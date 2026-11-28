@@ -1,0 +1,623 @@
+{
+ "blocks": {
+  "### T183 (observed 2026-11-23, the coordinator's transcript `c6fd72d1-...jsonl`: 31 Stop-hook blocks since 14:42, every one answered by a model turn while the session correctly waited - the free-slot block under the two convergence-talk rulings that held new work, and FINDINGS UNFILTERED for builders' own building-reviews)": {
+   "sha256": "edc3f3182036d5d9704ed9baa75ea1d5213629a00c286bfe3286a5a9fb706b4a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T183 Approach (checklist part A)": {
+   "sha256": "92f535af7daceaa9c19424211471fdddd8d9ae34e681b60c93c61d7d95f59669",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T183 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "fbd5d79a5b362d89aeacf5a8cf996f28b3acc2686fa1c1fae46f339abecedc68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md \"the convergence talk\": \"no edit to maintain entry size should ever be substantive\")": {
+   "sha256": "63440084da2c8a0ef749385ba537c669d63144d8d9ed948899e5be572ef22e7f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T184 Approach (checklist part A)": {
+   "sha256": "f983075d3f744aa5ee98defed847b7e1f536ad76beb244c5be4969ae796861d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "ddee08a0bb1a28eed7393fb3dc9d28c9b8a7901be898359327c6c4a9653270fb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T185 (the GM 2026-11-23, request.md 'the convergence talk': \"as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs\")": {
+   "sha256": "f7b9e313312898871249ee64ea247e1f5db68e4574c4afa8d7dc2b8fdf1e1cf2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T185 Approach (checklist part A)": {
+   "sha256": "4b93d7a56d8fe9e9734ca1efc0afe0936c380ab45f4f0d0943de237bd12db498",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T183": {
+   "section_sha256": "c9bed92f3b3165195e72212973ceaab800069953fdd6afe8eaf158848ddecc2d",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T183@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T183's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "46c8849c8703f4cee3d252f89968988128f21b5d3698b3be2ffe80a55dd1ff0e",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1 inventory",
+      "summary": "Every Stop/SubagentStop answer is classed as (a) must-do-before-stopping or (b) a nudge. The free-slot, open-task and parked-stages answers are (b) and leave the Stop block, and the free slot also gets no notice. QUESTION/OFFER UNFILTERED, kept-unnamed, run-still-going, dispatch-dropped, wakeup and builder-stop stay unchanged.",
+      "class": "within",
+      "why": "The approved offer is 'Stop hooks block only for what the session must do before stopping'. Each kept block concerns something to settle before stopping: the final message, a run nothing will wake, a dropped dispatch, a stale wakeup, or a builder's own SubagentStop. The (b) blocks are the 'keep working' nudges the GM wanted off the Stop. Unchanged from round 1 except that the free slot now has no notice (see D10)."
+     },
+     {
+      "id": "D2 idle check via asyncRewake",
+      "summary": "The periodic check is a second Stop entry with asyncRewake, where exit 2 wakes the session. It is not a cron.",
+      "class": "within",
+      "why": "Unchanged from round 1. A cron fire always submits a prompt, which would defeat the GM's 'does nothing and adds nothing to the context if we are still active'. asyncRewake is the documented way to stay silent and wake only when idle."
+     },
+     {
+      "id": "D3 one check per Stop, 300 s wait, 420 s timeout",
+      "summary": "Each Stop arms one check that waits L7R_IDLE_CHECK_SECS, a GUESS of 300 s. The check is silent if the transcript gained a user or assistant record since, and the timeout is 420 s.",
+      "class": "within",
+      "why": "Unchanged from round 1. This is the GM's 'every 5 minutes'. Every idle stretch begins at a Stop, and each Stop arms one check."
+     },
+     {
+      "id": "D4 silent for any background_tasks entry and for a sub-agent stop",
+      "summary": "The check is silent at once when background_tasks names a shell, subagent, monitor or workflow, and on a sub-agent's stop.",
+      "class": "within",
+      "why": "Unchanged from round 1. The offer says 'silent while ... waiting on a tracked agent', and each of these tracked runs wakes the session when it ends. The plan prices the long-lived-monitor seam."
+     },
+     {
+      "id": "D5 feature holds from the newest ask:set-down ruling, read by prose",
+      "summary": "A feature is held when its newest ask:set-down-... ruling (continue or accept) says no new, other or further task starts, or sets the feature down. Only a later set-down ruling ends the hold.",
+      "class": "within",
+      "why": "Unchanged from round 1. This carries 'respects binding rulings and set-downs' for feature-wide holds. How the reader classes one particular ruling on record is ruled separately as D11."
+     },
+     {
+      "id": "D6 named-task hold",
+      "summary": "A task the newest set-down ruling holds by name, through its do-not-start clause, is never the idle check's next task. A range counts each member. With only held tasks open the check is silent, and a later set-down ruling ends the hold. This is holds::named, pinned in tests/idle.rs. make task-start's picker does not read it.",
+      "class": "within",
+      "why": "Round 1's cure is applied as asked. The held task can no longer be named as 'the next', and a feature whose only open tasks are held stays silent. That carries 'respects binding rulings' for named tasks. Leaving task-start alone adds no refusal the GM did not ask for. The rule that a task named elsewhere in a ruling is not held is right in general: the 451 and 449-rows rulings name the tasks to go on with. Whether one particular ruling's other clauses hold its tasks or its feature is D11."
+     },
+     {
+      "id": "D7 task-start never reads a hold",
+      "summary": "Holds silence the nudges only. make task-start's refusal does not consult them.",
+      "class": "within",
+      "why": "Unchanged from round 1. The GM asked for the nudges to respect rulings, not for a new task-start refusal."
+     },
+     {
+      "id": "D8 findings guard on the session's own dispatch, once",
+      "summary": "FINDINGS UNFILTERED arms only on a review the main session dispatched. It is silent while that review is out and fires once after it returns.",
+      "class": "within",
+      "why": "Unchanged from round 1. This is the approved offer word for word."
+     },
+     {
+      "id": "D9 open-task nudge once while unchanged",
+      "summary": "The open-task words are said only when the session is idle with nothing tracked and no ruling or set-down holding, and only once while the state is unchanged. They name the next task in FR-013's performance-first order.",
+      "class": "within",
+      "why": "Unchanged from round 1. This matches 'speaks only when it is idle with actionable work and respects binding rulings and set-downs'."
+     },
+     {
+      "id": "D10 free slot named by nothing while builders run",
+      "summary": "The free-slot nudge is removed entirely: no Stop block and no report-back notice. A freed slot goes unnamed until the session is idle with nothing tracked running, when the open-task block names the next task. This retires 451 T88's rolling-dispatch block, L7R_BUILDERS and the busy-file reading, and the occupancy cost is recorded as unmeasured.",
+      "class": "within",
+      "why": "Round 1's cure is applied. The inventory row, the after-row, the performance checklist and the Accepted limitation all say no block and no notice. This is the approved offer's own silence 'while ... waiting on a tracked agent' and the GM's 'adds nothing to the context if we are still active'. Retiring T88's nudge follows from that, and no requirement in spec-cited.md or spec-index.md carries a rolling dispatch or a builder count (a grep for slot, rolling and BUILDERS finds none). The lower occupancy is a cost recorded honestly, not a fidelity finding."
+     },
+     {
+      "id": "D11 the 449-pilot ruling's set-down and T171 read as no hold",
+      "summary": "The Holds paragraph pins ask:set-down-449-pilot as 'the named-task hold'. It is not among the 6 feature holds, it holds only T150-T158, and T171 is never held ('never a task named elsewhere in the ruling (its T171)').",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "That ruling's what says, in item 2, 'Leave T171 open as filed' (its why: 'leaving the line as it is for a few hours costs nothing'). Item 4 says 'Then set down. The work resumes from the GM's reply to the pilot report and to the for_gm question below.' Item 4 sets the feature down until the GM replies, and the plan's own hold test in D5 is 'or sets the feature down'. As the paragraph is written and pinned, with this ruling newest and T171 or any other 449 task open, the idle check would say 'start' a task the ruling held. That is round 1's D6 failure one task over, against the approved 'respects binding rulings and set-downs'. No route makes it legitimate. Reading item 4 is not impossible, since the reader already matches 'sets the feature down'. Nothing in the GM's words implies a set-down clause be ignored. And honoring it defeats nothing: silence is what the request asks for. The ruling is no longer 449's newest, since the 2026-11-23 rows ruling supersedes it, so this costs nothing today. But it is the pinned reading of a set-down ruling on record, and a ruling of the same shape would be misread. Cure, either: (1) count this ruling among the feature holds by its item 4 'Then set down' and pin it that way in tests/idle.rs, which also keeps T171 from being named; or (2) state in the Holds paragraph why item 4 does not set the feature down and why item 2's 'Leave T171 open as filed' does not hold T171. Do not change the general rule about tasks named elsewhere, which (2) does not ask for."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
+  },
+  "T184": {
+   "section_sha256": "015879dec8f6c98398c6a365d289fffe1cf85e7276ba52040a6ca5948b1e2327",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T184-repair",
+     "summary": "What the 0009 and 0059 cuts lost is restored into the current text, and each page is split along its topics (0009 to new 0332, 0059 to new 0333), with a pointer sentence where the section stood; notes move with their sentences.",
+     "class": "within",
+     "why": "The GM 2026-11-23 approved 'the 0009/0059 repair' and named splitting into multiple entries so all details are preserved; a split with a pointer is his own route ('as long as the original page being linked to directs a reader to the other page')."
+    },
+    {
+     "id": "T184-earlier-corrections-kept",
+     "summary": "Three differences the word diff showed (the canal's 'division works', the 'The Chinese articles ...' clause, the Edo weirs' 'large rivers') are treated as earlier checks' corrections, kept and not restored as losses.",
+     "class": "within",
+     "why": "A correction to what the source says is not a size cut; keeping it is 'a size edit never changes a claim' and 'settled choices stay settled' from the seven rules the GM approved."
+    },
+    {
+     "id": "T184-guard",
+     "summary": "l7r-gate check question-size (make quick) refuses a SIZE EDIT (page over its limit at the base, or the removed words would put it back over) that drops a claim-bearing token (number, label, quoted passage, proper name, or a negation/qualifier leaving its block) unless it stands on the page or on a page its split pointer names; it names the split.",
+     "class": "within",
+     "why": "Mechanical enforcement of exactly the rule the GM approved ('a size edit never changes a claim'; 'no edit to maintain entry size should ever be substantive'); its refusal reaches only size edits, the thing the rule governs. Delete the rule and the check has nothing to check."
+    },
+    {
+     "id": "T184-pointer-form",
+     "summary": "Only the <a class=\"moved\" href=\"NNNN-<slug>.html\"> form counts as a split pointer (the form T185's triage follows); a plain link is refused; the refusal and the three rule files name the form.",
+     "class": "within",
+     "why": "Serves the GM's split condition that the original page directs the reader to the full information; one followable form keeps the guard and the no-cascade triage agreeing on what a split is, and narrows nothing the GM asked for."
+    },
+    {
+     "id": "T184-escape",
+     "summary": "SIZE_EDIT_OK=\"<why>\" lets a correction through, printed with the run; 0097's moved-and-rewritten section is its case.",
+     "class": "within",
+     "why": "A correction is not a size edit; the project's guard rules require a recorded escape; it does not let a size cut through without a stated reason on the record."
+    },
+    {
+     "id": "T184-per-page-limit",
+     "summary": "A page's own limit lives in research/size-limits.json and is read only with the size-exception agent's INDIVISIBLE verdict, its date and ledger row; the 20,000 global cap is unchanged; a divisible page is split instead.",
+     "class": "within",
+     "why": "The GM's own option: an audit-based process with an adversarial subagent check that records a new limit for this specific entry. Splitting first where a page divides loses no detail and the audited limit stays open to the page that cannot be split, so the GM's purpose (never lose information to the cap) holds on both routes."
+    },
+    {
+     "id": "T184-token-class-reach",
+     "summary": "The guard's token classes are stated (in the docs) to miss a claim carried only in plain words, a scope word outside the classes and a changed term (6 of 14 of the cuts' losses named, measured 2026-11-23); the classes are not tuned to catch them.",
+     "class": "within",
+     "why": "No sentence in the blocks permits a size edit to drop a claim: the goal line states the rule whole ('No research page loses a claim to fit the size cap'), the escape is for a correction, not a cut, and item 7 describes the detector's reach, not what the rule allows. The guard is added enforcement of the rule the GM approved 2026-11-23 (which asked for no guard), its misses stated rather than hidden, and on the real trim commit it refused both 0009 and 0059 (the red row, exit 1). A partial backstop is coverage, not a narrowing of what was asked."
+    },
+    {
+     "id": "T184-0097-left",
+     "summary": "The guard's firing on 0097 at cce80ca436 (none, not) is left: both claims stand restated on 0331 and 0097, the second a correction to the range the source names.",
+     "class": "within",
+     "why": "Observed with a method (grep of the dropped sentences' words), no claim lost, so no defect is left; a correction is the escape's case."
+    },
+    {
+     "id": "T184-popups-not-cascaded",
+     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs.'"
+    },
+    {
+     "id": "T184-heading-kept",
+     "summary": "0009's heading still ends 'and after the harvest' though that content is now on 0332; the pointer sentence takes the reader there, and a rename would re-owe every Entry: link.",
+     "class": "within",
+     "why": "Not a defect under the GM's split ruling: the page directs the reader to where the full information is; leaving it avoids the very cascade the GM asked to stop."
+    },
+    {
+     "id": "T184-followups-fixed",
+     "summary": "The registry entry hrr-agagawa-dento's unstated 'on large rivers' and the glossary term 'true leaf' drafted from general botany are fixed in this task by page session.",
+     "class": "within",
+     "why": "Defects found by the task's own checks fixed in the task, as the fix-as-we-go rule asks; nothing deferred."
+    },
+    {
+     "id": "T184-order-and-exits",
+     "summary": "Page sessions first, then the guard run over their pages as its green fixture; exits are closing-checks green, the record checks recorded, make question-sizes naming none, or a recorded set-down / arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and acceptance of the requested repair and rule; decides nothing about scope."
+    },
+    {
+     "id": "T184-performance-work",
+     "summary": "T184 is classed as performance work for scheduling: a lossy trim is refused at make quick instead of forcing restoration sessions and re-checks later.",
+     "class": "within",
+     "why": "The GM framed the cascade as time cost ('very time consuming to make') and said to fix it 'before we do literally anything else'; FR-013 and the GM's 2026-11-20 words on prioritizing performance work cover it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T185": {
+   "section_sha256": "97f279b49890ce958bba0ea4b298aa2d0f4310069e77ea219120a139b452e5bd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T185-a pointer form",
+     "summary": "A split's pointer is one marked form, <a class=\"moved\" href=\"NNNN-<slug>[.drawing].html\">, which builds as any question link; only that form is followed and lets a removal count as a move.",
+     "class": "within",
+     "why": "The GM's condition is that the source page directs a reader to the new page; the marked link does exactly that (it renders as an ordinary link) and adds only a machine-readable mark so the tool can tell which link is the split's. How the condition is detected is left open by the request."
+    },
+    {
+     "id": "T185-b plain link not a pointer",
+     "summary": "A split whose source carries a plain <a href> to the new page (which does direct a reader) is still counted as a removal and still re-owes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the GM's words, so ruled. Treating every plain link as a split pointer would put every page a pop-up's Entry page links to into that pop-up's reach and fingerprint, so an edit of any linked page would re-owe it - a wider cascade than today, defeating the request's own purpose (stop cascades that fix no real flaw). And no real split is left cascading: the 0009/0059 splits are marked before their re-owed checks run, 0097's checks already ran, and the MANIFEST tells every future splitter the form at no cost to them."
+    },
+    {
+     "id": "T185-c no link stays a removal",
+     "summary": "A move with no pointer at all stays a removal and re-owes.",
+     "class": "within",
+     "why": "This is the GM's own 'as long as the original page ... directs a reader to the other page' condition, applied literally."
+    },
+    {
+     "id": "T185-d follow pointers",
+     "summary": "A pop-up's checks read the pages its pointers name (fingerprints, owed rows, triage pages, research and depiction bundles), so a later edit of a moved block on its new page re-owes the pop-up.",
+     "class": "within",
+     "why": "The approved rule is 'a split is a move', not 'moved text is exempt'; a later claim-changing edit of the moved text still triggers review under 'only a claim-changing edit triggers review'. Keeps the cascade where it can matter."
+    },
+    {
+     "id": "T185-e verbatim only",
+     "summary": "A removed block counts as moved only if it stands verbatim on a reached page; a moved block that was also edited is a removal plus a new block.",
+     "class": "within",
+     "why": "The GM's exemption is for what cascades 'simply because a split occurs'; text changed in the move is more than a split. Whether a non-verbatim edit changes a claim is other rules' scope (re-classification, size edits), not narrowed here."
+    },
+    {
+     "id": "T185-f pointer-only block, POINTER_WORDS",
+     "summary": "A block carrying only the pointer (no note mark, no figure, at most POINTER_WORDS=25 words beside the link, a GUESS knob) counts as no claim; a longer one is reviewed as a claim.",
+     "class": "within",
+     "why": "The pointer block is what the GM's condition requires and is not a claim, so it owes nothing; the cap only stops new prose riding in under a pointer, and new prose is not something the split rule exempts. The 25 is labeled a GUESS knob."
+    },
+    {
+     "id": "T185-g claims triage",
+     "summary": "The claims triage drops the same moves and pointer blocks.",
+     "class": "within",
+     "why": "The GM: 'nothing needs to cascade' covers claim checks as well as pop-up checks."
+    },
+    {
+     "id": "T185-h record checks unchanged",
+     "summary": "Record checks need no change: units.rs indexes blocks and notes across every page, so a verbatim move already owes none (observed on the fixture).",
+     "class": "within",
+     "why": "No change needed to satisfy the rule; the premise is stated as an observation on the fixture and the plan's test pins the outcome."
+    },
+    {
+     "id": "T185-i new page's own checks",
+     "summary": "The new page's new heading and intro owe intro-check and record-format on the new page; not suppressed.",
+     "class": "within",
+     "why": "Scoped to the new page's new prose, not a re-owe of any pop-up or claim citing the source page; the split rule exempts the moved text, not new writing."
+    },
+    {
+     "id": "T185-j 0009/0059 repair",
+     "summary": "T184's 0009 and 0059 splits, linked plainly today, are marked class=\"moved\" before any check they re-owed runs (by T184's builder via the handoff if T184 lands second, by T185's own landing otherwise), confirmed by make modal-triage clearing the citing pop-ups.",
+     "class": "within",
+     "why": "The GM approved 'the 0009/0059 repair' in the same words; this is that repair, ordered so no needless cascade runs."
+    },
+    {
+     "id": "T185-k 0097 left plain",
+     "summary": "0097's earlier move to 0331 (plain link) is left unmarked; its re-owed checks have already run.",
+     "class": "within",
+     "why": "Nothing it re-owed is open, so no cascade is pending. A later edit of the moved text on 0331 will not be followed from 0097, but that is the state before T185 for every page link, not a wrong outcome T185 leaves or causes, and the request asked to retrofit only 0009/0059. Noted as an aside."
+    },
+    {
+     "id": "T185-l order and priority",
+     "summary": "Lands after T186's change computation, which it extends; marked performance work.",
+     "class": "within",
+     "why": "Sequencing; FR-013 and the GM's 2026-11-20 words put performance work first, and a split no longer re-owing every citing pop-up is performance work."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T183 (observed 2026-11-23, the coordinator's transcript `c6fd72d1-...jsonl`: 31 Stop-hook blocks since 14:42, every one answered by a model turn while the session correctly waited - the free-slot block under the two convergence-talk rulings that held new work, and FINDINGS UNFILTERED for builders' own building-reviews)",
+    "### T183 Approach (checklist part A)",
+    "### T183 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T183@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T183's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T183"
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md \"the convergence talk\": \"no edit to maintain entry size should ever be substantive\")",
+    "### T184 Approach (checklist part A)",
+    "### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T184-repair",
+     "summary": "Restore every claim the cce80ca436 trims dropped from 0009 and 0059 into the current text (keeping 449 T371's corrections in the same commit) and split each page along its topics onto new 0332/0333, leaving a one-sentence pointer where the section stood; notes move with their sentences, none duplicated.",
+     "class": "within",
+     "why": "The GM's convergence talk approved 'the 0009/0059 repair' and names splitting into multiple entries so 'all details and the fidelity of information ... is preserved'; 'a split is a move' is one of the approved seven rules. Keeping 449 T371's corrections drops nothing the GM asked to keep."
+    },
+    {
+     "id": "T184-guard",
+     "summary": "l7r-gate check question-size (make quick) refuses a SIZE EDIT (page over its limit at the base, or the removed words would put it back over) that drops a claim-bearing token (number, label, quoted passage, proper name not on the page or a page it links to; a negation or qualifier not in its own block), naming the split.",
+     "class": "within",
+     "why": "Enforcement of the GM's 'no edit to maintain entry size should ever be substantive' and the approved rule 'a size edit never changes a claim': delete that rule and the check has nothing to check. It refuses only the thing the GM ruled out, and names the split, which is his own remedy."
+    },
+    {
+     "id": "T184-escape",
+     "summary": "SIZE_EDIT_OK=\"<why>\" passes the guard for a correction, printed with the run; 0097 (section moved to 0331 and rewritten from new research) is the escape's case.",
+     "class": "within",
+     "why": "A correction is a claim-changing edit made for factual reasons, not 'an edit to maintain entry size', so the escape does not carve anything out of the GM's rule; it is the project's standard recorded escape for a guard. The 0097 rewrite from new research is a correction, not a size edit."
+    },
+    {
+     "id": "T184-token-gaps",
+     "summary": "The token classes miss a scope word outside their classes ('large-river works') and a changed term ('diversion' to 'division'); the gap is stated in the docs rather than tuned in. Tokens found on any linked page count as kept.",
+     "class": "within",
+     "why": "The rule itself is not narrowed: nothing in the plan permits a size edit that drops a scope word or changes a term, and the restored 0059 text carries both. The GM asked for the rule, not for a mechanical guard for it, so the guard is backstop enforcement the session added, and the limits of its reach take nothing away from what was asked. Catching every dropped modifier would refuse ordinary lossless trims."
+    },
+    {
+     "id": "T184-exception",
+     "summary": "A page's own limit in research/size-limits.json, honored only with the size-exception agent's INDIVISIBLE verdict, its date and ledger row; the 20,000 cap otherwise unchanged.",
+     "class": "within",
+     "why": "The GM's own option: 'an audit-based process that permits us to go past the size limit when an adversarial subagent check confirms that there don't seem to be a lot of good ways to do edits that would allow us to maintain the current amount of useful information ... record a new limit for this specific entry'. A split is such an edit, so requiring that no split serves is that test. Raising the global cap was only floated as a possibility, the approved rules do not include it, and the per-entry route is the one the GM described in detail."
+    },
+    {
+     "id": "T184-no-popup-cascade",
+     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited; the source page's pointer carries the reader on.",
+     "class": "within",
+     "why": "The GM's own words: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs.'"
+    },
+    {
+     "id": "T184-order",
+     "summary": "Page sessions (queued first) run before the guard is built; the guard is then run over their pages as its green fixture, and over cce80ca436 as red.",
+     "class": "within",
+     "why": "Sequencing inside the task that the request leaves open; both repair and guard are delivered."
+    },
+    {
+     "id": "T184-performance",
+     "summary": "The task is classed as performance work (FR-013 scheduling): a lossy trim refused at make quick removes the restoration cascade.",
+     "class": "within",
+     "why": "The GM called these cascades 'very time consuming' and said 'we have to fix that before we move forward', so putting the task first matches his order. FR-013 counts work that saves process time, and the cost is measured (two page sessions)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md \"the convergence talk\": \"no edit to maintain entry size should ever be substantive\")",
+    "### T184 Approach (checklist part A)",
+    "### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T184-repair",
+     "summary": "Restore every loss of the cce80ca436 cuts into the current 0009 and 0059 text, keeping 449 T371's corrections, and split each page along its topics (0332, 0333) with a one-sentence pointer where the section stood; notes move with their sentences.",
+     "class": "within",
+     "why": "The GM approved 'the 0009/0059 repair' and named splitting into multiple entries as the way to preserve every detail ('a split is a move'). Keeping the three earlier corrections (division works, the Chinese articles clause, 'large rivers' removed) is keeping corrections, not leaving a loss."
+    },
+    {
+     "id": "T184-guard",
+     "summary": "l7r-gate check question-size refuses a size edit (page over its limit at the base, or the removed words putting it back over) that drops a claim-bearing token not found on the page or a page it links to; token classes miss plain-word claims, which step 7 states in the docs.",
+     "class": "within",
+     "why": "Enforcement of the approved rule 'a size edit never changes a claim' / 'no edit to maintain entry size should ever be substantive': delete that rule and the guard has nothing to check. Counting a token kept when it stands on a linked page is the GM's 'a split is a move'. The guard's blind spots do not narrow the rule - the plan states them and does not treat a guard pass as compliance ('a restore is checked like any other edit')."
+    },
+    {
+     "id": "T184-escape",
+     "summary": "SIZE_EDIT_OK=\"<why>\" lets a correction to an over-limit page through the guard, printed with the run; 0097's restated, corrected sentences are its case.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: the rule covers 'an edit to maintain entry size', and a correction is not one - it is a claim-changing edit that the approved rules route to review instead. The guard's mechanical trigger (page over its limit at the base) cannot tell a correction from a trim, so without the escape it would refuse good work. The escape is named for corrections only and recorded, so it does not reopen lossy trims."
+    },
+    {
+     "id": "T184-limit",
+     "summary": "A page's own limit lives in research/size-limits.json and is honored only with the size-exception agent's INDIVISIBLE verdict, its date and a ledger row; the 20,000 cap is otherwise unchanged.",
+     "class": "within",
+     "why": "The GM asked for 'an audit-based process that permits us to go past the size limit when an adversarial subagent check confirms' there is no good way to edit that keeps the information, 'so that we record a new limit for this specific entry'. A split is such an edit, so 'cannot be split without loss' is the GM's test, not a narrower one; leaving the global cap alone matches the per-entry limit he described."
+    },
+    {
+     "id": "T184-no-cascade",
+     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited; 0009's heading keeps 'and after the harvest', the pointer carrying the reader on.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs'. A heading whose reader is carried on by the pointer is not a wrong outcome (constitution XIV's defect test)."
+    },
+    {
+     "id": "T184-0097",
+     "summary": "0097's two dropped qualifiers on cce80ca436 are left as they are: both claims stand restated (0331 and 0097), one corrected to the range the source names, observed by grep 2026-11-23.",
+     "class": "within",
+     "why": "Not a loss: the claims stand, observed with a method, one a correction. Nothing the GM asked for is left undone."
+    },
+    {
+     "id": "T184-followups",
+     "summary": "Registry entry hrr-agagawa-dento's 'large rivers' and the glossary term 'true leaf' drafted from general botany are fixed in this task by page session.",
+     "class": "within",
+     "why": "Defects found by this task's checks fixed in the task, as the fix-as-we-go rule requires; nothing deferred."
+    },
+    {
+     "id": "T184-order-and-perf",
+     "summary": "Page sessions first, then the guard run over their pages as the green fixture; the task is classed performance work (lossy trims no longer cascade into restorations).",
+     "class": "within",
+     "why": "Order is inside the task. The GM asked to fix the cascade 'before we do literally anything else', so the priority the performance class gives agrees with his instruction rather than stretching it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md \"the convergence talk\": \"no edit to maintain entry size should ever be substantive\")",
+    "### T184 Approach (checklist part A)",
+    "### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T184-repair",
+     "summary": "What the 0009 and 0059 cuts lost is restored into the current text, and each page is split along its topics (0009 to new 0332, 0059 to new 0333), with a pointer sentence where the section stood; notes move with their sentences.",
+     "class": "within",
+     "why": "The GM 2026-11-23 approved 'the 0009/0059 repair' and named splitting into multiple entries so all details are preserved; a split with a pointer is his own route ('as long as the original page being linked to directs a reader to the other page')."
+    },
+    {
+     "id": "T184-earlier-corrections-kept",
+     "summary": "Three differences the word diff showed (the canal's 'division works', the 'The Chinese articles ...' clause, the Edo weirs' 'large rivers') are treated as earlier checks' corrections, kept and not restored as losses.",
+     "class": "within",
+     "why": "A correction to what the source says is not a size cut; keeping it is 'a size edit never changes a claim' and 'settled choices stay settled' from the seven rules the GM approved."
+    },
+    {
+     "id": "T184-guard",
+     "summary": "l7r-gate check question-size (make quick) refuses a SIZE EDIT (page over its limit at the base, or the removed words would put it back over) that drops a claim-bearing token (number, label, quoted passage, proper name, or a negation/qualifier leaving its block) unless it stands on the page or on a page its split pointer names; it names the split.",
+     "class": "within",
+     "why": "Mechanical enforcement of exactly the rule the GM approved ('a size edit never changes a claim'; 'no edit to maintain entry size should ever be substantive'); its refusal reaches only size edits, the thing the rule governs. Delete the rule and the check has nothing to check."
+    },
+    {
+     "id": "T184-pointer-form",
+     "summary": "Only the <a class=\"moved\" href=\"NNNN-<slug>.html\"> form counts as a split pointer (the form T185's triage follows); a plain link is refused; the refusal and the three rule files name the form.",
+     "class": "within",
+     "why": "Serves the GM's split condition that the original page directs the reader to the full information; one followable form keeps the guard and the no-cascade triage agreeing on what a split is, and narrows nothing the GM asked for."
+    },
+    {
+     "id": "T184-escape",
+     "summary": "SIZE_EDIT_OK=\"<why>\" lets a correction through, printed with the run; 0097's moved-and-rewritten section is its case.",
+     "class": "within",
+     "why": "A correction is not a size edit; the project's guard rules require a recorded escape; it does not let a size cut through without a stated reason on the record."
+    },
+    {
+     "id": "T184-per-page-limit",
+     "summary": "A page's own limit lives in research/size-limits.json and is read only with the size-exception agent's INDIVISIBLE verdict, its date and ledger row; the 20,000 global cap is unchanged; a divisible page is split instead.",
+     "class": "within",
+     "why": "The GM's own option: an audit-based process with an adversarial subagent check that records a new limit for this specific entry. Splitting first where a page divides loses no detail and the audited limit stays open to the page that cannot be split, so the GM's purpose (never lose information to the cap) holds on both routes."
+    },
+    {
+     "id": "T184-token-class-reach",
+     "summary": "The guard's token classes are stated (in the docs) to miss a claim carried only in plain words, a scope word outside the classes and a changed term (6 of 14 of the cuts' losses named, measured 2026-11-23); the classes are not tuned to catch them.",
+     "class": "within",
+     "why": "No sentence in the blocks permits a size edit to drop a claim: the goal line states the rule whole ('No research page loses a claim to fit the size cap'), the escape is for a correction, not a cut, and item 7 describes the detector's reach, not what the rule allows. The guard is added enforcement of the rule the GM approved 2026-11-23 (which asked for no guard), its misses stated rather than hidden, and on the real trim commit it refused both 0009 and 0059 (the red row, exit 1). A partial backstop is coverage, not a narrowing of what was asked."
+    },
+    {
+     "id": "T184-0097-left",
+     "summary": "The guard's firing on 0097 at cce80ca436 (none, not) is left: both claims stand restated on 0331 and 0097, the second a correction to the range the source names.",
+     "class": "within",
+     "why": "Observed with a method (grep of the dropped sentences' words), no claim lost, so no defect is left; a correction is the escape's case."
+    },
+    {
+     "id": "T184-popups-not-cascaded",
+     "summary": "Pop-ups whose Entry: names 0009 or 0059 for content now on 0332/0333 are not edited.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs.'"
+    },
+    {
+     "id": "T184-heading-kept",
+     "summary": "0009's heading still ends 'and after the harvest' though that content is now on 0332; the pointer sentence takes the reader there, and a rename would re-owe every Entry: link.",
+     "class": "within",
+     "why": "Not a defect under the GM's split ruling: the page directs the reader to where the full information is; leaving it avoids the very cascade the GM asked to stop."
+    },
+    {
+     "id": "T184-followups-fixed",
+     "summary": "The registry entry hrr-agagawa-dento's unstated 'on large rivers' and the glossary term 'true leaf' drafted from general botany are fixed in this task by page session.",
+     "class": "within",
+     "why": "Defects found by the task's own checks fixed in the task, as the fix-as-we-go rule asks; nothing deferred."
+    },
+    {
+     "id": "T184-order-and-exits",
+     "summary": "Page sessions first, then the guard run over their pages as its green fixture; exits are closing-checks green, the record checks recorded, make question-sizes naming none, or a recorded set-down / arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and acceptance of the requested repair and rule; decides nothing about scope."
+    },
+    {
+     "id": "T184-performance-work",
+     "summary": "T184 is classed as performance work for scheduling: a lossy trim is refused at make quick instead of forcing restoration sessions and re-checks later.",
+     "class": "within",
+     "why": "The GM framed the cascade as time cost ('very time consuming to make') and said to fix it 'before we do literally anything else'; FR-013 and the GM's 2026-11-20 words on prioritizing performance work cover it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T185 (the GM 2026-11-23, request.md 'the convergence talk': \"as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs\")",
+    "### T185 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T185-a pointer form",
+     "summary": "A split's pointer is one marked form, <a class=\"moved\" href=\"NNNN-<slug>[.drawing].html\">, which builds as any question link; only that form is followed and lets a removal count as a move.",
+     "class": "within",
+     "why": "The GM's condition is that the source page directs a reader to the new page; the marked link does exactly that (it renders as an ordinary link) and adds only a machine-readable mark so the tool can tell which link is the split's. How the condition is detected is left open by the request."
+    },
+    {
+     "id": "T185-b plain link not a pointer",
+     "summary": "A split whose source carries a plain <a href> to the new page (which does direct a reader) is still counted as a removal and still re-owes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the GM's words, so ruled. Treating every plain link as a split pointer would put every page a pop-up's Entry page links to into that pop-up's reach and fingerprint, so an edit of any linked page would re-owe it - a wider cascade than today, defeating the request's own purpose (stop cascades that fix no real flaw). And no real split is left cascading: the 0009/0059 splits are marked before their re-owed checks run, 0097's checks already ran, and the MANIFEST tells every future splitter the form at no cost to them."
+    },
+    {
+     "id": "T185-c no link stays a removal",
+     "summary": "A move with no pointer at all stays a removal and re-owes.",
+     "class": "within",
+     "why": "This is the GM's own 'as long as the original page ... directs a reader to the other page' condition, applied literally."
+    },
+    {
+     "id": "T185-d follow pointers",
+     "summary": "A pop-up's checks read the pages its pointers name (fingerprints, owed rows, triage pages, research and depiction bundles), so a later edit of a moved block on its new page re-owes the pop-up.",
+     "class": "within",
+     "why": "The approved rule is 'a split is a move', not 'moved text is exempt'; a later claim-changing edit of the moved text still triggers review under 'only a claim-changing edit triggers review'. Keeps the cascade where it can matter."
+    },
+    {
+     "id": "T185-e verbatim only",
+     "summary": "A removed block counts as moved only if it stands verbatim on a reached page; a moved block that was also edited is a removal plus a new block.",
+     "class": "within",
+     "why": "The GM's exemption is for what cascades 'simply because a split occurs'; text changed in the move is more than a split. Whether a non-verbatim edit changes a claim is other rules' scope (re-classification, size edits), not narrowed here."
+    },
+    {
+     "id": "T185-f pointer-only block, POINTER_WORDS",
+     "summary": "A block carrying only the pointer (no note mark, no figure, at most POINTER_WORDS=25 words beside the link, a GUESS knob) counts as no claim; a longer one is reviewed as a claim.",
+     "class": "within",
+     "why": "The pointer block is what the GM's condition requires and is not a claim, so it owes nothing; the cap only stops new prose riding in under a pointer, and new prose is not something the split rule exempts. The 25 is labeled a GUESS knob."
+    },
+    {
+     "id": "T185-g claims triage",
+     "summary": "The claims triage drops the same moves and pointer blocks.",
+     "class": "within",
+     "why": "The GM: 'nothing needs to cascade' covers claim checks as well as pop-up checks."
+    },
+    {
+     "id": "T185-h record checks unchanged",
+     "summary": "Record checks need no change: units.rs indexes blocks and notes across every page, so a verbatim move already owes none (observed on the fixture).",
+     "class": "within",
+     "why": "No change needed to satisfy the rule; the premise is stated as an observation on the fixture and the plan's test pins the outcome."
+    },
+    {
+     "id": "T185-i new page's own checks",
+     "summary": "The new page's new heading and intro owe intro-check and record-format on the new page; not suppressed.",
+     "class": "within",
+     "why": "Scoped to the new page's new prose, not a re-owe of any pop-up or claim citing the source page; the split rule exempts the moved text, not new writing."
+    },
+    {
+     "id": "T185-j 0009/0059 repair",
+     "summary": "T184's 0009 and 0059 splits, linked plainly today, are marked class=\"moved\" before any check they re-owed runs (by T184's builder via the handoff if T184 lands second, by T185's own landing otherwise), confirmed by make modal-triage clearing the citing pop-ups.",
+     "class": "within",
+     "why": "The GM approved 'the 0009/0059 repair' in the same words; this is that repair, ordered so no needless cascade runs."
+    },
+    {
+     "id": "T185-k 0097 left plain",
+     "summary": "0097's earlier move to 0331 (plain link) is left unmarked; its re-owed checks have already run.",
+     "class": "within",
+     "why": "Nothing it re-owed is open, so no cascade is pending. A later edit of the moved text on 0331 will not be followed from 0097, but that is the state before T185 for every page link, not a wrong outcome T185 leaves or causes, and the request asked to retrofit only 0009/0059. Noted as an aside."
+    },
+    {
+     "id": "T185-l order and priority",
+     "summary": "Lands after T186's change computation, which it extends; marked performance work.",
+     "class": "within",
+     "why": "Sequencing; FR-013 and the GM's 2026-11-20 words put performance work first, and a split no longer re-owing every citing pop-up is performance work."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T183 to T185, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

@@ -1,0 +1,857 @@
+{
+ "blocks": {
+  "### T271 (the 2026-11-25 parallel trials, `specs/449-rust-codebase/port-talk-agenda.md` item 1: builders in worktrees of one feature write their plan review bundles under one directory, `/tmp/l7r-check`, and their scratch files into one session scratchpad)": {
+   "sha256": "a664288971b198fcbb1471440761e1c5f1144ea50ee43411b0976c062e5e2c20",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T271 Approach (checklist part A)": {
+   "sha256": "3895f7154fba7eda4e36cfacf6b1e1ab82b40ee19a95907b6b1ef264e3cb798c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T272 (the Stop hook's QUESTION UNFILTERED was refused three times on 2026-11-25 for a table row of session c6fd72d1's final message that lists a handoff file's contents, `what's waiting on you` among them: 451 T235's remaining false positive, observed 2026-11-26, method: every `QUESTION UNFILTERED` refusal in that session's transcript, counted by its quoted line)": {
+   "sha256": "d6a576ac559a0ec3b381cf7e4c6a99d8ea6d78b0330ac9ca7f0eb78a8162acf0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T272 Approach (checklist part A)": {
+   "sha256": "b50b8602b2c3011577be5bb4f1b7a8661fe2681273fd3c391dbc139a17f13055",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T273 (<why: the finding or measurement that files it>)": {
+   "sha256": "deb528dbd2078abbbb85dbd1a6a4eecfcfdc1758c06b7518e1939cd844cf3357",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T274 (the number of builders at once is certified against the container's memory limit from samples, and on 2026-11-26 those samples were a shell loop the coordinating session started by hand, so the three- and four-at-once comment batches ran unsampled (`docs/process-decisions.md`, \"Two code builders at once\"))": {
+   "sha256": "9db3418f6c5b775828e2744dc7495636e50c2cd30f3c5c0f2f80e8b72cd7e18c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T274 Approach (checklist part A)": {
+   "sha256": "2bb55c896958774ebaf871665d06974c09808474cee2c44a9258458d4b285166",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T275 Approach (checklist part A)": {
+   "sha256": "c20b362d57237a38ca16dabfe878b9daca7cfd2dd67fcb586ead49fbb0051504",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T275 (T267's census: state paths joined onto `<root>/.git` break or are passed over in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t270)": {
+   "sha256": "f4b2250c3be269ded390298dc25265b2cb7a1ee0a5d9f95f2a26a4b75f1c9ec4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T276 (<why: the finding or measurement that files it>)": {
+   "sha256": "f4dbfa4123c56ba0e85a4de7baee5ae75ba9760edc66b6b4ff4e6977269ba6c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T276 Approach (checklist part A)": {
+   "sha256": "5e09a0051fed2ba05d42c3ca16ee9daa99995eb0e728a3920cfc82b1d6b40ef8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T277 (<why: the finding or measurement that files it>)": {
+   "sha256": "b2010ad7e223503a0c946b35c0b909444e1b09a8095ef68b0ad651400939cd42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T277 Approach (checklist part A)": {
+   "sha256": "052ba7e0ddd5213f7296fa3049a01e77f6b9d766c56ecbc9e3977016df56016d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T278 (<why: the finding or measurement that files it>)": {
+   "sha256": "4aa432d82d7035bbedb8aa4471972d8d733add6aa3ccb991adc7258f22d25069",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T278 Approach (checklist part A)": {
+   "sha256": "9acf55913541bd96727823e5528174f1d7d92050b6ad862716b4d37935b728f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T279 (<why: the finding or measurement that files it>)": {
+   "sha256": "6046bed4a56ac51f7f4345a73454d73a75a5bbe31b7f193b0f3b02a003db2f45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T279 Approach (checklist part A)": {
+   "sha256": "83ef4ef9ad93299d7e107f293a9f2864236b6a930190a50a659361ce0a5c5e53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T280 (<why: the finding or measurement that files it>)": {
+   "sha256": "b9faba65e8c265334ca09ce18a79908639e07ac7b9d140c94b0daf6120375f38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T271": {
+   "section_sha256": "0a9555e5005ef50e61e6f85051afe1346514f88115eefeb98cd4cacd631e08ee",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 changed-blocks bundle keyed by tree",
+     "summary": "delta_prompt hashes the tree's path (tree_of, 451 T257) with the owed blocks' digests into the 8 hex; the name keeps its shape blocks-<tasks>-<8 hex>; one tree's rebuild of the same blocks keeps its directory; pinned red-first by two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own",
+     "class": "within",
+     "why": "This is the task line's fix for the collision the trials hit and the block reproduced on HEAD (two fixture trees, one directory, the second tree's MANIFEST and make -C command). It serves the GM's 2026-11-25 'a review recording in its own tree' fix before parallel builders. Keeping the name shape is a design choice inside the task. Aside, not blocking: the reader census grep covers *.rs under rust only, so a Makefile or script that matches the name as a string was not searched. The kept shape and the test make this a note, not a finding."
+    },
+    {
+     "id": "D2 task's own bundle left un-keyed",
+     "summary": "plan-<feature>-<task> (make decide) is not keyed by tree; the plan labels this narrower than the task line's 'key the plan review bundle by tree'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's stated reason, that keying it would change the -T<n> shape the plan hold reads, is a cost argument and does not carry this ruling. The ruling rests on a different premise: leaving the name alone leaves no defect. The purpose of the task and of the GM's 2026-11-25 fix ('a review recording in its own tree') is that no reviewer reads a bundle another tree rewrote, or records in the wrong tree. That bundle's name already carries its task. Its MANIFEST already names its tree (T257), as this very bundle's does: diagram-backlog-t271. Each builder works in a worktree of its own task. The GM approved 'a started-task mark per task' (2026-11-25, the same four fixes) so that one task is not started twice. So two trees can only rebuild one task's own bundle if one task is decided in two trees at once, and that is the case the started mark exists to prevent. The block states 'a task has one builder' without measuring it. It holds as far as the started mark does, and no GM word asks for more. The task line's 'by tree' wording is the session's own, not the GM's. If a second tree is ever found deciding a builder's task (the coordinating clone, for example), that is a defect and would need this reopened."
+    },
+    {
+     "id": "D3 scratch-file collision fixed by a brief line",
+     "summary": "scripts/container/builder-brief.md's pasted block gains one line: prefix every scratch file with the task id; a document, no test",
+     "class": "within",
+     "why": "It answers the task line's second half (scratch files in one session scratchpad). The GM's 2026-11-19 'real enforcement and not just instructions' has as its antecedent the six improvements and four ideas approved that day, which FR-012 scopes to named refusals. Read plainly, it does not reach this 2026-11-25 trials task, and stretching it to T271 would be completing the GM's thought. For the caller to see, not blocking: goal 1 says 'no builder's scratch file overwrites another's', but the mechanism is an instruction. A builder that ignores it can still overwrite another's file, so the goal is aimed at, not guaranteed."
+    },
+    {
+     "id": "D4 not classed as performance work",
+     "summary": "'Performance work? no: it removes a collision between two builders; nothing runs faster'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance work and measurement work go first. Fixing a correctness collision in review plumbing is neither, so this classification does not move T271 in FR-013's order against anything the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T272": {
+   "section_sha256": "202a0819250d13348ce7e735cb62fdbacf85d77afe70dcf53679cc5531315632",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 listed-content form",
+     "summary": "stated_ask treats `waiting (on|for) you` as listed, no ask, only when bounded on both sides: a `what's/what is/what was/what were` clause following a list separator before it, and a clause end or sibling `what` clause after it",
+     "class": "within",
+     "why": "FR-002 asks for a narrow detector of messages that put a question or decision to the GM; the row (a handoff file's contents) asks him nothing, so refusing it is a check refusing correct work (a defect), and the GM's 2026-11-25 words on the escalation check's cost are what T235's 'stop the false firings' answers. Every form that names the thing waiting, or has no list before it, still fires, so nothing FR-002 requires is narrowed."
+    },
+    {
+     "id": "D2 `for you to confirm` stays an ask",
+     "summary": "the 2026-11-26 two-builders line is ruled a true positive; the rule is unchanged for it and it is pinned as an ask",
+     "class": "within",
+     "why": "It puts a confirmation to the GM, which is exactly what FR-002 must refuse unfiltered; keeping and pinning it preserves the requirement."
+    },
+    {
+     "id": "D3 no status-cell exemption",
+     "summary": "T235's table asks (`Waiting on your budget answer`, `yours to decide`) still fire; no blanket table-cell exemption is built",
+     "class": "within",
+     "why": "Declining the broader exemption keeps real asks caught; it is the narrower fix, not a narrowing of what was asked."
+    },
+    {
+     "id": "D4 test placement",
+     "summary": "red-first Rust test pins the real row, three siblings and nine asks; the hook suite carries only the statement case (case 12), the ask cases kept in the Rust test alone to avoid a new guard message owing review (451 T170)",
+     "class": "within",
+     "why": "Both the exemption and the asks it must not swallow are enforced by tests that fail when the behavior is absent; where a test lives is design, not fidelity."
+    },
+    {
+     "id": "D5 classification",
+     "summary": "Found and left: none; performance work: no",
+     "class": "within",
+     "why": "Nothing known is left unfixed; the scheduling label does not change what the task builds."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T274": {
+   "section_sha256": "1d469749e5cd51fbd7d64b0aadc38754fa004c36c4e2c9ce60eabc7c623d7b23",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "samples under l7r-events/samples/ rather than the brief's l7r-events/mem-samples.jsonl; a consequence disclosed: state-push skips the folder, so samples stay on the container",
+     "class": "within",
+     "why": "The path is the coordinating session's brief, not the GM's words (the bundle holds neither the task line nor the brief, so this was judged against request.md and the spec only). The task line's 'into the tree's l7r-events' holds. The GM's tooling-state repository (2026-11-25) is for 'record-check answers and event logs'; samples are neither, and no GM sentence asks for memory samples to be kept off the container. The reason (readers that take every .jsonl there as a feature log) was read from code and labeled as such."
+    },
+    {
+     "id": "D2",
+     "summary": "a module of the measure crate; task gains no dependency",
+     "class": "within",
+     "why": "Placement; nothing the GM asked turns on it."
+    },
+    {
+     "id": "D3",
+     "summary": "the sampler writes and re-reads its own pid file; two starts converge on one; stop is a file removal",
+     "class": "within",
+     "why": "Mechanism for the one-a-clone constraint; its one cost (a duplicated line for at most one interval) is stated."
+    },
+    {
+     "id": "D4",
+     "summary": "alive is pid plus start time; a zombie is dead",
+     "class": "within",
+     "why": "Mechanism."
+    },
+    {
+     "id": "D5",
+     "summary": "setsid, null streams, inherited descriptors close-on-exec",
+     "class": "within",
+     "why": "Serves 'never failing a handout' (no handout waits on a pipe or holds a build slot's flock); measured once, labeled."
+    },
+    {
+     "id": "D6",
+     "summary": "a second start exits 0",
+     "class": "within",
+     "why": "Mechanism for asking at every handout."
+    },
+    {
+     "id": "D7",
+     "summary": "ends at a 4 MiB bound; the next start moves the file to mem-samples.1.jsonl, keeping at most two files",
+     "class": "within",
+     "why": "Bounded in size as the brief says, and bounded on disk in line with the GM's 2026-11-22 and 2026-11-25 words on cleaning up after ourselves. The rotation keeps sampling from stopping silently. Figures checked: 18,036/65 = 277 B a line, 4 MiB / 277 B x 10 s = about 42 h, 4,320 lines about 1.2 MB."
+    },
+    {
+     "id": "D8",
+     "summary": "each line carries max, cores and peak; the report checks itself against memory.peak",
+     "class": "within",
+     "why": "Gives the audit entry its falsifier, which the GM asked for in the register (2026-11-25: 'what we would look at that would falsify')."
+    },
+    {
+     "id": "D9",
+     "summary": "median and nearest-rank 95th percentile, labeled CONVENTION",
+     "class": "within",
+     "why": "Chosen to reproduce the recorded hand-log figures; labeled, as the 2026-11-23 talk on labels asks."
+    },
+    {
+     "id": "D10",
+     "summary": "stall and OOM rises booked between consecutive samples; GAP_S 120 s, a GUESS knob",
+     "class": "within",
+     "why": "Arithmetic of the report, with its knob labeled."
+    },
+    {
+     "id": "D11",
+     "summary": "the report's rows are pool trees HELD, not builders compiling; refinement deferred as T351, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the purpose in the heading (certifying the builder count against memory): the block itself says a row for N trees held cannot certify N builders compiling and reads low on memory. Ruled on purpose, not wording. (1) The purpose the task exists for, samples taken without a hand-started loop so a three- or four-at-once batch is never unsampled again, is delivered in full. (2) What is deferred is how stored samples are attributed to rows. The fix named is a join with the event log's Phase lines, so a later reader can re-book the same stored samples; nothing is lost at sampling time. (3) The report prints the caveat and its rustc column, so no row silently claims to certify a compiling count. (4) The deferral has the form FR-009 asks for (why it is not fixed here, a filed id T351, an order 'lands before T302'), the GM-approved form for a deferral. Not verifiable from the bundle: what T302 is, whether T351 is an open unticked task, and whether the samples outlive T351's landing given D7's two-file rotation (about 84 h) and D1's samples staying on the container. make decide's open-task test covers the second."
+    },
+    {
+     "id": "D12",
+     "summary": "CPU stall read from /proc/pressure/cpu, which may be the host's and not the cgroup's; not compared",
+     "class": "within",
+     "why": "The brief names that file, and the certification is against memory, not CPU stall. The premise is unmeasured but stated plainly, and it is not a defect of the memory figures the task certifies. Noted for the audit entry rather than ruled."
+    },
+    {
+     "id": "D13",
+     "summary": "knobs: L7R_MEM_MARGIN_GIB 7 (GUESS), L7R_SAMPLE_MAX_H 12 (GUESS), L7R_SAMPLE_S 10 (the hand loop's interval)",
+     "class": "within",
+     "why": "Bounded in hours as the brief says; each guess is labeled beside its constant, in the help and in the audit entry."
+    },
+    {
+     "id": "D14",
+     "summary": "asks after any handout that exits 0; a sampler failure is a line, never the exit code; L7R_SAMPLER=0 opts out; a cold handout's guard compile runs before the start, so on a clone's first handout it goes unsampled",
+     "class": "within",
+     "why": "'Never failing a handout' is the constraint. The goal is sampling while builders HOLD trees, and during a cold handout's guard build no builder holds that tree yet. The unsampled first compile is stated. It is a gap in a reading, not a wrong outcome of the memory certification at N concurrent builders: on the first handout of a clone no sampler-covered batch is yet running."
+    },
+    {
+     "id": "D15",
+     "summary": "the sampler writes no Phase line and no event-log line",
+     "class": "within",
+     "why": "The GM's 2026-11-22 'we want everything measured so we know where our time goes' is about the time a task's work takes. A background monitor spends no task's time; its cost is measured separately (0.9 ms a sample, 7.2 MiB resident)."
+    },
+    {
+     "id": "D16",
+     "summary": "the samples folder is made once at loop start, never on append",
+     "class": "within",
+     "why": "Keeps a deleted clone from being recreated, which serves the GM's clean-up words of 2026-11-25."
+    },
+    {
+     "id": "D17",
+     "summary": "sampler_words split out as its own function so its test does not depend on the test runner's environment",
+     "class": "within",
+     "why": "Testability, serving the brief's 100% line coverage."
+    },
+    {
+     "id": "R1",
+     "summary": "not built: no signal handler (a bare TERM leaves a stale pid file, which the next start replaces), and no test starts the real detached binary (a stand-in shell instead, the real path run by hand twice)",
+     "class": "within",
+     "why": "Both are stated. The stale pid file is recovered by the next start (pinned by a test), so no wrong outcome is left. Coverage of new Rust is clean, which is what the brief asks of the tests."
+    },
+    {
+     "id": "R2",
+     "summary": "baseline read over the three kept hand logs, where the brief said four",
+     "class": "within",
+     "why": "An observation of what the directory holds, not a choice to leave one out. Two of the three reproduce the decision record's figures."
+    },
+    {
+     "id": "R3",
+     "summary": "exits: first-tier builder-checks and crate-checks here; the full gate runs once over the batch in the clone",
+     "class": "within",
+     "why": "The GM's two-tier ruling of 2026-11-26 (T308)."
+    },
+    {
+     "id": "R4",
+     "summary": "counted as performance work; order after T285 and T316, before T351",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task'; FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T275": {
+   "section_sha256": "9f413929f157711fa2810281d405a7b252df670a37e75a632bf0437749cbcc85",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 resolver",
+     "summary": "The reviews and arbiter crates find their review state through the existing l7r_shared common_git_dir resolver. No second resolver is added and no git process is run.",
+     "class": "within",
+     "why": "This is a choice of mechanism for fixing a wrong outcome: in a pool tree, the arbiter bundle reported no rounds, no earlier verdict and no snapshot. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "D2 common not per tree",
+     "summary": "The state is read and written in the clone's common git directory from any tree. A plain clone's paths are unchanged because there the common directory is <root>/.git.",
+     "class": "within",
+     "why": "The block says every writer of this state already writes to the clone's directory (the pair guard's state, make verify's --state). So reading per tree is the defect and reading the common directory is its fix. This is not the 2026-11-25 'a review recording in its own tree' fix, which is the plan-verdict record that the MANIFEST says is run from the plan's own tree (451 T257). No block moves that record."
+    },
+    {
+     "id": "D3 fix list",
+     "summary": "The fix covers reviews (prereq verdict_dir, disposition_dir, stale_maps snapshots, write_verdict pairing-state, tree::of_unit and gate_file, scoped_dir, the snapshot destination) and arbiter (sections round_counter, reviews review_verdicts, which drops its rev-parse process). Red-first tests run on a real git worktree.",
+     "class": "within",
+     "why": "Each item is a site the census found that the arbiter bundle or the reviews crate reaches. The tests fail only when the requested behavior is missing, so they are enforcement and not added scope."
+    },
+    {
+     "id": "D4 snapshot test fixture",
+     "summary": "snapshot/tests.rs faked an unwritable snapshot with a .git file naming a missing directory. It now names a git directory that is a file, so the same error is still raised.",
+     "class": "within",
+     "why": "The fixture relied on the bug being fixed. Changing it keeps the test checking the same refusal."
+    },
+    {
+     "id": "D5 probes kept",
+     "summary": "clone_sync_hooks .join(.git).is_dir() probes stay on purpose: a pool tree must not claim to be the session's clone. archive/store.rs:161 probes $HOME/source-archive, which is always its own clone.",
+     "class": "within",
+     "why": "The block gives a reason for each that is correct behavior and not a wrong outcome, so neither is a defect and leaving them needs no ruling."
+    },
+    {
+     "id": "D6 T441 deferral (guard sites)",
+     "summary": "The guard's state joined onto the session cwd in a worktree has a visible effect (the finished-run reminder repeats at every Stop in a pool tree). It is not fixed here and is filed as T441, 'lands before T22'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a known wrong outcome out of this task, so it is a narrowing. The ground for it is not cost ('guard files, outside this task's crates' legitimizes nothing). The ground is the GM's own rule on known defects: fix them before the next step of the port begins (2026-11-18; 'fix all of this as part of our tasking that we are doing before resuming our port', 2026-11-26). T441 is filed in this same feature, which is that pre-port tasking, so the defect is scheduled and not carried into the port. The item also has the form FR-009 asks for: why it is not fixed here, the filed id and an order. The bundle does not say what T22 is. The ruling rests on T441 being a task of 451 and so landing before the port resumes, whatever T22 turns out to be."
+    },
+    {
+     "id": "D7 T442 deferral (tree-own git-dir readers and the gate's other .git joins)",
+     "summary": "The review-verdict readers that take a tree's own git directory (a checkpoint or tick in a pool tree misses a recorded verdict) and the gate's other .git joins (stale_terms.rs, helpers.rs quote-verbatim, approach-owed) are not fixed here and are filed as T442, 'lands before T22'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This covers two unlike things, so each is judged on its own. (a) The readers of the tree's own git directory have the same defect as D3, reached through rev-parse rather than a .join. (b) The other .git joins are separate sites. For both, 'more sites than one builder's brief allows' is a cost reason and legitimizes nothing. What makes each legitimate is the same as for D6: they are filed in 451, the GM's pre-port tasking, with FR-009's why, id and order. They are also measured as not reached by builder commands, from the transcripts' count of make targets. A note for T442: the census method this block states searches .git join strings only, and its shell pattern is elided with '...'. It does not name rev-parse --git-dir / --absolute-git-dir or other ways of reaching a tree's own git directory, which is how review_verdicts reached it. T442's own census should search those forms and give its pattern in full. No instance is shown left unfiled, so this does not change the ruling."
+    },
+    {
+     "id": "D8 order and exits",
+     "summary": "The task comes after T267 and before T441 and T442. Green means the three new tests pass with the crates' suites. Red means the failure is recorded, the task is set down and the claim is ruled through make arbiter-ask. Engine step table: n/a.",
+     "class": "within",
+     "why": "This is ordering and exit procedure inside the task. It narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T271 (the 2026-11-25 parallel trials, `specs/449-rust-codebase/port-talk-agenda.md` item 1: builders in worktrees of one feature write their plan review bundles under one directory, `/tmp/l7r-check`, and their scratch files into one session scratchpad)",
+    "### T271 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 changed-blocks bundle keyed by tree",
+     "summary": "delta_prompt hashes the tree's path (tree_of, 451 T257) with the owed blocks' digests into the 8 hex; the name keeps its shape blocks-<tasks>-<8 hex>; one tree's rebuild of the same blocks keeps its directory; pinned red-first by two_trees_owing_the_same_blocks_get_a_bundle_each_and_one_tree_keeps_its_own",
+     "class": "within",
+     "why": "This is the task line's fix for the collision the trials hit and the block reproduced on HEAD (two fixture trees, one directory, the second tree's MANIFEST and make -C command). It serves the GM's 2026-11-25 'a review recording in its own tree' fix before parallel builders. Keeping the name shape is a design choice inside the task. Aside, not blocking: the reader census grep covers *.rs under rust only, so a Makefile or script that matches the name as a string was not searched. The kept shape and the test make this a note, not a finding."
+    },
+    {
+     "id": "D2 task's own bundle left un-keyed",
+     "summary": "plan-<feature>-<task> (make decide) is not keyed by tree; the plan labels this narrower than the task line's 'key the plan review bundle by tree'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's stated reason, that keying it would change the -T<n> shape the plan hold reads, is a cost argument and does not carry this ruling. The ruling rests on a different premise: leaving the name alone leaves no defect. The purpose of the task and of the GM's 2026-11-25 fix ('a review recording in its own tree') is that no reviewer reads a bundle another tree rewrote, or records in the wrong tree. That bundle's name already carries its task. Its MANIFEST already names its tree (T257), as this very bundle's does: diagram-backlog-t271. Each builder works in a worktree of its own task. The GM approved 'a started-task mark per task' (2026-11-25, the same four fixes) so that one task is not started twice. So two trees can only rebuild one task's own bundle if one task is decided in two trees at once, and that is the case the started mark exists to prevent. The block states 'a task has one builder' without measuring it. It holds as far as the started mark does, and no GM word asks for more. The task line's 'by tree' wording is the session's own, not the GM's. If a second tree is ever found deciding a builder's task (the coordinating clone, for example), that is a defect and would need this reopened."
+    },
+    {
+     "id": "D3 scratch-file collision fixed by a brief line",
+     "summary": "scripts/container/builder-brief.md's pasted block gains one line: prefix every scratch file with the task id; a document, no test",
+     "class": "within",
+     "why": "It answers the task line's second half (scratch files in one session scratchpad). The GM's 2026-11-19 'real enforcement and not just instructions' has as its antecedent the six improvements and four ideas approved that day, which FR-012 scopes to named refusals. Read plainly, it does not reach this 2026-11-25 trials task, and stretching it to T271 would be completing the GM's thought. For the caller to see, not blocking: goal 1 says 'no builder's scratch file overwrites another's', but the mechanism is an instruction. A builder that ignores it can still overwrite another's file, so the goal is aimed at, not guaranteed."
+    },
+    {
+     "id": "D4 not classed as performance work",
+     "summary": "'Performance work? no: it removes a collision between two builders; nothing runs faster'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance work and measurement work go first. Fixing a correctness collision in review plumbing is neither, so this classification does not move T271 in FR-013's order against anything the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T272 (the Stop hook's QUESTION UNFILTERED was refused three times on 2026-11-25 for a table row of session c6fd72d1's final message that lists a handoff file's contents, `what's waiting on you` among them: 451 T235's remaining false positive, observed 2026-11-26, method: every `QUESTION UNFILTERED` refusal in that session's transcript, counted by its quoted line)",
+    "### T272 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T272-rule",
+     "summary": "stated_ask reads a `what's/what is/what was/what were (still) waiting on/for you` as listed content, no ask, when a list separator or and/or precedes the what-clause and the clause ends (., |, line end) or a sibling what-clause follows",
+     "class": "within",
+     "why": "Stops a false firing of the Stop hook's QUESTION UNFILTERED on a message that asks the GM nothing, which is what the GM's 2026-11-25 words on the escalation check's cost asked for (the session's levers began with 'stop the false firings') and what feature 429 FR-002's narrow detector requires. The exempted form names contents, not a decision, so no ask FR-002 covers is dropped."
+    },
+    {
+     "id": "T272-bounds",
+     "summary": "the exemption is bounded on both sides: no list before it, or the waiting thing named after it (`: X`, `is X`, `, X`, `(X)`, `waiting on your X`), stays an ask",
+     "class": "within",
+     "why": "Keeps FR-002's recall: every sentence that says what waits on the GM still owes the filter. Pinned by nine asks in the new test, green before and after."
+    },
+    {
+     "id": "T272-no-status-cell",
+     "summary": "no status-cell exemption; T235's table asks (`Waiting on your budget answer`, `yours to decide`) still fire",
+     "class": "within",
+     "why": "Declines a broader exemption that would undo T235's pinned true positives; it keeps the check as it was rather than narrowing it."
+    },
+    {
+     "id": "T272-confirm-pin",
+     "summary": "`for you to confirm` judged a true positive and left firing, pinned as an ask",
+     "class": "within",
+     "why": "The phrase puts a confirmation to the GM; leaving the rule unchanged for it is FR-002 as written. A test that fails only if this ask stops firing enforces the requirement."
+    },
+    {
+     "id": "T272-measure",
+     "summary": "the fix is measured on T235's 112-firing labeled corpus (82 fire: 74 T, 8 B; 0 of 30 F) and red-first on the real row (Rust 521/1 -> 522/0, suite 55/1 -> 56/0)",
+     "class": "within",
+     "why": "Verification that no ask is lost and the false positive is gone; each figure carries its date and method."
+    },
+    {
+     "id": "T272-scope",
+     "summary": "one landing, tooling only, no map changes, nothing found and left",
+     "class": "within",
+     "why": "Scope matches the task line; no unrequested behavior rides in."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T272 (the Stop hook's QUESTION UNFILTERED was refused three times on 2026-11-25 for a table row of session c6fd72d1's final message that lists a handoff file's contents, `what's waiting on you` among them: 451 T235's remaining false positive, observed 2026-11-26, method: every `QUESTION UNFILTERED` refusal in that session's transcript, counted by its quoted line)",
+    "### T272 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 listed-content form",
+     "summary": "stated_ask treats `waiting (on|for) you` as listed, no ask, only when bounded on both sides: a `what's/what is/what was/what were` clause following a list separator before it, and a clause end or sibling `what` clause after it",
+     "class": "within",
+     "why": "FR-002 asks for a narrow detector of messages that put a question or decision to the GM; the row (a handoff file's contents) asks him nothing, so refusing it is a check refusing correct work (a defect), and the GM's 2026-11-25 words on the escalation check's cost are what T235's 'stop the false firings' answers. Every form that names the thing waiting, or has no list before it, still fires, so nothing FR-002 requires is narrowed."
+    },
+    {
+     "id": "D2 `for you to confirm` stays an ask",
+     "summary": "the 2026-11-26 two-builders line is ruled a true positive; the rule is unchanged for it and it is pinned as an ask",
+     "class": "within",
+     "why": "It puts a confirmation to the GM, which is exactly what FR-002 must refuse unfiltered; keeping and pinning it preserves the requirement."
+    },
+    {
+     "id": "D3 no status-cell exemption",
+     "summary": "T235's table asks (`Waiting on your budget answer`, `yours to decide`) still fire; no blanket table-cell exemption is built",
+     "class": "within",
+     "why": "Declining the broader exemption keeps real asks caught; it is the narrower fix, not a narrowing of what was asked."
+    },
+    {
+     "id": "D4 test placement",
+     "summary": "red-first Rust test pins the real row, three siblings and nine asks; the hook suite carries only the statement case (case 12), the ask cases kept in the Rust test alone to avoid a new guard message owing review (451 T170)",
+     "class": "within",
+     "why": "Both the exemption and the asks it must not swallow are enforced by tests that fail when the behavior is absent; where a test lives is design, not fidelity."
+    },
+    {
+     "id": "D5 classification",
+     "summary": "Found and left: none; performance work: no",
+     "class": "within",
+     "why": "Nothing known is left unfixed; the scheduling label does not change what the task builds."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T274 (the number of builders at once is certified against the container's memory limit from samples, and on 2026-11-26 those samples were a shell loop the coordinating session started by hand, so the three- and four-at-once comment batches ran unsampled (`docs/process-decisions.md`, \"Two code builders at once\"))",
+    "### T274 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Samples written to l7r-events/samples/mem-samples.jsonl, not the brief's l7r-events/mem-samples.jsonl; as a consequence state-sync's commit (which skips non-files) no longer carries the samples off the container",
+     "class": "within",
+     "why": "The GM's words say nothing about where samples live; the task line's 'into the tree's l7r-events' holds. The move avoids a stated wrong outcome at the brief's path (the launch lookup reading the samples first, the cohort report calling an idle clone active). The samples not reaching the tooling-state repo narrows nothing the GM asked: his T258 words name record-check answers and event logs, and the sampler's data is neither."
+    },
+    {
+     "id": "D2",
+     "summary": "Sampler is a module of the measure crate; task crate gains no dependency, runs the gate binary",
+     "class": "within",
+     "why": "Code placement; nothing asked settles it."
+    },
+    {
+     "id": "D3",
+     "summary": "The sampler writes and re-reads its own pid file; two starts converge on one; stop is file removal; duplicated line possible for one interval",
+     "class": "within",
+     "why": "Implements 'one sampler a clone' from the brief; the duplicate-line cost is stated."
+    },
+    {
+     "id": "D4",
+     "summary": "Alive is pid plus start time; a zombie is dead",
+     "class": "within",
+     "why": "Liveness mechanism; nothing asked settles it."
+    },
+    {
+     "id": "D5",
+     "summary": "Detached via setsid, streams on /dev/null, inherited descriptors close-on-exec",
+     "class": "within",
+     "why": "Implements 'detached' and 'never failing a handout' (a handout must not hang on a pipe or hold a build slot)."
+    },
+    {
+     "id": "D6",
+     "summary": "A second start exits 0",
+     "class": "within",
+     "why": "Follows from one sampler a clone and a start at every handout."
+    },
+    {
+     "id": "D7",
+     "summary": "Sampler ends at MAX_BYTES (4 MiB); next start moves the file to mem-samples.1.jsonl; report reads both",
+     "class": "within",
+     "why": "The brief's size bound, kept literal (the sampler ends); the rotation keeps the handout's start from silently ending sampling for good. Arithmetic re-done: 4,194,304/277 bytes x 10 s = 42 h."
+    },
+    {
+     "id": "D8",
+     "summary": "Each line carries max, cores, peak; report checks the sampled peak against memory.peak on every report",
+     "class": "within",
+     "why": "Serves the audit-register entry's falsifier, which the GM's T259 words ask for ('what we would look at that would falsify')."
+    },
+    {
+     "id": "D9",
+     "summary": "Median = middle sample (mean of middle two), p95 = nearest rank, labeled CONVENTION",
+     "class": "within",
+     "why": "Statistic convention chosen to reproduce the recorded figures; nothing asked settles it."
+    },
+    {
+     "id": "D10",
+     "summary": "Stall and OOM rises booked to the later sample's row; pairs >120 s apart (GAP_S, GUESS) or with a fallen counter booked to no row, counted as gaps",
+     "class": "within",
+     "why": "Report arithmetic; the knob is labeled GUESS."
+    },
+    {
+     "id": "D11",
+     "summary": "Report rows are pool trees HELD, caveat printed; rows by trees at work deferred to T351, lands before T302",
+     "class": "within",
+     "why": "The brief asks for a report by the count of builders, and a held tree is a builder's; the limit that a held-tree row cannot certify N builders compiling is stated and filed in the found-and-left form. The bundle does not show what T302 is; the deferral is sound only if T302 (or whatever certifies three and four builders) reads the report after T351 lands, which the ordering claims and the bundle cannot confirm. Not blocking."
+    },
+    {
+     "id": "D12",
+     "summary": "CPU stall read from /proc/pressure/cpu (the brief's file), possibly the host's, not compared to the cgroup's cpu.pressure",
+     "class": "within",
+     "why": "The brief's choice, its unmeasured limit stated honestly."
+    },
+    {
+     "id": "D13",
+     "summary": "Knobs L7R_MEM_MARGIN_GIB 7 (GUESS), L7R_SAMPLE_MAX_H 12 (GUESS), L7R_SAMPLE_S 10 (the hand loop's interval)",
+     "class": "within",
+     "why": "Values for the brief's ten-second interval and bounds; guesses labeled where they stand and in the audit entry."
+    },
+    {
+     "id": "D14a",
+     "summary": "builder-tree asks for the sampler after any handout exiting 0, including 'already holds it', and waits for the start's line",
+     "class": "within",
+     "why": "Implements 'started by make builder-tree'."
+    },
+    {
+     "id": "D14b",
+     "summary": "A sampler start failure is a line, never the handout's exit code",
+     "class": "within",
+     "why": "The brief's 'never failing a handout', literally."
+    },
+    {
+     "id": "D14c",
+     "summary": "L7R_SAMPLER=0 asks for no sampler",
+     "class": "within",
+     "why": "An opt-out switch that refuses, blocks or rewrites nothing; with it unset the sampler starts at every handout as the brief asks, and the GM's words do not speak to it."
+    },
+    {
+     "id": "D14d",
+     "summary": "On a cold handout the start comes after the new tree's guard build, so a clone's first guard compile (or the first after a sampler ended) goes unsampled",
+     "class": "within",
+     "why": "Neither the GM's words nor the brief as relayed settle when in the handout the start falls; the gap is stated. Read against the block's own goal ('whenever builders hold pool trees') it is a small hole that falls on the first compile of a batch, the one least likely to coincide with another; worth closing by starting before the guard build, but not a narrowing of anything asked."
+    },
+    {
+     "id": "D15",
+     "summary": "Sampler writes no Phase or event-log line; task-time shown not to break with the folder present",
+     "class": "within",
+     "why": "Keeps the task time breakdown's booking as it is; the GM's breakdown words are not narrowed."
+    },
+    {
+     "id": "D16",
+     "summary": "Samples folder made once at loop start; an append never recreates it",
+     "class": "within",
+     "why": "Mechanism for a sampler whose clone was deleted; nothing asked settles it."
+    },
+    {
+     "id": "D17",
+     "summary": "sampler_words split out of Env::live as its own function so its lines are tested regardless of the test runner's environment",
+     "class": "within",
+     "why": "Serves the brief's 100% line coverage of new Rust."
+    },
+    {
+     "id": "NOT-BUILT",
+     "summary": "No signal handler (a bare TERM leaves the pid file, the next start replaces it); no test starts the real detached binary (a stand-in shell does; real path run by hand twice); no-inherited-descriptor shown once by a pipe",
+     "class": "within",
+     "why": "The brief asks for tests with 100% line coverage of new Rust, which the cover step reports clean; a bare-TERM kill is recovered at the next start, so no wrong outcome is left."
+    },
+    {
+     "id": "RECORD",
+     "summary": "Audit entry dev/audits/memory-sampler.md; one line of builder-brief.md retiring the hand loop; process-decisions, CLAUDE.md, efficiency-tooling rows; slot-coincide.py reads the JSON lines",
+     "class": "within",
+     "why": "The audit entry is the brief's and the GM's T259 register. Retiring the hand loop follows from the sampler replacing it, the task line's own premise."
+    },
+    {
+     "id": "EXITS",
+     "summary": "Green is builder-checks over the two crates plus their cover step (first tier); the full gate runs once in the clone over the batch",
+     "class": "within",
+     "why": "The two-tier arrangement the GM's T308 words ask for; the brief's coverage is met by crate-checks."
+    },
+    {
+     "id": "PERF",
+     "summary": "'Performance work? no: a measurement tool; it makes nothing faster.'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM, 2026-11-20 (request.md): 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first ... it should be counted as such even if the task itself doesn't improve performance.' T274 is a measurement task in that sense (it measures the machine to certify the builder count, a throughput lever), and the block's stated reason, 'it makes nothing faster', is the exact reason the GM ruled out. The bundle does not show that the field means anything other than FR-013's class (FR-013 and SC-006 use the same words, 'performance work'), and it bears on how T351, this task's deferral, is scheduled. None of the three tests holds: nothing makes the GM's classification impossible, nothing in his words implies an exception, and the literal reading defeats nothing. Fix: 'Performance work? yes: a measurement task, counted as performance work by the GM's words of 2026-11-20; it makes nothing faster itself.'"
+    }
+   ],
+   "tasks": [
+    "T274"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T274 (the number of builders at once is certified against the container's memory limit from samples, and on 2026-11-26 those samples were a shell loop the coordinating session started by hand, so the three- and four-at-once comment batches ran unsampled (`docs/process-decisions.md`, \"Two code builders at once\"))",
+    "### T274 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "samples under l7r-events/samples/ rather than the brief's l7r-events/mem-samples.jsonl; a consequence disclosed: state-push skips the folder, so samples stay on the container",
+     "class": "within",
+     "why": "The path is the coordinating session's brief, not the GM's words (the bundle holds neither the task line nor the brief, so this was judged against request.md and the spec only). The task line's 'into the tree's l7r-events' holds. The GM's tooling-state repository (2026-11-25) is for 'record-check answers and event logs'; samples are neither, and no GM sentence asks for memory samples to be kept off the container. The reason (readers that take every .jsonl there as a feature log) was read from code and labeled as such."
+    },
+    {
+     "id": "D2",
+     "summary": "a module of the measure crate; task gains no dependency",
+     "class": "within",
+     "why": "Placement; nothing the GM asked turns on it."
+    },
+    {
+     "id": "D3",
+     "summary": "the sampler writes and re-reads its own pid file; two starts converge on one; stop is a file removal",
+     "class": "within",
+     "why": "Mechanism for the one-a-clone constraint; its one cost (a duplicated line for at most one interval) is stated."
+    },
+    {
+     "id": "D4",
+     "summary": "alive is pid plus start time; a zombie is dead",
+     "class": "within",
+     "why": "Mechanism."
+    },
+    {
+     "id": "D5",
+     "summary": "setsid, null streams, inherited descriptors close-on-exec",
+     "class": "within",
+     "why": "Serves 'never failing a handout' (no handout waits on a pipe or holds a build slot's flock); measured once, labeled."
+    },
+    {
+     "id": "D6",
+     "summary": "a second start exits 0",
+     "class": "within",
+     "why": "Mechanism for asking at every handout."
+    },
+    {
+     "id": "D7",
+     "summary": "ends at a 4 MiB bound; the next start moves the file to mem-samples.1.jsonl, keeping at most two files",
+     "class": "within",
+     "why": "Bounded in size as the brief says, and bounded on disk in line with the GM's 2026-11-22 and 2026-11-25 words on cleaning up after ourselves. The rotation keeps sampling from stopping silently. Figures checked: 18,036/65 = 277 B a line, 4 MiB / 277 B x 10 s = about 42 h, 4,320 lines about 1.2 MB."
+    },
+    {
+     "id": "D8",
+     "summary": "each line carries max, cores and peak; the report checks itself against memory.peak",
+     "class": "within",
+     "why": "Gives the audit entry its falsifier, which the GM asked for in the register (2026-11-25: 'what we would look at that would falsify')."
+    },
+    {
+     "id": "D9",
+     "summary": "median and nearest-rank 95th percentile, labeled CONVENTION",
+     "class": "within",
+     "why": "Chosen to reproduce the recorded hand-log figures; labeled, as the 2026-11-23 talk on labels asks."
+    },
+    {
+     "id": "D10",
+     "summary": "stall and OOM rises booked between consecutive samples; GAP_S 120 s, a GUESS knob",
+     "class": "within",
+     "why": "Arithmetic of the report, with its knob labeled."
+    },
+    {
+     "id": "D11",
+     "summary": "the report's rows are pool trees HELD, not builders compiling; refinement deferred as T351, lands before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the purpose in the heading (certifying the builder count against memory): the block itself says a row for N trees held cannot certify N builders compiling and reads low on memory. Ruled on purpose, not wording. (1) The purpose the task exists for, samples taken without a hand-started loop so a three- or four-at-once batch is never unsampled again, is delivered in full. (2) What is deferred is how stored samples are attributed to rows. The fix named is a join with the event log's Phase lines, so a later reader can re-book the same stored samples; nothing is lost at sampling time. (3) The report prints the caveat and its rustc column, so no row silently claims to certify a compiling count. (4) The deferral has the form FR-009 asks for (why it is not fixed here, a filed id T351, an order 'lands before T302'), the GM-approved form for a deferral. Not verifiable from the bundle: what T302 is, whether T351 is an open unticked task, and whether the samples outlive T351's landing given D7's two-file rotation (about 84 h) and D1's samples staying on the container. make decide's open-task test covers the second."
+    },
+    {
+     "id": "D12",
+     "summary": "CPU stall read from /proc/pressure/cpu, which may be the host's and not the cgroup's; not compared",
+     "class": "within",
+     "why": "The brief names that file, and the certification is against memory, not CPU stall. The premise is unmeasured but stated plainly, and it is not a defect of the memory figures the task certifies. Noted for the audit entry rather than ruled."
+    },
+    {
+     "id": "D13",
+     "summary": "knobs: L7R_MEM_MARGIN_GIB 7 (GUESS), L7R_SAMPLE_MAX_H 12 (GUESS), L7R_SAMPLE_S 10 (the hand loop's interval)",
+     "class": "within",
+     "why": "Bounded in hours as the brief says; each guess is labeled beside its constant, in the help and in the audit entry."
+    },
+    {
+     "id": "D14",
+     "summary": "asks after any handout that exits 0; a sampler failure is a line, never the exit code; L7R_SAMPLER=0 opts out; a cold handout's guard compile runs before the start, so on a clone's first handout it goes unsampled",
+     "class": "within",
+     "why": "'Never failing a handout' is the constraint. The goal is sampling while builders HOLD trees, and during a cold handout's guard build no builder holds that tree yet. The unsampled first compile is stated. It is a gap in a reading, not a wrong outcome of the memory certification at N concurrent builders: on the first handout of a clone no sampler-covered batch is yet running."
+    },
+    {
+     "id": "D15",
+     "summary": "the sampler writes no Phase line and no event-log line",
+     "class": "within",
+     "why": "The GM's 2026-11-22 'we want everything measured so we know where our time goes' is about the time a task's work takes. A background monitor spends no task's time; its cost is measured separately (0.9 ms a sample, 7.2 MiB resident)."
+    },
+    {
+     "id": "D16",
+     "summary": "the samples folder is made once at loop start, never on append",
+     "class": "within",
+     "why": "Keeps a deleted clone from being recreated, which serves the GM's clean-up words of 2026-11-25."
+    },
+    {
+     "id": "D17",
+     "summary": "sampler_words split out as its own function so its test does not depend on the test runner's environment",
+     "class": "within",
+     "why": "Testability, serving the brief's 100% line coverage."
+    },
+    {
+     "id": "R1",
+     "summary": "not built: no signal handler (a bare TERM leaves a stale pid file, which the next start replaces), and no test starts the real detached binary (a stand-in shell instead, the real path run by hand twice)",
+     "class": "within",
+     "why": "Both are stated. The stale pid file is recovered by the next start (pinned by a test), so no wrong outcome is left. Coverage of new Rust is clean, which is what the brief asks of the tests."
+    },
+    {
+     "id": "R2",
+     "summary": "baseline read over the three kept hand logs, where the brief said four",
+     "class": "within",
+     "why": "An observation of what the directory holds, not a choice to leave one out. Two of the three reproduce the decision record's figures."
+    },
+    {
+     "id": "R3",
+     "summary": "exits: first-tier builder-checks and crate-checks here; the full gate runs once over the batch in the clone",
+     "class": "within",
+     "why": "The GM's two-tier ruling of 2026-11-26 (T308)."
+    },
+    {
+     "id": "R4",
+     "summary": "counted as performance work; order after T285 and T316, before T351",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task'; FR-013."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T275 (T267's census: state paths joined onto `<root>/.git` break or are passed over in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t270)",
+    "### T275 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 resolver",
+     "summary": "The reviews and arbiter crates find their review state through the existing l7r_shared common_git_dir resolver. No second resolver is added and no git process is run.",
+     "class": "within",
+     "why": "This is a choice of mechanism for fixing a wrong outcome: in a pool tree, the arbiter bundle reported no rounds, no earlier verdict and no snapshot. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "D2 common not per tree",
+     "summary": "The state is read and written in the clone's common git directory from any tree. A plain clone's paths are unchanged because there the common directory is <root>/.git.",
+     "class": "within",
+     "why": "The block says every writer of this state already writes to the clone's directory (the pair guard's state, make verify's --state). So reading per tree is the defect and reading the common directory is its fix. This is not the 2026-11-25 'a review recording in its own tree' fix, which is the plan-verdict record that the MANIFEST says is run from the plan's own tree (451 T257). No block moves that record."
+    },
+    {
+     "id": "D3 fix list",
+     "summary": "The fix covers reviews (prereq verdict_dir, disposition_dir, stale_maps snapshots, write_verdict pairing-state, tree::of_unit and gate_file, scoped_dir, the snapshot destination) and arbiter (sections round_counter, reviews review_verdicts, which drops its rev-parse process). Red-first tests run on a real git worktree.",
+     "class": "within",
+     "why": "Each item is a site the census found that the arbiter bundle or the reviews crate reaches. The tests fail only when the requested behavior is missing, so they are enforcement and not added scope."
+    },
+    {
+     "id": "D4 snapshot test fixture",
+     "summary": "snapshot/tests.rs faked an unwritable snapshot with a .git file naming a missing directory. It now names a git directory that is a file, so the same error is still raised.",
+     "class": "within",
+     "why": "The fixture relied on the bug being fixed. Changing it keeps the test checking the same refusal."
+    },
+    {
+     "id": "D5 probes kept",
+     "summary": "clone_sync_hooks .join(.git).is_dir() probes stay on purpose: a pool tree must not claim to be the session's clone. archive/store.rs:161 probes $HOME/source-archive, which is always its own clone.",
+     "class": "within",
+     "why": "The block gives a reason for each that is correct behavior and not a wrong outcome, so neither is a defect and leaving them needs no ruling."
+    },
+    {
+     "id": "D6 T441 deferral (guard sites)",
+     "summary": "The guard's state joined onto the session cwd in a worktree has a visible effect (the finished-run reminder repeats at every Stop in a pool tree). It is not fixed here and is filed as T441, 'lands before T22'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a known wrong outcome out of this task, so it is a narrowing. The ground for it is not cost ('guard files, outside this task's crates' legitimizes nothing). The ground is the GM's own rule on known defects: fix them before the next step of the port begins (2026-11-18; 'fix all of this as part of our tasking that we are doing before resuming our port', 2026-11-26). T441 is filed in this same feature, which is that pre-port tasking, so the defect is scheduled and not carried into the port. The item also has the form FR-009 asks for: why it is not fixed here, the filed id and an order. The bundle does not say what T22 is. The ruling rests on T441 being a task of 451 and so landing before the port resumes, whatever T22 turns out to be."
+    },
+    {
+     "id": "D7 T442 deferral (tree-own git-dir readers and the gate's other .git joins)",
+     "summary": "The review-verdict readers that take a tree's own git directory (a checkpoint or tick in a pool tree misses a recorded verdict) and the gate's other .git joins (stale_terms.rs, helpers.rs quote-verbatim, approach-owed) are not fixed here and are filed as T442, 'lands before T22'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This covers two unlike things, so each is judged on its own. (a) The readers of the tree's own git directory have the same defect as D3, reached through rev-parse rather than a .join. (b) The other .git joins are separate sites. For both, 'more sites than one builder's brief allows' is a cost reason and legitimizes nothing. What makes each legitimate is the same as for D6: they are filed in 451, the GM's pre-port tasking, with FR-009's why, id and order. They are also measured as not reached by builder commands, from the transcripts' count of make targets. A note for T442: the census method this block states searches .git join strings only, and its shell pattern is elided with '...'. It does not name rev-parse --git-dir / --absolute-git-dir or other ways of reaching a tree's own git directory, which is how review_verdicts reached it. T442's own census should search those forms and give its pattern in full. No instance is shown left unfiled, so this does not change the ruling."
+    },
+    {
+     "id": "D8 order and exits",
+     "summary": "The task comes after T267 and before T441 and T442. Green means the three new tests pass with the crates' suites. Red means the failure is recorded, the task is set down and the claim is ruled through make arbiter-ask. Engine step table: n/a.",
+     "class": "within",
+     "why": "This is ordering and exit procedure inside the task. It narrows nothing."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T271 to T280, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

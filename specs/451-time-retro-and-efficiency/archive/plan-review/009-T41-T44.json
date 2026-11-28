@@ -1,0 +1,820 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T41": {
+   "section_sha256": "5a5d53ae9b0f5085dcea7b0d8e66fe8374c76ebd79b5aa42a5662043806ff7aa",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T41-measure-then-launcher-only",
+     "summary": "Measure the failure in a scratch clone first, then change only the launcher's build-failure path; no gate crate changed.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the builders' loop). The GM asked that performance work go first (2026-11-20) and named no mechanism for this one; confining the change to the launcher narrows nothing he or the spec asked for."
+    },
+    {
+     "id": "T41-named-file-refusal",
+     "summary": "On a failed build the launcher keeps cargo's report and adds each file cargo points at (from the tree root), an advice line (yours: fix it; not yours: leave it and re-run once it compiles) and the git status of uncommitted edits; a failure naming no file keeps the old line; it applies to any uncompiling source.",
+     "class": "within",
+     "why": "Serves FR-013's 'the builders' loop faster': it removes the old order to edit the neighbor's file. It does not change who is refused or when, so it adds no behavior beyond the message. Its red-first shard case (2 FAIL lines on the unfixed launcher) only checks that the message is there, so it enforces the task and is not added scope."
+    },
+    {
+     "id": "T41-no-last-good-binary-fallback",
+     "summary": "Do not build a fallback that runs the last good l7r-gate binary when the tree does not compile; the launcher stays fail-closed.",
+     "class": "within",
+     "why": "Neither the request nor the spec asks for a fallback. The GM's words call only for performance work to go first, and FR-013 defines it by tag. Not building one keeps existing behavior the plan must keep (feature 449 T061's fail-closed launcher, and the dispatch's rule that a gate check over a changed guard uses the new code), so it narrows nothing asked. If you read it against the task's own problem statement (others' commands blocked), it is still not a narrowing of the GM's request. On the merits it would be LEGITIMATE anyway: a fallback would let verdicts and push-trusted records come from a binary older than the code it judges, which defeats what the gate is for. The plan measured how much a fallback would cover: the commands that may run safely on an old binary were 787 of 12,700 make targets in a week (6%), and make decide (449 runs) and rust-test (2,414 runs) would still fail."
+    },
+    {
+     "id": "T41-old-binary-safety-rule",
+     "summary": "Rule: a command may run on a binary older than the tree only if it renders no verdict and writes no record a later gate or push trusts. Under it decide, task-start, every check, rust lint/test/cover/dead, format --check, speckit-todo's push routes, mode-a and hamlet fail; format writing, bare speckit-todo and coord lines pass.",
+     "class": "within",
+     "why": "It is the reason for not building the fallback, not an exception put into behavior: nothing in the plan runs an old binary under it. It is narrower than (and so consistent with) the fail-closed launcher. The plan's figures carry one-shot measured labels (2026-11-20, .git/tool-usage.jsonl kind:target, 2026-11-13 to 20), and the arithmetic holds (787/12,700 = 6.2%)."
+    },
+    {
+     "id": "T41-stale-ok-escape-untouched",
+     "summary": "L7R_GATE_STALE_OK=1 (T129) still runs the old binary, unchanged.",
+     "class": "within",
+     "why": "This is behavior that already exists. The plan neither widens nor removes it, and nothing the GM asked reaches it."
+    },
+    {
+     "id": "T41-order-exits-done",
+     "summary": "Lands after T40 and is independent of T43. Green exit: the shard's new cases pass and the real make decide against a broken guard prints the two lines. Done is measured (exit 2 in 0.23 s with the named file and the advice).",
+     "class": "within",
+     "why": "Sequencing and the measures of done; they narrow nothing the request or spec asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T42": {
+   "section_sha256": "ee39c1fdd396bf71d5072ec8c7694347ba0eba6cc8c5dd807c9e2562ecdc9317",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T42-approach",
+     "summary": "A Python program run from stdin (own heredoc, own < regular file, or an upstream cat of one heredoc/file) is judged by T31's py_c denylist reader as a -c program is; T31's stdin rule is retired for every program the walk can read.",
+     "class": "within",
+     "why": "A defect fix in both directions: a writer standing in the mirror judged by no one (a check passing bad work) and three reads refused or rewritten (a check refusing good work), both wrong outcomes under constitution XIV. Nothing the GM or the spec asked for is narrowed; every write caught before is still caught (replays: 0 other outputs changed)."
+    },
+    {
+     "id": "T42-unreadable-keeps-T31",
+     "summary": "A stdin program the walk cannot read (variable, here-string, missing file, directory, device, any other upstream) keeps T31's rule: every -c read of the command is a write.",
+     "class": "within",
+     "why": "The block quotes T42's own task line for exactly this case ('a program fed from a variable or a file outside the command stays judged as T31 left it'); it narrows nothing asked and holds the closed side for what cannot be read."
+    },
+    {
+     "id": "T42-two-walks",
+     "summary": "walk_judged (judge, its re-judge, gm_tree offending) judges stdin programs; walk (house style, make-only, bench) sees none, as before.",
+     "class": "within",
+     "why": "Keeps house style's D11 (a program heredoc's writes unknowable) and its pinned case unchanged; the replays show 0 moves under house style and gm-tree alone. It leaves those readers as they were rather than narrowing anything requested."
+    },
+    {
+     "id": "T42-py_c-quote-and-re-compile",
+     "summary": "py_c gains the unquoted-heredoc quote 'h' (shell un-escaping, command substitution a write) and reads past re.compile( (a pattern, not code); builtin compile and other .compile( stay writes.",
+     "class": "within",
+     "why": "The first is what judging an unquoted heredoc body correctly needs; the second fixes a defect found by the replay's hand-read (window#307's read judged a writer). Both are defect fixes; the re.compile replay moved 0 rows."
+    },
+    {
+     "id": "T42-split-fixture-record",
+     "summary": "tree.rs split into tree/python.rs and tree/verdict.rs for the file-scale bar; main-tree refusals fixture relabeled from the t replay (5 allowed->rewrote, 1 rewrote->allowed); T31's '301 allowed' line corrected to place each heredoc by where the shell stands.",
+     "class": "within",
+     "why": "Housekeeping and record correction: a check's expected verdicts changing as a bug is fixed is expected (fix as we go), and restating a record to match measurement narrows nothing."
+    },
+    {
+     "id": "T42-left-window307-T44",
+     "summary": "window#307's second heredoc, a read (subprocess.run git ls-files), is now refused with no clone / rewritten with one, because subprocess is on T31's denylist; left, filed as T44, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T42's own goal (a read runs as typed) and is a defect left: T42 moves this row from allowed to refused by extending to stdin the rule the -c form has had since T31. The difficulty of an argv reader legitimates nothing. What makes it legitimate is the GM's own rule (2026-11-18): known defects are fixed before moving on to the next step, not necessarily inside the task that finds them. T44 is filed and placed before T22, the same point T42's own order names, so the defect is not carried into the next step. With a clone resolvable (the builders' case) the row is rewritten to run in the clone, not refused. Not retiring the -c/stdin denylist entry here also avoids leaving 92 writers unjudged."
+    },
+    {
+     "id": "T42-left-house-style-flake-T45",
+     "summary": "House style's verdict varied under load in one nobody replay (8 rows flipped, 3 outputs changed; reruns 0); left, filed as T45, measured first under induced load, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A pre-existing defect in code T42 does not touch (house style's walk and verdict unchanged, 0 moves in every steady replay) whose cause is not yet found. It is not carried into the next step: T45 lands before T22, which satisfies the GM's fix-before-moving-on rule. Ruled separately from window#307 because it is unlike it: T42 did not create it."
+    },
+    {
+     "id": "T42-perf-classification",
+     "summary": "T42 declared performance work in FR-013's sense ([perf], the builders' loop: a refused read costs a model round trip), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 takes either PERF=1 or a [perf] tag, and names the builders' loop. On the plain reading the task carries [perf]. The task line itself is not in the bundle, so the tag is taken from the block's own statement. The claim is thin (3 reads freed against 93 newly judged), but the work is owed as a defect fix regardless, and the classification narrows nothing the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T43": {
+   "section_sha256": "ea569e06067531d88c4c3860176749dd01e3a5e91b76b633b889ff56fed7b196",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T43-scope",
+     "summary": "T43 is filed as [perf] work under FR-013 (the owed computation every gate run, push and landing pays).",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'can we in general priotitize performance improvements going forward?' and 'doing those first makes everything after them faster'; FR-013 defines perf work as making the checks, gate or landings faster, which this is."
+    },
+    {
+     "id": "T43-rule",
+     "summary": "Delta::fetch reads a base file from the working tree when the cached diff does not name it, ls-files -v does not flag it assume-unchanged/skip-worktree, it is a plain file and holds no carriage return; decoded as cat_blobs decodes, so texts equals cat_blobs.",
+     "class": "within",
+     "why": "A speed change that removes work; the conservative conditions keep every owed unit the same, so no check's verdict changes. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T43-any-rev",
+     "summary": "The rule applies at any revision, so --between's reads shrink too.",
+     "class": "within",
+     "why": "Same speed change over the same function; no behavior asked for is removed."
+    },
+    {
+     "id": "T43-rejected-cache",
+     "summary": "Rejected keying the base read by merge base and reusing it across computations.",
+     "class": "within",
+     "why": "A design choice among speedups; it keeps an existing invariant of delta.rs and narrows nothing requested."
+    },
+    {
+     "id": "T43-tests",
+     "summary": "Red-first tests on a cost counter (blobs_asked: 11 to 1) and texts-equals-cat_blobs across edited/deleted/skip-worktree/link/CR/untracked/assume-unchanged states.",
+     "class": "within",
+     "why": "Enforcement of the task's own hold (owed output the same, base read shrunk); a test that fails only when the requested behavior is absent serves the request."
+    },
+    {
+     "id": "T43-fail-closed-read",
+     "summary": "If the cached git diff or ls-files -v fails, nothing is called unchanged and every base name goes to cat-file, as before T43; tested by corrupting the index.",
+     "class": "within",
+     "why": "Closes a wrong outcome the new read path would otherwise introduce (edited tree read as the base, so the record family owes nothing); fixing a found defect in the step is the standing rule, not a narrowing."
+    },
+    {
+     "id": "T43-refuse-failed-diff",
+     "summary": "Delta::changed returns git's error on a failed diff in a repository (a corrupt index), and every owed computation reading it refuses with 'cannot tell what changed ... repair the index' rather than owing nothing (or owing everything).",
+     "class": "within",
+     "why": "A found defect (a check passing bad work: six modal-research units went unowed on a corrupt index, measured) fixed in the step where found, red first; the refusal is confined to the failed-diff case the defect lives in, and choosing refusal over a flood is design, not a narrowing of anything asked."
+    },
+    {
+     "id": "T43-norepo-split",
+     "summary": "The failed-diff refusal is split: where the diff fails and git rev-parse --git-dir fails too (no repository at all, asked only after a failed diff), changed is empty and nothing is owed, as before T43; a repository whose diff fails (a corrupt index) is refused. Red first (a_tree_with_no_repository_has_nothing_changed), prompted by land's replay_owing test running triage in a bare directory.",
+     "class": "within",
+     "why": "Keeps the pre-T43 behavior for a directory with nothing to judge (no repository, so no base and no delta) - not a wrong outcome, and the defect the refusal fixes (a corrupt index leaving six modal units unowed) is still refused, since rev-parse --git-dir succeeds on a repository whose index is corrupt. Confining a defect fix to the case the defect lives in narrows nothing the GM asked; the GM's request is performance work and this preserves existing tested behavior rather than removing any."
+    },
+    {
+     "id": "T43-others-left",
+     "summary": "ls-files --others still reads a failure as no untracked files; a tree with no repository owes nothing, as the command-line tests and land's replay test pin.",
+     "class": "within",
+     "why": "Not a defect left: the no-repository behavior is pinned as intended, and a corrupt index (the failure case found) is refused earlier by changed wherever there is a base."
+    },
+    {
+     "id": "T43-ls-files-alone-untested",
+     "summary": "A failed ls-files -v with a good diff rides the same fail-closed rule and has no test of its own; no state was found that fails one and not the other.",
+     "class": "within",
+     "why": "Coverage of a case not shown to exist; the rule covers it, and no wrong outcome is left."
+    },
+    {
+     "id": "T43-entry-drift-left",
+     "summary": "Entry-drift's own RevReader still reads the 297 pop-up files at the base (0.025 s, about 2% of the computation) and is not filed.",
+     "class": "within",
+     "why": "A small cost, not a defect (no wrong outcome); FR-013 orders perf work first but does not require every measured cost be removed, so leaving a 2% cost narrows nothing the GM asked."
+    },
+    {
+     "id": "T43-edit-reach",
+     "summary": "Only the owed crate (delta.rs, a doc comment in owed.rs) and this section edited; ordered after T40, before T22, beside T41.",
+     "class": "within",
+     "why": "Scope and ordering inside the task as filed; consistent with FR-013's perf-first ordering."
+    },
+    {
+     "id": "T43-verification",
+     "summary": "Owed output checked against the HEAD build on eight real commits plus the reword (53 listing pairs, three triage bundles, fingerprint cross-checks); triage outputs differ only in the printed --out path, accepted.",
+     "class": "within",
+     "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T44": {
+   "section_sha256": "8b4850e81052b2dd06ed9526288cc1eea811b544cb40a59b3149dc26f926aeeb",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T44-accounting",
+     "summary": "py_c.rs accounts for every mention of subprocess before the writer denylist is read: a plain import, the PIPE/DEVNULL/STDOUT constants, and run/check_output/check_call/call with one literal list argv and only listed keywords; only the name is masked, so arguments (input=, stdout=open(...)) are still judged; anything unaccounted stays a write.",
+     "class": "within",
+     "why": "Fixes a found defect (a guard refusing or rewriting a read, window#307) while keeping T31's closed side. Refusing good work is a wrong outcome under constitution XIV, and the fix serves FR-013's builders'-loop performance aim. It narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T44-admitted-commands",
+     "summary": "Admitted argv commands: git ls-files, show, rev-parse, log, cat-file, ls-tree (with any -C dir), plus grep, ls, cat, head, wc, each element literal and screened for writing or program-running options (git --output/--ext-diff/--textconv/--filters; ugrep --filter/--pager/--view/--save-config/--query/-Q/--config). The option search space and method are stated.",
+     "class": "within",
+     "why": "The set is the corpus-observed reads plus the task line's and the brief's additions, and the screen states its search space (completion-helper lists, --help, rev-list -h labeled as a reading). It is a choice made inside the fix, and none of it narrows the GM's request or any FR."
+    },
+    {
+     "id": "T44-left-as-writes",
+     "summary": "git status and git diff (measured to rewrite .git/index), git grep (-O runs a program), rg (--pre, --hostname-bin run a program), shell strings, shell=True, unlisted keywords, non-literal argv, Popen, getoutput, aliased imports, make, unknown commands, and tree-code scripts (window#56/68/69/299, refusals#149) all stay writes.",
+     "class": "within",
+     "why": "Each one either writes or can run a program, or is a shape the reader does not know, so T31's closed side keeps it as a write. That keeps a judgment that already stands. It does not leave a wrong outcome in place: no corpus row runs rg, git grep, status or diff from Python, so no observed read is refused by these exclusions. The rg exclusion departs from the session's brief, not from the GM's request or the spec."
+    },
+    {
+     "id": "T44-repo-config-filters",
+     "summary": "A filter or textconv named by the repository's own config may run on log -p/show without a flag; this is accepted as main-tree already accepts it for the same shell command (tree.rs git_write); the mirror's config names none.",
+     "class": "within",
+     "why": "It matches the existing shell-level judgment and the mirror's config, which was read. It changes no behavior the GM asked to change."
+    },
+    {
+     "id": "T44-perf-tag",
+     "summary": "The task is tagged [perf] (the builders' loop) and not filed PERF=1, because it touches no engine stage's counted operations or time.",
+     "class": "within",
+     "why": "FR-013 counts a task as performance work when it is filed PERF=1 OR tagged [perf], and it names the builders' loop explicitly. The tag satisfies the requirement."
+    },
+    {
+     "id": "T44-order-exits",
+     "summary": "Order: after T42, before T22, beside T46. Exits: red tests green, replays with every move accounted, crate-scoped rust-test, lint and 100% cover, make quick, make static once, make hooks-test. Budget: one landing.",
+     "class": "within",
+     "why": "It is a performance task placed early, consistent with FR-013. Running make static once agrees with FR-007's aim. Nothing is narrowed."
+    },
+    {
+     "id": "T44-found-and-left",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "The exclusions above are writes or unknown shapes kept closed, not defects carried forward. The 31 unmoved subprocess rows are each placed (26 allowed, 5 running tree code)."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T41 (<why: the finding or measurement that files it>)",
+    "### T41 Approach (checklist part A)",
+    "(removed) ### T34 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T34-block-removed",
+     "summary": "T34's section, an unfilled template placeholder (earlier text: only placeholders and an empty step table, verdict CLEAR), is removed from the plan.",
+     "class": "within",
+     "why": "The removed text carried no decision - only template placeholders - so removing it narrows nothing in the request or the spec; it reads as T34's section leaving the open plan as the task finishes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T41 (T34's reading of `scripts/gates/l7r-gate.sh`: the launcher rebuilds `l7r-gate` when `rust/guard` changes and the gate links the guard, so one builder's uncompiling guard edit fails every other builder's gate command in a shared clone - read, not measured, until this task)",
+    "### T41 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T41-measure-then-launcher-only",
+     "summary": "Measure the failure in a scratch clone first, then change only the launcher's build-failure path; no gate crate changed.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the builders' loop). The GM asked that performance work go first (2026-11-20) and named no mechanism for this one; confining the change to the launcher narrows nothing he or the spec asked for."
+    },
+    {
+     "id": "T41-named-file-refusal",
+     "summary": "On a failed build the launcher keeps cargo's report and adds each file cargo points at (from the tree root), an advice line (yours: fix it; not yours: leave it and re-run once it compiles) and the git status of uncommitted edits; a failure naming no file keeps the old line; it applies to any uncompiling source.",
+     "class": "within",
+     "why": "Serves FR-013's 'the builders' loop faster': it removes the old order to edit the neighbor's file. It does not change who is refused or when, so it adds no behavior beyond the message. Its red-first shard case (2 FAIL lines on the unfixed launcher) only checks that the message is there, so it enforces the task and is not added scope."
+    },
+    {
+     "id": "T41-no-last-good-binary-fallback",
+     "summary": "Do not build a fallback that runs the last good l7r-gate binary when the tree does not compile; the launcher stays fail-closed.",
+     "class": "within",
+     "why": "Neither the request nor the spec asks for a fallback. The GM's words call only for performance work to go first, and FR-013 defines it by tag. Not building one keeps existing behavior the plan must keep (feature 449 T061's fail-closed launcher, and the dispatch's rule that a gate check over a changed guard uses the new code), so it narrows nothing asked. If you read it against the task's own problem statement (others' commands blocked), it is still not a narrowing of the GM's request. On the merits it would be LEGITIMATE anyway: a fallback would let verdicts and push-trusted records come from a binary older than the code it judges, which defeats what the gate is for. The plan measured how much a fallback would cover: the commands that may run safely on an old binary were 787 of 12,700 make targets in a week (6%), and make decide (449 runs) and rust-test (2,414 runs) would still fail."
+    },
+    {
+     "id": "T41-old-binary-safety-rule",
+     "summary": "Rule: a command may run on a binary older than the tree only if it renders no verdict and writes no record a later gate or push trusts. Under it decide, task-start, every check, rust lint/test/cover/dead, format --check, speckit-todo's push routes, mode-a and hamlet fail; format writing, bare speckit-todo and coord lines pass.",
+     "class": "within",
+     "why": "It is the reason for not building the fallback, not an exception put into behavior: nothing in the plan runs an old binary under it. It is narrower than (and so consistent with) the fail-closed launcher. The plan's figures carry one-shot measured labels (2026-11-20, .git/tool-usage.jsonl kind:target, 2026-11-13 to 20), and the arithmetic holds (787/12,700 = 6.2%)."
+    },
+    {
+     "id": "T41-stale-ok-escape-untouched",
+     "summary": "L7R_GATE_STALE_OK=1 (T129) still runs the old binary, unchanged.",
+     "class": "within",
+     "why": "This is behavior that already exists. The plan neither widens nor removes it, and nothing the GM asked reaches it."
+    },
+    {
+     "id": "T41-order-exits-done",
+     "summary": "Lands after T40 and is independent of T43. Green exit: the shard's new cases pass and the real make decide against a broken guard prints the two lines. Done is measured (exit 2 in 0.23 s with the named file and the advice).",
+     "class": "within",
+     "why": "Sequencing and the measures of done; they narrow nothing the request or spec asks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T42 (<why: the finding or measurement that files it>)",
+    "### T42 Approach (checklist part A)",
+    "### T43 (<why: the finding or measurement that files it>)",
+    "### T43 Approach (checklist part A)",
+    "(removed) ### T31 (<why: the finding or measurement that files it>)",
+    "(removed) ### T40 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T42/T43 template sections",
+     "summary": "Two new task sections added as the unfilled standard template (heading, Approach placeholder, empty step table, checklist part A placeholders, Found-and-left and Performance-work placeholders); every field is a <placeholder>, nothing is decided.",
+     "class": "within",
+     "why": "An unfilled template settles nothing the spec leaves open. Its Found-and-left placeholder states D15's deferral form (fix in the task by default; a deferral names why, T<n> and lands before T<m>; a class fix carries observed/method), and its Performance-work placeholder states FR-013's [perf]/PERF=1 test. Both match the accepted spec and the GM's 2026-11-19 approval and 2026-11-20 performance-first words. They neither narrow nor add to them."
+    },
+    {
+     "id": "removed T31/T40 template headings",
+     "summary": "The empty template headings of T31 and T40 are removed now that those tasks' sections are written.",
+     "class": "within",
+     "why": "The removed text (earlier.md) was the bare unfilled template, judged CLEAR. Deleting a placeholder whose section has been written removes no decision and no requirement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T42-1 stdin program judged by py_c reads",
+     "summary": "A Python program run from stdin (own heredoc, own < regular file, or an upstream cat of one heredoc or readable file) is judged by T31's denylist reader as a -c program is: a writer is a shell-standing write, a read is no target; T31's stdin rule retired for every readable program.",
+     "class": "within",
+     "why": "Fixes two defects in the constitution XIV sense (a write in the mirror judged by no one passes bad work; three real reads refused or rewritten refuse good work), which fix-as-we-go (GM 2026-11-18) requires, found by T31 inside this feature. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T42-2 an unreadable stdin program keeps T31's rule",
+     "summary": "A variable, here-string, missing file, directory, device or other upstream is a program the walk cannot read; the command's -c reads stay D5 writes as T31 left them.",
+     "class": "within",
+     "why": "The task line itself keeps that case ('a program fed from a variable or a file outside the command stays judged as T31 left it'); behavior is unchanged from HEAD for that case and is the denylist's closed side, so nothing is newly left and no ruling is owed."
+    },
+    {
+     "id": "T42-3 two walks",
+     "summary": "walk_judged (judge, its re-judge, gm_tree_hooks::offending) sees stdin programs; walk (house style, make-only, bench) does not, keeping house style's D11 and its pinned case.",
+     "class": "within",
+     "why": "Limits the change to the guards whose wrong outcomes were found; the other readers' behavior is unchanged (0 moves measured by replay). This is the scope of the fix, not a narrowing of any request clause."
+    },
+    {
+     "id": "T42-4 unquoted-heredoc quote 'h'",
+     "summary": "An unquoted heredoc body undoes the shell's escapes and treats a command substitution as a write, like a double-quoted -c.",
+     "class": "within",
+     "why": "Implementation correctness of T42-1; decides nothing the request or spec leaves open."
+    },
+    {
+     "id": "T42-5 re.compile read past",
+     "summary": "re.compile( is not a writer; the builtin compile and any other .compile( stay writes.",
+     "class": "within",
+     "why": "A defect (a read judged a writer) found by this task's replay and fixed in it, as fix-as-we-go asks; the conservative remainder keeps every write caught before still caught."
+    },
+    {
+     "id": "T42-6 fixture relabeled and suite case added",
+     "summary": "main-tree-refusals-2026-09.json relabeled from the t replay (5 allowed->rewrote, 1 rewrote->allowed); a heredoc writer in the mirror -> rewritten added.",
+     "class": "within",
+     "why": "The fixture follows the fixed behavior (a check's verdicts changing as a bug is fixed is expected, GM 2026-11-18); the new case is a red-first test enforcing the fix."
+    },
+    {
+     "id": "T42-7 window#307 left, filed as T44",
+     "summary": "window#307's read-only heredoc that calls subprocess.run([git, -C, root, ls-files]) moves from allowed to refused/rewritten under T42 (subprocess is on T31's denylist); the argv reader that would let it through is filed as T44, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a defect (a read refused) and T42 newly produces this one occurrence, so it is a narrowing and owes a ruling. It is legitimate on the GM's own words: 'we should fix all known bugs in each step before moving on to porting the next step' (2026-11-18) puts the unit at the step, and T44 is filed and ordered to land before T22, the next step. It is also a separate mechanism (an argv reader past a name denylist), and the same program as -c has been refused this way since T31, so T42 extends existing closed-side behavior to one more spelling rather than inventing a new refusal. The alternative, keeping heredocs unjudged, leaves 78 mirror writers uncaught, a worse defect. The ruling holds only while T44 lands before T22; a plan that lets T22 start with T44 open carries a known defect into the next step."
+    },
+    {
+     "id": "T42-8 tagged [perf], not PERF=1",
+     "summary": "T42 is classed performance work under FR-013 (the builders' loop: each wrongly refused read costs a model round trip), tagged [perf] and not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 accepts either PERF=1 or a [perf] tag, and names the builders' loop as performance work; removing wrong refusals shortens it. It is mainly a correctness fix, which fix-as-we-go orders first in any case, so the class changes nothing the GM asked for."
+    },
+    {
+     "id": "T42-9 order and exits",
+     "summary": "After T31, before T22, beside T38; green exits include make static once; red sets the task down and goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Consistent with FR-007 (make static once before the landing) and with fix-as-we-go's order; decides nothing against the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T42-approach",
+     "summary": "A Python program run from stdin (own heredoc, own < regular file, or an upstream cat of one heredoc/file) is judged by T31's py_c denylist reader as a -c program is; T31's stdin rule is retired for every program the walk can read.",
+     "class": "within",
+     "why": "A defect fix in both directions: a writer standing in the mirror judged by no one (a check passing bad work) and three reads refused or rewritten (a check refusing good work), both wrong outcomes under constitution XIV. Nothing the GM or the spec asked for is narrowed; every write caught before is still caught (replays: 0 other outputs changed)."
+    },
+    {
+     "id": "T42-unreadable-keeps-T31",
+     "summary": "A stdin program the walk cannot read (variable, here-string, missing file, directory, device, any other upstream) keeps T31's rule: every -c read of the command is a write.",
+     "class": "within",
+     "why": "The block quotes T42's own task line for exactly this case ('a program fed from a variable or a file outside the command stays judged as T31 left it'); it narrows nothing asked and holds the closed side for what cannot be read."
+    },
+    {
+     "id": "T42-two-walks",
+     "summary": "walk_judged (judge, its re-judge, gm_tree offending) judges stdin programs; walk (house style, make-only, bench) sees none, as before.",
+     "class": "within",
+     "why": "Keeps house style's D11 (a program heredoc's writes unknowable) and its pinned case unchanged; the replays show 0 moves under house style and gm-tree alone. It leaves those readers as they were rather than narrowing anything requested."
+    },
+    {
+     "id": "T42-py_c-quote-and-re-compile",
+     "summary": "py_c gains the unquoted-heredoc quote 'h' (shell un-escaping, command substitution a write) and reads past re.compile( (a pattern, not code); builtin compile and other .compile( stay writes.",
+     "class": "within",
+     "why": "The first is what judging an unquoted heredoc body correctly needs; the second fixes a defect found by the replay's hand-read (window#307's read judged a writer). Both are defect fixes; the re.compile replay moved 0 rows."
+    },
+    {
+     "id": "T42-split-fixture-record",
+     "summary": "tree.rs split into tree/python.rs and tree/verdict.rs for the file-scale bar; main-tree refusals fixture relabeled from the t replay (5 allowed->rewrote, 1 rewrote->allowed); T31's '301 allowed' line corrected to place each heredoc by where the shell stands.",
+     "class": "within",
+     "why": "Housekeeping and record correction: a check's expected verdicts changing as a bug is fixed is expected (fix as we go), and restating a record to match measurement narrows nothing."
+    },
+    {
+     "id": "T42-left-window307-T44",
+     "summary": "window#307's second heredoc, a read (subprocess.run git ls-files), is now refused with no clone / rewritten with one, because subprocess is on T31's denylist; left, filed as T44, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T42's own goal (a read runs as typed) and is a defect left: T42 moves this row from allowed to refused by extending to stdin the rule the -c form has had since T31. The difficulty of an argv reader legitimates nothing. What makes it legitimate is the GM's own rule (2026-11-18): known defects are fixed before moving on to the next step, not necessarily inside the task that finds them. T44 is filed and placed before T22, the same point T42's own order names, so the defect is not carried into the next step. With a clone resolvable (the builders' case) the row is rewritten to run in the clone, not refused. Not retiring the -c/stdin denylist entry here also avoids leaving 92 writers unjudged."
+    },
+    {
+     "id": "T42-left-house-style-flake-T45",
+     "summary": "House style's verdict varied under load in one nobody replay (8 rows flipped, 3 outputs changed; reruns 0); left, filed as T45, measured first under induced load, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A pre-existing defect in code T42 does not touch (house style's walk and verdict unchanged, 0 moves in every steady replay) whose cause is not yet found. It is not carried into the next step: T45 lands before T22, which satisfies the GM's fix-before-moving-on rule. Ruled separately from window#307 because it is unlike it: T42 did not create it."
+    },
+    {
+     "id": "T42-perf-classification",
+     "summary": "T42 declared performance work in FR-013's sense ([perf], the builders' loop: a refused read costs a model round trip), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 takes either PERF=1 or a [perf] tag, and names the builders' loop. On the plain reading the task carries [perf]. The task line itself is not in the bundle, so the tag is taken from the block's own statement. The claim is thin (3 reads freed against 93 newly judged), but the work is owed as a defect fix regardless, and the classification narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T42-approach",
+     "summary": "A Python program run from stdin (own heredoc, own < regular file, or an upstream cat of one heredoc/file) is judged by T31's py_c denylist reader as a -c program is; T31's stdin rule is retired for every program the walk can read.",
+     "class": "within",
+     "why": "A defect fix in both directions: a writer standing in the mirror judged by no one (a check passing bad work) and three reads refused or rewritten (a check refusing good work), both wrong outcomes under constitution XIV. Nothing the GM or the spec asked for is narrowed; every write caught before is still caught (replays: 0 other outputs changed)."
+    },
+    {
+     "id": "T42-unreadable-keeps-T31",
+     "summary": "A stdin program the walk cannot read (variable, here-string, missing file, directory, device, any other upstream) keeps T31's rule: every -c read of the command is a write.",
+     "class": "within",
+     "why": "The block quotes T42's own task line for exactly this case ('a program fed from a variable or a file outside the command stays judged as T31 left it'); it narrows nothing asked and holds the closed side for what cannot be read."
+    },
+    {
+     "id": "T42-two-walks",
+     "summary": "walk_judged (judge, its re-judge, gm_tree offending) judges stdin programs; walk (house style, make-only, bench) sees none, as before.",
+     "class": "within",
+     "why": "Keeps house style's D11 (a program heredoc's writes unknowable) and its pinned case unchanged; the replays show 0 moves under house style and gm-tree alone. It leaves those readers as they were rather than narrowing anything requested."
+    },
+    {
+     "id": "T42-py_c-quote-and-re-compile",
+     "summary": "py_c gains the unquoted-heredoc quote 'h' (shell un-escaping, command substitution a write) and reads past re.compile( (a pattern, not code); builtin compile and other .compile( stay writes.",
+     "class": "within",
+     "why": "The first is what judging an unquoted heredoc body correctly needs; the second fixes a defect found by the replay's hand-read (window#307's read judged a writer). Both are defect fixes; the re.compile replay moved 0 rows."
+    },
+    {
+     "id": "T42-split-fixture-record",
+     "summary": "tree.rs split into tree/python.rs and tree/verdict.rs for the file-scale bar; main-tree refusals fixture relabeled from the t replay (5 allowed->rewrote, 1 rewrote->allowed); T31's '301 allowed' line corrected to place each heredoc by where the shell stands.",
+     "class": "within",
+     "why": "Housekeeping and record correction: a check's expected verdicts changing as a bug is fixed is expected (fix as we go), and restating a record to match measurement narrows nothing."
+    },
+    {
+     "id": "T42-left-window307-T44",
+     "summary": "window#307's second heredoc, a read (subprocess.run git ls-files), is now refused with no clone / rewritten with one, because subprocess is on T31's denylist; left, filed as T44, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T42's own goal (a read runs as typed) and is a defect left: T42 moves this row from allowed to refused by extending to stdin the rule the -c form has had since T31. The difficulty of an argv reader legitimates nothing. What makes it legitimate is the GM's own rule (2026-11-18): known defects are fixed before moving on to the next step, not necessarily inside the task that finds them. T44 is filed and placed before T22, the same point T42's own order names, so the defect is not carried into the next step. With a clone resolvable (the builders' case) the row is rewritten to run in the clone, not refused. Not retiring the -c/stdin denylist entry here also avoids leaving 92 writers unjudged."
+    },
+    {
+     "id": "T42-left-house-style-flake-T45",
+     "summary": "House style's verdict varied under load in one nobody replay (8 rows flipped, 3 outputs changed; reruns 0); left, filed as T45, measured first under induced load, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A pre-existing defect in code T42 does not touch (house style's walk and verdict unchanged, 0 moves in every steady replay) whose cause is not yet found. It is not carried into the next step: T45 lands before T22, which satisfies the GM's fix-before-moving-on rule. Ruled separately from window#307 because it is unlike it: T42 did not create it."
+    },
+    {
+     "id": "T42-perf-classification",
+     "summary": "T42 declared performance work in FR-013's sense ([perf], the builders' loop: a refused read costs a model round trip), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 takes either PERF=1 or a [perf] tag, and names the builders' loop. On the plain reading the task carries [perf]. The task line itself is not in the bundle, so the tag is taken from the block's own statement. The claim is thin (3 reads freed against 93 newly judged), but the work is owed as a defect fix regardless, and the classification narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))",
+    "### T43 Approach (checklist part A)",
+    "(removed) ### T41 (<why: the finding or measurement that files it>)",
+    "(removed) ### T43 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T43-rule",
+     "summary": "Delta::fetch reads a base name the working tree holds unchanged (no diff line, not flagged by ls-files -v, plain file, no CR) from the tree, decoded as cat_blobs decodes; every other name still goes to cat-file.",
+     "class": "within",
+     "why": "A performance change to the gate's owed computation, the kind of work the GM ordered first (2026-11-20, FR-013); the owed units are held the same, so it narrows nothing asked."
+    },
+    {
+     "id": "T43-any-revision",
+     "summary": "The rule holds for any revision, so --between's two reads shrink too.",
+     "class": "within",
+     "why": "Same speed change, wider reach within the same function; no requested behavior altered."
+    },
+    {
+     "id": "T43-rejected-cache",
+     "summary": "Rejected keying the base read by merge base and reusing it across computations.",
+     "class": "within",
+     "why": "A design choice between two speedups; keeps delta.rs's existing no-state rule; narrows nothing the GM asked."
+    },
+    {
+     "id": "T43-red-first-counter",
+     "summary": "Delta::blobs_asked cost counter and tests red before, green after; tree-vs-blob equality test across file states.",
+     "class": "within",
+     "why": "Enforcement of the performance change and of its hold that output stays the same; serves FR-012/FR-013's spirit and the GM's 'real enforcement'."
+    },
+    {
+     "id": "T43-fail-closed",
+     "summary": "Where git diff or ls-files -v fails, nothing is called unchanged and every name goes to cat-file as before T43.",
+     "class": "within",
+     "why": "Fixes a defect the new rule would otherwise introduce (edits read as base on a corrupt index); restores prior behavior, fixed in the task as the constitution's fix-as-we-go requires."
+    },
+    {
+     "id": "T43-refuse-failed-diff",
+     "summary": "Delta::changed returns git's error and every owed computation refuses ('cannot tell what changed') instead of owing nothing on a failed diff.",
+     "class": "within",
+     "why": "A found defect (a check passing bad work: six modal units went unowed on a corrupt index, measured) fixed here by default, as the fix-as-we-go rule requires; not a narrowing of anything asked."
+    },
+    {
+     "id": "T43-others-unchanged",
+     "summary": "ls-files --others failing still reads as no untracked files (a tree with no repository owes nothing, as command-line tests pin).",
+     "class": "within",
+     "why": "Leaves existing, tested behavior that yields no wrong outcome (a corrupt index is caught by changed first); not a defect left, so no narrowing."
+    },
+    {
+     "id": "T43-entry-drift-left",
+     "summary": "Entry-drift's own RevReader still reads 297 pop-up objects at the base (about 0.025 s, ~2% of the computation), not filed.",
+     "class": "within",
+     "why": "A residual cost, not a wrong outcome, so not a defect; the GM asked performance work be prioritized, not that every measured cost in a touched path be removed. Leaving it narrows no requirement."
+    },
+    {
+     "id": "T43-scope",
+     "summary": "Only the owed crate edited (a doc comment in owed.rs); T41 works on l7r-gate.sh separately; order after T40, before T22.",
+     "class": "within",
+     "why": "Sequencing and file scope; nothing requested is dropped."
+    },
+    {
+     "id": "T43-no-map",
+     "summary": "Checklist items 10-12 and the step table n/a: no map moves, no pool manifest moves.",
+     "class": "within",
+     "why": "Accurate for a gate-tooling speed change; no request clause touched."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The empty template headings '### T41 (<why...>)' and '### T43 (<why...>)' are removed.",
+     "class": "within",
+     "why": "Placeholders with no content or decision; T43's as-built section replaces its own; removing T41's empty placeholder drops no decision (no T41 as-built block is in this bundle to judge)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T43-scope",
+     "summary": "T43 is filed as [perf] work under FR-013 (the owed computation every gate run, push and landing pays).",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'can we in general priotitize performance improvements going forward?' and 'doing those first makes everything after them faster'; FR-013 defines perf work as making the checks, gate or landings faster, which this is."
+    },
+    {
+     "id": "T43-rule",
+     "summary": "Delta::fetch reads a base file from the working tree when the cached diff does not name it, ls-files -v does not flag it assume-unchanged/skip-worktree, it is a plain file and holds no carriage return; decoded as cat_blobs decodes, so texts equals cat_blobs.",
+     "class": "within",
+     "why": "A speed change that removes work; the conservative conditions keep every owed unit the same, so no check's verdict changes. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T43-any-rev",
+     "summary": "The rule applies at any revision, so --between's reads shrink too.",
+     "class": "within",
+     "why": "Same speed change over the same function; no behavior asked for is removed."
+    },
+    {
+     "id": "T43-rejected-cache",
+     "summary": "Rejected keying the base read by merge base and reusing it across computations.",
+     "class": "within",
+     "why": "A design choice among speedups; it keeps an existing invariant of delta.rs and narrows nothing requested."
+    },
+    {
+     "id": "T43-tests",
+     "summary": "Red-first tests on a cost counter (blobs_asked: 11 to 1) and texts-equals-cat_blobs across edited/deleted/skip-worktree/link/CR/untracked/assume-unchanged states.",
+     "class": "within",
+     "why": "Enforcement of the task's own hold (owed output the same, base read shrunk); a test that fails only when the requested behavior is absent serves the request."
+    },
+    {
+     "id": "T43-fail-closed-read",
+     "summary": "If the cached git diff or ls-files -v fails, nothing is called unchanged and every base name goes to cat-file, as before T43; tested by corrupting the index.",
+     "class": "within",
+     "why": "Closes a wrong outcome the new read path would otherwise introduce (edited tree read as the base, so the record family owes nothing); fixing a found defect in the step is the standing rule, not a narrowing."
+    },
+    {
+     "id": "T43-refuse-failed-diff",
+     "summary": "Delta::changed returns git's error on a failed diff, and every owed computation reading it refuses with 'cannot tell what changed ... repair the index' rather than owing nothing (or owing everything).",
+     "class": "within",
+     "why": "A found defect (a check passing bad work: six modal-research units went unowed on a corrupt index, measured) fixed in the step where found, red first; the refusal is confined to the failed-diff case the defect lives in, and choosing refusal over a flood is design, not a narrowing of anything asked."
+    },
+    {
+     "id": "T43-others-left",
+     "summary": "ls-files --others still reads a failure as no untracked files; a tree with no repository owes nothing, as existing command-line tests pin.",
+     "class": "within",
+     "why": "Not a defect left: the no-repository behavior is pinned as intended, and a corrupt index (the failure case found) is refused earlier by changed wherever there is a base."
+    },
+    {
+     "id": "T43-ls-files-alone-untested",
+     "summary": "A failed ls-files -v with a good diff rides the same fail-closed rule and has no test of its own; no state was found that fails one and not the other.",
+     "class": "within",
+     "why": "Coverage of a case not shown to exist; the rule covers it, and no wrong outcome is left."
+    },
+    {
+     "id": "T43-entry-drift-left",
+     "summary": "Entry-drift's own RevReader still reads the 297 pop-up files at the base (0.025 s, about 2% of the computation) and is not filed.",
+     "class": "within",
+     "why": "A small cost, not a defect (no wrong outcome); FR-013 orders perf work first but does not require every measured cost be removed, so leaving a 2% cost narrows nothing the GM asked."
+    },
+    {
+     "id": "T43-edit-reach",
+     "summary": "Only the owed crate (delta.rs, a doc comment in owed.rs) and this section edited; ordered after T40, before T22, beside T41.",
+     "class": "within",
+     "why": "Scope and ordering inside the task as filed; consistent with FR-013's perf-first ordering."
+    },
+    {
+     "id": "T43-verification",
+     "summary": "Owed output checked against the HEAD build on eight real commits plus the reword (53 listing pairs, three triage bundles, fingerprint cross-checks); triage outputs differ only in the printed --out path, accepted.",
+     "class": "within",
+     "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T43-scope",
+     "summary": "T43 is filed as [perf] work under FR-013 (the owed computation every gate run, push and landing pays).",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'can we in general priotitize performance improvements going forward?' and 'doing those first makes everything after them faster'; FR-013 defines perf work as making the checks, gate or landings faster, which this is."
+    },
+    {
+     "id": "T43-rule",
+     "summary": "Delta::fetch reads a base file from the working tree when the cached diff does not name it, ls-files -v does not flag it assume-unchanged/skip-worktree, it is a plain file and holds no carriage return; decoded as cat_blobs decodes, so texts equals cat_blobs.",
+     "class": "within",
+     "why": "A speed change that removes work; the conservative conditions keep every owed unit the same, so no check's verdict changes. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T43-any-rev",
+     "summary": "The rule applies at any revision, so --between's reads shrink too.",
+     "class": "within",
+     "why": "Same speed change over the same function; no behavior asked for is removed."
+    },
+    {
+     "id": "T43-rejected-cache",
+     "summary": "Rejected keying the base read by merge base and reusing it across computations.",
+     "class": "within",
+     "why": "A design choice among speedups; it keeps an existing invariant of delta.rs and narrows nothing requested."
+    },
+    {
+     "id": "T43-tests",
+     "summary": "Red-first tests on a cost counter (blobs_asked: 11 to 1) and texts-equals-cat_blobs across edited/deleted/skip-worktree/link/CR/untracked/assume-unchanged states.",
+     "class": "within",
+     "why": "Enforcement of the task's own hold (owed output the same, base read shrunk); a test that fails only when the requested behavior is absent serves the request."
+    },
+    {
+     "id": "T43-fail-closed-read",
+     "summary": "If the cached git diff or ls-files -v fails, nothing is called unchanged and every base name goes to cat-file, as before T43; tested by corrupting the index.",
+     "class": "within",
+     "why": "Closes a wrong outcome the new read path would otherwise introduce (edited tree read as the base, so the record family owes nothing); fixing a found defect in the step is the standing rule, not a narrowing."
+    },
+    {
+     "id": "T43-refuse-failed-diff",
+     "summary": "Delta::changed returns git's error on a failed diff in a repository (a corrupt index), and every owed computation reading it refuses with 'cannot tell what changed ... repair the index' rather than owing nothing (or owing everything).",
+     "class": "within",
+     "why": "A found defect (a check passing bad work: six modal-research units went unowed on a corrupt index, measured) fixed in the step where found, red first; the refusal is confined to the failed-diff case the defect lives in, and choosing refusal over a flood is design, not a narrowing of anything asked."
+    },
+    {
+     "id": "T43-norepo-split",
+     "summary": "The failed-diff refusal is split: where the diff fails and git rev-parse --git-dir fails too (no repository at all, asked only after a failed diff), changed is empty and nothing is owed, as before T43; a repository whose diff fails (a corrupt index) is refused. Red first (a_tree_with_no_repository_has_nothing_changed), prompted by land's replay_owing test running triage in a bare directory.",
+     "class": "within",
+     "why": "Keeps the pre-T43 behavior for a directory with nothing to judge (no repository, so no base and no delta) - not a wrong outcome, and the defect the refusal fixes (a corrupt index leaving six modal units unowed) is still refused, since rev-parse --git-dir succeeds on a repository whose index is corrupt. Confining a defect fix to the case the defect lives in narrows nothing the GM asked; the GM's request is performance work and this preserves existing tested behavior rather than removing any."
+    },
+    {
+     "id": "T43-others-left",
+     "summary": "ls-files --others still reads a failure as no untracked files; a tree with no repository owes nothing, as the command-line tests and land's replay test pin.",
+     "class": "within",
+     "why": "Not a defect left: the no-repository behavior is pinned as intended, and a corrupt index (the failure case found) is refused earlier by changed wherever there is a base."
+    },
+    {
+     "id": "T43-ls-files-alone-untested",
+     "summary": "A failed ls-files -v with a good diff rides the same fail-closed rule and has no test of its own; no state was found that fails one and not the other.",
+     "class": "within",
+     "why": "Coverage of a case not shown to exist; the rule covers it, and no wrong outcome is left."
+    },
+    {
+     "id": "T43-entry-drift-left",
+     "summary": "Entry-drift's own RevReader still reads the 297 pop-up files at the base (0.025 s, about 2% of the computation) and is not filed.",
+     "class": "within",
+     "why": "A small cost, not a defect (no wrong outcome); FR-013 orders perf work first but does not require every measured cost be removed, so leaving a 2% cost narrows nothing the GM asked."
+    },
+    {
+     "id": "T43-edit-reach",
+     "summary": "Only the owed crate (delta.rs, a doc comment in owed.rs) and this section edited; ordered after T40, before T22, beside T41.",
+     "class": "within",
+     "why": "Scope and ordering inside the task as filed; consistent with FR-013's perf-first ordering."
+    },
+    {
+     "id": "T43-verification",
+     "summary": "Owed output checked against the HEAD build on eight real commits plus the reword (53 listing pairs, three triage bundles, fingerprint cross-checks); triage outputs differ only in the printed --out path, accepted.",
+     "class": "within",
+     "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T44 (found by T42, 2026-11-20: window#307's second heredoc, a read, runs `subprocess.run([\"git\",\"-C\",root,\"ls-files\"])` and main-tree refused it with no clone resolvable and rewrote it with one, since `subprocess` is on T31's denylist of known writers; observed 2026-11-20, method: T42's replay and a hand-read of each moved body)",
+    "### T44 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T44-accounting",
+     "summary": "py_c.rs accounts for every mention of subprocess before the writer denylist is read: a plain import, the PIPE/DEVNULL/STDOUT constants, and run/check_output/check_call/call with one literal list argv and only listed keywords; only the name is masked, so arguments (input=, stdout=open(...)) are still judged; anything unaccounted stays a write.",
+     "class": "within",
+     "why": "Fixes a found defect (a guard refusing or rewriting a read, window#307) while keeping T31's closed side. Refusing good work is a wrong outcome under constitution XIV, and the fix serves FR-013's builders'-loop performance aim. It narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T44-admitted-commands",
+     "summary": "Admitted argv commands: git ls-files, show, rev-parse, log, cat-file, ls-tree (with any -C dir), plus grep, ls, cat, head, wc, each element literal and screened for writing or program-running options (git --output/--ext-diff/--textconv/--filters; ugrep --filter/--pager/--view/--save-config/--query/-Q/--config). The option search space and method are stated.",
+     "class": "within",
+     "why": "The set is the corpus-observed reads plus the task line's and the brief's additions, and the screen states its search space (completion-helper lists, --help, rev-list -h labeled as a reading). It is a choice made inside the fix, and none of it narrows the GM's request or any FR."
+    },
+    {
+     "id": "T44-left-as-writes",
+     "summary": "git status and git diff (measured to rewrite .git/index), git grep (-O runs a program), rg (--pre, --hostname-bin run a program), shell strings, shell=True, unlisted keywords, non-literal argv, Popen, getoutput, aliased imports, make, unknown commands, and tree-code scripts (window#56/68/69/299, refusals#149) all stay writes.",
+     "class": "within",
+     "why": "Each one either writes or can run a program, or is a shape the reader does not know, so T31's closed side keeps it as a write. That keeps a judgment that already stands. It does not leave a wrong outcome in place: no corpus row runs rg, git grep, status or diff from Python, so no observed read is refused by these exclusions. The rg exclusion departs from the session's brief, not from the GM's request or the spec."
+    },
+    {
+     "id": "T44-repo-config-filters",
+     "summary": "A filter or textconv named by the repository's own config may run on log -p/show without a flag; this is accepted as main-tree already accepts it for the same shell command (tree.rs git_write); the mirror's config names none.",
+     "class": "within",
+     "why": "It matches the existing shell-level judgment and the mirror's config, which was read. It changes no behavior the GM asked to change."
+    },
+    {
+     "id": "T44-perf-tag",
+     "summary": "The task is tagged [perf] (the builders' loop) and not filed PERF=1, because it touches no engine stage's counted operations or time.",
+     "class": "within",
+     "why": "FR-013 counts a task as performance work when it is filed PERF=1 OR tagged [perf], and it names the builders' loop explicitly. The tag satisfies the requirement."
+    },
+    {
+     "id": "T44-order-exits",
+     "summary": "Order: after T42, before T22, beside T46. Exits: red tests green, replays with every move accounted, crate-scoped rust-test, lint and 100% cover, make quick, make static once, make hooks-test. Budget: one landing.",
+     "class": "within",
+     "why": "It is a performance task placed early, consistent with FR-013. Running make static once agrees with FR-007's aim. Nothing is narrowed."
+    },
+    {
+     "id": "T44-found-and-left",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "The exclusions above are writes or unknown shapes kept closed, not defects carried forward. The 31 unmoved subprocess rows are each placed (26 allowed, 5 running tree code)."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T41 to T44, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

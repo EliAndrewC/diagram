@@ -422,6 +422,8 @@ fn exempt(path: &str) -> bool {
     let name = path.rsplit('/').next().unwrap_or(path);
     VERBATIM.iter().any(|v| path.starts_with(v))
         || path.ends_with("/plan-review.json")
+        // its closed entries' parts since the split (462 T545), the same reviewers' text
+        || path.contains("/archive/plan-review/")
         || path == "research/moved-303.json"
         || path == "specs/303-research-organization/migration.md"
         || name == "request.md"

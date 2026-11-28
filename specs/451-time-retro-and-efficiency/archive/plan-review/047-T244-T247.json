@@ -1,0 +1,734 @@
+{
+ "blocks": {
+  "### T244 (the GM 2026-11-25, tasks.md T244: \"I would like to essentially defer all of it until at least tomorrow ... will our current procedures end up inadvertently kicking off a bunch of research tasks ... If so, then what can we do about that?\")": {
+   "sha256": "639ddfa79dbc4d88ae2377f6dc3612095936e89bbfa340ba67017535292f89c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T244 Approach (checklist part A)": {
+   "sha256": "e483033225af6d15c389659157f4f39832d67a16b03a82624e3356e497f6f0fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T245 (the GM 2026-11-25; measured 2026-11-25 (`du`, `df`, `make cache-clean DRY=1`): the disk at 88-90%, the build cache 190 GB against its own 100 GB budget, the cleanup freeing 27 MB)": {
+   "sha256": "92028b5548fe37e3227e4859a9443d30ece4bf034b874bd7d4638d7cc72b8f40",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T245 Approach (checklist part A)": {
+   "sha256": "18e2b936aa01993fe82d38e61a5252aa2b1a42fb0bb8b351dfa109c48049c934",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T246 (the coordinating session's measurement of 2026-11-25 and the GM's words on the old task scratch folder, which tasks.md's T246 line carries; amended the same day by the host session's five points)": {
+   "sha256": "7f3e85ebf498119b4716b1d8c52ad6b1d4092b047e43386636111edd1fa2318f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T246 Approach (checklist part A)": {
+   "sha256": "0dc8f5d74931e211ad4f1c889879073df8dc43ec1e461949e27174c2fd0bffcd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T247 (451 T229's builder in a parallel worktree: the tool target's l7r-gate rebuilt inside a cover run's environment after a gate source edit, and 21 tests of clone-sync-hooks.sh and sync-with-main.sh then failed on 'uncommitted changes' from the default_*.profraw files in their fixture clones, observed 2026-11-25, method: T229's builder's hook-suite run; seen by T235's, T231's and T229's builders)": {
+   "sha256": "14441c6ade6c86d6863fdd76360977344ea49dc0fb3e1585b2a66a2381a2af90",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T247 Approach (checklist part A)": {
+   "sha256": "dec6655866cd4daf89a0fba81a07988678b2f3f342586deb43ff959fa6be1999",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T244": {
+   "section_sha256": "e65c7d04efe890f318dcd224faf93edb7f79a6d33409595b4d1c72a5691c6bd4",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "switch",
+     "summary": "A `research` axis (open|deferred) in dev/switches.json beside claims and port, thrown by make research-deferred / research-open with a recorded reason, who and when; one reader l7r_shared::switches::research.",
+     "class": "within",
+     "why": "The GM (2026-11-25): defer the queued research 'until at least tomorrow', and asked what can stop procedures kicking it off. A reversible, recorded switch is the deferral itself; it has no automatic expiry, so reopening stays the GM's call, which fits 'at least tomorrow'."
+    },
+    {
+     "id": "switch-default",
+     "summary": "A missing file or entry reads open; a malformed entry reads open with MALFORMED in its why.",
+     "class": "within",
+     "why": "Open is the shipped rules (research binds), as clean is for claims; this follows the switches' existing form and governs only a broken file. It carves no research out of a deferral thrown correctly."
+    },
+    {
+     "id": "write-defect",
+     "summary": "switches::write serialized only claims and port; now writes every axis, pinned by a test.",
+     "class": "within",
+     "why": "Without it the next claims or port throw would silently erase the deferral and defeat the request; a wrong outcome fixed as found."
+    },
+    {
+     "id": "box-answer",
+     "summary": "While deferred, a research: physical task's boxes may be answered 'deferred: UNRESEARCHED' on the box line; the box stays [ ], BOXES=1 does not tick it; tick and land accept it only while deferred and refuse it, naming the switch, while open.",
+     "class": "within",
+     "why": "This is how a physical task lands without starting a research pass, i.e. the deferral the GM asked for; leaving the box unticked keeps the record honest that no pass ran, and refusing the answer while open restores the shipped rules. The bundle does not list the five boxes; if any of them is not a search (e.g. a review of the guess), letting it be answered too is wider than research, but it widens nothing the GM asked to keep and narrows nothing he asked for."
+    },
+    {
+     "id": "standing-rule-and-backlog",
+     "summary": "research_boxes.rs::violations accepts an answered box whatever the switch's state (a task ticked while deferred stays green after reopening), and the tick does not check that make research-backlog lists the deferred decision; the answer's text and the refusal name the backlog instead.",
+     "class": "within",
+     "why": "Judged together because each leans on the other. T244 asks that procedures not start research while it is deferred; it asks for no new check that deferred decisions reach the backlog, and the UNRESEARCHED labeling of a guess is the 2026-11-25 backlog rule's existing mechanism, which this plan leaves as it was. Nothing in the bundle makes the task's decision appear on research-backlog, so the plan's goal line ('lands with its decision drawn UNRESEARCHED onto the backlog') states an intent, not an enforced outcome; but the deferred box itself stays '[ ] ... deferred: UNRESEARCHED' in tasks.md permanently, a findable record of every search not run, so reopening does not turn the deferral into a silent waiver. The plan's 'cheaper route' reason is not what makes this within; that the request does not ask for the check is. Not building an unasked check narrows nothing."
+    },
+    {
+     "id": "stage-end-list",
+     "summary": "Root CLAUDE.md Research bullet, research-doctrine.md and the research-backlog help line restated: while deferred, a port stage's end lists what it touched (make research-backlog STAGE=) and does not search it.",
+     "class": "within",
+     "why": "The stage-end search is a procedure that would start queued backlog research, exactly what the GM deferred."
+    },
+    {
+     "id": "search-first-exception-via-escape",
+     "summary": "While deferred, the approved search-first exception (a decision that other code builds on, or a guess likely visibly wrong) goes through RESEARCH_OK: the doctrine prose says so, and the guard refuses a research-pass dispatch for it without the escape.",
+     "class": "within",
+     "why": "Read against request.md: 'all of it' is 'the research that we currently have queued', deferred because none of it is blocking or likely to change the maps, so suspending the 2026-11-25 search-first exception for decisions that ARE foundational would exceed his words. The plan does not suspend it: the search still runs first, on the session's judgment, once a reason is given in RESEARCH_OK and recorded. What changes is that the search becomes a recorded, deliberate act rather than a procedure firing by itself, which is the GM's concern ('inadvertently kicking off'). The exception's purpose (do not build on a wrong foundation) is untouched, so this neither narrows the T244 request nor guts the earlier rule. The ruling depends on the escape staying a reason-only escape; a version that refused such a search outright would be NOT LEGITIMATE."
+    },
+    {
+     "id": "guard",
+     "summary": "PreToolUse guard: while deferred, refuses an Agent dispatch of research-pass (check-wave units included) and a Bash invocation of make page-session; RESEARCH_OK=\"<reason>\" escape, logged; silent while open.",
+     "class": "within",
+     "why": "Real enforcement of 'not inadvertently kicking off research'; an escape with a stated, recorded reason means what passes is deliberate. Note on reach: request.md shows page sessions also used for non-search work (T192 label tagging, cascade repairs); the guard refuses those too while deferred, passing only via RESEARCH_OK. That is reach beyond research, but it removes nothing the GM asked for (the escape keeps that work reachable). If page sessions are routinely needed for non-research work while deferred, the escape will get used often and that is worth watching."
+    },
+    {
+     "id": "impl-drift-not-built",
+     "summary": "No code for impl-drift NEEDS-RESEARCH verdicts: they already stay listed and refuse nothing while claims stand at report (feature 445).",
+     "class": "within",
+     "why": "Doing nothing where existing behavior already starts no research narrows nothing asked. The premise depends on claims staying at report, and the bundle shows no measurement of it; if claims is moved to clean while research is deferred, this path needs re-checking."
+    },
+    {
+     "id": "order",
+     "summary": "Lands before 449's port resumes; the switch is thrown to deferred by make research-deferred after landing.",
+     "class": "within",
+     "why": "Matches the task line and the GM's wish that the deferral is in force for the queued work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T245": {
+   "section_sha256": "a8b571ecf45b9b2fe2f953c25eac1cc70b661b1f8557c50b649244e58d09eed4",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the audit",
+     "summary": "make disk-audit: every place the container writes, size, largest entries with owner and age, a GUESS budget each, the total against the disk, the unaccounted remainder, what the eviction would free now; read-only",
+     "class": "within",
+     "why": "The GM's second sentence asks for 'some kind of audit of disk space and what this container specifically is leaving sitting around'. Budgets per place are the coordinating session's build and are stated as GUESS knobs. The remainder is reported, not hidden; I measured independently (du -x over / on 2026-11-25): the container's visible tree is about 240 GB plus the ~/.claude bind mount, against 411 GB used on df, so the plan's 'about 177 GB outside the container's view' holds."
+    },
+    {
+     "id": "D2 the trigger on the host disk",
+     "summary": "A prompt reads df; below L7R_DISK_FREE_PCT (GUESS 20) free, at most hourly, starts the eviction detached and says what it freed in one line; the share is read on the host's disk",
+     "class": "within",
+     "why": "The GM's third sentence: 'trigger something automatically if our disk space ever drops below a certain percentage of free space'. The disk he names is the host's ('my host has a 461G disk drive'), so reading the share there is the plain reading. The threshold is a GUESS knob."
+    },
+    {
+     "id": "D3 the budget evicts idle and gone trees' profiles",
+     "summary": "Past the cache budget, whole profiles of trees that are gone or idle (HEAD log unmoved for 12 h, no live cwd) go first, least recently built first, only until back within budget",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It relaxes T158's keeping of every live tree's build directory whole. Ruled on purpose: the GM's T245 words locate the problem in 'artifacts sitting around', and his 2026-11-22 request was to 'clean up after ourselves ... to not have 30 gigs of stuff suddenly get eaten without us realizing it'. Under the old rule the budget held nothing (190 GB against 100) and evicting only gone trees freed 27 MB, so the literal old rule defeats both requests. A profile unbuilt for 12 h in an idle tree is exactly an artifact sitting around, and the cost (a cold rebuild) is priced in the plan and tied to three knobs."
+    },
+    {
+     "id": "D4 active trees' idle profiles, the profile as unit",
+     "summary": "An active tree's profiles idle past 12 h rank after idle trees' and may go; the unit is the profile, not the tree",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from D3 because the tree is in use. A profile not built for 12 h is sitting around whatever tree holds it; the plan measured a 25 GB cover-gate idle while its tree's tool profile was fresh, so a per-tree age keeps idle artifacts and defeats the GM's purpose. The working set stays protected: in_use, the running-build hold, the mirror exclusion, and the dry run touched none of diagram-backlog's debug, cover-gate or tool, nor a parallel builder's tree."
+    },
+    {
+     "id": "D5 the budget path without a low disk",
+     "summary": "The eviction also runs from cargo::plan past the 100 GB budget when the disk is not below the share",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The low-disk path is the GM's third sentence. The budget path answers his 2026-11-22 request ('not have 30 gigs ... eaten without us realizing it'), which is about growth, not about a full disk. The budget already existed under T158 and is what that request built; D5 makes it hold for artifacts sitting around rather than inventing a new rule. Waiting for the disk to be low would bring back the 2026-11-22 failure the request exists to prevent."
+    },
+    {
+     "id": "D6 a removed worktree's build directory with it",
+     "summary": "T158's proven-dead rule loses its idle wait; the day's sweep removes clean scratch worktrees before planning; make land removes each cleaned tree's build directory; a hand removal is caught at the next sweep",
+     "class": "within",
+     "why": "A build directory whose tree is gone is an artifact left sitting around with no possible user; in_use still guards a running build. It is in the coordinating session's build and serves the GM's first sentence."
+    },
+    {
+     "id": "D7 never under a running build",
+     "summary": "T158's global hold kept; each removal re-checks it (sweep::take)",
+     "class": "within",
+     "why": "Stricter than before; preserves the existing protection of builds in progress."
+    },
+    {
+     "id": "D8 the cache stays over budget where live working sets exceed it",
+     "summary": "When the working sets alone pass the budget the cache is left over it and the audit says by how much; an active tree's working set is never evicted to hold the number",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the coordinating session's build ('the cache budget made to hold'), not the GM's words. It is implied by his words: what he asked to deal with is what the container is 'leaving sitting around', and a working set built that morning in a tree in use is not. The build itself limits eviction to 'idle trees' targets' and 'never under a running build'. The overage is reported by the audit, so nothing is silent, and the budget is a GUESS knob."
+    },
+    {
+     "id": "D9 'found nothing it may take' said once",
+     "summary": "When the disk is under the share but nothing is evictable, the notice is said once until an eviction frees something again",
+     "class": "within",
+     "why": "The trigger still runs hourly and says every eviction that frees something. Reporting the same empty result every hour is not asked for anywhere. The plan's own figures show the share is unreachable on the host disk (about 18.7% free after everything evictable goes), and that is stated as the knob's question. Whether the notice repeats is a design choice, not a fidelity finding."
+    },
+    {
+     "id": "D10 the audit register's disk entry noted, not built",
+     "summary": "449 T437 item 13 gets the disk entry noted here; no register is built in this task",
+     "class": "within",
+     "why": "Checked: 449 T437 is a discussion task, explicitly 'NOT a build task'. Its item 13, an audit register with falsifiers, is a possibility to put to the GM, not something he approved. Building it here would be unrequested. The GM's 'add to our performance tuning and checks' is carried by make disk-audit, the automatic low-disk check at each prompt and the budget's eviction, and the task is filed as performance work."
+    },
+    {
+     "id": "D11 knobs and GUESS budgets",
+     "summary": "L7R_DISK_FREE_PCT (20) and the per-place budgets are GUESS constants with their why beside them; L7R_CACHE_IDLE_HOURS and L7R_CACHE_BUDGET_GB reused",
+     "class": "within",
+     "why": "The build names 'a knob, GUESS 20% free'; the GM's 'a certain percentage' leaves the value open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T246": {
+   "section_sha256": "9c002a54a87ee4e22a4d8b1366024815345a2436bfe4344357bc95f64d446e53",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "landed-scratch",
+     "summary": "make land's last step takes a landed number's DIRECTORIES t<N>... in the git directory and l7r-handoffs/T<N>-...; never a file (handoff note, land log); a number another feature started within the day is left by tmp::landed's rule",
+     "class": "within",
+     "why": "Answers the GM's 'the old task scratch folder is over 1/3 of a gigabyte? That doesn't seem right to me': a landed task's scratch directories (the handoff folder held 207 MB) go at landing. The files left are small (1.1 MB measured), read by land/writers.rs and the context-cap guard, and audited under a budget; the same-number rule keeps another feature's live task's scratch, which taking would be a wrong outcome."
+    },
+    {
+     "id": "landed-only-reach",
+     "summary": "the .git/t<N> and l7r-handoffs/T<N>- directories are taken only for a LANDED number; a set-down or never-landed number's scratch has no age rule and stays, sized under the audit's budgets (1 GB, 0.5 GB)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the goal's 'or by the sweep's age'. Legitimate by purpose: the GM's complaint is about OLD task scratch, and an unlanded task's scratch is the handoff material a set-down task resumes from, so taking it by age would lose live work, which is a wrong outcome. The residue cannot grow unseen, because each place has its own audit line and budget, flagged OVER (measured 2026-11-25: 0.0 of 1.0 GB and 0.2 of 0.5 GB)."
+    },
+    {
+     "id": "snapshots-without-tree",
+     "summary": "a review snapshot without tree.json is taken once idle SCRATCH_SWEEP_SNAPSHOT_DAYS (GUESS, a week)",
+     "class": "within",
+     "why": "The brief's 'first measure whether any review reads a snapshot older than its current unit's, and keep what one does' was measured first (one snapshot per unit; 245 reads, none past 72 h after its take); a week is many times the oldest read, so nothing read is taken."
+    },
+    {
+     "id": "snapshots-with-tree",
+     "summary": "a review snapshot WITH tree.json is kept whatever its age, until its unit is snapshotted again (about 0.9 GB held); taking one whose copy matches the live pool priced and not built",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own goal that every leftover goes by age. Legitimate on the wrong outcome alone: tree::of_unit keys the unit's verdict carry, checkpoint and arbiter round count to that copy, so taking it would make them read the live pool, which breaks the reviews and is not merely awkward. The GM's purpose (nothing piling up unseen) survives: the snapshots keep a place and a 1.5 GB budget in make disk-audit and are flagged OVER past it."
+    },
+    {
+     "id": "gencache-dead-stores",
+     "summary": "every .gencache store but rust taken once idle SCRATCH_SWEEP_DAYS in each tree; rust never taken",
+     "class": "within",
+     "why": "A leftover the container keeps (6.1 GB dead Python roll store, measured) cleaned by age as T245/T246 ask; the live rust store has its own lock and readers, and taking it would break a live read."
+    },
+    {
+     "id": "p1-scratchpad-entries",
+     "summary": "(1) finished sessions' scratchpad entries judged one by one by idle SCRATCH_SWEEP_DAYS (GUESS 3 days); prompting and registered-running sessions kept; task outputs keep their own rule; the low-disk trigger runs the age shares before the cache's share, a build running or not",
+     "class": "within",
+     "why": "The host's point (1): an age sweep, GUESS 3 days, at session start (already, 451 T158) and at the low-disk trigger, the running session's scratchpad kept. The per-entry rule reaches the 12.8 GB the whole-session rule kept by its transcript."
+    },
+    {
+     "id": "p2-worktree-build-cache",
+     "summary": "(2) a gone tree's build directory goes with no idle wait (T245), the hand removal pinned by a test; diagram-backlog-review wanted; diagram-backlog-pages reported, not removed",
+     "class": "within",
+     "why": "Point (2) asks that the hand removal be measured to be caught (pinned by a_target_is_taken_whole_only_once_proven_dead and the live ls) and that whether the two clones are still wanted be checked: checked and reported. Removal of -pages was not asked, and it holds 19 commits no remote has."
+    },
+    {
+     "id": "p3-measured-where",
+     "summary": "(3) the settings measured on cargo test -p l7r_guard from a git archive of HEAD into fresh scratch targets (and a coverage build of l7r_gate_pool), not on the live 80 GB and 43 GB caches",
+     "class": "within",
+     "why": "Point (3) asks for before and after in size and build time. A controlled build of the same code under each setting measures exactly that without this task's edits or a shared cache moving the numbers; the live caches take the setting through one cold rebuild, which the plan states (31 GB, T158's figure). This is a method, nothing asked is dropped."
+    },
+    {
+     "id": "p3-debug-0",
+     "summary": "(3) [profile.dev] (and test, inheriting) set to debug = 0 after measuring size and build/test times; RUST_BACKTRACE file:line and a debugger's source view lost; one cold rebuild per tree",
+     "class": "within",
+     "why": "Point (3) names 'line-tables-only (or 0)' and asks before-and-after in size and time; the brief's condition (change only if times are not worse beyond noise) was measured (the table, two runs per cell under load 11-31, plus the coverage build, 447 vs 271 MB, the same report). What is lost is stated."
+    },
+    {
+     "id": "p3-incremental-left",
+     "summary": "(3) CARGO_INCREMENTAL=0 measured and left unchanged, numbers reported for the GM",
+     "class": "within",
+     "why": "Point (3) asks it MEASURED for one-shot gate and landing builds; the measurement found no build of theirs is one-shot (their targets are kept and rebuilt every run) and a one-file rebuild many times slower (29-36 s vs 2.6-10 s), and the brief says exactly that case is reported and left for the GM. Not an open-question narrowing: the ask was a measurement, which is done."
+    },
+    {
+     "id": "p3-target-age-pruning",
+     "summary": "(3) age pruning of old artifacts inside a live target left to T158's and T245's existing rules (sixteen variants, idle profiles)",
+     "class": "within",
+     "why": "The part of point (3) already built by earlier tasks; nothing asked is dropped."
+    },
+    {
+     "id": "p4-transcripts",
+     "summary": "(4) the audit counts only the mirror's slug and those under it (-diagram, -diagram-...), GUESS budget 10 GB, the rest to unaccounted",
+     "class": "within",
+     "why": "Point (4) verbatim: counts only this project's transcripts, never the others."
+    },
+    {
+     "id": "p5-podman",
+     "summary": "(5) the host's unused podman layers named on a line of their own, not counted",
+     "class": "within",
+     "why": "Point (5): the host's to clean, the audit names it as host-side; the container cannot see it."
+    },
+    {
+     "id": "audit-places",
+     "summary": "new audit places with GUESS budgets (.git/t<N>* 1 GB, handoffs 0.5 GB, snapshots 1.5 GB, .gencache 1 GB), sized within the clones and not added to the total again",
+     "class": "within",
+     "why": "T245's 'audit of disk space and what this container specifically is leaving sitting around', extended to the leftovers T246 finds; budgets labeled GUESS."
+    },
+    {
+     "id": "found-fixed",
+     "summary": "three found items fixed here: transcripts overcounted, --scratch-sweep usage lacked landed, the audit's last line said 'disk under' at 29% free",
+     "class": "within",
+     "why": "Wrong outcomes (an audit that misreports, a usage line that hides a mode) fixed in the task; none deferred, so FR-009's deferral clauses do not apply."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T247": {
+   "section_sha256": "d9f48536e219e3e57603678ec1afa499775666152b0df03acc04b9930a78db25",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T247-env",
+     "summary": "build() runs cargo under env -u of every variable cargo llvm-cov show-env sets, every rustflags/rustdocflags channel, both wrapper channels (RUSTC_WORKSPACE_WRAPPER, RUSTC_WRAPPER) and CARGO_LLVM_COV_BUILD_DIR, so the tool's flags come only from .cargo/config.toml",
+     "class": "within",
+     "why": "The task line asks for the rebuild with the instrumentation flags cleared; the plan measured (toy workspace, 2026-11-25) that the builder's env -u RUSTFLAGS workaround misses the RUSTC_WORKSPACE_WRAPPER channel, and clears every channel that can carry the flag. This is the requested fix, no wider."
+    },
+    {
+     "id": "T247-refuse",
+     "summary": "After a successful build, a binary holding __llvm_prf_cnts is removed with its build.json, the launcher exits 1 naming why and where to look, and L7R_GATE_PRINT_FRESH names no binary",
+     "class": "within",
+     "why": "The task line: an instrumented binary is never left as the tool; feature 449 T61: the launcher fails closed. The false-positive check (0 of 19 plain tool binaries hold the section) shows no correct build is refused."
+    },
+    {
+     "id": "T247-scan-at-build",
+     "summary": "The instrumentation scan runs only at a build (0.038 s over the 33 MB binary), never on a fresh call",
+     "class": "within",
+     "why": "T205: no extra work on a fresh call. Where the check runs is a cost choice that does not narrow what is enforced, since every new binary passes through a build."
+    },
+    {
+     "id": "T247-pre-existing",
+     "summary": "A binary instrumented before this fix is not hunted down; the <bin>.plain freshness stamp was priced and not built, because the scan finds no such binary in any clone",
+     "class": "within",
+     "why": "Nothing is left unfixed here: the scan of every clone's tool target (2026-11-25) found 0 instrumented binaries, so there is no wrong outcome. A guard against a state measured to exist nowhere is not owed (constitution XIV, what a defect is), and every binary built from now on passes through the new refusal. The plan states this openly with its evidence rather than hiding it."
+    },
+    {
+     "id": "T247-guard-wrapper",
+     "summary": "scripts/hooks/l7r-guard.sh, which builds the same way into the same target, is left unchanged",
+     "class": "within",
+     "why": "The task is the gate launcher's tool build. The plan measured that no Rust test runs l7r-guard.sh (grep -rn l7r-guard.sh rust/, 2026-11-25), so it is never started inside a cover environment and shows no defect, and its build writes l7r-guard, not the gate's programs. Caveat for the builder, not a ruling: that search finds the script by name in rust/ only; a Rust test reaching it through another script would be missed."
+    },
+    {
+     "id": "T247-tests",
+     "summary": "Red-first tests in tests/hooks/test-l7r-gate.1.sh: cargo is handed none of the coverage environment, a later call drops no profile, and the instrumented-build refusal (refused, removed, says why, print-fresh names nothing)",
+     "class": "within",
+     "why": "Enforcement of what the task line asks (red-first on a cover-run environment); each test fails only when the requested behavior is absent."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T244 (the GM 2026-11-25, tasks.md T244: \"I would like to essentially defer all of it until at least tomorrow ... will our current procedures end up inadvertently kicking off a bunch of research tasks ... If so, then what can we do about that?\")",
+    "### T244 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "switch",
+     "summary": "A `research` axis (open|deferred) in dev/switches.json beside claims and port, thrown by make research-deferred / research-open with a recorded reason, who and when; one reader l7r_shared::switches::research.",
+     "class": "within",
+     "why": "The GM (2026-11-25): defer the queued research 'until at least tomorrow', and asked what can stop procedures kicking it off. A reversible, recorded switch is the deferral itself; it has no automatic expiry, so reopening stays the GM's call, which fits 'at least tomorrow'."
+    },
+    {
+     "id": "switch-default",
+     "summary": "A missing file or entry reads open; a malformed entry reads open with MALFORMED in its why.",
+     "class": "within",
+     "why": "Open is the shipped rules (research binds), as clean is for claims; this follows the switches' existing form and governs only a broken file. It carves no research out of a deferral thrown correctly."
+    },
+    {
+     "id": "write-defect",
+     "summary": "switches::write serialized only claims and port; now writes every axis, pinned by a test.",
+     "class": "within",
+     "why": "Without it the next claims or port throw would silently erase the deferral and defeat the request; a wrong outcome fixed as found."
+    },
+    {
+     "id": "box-answer",
+     "summary": "While deferred, a research: physical task's boxes may be answered 'deferred: UNRESEARCHED' on the box line; the box stays [ ], BOXES=1 does not tick it; tick and land accept it only while deferred and refuse it, naming the switch, while open.",
+     "class": "within",
+     "why": "This is how a physical task lands without starting a research pass, i.e. the deferral the GM asked for; leaving the box unticked keeps the record honest that no pass ran, and refusing the answer while open restores the shipped rules. The bundle does not list the five boxes; if any of them is not a search (e.g. a review of the guess), letting it be answered too is wider than research, but it widens nothing the GM asked to keep and narrows nothing he asked for."
+    },
+    {
+     "id": "standing-rule-and-backlog",
+     "summary": "research_boxes.rs::violations accepts an answered box whatever the switch's state (a task ticked while deferred stays green after reopening), and the tick does not check that make research-backlog lists the deferred decision; the answer's text and the refusal name the backlog instead.",
+     "class": "within",
+     "why": "Judged together because each leans on the other. T244 asks that procedures not start research while it is deferred; it asks for no new check that deferred decisions reach the backlog, and the UNRESEARCHED labeling of a guess is the 2026-11-25 backlog rule's existing mechanism, which this plan leaves as it was. Nothing in the bundle makes the task's decision appear on research-backlog, so the plan's goal line ('lands with its decision drawn UNRESEARCHED onto the backlog') states an intent, not an enforced outcome; but the deferred box itself stays '[ ] ... deferred: UNRESEARCHED' in tasks.md permanently, a findable record of every search not run, so reopening does not turn the deferral into a silent waiver. The plan's 'cheaper route' reason is not what makes this within; that the request does not ask for the check is. Not building an unasked check narrows nothing."
+    },
+    {
+     "id": "stage-end-list",
+     "summary": "Root CLAUDE.md Research bullet, research-doctrine.md and the research-backlog help line restated: while deferred, a port stage's end lists what it touched (make research-backlog STAGE=) and does not search it.",
+     "class": "within",
+     "why": "The stage-end search is a procedure that would start queued backlog research, exactly what the GM deferred."
+    },
+    {
+     "id": "search-first-exception-via-escape",
+     "summary": "While deferred, the approved search-first exception (a decision that other code builds on, or a guess likely visibly wrong) goes through RESEARCH_OK: the doctrine prose says so, and the guard refuses a research-pass dispatch for it without the escape.",
+     "class": "within",
+     "why": "Read against request.md: 'all of it' is 'the research that we currently have queued', deferred because none of it is blocking or likely to change the maps, so suspending the 2026-11-25 search-first exception for decisions that ARE foundational would exceed his words. The plan does not suspend it: the search still runs first, on the session's judgment, once a reason is given in RESEARCH_OK and recorded. What changes is that the search becomes a recorded, deliberate act rather than a procedure firing by itself, which is the GM's concern ('inadvertently kicking off'). The exception's purpose (do not build on a wrong foundation) is untouched, so this neither narrows the T244 request nor guts the earlier rule. The ruling depends on the escape staying a reason-only escape; a version that refused such a search outright would be NOT LEGITIMATE."
+    },
+    {
+     "id": "guard",
+     "summary": "PreToolUse guard: while deferred, refuses an Agent dispatch of research-pass (check-wave units included) and a Bash invocation of make page-session; RESEARCH_OK=\"<reason>\" escape, logged; silent while open.",
+     "class": "within",
+     "why": "Real enforcement of 'not inadvertently kicking off research'; an escape with a stated, recorded reason means what passes is deliberate. Note on reach: request.md shows page sessions also used for non-search work (T192 label tagging, cascade repairs); the guard refuses those too while deferred, passing only via RESEARCH_OK. That is reach beyond research, but it removes nothing the GM asked for (the escape keeps that work reachable). If page sessions are routinely needed for non-research work while deferred, the escape will get used often and that is worth watching."
+    },
+    {
+     "id": "impl-drift-not-built",
+     "summary": "No code for impl-drift NEEDS-RESEARCH verdicts: they already stay listed and refuse nothing while claims stand at report (feature 445).",
+     "class": "within",
+     "why": "Doing nothing where existing behavior already starts no research narrows nothing asked. The premise depends on claims staying at report, and the bundle shows no measurement of it; if claims is moved to clean while research is deferred, this path needs re-checking."
+    },
+    {
+     "id": "order",
+     "summary": "Lands before 449's port resumes; the switch is thrown to deferred by make research-deferred after landing.",
+     "class": "within",
+     "why": "Matches the task line and the GM's wish that the deferral is in force for the queued work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T245 (the GM 2026-11-25; measured 2026-11-25 (`du`, `df`, `make cache-clean DRY=1`): the disk at 88-90%, the build cache 190 GB against its own 100 GB budget, the cleanup freeing 27 MB)",
+    "### T245 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the audit",
+     "summary": "make disk-audit: every place the container writes, size, largest entries with owner and age, a GUESS budget each, the total against the disk, the unaccounted remainder, what the eviction would free now; read-only",
+     "class": "within",
+     "why": "The GM's second sentence asks for 'some kind of audit of disk space and what this container specifically is leaving sitting around'. Budgets per place are the coordinating session's build and are stated as GUESS knobs. The remainder is reported, not hidden; I measured independently (du -x over / on 2026-11-25): the container's visible tree is about 240 GB plus the ~/.claude bind mount, against 411 GB used on df, so the plan's 'about 177 GB outside the container's view' holds."
+    },
+    {
+     "id": "D2 the trigger on the host disk",
+     "summary": "A prompt reads df; below L7R_DISK_FREE_PCT (GUESS 20) free, at most hourly, starts the eviction detached and says what it freed in one line; the share is read on the host's disk",
+     "class": "within",
+     "why": "The GM's third sentence: 'trigger something automatically if our disk space ever drops below a certain percentage of free space'. The disk he names is the host's ('my host has a 461G disk drive'), so reading the share there is the plain reading. The threshold is a GUESS knob."
+    },
+    {
+     "id": "D3 the budget evicts idle and gone trees' profiles",
+     "summary": "Past the cache budget, whole profiles of trees that are gone or idle (HEAD log unmoved for 12 h, no live cwd) go first, least recently built first, only until back within budget",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It relaxes T158's keeping of every live tree's build directory whole. Ruled on purpose: the GM's T245 words locate the problem in 'artifacts sitting around', and his 2026-11-22 request was to 'clean up after ourselves ... to not have 30 gigs of stuff suddenly get eaten without us realizing it'. Under the old rule the budget held nothing (190 GB against 100) and evicting only gone trees freed 27 MB, so the literal old rule defeats both requests. A profile unbuilt for 12 h in an idle tree is exactly an artifact sitting around, and the cost (a cold rebuild) is priced in the plan and tied to three knobs."
+    },
+    {
+     "id": "D4 active trees' idle profiles, the profile as unit",
+     "summary": "An active tree's profiles idle past 12 h rank after idle trees' and may go; the unit is the profile, not the tree",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from D3 because the tree is in use. A profile not built for 12 h is sitting around whatever tree holds it; the plan measured a 25 GB cover-gate idle while its tree's tool profile was fresh, so a per-tree age keeps idle artifacts and defeats the GM's purpose. The working set stays protected: in_use, the running-build hold, the mirror exclusion, and the dry run touched none of diagram-backlog's debug, cover-gate or tool, nor a parallel builder's tree."
+    },
+    {
+     "id": "D5 the budget path without a low disk",
+     "summary": "The eviction also runs from cargo::plan past the 100 GB budget when the disk is not below the share",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The low-disk path is the GM's third sentence. The budget path answers his 2026-11-22 request ('not have 30 gigs ... eaten without us realizing it'), which is about growth, not about a full disk. The budget already existed under T158 and is what that request built; D5 makes it hold for artifacts sitting around rather than inventing a new rule. Waiting for the disk to be low would bring back the 2026-11-22 failure the request exists to prevent."
+    },
+    {
+     "id": "D6 a removed worktree's build directory with it",
+     "summary": "T158's proven-dead rule loses its idle wait; the day's sweep removes clean scratch worktrees before planning; make land removes each cleaned tree's build directory; a hand removal is caught at the next sweep",
+     "class": "within",
+     "why": "A build directory whose tree is gone is an artifact left sitting around with no possible user; in_use still guards a running build. It is in the coordinating session's build and serves the GM's first sentence."
+    },
+    {
+     "id": "D7 never under a running build",
+     "summary": "T158's global hold kept; each removal re-checks it (sweep::take)",
+     "class": "within",
+     "why": "Stricter than before; preserves the existing protection of builds in progress."
+    },
+    {
+     "id": "D8 the cache stays over budget where live working sets exceed it",
+     "summary": "When the working sets alone pass the budget the cache is left over it and the audit says by how much; an active tree's working set is never evicted to hold the number",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the coordinating session's build ('the cache budget made to hold'), not the GM's words. It is implied by his words: what he asked to deal with is what the container is 'leaving sitting around', and a working set built that morning in a tree in use is not. The build itself limits eviction to 'idle trees' targets' and 'never under a running build'. The overage is reported by the audit, so nothing is silent, and the budget is a GUESS knob."
+    },
+    {
+     "id": "D9 'found nothing it may take' said once",
+     "summary": "When the disk is under the share but nothing is evictable, the notice is said once until an eviction frees something again",
+     "class": "within",
+     "why": "The trigger still runs hourly and says every eviction that frees something. Reporting the same empty result every hour is not asked for anywhere. The plan's own figures show the share is unreachable on the host disk (about 18.7% free after everything evictable goes), and that is stated as the knob's question. Whether the notice repeats is a design choice, not a fidelity finding."
+    },
+    {
+     "id": "D10 the audit register's disk entry noted, not built",
+     "summary": "449 T437 item 13 gets the disk entry noted here; no register is built in this task",
+     "class": "within",
+     "why": "Checked: 449 T437 is a discussion task, explicitly 'NOT a build task'. Its item 13, an audit register with falsifiers, is a possibility to put to the GM, not something he approved. Building it here would be unrequested. The GM's 'add to our performance tuning and checks' is carried by make disk-audit, the automatic low-disk check at each prompt and the budget's eviction, and the task is filed as performance work."
+    },
+    {
+     "id": "D11 knobs and GUESS budgets",
+     "summary": "L7R_DISK_FREE_PCT (20) and the per-place budgets are GUESS constants with their why beside them; L7R_CACHE_IDLE_HOURS and L7R_CACHE_BUDGET_GB reused",
+     "class": "within",
+     "why": "The build names 'a knob, GUESS 20% free'; the GM's 'a certain percentage' leaves the value open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T246 (the coordinating session's measurement of 2026-11-25 and the GM's words on the old task scratch folder, which tasks.md's T246 line carries; amended the same day by the host session's five points)",
+    "### T246 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "landed-scratch",
+     "summary": "make land's last step takes a landed number's DIRECTORIES t<N>... in the git directory and l7r-handoffs/T<N>-...; never a file (handoff note, land log); a number another feature started within the day is left by tmp::landed's rule",
+     "class": "within",
+     "why": "Answers the GM's 'the old task scratch folder is over 1/3 of a gigabyte? That doesn't seem right to me': the bulk (the handoff scratch folders, 207 MB) now goes at landing or by the sweep's age. The files left are small (1.1 MB measured), read by land/writers.rs and the context-cap guard, and given a place and budget in the audit; the same-number rule keeps another feature's live task's scratch, which taking would be a wrong outcome."
+    },
+    {
+     "id": "snapshots-without-tree",
+     "summary": "a review snapshot without tree.json is taken once idle SCRATCH_SWEEP_SNAPSHOT_DAYS (GUESS, a week)",
+     "class": "within",
+     "why": "The brief's 'first measure whether any review reads a snapshot older than its current unit's, and keep what one does' was measured first (one snapshot per unit; 245 reads, none past 72 h after its take); a week is many times the oldest read, so nothing read is taken."
+    },
+    {
+     "id": "snapshots-with-tree",
+     "summary": "a review snapshot WITH tree.json is kept whatever its age, until its unit is snapshotted again (about 0.9 GB held); taking one whose copy matches the live pool priced and not built",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own goal that every leftover goes by age. Legitimate on two grounds: the brief relays 'keep what one does', and tree::of_unit keys the unit's verdict carry, checkpoint and arbiter round count to that copy, so taking it would make them read the live pool - a wrong outcome that defeats the reviews, not merely awkward. The purpose (nothing kept unseen, no 30 GB eaten unnoticed) survives: the snapshots keep a place and a 1.5 GB budget in make disk-audit, flagged OVER when they pass it."
+    },
+    {
+     "id": "gencache-dead-stores",
+     "summary": "every .gencache store but rust taken once idle SCRATCH_SWEEP_DAYS in each tree; rust never taken",
+     "class": "within",
+     "why": "A leftover the container keeps (6.1 GB dead Python roll store, measured) cleaned by age as T245/T246 ask; the live rust store has its own lock and readers, and taking it would break a live read."
+    },
+    {
+     "id": "p1-scratchpad-entries",
+     "summary": "(1) finished sessions' scratchpad entries judged one by one by idle SCRATCH_SWEEP_DAYS (GUESS 3 days); prompting and registered-running sessions kept; task outputs keep their own rule; the low-disk trigger runs the age shares before the cache's share, a build running or not",
+     "class": "within",
+     "why": "The host's point (1): an age sweep, GUESS 3 days, at session start (already, 451 T158) and at the low-disk trigger, the running session's scratchpad kept. The per-entry rule reaches the 12.8 GB the whole-session rule kept by its transcript."
+    },
+    {
+     "id": "p2-worktree-build-cache",
+     "summary": "(2) a gone tree's build directory goes with no idle wait (T245), the hand removal pinned by a test; diagram-backlog-review wanted; diagram-backlog-pages reported, not removed",
+     "class": "within",
+     "why": "Point (2) asks that the hand removal be measured to be caught (pinned by a_target_is_taken_whole_only_once_proven_dead and the live ls) and that whether the two clones are still wanted be checked: checked and reported. Removal of -pages was not asked, and it holds 19 commits no remote has."
+    },
+    {
+     "id": "p3-debug-0",
+     "summary": "(3) [profile.dev] (and test, inheriting) set to debug = 0 after measuring size and build/test times; RUST_BACKTRACE file:line and a debugger's source view lost; one cold rebuild per tree",
+     "class": "within",
+     "why": "Point (3) names 'line-tables-only (or 0)' and asks before-and-after in size and time; the brief's condition (change only if times are not worse beyond noise) was measured (the table, two runs per cell under load 11-31, plus the coverage build, 447 vs 271 MB, the same report). What is lost is stated."
+    },
+    {
+     "id": "p3-incremental-left",
+     "summary": "(3) CARGO_INCREMENTAL=0 measured and left unchanged, numbers reported for the GM",
+     "class": "within",
+     "why": "Point (3) asks it MEASURED for one-shot gate and landing builds; the measurement found no build of theirs is one-shot (their targets are kept and rebuilt every run) and a one-file rebuild many times slower (29-36 s vs 2.6-10 s), and the brief says exactly that case is reported and left for the GM. Not an open-question narrowing: the ask was a measurement, which is done."
+    },
+    {
+     "id": "p3-target-age-pruning",
+     "summary": "(3) age pruning of old artifacts inside a live target left to T158's and T245's existing rules (sixteen variants, idle profiles)",
+     "class": "within",
+     "why": "The part of point (3) already built by earlier tasks; nothing asked is dropped."
+    },
+    {
+     "id": "p4-transcripts",
+     "summary": "(4) the audit counts only the mirror's slug and those under it (-diagram, -diagram-...), GUESS budget 10 GB, the rest to unaccounted",
+     "class": "within",
+     "why": "Point (4) verbatim: counts only this project's transcripts, never the others."
+    },
+    {
+     "id": "p5-podman",
+     "summary": "(5) the host's unused podman layers named on a line of their own, not counted",
+     "class": "within",
+     "why": "Point (5): the host's to clean, the audit names it as host-side; the container cannot see it."
+    },
+    {
+     "id": "audit-places",
+     "summary": "new audit places with GUESS budgets (.git/t<N>* 1 GB, handoffs 0.5 GB, snapshots 1.5 GB, .gencache 1 GB), sized within the clones and not added to the total again",
+     "class": "within",
+     "why": "T245's 'audit of disk space and what this container specifically is leaving sitting around', extended to the leftovers T246 finds; budgets labeled GUESS."
+    },
+    {
+     "id": "found-fixed",
+     "summary": "three found items fixed here: transcripts overcounted, --scratch-sweep usage lacked landed, the audit's last line said 'disk under' at 29% free",
+     "class": "within",
+     "why": "Wrong outcomes (an audit that misreports, a usage line that hides a mode) fixed in the task; none deferred, so FR-009's deferral clauses do not apply."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T246 (the coordinating session's measurement of 2026-11-25 and the GM's words on the old task scratch folder, which tasks.md's T246 line carries; amended the same day by the host session's five points)",
+    "### T246 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "landed-scratch",
+     "summary": "make land's last step takes a landed number's DIRECTORIES t<N>... in the git directory and l7r-handoffs/T<N>-...; never a file (handoff note, land log); a number another feature started within the day is left by tmp::landed's rule",
+     "class": "within",
+     "why": "Answers the GM's 'the old task scratch folder is over 1/3 of a gigabyte? That doesn't seem right to me': a landed task's scratch directories (the handoff folder held 207 MB) go at landing. The files left are small (1.1 MB measured), read by land/writers.rs and the context-cap guard, and audited under a budget; the same-number rule keeps another feature's live task's scratch, which taking would be a wrong outcome."
+    },
+    {
+     "id": "landed-only-reach",
+     "summary": "the .git/t<N> and l7r-handoffs/T<N>- directories are taken only for a LANDED number; a set-down or never-landed number's scratch has no age rule and stays, sized under the audit's budgets (1 GB, 0.5 GB)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the goal's 'or by the sweep's age'. Legitimate by purpose: the GM's complaint is about OLD task scratch, and an unlanded task's scratch is the handoff material a set-down task resumes from, so taking it by age would lose live work, which is a wrong outcome. The residue cannot grow unseen, because each place has its own audit line and budget, flagged OVER (measured 2026-11-25: 0.0 of 1.0 GB and 0.2 of 0.5 GB)."
+    },
+    {
+     "id": "snapshots-without-tree",
+     "summary": "a review snapshot without tree.json is taken once idle SCRATCH_SWEEP_SNAPSHOT_DAYS (GUESS, a week)",
+     "class": "within",
+     "why": "The brief's 'first measure whether any review reads a snapshot older than its current unit's, and keep what one does' was measured first (one snapshot per unit; 245 reads, none past 72 h after its take); a week is many times the oldest read, so nothing read is taken."
+    },
+    {
+     "id": "snapshots-with-tree",
+     "summary": "a review snapshot WITH tree.json is kept whatever its age, until its unit is snapshotted again (about 0.9 GB held); taking one whose copy matches the live pool priced and not built",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own goal that every leftover goes by age. Legitimate on the wrong outcome alone: tree::of_unit keys the unit's verdict carry, checkpoint and arbiter round count to that copy, so taking it would make them read the live pool, which breaks the reviews and is not merely awkward. The GM's purpose (nothing piling up unseen) survives: the snapshots keep a place and a 1.5 GB budget in make disk-audit and are flagged OVER past it."
+    },
+    {
+     "id": "gencache-dead-stores",
+     "summary": "every .gencache store but rust taken once idle SCRATCH_SWEEP_DAYS in each tree; rust never taken",
+     "class": "within",
+     "why": "A leftover the container keeps (6.1 GB dead Python roll store, measured) cleaned by age as T245/T246 ask; the live rust store has its own lock and readers, and taking it would break a live read."
+    },
+    {
+     "id": "p1-scratchpad-entries",
+     "summary": "(1) finished sessions' scratchpad entries judged one by one by idle SCRATCH_SWEEP_DAYS (GUESS 3 days); prompting and registered-running sessions kept; task outputs keep their own rule; the low-disk trigger runs the age shares before the cache's share, a build running or not",
+     "class": "within",
+     "why": "The host's point (1): an age sweep, GUESS 3 days, at session start (already, 451 T158) and at the low-disk trigger, the running session's scratchpad kept. The per-entry rule reaches the 12.8 GB the whole-session rule kept by its transcript."
+    },
+    {
+     "id": "p2-worktree-build-cache",
+     "summary": "(2) a gone tree's build directory goes with no idle wait (T245), the hand removal pinned by a test; diagram-backlog-review wanted; diagram-backlog-pages reported, not removed",
+     "class": "within",
+     "why": "Point (2) asks that the hand removal be measured to be caught (pinned by a_target_is_taken_whole_only_once_proven_dead and the live ls) and that whether the two clones are still wanted be checked: checked and reported. Removal of -pages was not asked, and it holds 19 commits no remote has."
+    },
+    {
+     "id": "p3-measured-where",
+     "summary": "(3) the settings measured on cargo test -p l7r_guard from a git archive of HEAD into fresh scratch targets (and a coverage build of l7r_gate_pool), not on the live 80 GB and 43 GB caches",
+     "class": "within",
+     "why": "Point (3) asks for before and after in size and build time. A controlled build of the same code under each setting measures exactly that without this task's edits or a shared cache moving the numbers; the live caches take the setting through one cold rebuild, which the plan states (31 GB, T158's figure). This is a method, nothing asked is dropped."
+    },
+    {
+     "id": "p3-debug-0",
+     "summary": "(3) [profile.dev] (and test, inheriting) set to debug = 0 after measuring size and build/test times; RUST_BACKTRACE file:line and a debugger's source view lost; one cold rebuild per tree",
+     "class": "within",
+     "why": "Point (3) names 'line-tables-only (or 0)' and asks before-and-after in size and time; the brief's condition (change only if times are not worse beyond noise) was measured (the table, two runs per cell under load 11-31, plus the coverage build, 447 vs 271 MB, the same report). What is lost is stated."
+    },
+    {
+     "id": "p3-incremental-left",
+     "summary": "(3) CARGO_INCREMENTAL=0 measured and left unchanged, numbers reported for the GM",
+     "class": "within",
+     "why": "Point (3) asks it MEASURED for one-shot gate and landing builds; the measurement found no build of theirs is one-shot (their targets are kept and rebuilt every run) and a one-file rebuild many times slower (29-36 s vs 2.6-10 s), and the brief says exactly that case is reported and left for the GM. Not an open-question narrowing: the ask was a measurement, which is done."
+    },
+    {
+     "id": "p3-target-age-pruning",
+     "summary": "(3) age pruning of old artifacts inside a live target left to T158's and T245's existing rules (sixteen variants, idle profiles)",
+     "class": "within",
+     "why": "The part of point (3) already built by earlier tasks; nothing asked is dropped."
+    },
+    {
+     "id": "p4-transcripts",
+     "summary": "(4) the audit counts only the mirror's slug and those under it (-diagram, -diagram-...), GUESS budget 10 GB, the rest to unaccounted",
+     "class": "within",
+     "why": "Point (4) verbatim: counts only this project's transcripts, never the others."
+    },
+    {
+     "id": "p5-podman",
+     "summary": "(5) the host's unused podman layers named on a line of their own, not counted",
+     "class": "within",
+     "why": "Point (5): the host's to clean, the audit names it as host-side; the container cannot see it."
+    },
+    {
+     "id": "audit-places",
+     "summary": "new audit places with GUESS budgets (.git/t<N>* 1 GB, handoffs 0.5 GB, snapshots 1.5 GB, .gencache 1 GB), sized within the clones and not added to the total again",
+     "class": "within",
+     "why": "T245's 'audit of disk space and what this container specifically is leaving sitting around', extended to the leftovers T246 finds; budgets labeled GUESS."
+    },
+    {
+     "id": "found-fixed",
+     "summary": "three found items fixed here: transcripts overcounted, --scratch-sweep usage lacked landed, the audit's last line said 'disk under' at 29% free",
+     "class": "within",
+     "why": "Wrong outcomes (an audit that misreports, a usage line that hides a mode) fixed in the task; none deferred, so FR-009's deferral clauses do not apply."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T247 (451 T229's builder in a parallel worktree: the tool target's l7r-gate rebuilt inside a cover run's environment after a gate source edit, and 21 tests of clone-sync-hooks.sh and sync-with-main.sh then failed on 'uncommitted changes' from the default_*.profraw files in their fixture clones, observed 2026-11-25, method: T229's builder's hook-suite run; seen by T235's, T231's and T229's builders)",
+    "### T247 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T247-env",
+     "summary": "build() runs cargo under env -u of every variable cargo llvm-cov show-env sets, every rustflags/rustdocflags channel, both wrapper channels (RUSTC_WORKSPACE_WRAPPER, RUSTC_WRAPPER) and CARGO_LLVM_COV_BUILD_DIR, so the tool's flags come only from .cargo/config.toml",
+     "class": "within",
+     "why": "The task line asks for the rebuild with the instrumentation flags cleared; the plan measured (toy workspace, 2026-11-25) that the builder's env -u RUSTFLAGS workaround misses the RUSTC_WORKSPACE_WRAPPER channel, and clears every channel that can carry the flag. This is the requested fix, no wider."
+    },
+    {
+     "id": "T247-refuse",
+     "summary": "After a successful build, a binary holding __llvm_prf_cnts is removed with its build.json, the launcher exits 1 naming why and where to look, and L7R_GATE_PRINT_FRESH names no binary",
+     "class": "within",
+     "why": "The task line: an instrumented binary is never left as the tool; feature 449 T61: the launcher fails closed. The false-positive check (0 of 19 plain tool binaries hold the section) shows no correct build is refused."
+    },
+    {
+     "id": "T247-scan-at-build",
+     "summary": "The instrumentation scan runs only at a build (0.038 s over the 33 MB binary), never on a fresh call",
+     "class": "within",
+     "why": "T205: no extra work on a fresh call. Where the check runs is a cost choice that does not narrow what is enforced, since every new binary passes through a build."
+    },
+    {
+     "id": "T247-pre-existing",
+     "summary": "A binary instrumented before this fix is not hunted down; the <bin>.plain freshness stamp was priced and not built, because the scan finds no such binary in any clone",
+     "class": "within",
+     "why": "Nothing is left unfixed here: the scan of every clone's tool target (2026-11-25) found 0 instrumented binaries, so there is no wrong outcome. A guard against a state measured to exist nowhere is not owed (constitution XIV, what a defect is), and every binary built from now on passes through the new refusal. The plan states this openly with its evidence rather than hiding it."
+    },
+    {
+     "id": "T247-guard-wrapper",
+     "summary": "scripts/hooks/l7r-guard.sh, which builds the same way into the same target, is left unchanged",
+     "class": "within",
+     "why": "The task is the gate launcher's tool build. The plan measured that no Rust test runs l7r-guard.sh (grep -rn l7r-guard.sh rust/, 2026-11-25), so it is never started inside a cover environment and shows no defect, and its build writes l7r-guard, not the gate's programs. Caveat for the builder, not a ruling: that search finds the script by name in rust/ only; a Rust test reaching it through another script would be missed."
+    },
+    {
+     "id": "T247-tests",
+     "summary": "Red-first tests in tests/hooks/test-l7r-gate.1.sh: cargo is handed none of the coverage environment, a later call drops no profile, and the instrumented-build refusal (refused, removed, says why, print-fresh names nothing)",
+     "class": "within",
+     "why": "Enforcement of what the task line asks (red-first on a cover-run environment); each test fails only when the requested behavior is absent."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T244 to T247, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

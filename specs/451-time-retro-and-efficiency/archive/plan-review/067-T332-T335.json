@@ -1,0 +1,739 @@
+{
+ "blocks": {
+  "### T332, T344 (bundle) (two filings of one defect: a pool tree's `Phase` lines carried the task of the tree's last `make task-start`, which no handout moves - all 179 `Phase` lines of T315's check runs in `diagram-backlog-t269` carried T285 through five handouts, observed 2026-11-26 (T344's line; method: the 451 event log's `Phase` lines of that tree from 20:07 UTC counted by their task field, against `.git/builder-pool.log`))": {
+   "sha256": "f51be1cdec31d35b1eefee9dcf8b66b8bedbe81ef5f7f3b2ebad1a16b3f8f017",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T332, T344 Approach (checklist part A)": {
+   "sha256": "a6906ba9e168f6f80c0c5397641c459178d610f6356adae80499b9bd56317b4e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T333 (<why: the finding or measurement that files it>)": {
+   "sha256": "a60d3eac8aba3127a3b0709dd9a8fc5784cb3586d7dd3c30ded2400a000dfd9a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T333 Approach (checklist part A)": {
+   "sha256": "862000f83c6062d980274dc169327416d0b0d5af1bdf0cc8660daecca4560804",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T334 (the coordinating session's own briefs of 2026-11-26 broke the sizing rules of `scripts/container/builder-brief.md` five times with nothing refusing - T285, T298, T316 and T308 each reached the 300k cap, T315 ended at 308k - and carried no STOP POINT line; the GM asked that day whether the instructions were in the right place)": {
+   "sha256": "7b08579b4e38e9ffd1850232ee52b595e82697d31e0d78f1ca9712571daac621",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T334 Approach (checklist part A)": {
+   "sha256": "8e944c575b2f5c8e889dcf62d3f3f041702ae7fe8183590adb98063ab825cc06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T335 (<why: the finding or measurement that files it>)": {
+   "sha256": "374c10cc2d3c61467dae44f1cde82c3f6617c65bc1c6c99dba24fb478818b9bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T332": {
+   "section_sha256": "60b59261a6f55b3176508b83386fdb03bdc27169d214a1e1ff420650092b743c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the rule: the task read from the pool registry in filed.rs's last link",
+     "summary": "A tool's own line from a held pool tree that names no task and has no agent or page session takes the first task of the registry entry for that tree, where the entry's feature is the line's feature; trees not listed, free, or held for another feature or none fall through to in_force as before.",
+     "class": "within",
+     "why": "Both tasks: the defect is a wrong outcome against the task time breakdown the GM asked for (2026-11-25, T243: time broken down per task; 2026-11-22: everything measured, compiling and tests above all). Booking a builder's build and test seconds to the task its tree was handed out for is that request working. For T344 in particular: its line asked for the mark to be set at make builder-tree T=. The plan reaches the same outcome by another mechanism and shows the asked-for one would not reach it (the Phase writer reads no marks; the mark directories were empty, observed 2026-11-27 with ls). Picking a mechanism that delivers the outcome the task asked for is within; it does not narrow the outcome."
+    },
+    {
+     "id": "D2 scope: only lines that reached in_force (no agent, no page session, no task named)",
+     "summary": "pool_task is asked only where in_force was asked; an agent's or page session's line that names no task still carries none (451 T161).",
+     "class": "within",
+     "why": "It leaves T161's settled rule alone and covers every line the defect reached (the Phase lines, which carry no payload). Nothing the GM asked for is cut out."
+    },
+    {
+     "id": "D3 a start after the handout stands",
+     "summary": "A make task-start in the tree after the entry's since names the task (a bundle's builder starting its second member books to it); an untimed start is not one; a handout whose time does not read counts as older than every timed start.",
+     "class": "within",
+     "why": "It keeps the builder's own later record in force over the handout, so the booking is more correct per task. The GM's 2026-11-25 (l) words accept about 90% accuracy for the breakdown, so the tie-break rules are a design choice inside the request."
+    },
+    {
+     "id": "D4 a bundle's lines go to its first task until a later start",
+     "summary": "A tree held for a,b books to a unless the builder starts b.",
+     "class": "within",
+     "why": "A bundle's tasks are worked at the same time (the GM, 2026-11-22, T141). Putting shared seconds under one named member, rather than under the stale task of an unrelated earlier start, is inside 'it doesn't have to be 100% exact' (2026-11-25 (l)). No minute is lost from the breakdown."
+    },
+    {
+     "id": "D5 no start row or undo row written at the handout",
+     "summary": "The registry is read instead of a start row being written at take and undone at release, because land/ready.rs, the stall check, task_time's first start, and the raw-log static-runs count would read a start nobody made wrongly, and the undo would erase the builder's own starts.",
+     "class": "within",
+     "why": "It is a mechanism choice that avoids putting wrong outcomes into four other readers (T359's constraints). It narrows neither task's outcome. T344's mark route is covered under D1."
+    },
+    {
+     "id": "D6 the fix in filed.rs, not phase.rs",
+     "summary": "The link in filed answers for every tool that appends a row from a tree (append_row_with), not only the rustc Phase writer.",
+     "class": "within",
+     "why": "Its only effect is that every tool row with the same defect is booked right, including the pre-warm's (T316) lines that the breakdown counts, so it serves the breakdown request. The fix sits at the waist every task-less tool row passes through (filed's last link), so no census of writers is needed. The block's 'one of several tools' (append_row_with) carries no count or command, and the ruling does not rest on it."
+    },
+    {
+     "id": "D7 the re-file left as it is",
+     "summary": "make events-refile is not changed, since it moves lines between features and does not undo the new booking.",
+     "class": "within",
+     "why": "This is an analysis that no change is needed, with the reason. It decides nothing that narrows the request."
+    },
+    {
+     "id": "D8 the lines already written are not rewritten, and make task-time's reader fix is deferred to T391 (lands before T317)",
+     "summary": "3,255 of 3,883 pool-tree Phase lines carry another task (observed 2026-11-27 with its method). make task-progress already re-tasks them at read time; make task-time still books 2026-11-26's tables wrong until T391.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing for T344, whose finding is make task-time's existing tables (five tasks' seconds booked to one); T332's line, as the block gives it, asks only for the task to be read from the pool. The plan's own reason ('a job of its own', another crate) would not carry it: that is a more-code reason, and the measure crate is already in this section's green exit. What carries it is the accepted spec's FR-009, which is the form a defect deferral takes and which this item meets in full: why it is not fixed here, the filed id T391, and its order, 'lands before T317'. T317 is the next work that reads a line's task (the pre-warm's category), so the defect is not carried into the work that would build on it, and that is what fix-as-we-go requires. The raw lines are left as written, and the correction belongs in the reader, as make task-progress's retask already does. The forward booking is fixed here, so the request's purpose (an accurate per-task breakdown) is not defeated. CONDITION: this ruling holds only while T391 lands before T317. If T317 is started first, the deferral is NOT LEGITIMATE."
+    },
+    {
+     "id": "D9 constraints and exits (no guard message changes; crate-scoped checks then the full gate at landing; red-first tests)",
+     "summary": "Two red-first tests pinned on the old code (510 passed, 2 failed; then 512 passed, 2026-11-27, its command named); green via make builder-checks; no map changes.",
+     "class": "within",
+     "why": "The two tests fail only when the asked-for booking is absent, so they enforce the request and are not added scope."
+    },
+    {
+     "id": "D10 the section classed as performance work",
+     "summary": "'Performance work? yes: a measurement task.'",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'. Booking the build and test seconds right is that kind of measurement task."
+    },
+    {
+     "id": "D11 the registry read left untimed",
+     "summary": "One read of builder-pool.json (39 lines, observed 2026-11-27 with wc -l) per line that reaches the last link; the read's time was not measured.",
+     "class": "within",
+     "why": "No claim rests on a speed figure, and no performance claim is made for the read. The file's size is measured and labeled."
+    },
+    {
+     "id": "D12 the reach to the main session's task-less hook lines",
+     "summary": "The link also answers the main session's hook lines that name no task, where their tree is a held pool tree.",
+     "class": "within",
+     "why": "It is the same booking defect on the same link, and only where the tree is held for the line's feature. Elsewhere in_force answers as before. It adds no new refusal and no new behavior beyond the booking."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T334": {
+   "section_sha256": "23c3c3a48d5c551f5a117fd14a3884dcf85c11fb5e8c20e2541539c81b8c150d",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T334-approach",
+     "summary": "The standing part of a builder's brief is printed by a command that sizes the brief first. A PreToolUse guard refuses a builder's dispatch that does not open with the command's marker. builder-brief.md keeps each rule with its incident.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-26 question ('putting the instructions in the right place') answered with the 2026-11-19 standard ('real enforcement and not just instructions') and T285's ('not rely on you remembering'). The instructions move into tooling that prints them, and a dispatch without them is refused."
+    },
+    {
+     "id": "T334-D1",
+     "summary": "The kinds are named fix|measurement|build-half|closing-half, not the task line's fix|measurement|mechanism-build|closing.",
+     "class": "within",
+     "why": "Only the name changes; the set of kinds and what each does are the same. The task line's kind names are the coordinating session's, not the GM's."
+    },
+    {
+     "id": "T334-D2a",
+     "summary": "An unsplit mechanism is refused by the command, not by the PreToolUse guard. Only a hand-edited marker evades it.",
+     "class": "within",
+     "why": "The refusal still fires on the only route that makes a marker, and the guard refuses any builder's dispatch without one. The gap left is a forged marker, which is deliberate circumvention rather than the forgetting the GM's words target. The cost reason given is not needed to place this within scope."
+    },
+    {
+     "id": "T334-D2b",
+     "summary": "A task is recognized as a mechanism by mechanism(): phrases on its tasks.md line, or a make target with a hyphen that the Makefile does not define.",
+     "class": "within",
+     "why": "This is how the sizing rule 'a mechanism as two builders' is detected. It reads the task's own line, not the caller's words."
+    },
+    {
+     "id": "T334-D2c",
+     "summary": "The escape SIZING_OK=\"<reason>\" passes the mechanism refusal and is logged.",
+     "class": "within",
+     "why": "It is the project's escape pattern (FR-012: a reason, recorded). It covers a line that names a guard the task only repairs, which would otherwise be refused as correct work."
+    },
+    {
+     "id": "T334-D3a",
+     "summary": "A builder's dispatch is an ad-hoc Agent call whose prompt names a pool-registry path or carries a marker. This is narrower than spec D8's 'no defined agent' definition, so an ad-hoc builder working in the session clone with no pool tree passes unchecked (filed as T353, lands before T302).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Spec D8 defines a builder for the context cap, where reading every ad-hoc agent costs nothing. This guard demands a marker. On the replay day, applying D8's definition here would refuse the 17 ad-hoc dispatches that named no pool tree, measuring agents among them (observed 2026-11-26, the block's replay). That is a guard firing on correct work, and it defeats the purpose of real enforcement by teaching bypass (root CLAUDE.md). The prose cannot tell a reader from an editor, so the literal rule cannot be met without that cost. The leftover is filed with its reason and ordered before T302 (FR-009's form), so the feature still owes it."
+    },
+    {
+     "id": "T334-D3b",
+     "summary": "Defined agents, Explore and Plan are never a builder's dispatch.",
+     "class": "within",
+     "why": "Spec FR-006 and D8 exclude defined review agents from 'builder' too, and Explore and Plan do not build."
+    },
+    {
+     "id": "T334-D3c",
+     "summary": "A prompt opening 'Run the claims round' is exempt, as split.rs reads it.",
+     "class": "within",
+     "why": "The claims round was split off from the builders by the GM's 2026-11-25 'sounds good please do that ASAP'. It is not a code builder, and the exemption matches the existing split.rs reading."
+    },
+    {
+     "id": "T334-D4",
+     "summary": "The marker and the escape count only on a line of their own. A pasted '<' placeholder is no reason.",
+     "class": "within",
+     "why": "This is a parsing convention that stops a mention in prose from passing as a marker or an escape. It is stricter, not narrower."
+    },
+    {
+     "id": "T334-D5",
+     "summary": "The escape is checked after the 'is this a builder's dispatch' test and before every refusal, so every escape taken is logged.",
+     "class": "within",
+     "why": "It is an ordering convention that keeps the escape log truthful. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T334-D6",
+     "summary": "KIND=measurement requires MEASURES.",
+     "class": "within",
+     "why": "It is stricter than the brief. It makes the measurement bound fire for T315's case, which is one of the motivating incidents."
+    },
+    {
+     "id": "T334-D7",
+     "summary": "A bundle T=a,b is briefed as one builder on one tree, with the marker naming both. A mechanism among the tasks still refuses KIND=fix, and the guard holds the tree to every task named.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 bundling words ('small defects can be bundled together and worked at the same time') and builder-brief.md's 'one task or one bundle' both allow it. Refusing bundles, or escaping every one, would refuse correct work."
+    },
+    {
+     "id": "T334-D8",
+     "summary": "Every sizing refusal runs before the pool's handout, so a refused brief holds no tree.",
+     "class": "within",
+     "why": "It is an ordering convention and is pinned by a test."
+    },
+    {
+     "id": "T334-D9",
+     "summary": "JOBS_MAX is 3 (the sizing rule's own limit). MEASURES_MAX is 6, a GUESS knob. Both are listed in the audit register's covers.",
+     "class": "within",
+     "why": "JOBS_MAX follows the written rule. MEASURES_MAX is a labeled knob sitting under T315's observed seven, and it is registered for audit as the GM's 2026-11-25 register words ask."
+    },
+    {
+     "id": "T334-D10",
+     "summary": "The measurement rule reads only lines opening 'Job|Part|Step <n>' that hold a fixed edit word, not every sentence. It misses T316's numbered list and is labeled GUESS; the T316/T308 shape is filed as T354, which lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally, 'names a source edit' would require reading every prose sentence for an edit, and that would refuse correct measurement briefs. That is a guard firing on good work, which defeats the purpose by teaching bypass. The narrow form, what it misses and its false positive are stated at the guard's head and under Found and left. The detector was not tuned to fit the five incidents (the anti-overfit rule)."
+    },
+    {
+     "id": "T334-sizing-from-declarations",
+     "summary": "Sizing reads the caller's declared KIND, JOBS and MEASURES. Only the mechanism test reads tasks.md independently. Item 4 says that even with a truthful caller, the sizing misses two of the five motivating briefs (T316 and T308).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against the purpose (real enforcement, not reliance on remembering). The command runs before the brief's text is written: Approach item 1 says the brief 'is sized before it is written', and D8 puts every sizing refusal before the handout. So the command cannot count from that text, and forcing a declaration that is then checked removes the forgetting the GM named. The guard does see the text, and it reads it for the measurement rule (D10). Its narrowness there is ruled under T334-D10. T285 (by the task's line), T298 and T315 are caught (observed 2026-11-26, the block's replay2). The two misses are the measurement-plus-build shape. The block says the rule for that shape (refuse JOBS>1 on a measurement outright) is not yet settled, and adopting it from five briefs risks refusing correct work, which defeats the purpose. It is filed as T354 and ordered before T302."
+    },
+    {
+     "id": "T334-D11",
+     "summary": "The block stays under 2,000 characters and quotes no rule text. Every kind's block carries a 'STOP POINT (' line.",
+     "class": "within",
+     "why": "This keeps agent-prefix-hooks from refusing the block, and the incident's missing STOP POINT line is now always present."
+    },
+    {
+     "id": "T334-D12",
+     "summary": "The build half's handoff is <git common dir>/l7r-handoffs/<task>-build.md. A closing half asked for before that file exists gets a note on stderr, not a refusal.",
+     "class": "within",
+     "why": "The path is a naming convention. Not refusing is right because of the known T352 case: a capped build half writes <task>-<aid>.md, so a refusal would block a legitimate closing half."
+    },
+    {
+     "id": "T334-found-T352",
+     "summary": "A build half that reaches the context cap cannot write <task>-build.md, so the closing half's block names a file that does not exist. Filed as T352, lands before T302.",
+     "class": "within",
+     "why": "This defers a defect the task creates (a block naming a missing file), but within the feature. It is filed under FR-009's accepted form (reason, id T352, 'lands before T302'), so nothing is carried past the next step and the feature still delivers the fix. The command reports the case on stderr when it occurs. This is sequencing, not a narrowing of what the feature owes."
+    },
+    {
+     "id": "T334-found-T360",
+     "summary": "A builder sent from a Workflow script's agent() call bypasses the guard. Filed as T360, lands before T302.",
+     "class": "within",
+     "why": "This is sequencing within the feature under FR-009's accepted deferral form (reason, id T360, lands before T302). Nothing is carried past the next step. No builder was sent through a Workflow agent() on the replay day; all 56 builder dispatches went through the Agent tool (observed 2026-11-26)."
+    },
+    {
+     "id": "T334-tree-not-held-unreplayed",
+     "summary": "The guard rule 'marker names a tree the pool does not hold for its task' was not replayed, because the day's holders cannot be recovered.",
+     "class": "within",
+     "why": "This is a limit on the evidence, not on scope. The rule is built and pinned by a_marker_is_held_to_its_kind_its_jobs_and_the_pool."
+    },
+    {
+     "id": "T334-perf-claim",
+     "summary": "The section calls the task performance work by FR-013's test (the builders' loop is faster), adds no [perf] tag, and leaves the tag to the coordinating session.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work. Leaving the tag to the coordinating session changes nothing the GM asked."
+    },
+    {
+     "id": "T334-not-seen-red",
+     "summary": "The command's sizing tests and the marker's test were not seen red. Only the guard's suite was run with its check disabled.",
+     "class": "within",
+     "why": "What the GM asked for reaches the refusal existing and firing; the tests that pin it exist (a_brief_is_sized_before_any_tree_is_taken and others). FR-012's red-first requirement names the refusals of FR-006 to FR-009, FR-011 and FR-013, and T334's later amendment is not one of them. How the tests were shown is test quality, which this review does not judge."
+    },
+    {
+     "id": "T334-D2-escape-form",
+     "summary": "SIZING_OK=\"<reason>\" is logged by the Makefile's LOGESCAPE.",
+     "class": "within",
+     "why": "It is the project's recorded-escape pattern. FR-012's two-word minimum binds FR-006..FR-013 refusals, not this one."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T332, T344 (bundle) (two filings of one defect: a pool tree's `Phase` lines carried the task of the tree's last `make task-start`, which no handout moves - all 179 `Phase` lines of T315's check runs in `diagram-backlog-t269` carried T285 through five handouts, observed 2026-11-26 (T344's line; method: the 451 event log's `Phase` lines of that tree from 20:07 UTC counted by their task field, against `.git/builder-pool.log`))",
+    "### T332, T344 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the rule: the task read from the pool registry in filed.rs's last link",
+     "summary": "A tool's own line from a held pool tree that names no task and has no agent or page session takes the first task of the registry entry for that tree, where the entry's feature is the line's feature; trees not listed, free, or held for another feature or none fall through to in_force as before.",
+     "class": "within",
+     "why": "Both tasks: the defect is a wrong outcome against the task time breakdown the GM asked for (2026-11-25, T243: time broken down per task; 2026-11-22: everything measured, compiling and tests above all). Booking a builder's build and test seconds to the task its tree was handed out for is that request working. For T344 in particular: its line asked for the mark to be set at make builder-tree T=. The plan reaches the same outcome by another mechanism and shows the asked-for one would not reach it (the Phase writer reads no marks; the mark directories were empty, observed 2026-11-27 with ls). Picking a mechanism that delivers the outcome the task asked for is within; it does not narrow the outcome."
+    },
+    {
+     "id": "D2 scope: only lines that reached in_force (no agent, no page session, no task named)",
+     "summary": "pool_task is asked only where in_force was asked; an agent's or page session's line that names no task still carries none (451 T161).",
+     "class": "within",
+     "why": "It leaves T161's settled rule alone and covers every line the defect reached (the Phase lines, which carry no payload). Nothing the GM asked for is cut out."
+    },
+    {
+     "id": "D3 a start after the handout stands",
+     "summary": "A make task-start in the tree after the entry's since names the task (a bundle's builder starting its second member books to it); an untimed start is not one; a handout whose time does not read counts as older than every timed start.",
+     "class": "within",
+     "why": "It keeps the builder's own later record in force over the handout, so the booking is more correct per task. The GM's 2026-11-25 (l) words accept about 90% accuracy for the breakdown, so the tie-break rules are a design choice inside the request."
+    },
+    {
+     "id": "D4 a bundle's lines go to its first task until a later start",
+     "summary": "A tree held for a,b books to a unless the builder starts b.",
+     "class": "within",
+     "why": "A bundle's tasks are worked at the same time (the GM, 2026-11-22, T141). Putting shared seconds under one named member, rather than under the stale task of an unrelated earlier start, is inside 'it doesn't have to be 100% exact' (2026-11-25 (l)). No minute is lost from the breakdown."
+    },
+    {
+     "id": "D5 no start row or undo row written at the handout",
+     "summary": "The registry is read instead of a start row being written at take and undone at release, because land/ready.rs, the stall check, task_time's first start, and the raw-log static-runs count would read a start nobody made wrongly, and the undo would erase the builder's own starts.",
+     "class": "within",
+     "why": "It is a mechanism choice that avoids putting wrong outcomes into four other readers (T359's constraints). It narrows neither task's outcome. T344's mark route is covered under D1."
+    },
+    {
+     "id": "D6 the fix in filed.rs, not phase.rs",
+     "summary": "The link in filed answers for every tool that appends a row from a tree (append_row_with), not only the rustc Phase writer.",
+     "class": "within",
+     "why": "Its only effect is that every tool row with the same defect is booked right, including the pre-warm's (T316) and the build slot's lines that the breakdown counts. It serves the breakdown request and adds no new behavior beyond the defect's class. The search space is named: the append_row_with writers, reached through the one waist (filed's last link), not a census of names."
+    },
+    {
+     "id": "D7 the re-file left as it is",
+     "summary": "make events-refile is not changed, since it moves lines between features and does not undo the new booking.",
+     "class": "within",
+     "why": "This is an analysis that no change is needed, with the reason. It decides nothing that narrows the request."
+    },
+    {
+     "id": "D8 the lines already written are not rewritten, and make task-time's reader fix is deferred to T391 (lands before T317)",
+     "summary": "3,255 of 3,883 pool-tree Phase lines carry another task (observed 2026-11-27 with its method). make task-progress already re-tasks them at read time; make task-time still books 2026-11-26's tables wrong until T391.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing for T344, whose finding is make task-time's existing tables (five tasks' seconds booked to one); T332's line asks only for the task to be read from the pool. The defect is not left unfixed. It is filed as T391 and ordered to land before T317, the next work that reads the line's task. T391 is measurement work, which the GM's 2026-11-20 words schedule first as performance work. The deferral states why, the filed id and the order, which is the form FR-009 gives (FR-009 comes from the GM's approval of 'briefs that default to fixing in the task'), and the plan does not claim the old tables are right. The source log lines are not rewritten, which keeps the raw record intact; the correction lives in the reader, as task-progress already does. A one-job builder per task follows from the GM's approved improvement 1 (small builder contexts) and his 2026-11-22 bundling words ('we can file new tasks just as fast'). The purpose (an accurate per-task breakdown) is not defeated, since the forward lines are fixed here and the historical reading is fixed before anything builds on it. If T391 slipped past T317, this ruling would no longer hold."
+    },
+    {
+     "id": "D9 constraints and exits (no guard message changes; crate-scoped checks then the full gate at landing; red-first tests)",
+     "summary": "Two red-first tests pinned on the old code (510 passed, 2 failed; then 512 passed, 2026-11-27, its command named); green via make builder-checks; no map changes.",
+     "class": "within",
+     "why": "The two tests fail only when the asked-for booking is absent, so they enforce the request and are not added scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T332, T344 (bundle) (two filings of one defect: a pool tree's `Phase` lines carried the task of the tree's last `make task-start`, which no handout moves - all 179 `Phase` lines of T315's check runs in `diagram-backlog-t269` carried T285 through five handouts, observed 2026-11-26 (T344's line; method: the 451 event log's `Phase` lines of that tree from 20:07 UTC counted by their task field, against `.git/builder-pool.log`))",
+    "### T332, T344 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the rule: the task read from the pool registry in filed.rs's last link",
+     "summary": "A tool's own line from a held pool tree that names no task and has no agent or page session takes the first task of the registry entry for that tree, where the entry's feature is the line's feature; trees not listed, free, or held for another feature or none fall through to in_force as before.",
+     "class": "within",
+     "why": "Both tasks: the defect is a wrong outcome against the task time breakdown the GM asked for (2026-11-25, T243: time broken down per task; 2026-11-22: everything measured, compiling and tests above all). Booking a builder's build and test seconds to the task its tree was handed out for is that request working. For T344 in particular: its line asked for the mark to be set at make builder-tree T=. The plan reaches the same outcome by another mechanism and shows the asked-for one would not reach it (the Phase writer reads no marks; the mark directories were empty, observed 2026-11-27 with ls). Picking a mechanism that delivers the outcome the task asked for is within; it does not narrow the outcome."
+    },
+    {
+     "id": "D2 scope: only lines that reached in_force (no agent, no page session, no task named)",
+     "summary": "pool_task is asked only where in_force was asked; an agent's or page session's line that names no task still carries none (451 T161).",
+     "class": "within",
+     "why": "It leaves T161's settled rule alone and covers every line the defect reached (the Phase lines, which carry no payload). Nothing the GM asked for is cut out."
+    },
+    {
+     "id": "D3 a start after the handout stands",
+     "summary": "A make task-start in the tree after the entry's since names the task (a bundle's builder starting its second member books to it); an untimed start is not one; a handout whose time does not read counts as older than every timed start.",
+     "class": "within",
+     "why": "It keeps the builder's own later record in force over the handout, so the booking is more correct per task. The GM's 2026-11-25 (l) words accept about 90% accuracy for the breakdown, so the tie-break rules are a design choice inside the request."
+    },
+    {
+     "id": "D4 a bundle's lines go to its first task until a later start",
+     "summary": "A tree held for a,b books to a unless the builder starts b.",
+     "class": "within",
+     "why": "A bundle's tasks are worked at the same time (the GM, 2026-11-22, T141). Putting shared seconds under one named member, rather than under the stale task of an unrelated earlier start, is inside 'it doesn't have to be 100% exact' (2026-11-25 (l)). No minute is lost from the breakdown."
+    },
+    {
+     "id": "D5 no start row or undo row written at the handout",
+     "summary": "The registry is read instead of a start row being written at take and undone at release, because land/ready.rs, the stall check, task_time's first start, and the raw-log static-runs count would read a start nobody made wrongly, and the undo would erase the builder's own starts.",
+     "class": "within",
+     "why": "It is a mechanism choice that avoids putting wrong outcomes into four other readers (T359's constraints). It narrows neither task's outcome. T344's mark route is covered under D1."
+    },
+    {
+     "id": "D6 the fix in filed.rs, not phase.rs",
+     "summary": "The link in filed answers for every tool that appends a row from a tree (append_row_with), not only the rustc Phase writer.",
+     "class": "within",
+     "why": "Its only effect is that every tool row with the same defect is booked right, including the pre-warm's (T316) lines that the breakdown counts, so it serves the breakdown request. The fix sits at the waist every task-less tool row passes through (filed's last link), so no census of writers is needed. The block's 'one of several tools' (append_row_with) carries no count or command, and the ruling does not rest on it."
+    },
+    {
+     "id": "D7 the re-file left as it is",
+     "summary": "make events-refile is not changed, since it moves lines between features and does not undo the new booking.",
+     "class": "within",
+     "why": "This is an analysis that no change is needed, with the reason. It decides nothing that narrows the request."
+    },
+    {
+     "id": "D8 the lines already written are not rewritten, and make task-time's reader fix is deferred to T391 (lands before T317)",
+     "summary": "3,255 of 3,883 pool-tree Phase lines carry another task (observed 2026-11-27 with its method). make task-progress already re-tasks them at read time; make task-time still books 2026-11-26's tables wrong until T391.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing for T344, whose finding is make task-time's existing tables (five tasks' seconds booked to one); T332's line, as the block gives it, asks only for the task to be read from the pool. The plan's own reason ('a job of its own', another crate) would not carry it: that is a more-code reason, and the measure crate is already in this section's green exit. What carries it is the accepted spec's FR-009, which is the form a defect deferral takes and which this item meets in full: why it is not fixed here, the filed id T391, and its order, 'lands before T317'. T317 is the next work that reads a line's task (the pre-warm's category), so the defect is not carried into the work that would build on it, and that is what fix-as-we-go requires. The raw lines are left as written, and the correction belongs in the reader, as make task-progress's retask already does. The forward booking is fixed here, so the request's purpose (an accurate per-task breakdown) is not defeated. CONDITION: this ruling holds only while T391 lands before T317. If T317 is started first, the deferral is NOT LEGITIMATE."
+    },
+    {
+     "id": "D9 constraints and exits (no guard message changes; crate-scoped checks then the full gate at landing; red-first tests)",
+     "summary": "Two red-first tests pinned on the old code (510 passed, 2 failed; then 512 passed, 2026-11-27, its command named); green via make builder-checks; no map changes.",
+     "class": "within",
+     "why": "The two tests fail only when the asked-for booking is absent, so they enforce the request and are not added scope."
+    },
+    {
+     "id": "D10 the section classed as performance work",
+     "summary": "'Performance work? yes: a measurement task.'",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'. Booking the build and test seconds right is that kind of measurement task."
+    },
+    {
+     "id": "D11 the registry read left untimed",
+     "summary": "One read of builder-pool.json (39 lines, observed 2026-11-27 with wc -l) per line that reaches the last link; the read's time was not measured.",
+     "class": "within",
+     "why": "No claim rests on a speed figure, and no performance claim is made for the read. The file's size is measured and labeled."
+    },
+    {
+     "id": "D12 the reach to the main session's task-less hook lines",
+     "summary": "The link also answers the main session's hook lines that name no task, where their tree is a held pool tree.",
+     "class": "within",
+     "why": "It is the same booking defect on the same link, and only where the tree is held for the line's feature. Elsewhere in_force answers as before. It adds no new refusal and no new behavior beyond the booking."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T334 (the coordinating session's own briefs of 2026-11-26 broke the sizing rules of `scripts/container/builder-brief.md` five times with nothing refusing - T285, T298, T316 and T308 each reached the 300k cap, T315 ended at 308k - and carried no STOP POINT line; the GM asked that day whether the instructions were in the right place)",
+    "### T334 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T334-approach",
+     "summary": "The standing part of a builder's brief is printed by a command that sizes the brief first. A PreToolUse guard refuses a builder's dispatch that does not open with the command's marker. builder-brief.md keeps each rule with its incident.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-26 question ('putting the instructions in the right place') answered with the 2026-11-19 standard ('real enforcement and not just instructions') and T285's ('not rely on you remembering'). The instructions move into tooling that prints them, and a dispatch without them is refused."
+    },
+    {
+     "id": "T334-D1",
+     "summary": "The kinds are named fix|measurement|build-half|closing-half, not the task line's fix|measurement|mechanism-build|closing.",
+     "class": "within",
+     "why": "Only the name changes; the set of kinds and what each does are the same. The task line's kind names are the coordinating session's, not the GM's."
+    },
+    {
+     "id": "T334-D2a",
+     "summary": "An unsplit mechanism is refused by the command, not by the PreToolUse guard. Only a hand-edited marker evades it.",
+     "class": "within",
+     "why": "The refusal still fires on the only route that makes a marker, and the guard refuses any builder's dispatch without one. The gap left is a forged marker, which is deliberate circumvention rather than the forgetting the GM's words target. The cost reason given is not needed to place this within scope."
+    },
+    {
+     "id": "T334-D2b",
+     "summary": "A task is recognized as a mechanism by mechanism(): phrases on its tasks.md line, or a make target with a hyphen that the Makefile does not define.",
+     "class": "within",
+     "why": "This is how the sizing rule 'a mechanism as two builders' is detected. It reads the task's own line, not the caller's words."
+    },
+    {
+     "id": "T334-D2c",
+     "summary": "The escape SIZING_OK=\"<reason>\" passes the mechanism refusal and is logged.",
+     "class": "within",
+     "why": "It is the project's escape pattern (FR-012: a reason, recorded). It covers a line that names a guard the task only repairs, which would otherwise be refused as correct work."
+    },
+    {
+     "id": "T334-D3a",
+     "summary": "A builder's dispatch is an ad-hoc Agent call whose prompt names a pool-registry path or carries a marker. This is narrower than spec D8's 'no defined agent' definition, so an ad-hoc builder working in the session clone with no pool tree passes unchecked (filed as T353, lands before T302).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Spec D8 defines a builder for the context cap, where reading every ad-hoc agent costs nothing. This guard demands a marker. On the replay day, applying D8's definition here would refuse the 17 ad-hoc dispatches that named no pool tree, measuring agents among them (observed 2026-11-26, the block's replay). That is a guard firing on correct work, and it defeats the purpose of real enforcement by teaching bypass (root CLAUDE.md). The prose cannot tell a reader from an editor, so the literal rule cannot be met without that cost. The leftover is filed with its reason and ordered before T302 (FR-009's form), so the feature still owes it."
+    },
+    {
+     "id": "T334-D3b",
+     "summary": "Defined agents, Explore and Plan are never a builder's dispatch.",
+     "class": "within",
+     "why": "Spec FR-006 and D8 exclude defined review agents from 'builder' too, and Explore and Plan do not build."
+    },
+    {
+     "id": "T334-D3c",
+     "summary": "A prompt opening 'Run the claims round' is exempt, as split.rs reads it.",
+     "class": "within",
+     "why": "The claims round was split off from the builders by the GM's 2026-11-25 'sounds good please do that ASAP'. It is not a code builder, and the exemption matches the existing split.rs reading."
+    },
+    {
+     "id": "T334-D4",
+     "summary": "The marker and the escape count only on a line of their own. A pasted '<' placeholder is no reason.",
+     "class": "within",
+     "why": "This is a parsing convention that stops a mention in prose from passing as a marker or an escape. It is stricter, not narrower."
+    },
+    {
+     "id": "T334-D5",
+     "summary": "The escape is checked after the 'is this a builder's dispatch' test and before every refusal, so every escape taken is logged.",
+     "class": "within",
+     "why": "It is an ordering convention that keeps the escape log truthful. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T334-D6",
+     "summary": "KIND=measurement requires MEASURES.",
+     "class": "within",
+     "why": "It is stricter than the brief. It makes the measurement bound fire for T315's case, which is one of the motivating incidents."
+    },
+    {
+     "id": "T334-D7",
+     "summary": "A bundle T=a,b is briefed as one builder on one tree, with the marker naming both. A mechanism among the tasks still refuses KIND=fix, and the guard holds the tree to every task named.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 bundling words ('small defects can be bundled together and worked at the same time') and builder-brief.md's 'one task or one bundle' both allow it. Refusing bundles, or escaping every one, would refuse correct work."
+    },
+    {
+     "id": "T334-D8",
+     "summary": "Every sizing refusal runs before the pool's handout, so a refused brief holds no tree.",
+     "class": "within",
+     "why": "It is an ordering convention and is pinned by a test."
+    },
+    {
+     "id": "T334-D9",
+     "summary": "JOBS_MAX is 3 (the sizing rule's own limit). MEASURES_MAX is 6, a GUESS knob. Both are listed in the audit register's covers.",
+     "class": "within",
+     "why": "JOBS_MAX follows the written rule. MEASURES_MAX is a labeled knob sitting under T315's observed seven, and it is registered for audit as the GM's 2026-11-25 register words ask."
+    },
+    {
+     "id": "T334-D10",
+     "summary": "The measurement rule reads only lines opening 'Job|Part|Step <n>' that hold a fixed edit word, not every sentence. It misses T316's numbered list and is labeled GUESS; the T316/T308 shape is filed as T354, which lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally, 'names a source edit' would require reading every prose sentence for an edit, and that would refuse correct measurement briefs. That is a guard firing on good work, which defeats the purpose by teaching bypass. The narrow form, what it misses and its false positive are stated at the guard's head and under Found and left. The detector was not tuned to fit the five incidents (the anti-overfit rule)."
+    },
+    {
+     "id": "T334-sizing-from-declarations",
+     "summary": "Sizing reads the caller's declared KIND, JOBS and MEASURES. Only the mechanism test reads tasks.md independently. Item 4 says that even with a truthful caller, the sizing misses two of the five motivating briefs (T316 and T308).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against the purpose (real enforcement, not reliance on remembering). The command runs before the brief's text exists (D8), so it cannot count jobs from that text, and forcing a declaration that is then checked removes the forgetting the GM named. T285 (by the task's line), T298 and T315 are caught (observed 2026-11-26, the block's replay2). The two misses are the measurement-plus-build shape. The block says the rule for that shape (refuse JOBS>1 on a measurement outright) is not yet settled, and adopting it from five briefs risks refusing correct work. It is filed as T354 and ordered before T302, so the feature still owes it before the next step."
+    },
+    {
+     "id": "T334-D11",
+     "summary": "The block stays under 2,000 characters and quotes no rule text. Every kind's block carries a 'STOP POINT (' line.",
+     "class": "within",
+     "why": "This keeps agent-prefix-hooks from refusing the block, and the incident's missing STOP POINT line is now always present."
+    },
+    {
+     "id": "T334-D12",
+     "summary": "The build half's handoff is <git common dir>/l7r-handoffs/<task>-build.md. A closing half asked for before that file exists gets a note on stderr, not a refusal.",
+     "class": "within",
+     "why": "The path is a naming convention. Not refusing is right because of the known T352 case: a capped build half writes <task>-<aid>.md, so a refusal would block a legitimate closing half."
+    },
+    {
+     "id": "T334-found-T352",
+     "summary": "A build half that reaches the context cap cannot write <task>-build.md, so the closing half's block names a file that does not exist. Filed as T352, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect left (a block naming a missing file), but it is not carried past the next step: it carries FR-009's reason, a filed id and an order, and the command reports it on stderr when it occurs. The decisive ground is that ordering, not the 'another guard's rule' cost reason. The leftover stays inside this feature's own delivery."
+    },
+    {
+     "id": "T334-found-T360",
+     "summary": "A builder sent from a Workflow script's agent() call bypasses the guard. Filed as T360, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "No builder was sent that way on the replay day; all 56 builder dispatches went through the Agent tool (observed 2026-11-26). Closing the gap means routing workflow_hooks' agent() through this guard's verdict. It is filed with a reason, an id and an order before T302, so the feature does not drop it; only the sequencing changes."
+    },
+    {
+     "id": "T334-tree-not-held-unreplayed",
+     "summary": "The guard rule 'marker names a tree the pool does not hold for its task' was not replayed, because the day's holders cannot be recovered.",
+     "class": "within",
+     "why": "This is a limit on the evidence, not on scope. The rule is built and pinned by a_marker_is_held_to_its_kind_its_jobs_and_the_pool."
+    },
+    {
+     "id": "T334-perf-claim",
+     "summary": "The section calls the task performance work by FR-013's test (the builders' loop is faster), adds no [perf] tag, and leaves the tag to the coordinating session.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work. Leaving the tag to the coordinating session changes nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T334 (the coordinating session's own briefs of 2026-11-26 broke the sizing rules of `scripts/container/builder-brief.md` five times with nothing refusing - T285, T298, T316 and T308 each reached the 300k cap, T315 ended at 308k - and carried no STOP POINT line; the GM asked that day whether the instructions were in the right place)",
+    "### T334 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T334-approach",
+     "summary": "The standing part of a builder's brief is printed by a command that sizes the brief first. A PreToolUse guard refuses a builder's dispatch that does not open with the command's marker. builder-brief.md keeps each rule with its incident.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-26 question ('putting the instructions in the right place') answered with the 2026-11-19 standard ('real enforcement and not just instructions') and T285's ('not rely on you remembering'). The instructions move into tooling that prints them, and a dispatch without them is refused."
+    },
+    {
+     "id": "T334-D1",
+     "summary": "The kinds are named fix|measurement|build-half|closing-half, not the task line's fix|measurement|mechanism-build|closing.",
+     "class": "within",
+     "why": "Only the name changes; the set of kinds and what each does are the same. The task line's kind names are the coordinating session's, not the GM's."
+    },
+    {
+     "id": "T334-D2a",
+     "summary": "An unsplit mechanism is refused by the command, not by the PreToolUse guard. Only a hand-edited marker evades it.",
+     "class": "within",
+     "why": "The refusal still fires on the only route that makes a marker, and the guard refuses any builder's dispatch without one. The gap left is a forged marker, which is deliberate circumvention rather than the forgetting the GM's words target. The cost reason given is not needed to place this within scope."
+    },
+    {
+     "id": "T334-D2b",
+     "summary": "A task is recognized as a mechanism by mechanism(): phrases on its tasks.md line, or a make target with a hyphen that the Makefile does not define.",
+     "class": "within",
+     "why": "This is how the sizing rule 'a mechanism as two builders' is detected. It reads the task's own line, not the caller's words."
+    },
+    {
+     "id": "T334-D2c",
+     "summary": "The escape SIZING_OK=\"<reason>\" passes the mechanism refusal and is logged.",
+     "class": "within",
+     "why": "It is the project's escape pattern (FR-012: a reason, recorded). It covers a line that names a guard the task only repairs, which would otherwise be refused as correct work."
+    },
+    {
+     "id": "T334-D3a",
+     "summary": "A builder's dispatch is an ad-hoc Agent call whose prompt names a pool-registry path or carries a marker. This is narrower than spec D8's 'no defined agent' definition, so an ad-hoc builder working in the session clone with no pool tree passes unchecked (filed as T353, lands before T302).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Spec D8 defines a builder for the context cap, where reading every ad-hoc agent costs nothing. This guard demands a marker. On the replay day, applying D8's definition here would refuse the 17 ad-hoc dispatches that named no pool tree, measuring agents among them (observed 2026-11-26, the block's replay). That is a guard firing on correct work, and it defeats the purpose of real enforcement by teaching bypass (root CLAUDE.md). The prose cannot tell a reader from an editor, so the literal rule cannot be met without that cost. The leftover is filed with its reason and ordered before T302 (FR-009's form), so the feature still owes it."
+    },
+    {
+     "id": "T334-D3b",
+     "summary": "Defined agents, Explore and Plan are never a builder's dispatch.",
+     "class": "within",
+     "why": "Spec FR-006 and D8 exclude defined review agents from 'builder' too, and Explore and Plan do not build."
+    },
+    {
+     "id": "T334-D3c",
+     "summary": "A prompt opening 'Run the claims round' is exempt, as split.rs reads it.",
+     "class": "within",
+     "why": "The claims round was split off from the builders by the GM's 2026-11-25 'sounds good please do that ASAP'. It is not a code builder, and the exemption matches the existing split.rs reading."
+    },
+    {
+     "id": "T334-D4",
+     "summary": "The marker and the escape count only on a line of their own. A pasted '<' placeholder is no reason.",
+     "class": "within",
+     "why": "This is a parsing convention that stops a mention in prose from passing as a marker or an escape. It is stricter, not narrower."
+    },
+    {
+     "id": "T334-D5",
+     "summary": "The escape is checked after the 'is this a builder's dispatch' test and before every refusal, so every escape taken is logged.",
+     "class": "within",
+     "why": "It is an ordering convention that keeps the escape log truthful. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T334-D6",
+     "summary": "KIND=measurement requires MEASURES.",
+     "class": "within",
+     "why": "It is stricter than the brief. It makes the measurement bound fire for T315's case, which is one of the motivating incidents."
+    },
+    {
+     "id": "T334-D7",
+     "summary": "A bundle T=a,b is briefed as one builder on one tree, with the marker naming both. A mechanism among the tasks still refuses KIND=fix, and the guard holds the tree to every task named.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 bundling words ('small defects can be bundled together and worked at the same time') and builder-brief.md's 'one task or one bundle' both allow it. Refusing bundles, or escaping every one, would refuse correct work."
+    },
+    {
+     "id": "T334-D8",
+     "summary": "Every sizing refusal runs before the pool's handout, so a refused brief holds no tree.",
+     "class": "within",
+     "why": "It is an ordering convention and is pinned by a test."
+    },
+    {
+     "id": "T334-D9",
+     "summary": "JOBS_MAX is 3 (the sizing rule's own limit). MEASURES_MAX is 6, a GUESS knob. Both are listed in the audit register's covers.",
+     "class": "within",
+     "why": "JOBS_MAX follows the written rule. MEASURES_MAX is a labeled knob sitting under T315's observed seven, and it is registered for audit as the GM's 2026-11-25 register words ask."
+    },
+    {
+     "id": "T334-D10",
+     "summary": "The measurement rule reads only lines opening 'Job|Part|Step <n>' that hold a fixed edit word, not every sentence. It misses T316's numbered list and is labeled GUESS; the T316/T308 shape is filed as T354, which lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally, 'names a source edit' would require reading every prose sentence for an edit, and that would refuse correct measurement briefs. That is a guard firing on good work, which defeats the purpose by teaching bypass. The narrow form, what it misses and its false positive are stated at the guard's head and under Found and left. The detector was not tuned to fit the five incidents (the anti-overfit rule)."
+    },
+    {
+     "id": "T334-sizing-from-declarations",
+     "summary": "Sizing reads the caller's declared KIND, JOBS and MEASURES. Only the mechanism test reads tasks.md independently. Item 4 says that even with a truthful caller, the sizing misses two of the five motivating briefs (T316 and T308).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against the purpose (real enforcement, not reliance on remembering). The command runs before the brief's text is written: Approach item 1 says the brief 'is sized before it is written', and D8 puts every sizing refusal before the handout. So the command cannot count from that text, and forcing a declaration that is then checked removes the forgetting the GM named. The guard does see the text, and it reads it for the measurement rule (D10). Its narrowness there is ruled under T334-D10. T285 (by the task's line), T298 and T315 are caught (observed 2026-11-26, the block's replay2). The two misses are the measurement-plus-build shape. The block says the rule for that shape (refuse JOBS>1 on a measurement outright) is not yet settled, and adopting it from five briefs risks refusing correct work, which defeats the purpose. It is filed as T354 and ordered before T302."
+    },
+    {
+     "id": "T334-D11",
+     "summary": "The block stays under 2,000 characters and quotes no rule text. Every kind's block carries a 'STOP POINT (' line.",
+     "class": "within",
+     "why": "This keeps agent-prefix-hooks from refusing the block, and the incident's missing STOP POINT line is now always present."
+    },
+    {
+     "id": "T334-D12",
+     "summary": "The build half's handoff is <git common dir>/l7r-handoffs/<task>-build.md. A closing half asked for before that file exists gets a note on stderr, not a refusal.",
+     "class": "within",
+     "why": "The path is a naming convention. Not refusing is right because of the known T352 case: a capped build half writes <task>-<aid>.md, so a refusal would block a legitimate closing half."
+    },
+    {
+     "id": "T334-found-T352",
+     "summary": "A build half that reaches the context cap cannot write <task>-build.md, so the closing half's block names a file that does not exist. Filed as T352, lands before T302.",
+     "class": "within",
+     "why": "This defers a defect the task creates (a block naming a missing file), but within the feature. It is filed under FR-009's accepted form (reason, id T352, 'lands before T302'), so nothing is carried past the next step and the feature still delivers the fix. The command reports the case on stderr when it occurs. This is sequencing, not a narrowing of what the feature owes."
+    },
+    {
+     "id": "T334-found-T360",
+     "summary": "A builder sent from a Workflow script's agent() call bypasses the guard. Filed as T360, lands before T302.",
+     "class": "within",
+     "why": "This is sequencing within the feature under FR-009's accepted deferral form (reason, id T360, lands before T302). Nothing is carried past the next step. No builder was sent through a Workflow agent() on the replay day; all 56 builder dispatches went through the Agent tool (observed 2026-11-26)."
+    },
+    {
+     "id": "T334-tree-not-held-unreplayed",
+     "summary": "The guard rule 'marker names a tree the pool does not hold for its task' was not replayed, because the day's holders cannot be recovered.",
+     "class": "within",
+     "why": "This is a limit on the evidence, not on scope. The rule is built and pinned by a_marker_is_held_to_its_kind_its_jobs_and_the_pool."
+    },
+    {
+     "id": "T334-perf-claim",
+     "summary": "The section calls the task performance work by FR-013's test (the builders' loop is faster), adds no [perf] tag, and leaves the tag to the coordinating session.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work. Leaving the tag to the coordinating session changes nothing the GM asked."
+    },
+    {
+     "id": "T334-not-seen-red",
+     "summary": "The command's sizing tests and the marker's test were not seen red. Only the guard's suite was run with its check disabled.",
+     "class": "within",
+     "why": "What the GM asked for reaches the refusal existing and firing; the tests that pin it exist (a_brief_is_sized_before_any_tree_is_taken and others). FR-012's red-first requirement names the refusals of FR-006 to FR-009, FR-011 and FR-013, and T334's later amendment is not one of them. How the tests were shown is test quality, which this review does not judge."
+    },
+    {
+     "id": "T334-D2-escape-form",
+     "summary": "SIZING_OK=\"<reason>\" is logged by the Makefile's LOGESCAPE.",
+     "class": "within",
+     "why": "It is the project's recorded-escape pattern. FR-012's two-word minimum binds FR-006..FR-013 refusals, not this one."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T332 to T335, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

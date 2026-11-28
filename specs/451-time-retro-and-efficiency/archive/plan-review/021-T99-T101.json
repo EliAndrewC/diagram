@@ -1,0 +1,589 @@
+{
+ "blocks": {
+  "### T100 Approach (checklist part A)": {
+   "sha256": "aea166f60a704e358e7e303ffd69d4ae7d3754e8f985b0e4df53e4b85434f686",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T100 (as filed, restated by its measurement: at the set-down refusal of 2026-11-21 18:31:07Z, T88's close-out builder had already ended - its final notice was queued in the session's transcript 2.9 s before the Stop, after the interim one the coordinator had read - so \"nothing is running\" was right, and the two finished-run refusals the line names, `make guard-edit` (pid 3707075, 2026-11-21 20:10:38Z) and `make format` (pid 1490566, 2026-11-22 00:17:07Z, 19:17 local on 2026-11-21), were each `output in (no file)`, a run that ended while `/proc` was read, which T171 fixed, measured 2026-11-23 (the session transcript `c6fd72d1-...jsonl`, its agents' own transcripts and the 451 event log, `/tmp/t100/agents.py`, `lines.py`, `makerun.py`))": {
+   "sha256": "37212e1cfb22e55f4f1b2e3de8f8c3643bda51a606255c6c7bea661641d66457",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T99": {
+   "section_sha256": "ff8b6f093bf7e783958610c68f63d81626f21395fa5b867bf1fa5ef1c325bfa3",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T99-gate",
+     "summary": "Case 5's clock seam holds the timer's first reading behind a gate file. The first jump is written only once that reading is taken, so it lands inside the wait by a condition and not by the shell's timing.",
+     "class": "within",
+     "why": "This is the rule T99's line asks for ('wait on a condition, not a clock'), applied to the window that feature 169's eight jumps were betting on. It stays inside the suite."
+    },
+    {
+     "id": "T99-pacing",
+     "summary": "Each next jump waits for four of the timer's logged reads after the last one, so at least one tick falls between two jumps. Pacing ends once the run has started.",
+     "class": "within",
+     "why": "A condition replaces a 'sleep 0.15'. It makes the case hold under load, which is what T99 asks."
+    },
+    {
+     "id": "T99-stamps",
+     "summary": "Each jump is stamped before it is written, with bash's $EPOCHREALTIME and no fork of date.",
+     "class": "within",
+     "why": "This removes the shell lag that caused the red. It is a mechanism inside the asked fix."
+    },
+    {
+     "id": "T99-full-wait-checks",
+     "summary": "The full wait is pinned by the guard's own 'suspend detected' lines, with jump sizes B x 2^(k-1) decoded to name the latest jump seen. Two checks follow: the run starts at least IDLE_WAIT_S after that jump's stamp, and the timer reads its clock at least 24 times between seeing that jump and the run's start.",
+     "class": "within",
+     "why": "This restates case 5's property (a jump restarts the FULL wait) in the timer's own events rather than in slack. It is red first on HEAD under a shell lag and red on a broken guard, as T99's line requires."
+    },
+    {
+     "id": "T99-decode-check",
+     "summary": "A decode check holds the reading itself: every line on the B grid, the jumps contiguous, and as many lines as the record's suspends. The suite goes from 34 to 37 checks.",
+     "class": "within",
+     "why": "Its only job is to make the requested check read the guard's log correctly. That is enforcement of what was asked, not unrequested scope."
+    },
+    {
+     "id": "T99-guard-untouched",
+     "summary": "The guard's code is not changed. Only the test file changes.",
+     "class": "within",
+     "why": "This is inside the brief, which allowed the guard to change only to expose a timestamp. No timestamp had to be exposed."
+    },
+    {
+     "id": "T99-constants",
+     "summary": "The old 0.35 s slack is retired in favour of IDLE_WAIT_S as a hard floor. The jump size moves from 500 s to B x 2^(k-1) with B = 300 s, checked by arithmetic against IDLE_SUSPEND_S and IDLE_GIVE_UP_S.",
+     "class": "within",
+     "why": "These are the test's own GUESS constants, moved to serve the condition-based check. No research claim or map moves."
+    },
+    {
+     "id": "T99-coverage",
+     "summary": "The new check pins a full wait after the LAST JUMP THE TIMER LOGGED. It no longer implies that the run began after ALL eight jumps. A timer that detected only its first jump would pass, and the plan says so.",
+     "class": "within",
+     "why": "The old implication was a timing assumption: that the shell writes all eight jumps inside one wait. Under a lagging shell a sound timer correctly ends its wait between jumps (the measured 'sleep 1.0 s late' batch), so keeping that implication would keep the very false red T99 removes. The guard's contract (D3: a wall jump past the ticks restarts the wait) is pinned as before, and the plan measured that a non-restarting timer is red in every batch. The undetected-after-first timer is a hypothetical, not a known defect, so nothing defective is left."
+    },
+    {
+     "id": "T99-case7",
+     "summary": "Case 7's upper bound on a condition wait is raised from 8 s to 90 s, after 3 of 64 HEAD copies under load went red. It is fixed in this task.",
+     "class": "within",
+     "why": "A found defect (a check refusing good work under load) is fixed as it is found, with the bound case 4b already holds. A green run pays nothing, so this does not narrow what was asked."
+    },
+    {
+     "id": "T99-case6-deferred",
+     "summary": "Case 6's 'the losers deferred' went red in 1 of 64 copies at load 133.7. It is not fixed here: it is outside case 5 and its fix is a design choice. It is filed as T104, which lands before T22.",
+     "class": "within",
+     "why": "This narrows nothing T99 was asked for, because T99's line is case 5. The defect is not left: it is filed with a reason, a task id and an order, as FR-009 requires, and it lands before T22, the same point T99 lands before."
+    },
+    {
+     "id": "T99-case4b-not-reproduced",
+     "summary": "The brief cited T76's red as case 5, but it was case 4b, and it was not reproduced in 472 copies. It is filed as T104, which lands before T22.",
+     "class": "within",
+     "why": "It is outside case 5, was never reproduced, and is filed with a reason, an id and an order. Nothing in what was asked is dropped."
+    },
+    {
+     "id": "T99-not-performance",
+     "summary": "The plan labels T99 as not performance work.",
+     "class": "within",
+     "why": "This is the conservative direction under FR-013/SC-006: the label can only put T99 behind performance tasks, never ahead of them. It narrows no priority the GM set."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T100": {
+   "section_sha256": "37672245721b754a77876c9c5549aca17affa4f4ab79db9d7e2d36d3ab2d5279",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T100-D1 set-down half withdrawn as no defect",
+     "summary": "The 'nothing is running' Stop refusal at 2026-11-21 18:31:07Z is restated, by replay through the live guard binary on fixtures of the session's and agents' transcripts, as correct: T88's builder had already ended (final notice queued 2.9 s before the Stop); cut at the interim notice the guard reads the builder as running. No code change.",
+     "class": "within",
+     "why": "Constitution XIV: a defect is a wrong outcome; the refusal's answer was right and only the task line's premise (that the builder still ran) was wrong, which is fixed by restating it, as done. The replay outputs cited (fx-stop.out 'nothing is running', replay-noproc.log cut 56447 '1 of 3 builders running (451 T88)') match. Leaving a non-defect unchanged narrows nothing in request.md or the spec."
+    },
+    {
+     "id": "T100-D2 finished-run half left to T171",
+     "summary": "The two 'output in (no file)' make-run refusals (make guard-edit, make format) are the vanished-pid race, fixed by T171's Procs::gone (253f81afa7), pinned by a_run_that_ends_while_it_is_read_is_no_run; T100 adds nothing of its own.",
+     "class": "within",
+     "why": "The defect is fixed and pinned by a test already landed, not deferred; 33 Stops since T171's binary show no recurrence of the signature. Withdrawing a duplicate of a landed fix is not a narrowing."
+    },
+    {
+     "id": "T100-D3 done measured by replay, no landing beyond the tick",
+     "summary": "Exit and done criteria are the replays and the post-T171 Stop census, with L7R_PROC_ROOT empty because a landing in the clone holds every slot; order after T171.",
+     "class": "within",
+     "why": "Verification method and ordering for a task with no code change; nothing the GM asked for is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T101": {
+   "section_sha256": "97ae5e27c10beefbaa7a3347c5fb0062879ec83b317cadc8f7f161ed8f8c48a7",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T101-mark-one-object",
+     "summary": "The active-task mark stays one object (the last task started); only the hold changes; task-start's append and the event log's filing are untouched.",
+     "class": "within",
+     "why": "Leaves every other reader of the mark (measured search) as it is; the change is confined to the refusal the task was filed against."
+    },
+    {
+     "id": "T101-1-hold-yields-to-ready",
+     "summary": "Where the mark's open task holds, a landing lands beside it when each of its tasks is started in the clone, its section passes `plan decided`, and no file of its delta (sectioned files and review ledger aside) carries an edit or shell write filed under another OPEN task since the file last landed; each failing reason is named with the hold.",
+     "class": "within",
+     "why": "This is the fix the filed task asks for (a ready, CLEAR, closing-checked task refused 'held by' a task started after it). 405 D4's purpose - no push of the worked task's half-done work - is kept as the files-its-own test, so the rule's purpose is not gutted; the mark's task is now protected the way every other started task beside it already was (D4: no other open box holds)."
+    },
+    {
+     "id": "T101-1-ready-exported",
+     "summary": "A ready ruling exports L7R_LAND_READY; holding_with holds nothing for the ticks it names, so the push and the CI merge read the landing's own ruling; where the first pass did not rule, the push's step asks again (export_ready); the ruling never reads which task the mark names.",
+     "class": "within",
+     "why": "Measured that a first-pass-only fix lands nothing (the push re-asks the hold); carrying one ruling to all three askers is what makes the fix reach its stated case."
+    },
+    {
+     "id": "T101-scope-shared-speckit",
+     "summary": "The hold's one condition is edited in shared::speckit (holding_with) under make guard-edit, a labeled deviation from the launcher's file list; T97's shared/src/tree* and T82's files untouched.",
+     "class": "within",
+     "why": "The launcher's file list is not the GM's words; the edit sits where the rule actually lives (one rule, three callers) and touches no other open task's files. Implementation placement is not a fidelity question."
+    },
+    {
+     "id": "T101-priced-not-taken",
+     "summary": "Padding L7R_LAND_TICKS with the mark's task, and a new `l7r-gate land --held` verb, priced and not taken.",
+     "class": "within",
+     "why": "Design alternatives declined for stated correctness reasons (a padded TICKS would name a task the landing does not tick); nothing asked is dropped."
+    },
+    {
+     "id": "T101-2-sections-committed-apart",
+     "summary": "land-alone step 2, under its lock taken first, commits plan.md, tasks.md and plan-review.json built from HEAD with only the landing tasks' pieces replaced (temporary index, commit-tree, compare-and-swap update-ref), working files untouched; step 3's own-files refusal passes over the sectioned files.",
+     "class": "within",
+     "why": "Implements the task's second half (T95, CLEAR, could not land alone because plan.md also held T82's and T97's unreviewed sections); dry run on the real T95 case measured the commit carrying only T95's pieces."
+    },
+    {
+     "id": "T101-2-in-the-script",
+     "summary": "The staging lives in scripts/land-alone.sh's Python (PYLIB), not the land crate, so one program holds the pieces' rule for staging and take-back.",
+     "class": "within",
+     "why": "Placement choice; no part of the request reaches it."
+    },
+    {
+     "id": "T101-2-take-back-piece-merge",
+     "summary": "Where git merge-file conflicts on a sectioned file at take-back (measured shape: a tick's archive meeting another task's edit of the next heading), the file is merged piece by piece; a piece both sides changed differently still conflicts and nothing moves, as before.",
+     "class": "within",
+     "why": "Needed for (2) to work on the shape measured; keeps the existing stop on a true conflict."
+    },
+    {
+     "id": "T101-costs-python-write-and-7-day",
+     "summary": "The files-own test does not see a file written by a Python program (the event log names no file for it; T96, open) and takes an edit older than 7 days as landed (land-alone's existing LANDED_SINCE bound).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated each part. Python writes: the file name is absent from the log until T96 lands, so the test cannot see it; the gap already governs every started task other than the mark's under 405 D4 and land-alone's existing own-files refusal, so T101 adds no new class of exposure, and the fix is an already-filed open task (T96). 7-day bound: it is land-alone's own existing bound, reused rather than introduced. Neither removes anything the GM asked for in 451, and neither guts D4's purpose for the work the log does attribute."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T99 (the idle-tests suite's case 5 check \"the run started a FULL wait after the jump\" failed good work: red in T88's closing run `20261121T180015Z-555985` (33 of 34, at a load of 16.5 beside a make done; `/tmp/t88/closing-1.log` is the same run), green on the rerun unchanged; measured 2026-11-21 over this clone's 24 closing-check runs (12:46Z on), the suite ran in at least 15 (its name on the log's timing line or a failure; the rest skipped on an unchanged key) and that was case 5's one red; reproduced the same day, 8 of 8 copies red with the suite's own `date` started 0.5 s late and 1 of 8 at 0.2 s, measured 2026-11-21 (`slowrun.sh` over HEAD))",
+    "### T99 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T99-A1",
+     "summary": "Case 5 is re-pinned by the guard's own events instead of slack: the clock seam holds the timer's first read on a gate until the first jump is written, jumps are paced by four timer reads each, each jump is stamped with $EPOCHREALTIME before it is written, jump k moves the clock B x 2^(k-1) s (B = 300) so each 'suspend detected' line decodes to the latest jump seen, and two checks pin the full wait after that jump (at least IDLE_WAIT_S of real seconds, and at least 24 timer reads), with a decode check on the reading.",
+     "class": "within",
+     "why": "T99's line asks for case 5 to hold under load by waiting on a condition rather than a clock, red first. A check that refuses good work is a defect under constitution XIV, and fixing it is fix-as-we-go. The fix keeps the regression the case exists for: a jump that is counted but does not restart the wait is red in every broken-guard batch (8/8, 16/16, 8/8, measured 2026-11-21). It also removes a timing used as a gate, which follows the 427 T03 ruling the plan cites."
+    },
+    {
+     "id": "T99-A2",
+     "summary": "The plan states the guard is left untouched and case 5's changes stay in tests/hooks/test-idle-tests-hooks.sh, which goes from 34 checks to 37.",
+     "class": "within",
+     "why": "This keeps to the brief as the plan quotes it (the test file alone, the guard only if a timestamp had to be exposed, and the plan says none had to be). The three added checks (the held reading, the decode, the ticks) only check case 5's own property, so they enforce what was asked."
+    },
+    {
+     "id": "T99-A3",
+     "summary": "Constants moved: the old check's 0.35 s slack is retired in favor of the IDLE_WAIT_S floor, and the jump size goes from 500 s to B x 2^(k-1) with B = 300, kept above IDLE_SUSPEND_S per jump and inside IDLE_GIVE_UP_S in total, by arithmetic.",
+     "class": "within",
+     "why": "These are internal test parameters that serve the fix in A1. The request has no requirement on them and no research claim moves."
+    },
+    {
+     "id": "T99-A4",
+     "summary": "Case 7's upper bound on a condition wait is raised from 8 s to 90 s (a GUESS), fixed here rather than left. It was red in 3 of 64 loaded HEAD copies.",
+     "class": "within",
+     "why": "This fixes a check that refused good work, a defect found by this task, in the same file. A bound that a green run never pays is not a timing gate. Fixing a known defect in the step is what fix-as-we-go asks for, so it is not unrequested scope."
+    },
+    {
+     "id": "T99-A5",
+     "summary": "Coverage: the new case 5 pins a full wait after the LAST jump the timer logged, not after ALL eight jumps as the old check implied. A timer that restarts on its first jump and never detects the later ones would pass, and the plan says so.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Against the GM's request and the spec this narrows nothing, because neither names case 5. It does narrow the old check's implied reach, and literal 'after all eight' would defeat T99's own purpose of not refusing good work. The plan reports that with the suite's sleep 1.0 s late a sound guard's wait legitimately ended after jump 1 alone (the stall path, 8 of 8 green copies under final.sh). A check demanding a run after all eight jumps would refuse that good work, which is the timing-as-gate the 427 T03 ruling forbids. The regression the case exists for, a jump counted without a restart, stays red in every broken-guard batch the plan reports. The plan states the remaining gap (a timer that detects only its first jump) openly, without claiming coverage it lacks."
+    },
+    {
+     "id": "T99-F1",
+     "summary": "Case 6's 'the losers deferred (0)' red (1 of 64 copies at load 133.7) is not fixed here, because it is outside case 5 and a design choice. It is filed as T104, to land before T22.",
+     "class": "within",
+     "why": "T99's scope is case 5. The defect is deferred with its reason, a filed task id and its order ('lands before T22'), which is the form FR-009 requires, and it is fixed before the step T99's own line is ordered against. It is not left unfixed."
+    },
+    {
+     "id": "T99-F2",
+     "summary": "The brief's T76 closing-run red was case 4b, not case 5. It was not reproduced in 472 copies, is not fixed here, and is filed as T104, to land before T22.",
+     "class": "within",
+     "why": "This corrects the brief's misattribution: the red is outside case 5 and has no diagnosis yet. It is deferred with its reason, a filed id and its order, so nothing the request or T99's line asks for is narrowed."
+    },
+    {
+     "id": "T99-O1",
+     "summary": "Order: after T88, before T22, independent of T97 and T101 (no shared file); budget one landing.",
+     "class": "within",
+     "why": "This follows T99's own line ('lands before T22') as the plan quotes it, and the plan reports no shared file with T97 or T101. Ordering is not a narrowing of what is built."
+    },
+    {
+     "id": "T99-O2",
+     "summary": "T99 is marked 'Performance work? No'.",
+     "class": "within",
+     "why": "The mark changes nothing about what T99 builds. The bundle does not show which task the GM's 2026-11-21 'file that as a performance task' names, and FR-013's meaning is cut at [...] in the index. So this ruling does not settle whether the mark is right, only that it narrows nothing this section implements. Whether the mark is right is FR-013 and SC-006's scheduling question."
+    },
+    {
+     "id": "T99-R1",
+     "summary": "Red first: T99's line asks for 'red first by a loaded run'. The plan reports that CPU load alone gave 0 of 96 case-5 reds on HEAD, so it takes its reproduction from a PATH shim delaying the suite shell's own date (8 of 8 red at 0.5 s, 1 of 8 at 0.2 s), alongside the original red in T88's loaded closing run (load 16.5).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal form, a red produced on demand by load alone, was not obtainable: the plan reports 0 of 96 copies red at loads of 15.7 to 79.7, because load slowed the timer more than the shell. The failure it does reproduce has the mechanism the plan diagnoses (the test shell's own lag eating the margin), and the one loaded red that exists is the T88 run it starts from. Red-first exists to show that the check fails on the failure before the fix and passes after, and the shim does that (HEAD red 8 of 8, the final case green under the same shim at 1.0 s). This is not a narrowing of the GM's request, which does not mention case 5."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T99 (the idle-tests suite's case 5 check \"the run started a FULL wait after the jump\" failed good work: red in T88's closing run `20261121T180015Z-555985` (33 of 34, at a load of 16.5 beside a make done; `/tmp/t88/closing-1.log` is the same run), green on the rerun unchanged; measured 2026-11-21 over this clone's 24 closing-check runs (12:46Z on), the suite ran in at least 15 (its name on the log's timing line or a failure; the rest skipped on an unchanged key) and that was case 5's one red; reproduced the same day, 8 of 8 copies red with the suite's own `date` started 0.5 s late and 1 of 8 at 0.2 s, measured 2026-11-21 (`slowrun.sh` over HEAD))",
+    "### T99 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T99-gate",
+     "summary": "Case 5's clock seam holds the timer's first reading behind a gate file. The first jump is written only once that reading is taken, so it lands inside the wait by a condition and not by the shell's timing.",
+     "class": "within",
+     "why": "This is the rule T99's line asks for ('wait on a condition, not a clock'), applied to the window that feature 169's eight jumps were betting on. It stays inside the suite."
+    },
+    {
+     "id": "T99-pacing",
+     "summary": "Each next jump waits for four of the timer's logged reads after the last one, so at least one tick falls between two jumps. Pacing ends once the run has started.",
+     "class": "within",
+     "why": "A condition replaces a 'sleep 0.15'. It makes the case hold under load, which is what T99 asks."
+    },
+    {
+     "id": "T99-stamps",
+     "summary": "Each jump is stamped before it is written, with bash's $EPOCHREALTIME and no fork of date.",
+     "class": "within",
+     "why": "This removes the shell lag that caused the red. It is a mechanism inside the asked fix."
+    },
+    {
+     "id": "T99-full-wait-checks",
+     "summary": "The full wait is pinned by the guard's own 'suspend detected' lines, with jump sizes B x 2^(k-1) decoded to name the latest jump seen. Two checks follow: the run starts at least IDLE_WAIT_S after that jump's stamp, and the timer reads its clock at least 24 times between seeing that jump and the run's start.",
+     "class": "within",
+     "why": "This restates case 5's property (a jump restarts the FULL wait) in the timer's own events rather than in slack. It is red first on HEAD under a shell lag and red on a broken guard, as T99's line requires."
+    },
+    {
+     "id": "T99-decode-check",
+     "summary": "A decode check holds the reading itself: every line on the B grid, the jumps contiguous, and as many lines as the record's suspends. The suite goes from 34 to 37 checks.",
+     "class": "within",
+     "why": "Its only job is to make the requested check read the guard's log correctly. That is enforcement of what was asked, not unrequested scope."
+    },
+    {
+     "id": "T99-guard-untouched",
+     "summary": "The guard's code is not changed. Only the test file changes.",
+     "class": "within",
+     "why": "This is inside the brief, which allowed the guard to change only to expose a timestamp. No timestamp had to be exposed."
+    },
+    {
+     "id": "T99-constants",
+     "summary": "The old 0.35 s slack is retired in favour of IDLE_WAIT_S as a hard floor. The jump size moves from 500 s to B x 2^(k-1) with B = 300 s, checked by arithmetic against IDLE_SUSPEND_S and IDLE_GIVE_UP_S.",
+     "class": "within",
+     "why": "These are the test's own GUESS constants, moved to serve the condition-based check. No research claim or map moves."
+    },
+    {
+     "id": "T99-coverage",
+     "summary": "The new check pins a full wait after the LAST JUMP THE TIMER LOGGED. It no longer implies that the run began after ALL eight jumps. A timer that detected only its first jump would pass, and the plan says so.",
+     "class": "within",
+     "why": "The old implication was a timing assumption: that the shell writes all eight jumps inside one wait. Under a lagging shell a sound timer correctly ends its wait between jumps (the measured 'sleep 1.0 s late' batch), so keeping that implication would keep the very false red T99 removes. The guard's contract (D3: a wall jump past the ticks restarts the wait) is pinned as before, and the plan measured that a non-restarting timer is red in every batch. The undetected-after-first timer is a hypothetical, not a known defect, so nothing defective is left."
+    },
+    {
+     "id": "T99-case7",
+     "summary": "Case 7's upper bound on a condition wait is raised from 8 s to 90 s, after 3 of 64 HEAD copies under load went red. It is fixed in this task.",
+     "class": "within",
+     "why": "A found defect (a check refusing good work under load) is fixed as it is found, with the bound case 4b already holds. A green run pays nothing, so this does not narrow what was asked."
+    },
+    {
+     "id": "T99-case6-deferred",
+     "summary": "Case 6's 'the losers deferred' went red in 1 of 64 copies at load 133.7. It is not fixed here: it is outside case 5 and its fix is a design choice. It is filed as T104, which lands before T22.",
+     "class": "within",
+     "why": "This narrows nothing T99 was asked for, because T99's line is case 5. The defect is not left: it is filed with a reason, a task id and an order, as FR-009 requires, and it lands before T22, the same point T99 lands before."
+    },
+    {
+     "id": "T99-case4b-not-reproduced",
+     "summary": "The brief cited T76's red as case 5, but it was case 4b, and it was not reproduced in 472 copies. It is filed as T104, which lands before T22.",
+     "class": "within",
+     "why": "It is outside case 5, was never reproduced, and is filed with a reason, an id and an order. Nothing in what was asked is dropped."
+    },
+    {
+     "id": "T99-not-performance",
+     "summary": "The plan labels T99 as not performance work.",
+     "class": "within",
+     "why": "This is the conservative direction under FR-013/SC-006: the label can only put T99 behind performance tasks, never ahead of them. It narrows no priority the GM set."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T100 (<why: the finding or measurement that files it>)",
+    "### T100 Approach (checklist part A)",
+    "### T104 (<why: the finding or measurement that files it>)",
+    "### T104 Approach (checklist part A)",
+    "### T107 (<why: the finding or measurement that files it>)",
+    "### T107 Approach (checklist part A)",
+    "### T109 (<why: the finding or measurement that files it>)",
+    "### T109 Approach (checklist part A)",
+    "### T116 (<why: the finding or measurement that files it>)",
+    "### T116 Approach (checklist part A)",
+    "### T117 (<why: the finding or measurement that files it>)",
+    "### T117 Approach (checklist part A)",
+    "### T120 (<why: the finding or measurement that files it>)",
+    "### T120 Approach (checklist part A)",
+    "### T121 (<why: the finding or measurement that files it>)",
+    "### T121 Approach (checklist part A)",
+    "### T122 (<why: the finding or measurement that files it>)",
+    "### T122 Approach (checklist part A)",
+    "### T125 (<why: the finding or measurement that files it>)",
+    "### T125 Approach (checklist part A)",
+    "### T126 (<why: the finding or measurement that files it>)",
+    "### T126 Approach (checklist part A)",
+    "### T127 (<why: the finding or measurement that files it>)",
+    "### T127 Approach (checklist part A)",
+    "### T128 (<why: the finding or measurement that files it>)",
+    "### T128 Approach (checklist part A)",
+    "### T130 (<why: the finding or measurement that files it>)",
+    "### T130 Approach (checklist part A)",
+    "### T131 (<why: the finding or measurement that files it>)",
+    "### T131 Approach (checklist part A)",
+    "### T132 (<why: the finding or measurement that files it>)",
+    "### T132 Approach (checklist part A)",
+    "### T133 (<why: the finding or measurement that files it>)",
+    "### T133 Approach (checklist part A)",
+    "### T134 (<why: the finding or measurement that files it>)",
+    "### T134 Approach (checklist part A)",
+    "### T135 (<why: the finding or measurement that files it>)",
+    "### T135 Approach (checklist part A)",
+    "### T136 (<why: the finding or measurement that files it>)",
+    "### T136 Approach (checklist part A)",
+    "### T137 (<why: the finding or measurement that files it>)",
+    "### T137 Approach (checklist part A)",
+    "### T138 (<why: the finding or measurement that files it>)",
+    "### T138 Approach (checklist part A)",
+    "### T139 (<why: the finding or measurement that files it>)",
+    "### T139 Approach (checklist part A)",
+    "### T140 (<why: the finding or measurement that files it>)",
+    "### T140 Approach (checklist part A)",
+    "### T143 (<why: the finding or measurement that files it>)",
+    "### T143 Approach (checklist part A)",
+    "### T144 (<why: the finding or measurement that files it>)",
+    "### T144 Approach (checklist part A)",
+    "### T145 (<why: the finding or measurement that files it>)",
+    "### T145 Approach (checklist part A)",
+    "### T146 (<why: the finding or measurement that files it>)",
+    "### T146 Approach (checklist part A)",
+    "### T148 (<why: the finding or measurement that files it>)",
+    "### T148 Approach (checklist part A)",
+    "### T149 (<why: the finding or measurement that files it>)",
+    "### T149 Approach (checklist part A)",
+    "### T150 (<why: the finding or measurement that files it>)",
+    "### T150 Approach (checklist part A)",
+    "### T152 (<why: the finding or measurement that files it>)",
+    "### T152 Approach (checklist part A)",
+    "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(<the built page of research/contents.json#trades-and-services>, ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))",
+    "### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)",
+    "### T51 Approach (checklist part A)",
+    "### T98 (<why: the finding or measurement that files it>)",
+    "### T98 Approach (checklist part A)",
+    "(removed) ### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a 12-item section, `make decide`, its MODE 4 rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, 2026-11-22, request.md \"on bundling small tasks\")",
+    "(removed) ### T49 (<why: the finding or measurement that files it>)",
+    "(removed) ### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(\"research/urban-features.html\", ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))",
+    "(removed) ### T51 (<why: the finding or measurement that files it>)",
+    "(removed) ### T80 (<why: the finding or measurement that files it>)",
+    "(removed) ### T81 (<why: the finding or measurement that files it>)",
+    "(removed) ### T82 (<why: the finding or measurement that files it>)",
+    "(removed) ### T83 (<why: the finding or measurement that files it>)",
+    "(removed) ### T87 (<why: the finding or measurement that files it>)",
+    "(removed) ### T88 (<why: the finding or measurement that files it>)",
+    "(removed) ### T89 (<why: the finding or measurement that files it>)",
+    "(removed) ### T91 (<why: the finding or measurement that files it>)",
+    "(removed) ### T92 (<why: the finding or measurement that files it>)",
+    "(removed) ### T93 (<why: the finding or measurement that files it>)",
+    "(removed) ### T95 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T51-gate-write-route",
+     "summary": "T51: gate-write reads a script run's text (the command's own heredoc for that path first, else a regular file of at most 1 MB at the call) in shell_write, landing after T118 teaches the shared reader a join's read and a run argv list; nothing lands from the call site this round because it fails the let-through baseline (window#306).",
+     "class": "within",
+     "why": "T51 is a task the feature filed from T33's finding, not a clause of the GM's request or a spec FR; its plan follows its own line (measure first, the text read at the call, the four false shapes as baseline, red first) and moves the guard toward catching more, so it narrows nothing asked."
+    },
+    {
+     "id": "T51-make-only-limit",
+     "summary": "T51: make-only's guard-write gains the script route only if the post-T118 replay shows a correction; until then its unread route is an accepted limitation (16 moved rows, 0 corrections, 17 of 17 guard-file script writes escaped), and the design is asked again after T118.",
+     "class": "within",
+     "why": "Neither request.md nor the accepted spec asks anything of make-only's guard-write or the script route, and no defect (a wrong outcome) is left: the measured call-site reading moves 16 make-only rows, 0 of them corrections and all 16 false refusals of correct work, and every guard-file write through a script in both corpora carried GUARD_EDIT_OK (17 of 17). The hole is would-be and was never observed, so leaving the route unread stays within what was asked."
+    },
+    {
+     "id": "T51-found-T118",
+     "summary": "T51 Found and left: HEAD refuses correct Python run from stdin or -c (a join's read, a run argv list, a directory literal, a dotted word); not fixed here (shared::tree::program outside the task's files); filed as T118, lands before T51.",
+     "class": "within",
+     "why": "A deferral in D15's form (why, filed id, order), and it lands before T51 itself, so the defect is fixed before the task that found it finishes; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T51-found-T119",
+     "summary": "T51 Found and left: make guard-edit FILE=<path outside the tree> wrote a stray l7r-guard-permits.jsonl into the clone root and its permit did not take; not fixed here (outside the task's files); filed as T119, lands before T22.",
+     "class": "within",
+     "why": "A deferral in D15's form with a stated reason and order; the open-task test on both ids is make decide's (D15), not a fidelity question."
+    },
+    {
+     "id": "T51-read-cap",
+     "summary": "T51: the script read is capped at 1 MB, a CONVENTION past every script the corpora read (largest 37,480 bytes).",
+     "class": "within",
+     "why": "A labeled convention above every measured case; it narrows nothing in the request or spec."
+    },
+    {
+     "id": "T51-not-perf",
+     "summary": "T51: Performance work? no.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the engine, checks, gate, landings or builders' loop faster, or measures where time goes; a write guard under a running gate is correctness work, so the no keeps FR-013's ordering as written."
+    },
+    {
+     "id": "T49-heading",
+     "summary": "T49's heading only: window#172's quoted literal \"research/urban-features.html\" becomes <the built page of research/contents.json#trades-and-services>; the Approach and its table are unchanged from the text judged CLEAR.",
+     "class": "within",
+     "why": "A wording change in the finding's heading; it makes no decision and changes no design."
+    },
+    {
+     "id": "templates",
+     "summary": "T98, T100, T104, T107, T109, T116, T117, T120 to T122, T125 to T128, T130 to T140, T143 to T146, T148 to T150 and T152: the unfilled make task-add template (heading and Approach checklist), identical apart from the id (checked by hashing each body with its id stripped).",
+     "class": "within",
+     "why": "An unfilled template of a filed, not-yet-started task makes no decision."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "Removed: the template blocks of T49 and T51 (replaced by their filled sections above), and of T80 to T83, T87 to T89, T91 to T93 and T95 (each the unfilled template, beside plan-archive notes moving finished sections to plan-done.md under feature 375 FR-044).",
+     "class": "within",
+     "why": "Removing an unfilled template removes no decision; under FR-044 an archived section owes no review."
+    },
+    {
+     "id": "removed-T141",
+     "summary": "Removed: T141's filled section (bundling small tasks: T=a,b,c for task-start, closing-checks and decide, one section and one verdict per bundle), judged CLEAR before; the bundle carries no plan-archive note naming T141.",
+     "class": "within",
+     "why": "No current block of the bundle carries T141 (no template, no filled section, no bundle heading listing it; grep of blocks.md and the MANIFEST keys), so no surviving plan text replaces the CLEAR design with a narrower one. A removal that writes no new text decides nothing and narrows nothing in the GM's 2026-11-22 bundling request: it is either FR-044's archival of a finished task, which owes no review, or it leaves an open task that cannot be ticked without a section carrying a recorded verdict."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T100 (as filed, restated by its measurement: at the set-down refusal of 2026-11-21 18:31:07Z, T88's close-out builder had already ended - its final notice was queued in the session's transcript 2.9 s before the Stop, after the interim one the coordinator had read - so \"nothing is running\" was right, and the two finished-run refusals the line names, `make guard-edit` (pid 3707075, 2026-11-21 20:10:38Z) and `make format` (pid 1490566, 2026-11-22 00:17:07Z, 19:17 local on 2026-11-21), were each `output in (no file)`, a run that ended while `/proc` was read, which T171 fixed, measured 2026-11-23 (the session transcript `c6fd72d1-...jsonl`, its agents' own transcripts and the 451 event log, `/tmp/t100/agents.py`, `lines.py`, `makerun.py`))",
+    "### T100 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T100-D1 set-down half withdrawn as no defect",
+     "summary": "The 'nothing is running' Stop refusal at 2026-11-21 18:31:07Z is restated, by replay through the live guard binary on fixtures of the session's and agents' transcripts, as correct: T88's builder had already ended (final notice queued 2.9 s before the Stop); cut at the interim notice the guard reads the builder as running. No code change.",
+     "class": "within",
+     "why": "Constitution XIV: a defect is a wrong outcome; the refusal's answer was right and only the task line's premise (that the builder still ran) was wrong, which is fixed by restating it, as done. The replay outputs cited (fx-stop.out 'nothing is running', replay-noproc.log cut 56447 '1 of 3 builders running (451 T88)') match. Leaving a non-defect unchanged narrows nothing in request.md or the spec."
+    },
+    {
+     "id": "T100-D2 finished-run half left to T171",
+     "summary": "The two 'output in (no file)' make-run refusals (make guard-edit, make format) are the vanished-pid race, fixed by T171's Procs::gone (253f81afa7), pinned by a_run_that_ends_while_it_is_read_is_no_run; T100 adds nothing of its own.",
+     "class": "within",
+     "why": "The defect is fixed and pinned by a test already landed, not deferred; 33 Stops since T171's binary show no recurrence of the signature. Withdrawing a duplicate of a landed fix is not a narrowing."
+    },
+    {
+     "id": "T100-D3 done measured by replay, no landing beyond the tick",
+     "summary": "Exit and done criteria are the replays and the post-T171 Stop census, with L7R_PROC_ROOT empty because a landing in the clone holds every slot; order after T171.",
+     "class": "within",
+     "why": "Verification method and ordering for a task with no code change; nothing the GM asked for is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T101 (a ready task was refused \"held by\" the task started after it: T81, T88 and T93, each CLEAR and closing-checked, refused \"held by T97\" at 18:32:27Z, T97 started 61 s before, and landed only after the mark was moved by hand, measured 2026-11-21 (the 451 event log's land `end` lines, the clone's `task-starts.jsonl`); and T95, CLEAR, could not land alone because plan.md also held T82's and T97's unreviewed sections)",
+    "### T101 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T101-mark-one-object",
+     "summary": "The active-task mark stays one object (the last task started); only the hold changes; task-start's append and the event log's filing are untouched.",
+     "class": "within",
+     "why": "Leaves every other reader of the mark (measured search) as it is; the change is confined to the refusal the task was filed against."
+    },
+    {
+     "id": "T101-1-hold-yields-to-ready",
+     "summary": "Where the mark's open task holds, a landing lands beside it when each of its tasks is started in the clone, its section passes `plan decided`, and no file of its delta (sectioned files and review ledger aside) carries an edit or shell write filed under another OPEN task since the file last landed; each failing reason is named with the hold.",
+     "class": "within",
+     "why": "This is the fix the filed task asks for (a ready, CLEAR, closing-checked task refused 'held by' a task started after it). 405 D4's purpose - no push of the worked task's half-done work - is kept as the files-its-own test, so the rule's purpose is not gutted; the mark's task is now protected the way every other started task beside it already was (D4: no other open box holds)."
+    },
+    {
+     "id": "T101-1-ready-exported",
+     "summary": "A ready ruling exports L7R_LAND_READY; holding_with holds nothing for the ticks it names, so the push and the CI merge read the landing's own ruling; where the first pass did not rule, the push's step asks again (export_ready); the ruling never reads which task the mark names.",
+     "class": "within",
+     "why": "Measured that a first-pass-only fix lands nothing (the push re-asks the hold); carrying one ruling to all three askers is what makes the fix reach its stated case."
+    },
+    {
+     "id": "T101-scope-shared-speckit",
+     "summary": "The hold's one condition is edited in shared::speckit (holding_with) under make guard-edit, a labeled deviation from the launcher's file list; T97's shared/src/tree* and T82's files untouched.",
+     "class": "within",
+     "why": "The launcher's file list is not the GM's words; the edit sits where the rule actually lives (one rule, three callers) and touches no other open task's files. Implementation placement is not a fidelity question."
+    },
+    {
+     "id": "T101-priced-not-taken",
+     "summary": "Padding L7R_LAND_TICKS with the mark's task, and a new `l7r-gate land --held` verb, priced and not taken.",
+     "class": "within",
+     "why": "Design alternatives declined for stated correctness reasons (a padded TICKS would name a task the landing does not tick); nothing asked is dropped."
+    },
+    {
+     "id": "T101-2-sections-committed-apart",
+     "summary": "land-alone step 2, under its lock taken first, commits plan.md, tasks.md and plan-review.json built from HEAD with only the landing tasks' pieces replaced (temporary index, commit-tree, compare-and-swap update-ref), working files untouched; step 3's own-files refusal passes over the sectioned files.",
+     "class": "within",
+     "why": "Implements the task's second half (T95, CLEAR, could not land alone because plan.md also held T82's and T97's unreviewed sections); dry run on the real T95 case measured the commit carrying only T95's pieces."
+    },
+    {
+     "id": "T101-2-in-the-script",
+     "summary": "The staging lives in scripts/land-alone.sh's Python (PYLIB), not the land crate, so one program holds the pieces' rule for staging and take-back.",
+     "class": "within",
+     "why": "Placement choice; no part of the request reaches it."
+    },
+    {
+     "id": "T101-2-take-back-piece-merge",
+     "summary": "Where git merge-file conflicts on a sectioned file at take-back (measured shape: a tick's archive meeting another task's edit of the next heading), the file is merged piece by piece; a piece both sides changed differently still conflicts and nothing moves, as before.",
+     "class": "within",
+     "why": "Needed for (2) to work on the shape measured; keeps the existing stop on a true conflict."
+    },
+    {
+     "id": "T101-costs-python-write-and-7-day",
+     "summary": "The files-own test does not see a file written by a Python program (the event log names no file for it; T96, open) and takes an edit older than 7 days as landed (land-alone's existing LANDED_SINCE bound).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated each part. Python writes: the file name is absent from the log until T96 lands, so the test cannot see it; the gap already governs every started task other than the mark's under 405 D4 and land-alone's existing own-files refusal, so T101 adds no new class of exposure, and the fix is an already-filed open task (T96). 7-day bound: it is land-alone's own existing bound, reused rather than introduced. Neither removes anything the GM asked for in 451, and neither guts D4's purpose for the work the log does attribute."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T99 to T101, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

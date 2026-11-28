@@ -203,7 +203,7 @@ fn ticked_feature(plan: &str, tasks: &str) -> l7r_shared::tempdir::Held<std::pat
 #[test]
 fn the_archive_moves_ticked_cleared_sections_byte_for_byte() {
     let dir = ticked_feature(PLAN_TASKS, "- [x] T05 the bath\n- [ ] T06 the wells\n");
-    assert_eq!(archive(&dir, Some("2026-01-01")), ["T05"]);
+    assert_eq!(archive(&dir, Some("2026-01-01"), false), ["T05"]);
     let plan = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     assert!(plan.contains("<!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-01-01 (feature 375 FR-044) -->\n## T06"));
     let done = std::fs::read_to_string(dir.join("plan-done.md")).unwrap();
@@ -211,14 +211,14 @@ fn the_archive_moves_ticked_cleared_sections_byte_for_byte() {
         done.starts_with("# 375-x - the plan's finished sections")
             && done.contains("<!-- plan-archive: archived 2026-01-01 -->\n## T05 the bath")
     );
-    assert_eq!(archive(&dir, None), Vec::<String>::new());
+    assert_eq!(archive(&dir, None, false), Vec::<String>::new());
 }
 
 #[test]
 fn a_run_of_sections_leaves_one_line_and_a_second_archive_appends() {
     let plan = "# p\n\n## T01 a\n\nx\n\n## T02 b\n\ny\n\n## T03 c\n\nz\n";
     let dir = ticked_feature(plan, "- [x] T01 a\n- [x] T02 b\n- [ ] T03 c\n");
-    assert_eq!(archive(&dir, Some("2026-01-01")), ["T01", "T02"]);
+    assert_eq!(archive(&dir, Some("2026-01-01"), false), ["T01", "T02"]);
     assert!(std::fs::read_to_string(dir.join("plan.md"))
         .unwrap()
         .contains("T01 to T02 moved"));
@@ -227,7 +227,7 @@ fn a_run_of_sections_leaves_one_line_and_a_second_archive_appends() {
         "- [x] T01 a\n- [x] T02 b\n- [x] T03 c\n",
     )
     .unwrap();
-    assert_eq!(archive(&dir, Some("2026-01-02")), ["T03"]);
+    assert_eq!(archive(&dir, Some("2026-01-02"), false), ["T03"]);
     let done = std::fs::read_to_string(dir.join("plan-done.md")).unwrap();
     assert_eq!(done.matches("the plan's finished sections").count(), 1);
     assert!(done.contains("archived 2026-01-02"));
@@ -237,7 +237,7 @@ fn a_run_of_sections_leaves_one_line_and_a_second_archive_appends() {
 fn a_section_joined_from_two_places_is_moved_piece_by_piece() {
     let plan = "# p\n\n### T01 Approach\n\nfirst\n\n<!-- between -->\n\n## Other\n\nkept\n\n### T01 Decisions\n\nsecond\n";
     let dir = ticked_feature(plan, "- [x] T01 a\n");
-    assert_eq!(archive(&dir, Some("2026-01-01")), ["T01"]);
+    assert_eq!(archive(&dir, Some("2026-01-01"), false), ["T01"]);
     let text = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     assert!(text.contains("## Other") && !text.contains("first") && !text.contains("second"));
     assert_eq!(text.matches("plan-archive:").count(), 2);
@@ -246,11 +246,11 @@ fn a_section_joined_from_two_places_is_moved_piece_by_piece() {
 #[test]
 fn nothing_ticked_or_nothing_clear_stays() {
     let open = ticked_feature(PLAN_TASKS, "- [ ] T05 x\n- [ ] T06 y\n");
-    assert_eq!(archive(&open, None), Vec::<String>::new());
+    assert_eq!(archive(&open, None, false), Vec::<String>::new());
     let root = repo();
     let dir = feature_at(&root, Some(PLAN_TASKS), None, "375-x");
     std::fs::write(dir.join("tasks.md"), "- [x] T05 x\n").unwrap();
-    assert_eq!(archive(&dir, None), Vec::<String>::new());
+    assert_eq!(archive(&dir, None, false), Vec::<String>::new());
 }
 
 #[test]
@@ -267,7 +267,7 @@ fn a_section_with_its_own_verdict_is_archivable() {
         None,
     )
     .unwrap();
-    assert_eq!(archive(&dir, None), ["T05"]);
+    assert_eq!(archive(&dir, None, false), ["T05"]);
 }
 
 #[test]
@@ -300,7 +300,7 @@ fn reviewed(tasks: &str, plan: &str) -> l7r_shared::tempdir::Held<std::path::Pat
 fn the_archive_moves_only_finished_clear_sections_and_owes_nothing() {
     let dir = reviewed("- [x] T01 the sty\n- [ ] T02 the well\n", BLOCKS);
     let sec = task_sections(BLOCKS)["T01"].clone();
-    assert_eq!(archive(&dir, Some("2026-10-13")), ["T01"]);
+    assert_eq!(archive(&dir, Some("2026-10-13"), false), ["T01"]);
     let plan = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     assert!(
         !plan.contains(&sec)
@@ -315,7 +315,7 @@ fn the_archive_moves_only_finished_clear_sections_and_owes_nothing() {
         "- [x] T01 the sty\n- [x] T02 the well\n",
     )
     .unwrap();
-    assert_eq!(archive(&dir, None), ["T02"]);
+    assert_eq!(archive(&dir, None, false), ["T02"]);
     assert!(!std::fs::read_to_string(dir.join("plan.md"))
         .unwrap()
         .contains("Wave 2"));
@@ -335,7 +335,7 @@ fn a_finished_section_a_typo_from_its_reviewed_text_is_archived() {
         dir.parent().unwrap().parent().unwrap(),
         &["commit", "-qam", "a blank line"],
     );
-    assert_eq!(archive(&dir, Some("2026-10-21")), ["T01"]);
+    assert_eq!(archive(&dir, Some("2026-10-21"), false), ["T01"]);
 }
 
 #[test]
@@ -344,21 +344,21 @@ fn a_task_whose_blocks_stand_in_two_places_is_archived_whole() {
         "{BLOCKS}\n### T01 Decisions\n\n**D4 - the sty's door.** It faces south (FR-001).\n"
     );
     let dir = reviewed("- [x] T01 the sty\n- [ ] T02 the well\n", &split);
-    assert_eq!(archive(&dir, Some("2026-10-31")), ["T01", "T01"]);
+    assert_eq!(archive(&dir, Some("2026-10-31"), false), ["T01", "T01"]);
     let plan = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     assert!(
         !plan.to_lowercase().contains("the sty stands")
             && !plan.contains("the sty's door")
             && plan.contains("Wave 2 (T02)")
     );
-    assert_eq!(archive(&dir, None), Vec::<String>::new());
+    assert_eq!(archive(&dir, None, false), Vec::<String>::new());
 }
 
 #[test]
 fn a_range_heading_and_its_tasks_own_blocks_are_archived_once_each() {
     let ranged = "# Plan\n\n### T01-T02 - the yard\n\n**D1 - shared.** The yard is fenced (FR-001).\n\n### T02 Approach\n\n1. The well by the lane (FR-002).\n\n### T01 Approach\n\n1. The sty by the house (FR-001).\n\n## Notes\n\nA note.\n";
     let dir = reviewed("- [x] T01 the sty\n- [x] T02 the well\n", ranged);
-    archive(&dir, Some("2026-11-08"));
+    archive(&dir, Some("2026-11-08"), false);
     let done = std::fs::read_to_string(dir.join("plan-done.md")).unwrap();
     let plan = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     for heading in [
@@ -370,7 +370,7 @@ fn a_range_heading_and_its_tasks_own_blocks_are_archived_once_each() {
         assert!(!plan.contains(heading));
     }
     assert!(!done.contains("moved to plan-done.md") && plan.contains("## Notes"));
-    assert_eq!(archive(&dir, None), Vec::<String>::new());
+    assert_eq!(archive(&dir, None, false), Vec::<String>::new());
 }
 
 #[test]
@@ -378,7 +378,7 @@ fn a_task_archived_in_tasks_done_is_ticked_for_the_archive_and_the_push() {
     // feature 449 T142: the ticked task moved to tasks-done.md, its section moves when its review is CLEAR...
     let dir = ticked_feature(PLAN_TASKS, "- [ ] T06 the wells\n");
     std::fs::write(dir.join("tasks-done.md"), "# h\n\n- [x] T05 the bath\n").unwrap();
-    assert_eq!(archive(&dir, Some("2026-01-01")), ["T05"]);
+    assert_eq!(archive(&dir, Some("2026-01-01"), false), ["T05"]);
     // ...and a feature whose ticked tasks all moved still owes the push its plan review
     let root = repo();
     std::fs::write(root.join("README"), "x").unwrap();
@@ -403,12 +403,12 @@ fn a_bundle_block_stays_while_any_task_it_lists_is_open() {
     // block every listed task owned (451 T141), so the 35 still open lost the part B their red-gate trigger owed and every tick refused
     let plan = "# p\n\n### T01 Approach\n\nfirst\n\n### T02 Approach\n\nsecond\n\n### T01, T02 part B (2026-01-01T00:00Z)\n\n1. shared\n";
     let dir = ticked_feature(plan, "- [x] T01 a\n- [ ] T02 b\n");
-    assert_eq!(archive(&dir, Some("2026-01-01")), ["T01"]);
+    assert_eq!(archive(&dir, Some("2026-01-01"), false), ["T01"]);
     let text = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     let kept = text.contains("### T01, T02 part B") && text.contains("1. shared");
     assert!(!text.contains("first") && kept);
     std::fs::write(dir.join("tasks.md"), "- [x] T01 a\n- [x] T02 b\n").unwrap();
-    assert_eq!(archive(&dir, Some("2026-01-02")), ["T02"]);
+    assert_eq!(archive(&dir, Some("2026-01-02"), false), ["T02"]);
     let text = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     assert!(!text.contains("part B") && !text.contains("second"));
 }
@@ -444,7 +444,7 @@ fn a_heading_that_names_a_ticked_task_leaves_none_of_its_own_section_behind() {
     review["blocks"]["### T02 Approach (checklist part A)"]["sha256"] =
         json!(digest(b"the stub's text"));
     std::fs::write(&path, review.to_string()).unwrap();
-    archive(&dir, Some("2026-11-27"));
+    archive(&dir, Some("2026-11-27"), false);
     let text = std::fs::read_to_string(dir.join("plan.md")).unwrap();
     assert!(
         !text.contains("T02 Approach") && !text.contains("why\n") && text.contains("## T03 open")

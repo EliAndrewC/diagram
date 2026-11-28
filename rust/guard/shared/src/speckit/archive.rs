@@ -40,6 +40,9 @@ pub const PLAN_DONE: &str = "plan-done.md";
 pub const TASKS_DONE: &str = "tasks-done.md";
 /// The records cut into parts.
 pub const RECORDS: [&str; 2] = [PLAN_DONE, TASKS_DONE];
+/// The plan review record: its closed tasks' entries cut into JSON parts under `archive/plan-review/` by the plan crate's split (462
+/// T545), its live entries left flat in the file's own format, so its writers, its merge driver and the gate read it as before.
+pub const REVIEW: &str = "plan-review.json";
 /// A part's most bytes, but a single task larger than it, which stands in a part alone. 64 KiB (a GUESS knob, 451 T537): about 16,000
 /// tokens at 4 bytes a token, under the Read tool's cap for one call, and about 390 lines of 451's plan-done.md, under its 2,000-line
 /// default.
@@ -119,6 +122,41 @@ pub fn task_text(read: Read, record: &str, task: &str) -> String {
     joined(read, &strings(&index(read)["tasks"][record][task]), record)
 }
 
+/// `task`'s plan review entries as one record of the flat file's shape: the parts the index names for it, then the flat (live) record,
+/// a later text's entry over an earlier's and the rounds in that order (462 T545). For a reader of a closed task's verdict - a host
+/// archived with its `Built here:` line, a late ledger row; the gate and the writers read the flat record alone.
+#[must_use]
+pub fn review(read: Read, task: &str) -> Value {
+    let mut out = json!({"blocks": {}, "tasks": {}, "block_reviews": []});
+    let parts = strings(&index(read)["tasks"][REVIEW][task]);
+    for text in parts
+        .iter()
+        .filter_map(|p| read(&format!("{DIR}/{p}")))
+        .chain(read(REVIEW))
+    {
+        let Ok(Value::Object(v)) = serde_json::from_str::<Value>(&text) else {
+            continue;
+        };
+        for (key, value) in v {
+            match (key.as_str(), value) {
+                ("blocks" | "tasks", Value::Object(m)) => {
+                    if let Some(o) = out[key.as_str()].as_object_mut() {
+                        o.extend(m);
+                    }
+                }
+                ("block_reviews", Value::Array(rows)) => {
+                    if let Some(a) = out["block_reviews"].as_array_mut() {
+                        a.extend(rows);
+                    }
+                }
+                ("part", _) => {}
+                (_, value) => out[key.as_str()] = value,
+            }
+        }
+    }
+    out
+}
+
 /// The task ids the parts of `record` hold, per the index (the flat file's are the caller's to read).
 #[must_use]
 pub fn ids(read: Read, record: &str) -> Vec<String> {
@@ -137,7 +175,7 @@ pub fn paths(read: Read) -> Vec<String> {
         return Vec::new();
     }
     let mut out = vec![INDEX.to_owned(), NOTE.to_owned()];
-    for record in RECORDS {
+    for record in RECORDS.into_iter().chain([REVIEW]) {
         out.extend(
             strings(&index["parts"][record])
                 .into_iter()
@@ -196,7 +234,7 @@ fn pieces(record: &str, text: &str) -> (String, Vec<(String, Vec<String>, String
 }
 
 /// A part: its lowest id, its highest, the ids its pieces own, its text.
-type Part = (String, String, Vec<String>, String);
+pub type Part = (String, String, Vec<String>, String);
 
 /// The parts `record`'s flat `text` is cut into, in the record's own order: its pieces taken in RUNS - a piece whose task the run
 /// before it owns (a bundle's member's part B after the bundle, a task's Approach after its section) joins that run - and whole runs
@@ -260,39 +298,71 @@ pub fn fold(d: &Path, force: bool) -> Result<Vec<String>, String> {
         let Ok(text) = std::fs::read_to_string(&flat) else {
             continue;
         };
-        let stem = record.trim_end_matches(".md");
-        let dir = d.join(DIR).join(stem);
-        io(&dir, std::fs::create_dir_all(&dir))?;
-        let mut parts = strings(&index["parts"][record]);
-        for (first, last, ids, body) in cut(record, &text) {
-            let n = parts.len() + 1;
-            let name = format!("{stem}/{n:03}-{first}-{last}.md");
-            let path = d.join(DIR).join(&name);
-            let header = format!(
-                "# {feature} - {record}, part {n} ({first} to {last}), cut by `make archive-split` (451 T537); what is where: {NOTE}\n\n"
-            );
-            io(&path, std::fs::write(&path, header + &body))?;
-            for id in ids {
-                let slot = &mut index["tasks"][record][&id];
-                if !strings(slot).contains(&name) {
-                    let mut named = strings(slot);
-                    named.push(name.clone());
-                    *slot = json!(named);
-                }
-            }
-            parts.push(name.clone());
-            written.push(format!("{DIR}/{name}"));
-        }
-        index["parts"][record] = json!(parts);
-        index["bound"] = json!(BOUND);
-        let at = d.join(INDEX);
-        let pretty = serde_json::to_string_pretty(&index).unwrap_or_default() + "\n";
-        io(&at, std::fs::write(&at, pretty))?;
-        let note = d.join(NOTE);
-        io(&note, std::fs::write(&note, note_text(d, &feature, &index)))?;
+        written.extend(place(d, &mut index, &feature, record, cut(record, &text))?);
         io(&flat, std::fs::remove_file(&flat))?;
     }
     Ok(written)
+}
+
+/// Write `cut`'s parts of `record` after its existing ones, each named `<stem>/NNN-<lowest>-<highest>.<ext>`, then the index and the
+/// note: the parts written, feature-relative. A Markdown part opens with one header line; a JSON part carries its own (`part`).
+fn place(
+    d: &Path,
+    index: &mut Value,
+    feature: &str,
+    record: &str,
+    cut: Vec<Part>,
+) -> Result<Vec<String>, String> {
+    let (stem, ext) = record.rsplit_once('.').unwrap_or((record, "md"));
+    let dir = d.join(DIR).join(stem);
+    io(&dir, std::fs::create_dir_all(&dir))?;
+    let mut parts = strings(&index["parts"][record]);
+    let mut written = Vec::new();
+    for (first, last, ids, body) in cut {
+        let n = parts.len() + 1;
+        let name = format!("{stem}/{n:03}-{first}-{last}.{ext}");
+        let path = d.join(DIR).join(&name);
+        let header = if ext == "md" {
+            format!("# {feature} - {record}, part {n} ({first} to {last}), cut by `make archive-split` (451 T537); what is where: {NOTE}\n\n")
+        } else {
+            String::new()
+        };
+        io(&path, std::fs::write(&path, header + &body))?;
+        for id in ids {
+            let slot = &mut index["tasks"][record][&id];
+            if !strings(slot).contains(&name) {
+                let mut named = strings(slot);
+                named.push(name.clone());
+                *slot = json!(named);
+            }
+        }
+        parts.push(name.clone());
+        written.push(format!("{DIR}/{name}"));
+    }
+    index["parts"][record] = json!(parts);
+    index["bound"] = json!(BOUND);
+    let at = d.join(INDEX);
+    let pretty = serde_json::to_string_pretty(&index).unwrap_or_default() + "\n";
+    io(&at, std::fs::write(&at, pretty))?;
+    let note = d.join(NOTE);
+    io(&note, std::fs::write(&note, note_text(d, feature, index)))?;
+    Ok(written)
+}
+
+/// Add the plan review's closed entries as parts of [`REVIEW`] (462 T545): each part (its lowest id, its highest, the ids it holds, its
+/// JSON text) written after any existing ones, with the index and the note; the caller rewrites the flat record after them, so a
+/// failure between leaves an entry in both places, never in neither. The parts written, feature-relative.
+///
+/// # Errors
+/// A file that cannot be written.
+pub fn add_review(d: &Path, cut: Vec<Part>) -> Result<Vec<String>, String> {
+    let mut index = index(&files(d));
+    let feature = d
+        .file_name()
+        .unwrap_or_default()
+        .to_string_lossy()
+        .into_owned();
+    place(d, &mut index, &feature, REVIEW, cut)
 }
 
 /// An I/O result with its path named in the error.
@@ -317,10 +387,10 @@ spent its context on it (the GM 2026-11-27; 451 T536, T537). `make archive-split
 ## Do not\n\n\
 - Read every part, `cat archive/*`, or Read a part when one task's section is all you need (`make plan-section`).\n\
 - Grep this directory or the feature directory broadly: a common word matches thousands of lines. Grep with `-l` or `-c` first,\n  then read the one part it names.\n\
-- Read the feature's plan-review.json whole: it is not cut here (451's stood at 5.0 MB; 462 T545 splits it). `make plan-section`\n  and `make plan-delta` read it for you.\n\n\
+- Read the feature's plan-review.json whole, or its parts here: `make archive-split` keeps its live entries flat (451's stood at\n  5.0 MB) and moves a closed task's verdicts and rounds to `plan-review/` parts, `index.json` naming each task's (462 T545).\n  `make plan-section` and `make plan-delta` read it for you.\n\n\
 ## The parts\n\n| record | part | bytes |\n|---|---|---|\n"
     );
-    for record in RECORDS {
+    for record in RECORDS.into_iter().chain([REVIEW]) {
         for part in strings(&index["parts"][record]) {
             let bytes = std::fs::metadata(d.join(DIR).join(&part)).map_or(0, |m| m.len());
             _ = writeln!(out, "| {record} | `{part}` | {bytes} |");
@@ -328,6 +398,8 @@ spent its context on it (the GM 2026-11-27; 451 T536, T537). `make archive-split
     }
     out
 }
+
+pub mod report;
 
 #[cfg(test)]
 mod tests;

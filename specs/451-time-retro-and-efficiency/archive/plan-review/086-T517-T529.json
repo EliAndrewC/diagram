@@ -1,0 +1,842 @@
+{
+ "blocks": {
+  "### T517 (T515's second half, the session's scratch at 21.8 GB, observed 2026-11-27, method: `make disk-audit`)": {
+   "sha256": "ca4f9805ee691a05bb21cc4272f4085a3f136cf4f17f344230815ebd5a8da34a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T517 Approach (checklist part A)": {
+   "sha256": "3e1400ef63eb145cd83925957d8053ec121ee43ae0ac9f2a5c52522e1d7e3b35",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T519 (spec-lint's figure refusal named a label it does not accept: 461's spec took four pushes, 2026-11-27)": {
+   "sha256": "c9819e3eec2a5e5e100508fefda8693091472452bccf86b9563fa14332c03037",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T519 Approach (checklist part A)": {
+   "sha256": "7468173f2ece485f9a133a7b8599168b960d693e33d1b8f48b05a80893438d45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T520 (the GM 2026-11-27 on what T515's prune leaves: \"that is more than what I would have expected\"; the cache's working set one full build per tree, six trees over, observed 2026-11-27, method: `make cache-clean DRY=1` and `du` per tree)": {
+   "sha256": "99cef290567005eb62657a59d5c94d88ee5576af788359c4bb6874c4fed2c1a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T520 Approach (checklist part A)": {
+   "sha256": "344d9dde0dc6044a47f9c0c50ea6c141bddde17d1c61b0bbd3e43d840dc8918c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T521 (the GM 2026-11-27, request.md: no percentage beside a count, and the same day, of the line classes, shares only of time and tokens)": {
+   "sha256": "0bc906f844d1b65301368882c1c512b6520f111d7752fcb9134e9c8ccdf64c1c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T521 Approach (checklist part A)": {
+   "sha256": "26528e88cce1366eb9a000d85981eb765ea16fc5fa75d719676e5a61bbd94fdf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T522 (the GM 2026-11-27, request.md: T417's compiles and test runs, \"I would have expected the number of compiler runs to actually be strictly higher than the number of test runs\")": {
+   "sha256": "78c0c3e8a4618ae2b174c34c7398068be56abf56f81a7d63134d58b508e41561",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T522 Approach (checklist part A)": {
+   "sha256": "2171529a37da9b480eb4b7b9328bbb8753dab01a59304052ef5b3793a3061beb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T523 (T520's found-and-left item: the model trial's arms shared one build target, and the sweep left what at the cache's root is no build directory)": {
+   "sha256": "5553f881d9f4a3a9bc16fa006724b212c771984038596eddd86c4c8d1f5fd605",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T523 Approach (checklist part A)": {
+   "sha256": "78761da0c37e273a0d302311dcbfb602f0309b9ed387350a10a0baabdb4de574",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T525 (<why: the finding or measurement that files it>)": {
+   "sha256": "a4c8a4cc96752a72bb1a339e29ecd52274db361bf3c8a89670147684f5992a82",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T525 Approach (checklist part A)": {
+   "sha256": "3e0b5832b3017ab9ad6a04ca12bfbffba2f8c337612e746d4c078780f9a0a28e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T526 (451 T520's option (b), the GM's 2026-11-26 rule \"we definitely don't want to clean things up if it is going to cost us time later\" and his 2026-11-27 word that time stays before disk; b1, the pool's fourth tree, idle while three builders ran)": {
+   "sha256": "b6aeb271a936efc6e071dadb7061215a82b1601901369c12627ef627a176af6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T526 Approach (checklist part A)": {
+   "sha256": "a362e3cac8f0e7435463d9a43874e675c1b394c0560907cdbf79701238f2b4a6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T527 (the landing's mechanical refusals reached where the work is written: four landings refused on 2026-11-27 for what no earlier check said)": {
+   "sha256": "7e1ecefb99cb3b894d430a92fe2d0abd7681029dd64148951a6db320e046a2ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T527 Approach (checklist part A)": {
+   "sha256": "1fce4643041dbe76146bbe68b2763ff2026d9a0125791730db883805d9433271",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T528 (451 T522's writer half: the compile lines did not say whether cargo compiled anything, so `make task-time` told a no-op by a 1.0 s GUESS span, `NOOP_BELOW_S`)": {
+   "sha256": "07254e8bb7c7f62217e17abd59fb877111f6ec3dd3449e7766dea1103b62e776",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T528 Approach (checklist part A)": {
+   "sha256": "686fad4d57ec7f0d3caccaf1838cd10f351c6629abcdf24ebb4ce82d6a919a32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T529 Approach (checklist part A)": {
+   "sha256": "6d8a3faca207f01229e69c020fd43a7496fc1940ae9b808d52215fd7cb3dccc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T529 (451 T522-D5: a pool tree's `Phase` lines filed in `_unassigned.jsonl` with no task, so `make where-time F=451` missed them)": {
+   "sha256": "f85ef0e43e2ec0b465f34f0fe1895abf6fb2f2657a66bc4bc7cbf5cf00f0705f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T517": {
+   "section_sha256": "82f19dea49b19f08ad884a9acfd4fda086f6abbf907cf8a3252f6ca2bb32a092",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 landing takes its tasks' scratch",
+     "summary": "make land's --scratch-sweep landed also removes the landed tasks' t<N> entries (file or directory) in the landing session's scratchpad, as it takes their .git/t<N> scratch (T246)",
+     "class": "within",
+     "why": "The GM 2026-11-27 (T515's words): 'we are leaving things around that are causing my hard drive to slowly fill up in a way which our current tooling is not preventing'; and on T515's remainder, ~200 GB for this container 'is more than what I would have expected'. A landed task's measurement worlds in a live coordinator's scratchpad are such a hole: the age rule (T246) keeps the running session's scratchpad, so nothing took them. Taking them at landing is the request."
+    },
+    {
+     "id": "D2 whole-number match",
+     "summary": "an entry matches when its name is t, the task's whole number, then a non-digit or end (t51 never matches t515), the rule tmp::landed already uses",
+     "class": "within",
+     "why": "Correctness of D1: a prefix match would delete an open task's worlds. Enforces the request, takes nothing from it."
+    },
+    {
+     "id": "D3 what is kept",
+     "summary": "an entry holding a registered worktree's tree, an entry a live process holds, and everything when /proc cannot be read, are kept",
+     "class": "within",
+     "why": "Protects live work. The GM 2026-11-26: 'we definitely don't want to clean things up if it is going to cost us time later'; the constraint 'never a task still open, never a file a live process holds' serves it. Not a narrowing of what the GM asked to have removed."
+    },
+    {
+     "id": "D4 which session",
+     "summary": "the landing session's scratchpad, found by CLAUDE_CODE_SESSION_ID under any slug (builders write into their coordinator's scratchpad, T271); no session id takes nothing; other sessions' scratchpads stay with the age rule",
+     "class": "within",
+     "why": "The hole measured is the live landing session's scratchpad, which the age rule cannot reach; other sessions' scratchpads are already covered by T246's age sweep once finished, and a live other session's are its own open work. The scope matches the hole the GM's words point at; nothing he asked for is left uncovered by some rule."
+    },
+    {
+     "id": "D5 numbers another feature holds",
+     "summary": "tmp::landed's day rule kept; on top, a number another feature started (live start in task-starts.jsonl) and has not ticked is held whatever its age, and an unreadable tasks.md holds its number",
+     "class": "within",
+     "why": "Numbers are shared across features, so without this a landing of 451 Tn would delete another feature's open Tn's worlds - the cost-us-time-later case the GM ruled out (2026-11-26). Measured today: none of the 17.86 GB landed entries is held by it, so it keeps nothing the GM asked to have taken."
+    },
+    {
+     "id": "D6 m14 left to the age rule",
+     "summary": "the 2.4 GB m14 entry carries no task prefix and is not taken by a landing",
+     "class": "within",
+     "why": "A landing can attribute only entries named for its tasks; an unprefixed entry is not a landed task's scratch and may be live work. T517's line asks for landed tasks' scratch; this leaves nothing of that class. (Note: it stays while this session lives, since the age rule keeps the running session's scratchpad; not a defect a reader of the disk audit would call a hole in the landing rule.)"
+    },
+    {
+     "id": "D7 backlog filed as T533",
+     "summary": "the 17.86 GB in 2,792 entries of tasks landed before this rule is not taken by T517 and is filed as T533, ordered before T525",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T517's reach, not the request: the GM asked that the tooling stop the slow fill, and D1 is that fix for every landing from now on; the existing backlog cannot be reached by a per-landing rule because those tasks have already landed, and no landing will name them. The removal is carried, not dropped: the found-and-left item names why, its filed id (T533) and its order (lands before T525), as FR-009 requires. The stated reason ('a one-off take of a live session's files is the session's call, not a landing's') is the weak part - the landing rule does take a live session's files - but the decisive point is the class: a one-shot deletion of already-landed work is a different action from the rule, and splitting it into a filed, ordered task within the feature leaves no defect unowned. Legitimate only so long as T533 is kept (not dropped in the feature's close-out move)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T523": {
+   "section_sha256": "13511dac79ad7916953ced00bb4d949d9b076901163f516f4b06413188923ed1",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T523-1 arm naming",
+     "summary": "Each model-trial arm's checkout is <out>/<out's name>-<8 hex of sha256 of out's canonical path>, main's with -main, so no two arms share a basename-keyed build target, cargo lock or tool binary.",
+     "class": "within",
+     "why": "Arms sharing one target give timings that are not their own: a measuring tool that answers wrongly, a defect. Measurement work is performance work by FR-013 and the GM's 2026-11-20 words, and 2026-11-22 asks that 'everything [be] measured so we know where our time goes'. Fixing the defect is inside what was asked."
+    },
+    {
+     "id": "T523-2 fix in the trial, not the launcher",
+     "summary": "The five basename-keyed sites (l7r-gate.sh, l7r-guard.sh, HAMLET_RUN, gate_binary, target_of) are left alone, and the trial names its trees apart instead of re-keying the launcher or setting an environment variable.",
+     "class": "within",
+     "why": "This is a choice of mechanism and narrows nothing. Re-keying would re-home every live tree's warm cache, which is the time cost the GM's 2026-11-26 principle forbids, and the env-var route would miss render's make map. The defect is still fixed for every arm."
+    },
+    {
+     "id": "T523-3 no fallback for old checkouts",
+     "summary": "A case prepared before the change (checkout 'tree') must be prepared again, with no fallback.",
+     "class": "within",
+     "why": "A fallback would keep the sharing that is the defect. A one-time re-prepare of a trial case is a cost of the fix and removes nothing the GM asked for."
+    },
+    {
+     "id": "T523-4 cold build per arm",
+     "summary": "Each arm's first gate call builds its own tool cold (165.9 s / 197.8 s observed), giving up the cross-arm warm cache.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 'reusing the same build cache' and the 2026-11-26 time-over-disk principle are about the working build cache. Inside a trial whose purpose is comparing arms' timings, a cache shared across arms is the defect itself. Paying the cold build is what a correct measurement costs. It does not clean anything that saves time later."
+    },
+    {
+     "id": "T523-5 root sweep of loose files and marker-only shells",
+     "summary": "At the cache root, loose files (27 fixture profraw, the list, fixture.profdata, .rustc_info.json) and marker-only shells under no live tree's name are taken once idle past the threshold and held by no process.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-22 and 2026-11-25/27 asks to clean up what the container leaves behind. It respects the 2026-11-26 principle: 'that one coverage' is a coverage build variant, which stays under T158's proven-dead rule, and these are orphans that no live code writes (observed by grep) and that hold no build. Deleting them costs no later time."
+    },
+    {
+     "id": "T523-6 kept: root CACHEDIR.TAG and diagram-research/",
+     "summary": "The root's CACHEDIR.TAG (backup marker) and diagram-research/ (holds a kept l7r-guard.good) are not taken.",
+     "class": "within",
+     "why": "Keeping things that serve a purpose narrows nothing the GM asked. The 2026-11-26 principle is satisfied."
+    },
+    {
+     "id": "T523-7 BUILT_INTO shrinks to [clone]",
+     "summary": "tree and main-tree leave BUILT_INTO, so targets of those names whose trees are gone are proven dead like any other. The proven-dead test is updated to expect them taken.",
+     "class": "within",
+     "why": "No code builds into those names after T523-1. T158's proven-dead rule is kept unchanged for every build directory, and the new per-arm targets are ordinary tree-keyed targets that go when their tree goes, as T246 item 2 relays."
+    },
+    {
+     "id": "T523-8 text and docs",
+     "summary": "disk-audit's owner text for clone drops \"trials'\"; the cache-clean help line names the new rule; docs/make-targets.html is regenerated.",
+     "class": "within",
+     "why": "These keep the descriptions true to the change. They add no behavior."
+    },
+    {
+     "id": "T523-9 order and found-and-left",
+     "summary": "Lands after T520 and before T517, tagged [perf], with found-and-left none (the 28-vs-27 profraw count noted as a search smell).",
+     "class": "within",
+     "why": "The order follows FR-013 and T520's filing. Nothing is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T517 (T515's second half, the session's scratch at 21.8 GB, observed 2026-11-27, method: `make disk-audit`)",
+    "### T517 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 landing takes its tasks' scratch",
+     "summary": "make land's --scratch-sweep landed also removes the landed tasks' t<N> entries (file or directory) in the landing session's scratchpad, as it takes their .git/t<N> scratch (T246)",
+     "class": "within",
+     "why": "The GM 2026-11-27 (T515's words): 'we are leaving things around that are causing my hard drive to slowly fill up in a way which our current tooling is not preventing'; and on T515's remainder, ~200 GB for this container 'is more than what I would have expected'. A landed task's measurement worlds in a live coordinator's scratchpad are such a hole: the age rule (T246) keeps the running session's scratchpad, so nothing took them. Taking them at landing is the request."
+    },
+    {
+     "id": "D2 whole-number match",
+     "summary": "an entry matches when its name is t, the task's whole number, then a non-digit or end (t51 never matches t515), the rule tmp::landed already uses",
+     "class": "within",
+     "why": "Correctness of D1: a prefix match would delete an open task's worlds. Enforces the request, takes nothing from it."
+    },
+    {
+     "id": "D3 what is kept",
+     "summary": "an entry holding a registered worktree's tree, an entry a live process holds, and everything when /proc cannot be read, are kept",
+     "class": "within",
+     "why": "Protects live work. The GM 2026-11-26: 'we definitely don't want to clean things up if it is going to cost us time later'; the constraint 'never a task still open, never a file a live process holds' serves it. Not a narrowing of what the GM asked to have removed."
+    },
+    {
+     "id": "D4 which session",
+     "summary": "the landing session's scratchpad, found by CLAUDE_CODE_SESSION_ID under any slug (builders write into their coordinator's scratchpad, T271); no session id takes nothing; other sessions' scratchpads stay with the age rule",
+     "class": "within",
+     "why": "The hole measured is the live landing session's scratchpad, which the age rule cannot reach; other sessions' scratchpads are already covered by T246's age sweep once finished, and a live other session's are its own open work. The scope matches the hole the GM's words point at; nothing he asked for is left uncovered by some rule."
+    },
+    {
+     "id": "D5 numbers another feature holds",
+     "summary": "tmp::landed's day rule kept; on top, a number another feature started (live start in task-starts.jsonl) and has not ticked is held whatever its age, and an unreadable tasks.md holds its number",
+     "class": "within",
+     "why": "Numbers are shared across features, so without this a landing of 451 Tn would delete another feature's open Tn's worlds - the cost-us-time-later case the GM ruled out (2026-11-26). Measured today: none of the 17.86 GB landed entries is held by it, so it keeps nothing the GM asked to have taken."
+    },
+    {
+     "id": "D6 m14 left to the age rule",
+     "summary": "the 2.4 GB m14 entry carries no task prefix and is not taken by a landing",
+     "class": "within",
+     "why": "A landing can attribute only entries named for its tasks; an unprefixed entry is not a landed task's scratch and may be live work. T517's line asks for landed tasks' scratch; this leaves nothing of that class. (Note: it stays while this session lives, since the age rule keeps the running session's scratchpad; not a defect a reader of the disk audit would call a hole in the landing rule.)"
+    },
+    {
+     "id": "D7 backlog filed as T533",
+     "summary": "the 17.86 GB in 2,792 entries of tasks landed before this rule is not taken by T517 and is filed as T533, ordered before T525",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T517's reach, not the request: the GM asked that the tooling stop the slow fill, and D1 is that fix for every landing from now on; the existing backlog cannot be reached by a per-landing rule because those tasks have already landed, and no landing will name them. The removal is carried, not dropped: the found-and-left item names why, its filed id (T533) and its order (lands before T525), as FR-009 requires. The stated reason ('a one-off take of a live session's files is the session's call, not a landing's') is the weak part - the landing rule does take a live session's files - but the decisive point is the class: a one-shot deletion of already-landed work is a different action from the rule, and splitting it into a filed, ordered task within the feature leaves no defect unowned. Legitimate only so long as T533 is kept (not dropped in the feature's close-out move)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T519 (spec-lint's figure refusal named a label it does not accept: 461's spec took four pushes, 2026-11-27)",
+    "### T519 Approach (checklist part A)",
+    "### T527 (the landing's mechanical refusals reached where the work is written: four landings refused on 2026-11-27 for what no earlier check said)",
+    "### T527 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T519-D1",
+     "summary": "spec-lint check 5's refusal prints the label form it accepts ('observed <YYYY-MM-DD>, method: <how>' in one paragraph) and a filled lower-case example, replacing 'date and method'; the review-history suffix and the 'carries no m:<key>' prefix are kept",
+     "class": "within",
+     "why": "A wording change to an existing refusal so a writer passes on the next push; serves the GM's T527 words (a problem met again and again owes a process fix: 461's spec took four pushes) and the 2026-11-19 ask for process improvements. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T519-D2",
+     "summary": "Check 5's acceptance pattern (core ONE_SHOT) is unchanged; only the message changes",
+     "class": "within",
+     "why": "Keeps 239 FR-010 (a one-shot observation stays legal and labeled) exactly as it is; neither widens nor narrows what passes."
+    },
+    {
+     "id": "T519-D3",
+     "summary": "The new test pins the form by round trip: the example is lifted from the refusal, pasted into the refused paragraph, and the paragraph must then pass; red first on the old message",
+     "class": "within",
+     "why": "Enforcement of the requested behavior (the refusal names a label that passes); deleting the behavior leaves the test nothing to check."
+    },
+    {
+     "id": "T519-D4",
+     "summary": "Found and left: reviews/prereq.rs keeps a case-sensitive copy of ONE_SHOT, so 'Observed ...' passes spec-lint but is listed unresolved by a dispatch's prerequisite check; not fixed here, filed as T534, lands before T503; the example is lower case so the printed fix passes both",
+     "class": "narrowing",
+     "why": "Ruled as MODE 1, presumed not legitimate. The stated reason alone (a third crate, outside the brief's two jobs) is the 'more of the codebase' argument and would not carry it. What carries it: (1) T519's purpose is intact - the refusal's printed example is lower case, so a writer who follows the printed fix passes spec-lint, the push AND the prereq check, and the plan already chooses its example to avoid the defect; (2) the defect predates T519 and is not introduced by it; (3) it is not left but filed as T534 and ordered before T503, the form the accepted spec's FR-009 gives a deferral, consistent with the GM's approved item 4 ('briefs that default to fixing in the task' - a default) and his T141 bundling words. A defect carried silently, or one T519's own fix did not route around, would be NOT LEGITIMATE.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T519-D5",
+     "summary": "Built and landed bundled with T527 in one pool tree, one landing",
+     "class": "within",
+     "why": "The GM's 2026-11-22 bundling of small tasks (T141)."
+    },
+    {
+     "id": "T527-D1",
+     "summary": "make plan-delta and make decide also run the push's own 'check spec-lint --delta <root> <feature dir>' and report both together; a red lint follows the verb's output with the lint's findings and a refusal naming 'make <verb> again', exit 1, and withholds the dispatch prompt; other verbs and a feature naming no directory ask no lint",
+     "class": "within",
+     "why": "The GM's 2026-11-27 words (T527): a refusal met again and again owes a process fix. It reuses the push's check and its 'introduced' filter, so it refuses only what the push would refuse anyway, earlier; it adds no new rule. Withholding the prompt stops a review being dispatched over text the push will refuse - the same refusal, moved earlier."
+    },
+    {
+     "id": "T527-D2",
+     "summary": "spec-lint --delta ROOT DIR... narrows the delta to the named features, on the push's own base (delta_base::named, else merge base with origin/main) and its 'introduced' filter; --delta ROOT alone unchanged",
+     "class": "within",
+     "why": "Mechanism for D1; keeps the push's behavior unchanged and judges the writer only on findings the base did not already hold."
+    },
+    {
+     "id": "T527-D3",
+     "summary": "make builder-checks also runs the push's audit-register row ('check audit-register --delta <top>') in the same rc loop, reporting every failure together (451 T25); its refusal text unchanged",
+     "class": "within",
+     "why": "Serves the T527 words (T515's knobs were refused at the landing). Checked against the GM's two-tier words (T308: rigor deferred to the session clone; 'our goal is to maximize task throughput'): this is one mechanical row of the push table (its own command, not a new check), not coverage or hook suites, and its purpose - fewer refused landings - is the throughput the GM named, so the purpose of the two-tier rule is served, not gutted."
+    },
+    {
+     "id": "T527-D4",
+     "summary": "Kept outside 461 FR-002: no file of land/, push.rs or the hand-in touched; these run before hand-in (plan review and first tier)",
+     "class": "within",
+     "why": "Avoids overlap with 461 T06/T08's builder-done first pass; narrows nothing either feature asked for."
+    },
+    {
+     "id": "T527-D5",
+     "summary": "No hand-in base set; the push's merge base is used, on the measured clean base in the pool tree (both delta checks and the full spec-lint clean before the first edit)",
+     "class": "within",
+     "why": "A design choice the spec leaves open, with its premise measured and labeled."
+    },
+    {
+     "id": "T527-D6",
+     "summary": "The builder-checks row is shown by a red/green probe run (a probe constant refused, then green once removed) rather than a standing test, since no Rust test reads a recipe; the two Rust changes carry red-first tests",
+     "class": "within",
+     "why": "451 FR-012's standing red-first test duty covers FR-006 to FR-009, FR-011 and FR-013, not this task; the row itself is real enforcement (the 2026-11-19 approval) and its firing is observed and labeled. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T527-D7",
+     "summary": "Lands with T519 and before 461 T08, which needs nothing from it",
+     "class": "within",
+     "why": "Ordering only; 451 FR-013's performance-first rule is not engaged (neither is filed as [perf])."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T521 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T521-1 shares only of time and tokens",
+     "summary": "make task-time prints a percentage only where it is a share of time or of tokens; counts (test runs, compiles) carry no share.",
+     "class": "within",
+     "why": "The GM, 2026-11-27 (request.md's last entry): 'I don't know that it's useful to see percentages for counts the way that it is to see percentages for time'. Token shares are a share of a consumed resource the GM ranks with throughput ('just as important as task throughput'), not of a count of events, and the T512 request for percentages stands for them. Unchanged from the block's CLEAR version."
+    },
+    {
+     "id": "T521-2 minutes each beside a count",
+     "summary": "Beside a count of test runs or compiles the reader sees the minutes each took (e.g. '15, 0.2 min each').",
+     "class": "within",
+     "why": "The GM asked to see 'the number of times that the tests were run ... next to the amount of time we spent'; minutes per run replaces the struck share and serves that clause. The figure moved from 1.2 to 0.2 min each since the last verdict and now carries a one-shot label (measured 2026-11-27, D5's run); a corrected figure, not a new decision."
+    },
+    {
+     "id": "T521-3 line counts without a share",
+     "summary": "T417's changed lines print as '+831 -445' with no share of the task's changed lines.",
+     "class": "within",
+     "why": "Lines added/deleted are counts, inside the GM's words on percentages for counts; no line figure is removed, only its share."
+    },
+    {
+     "id": "T521-4 not a defect, figures unchanged",
+     "summary": "Item 12 classes the change as the GM's change to what the report shows, not a defect fix; T512's figures and sources unchanged, only their printing.",
+     "class": "within",
+     "why": "Matches the request: the GM changed what the report should show; nothing the GM asked for is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T522 (the GM 2026-11-27, request.md: T417's compiles and test runs, \"I would have expected the number of compiler runs to actually be strictly higher than the number of test runs\")",
+    "### T522 Approach (checklist part A)",
+    "### T525 (<why: the finding or measurement that files it>)",
+    "### T525 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T522-D1",
+     "summary": "A compile is every compiler invocation: build, cover-build, each lint pass, each prewarm; a prewarm is counted under its own line's task, its minutes still outside any call's compile (T316).",
+     "class": "within",
+     "why": "Answers the GM's own question verbatim (2026-11-27): 'if running make test implicitly invokes the compiler, then does that mean that the compiler is actually being invoked many more times than what is reflected in these numbers?' and his earlier ask to see 'the number of times we had to recompile next to the amount of time we spent recompiling'. Counting the uncounted lint and prewarm invocations is the count he asked about; keeping T316's minutes rule changes nothing he asked to change."
+    },
+    {
+     "id": "T522-D2",
+     "summary": "Compiles under NOOP_BELOW_S (1.0 s, GUESS knob with audit entry) are reported apart as no-op checks; a line's own 'compiled' field wins; the writer's exact answer deferred to T528.",
+     "class": "within",
+     "why": "Serves 'the number of times we had to recompile': the full count of D1 is still shown (40), with the ones that did work beside it. The knob is labeled GUESS with an audit entry and its basis measured (floor 0.03-0.15 s, p10 of real one-crate rebuilds 1.27-1.51 s, dated with method). The writer-side exact answer is ruled separately (T522-deferral-T528)."
+    },
+    {
+     "id": "T522-D3",
+     "summary": "A unit-test run is a 'test' line, a coverage run a 'cover-run' line, counted apart; make quick and preflight lines are not counted (they hold their own cargo test lines); minutes per run from each kind's own lines' mean span.",
+     "class": "within",
+     "why": "Directly answers 'these numbers make me a little concerned about whether they actually reflect what is really happening': nine of T417's 28 were task-add's own 0-1 s quick checks (observed with method). Removing a double count and dividing by the right lines is making the requested count true, not narrowing it."
+    },
+    {
+     "id": "T522-D4",
+     "summary": "Each landed task's section ends with an always-printed table of its counted lines (start, tree, target, step, crates, seconds, counted-as); the size table's columns become unit-test runs | coverage runs | compiles, the compiles cell without a percentage.",
+     "class": "within",
+     "why": "The GM asked 'Or am I missing something?' and earlier said the data should make it 'much easier for me to eyeball how reasonable the times that I'm seeing look'; a listing behind every count lets him check it by eye. No percentage on a count, per his 2026-11-27 words ('I only really care about that for time and tokens')."
+    },
+    {
+     "id": "T522-D5",
+     "summary": "T417's other runs are traced to its own builder's tree (diagram-backlog-b1), whose lines the writer filed in _unassigned.jsonl; make task-time now reads that log and retasks them to the holder.",
+     "class": "within",
+     "why": "This is the explanation the GM asked for ('Or am I missing something?'), measured with method, and it makes the task-time row he read count T417's own lines. The writer-side misfiling it found is a separate decision, T522-deferral-T529."
+    },
+    {
+     "id": "T522-D6",
+     "summary": "tie() matched lines to runs by session plus target/task, never by tree, so a pool tree's line could go to another builder's run; fixed by held_for on held lines and _unassigned retasked to the holder; seven tasks' minutes move.",
+     "class": "within",
+     "why": "A defect found while answering whether the numbers 'reflect what is really happening', fixed in this task rather than deferred. Other tasks' figures moving is the fix taking effect, not a regression (constitution XIII/XIV)."
+    },
+    {
+     "id": "T522-D7",
+     "summary": "T417 before/after recorded with one command: compiles 40 (39 of 1.0 s or more) vs 19 unit-test runs and 0 coverage runs; compiles broken down as 19 builds, 0 coverage builds, 9 lint, 12 prewarm.",
+     "class": "within",
+     "why": "The measured outcome of D1-D6 on the exact row the GM read; dated with method. It reports what the counts are, not a target the counts were tuned to: each change is justified by what a line is (D1, D3), independent of the GM's expectation."
+    },
+    {
+     "id": "T522-deferral-T528",
+     "summary": "Found and left: compile lines do not say whether cargo compiled anything, so the no-op split rests on the 1.0 s GUESS; the writer's exact answer is filed as T528, 'no open task waits on it'.",
+     "class": "within",
+     "why": "Not a defect by constitution XIV's test: no wrong outcome is shown. The requested count (every compiler invocation, D1) does not depend on the knob; the split beside it is labeled a GUESS, carries an audit entry, and its threshold sits in a measured gap between the no-op floor (0.03-0.15 s) and real rebuilds (p10 1.27-1.51 s). Leaving a measured heuristic as it is stays within what was asked."
+    },
+    {
+     "id": "T522-deferral-T529",
+     "summary": "Found and left: a pool tree's lines are filed in _unassigned.jsonl with no task (647 of diagram-backlog-b1's on 2026-11-27); make where-time F=451 misses them and a pre-warm filed there is counted under the _unassigned feature. Not fixed here because it is the writer's (event_log_hooks filed::filed), outside this task's crate; filed as T529, 'no open task waits on it'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "It is a defect left: make where-time F=451, this feature's own FR-005 report, gives a wrong answer by 647 lines of this feature's work, the GM's 2026-11-19 'how much time are we spending on running our tests? ... on recompiling things?'. Its stated reason (the writer is outside this task's crate) is the more-of-the-codebase kind that does not make a carve-out legitimate. The ground that would, FR-009's GM-approved deferral, holds only in its approved form: why, a filed open task, AND its order 'lands before T<m>' (D15: refused when missing). This item gives 'no open task waits on it' in place of the order, so nothing schedules the fix before the reports are read, though the block's own item 5 says T522 lands 'Before the process review reads the report'. To clear: fix the writer here, or state the order, 'Not fixed here: <why>. Filed as T529; lands before T<m>.', naming the open task that next reads make where-time per feature (the process review, if it is filed and open)."
+    },
+    {
+     "id": "T522-perf",
+     "summary": "T522 is classed performance work: a report of where the time goes.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "T522-constraints",
+     "summary": "T521's rule (a count carries no share) and T316's (a pre-warm is no call's compile in the minutes) are held.",
+     "class": "within",
+     "why": "T521's rule is the GM's 2026-11-27 'I don't know that it's useful to see percentages for counts'; T316's keeps the minutes as booked, which the request did not ask to change."
+    },
+    {
+     "id": "T525",
+     "summary": "An unfilled template block: placeholder heading and checklist, an empty step table.",
+     "class": "within",
+     "why": "It decides nothing; no decision to judge against the request. Whatever fills it is a changed block owed its own review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T522 (the GM 2026-11-27, request.md: T417's compiles and test runs, \"I would have expected the number of compiler runs to actually be strictly higher than the number of test runs\")",
+    "### T522 Approach (checklist part A)",
+    "### T525 (<why: the finding or measurement that files it>)",
+    "### T525 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T525 (both blocks)",
+     "summary": "The template as task-add writes it: every field a placeholder, no approach, no table rows.",
+     "class": "within",
+     "why": "It decides nothing, so there is nothing to rule on. Once the section is filled in, its blocks change and are owed review again."
+    },
+    {
+     "id": "T522-D1",
+     "summary": "A compile is every compiler invocation: build, cover-build, each lint pass and each prewarm. A prewarm is counted under its own line's task, and its minutes stay outside the call's compile (T316).",
+     "class": "within",
+     "why": "It answers the GM's question directly: 'if running make test implicitly invokes the compiler, then does that mean that the compiler is actually being invoked many more times than what is reflected in these numbers?'"
+    },
+    {
+     "id": "T522-D2",
+     "summary": "Compiles under NOOP_BELOW_S (1.0 s, a GUESS knob with an audit entry) are split out as no-op checks. A writer-given 'compiled' field is used first when present.",
+     "class": "within",
+     "why": "It serves 'whether they actually reflect what is really happening'. It adds a sub-count and leaves the total exact. The knob is labeled a guess and its figures are dated with their methods."
+    },
+    {
+     "id": "T522-D2/Found-and-left-1 (T528)",
+     "summary": "The exact did-cargo-compile answer has to come from the writer. That is deferred to T528, which lands before T380, the next reading of the compile and slot figures.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM asked for 'the number of times we had to recompile' (request.md, the T512 words) and whether the counts reflect reality. The total, 40 compiler invocations, is exact. Only the split of those that did work rests on the span, and the cell states that threshold literally ('39 of 1.0 s or more'). The knob is labeled GUESS with an audit entry, and the reader takes a writer-given 'compiled' first. The writer's fix is outside this crate. Its deferral is in D15's form and lands before T380, the next reading of the compile and slot figures, so no later reading relies on the guess unflagged. The earlier BLOCKED text had 'no open task waits on it'; that is now an order."
+    },
+    {
+     "id": "T522-D3",
+     "summary": "A unit-test run is a 'test' line and a coverage run is a 'cover-run' line, counted apart. make quick and preflight lines are counted as neither, since their own 'test' lines would be counted twice. Minutes per run become each kind's mean span.",
+     "class": "within",
+     "why": "It answers 'why we would run our unit tests so much more than running our compiler'. Nine of T417's 28 'test runs' were quick lines. Removing a double count is a fix to a wrong outcome."
+    },
+    {
+     "id": "T522-D4",
+     "summary": "Every landed task's section ends with a listing of its counted lines, always printed. The size table's columns become unit-test runs | coverage runs | compiles (N (M of 1.0 s or more)). Counts carry no share (T521).",
+     "class": "within",
+     "why": "It serves 'Or am I missing something?' and the GM's earlier words that the counts are there to make it 'much easier for me to eyeball how reasonable the times that I'm seeing look'. Leaving percentages off the counts follows his words on percentages."
+    },
+    {
+     "id": "T522-D5",
+     "summary": "T417's missing runs were its own pool-tree lines, which the writer had filed in _unassigned.jsonl. The report now reads that log.",
+     "class": "within",
+     "why": "It is the explanation the GM asked for, and the reader now counts the lines that had been left out."
+    },
+    {
+     "id": "T522-D5/Found-and-left-2 (T529)",
+     "summary": "The writer still files pool-tree lines in _unassigned with no task. make where-time F=451 misses them, and a pre-warm filed there is counted under the _unassigned feature. Deferred to T529, which lands before T22 (the close, which reads make where-time F= per feature).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I ruled the item's two effects separately. (a) make where-time F=451 misses the pool-tree lines: its consumer is the close, which reads where-time F= per feature, and T529 lands before T22. (b) A pre-warm filed in _unassigned is counted under the _unassigned feature: that is attribution to a FEATURE, the same per-feature reading. In make task-time the task-level count is already right. T417's listing holds 59 rows, all in pool tree b1 (19 builds + 19 tests + 9 lints + 12 pre-warms = 59), so its pool-tree pre-warms are credited to the task. So the count the GM questioned is correct now, and what is deferred reaches no consumer before T22. The deferral is in D15's form. The earlier BLOCKED text had 'no open task waits on it'; that is now an order, and the 647 figure now carries its date and method in D5."
+    },
+    {
+     "id": "T522-D6",
+     "summary": "Booking defect fixed: tie now gives a held line only to a run of the holder's tasks (held_for), and retask treats _unassigned lines as the holder's. Seven other tasks' minutes and 237 loose phases move.",
+     "class": "within",
+     "why": "It fixes a wrong outcome found while answering the question: another builder's lines went into a task's counts and minutes. That is exactly the GM's concern 'whether they actually reflect what is really happening', and the fix-as-we-go rule. The figures that moved are measured and dated."
+    },
+    {
+     "id": "T522-Approach items 2/5/Performance",
+     "summary": "It holds to T521 (a count carries no share) and T316 (a pre-warm is not a call's compile in the minutes). It is ordered after T521 and before the process review reads the report, and it is counted as performance work.",
+     "class": "within",
+     "why": "Those rules are inside the feature already. FR-013 counts measurement of where time goes as performance work, citing the GM's words of 2026-11-20."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T523 (T520's found-and-left item: the model trial's arms shared one build target, and the sweep left what at the cache's root is no build directory)",
+    "### T523 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T523-D1 arm checkout naming",
+     "summary": "Each model-trial arm checks out to <out>/<out name>-<first 8 hex of SHA-256 of out's canonical path>, main's adding -main, so arms (including same-named arms under two trials) build into targets of their own; relative and absolute out resolve to the same checkout and a re-prepare reuses it.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (arms sharing one cargo lock and tool binary, so their timings were not their own) found and left by T520; it is the defect fix the GM's fix-all-known-bugs rule asks for and narrows nothing asked."
+    },
+    {
+     "id": "T523-D2 fix in the trial, not the launcher",
+     "summary": "The five basename-keyed sites (l7r-gate.sh, l7r-guard.sh, HAMLET_RUN, gate_binary, target_of) are left as they are; an env-var override is rejected because render's make map goes through HAMLET_RUN.",
+     "class": "within",
+     "why": "A design choice of where to fix; keeping every live tree's warm cache (230 GiB) instead of re-homing it follows the GM's 2026-11-26 principle that time saved outweighs disk and that nothing is cleaned if it costs time later."
+    },
+    {
+     "id": "T523-D3 no fallback for cases prepared under the old name",
+     "summary": "A case whose checkout is the old 'tree' must be prepared again; no compatibility fallback.",
+     "class": "within",
+     "why": "A fallback would keep the very sharing being fixed; it narrows no requirement or GM instruction."
+    },
+    {
+     "id": "T523-D4 cache-root sweep rule",
+     "summary": "At the build cache's root, loose files and shells holding only cargo markers under no live tree's name are taken once idle past the threshold and held by no process; the root's CACHEDIR.TAG and diagram-research/ (holding a kept l7r-guard.good) stay.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-25/27 asks that the container stop leaving artifacts its tooling does not clean, while respecting the 2026-11-26 rule: what is taken holds no build, nothing live writes there (grep recorded), and it is gated on idle and unheld, so it cannot cost later build time."
+    },
+    {
+     "id": "T523-D5 BUILT_INTO shrinks to [clone]",
+     "summary": "tree and main-tree leave BUILT_INTO so a target of those names whose trees are gone is proven dead under T158's rule like any other; disk-audit owner text and cache-clean help/doc updated to match.",
+     "class": "within",
+     "why": "Follows from D1 (no code path builds into tree or main-tree now); T158's proven-dead rule is kept, not weakened; the text updates keep the tooling's descriptions true."
+    },
+    {
+     "id": "T523-D6 accepted cost: each arm's first gate call builds cold",
+     "summary": "Per-arm cold builds (builder-checks 165.9 s guard, 197.8 s measure) are accepted as the price of per-arm timings.",
+     "class": "within",
+     "why": "The trial exists to measure arms; a shared warm build is what made its timings untrustworthy. This is the cost of the fix, not a carve-out from anything asked."
+    },
+    {
+     "id": "T523-D7 order and classification",
+     "summary": "Lands after T520 and before T517; tagged [perf] under FR-013 as work that makes the trial's timings trustworthy; found-and-left none (the 28-vs-27 profraw count noted as a search smell).",
+     "class": "within",
+     "why": "FR-013 counts measurement work as performance work for ordering (GM 2026-11-20); the order is T520's filing; leaving nothing found and unfixed narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T523 (T520's found-and-left item: the model trial's arms shared one build target, and the sweep left what at the cache's root is no build directory)",
+    "### T523 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T523-1 arm naming",
+     "summary": "Each model-trial arm's checkout is <out>/<out's name>-<8 hex of sha256 of out's canonical path>, main's with -main, so no two arms share a basename-keyed build target, cargo lock or tool binary.",
+     "class": "within",
+     "why": "Arms sharing one target give timings that are not their own: a measuring tool that answers wrongly, a defect. Measurement work is performance work by FR-013 and the GM's 2026-11-20 words, and 2026-11-22 asks that 'everything [be] measured so we know where our time goes'. Fixing the defect is inside what was asked."
+    },
+    {
+     "id": "T523-2 fix in the trial, not the launcher",
+     "summary": "The five basename-keyed sites (l7r-gate.sh, l7r-guard.sh, HAMLET_RUN, gate_binary, target_of) are left alone, and the trial names its trees apart instead of re-keying the launcher or setting an environment variable.",
+     "class": "within",
+     "why": "This is a choice of mechanism and narrows nothing. Re-keying would re-home every live tree's warm cache, which is the time cost the GM's 2026-11-26 principle forbids, and the env-var route would miss render's make map. The defect is still fixed for every arm."
+    },
+    {
+     "id": "T523-3 no fallback for old checkouts",
+     "summary": "A case prepared before the change (checkout 'tree') must be prepared again, with no fallback.",
+     "class": "within",
+     "why": "A fallback would keep the sharing that is the defect. A one-time re-prepare of a trial case is a cost of the fix and removes nothing the GM asked for."
+    },
+    {
+     "id": "T523-4 cold build per arm",
+     "summary": "Each arm's first gate call builds its own tool cold (165.9 s / 197.8 s observed), giving up the cross-arm warm cache.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 'reusing the same build cache' and the 2026-11-26 time-over-disk principle are about the working build cache. Inside a trial whose purpose is comparing arms' timings, a cache shared across arms is the defect itself. Paying the cold build is what a correct measurement costs. It does not clean anything that saves time later."
+    },
+    {
+     "id": "T523-5 root sweep of loose files and marker-only shells",
+     "summary": "At the cache root, loose files (27 fixture profraw, the list, fixture.profdata, .rustc_info.json) and marker-only shells under no live tree's name are taken once idle past the threshold and held by no process.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-22 and 2026-11-25/27 asks to clean up what the container leaves behind. It respects the 2026-11-26 principle: 'that one coverage' is a coverage build variant, which stays under T158's proven-dead rule, and these are orphans that no live code writes (observed by grep) and that hold no build. Deleting them costs no later time."
+    },
+    {
+     "id": "T523-6 kept: root CACHEDIR.TAG and diagram-research/",
+     "summary": "The root's CACHEDIR.TAG (backup marker) and diagram-research/ (holds a kept l7r-guard.good) are not taken.",
+     "class": "within",
+     "why": "Keeping things that serve a purpose narrows nothing the GM asked. The 2026-11-26 principle is satisfied."
+    },
+    {
+     "id": "T523-7 BUILT_INTO shrinks to [clone]",
+     "summary": "tree and main-tree leave BUILT_INTO, so targets of those names whose trees are gone are proven dead like any other. The proven-dead test is updated to expect them taken.",
+     "class": "within",
+     "why": "No code builds into those names after T523-1. T158's proven-dead rule is kept unchanged for every build directory, and the new per-arm targets are ordinary tree-keyed targets that go when their tree goes, as T246 item 2 relays."
+    },
+    {
+     "id": "T523-8 text and docs",
+     "summary": "disk-audit's owner text for clone drops \"trials'\"; the cache-clean help line names the new rule; docs/make-targets.html is regenerated.",
+     "class": "within",
+     "why": "These keep the descriptions true to the change. They add no behavior."
+    },
+    {
+     "id": "T523-9 order and found-and-left",
+     "summary": "Lands after T520 and before T517, tagged [perf], with found-and-left none (the 28-vs-27 profraw count noted as a search smell).",
+     "class": "within",
+     "why": "The order follows FR-013 and T520's filing. Nothing is deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T526 (451 T520's option (b), the GM's 2026-11-26 rule \"we definitely don't want to clean things up if it is going to cost us time later\" and his 2026-11-27 word that time stays before disk; b1, the pool's fourth tree, idle while three builders ran)",
+    "### T526 Approach (checklist part A)",
+    "### T529 (<why: the finding or measurement that files it>)",
+    "### T529 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T526-a",
+     "summary": "The pool-tree exemption from eviction is narrowed: a free tree past the first L7R_BUILDERS (3) trees of its clone's registry, neither held nor the lane's, has its ordinary build profiles taken by the budget step and the low-disk trigger once idle past L7R_CACHE_IDLE_HOURS (12).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the GM's 2026-11-26 principle ('we definitely don't want to clean things up if it is going to cost us time later') by accepting a contingent later cost the block names itself (a fourth builder's first builder-checks cold, 165.9 s guard / 197.8 s measure). Legitimate on two grounds. (1) Implied by the GM's own 2026-11-27 words that file T515: 'we might have implemented some cleanup that occurs when a builder worktree is cleaned up, but then since we are reusing builder worktrees for efficiency, then maybe that means that a lot of the cleanup that we are relying on never actually happens ... our current tooling is not preventing' - a reused pool tree that is never cleaned is the hole he names. (2) Purpose test: the principle protects caches that save time when used; builder_tree::take hands out the first free tree in registry order, so at the GM's settled count ('start it at 3 builders', 2026-11-26) a handout reaches the fourth tree only when more than three run at once, and eviction needs 12 h of non-use AND a cache past budget or a disk below its free share - so what is taken is a cache the settled loop does not use, and the time it saves at that count is zero. Residual, not a ruling ground: there is no builder cap (T284: 'synchronization rather than pre-emptively limiting builders'), so the 'no handout reaches it' premise rests on take's order plus the 12 h idle test, not on a ceiling; the cold-start price is paid once, and only if the count is raised after an eviction."
+    },
+    {
+     "id": "T526-b",
+     "summary": "The same unreached tree's coverage profile (cover-*, 1.9 GB on b1) is taken with its other profiles.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from T526-a because the GM's 2026-11-26 sentence names coverage specifically: 'If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle for a bit'. That sentence is about a coverage cache that IS used, rarely; this tree's coverage is used only when the tree itself is handed out, which by take's order the settled count does not do, and it is taken not 'just because it's been idle' but only under budget or low-disk pressure after 12 h - the same reach as T526-a, and the same T515 words imply it. The kept trees' coverage, the case his sentence describes, stays (T526-e). Note for the record, not a ruling ground: the block's 'What it frees and costs' gives only builder-checks' cold cost; the cold coverage cost should be stated too (T520's census, 1.5 to 10 min, already cited in 'Declined')."
+    },
+    {
+     "id": "T526-c",
+     "summary": "Kept trees chosen by registry position (the first L7R_BUILDERS trees on disk, per clone, gone trees not counted, nameless entries passed over), read through Config::builders with builder_queue::builders()' parse and default; the knob's value unchanged.",
+     "class": "within",
+     "why": "Design of how 'the trees a handout reaches' is computed; it keeps more than a count-less-held rule would and keeps every tree take can hand out at the knob. Changes no constant (L7R_BUILDERS stays 3)."
+    },
+    {
+     "id": "T526-d",
+     "summary": "The landing lane's tree is kept and not counted by either mark: a name ending -land, or the reserved holder 'lane'; 461 T13 must write the holder for a lane tree not named -land.",
+     "class": "within",
+     "why": "Keeps more, not less. The block itself states the gap: a lane tree named elsewhere through L7R_LANE_TREE has no mark until 461 T13 writes the holder, and the order line puts T526 before T13. The bundle cannot confirm feature 461's D1 (spec-cited.md: NOT FOUND); the lane-tree rule rests on the block's own description of it."
+    },
+    {
+     "id": "T526-e",
+     "summary": "T520's option (a), taking the kept trees' coverage profiles (23.2 GB), is declined.",
+     "class": "within",
+     "why": "Declining it honors the GM's 2026-11-26 words on rarely used coverage that saves a ton of time when used: coverage-repair builders build in those trees, 1.5 to 10 min cold."
+    },
+    {
+     "id": "T526-f",
+     "summary": "T526 is tagged [perf] under 451 FR-013 (scheduling priority).",
+     "class": "within",
+     "why": "The GM placed disk work under performance tuning himself (2026-11-25: 'having some kind of audit of disk space ... is probably something we should add to our performance tuning and checks'); the block keeps the builders' warm trees and changes no engine speed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T528 (451 T522's writer half: the compile lines did not say whether cargo compiled anything, so `make task-time` told a no-op by a 1.0 s GUESS span, `NOOP_BELOW_S`)",
+    "### T528 Approach (checklist part A)",
+    "### T529 (451 T522-D5: a pool tree's `Phase` lines filed in `_unassigned.jsonl` with no task, so `make where-time F=451` missed them)",
+    "### T529 Approach (checklist part A)",
+    "(removed) ### T529 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T528 Approach",
+     "summary": "Each build, cover-build, lint and prewarm Phase line carries `compiled`, the distinct crates cargo's JSON reports built afresh; the reader takes it first and NOOP_BELOW_S stays only for lines without it.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-27 question on T417's row (whether 19 compiler runs against 28 test runs reflect what really happened, and whether make test invokes the compiler unseen): a compile is counted as work by cargo's own report, not by a GUESS span."
+    },
+    {
+     "id": "T528-D1",
+     "summary": "The count comes from cargo's --message-format=json-render-diagnostics, not clippy's Checking lines as the task line said, because every pass runs --quiet and prints none (observed 2026-11-27).",
+     "class": "within",
+     "why": "A change of means, not of scope: the task line's wording is not the GM's, and the deviation reaches the same goal (a count of what cargo compiled) by the only source the --quiet passes leave. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T528-D2",
+     "summary": "The JSON flag is added at each call site, never inside lint::passes() or test_args, so no small-lane key or fingerprint moves; failures still render on stderr and JSON is stripped from the returned stdout.",
+     "class": "within",
+     "why": "Keeps earlier accepted tasks' behavior (T347, T355, T367, T411) intact while adding the field; a constraint on how, not a narrowing of what."
+    },
+    {
+     "id": "T528-D3",
+     "summary": "The field is omitted where cargo exited non-zero or named no artifact; a lint line's count is its passes' sum, none where a pass gave none.",
+     "class": "within",
+     "why": "Where cargo gives no word there is nothing to report, so the reader's span fallback decides; that is the field's natural boundary, not a carve-out from the request."
+    },
+    {
+     "id": "T528-D4",
+     "summary": "The pre-warm's stdout goes from Stdio::null() to piped and drained on its own thread, so the never-cuts polling loop is unchanged.",
+     "class": "within",
+     "why": "An implementation means of writing the field on prewarm lines without changing the pre-warm's behavior."
+    },
+    {
+     "id": "T528-D5",
+     "summary": "T417's task-time row is unchanged before and after (its lines predate the field); on this task's own 11 runs the field and the 1.0 s knob agree.",
+     "class": "within",
+     "why": "A measurement that verifies the change, carrying date and method; no backfill was asked (the GM 2026-11-27: no backfill expected for past tasks)."
+    },
+    {
+     "id": "T528 Found and left: report text",
+     "summary": "The report's compile cell and sources paragraph still describe the count by the span, though a line now carries cargo's word; deferred as T538, lands before T380 (the next reading of the compile figures), because it is the reader's text in measure's task_time.",
+     "class": "within",
+     "why": "A deferral in FR-009's own form (why, filed task, order), ordered before the next consumer of the figures; the field itself, which carries the substance of the GM's question, lands here. No part of the request is dropped."
+    },
+    {
+     "id": "T529 Approach",
+     "summary": "filed::filed asks the builder pool for the held tree's holder's FEATURE after the line's own words and before the environment/feature.json fallback; pool_task then names the holder's task.",
+     "class": "within",
+     "why": "Serves the request's per-feature reports (FR-005, make where-time F=) and the GM's concern that the figures reflect what really happened: a builder's compile and test lines were missing from its feature's log."
+    },
+    {
+     "id": "T529-D1",
+     "summary": "Cause: diagram-backlog-b1 has no feature.json, so the fallback read no feature and pool_task was never asked; 648 lines went to _unassigned.jsonl (observed 2026-11-27).",
+     "class": "within",
+     "why": "A measured diagnosis, dated with method; decides nothing beyond the fix."
+    },
+    {
+     "id": "T529-D2",
+     "summary": "The pool's holder beats feature.json and the session environment for a line no word files, reversing T344's rule that a tree held for another feature leaves the start in force; a line whose own word names a feature keeps it.",
+     "class": "within",
+     "why": "T344's rule is an earlier task's design, not the GM's words (request.md does not carry it); reversing it on measured evidence (t269's 6 lines misfiled under T285 by a stale feature.json) widens correct filing and narrows nothing asked."
+    },
+    {
+     "id": "T529-D3",
+     "summary": "A free tree, a tree the registry does not list, and a holder naming no one feature directory keep the marked fallback.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The rule cannot apply: a free or unlisted tree has no holder to name, and a holder naming no single feature directory gives no one feature to file under. The fallback stays marked, so these lines remain visible as unassigned rather than silently misfiled; the purpose (lines filed where a holder determines them) is not gutted."
+    },
+    {
+     "id": "T529 Found and left: lines already filed",
+     "summary": "The 648 b1 lines in _unassigned.jsonl and t269's 6 lines stay where filed; make events-refile cannot read pool holds; deferred as T539, lands before T22 (the close that reads where-time per feature); make task-time already books them through held::retask.",
+     "class": "within",
+     "why": "A deferral in FR-009's form, ordered before the consumer that would read them wrongly, with the task-time report already correct; no backfill was asked beyond the overnight window, which task-time covers."
+    },
+    {
+     "id": "(removed) T529 placeholder",
+     "summary": "The template-only T529 block is replaced by the filled T529 block under its real heading.",
+     "class": "within",
+     "why": "The removed text was an unfilled template carrying no decision."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T517 to T529, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

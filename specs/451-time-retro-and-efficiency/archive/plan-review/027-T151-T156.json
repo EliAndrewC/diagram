@@ -1,0 +1,774 @@
+{
+ "blocks": {
+  "### T151 (make ledger-owed traced no check-wave unit to the session that ran it: 35 impl-drift passes of 449 T249's re-check stayed owed after the session's write and refused every landing)": {
+   "sha256": "2f8eef25283e02b3c8480f2651c4462262956abb7f92f4df21a6816b967664e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T151 Approach (checklist part A)": {
+   "sha256": "13261e7933875a57265a5920e032f6ce1e454c8de958c5ad7816d5d2a70fe503",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T152 (<why: the finding or measurement that files it>)": {
+   "sha256": "c0af6ae7e3eb1a9b4c5d4c19cd52f8f7c8b45884de95ac28c57db38fee5369c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T152 Approach (checklist part A)": {
+   "sha256": "049cbc53156cbb4d2b5b4bf22741b2b196d5287b88954dd166f1733fcc8042da",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T151": {
+   "section_sha256": "f202f1ba6a706ddce32d4158100eb2c912d950b3d1cd53ee081ff16b78799f1e",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "THE FIX (trace and reply)",
+     "summary": "rows.rs gains wave_transcript to find <session>/subagents/workflows/<run>/agent-<id>.jsonl; session_of names a wave unit's session as the directory above subagents/workflows/<run>/; filled_row takes a wave unit's reply and label from its run's journal.jsonl result line and fills the same cells a hand-dispatched pass gets.",
+     "class": "within",
+     "why": "This is the task line itself: a session's make ledger-owed WRITE= must trace and write the check-wave units it ran so they stop refusing every landing. The mechanism follows from the measured transcript and journal layout; nothing asked is narrowed."
+    },
+    {
+     "id": "THE VERDICT CELL (parity)",
+     "summary": "A wave pass's verdict cell is read from its reply by verdict_of, as a hand-dispatched pass's is, not from the journal's verdict field; an all-IN-STEP impl-drift reply therefore reads 'findings' exactly as the session's hand-dispatched impl-drift rows already do.",
+     "class": "within",
+     "why": "Within the task: the task line is the trace, and choosing which source fills the verdict cell, the same reading verdict_of already gives every hand-dispatched pass, narrows nothing asked. Whether an all-IN-STEP impl-drift reply reading 'findings' is a wrong outcome: the bundle shows none. The plan's own constraint is that a row answers a pass by its check and cost cells (feature 371), and nothing in the bundle shows a consumer of the verdict cell that would refuse, let through or misreport work because of it. It is a pre-existing reading of verdict_of shared by the hand-dispatched rows, not introduced here; on what the bundle shows it is a difference, not a defect left (constitution XIV), so it needs no ruling."
+    },
+    {
+     "id": "THE COST CELLS (accepted limitation)",
+     "summary": "settle::settled / cost::subagent_files are not taught the wave directory, so a wave pass keeps the hook's logged cost cells rather than cells recomputed from its finished transcript; the size of any difference was not measured.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Wave passes' costing is left unlike hand-dispatched passes' (the hook's logged cells kept, not recomputed). Applying the fuller treatment would defeat the task's own stated purpose, concretely: by the plan's constraint a row answers a pass by its check and cost cells (feature 371), so recomputing the cells of the ~342 wave passes already answered (377 logged, 35 owed, measured 2026-11-22 by grep -c) would make those rows answer nothing and put the passes back on the owed list, refusing landings again - the exact failure T151 exists to end. The plan states the unmeasured size of the gap openly rather than claiming it is nil."
+    },
+    {
+     "id": "THE WRITE",
+     "summary": "The fix's binary runs make ledger-owed WRITE= with the session's earlier rows' full text, writing 41 rows (the 35 impl-drift units and 6 later passes), with the 40 plan reviews refused as their landings' own per 451 T105; after, only 40 MODE 4 plan reviews are owed.",
+     "class": "within",
+     "why": "Carrying out the task's goal under an existing rule (451 T105); the WRITE= text names where every check's verdict is recorded, so applying it to the 6 later passes asserts nothing false. Nothing asked is narrowed."
+    },
+    {
+     "id": "pins and order",
+     "summary": "Red-first pins in ledger_passes/tests.rs (a wave unit written for its own session from the journal, another session's unit left owed) and rows/tests.rs (text result, structured result without text, no result, no agent), shown red before the fix; then crate tests, lint, cover, closing checks.",
+     "class": "within",
+     "why": "Tests whose only effect is to make the requested fix happen and keep happening; enforcement of the task, not added scope."
+    },
+    {
+     "id": "search space",
+     "summary": "transcript( callers under rust/gate/crates/reviews found by grep; trace.rs unit_prompt already walks the wave directory and is unchanged; cost::transcript itself is not changed.",
+     "class": "within",
+     "why": "The enumeration states its search space; because the fix adds wave_transcript in rows.rs rather than changing cost::transcript, callers of cost::transcript outside that crate are not affected. No narrowing."
+    },
+    {
+     "id": "Found and left? none",
+     "summary": "The plan declares no defect found and left.",
+     "class": "within",
+     "why": "Consistent with the rulings above: the verdict-cell reading is shown by the bundle to be a difference with no wrong outcome, and the cost-cell limitation is a stated, purpose-justified choice, not a defect shown. Nothing else in the block is left."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T151 is declared not performance work for FR-013's scheduling.",
+     "class": "within",
+     "why": "The task repairs the review ledger's tracing of check-wave passes to their session so landings stop being refused; it neither improves a measured time nor is the time-measurement work the GM asked on 2026-11-20 to count as performance. The declaration takes nothing from FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T153": {
+   "section_sha256": "be372711fa07aa1f9db21ef1698766ad1e40aedab48de3861504ef498b76ab7c",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "one-form",
+     "summary": "One Phase line form (phase_row in event_log_hooks.rs) built in one place, every writer appending through append_row_with, the hooks' writer; the make target read one way via shared::make::outermost_goal",
+     "class": "within",
+     "why": "FR-003/D4 name the hooks' line writer as the one writer; a shared form is how every step the GM named gets measured the same way."
+    },
+    {
+     "id": "writers-in-process-or-door",
+     "summary": "A step's line is written in process where a Rust tool already runs it, otherwise through one shell door (l7r-gate measure event-log phase)",
+     "class": "within",
+     "why": "A mechanism choice for 'we want everything measured'; it drops no step."
+    },
+    {
+     "id": "hook-suites",
+     "summary": "hookrun.sh leaves each job's span and make hooks-test hands them to the door in one call, so closing-checks and make done write theirs too",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-22 words: 'make the hook suites measure their time so they won't be missing'."
+    },
+    {
+     "id": "map-phases-at-mtimes",
+     "summary": "make map's generate/render/page cut at each staged artifact's mtime, a CACHED hit its own line, rather than the engines timing themselves",
+     "class": "within",
+     "why": "Map generation is measured, as the GM asked ('especially ... generating maps'), with its steps split; how the cut is taken is method, not scope. The plan labels the reading and the reason (engine self-timing would move every map's engine id)."
+    },
+    {
+     "id": "gate-phases",
+     "summary": "measure runstats phase|phase-pre, already called per gate phase by make done, writes the Phase line in process",
+     "class": "within",
+     "why": "Measures the gate's seeds, counters, preflight, reference etc., which the task names as invisible; no process added."
+    },
+    {
+     "id": "recipes-timed",
+     "summary": "make record, quick, preflight, cohort timed whole by the Makefile's TIMED macro (quick's checks moved to _quick)",
+     "class": "within",
+     "why": "Brings these targets into the phase record; 'everything measured'."
+    },
+    {
+     "id": "page-sessions",
+     "summary": "Page sessions write write/check lines from the runner, booked under their task directly since no Bash run holds them",
+     "class": "within",
+     "why": "Detached work that was invisible is now measured and attributed rather than left loose."
+    },
+    {
+     "id": "reader-categories-and-columns",
+     "summary": "where_time/columns.rs books each phase to compile, hook suites, map generation, tests, gate, docs or review; containers book none; Split carves categories in a fixed order so parallel suites count once; both tables gain hook suites and map generation columns; a session-less test phase is now counted loose",
+     "class": "within",
+     "why": "The GM asked to know where time goes, 'especially for compiling, running tests, and generating maps'; the new columns and no-double-count carving serve exactly that."
+    },
+    {
+     "id": "lint-format-no-category",
+     "summary": "lint (clippy) and format (rustfmt) phases booked to no phase category; their seconds stay in the holding run's own bucket as before; a lint's own build line still booked to compile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the split the readers give, not the measurement: the lines are written and the seconds remain counted in the run's FR-001 bucket, so nothing is invisible. Splitting clippy into compile vs tests is not possible without a seam inside one process, and rustfmt is neither, so booking either to compile or tests would misstate the very categories the GM wants to read; the literal alternative defeats the request's purpose (accurate knowledge of where time goes)."
+    },
+    {
+     "id": "verification-scope",
+     "summary": "Lines verified by real runs in the clone for map, cohort, record, quick, page session and hook suites; make preflight and make done's gate phases shown by unit tests (runstats/tests.rs) alone until a make done runs",
+     "class": "within",
+     "why": "The writers for those steps are implemented as asked; this is how their working is shown, not a reduction of what is measured, and the plan states it plainly rather than claiming a run."
+    },
+    {
+     "id": "overhead-and-pool-rebuild",
+     "summary": "Measurement overhead kept negligible (one door call per hooks-test, none added for gate phases, one in-process append per map step); the pool crate edit moves Mode A maps' build id so each is redrawn once to the same rules",
+     "class": "within",
+     "why": "Consequences of measuring map steps, stated and measured; no map behavior changed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T154": {
+   "section_sha256": "f549fcc3e1cf16e486d10a88af8f9171ade9073d2eb69edefc9633b753765f53",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T154-verdict",
+     "summary": "The trial's verdict: do not build. The gate (make done / make land) runs no plain `rust test` build; coverage already answers for the plain run (449 T111 keep_tests, 451 T57 unit_tests_only), so the candidate saves 0 min.",
+     "class": "within",
+     "why": "The task was a trial (measure first) on whether a plain test build could be dropped where coverage runs the same tests. Finding it already dropped and saying so is the green exit, measured by recipe reads and Phase lines with no build line under done/land but the counting crates'. It answers the GM's 'how much time are we spending on recompiling things' and narrows nothing."
+    },
+    {
+     "id": "T154-keep-counting-build",
+     "summary": "The counting build (test-counters on pool, phases, mode_a) is kept, not dropped: it runs 13 tests the default build does not and is the counters-inert check's job.",
+     "class": "within",
+     "why": "The candidate was to drop a build where coverage runs the SAME tests. The counting build does not run the same tests (counted 59/54, 339/335, 134/130), so it is outside the candidate by its own terms. Keeping it keeps an existing check working and does not narrow what was asked."
+    },
+    {
+     "id": "T154-builder-builds-not-pursued",
+     "summary": "The builders' own `make rust-test` builds (61.1 of the window's 75.7 build machine-minutes) are outside the gate; whether they could share the coverage build is not measured here and nothing is proposed.",
+     "class": "within",
+     "why": "T154's question is the gate's build. Stating where the rest of the build time sits, and declining to propose a change on an unmeasured premise, keeps to the trial form and to the measure-first rule. The time is already measured by the Phase lines (FR-003), so 'everything measured' is not narrowed. Whether to file a follow-up on builder builds is scheduling, not a fidelity question for this section."
+    },
+    {
+     "id": "T154-figures-side-by-side",
+     "summary": "The task line's 78 / 54 machine-minutes and this window's 122 / 121 are given side by side, not reconciled, because the task line's method is not recorded.",
+     "class": "within",
+     "why": "A presentation choice about a premise that does not decide the verdict (the verdict rests on the recipes read and on no plain build Phase line in the gate). Both figures carry a date and a method or say that none is recorded. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T154-method-gate-steps-not-make-done",
+     "summary": "The cold run used `scripts/gates/l7r-gate.sh rust <step>` in the gate's order in a detached worktree, not `make done`, so that the trial commits no run record.",
+     "class": "within",
+     "why": "A choice of measuring method that keeps the trial from committing. It measures the same phases, and the worktree and its 19 GB target directory were removed afterwards. Not a narrowing."
+    },
+    {
+     "id": "T154-found-and-left-T159",
+     "summary": "A fresh tree's coverage run is red on rust/mode_a (armory test reads two .gitignored generated SVGs, NotFound). Not fixed here; filed as T159, ordered to land before T148.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a check that refuses good work in a new tree), so leaving it unfixed in this task is a narrowing and is ruled on. It is legitimate: the section is a trial that changes no code, the defect is not dropped but filed as T159 with a stated reason and a stated order ('lands before T148', the first task that builds in fresh trees, so the defect cannot bite before it is fixed), which meets FR-009's form. Fix-as-we-go asks that a step's known defects be fixed before the next step begins, and that order does exactly that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T155": {
+   "section_sha256": "c3cf5e24746b9ad06cb0cfe04f95026d6d42025d90a282457bc2bb847a8df9fb",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T155-D1 trial form",
+     "summary": "T155 is run as a trial: measure a landing's duplicate build and two candidates (sccache, building at the clone's path), no code changed.",
+     "class": "within",
+     "why": "Measuring where the time goes is performance work by FR-013 and the GM's 2026-11-20 and 2026-11-22 words ('we want everything measured so we know where our time goes, especially for compiling'). Measuring before building narrows nothing."
+    },
+    {
+     "id": "T155-D2a sccache not built",
+     "summary": "Verdict (a): no content-keyed compilation cache is built, because it hit 0 times across the two paths, coverage units are uncacheable under it, and 0.13 has no base-directory option.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's own goal (Approach item 1: a landing compiles nothing the clone already compiled) is left unmet by this candidate, so it is a narrowing; but the candidate is measured to be physically unable to deliver: 0 hits at the second path, every coverage unit 'multiple input files', and even with a base-directory option the ceiling is rlibs only, bought with CARGO_INCREMENTAL=0 in every builder's loop, which would slow the loop the GM asked to speed. Physically impossible as it stands, not merely awkward."
+    },
+    {
+     "id": "T155-D2b same-path build not built",
+     "summary": "Verdict (b): the landing is not built at the clone's path in the clone's target directory, because mtime freshness across two trees reuses the clone's build of a different copy - a red tree passed cover clean.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from (a). Building it would defeat the request's own purpose: the GM asked for performance improvements and for enforcement that is real, and a landing whose tests run the clone builders' code instead of the commit's is a check that passes bad work - a defect, measured on a deliberate hazard (red probe passes at the clone's path, fails in its own directory). The saving it offers is exactly the units it can reuse wrongly. Refusing a change that weakens the gate is not carving out a case contrary to what was asked."
+    },
+    {
+     "id": "T155-D3 no follow-up filed",
+     "summary": "The residual duplicate (the l7r-rust tool binary rebuilt per target directory, 0.66 min on pair 1 when a gate crate moved; pair 2's 5.15 ceiling, partly the setup's hand edit) is judged too little and too narrow for a follow-up; none is proposed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a measured cost, not a defect: no map reads wrong, no check passes bad work or refuses good work. FR-013 orders performance work first; it does not oblige filing every measured residue, and the GM's request asks for numbers to decide on, which this trial gives with methods. The 5.15 is reachable only through sccache with an option it lacks plus incremental off everywhere (D2a), so it is not an open route. The figures are recorded, so the call can be revisited."
+    },
+    {
+     "id": "T155-D4 Text-file-busy defect deferred",
+     "summary": "pool's maps::tests::the_launcher_runs_the_gate_script failing 'Text file busy' under load is left unfixed in this trial, filed as T160, to land before T148.",
+     "class": "within",
+     "why": "A defect (a gate red on a test that is not broken) found by the trial, deferred in FR-009's own form: why not here (a trial changes no engine code), its filed id (T160) and its order ('lands before T148', the task whose side-by-side gates would raise the race). FR-009 is the spec's provision for exactly this; nothing in the request requires a measurement task to fix a defect it stumbled on in another crate."
+    },
+    {
+     "id": "T155-D5 constraints listed",
+     "summary": "Constraints: the trial form, FR-013, kept results keyed by contents and seeded by land-alone.sh, constitution XIII, and 'a copied cache is no answer' attributed to the GM's 2026-11-22 words.",
+     "class": "within",
+     "why": "The constraint decides nothing here: no candidate examined or excluded is a copied cache, and the heading's own premise (fingerprints carry absolute paths) makes a copied target directory moot. Note for the author: 'a copied cache is no answer' is a reading of the GM accepting the session's unquoted points ('your points about reusing the same build cache ... are well taken'), not his words; labeling it G overstates it, but it narrows nothing in this section."
+    },
+    {
+     "id": "T155-D6 order, exits, budget",
+     "summary": "After 451 T154, before any build follow-up (none proposed); green exit = measurement recorded with its verdict; red exit = set down with an arbiter-ask; budget one landing.",
+     "class": "within",
+     "why": "Ordering and exits of a measurement task; nothing the request or spec constrains is narrowed."
+    },
+    {
+     "id": "T155-D7 scratch cleanup, apt package kept",
+     "summary": "Scratch worktrees, their target directories, the sccache directory and server removed; the apt sccache package stays installed, recorded.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 purpose is that disk is not eaten 'without us realizing it'; the large artifacts (target directories, cache) were removed and checked, and the package left is recorded, so it does not gut that purpose. Aside: since the verdict is not to use sccache, removing the package would be the tidier end."
+    },
+    {
+     "id": "T155-D8 part B red-gate owed",
+     "summary": "Part B answers a red-gate preflight owed by another builder's make done; arbiter ruled continue; nothing of T155's refused.",
+     "class": "within",
+     "why": "Procedure record with the arbiter's continue; decides nothing about scope."
+    },
+    {
+     "id": "T155-D9 performance classification",
+     "summary": "T155 is classed performance work under FR-013, verdict nothing to build.",
+     "class": "within",
+     "why": "FR-013 counts measurement of where time goes as performance work for ordering."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T156": {
+   "section_sha256": "3313b35c5424f6ca19923f4ceb46c34ccba8e9fa71eac779cd4cfc1267bf6e46",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T156-a",
+     "summary": "builder_brief reads the feature number and every task id before the description's first colon, words between allowed; a range T289-T300 is each member at its first id's width; a backwards, lettered or wider-than-SPAN range reads as its two ends.",
+     "class": "within",
+     "why": "A defect fix in this feature's rolling-dispatch tooling (451 T88, the bundling the GM asked for 2026-11-22, T141): the Stop hook miscounted five live builders. Fixing a known bug as found is the standing rule; a malformed range kept to its two ends is the prior behavior, not a narrowing of anything asked."
+    },
+    {
+     "id": "T156-b",
+     "summary": "A running agent whose description names a landing before its colon, or whose prompt's first line runs make land (not land-tooling/land-stop), is a lander; free_slot names no task-start while one runs. A landing brief naming neither reads as no lander, failing toward a visibly named start.",
+     "class": "within",
+     "why": "Carries the arbiter's ruling ask:set-down-449-mid-landing (no task-start while a landing runs) into the hook. The residual case (an unrecognizable landing brief) is backed by (c)'s process check for any landing actually running in the clone, and fails toward a named start the session can see rather than a hidden hold; the ruling binds the session's conduct, which a named suggestion does not override. No requested behavior is cut."
+    },
+    {
+     "id": "T156-c",
+     "summary": "A landing process in this clone or its -land worktree (l7r-gate land without --stop, or land-alone.sh), found by walking /proc (L7R_PROC_ROOT in tests), also holds the slots; the few lines of the land crate's landing_pids shape are re-read here rather than imported.",
+     "class": "within",
+     "why": "Same ruling, enforced on the process rather than the brief; where the code lives is design, not fidelity."
+    },
+    {
+     "id": "T156-d",
+     "summary": "next_independent skips a running builder's own tasks, including bundle members never task-started, so none is named the next start.",
+     "class": "within",
+     "why": "A defect found while testing and fixed in the task (fix as we go); it makes the hook's start-next correct for the bundles the GM asked for."
+    },
+    {
+     "id": "T156-SPAN",
+     "summary": "SPAN = 200, a CONVENTION past the widest bundle seen (twelve).",
+     "class": "within",
+     "why": "A labeled convention bounding range expansion; it narrows nothing asked, and a range beyond it keeps the old two-ends reading."
+    },
+    {
+     "id": "T156-exits",
+     "summary": "Green on make rust-test CRATE=rust/guard/shared, its cover, lint, format and the hook suite; red recorded and the task set down, a cannot-be-done claim ruled through make arbiter-ask; red-first tests for the three new cases.",
+     "class": "within",
+     "why": "Verification of the fix itself; enforcement of the requested behavior, not unrequested scope."
+    },
+    {
+     "id": "T156-found-and-left",
+     "summary": "Nothing left: the one defect found (range members named as next start) is fixed here.",
+     "class": "within",
+     "why": "No defect is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T151 (make ledger-owed traced no check-wave unit to the session that ran it: 35 impl-drift passes of 449 T249's re-check stayed owed after the session's write and refused every landing)",
+    "### T151 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "the trace and the reply (THE FIX)",
+     "summary": "rows.rs finds a check-wave unit's transcript under <session>/subagents/workflows/<run>/, names its session as the directory above subagents/workflows/<run>/, and takes its reply and label from the run's journal.jsonl result line",
+     "class": "within",
+     "why": "This is the defect the task line names (no wave unit traced to its session, 35 passes owed and refusing every landing), fixed by the measured route; a hand-dispatched pass's tracing is unchanged."
+    },
+    {
+     "id": "THE VERDICT CELL (parity)",
+     "summary": "a wave pass's verdict cell is read from its reply by verdict_of, as a hand-dispatched pass's is, not from the journal's verdict field",
+     "class": "within",
+     "why": "Keeps the one existing rule for every row; nothing in the request or task line asks for a second source of verdicts, and the outcome matches the session's existing hand-dispatched impl-drift rows."
+    },
+    {
+     "id": "THE COST CELLS (accepted limitation)",
+     "summary": "costing (settle::settled via cost::subagent_files) is not taught the wave directory, so a wave pass keeps the hook's logged cost cells rather than cells recomputed from its finished transcript",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task is the trace: a session's write must answer its own wave units so they stop refusing landings. Since a row answers a pass by its cost cells (feature 371), recomputing them would make the ~342 wave passes already answered owed again and refuse landings, which defeats the task's own stated purpose. No wrong outcome is shown in the logged cells (they are the cells the pass is keyed by), so this leaves a difference, not a known defect, and no task needs filing."
+    },
+    {
+     "id": "THE WRITE and the 40 plan reviews",
+     "summary": "the session's write records the 35 wave units and 6 later passes with WRITE= text that names where each check's verdict is recorded; 40 MODE 4 plan reviews stay owed as their landings' own (451 T105)",
+     "class": "within",
+     "why": "Applies the existing by-hand write rule (451 T105) unchanged; the acted-on text is stated true for the later passes, and the done measure (only MODE 4 plan reviews owed) is what the fix is for."
+    },
+    {
+     "id": "the pins",
+     "summary": "a_sessions_write_takes_its_own_check_wave_units_from_the_journal and a_wave_unit_s_text_result_is_its_reply, red before the fix",
+     "class": "within",
+     "why": "Tests whose only effect is to make the fix happen and keep happening; enforcement of the task, not added scope."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "the task is classed a defect fix, not performance work",
+     "class": "within",
+     "why": "It is a review-ledger trace defect blocking landings, not a time measurement or speed change; FR-013's ordering is not narrowed by it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T151 (make ledger-owed traced no check-wave unit to the session that ran it: 35 impl-drift passes of 449 T249's re-check stayed owed after the session's write and refused every landing)",
+    "### T151 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE FIX (trace and reply)",
+     "summary": "rows.rs gains wave_transcript to find <session>/subagents/workflows/<run>/agent-<id>.jsonl; session_of names a wave unit's session as the directory above subagents/workflows/<run>/; filled_row takes a wave unit's reply and label from its run's journal.jsonl result line and fills the same cells a hand-dispatched pass gets.",
+     "class": "within",
+     "why": "This is the task line itself: a session's make ledger-owed WRITE= must trace and write the check-wave units it ran so they stop refusing every landing. The mechanism follows from the measured transcript and journal layout; nothing asked is narrowed."
+    },
+    {
+     "id": "THE VERDICT CELL (parity)",
+     "summary": "A wave pass's verdict cell is read from its reply by verdict_of, as a hand-dispatched pass's is, not from the journal's verdict field; an all-IN-STEP impl-drift reply therefore reads 'findings' exactly as the session's hand-dispatched impl-drift rows already do.",
+     "class": "within",
+     "why": "Within the task: the task line is the trace, and choosing which source fills the verdict cell, the same reading verdict_of already gives every hand-dispatched pass, narrows nothing asked. Whether an all-IN-STEP impl-drift reply reading 'findings' is a wrong outcome: the bundle shows none. The plan's own constraint is that a row answers a pass by its check and cost cells (feature 371), and nothing in the bundle shows a consumer of the verdict cell that would refuse, let through or misreport work because of it. It is a pre-existing reading of verdict_of shared by the hand-dispatched rows, not introduced here; on what the bundle shows it is a difference, not a defect left (constitution XIV), so it needs no ruling."
+    },
+    {
+     "id": "THE COST CELLS (accepted limitation)",
+     "summary": "settle::settled / cost::subagent_files are not taught the wave directory, so a wave pass keeps the hook's logged cost cells rather than cells recomputed from its finished transcript; the size of any difference was not measured.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Wave passes' costing is left unlike hand-dispatched passes' (the hook's logged cells kept, not recomputed). Applying the fuller treatment would defeat the task's own stated purpose, concretely: by the plan's constraint a row answers a pass by its check and cost cells (feature 371), so recomputing the cells of the ~342 wave passes already answered (377 logged, 35 owed, measured 2026-11-22 by grep -c) would make those rows answer nothing and put the passes back on the owed list, refusing landings again - the exact failure T151 exists to end. The plan states the unmeasured size of the gap openly rather than claiming it is nil."
+    },
+    {
+     "id": "THE WRITE",
+     "summary": "The fix's binary runs make ledger-owed WRITE= with the session's earlier rows' full text, writing 41 rows (the 35 impl-drift units and 6 later passes), with the 40 plan reviews refused as their landings' own per 451 T105; after, only 40 MODE 4 plan reviews are owed.",
+     "class": "within",
+     "why": "Carrying out the task's goal under an existing rule (451 T105); the WRITE= text names where every check's verdict is recorded, so applying it to the 6 later passes asserts nothing false. Nothing asked is narrowed."
+    },
+    {
+     "id": "pins and order",
+     "summary": "Red-first pins in ledger_passes/tests.rs (a wave unit written for its own session from the journal, another session's unit left owed) and rows/tests.rs (text result, structured result without text, no result, no agent), shown red before the fix; then crate tests, lint, cover, closing checks.",
+     "class": "within",
+     "why": "Tests whose only effect is to make the requested fix happen and keep happening; enforcement of the task, not added scope."
+    },
+    {
+     "id": "search space",
+     "summary": "transcript( callers under rust/gate/crates/reviews found by grep; trace.rs unit_prompt already walks the wave directory and is unchanged; cost::transcript itself is not changed.",
+     "class": "within",
+     "why": "The enumeration states its search space; because the fix adds wave_transcript in rows.rs rather than changing cost::transcript, callers of cost::transcript outside that crate are not affected. No narrowing."
+    },
+    {
+     "id": "Found and left? none",
+     "summary": "The plan declares no defect found and left.",
+     "class": "within",
+     "why": "Consistent with the rulings above: the verdict-cell reading is shown by the bundle to be a difference with no wrong outcome, and the cost-cell limitation is a stated, purpose-justified choice, not a defect shown. Nothing else in the block is left."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T151 is declared not performance work for FR-013's scheduling.",
+     "class": "within",
+     "why": "The task repairs the review ledger's tracing of check-wave passes to their session so landings stop being refused; it neither improves a measured time nor is the time-measurement work the GM asked on 2026-11-20 to count as performance. The declaration takes nothing from FR-013."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T153 (only the checks' wrapper and make land wrote Phase lines, so the hook suites, make map, record, quick, preflight, the gate's seeds and counters, make cohort and the page sessions were invisible to make where-time)",
+    "### T153 Approach (checklist part A)",
+    "### T153 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "one-form",
+     "summary": "One Phase-line form (phase_row in event_log_hooks.rs) that both existing writers (rustc, land) now build and every new writer appends with append_row_with, the hooks' writer; the run's make target read one way via shared::make::outermost_goal",
+     "class": "within",
+     "why": "FR-003 and D4 name the hooks' line writer as the one writer; unifying the two hand-built forms serves that and adds no behavior the GM did not ask for."
+    },
+    {
+     "id": "writers-in-process-or-door",
+     "summary": "A step is measured in process where a Rust tool already runs it, otherwise through one shell door (l7r-gate measure event-log phase)",
+     "class": "within",
+     "why": "A mechanism choice for writing every phase's line; it measures the same steps either way and leaves none out."
+    },
+    {
+     "id": "hook-suites",
+     "summary": "hookrun.sh leaves each job's span and make hooks-test hands them to the door in one call, so closing-checks and make done write theirs too",
+     "class": "within",
+     "why": "Exactly the GM's 2026-11-22 ask: 'make the hook suites measure their time so they won't be missing'."
+    },
+    {
+     "id": "make-map-mtime-cut",
+     "summary": "make map writes a cached line on a hit, and on a draw generate/render/page cut at each staged artifact's mtime rather than engines reporting their own timings",
+     "class": "within",
+     "why": "The GM asked that generating maps be measured; the draw is measured whole, start to end, so map-generation time is captured. The generate/render/page sub-split is detail the request did not ask for, so reading it off mtimes narrows nothing requested and needs no ruling."
+    },
+    {
+     "id": "gate-phases",
+     "summary": "measure runstats phase|phase-pre, already called per gate phase by make done, writes the Phase line in process (seeds, counters-inert, preflight, static, format, reference, hooks-test)",
+     "class": "within",
+     "why": "Serves 'everything measured', in particular tests and map generation (seeds, reference) inside the gate; no process added."
+    },
+    {
+     "id": "recipes-timed",
+     "summary": "make record, quick, preflight, cohort timed whole by a TIMED Makefile macro (quick's checks moved to _quick)",
+     "class": "within",
+     "why": "Each was named as invisible and the GM asked for everything measured; the _quick move is the means of timing quick whole."
+    },
+    {
+     "id": "page-sessions",
+     "summary": "Page sessions write write/check Phase lines from the runner, booked under their task directly since no Bash run holds them",
+     "class": "within",
+     "why": "'Everything measured'; booking a detached session under its task rather than leaving it loose keeps its time where it went."
+    },
+    {
+     "id": "reader-categories",
+     "summary": "where_time/columns.rs books each line to compile, hook suites, map generation, tests, gate, docs or review; containers (landing end, static, hooks-test, a lint) to none so nothing counts twice; Split carves in a fixed order so parallel suites count once; hook suites and map generation columns added to both tables and feature-report",
+     "class": "within",
+     "why": "FR-005 reads the phase lines into columns; the GM named compiling, tests and generating maps and asked that hook suites not be missing, so the two added columns serve the request directly, and the no-double-count rule keeps the figures true."
+    },
+    {
+     "id": "lint-format-uncategorized",
+     "summary": "lint (clippy) and format (rustfmt) phases are booked to no category; their seconds stay in the holding run's bucket as before; a lint's own build line, where kept, is still compile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This departs from the accepted spec's D4, which read literally books every non-build phase, lint and format included, as tests. Applying D4 literally would defeat the request's own purpose. The GM wants to 'know where our time goes, especially for compiling, running tests', and booking clippy's type-check and compile work plus rustfmt as tests would inflate the test figure and shrink the compile figure, the two numbers he named. Nothing goes unmeasured: the lines are written, and the seconds stay booked to the holding run's bucket, so 'everything measured' still holds. The two items are judged separately. Clippy is compile and lint in one process with no seam, so neither single label is true of it. rustfmt is neither compile nor tests. Both hold."
+    },
+    {
+     "id": "sessionless-test-loose",
+     "summary": "A session-less test phase is now counted as loose time where it was ignored before",
+     "class": "within",
+     "why": "A reader change that stops dropping measured time, which serves 'everything measured so we know where our time goes'."
+    },
+    {
+     "id": "performance-work",
+     "summary": "T153 counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM 2026-11-20, request.md, quoted verbatim and accurately: a measurement task 'counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "mode-a-redraw",
+     "summary": "The pool crate's build id moves, so each Mode A map is drawn again once to the same rules; no engine edited",
+     "class": "within",
+     "why": "A stated consequence of editing the pool crate, not a scope decision. Maps are redrawn under unchanged rules, and no exactness standard applies."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T153 (only the checks' wrapper and make land wrote Phase lines, so the hook suites, make map, record, quick, preflight, the gate's seeds and counters, make cohort and the page sessions were invisible to make where-time)",
+    "### T153 Approach (checklist part A)",
+    "### T153 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "one-form",
+     "summary": "One Phase line form (phase_row in event_log_hooks.rs) built in one place, every writer appending through append_row_with, the hooks' writer; the make target read one way via shared::make::outermost_goal",
+     "class": "within",
+     "why": "FR-003/D4 name the hooks' line writer as the one writer; a shared form is how every step the GM named gets measured the same way."
+    },
+    {
+     "id": "writers-in-process-or-door",
+     "summary": "A step's line is written in process where a Rust tool already runs it, otherwise through one shell door (l7r-gate measure event-log phase)",
+     "class": "within",
+     "why": "A mechanism choice for 'we want everything measured'; it drops no step."
+    },
+    {
+     "id": "hook-suites",
+     "summary": "hookrun.sh leaves each job's span and make hooks-test hands them to the door in one call, so closing-checks and make done write theirs too",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-22 words: 'make the hook suites measure their time so they won't be missing'."
+    },
+    {
+     "id": "map-phases-at-mtimes",
+     "summary": "make map's generate/render/page cut at each staged artifact's mtime, a CACHED hit its own line, rather than the engines timing themselves",
+     "class": "within",
+     "why": "Map generation is measured, as the GM asked ('especially ... generating maps'), with its steps split; how the cut is taken is method, not scope. The plan labels the reading and the reason (engine self-timing would move every map's engine id)."
+    },
+    {
+     "id": "gate-phases",
+     "summary": "measure runstats phase|phase-pre, already called per gate phase by make done, writes the Phase line in process",
+     "class": "within",
+     "why": "Measures the gate's seeds, counters, preflight, reference etc., which the task names as invisible; no process added."
+    },
+    {
+     "id": "recipes-timed",
+     "summary": "make record, quick, preflight, cohort timed whole by the Makefile's TIMED macro (quick's checks moved to _quick)",
+     "class": "within",
+     "why": "Brings these targets into the phase record; 'everything measured'."
+    },
+    {
+     "id": "page-sessions",
+     "summary": "Page sessions write write/check lines from the runner, booked under their task directly since no Bash run holds them",
+     "class": "within",
+     "why": "Detached work that was invisible is now measured and attributed rather than left loose."
+    },
+    {
+     "id": "reader-categories-and-columns",
+     "summary": "where_time/columns.rs books each phase to compile, hook suites, map generation, tests, gate, docs or review; containers book none; Split carves categories in a fixed order so parallel suites count once; both tables gain hook suites and map generation columns; a session-less test phase is now counted loose",
+     "class": "within",
+     "why": "The GM asked to know where time goes, 'especially for compiling, running tests, and generating maps'; the new columns and no-double-count carving serve exactly that."
+    },
+    {
+     "id": "lint-format-no-category",
+     "summary": "lint (clippy) and format (rustfmt) phases booked to no phase category; their seconds stay in the holding run's own bucket as before; a lint's own build line still booked to compile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the split the readers give, not the measurement: the lines are written and the seconds remain counted in the run's FR-001 bucket, so nothing is invisible. Splitting clippy into compile vs tests is not possible without a seam inside one process, and rustfmt is neither, so booking either to compile or tests would misstate the very categories the GM wants to read; the literal alternative defeats the request's purpose (accurate knowledge of where time goes)."
+    },
+    {
+     "id": "verification-scope",
+     "summary": "Lines verified by real runs in the clone for map, cohort, record, quick, page session and hook suites; make preflight and make done's gate phases shown by unit tests (runstats/tests.rs) alone until a make done runs",
+     "class": "within",
+     "why": "The writers for those steps are implemented as asked; this is how their working is shown, not a reduction of what is measured, and the plan states it plainly rather than claiming a run."
+    },
+    {
+     "id": "overhead-and-pool-rebuild",
+     "summary": "Measurement overhead kept negligible (one door call per hooks-test, none added for gate phases, one in-process append per map step); the pool crate edit moves Mode A maps' build id so each is redrawn once to the same rules",
+     "class": "within",
+     "why": "Consequences of measuring map steps, stated and measured; no map behavior changed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T154 (a TRIAL, measured 2026-11-22: the gate was said to compile each crate three times and run its tests twice - the Phase lines of 2026-11-22 01:00-08:15 gave a test build of 73 min, a coverage build of 78 min and clippy 54 min of machine time against about 45 min of tests run)",
+    "### T154 Approach (checklist part A)",
+    "### T154 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T154-verdict",
+     "summary": "The trial's verdict: do not build. The gate (make done / make land) runs no plain `rust test` build; coverage already answers for the plain run (449 T111 keep_tests, 451 T57 unit_tests_only), so the candidate saves 0 min.",
+     "class": "within",
+     "why": "The task was a trial (measure first) on whether a plain test build could be dropped where coverage runs the same tests. Finding it already dropped and saying so is the green exit, measured by recipe reads and Phase lines with no build line under done/land but the counting crates'. It answers the GM's 'how much time are we spending on recompiling things' and narrows nothing."
+    },
+    {
+     "id": "T154-keep-counting-build",
+     "summary": "The counting build (test-counters on pool, phases, mode_a) is kept, not dropped: it runs 13 tests the default build does not and is the counters-inert check's job.",
+     "class": "within",
+     "why": "The candidate was to drop a build where coverage runs the SAME tests. The counting build does not run the same tests (counted 59/54, 339/335, 134/130), so it is outside the candidate by its own terms. Keeping it keeps an existing check working and does not narrow what was asked."
+    },
+    {
+     "id": "T154-builder-builds-not-pursued",
+     "summary": "The builders' own `make rust-test` builds (61.1 of the window's 75.7 build machine-minutes) are outside the gate; whether they could share the coverage build is not measured here and nothing is proposed.",
+     "class": "within",
+     "why": "T154's question is the gate's build. Stating where the rest of the build time sits, and declining to propose a change on an unmeasured premise, keeps to the trial form and to the measure-first rule. The time is already measured by the Phase lines (FR-003), so 'everything measured' is not narrowed. Whether to file a follow-up on builder builds is scheduling, not a fidelity question for this section."
+    },
+    {
+     "id": "T154-figures-side-by-side",
+     "summary": "The task line's 78 / 54 machine-minutes and this window's 122 / 121 are given side by side, not reconciled, because the task line's method is not recorded.",
+     "class": "within",
+     "why": "A presentation choice about a premise that does not decide the verdict (the verdict rests on the recipes read and on no plain build Phase line in the gate). Both figures carry a date and a method or say that none is recorded. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T154-method-gate-steps-not-make-done",
+     "summary": "The cold run used `scripts/gates/l7r-gate.sh rust <step>` in the gate's order in a detached worktree, not `make done`, so that the trial commits no run record.",
+     "class": "within",
+     "why": "A choice of measuring method that keeps the trial from committing. It measures the same phases, and the worktree and its 19 GB target directory were removed afterwards. Not a narrowing."
+    },
+    {
+     "id": "T154-found-and-left-T159",
+     "summary": "A fresh tree's coverage run is red on rust/mode_a (armory test reads two .gitignored generated SVGs, NotFound). Not fixed here; filed as T159, ordered to land before T148.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a check that refuses good work in a new tree), so leaving it unfixed in this task is a narrowing and is ruled on. It is legitimate: the section is a trial that changes no code, the defect is not dropped but filed as T159 with a stated reason and a stated order ('lands before T148', the first task that builds in fresh trees, so the defect cannot bite before it is fixed), which meets FR-009's form. Fix-as-we-go asks that a step's known defects be fixed before the next step begins, and that order does exactly that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T155 (a TRIAL, measured 2026-11-22: the task line said a landing recompiles what the clone already built - 117 min of make land phases over 6 landings, 28 of them coverage builds - because cargo's fingerprints carry each tree's absolute path, so the landing worktree's own target directory cannot use the clone's builds)",
+    "### T155 Approach (checklist part A)",
+    "### T155 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T155 part B (2026-11-23T01:16Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T155-D1 trial form",
+     "summary": "T155 is run as a trial: measure a landing's duplicate build and two candidates (sccache, building at the clone's path), no code changed.",
+     "class": "within",
+     "why": "Measuring where the time goes is performance work by FR-013 and the GM's 2026-11-20 and 2026-11-22 words ('we want everything measured so we know where our time goes, especially for compiling'). Measuring before building narrows nothing."
+    },
+    {
+     "id": "T155-D2a sccache not built",
+     "summary": "Verdict (a): no content-keyed compilation cache is built, because it hit 0 times across the two paths, coverage units are uncacheable under it, and 0.13 has no base-directory option.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's own goal (Approach item 1: a landing compiles nothing the clone already compiled) is left unmet by this candidate, so it is a narrowing; but the candidate is measured to be physically unable to deliver: 0 hits at the second path, every coverage unit 'multiple input files', and even with a base-directory option the ceiling is rlibs only, bought with CARGO_INCREMENTAL=0 in every builder's loop, which would slow the loop the GM asked to speed. Physically impossible as it stands, not merely awkward."
+    },
+    {
+     "id": "T155-D2b same-path build not built",
+     "summary": "Verdict (b): the landing is not built at the clone's path in the clone's target directory, because mtime freshness across two trees reuses the clone's build of a different copy - a red tree passed cover clean.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from (a). Building it would defeat the request's own purpose: the GM asked for performance improvements and for enforcement that is real, and a landing whose tests run the clone builders' code instead of the commit's is a check that passes bad work - a defect, measured on a deliberate hazard (red probe passes at the clone's path, fails in its own directory). The saving it offers is exactly the units it can reuse wrongly. Refusing a change that weakens the gate is not carving out a case contrary to what was asked."
+    },
+    {
+     "id": "T155-D3 no follow-up filed",
+     "summary": "The residual duplicate (the l7r-rust tool binary rebuilt per target directory, 0.66 min on pair 1 when a gate crate moved; pair 2's 5.15 ceiling, partly the setup's hand edit) is judged too little and too narrow for a follow-up; none is proposed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a measured cost, not a defect: no map reads wrong, no check passes bad work or refuses good work. FR-013 orders performance work first; it does not oblige filing every measured residue, and the GM's request asks for numbers to decide on, which this trial gives with methods. The 5.15 is reachable only through sccache with an option it lacks plus incremental off everywhere (D2a), so it is not an open route. The figures are recorded, so the call can be revisited."
+    },
+    {
+     "id": "T155-D4 Text-file-busy defect deferred",
+     "summary": "pool's maps::tests::the_launcher_runs_the_gate_script failing 'Text file busy' under load is left unfixed in this trial, filed as T160, to land before T148.",
+     "class": "within",
+     "why": "A defect (a gate red on a test that is not broken) found by the trial, deferred in FR-009's own form: why not here (a trial changes no engine code), its filed id (T160) and its order ('lands before T148', the task whose side-by-side gates would raise the race). FR-009 is the spec's provision for exactly this; nothing in the request requires a measurement task to fix a defect it stumbled on in another crate."
+    },
+    {
+     "id": "T155-D5 constraints listed",
+     "summary": "Constraints: the trial form, FR-013, kept results keyed by contents and seeded by land-alone.sh, constitution XIII, and 'a copied cache is no answer' attributed to the GM's 2026-11-22 words.",
+     "class": "within",
+     "why": "The constraint decides nothing here: no candidate examined or excluded is a copied cache, and the heading's own premise (fingerprints carry absolute paths) makes a copied target directory moot. Note for the author: 'a copied cache is no answer' is a reading of the GM accepting the session's unquoted points ('your points about reusing the same build cache ... are well taken'), not his words; labeling it G overstates it, but it narrows nothing in this section."
+    },
+    {
+     "id": "T155-D6 order, exits, budget",
+     "summary": "After 451 T154, before any build follow-up (none proposed); green exit = measurement recorded with its verdict; red exit = set down with an arbiter-ask; budget one landing.",
+     "class": "within",
+     "why": "Ordering and exits of a measurement task; nothing the request or spec constrains is narrowed."
+    },
+    {
+     "id": "T155-D7 scratch cleanup, apt package kept",
+     "summary": "Scratch worktrees, their target directories, the sccache directory and server removed; the apt sccache package stays installed, recorded.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 purpose is that disk is not eaten 'without us realizing it'; the large artifacts (target directories, cache) were removed and checked, and the package left is recorded, so it does not gut that purpose. Aside: since the verdict is not to use sccache, removing the package would be the tidier end."
+    },
+    {
+     "id": "T155-D8 part B red-gate owed",
+     "summary": "Part B answers a red-gate preflight owed by another builder's make done; arbiter ruled continue; nothing of T155's refused.",
+     "class": "within",
+     "why": "Procedure record with the arbiter's continue; decides nothing about scope."
+    },
+    {
+     "id": "T155-D9 performance classification",
+     "summary": "T155 is classed performance work under FR-013, verdict nothing to build.",
+     "class": "within",
+     "why": "FR-013 counts measurement of where time goes as performance work for ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T156 (the Stop hook's free-slot count misread five live builder descriptions on 2026-11-22, the session's note)",
+    "### T156 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T156-a",
+     "summary": "builder_brief reads the feature number and every task id before the description's first colon, words between allowed; a range T289-T300 is each member at its first id's width; a backwards, lettered or wider-than-SPAN range reads as its two ends.",
+     "class": "within",
+     "why": "A defect fix in this feature's rolling-dispatch tooling (451 T88, the bundling the GM asked for 2026-11-22, T141): the Stop hook miscounted five live builders. Fixing a known bug as found is the standing rule; a malformed range kept to its two ends is the prior behavior, not a narrowing of anything asked."
+    },
+    {
+     "id": "T156-b",
+     "summary": "A running agent whose description names a landing before its colon, or whose prompt's first line runs make land (not land-tooling/land-stop), is a lander; free_slot names no task-start while one runs. A landing brief naming neither reads as no lander, failing toward a visibly named start.",
+     "class": "within",
+     "why": "Carries the arbiter's ruling ask:set-down-449-mid-landing (no task-start while a landing runs) into the hook. The residual case (an unrecognizable landing brief) is backed by (c)'s process check for any landing actually running in the clone, and fails toward a named start the session can see rather than a hidden hold; the ruling binds the session's conduct, which a named suggestion does not override. No requested behavior is cut."
+    },
+    {
+     "id": "T156-c",
+     "summary": "A landing process in this clone or its -land worktree (l7r-gate land without --stop, or land-alone.sh), found by walking /proc (L7R_PROC_ROOT in tests), also holds the slots; the few lines of the land crate's landing_pids shape are re-read here rather than imported.",
+     "class": "within",
+     "why": "Same ruling, enforced on the process rather than the brief; where the code lives is design, not fidelity."
+    },
+    {
+     "id": "T156-d",
+     "summary": "next_independent skips a running builder's own tasks, including bundle members never task-started, so none is named the next start.",
+     "class": "within",
+     "why": "A defect found while testing and fixed in the task (fix as we go); it makes the hook's start-next correct for the bundles the GM asked for."
+    },
+    {
+     "id": "T156-SPAN",
+     "summary": "SPAN = 200, a CONVENTION past the widest bundle seen (twelve).",
+     "class": "within",
+     "why": "A labeled convention bounding range expansion; it narrows nothing asked, and a range beyond it keeps the old two-ends reading."
+    },
+    {
+     "id": "T156-exits",
+     "summary": "Green on make rust-test CRATE=rust/guard/shared, its cover, lint, format and the hook suite; red recorded and the task set down, a cannot-be-done claim ruled through make arbiter-ask; red-first tests for the three new cases.",
+     "class": "within",
+     "why": "Verification of the fix itself; enforcement of the requested behavior, not unrequested scope."
+    },
+    {
+     "id": "T156-found-and-left",
+     "summary": "Nothing left: the one defect found (range members named as next start) is fixed here.",
+     "class": "within",
+     "why": "No defect is deferred."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T151 to T156, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

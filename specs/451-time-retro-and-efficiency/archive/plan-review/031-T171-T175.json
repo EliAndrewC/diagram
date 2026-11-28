@@ -1,0 +1,857 @@
+{
+ "blocks": {
+  "### T173 (<why: the finding or measurement that files it>)": {
+   "sha256": "c60a5e65842c8384d692ea026ed28156701db68b80f83d2e65cf361a3f6edb7f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T173 Approach (checklist part A)": {
+   "sha256": "70202d69bc869fe100b53964e41336fd99ad2781ee2622f1a33f4e3bba72f1a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T174 (observed 2026-11-23, 451 T170's census: 17 of the 58 corpus files of `make hooks-test HOOKS_ALL=1` empty, repo-safety's, shell-check's and source-block's among them; 451 T177's ranking: guard-file's notice on a Read of a guard file rendered by no suite)": {
+   "sha256": "14347e2b94c97d108f008b66e37e747d6c17c10ab378741aa4098fed4fc9ae58",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T174 Approach (checklist part A)": {
+   "sha256": "92c54a901be9ce8461c6629033e46bf2830fc826d2bb42421438934c8298d0ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T174 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "c270406bf8d2d3afa3d6fde16e13c2f6ed6be23795020b9722e75bd9f49fa557",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T175 (observed 2026-11-23: 451 T170's builder was refused every `rust/` edit in the clone by 449's building-reviews, which read the review tree `<clone>-review` since 451 T164; the guard log holds 20 engine-freeze refusals that day, all edits in the clone, 18 of them while every live review read the review tree, measured 2026-11-23 by `make guard-log GUARD=engine-freeze SINCE=2026-11-23` against each review transcript's first and last record and its prompt's `Review tree:` line, `/tmp/t175/firings.log`)": {
+   "sha256": "85510a86bf67d96926c3fc684afa5db5c20e2f6048c7a9efaf44e950d9c3d289",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T175 Approach (checklist part A)": {
+   "sha256": "3d6cc873cedf24f709de74678774747de8a9533b9b82b3e2d7976a8d63435da7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T175 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "e31088b446ac10dc7ab001d6223fd71c29c9e51ba0c016b2663ab2a1b8adb98b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T171": {
+   "section_sha256": "759418bb3f7bf358b94adf4c97eee1199a8e2d3f9fc97a3d4b4b8b7e3055089d",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T171-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted T171's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "f24c3b5cfab4ef0b69b485ac2c424348a834220b71a0d1a5dd964dcebf27d38e",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1",
+      "summary": "No time-window matcher ties a detached run (no harness ancestor, no launch line) to a builder; such a run still refuses the Stop.",
+      "class": "within",
+      "why": "Nothing in request.md or the spec asks for detached runs to be attributed by timing. A run with no pid ancestry and no launch line cannot be tied to a builder except by a guess. The class the matcher would serve was measured as gone: 8 detached verify-gate refusals before T164, none after, and 1 refusal since T164, which was the race fix 1 fixes (dated and with its method). FR-008 (spec-index) refuses any other backgrounded make or cargo run. Leaving these runs refused keeps the guard's existing behavior and narrows nothing the GM asked for."
+     },
+     {
+      "id": "D2-type",
+      "summary": "An unnamed depth-1 agent holds a builder slot only if its type is general-purpose; typed check agents (round-arbiter, spec-fidelity) take no slot.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "This narrows the task line's words ('an agent whose description names no task still counts as a builder'). The exception is already implied by the accepted spec: FR-006 defines a builder as 'an agent dispatched with a task's brief, not a defined review agent'. The block should have cited FR-006; it cites only T88. The purpose test also holds. Fix 2 exists so the slot count sees the builders it missed. Counting a round arbiter as a builder would read three builders running while a builder slot was free, and let the turn end over the empty slot that T88's rolling dispatch exists to fill. The rule's reach past the two types named (every other non-general-purpose type) rests on the measurement: on the 69 slot refusals, the unnamed running depth-1 agents were general-purpose 37 times and round-arbiter 11 times, and no other type appeared (dated, /tmp/t171/slots.py)."
+     },
+     {
+      "id": "D2-depth",
+      "summary": "Only agents at spawnDepth 1 (dispatched by the session itself) are counted as unnamed builders; a builder's own sub-agents take no slot.",
+      "class": "within",
+      "why": "A builder is an agent the session dispatched: FR-006's 'an agent dispatched with a task's brief', and the block's T88 reading. A depth-2 agent works inside its builder's slot. Counting it separately would overcount and refuse nothing wrongly removed. This narrows nothing in the request or the spec."
+     },
+     {
+      "id": "fix1-session",
+      "summary": "A run whose launch line names another session is Status::Session; this session's turn closes and the context line names the owning session.",
+      "class": "within",
+      "why": "The guard's job is that a session does not end its turn over a run it started. A refusal over another session's run is a wrong outcome (block item 12), and fixing it serves FR-013's faster builders' loop. The run is still named in the context line, and nothing in request.md or the spec asks that a session be held over another's run."
+     },
+     {
+      "id": "fix1-hops",
+      "summary": "still_running follows an unnamed agent up parentAgentId at most HOPS=4, a labeled CONVENTION; a sub-agent's run is waited on while it runs and judged detached once it stops.",
+      "class": "within",
+      "why": "This is a bound on an implementation walk, labeled a CONVENTION with its reason. It decides nothing the request or the spec settles."
+     },
+     {
+      "id": "fix1-gone",
+      "summary": "Procs::gone drops a pid whose stat is gone or a zombie's, so a run that ended while /proc was read is no run.",
+      "class": "within",
+      "why": "This fixes a measured defect: 2 refusals with 'output in (no file)', dated, with their method. A wrong refusal is removed and no watched run is released."
+     },
+     {
+      "id": "fix3-once",
+      "summary": "An unchanged refusal is said in full once, then as one line 'still: <first 8 words> - unchanged since HH:MM' that is still exit 2. It is said in full again on a changed text, on a block back after a passing Stop, with no session id, or when the record cannot be read or written.",
+      "class": "within",
+      "why": "This serves the GM's 2026-11-23 ask: 'could we accomplish the same thing with no loss of fidelity and fewer tokens?' The repeat is still a refusal, so it does the same thing. The text appears in full whenever it differs from what this session was last told, and on every failure path. The repeat stands only while that same full text was already said to this session in this block, and the block measures a 32% cut in the Stop blocks' characters. On what the block states, no fidelity is lost."
+     },
+     {
+      "id": "fix3-8words",
+      "summary": "The one-line repeat carries the refusal's first 8 words, a labeled CONVENTION.",
+      "class": "within",
+      "why": "This is the form of the summary line, labeled with its reason. It narrows nothing the request or the spec asks for."
+     }
+    ],
+    "verdict": "CLEAR"
+   }
+  },
+  "T172": {
+   "section_sha256": "1656c4a408e950d182d38a0a20133f2e50748cf3ca492dbd4cb4891cb8a11c94",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T165-withdraw",
+     "summary": "T165 withdrawn as done by T175: a review naming a review tree holds only edits inside it, one naming none and the rolls hold the clone; nothing built.",
+     "class": "within",
+     "why": "T165's ask, as the block quotes it, is to narrow the engine freeze to reviews with no review-tree snapshot (and the rolls). The block shows the snapshot and the prompt line T175 keys on are written under one condition (a non-empty --commit), so T175's rule is that ask; it is backed by a measured live case (449 T383's two reviews kept PASS at the tree's key while five rust/ files were edited, no engine-freeze firing since T175 landed against 20 before it, 2026-11-23) and the engine-freeze suite green. Withdrawing a task whose ask is already met drops nothing that was asked."
+    },
+    {
+     "id": "T166-carry-bundle",
+     "summary": "review-tree.sh carries its bundle to reviews owed --check-declared by L7R_VERIFY_STARTED, read in place of the clone's shared active-task mark; a gate built before reads the mark as before; no feature dir or no task falls back to the mark's rule.",
+     "class": "within",
+     "why": "The measurement restates T166's cause (the shared mark moved by another session's set-down or task-start, not a worktree lacking the mark) and the fix targets that cause, so verify judges the bundle it verifies. The environment-variable route and the fallbacks preserve existing behavior for old gates and undeclared cases; nothing the task asked for is dropped. Pinned red-first by a crate test and a suite case."
+    },
+    {
+     "id": "T166-first-task",
+     "summary": "Of the carried bundle, only the FIRST task counts as the started one (a CONVENTION); a declared line naming only the bundle's second task is refused.",
+     "class": "within",
+     "why": "The first-task rule already exists: make task-start marks a bundle by its first task, 449 T238 round 2 answers a line naming the started task, and the landing's holding box reads the same. T166 changes WHERE the started task is read from (the carried bundle, not the shared mark), not WHICH task counts; neither request.md nor FR-013 says which of a bundle's tasks answers. The block's 'algorithmically easier' remark is not the ground for this class - the ground is that verify and the landing keep one rule, so verify does not pass what the landing then refuses."
+    },
+    {
+     "id": "T166-found-and-left-owed-listing",
+     "summary": "reviews owed's listing in the review tree reads the active features without the carried bundle; left unfixed.",
+     "class": "within",
+     "why": "No wrong outcome is measured: the three review commits observed (36fa41f4cc, 48103d14e6, d80ff6a0dd, git show --stat, 2026-11-23) each carry their feature's tasks.md, and the pointer names one feature for all builders. A hypothetical gap with no wrong outcome is not a defect (constitution XIV v2.36.0), so leaving it is not a narrowing and FR-009's defect-deferral form does not reach it."
+    },
+    {
+     "id": "T172-calibrated-bound",
+     "summary": "test-l7r-guard.sh's locked case times the no-binary path three times and bounds the locked call at three times the slowest, never under the old 1 s (a CONVENTION from CLAUDE.md's calibration loop); the live wrapper untouched.",
+     "class": "within",
+     "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T174": {
+   "section_sha256": "bbb9baf1e6ade015ba759e12e670af187cb537cbc65197d1b3d878a31031ec84",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 suites render through the hook path",
+     "summary": "case_tables::drive names the process's corpus in the test thread's env, so repo-safety, shell-check, source-block and house-style's table render into the corpus via cli -> protocol::run -> keep",
+     "class": "within",
+     "why": "Carries the task's approach and the GM's 2026-11-23 ask that hook output be held for brevity and fidelity; a message no suite renders is held by nothing. Enforcement of what was asked."
+    },
+    {
+     "id": "D2 guard-file, set-down, finished-run fixtures",
+     "summary": "guard-file's case reads a guard script so the generic Read notice renders; set-down section 4b and finished-run section 4 add the missing forms",
+     "class": "within",
+     "why": "Brings unrendered forms of hook messages to the check; no behavior change."
+    },
+    {
+     "id": "D3 Stop printed lines not held",
+     "summary": "A Stop's printed line (finished-run's 'do not end a turn', 'is still going', the dead-producer waiter) reaches no model per T170's request blobs, so it is not held; the Refuse answers (hookErrors) are held",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own stated purpose, 'That amount of output consumes tokens': text that reaches no model consumes none, and the premise carries a measurement (T170's request blobs). The Refuse answers that do reach a model are held and priced."
+    },
+    {
+     "id": "D4 30 keys BASELINE by break-even, root Makefile notice left",
+     "summary": "Only guard-file's Read notice clears T177's break-even (31,680 characters a key, measured 2026-11-23) and is reviewed; the other 30 newly held wordings are recorded BASELINE with their per-session figure; the root Makefile's notice keeps the cut clause (64 x 436 = 27,904 < 31,680)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's review-of-each-hook idea was put as a question ('Maybe even ... What do you think?'); his purpose is fewer tokens with no loss of fidelity. A review costing more than the wording costs a session defeats that purpose (0 to 10,368 a session per family against 31,680 or more a review). Each wording stays held to its budget and none changes, so no fidelity is lost."
+    },
+    {
+     "id": "D5 BASELINE door",
+     "summary": "make guard-messages VERDICT=BASELINE BY=<figure> records a wording no row holds; refuses a held key, an over-budget wording, a why with no number",
+     "class": "within",
+     "why": "The only means of 'record the rest BASELINE with its figure'; its refusals enforce exactly that. Red first."
+    },
+    {
+     "id": "D6 guard-file notice cut",
+     "summary": "375 -> 312 characters after message-check BREVITY FAIL, FIDELITY PASS; round 2 PASS; superseded FAIL row deleted by key",
+     "class": "within",
+     "why": "Exactly the GM's 'same thing with no loss of fidelity and fewer tokens', reviewed by the subagent check he named."
+    },
+    {
+     "id": "D7 house-style refusal fix",
+     "summary": "Reported words set in code spans; refusal rewritten 977 -> 477 after a FIDELITY FAIL, round 2 PASS; superseded rows deleted",
+     "class": "within",
+     "why": "A defect found in-task (a wrong outcome: the push refused the record) fixed red first, fix as we go; the rewrite reviewed for fidelity."
+    },
+    {
+     "id": "D8 found-and-left: per-word keys; corpus test under guard-cases.sh",
+     "summary": "house-style and shell-check wordings keyed per quoted word; the corpus test would fail if a suite named it under guard-cases.sh, none does",
+     "class": "within",
+     "why": "Neither is a wrong outcome: the same fixed wording keyed by a different quoted word, re-keyed together by one cut; no suite names the test. Differences, not defects."
+    },
+    {
+     "id": "D9 perf class and order",
+     "summary": "[perf] under FR-013; after T170/T177, before T173 and T22; reds left are T179's uncommitted work",
+     "class": "within",
+     "why": "Less context a builder call reads is builders'-loop performance work under FR-013; the reds lie in another task's files, not a decision T174 makes."
+    },
+    {
+     "id": "D10 the corpus files still empty, accounted",
+     "summary": "Re-census 2026-11-23: 15 of 61 corpus files empty; 13 are suites of scripts no hook runs (settings.json's one hook command, l7r-hook, calls none; their output reaches a model as a command result; sync-with-main's reaches a session only via clone-sync's notice, which its own suite renders); 2 are guards that build no Answer (event-log, stall-watchdog)",
+     "class": "within",
+     "why": "Round 1's finding (the 14 left unaccounted) is met by a dated, method-labeled observation covering every empty file. Judged by class: the 13 are not hooks, the GM's noun ('A lot of our hooks have somewhat long output'), so leaving them is outside the request rather than an exception to it, and pulling command output in would be unrequested scope; the 2 guards say nothing, so nothing is left unheld. The census moved 58 -> 61 files and 14 -> 15 empties between T170 and today; all 15 of today's are named, so the extra one is accounted."
+    },
+    {
+     "id": "D11 the task line's premise restated",
+     "summary": "finished-run's and set-down's Stop blocks do not bypass protocol::run (both answer Refuse through decide; their corpus files were not empty); what those suites missed were three forms, filled by D2",
+     "class": "within",
+     "why": "A premise restated to what was measured (corpus lines, record rows by guard, check2.out), with the actual gap still fixed; nothing asked is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T175": {
+   "section_sha256": "1f1c0454c2a3550f029e63886cb3fc91ebadb6d67886638f636c2dd24e8afc63",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T175-1 review-tree filter",
+     "summary": "engine_freeze_hooks reads each live review's tree from its dispatch prompt's `Review tree:` line and holds an edit only when the review names no tree or the edit's realpath lies inside that tree (component-wise compare, so <clone> is not a prefix of <clone>-review).",
+     "class": "within",
+     "why": "Performance work under FR-013 (it makes the builders' loop faster, a kind FR-013 names; the GM 2026-11-20 'in general priotitize performance improvements'). It does not narrow feature 429's rule as the block states it ('no edit the review reads'): a review reading its own worktree at a commit cannot read a clone edit, and an edit inside the review tree is still refused, so the rule's purpose is untouched. Grounded on measured refusals (18 of 20 on 2026-11-23)."
+    },
+    {
+     "id": "T175-2 malformed or absent tree refuses",
+     "summary": "A tree that is not absolute or has no .git counts as no tree, so today's refuse rule applies.",
+     "class": "within",
+     "why": "Fails closed; keeps the existing guard's behavior wherever the new premise cannot be confirmed."
+    },
+    {
+     "id": "T175-3 filter before engine-edit question",
+     "summary": "The tree filter runs before the l7r-gate engine-edit question, so a clone edit under tree-reading reviews starts no process.",
+     "class": "within",
+     "why": "Implementation order that removes work; no behavior beyond T175-1."
+    },
+    {
+     "id": "T175-4 rolls unchanged",
+     "summary": "Feature 444's rolls run in the clone and keep freezing it, including under tree-reading reviews.",
+     "class": "within",
+     "why": "Leaves an existing rule exactly as it is; a roll does read the clone, so the freeze still serves its purpose."
+    },
+    {
+     "id": "T175-5 refusal words unchanged",
+     "summary": "The refusal text is unchanged (only the holders listed differ), so no message-check is owed.",
+     "class": "within",
+     "why": "No new hook output; nothing in the 2026-11-23 hook-output request is touched."
+    },
+    {
+     "id": "T175-6 docs/guards.md row via handoff",
+     "summary": "The docs/guards.md row is applied by the session once 451 T170 lands, its text held in a handoff file.",
+     "class": "within",
+     "why": "An ordering choice to avoid colliding with T170's edit of the same file; the row is written, not dropped."
+    },
+    {
+     "id": "T175-7 performance classification",
+     "summary": "Filed as performance work (Performance work? yes).",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work, which is what T175 does."
+    },
+    {
+     "id": "T175-8 second-run red outside T175",
+     "summary": "The second crate-checks run's one red, make_only_hooks::tests::an_escape_is_recorded_with_its_reason, is recorded as outside T175 (green in the first run and under cover); Found and left says none.",
+     "class": "within",
+     "why": "No decision narrows the request: a single intermittent red in an unrelated test on a shared container is not shown to be a wrong outcome, and the task reports it rather than hiding it. Aside: if it recurs it is a check refusing good work and should be filed."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T171 (observed 2026-11-23: the coordinator's Stops were refused again and again in the same words - 268 make-run refusals (\"A MAKE RUN THIS SESSION STARTED IS STILL GOING\") in its session, each stored twice in its transcript, which the task line counted as about 550, and 134 set-down refusals since 2026-11-20, measured 2026-11-23 (the session transcript's `stop_hook_summary` records of `l7r-guard`, `/tmp/t171/stops.py`); most named a builder's own gate or a builder the slot count did not see)",
+    "### T171 Approach (checklist part A)",
+    "### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "fix1-session",
+     "summary": "A run whose launch line names another session is Status::Session: this session's turn closes and the context line names that session.",
+     "class": "within",
+     "why": "The finished-run guard's subject is a run THIS session started and must watch (GM 2026-09-12); a run another session launched is that session's to watch, and its own Stop hook holds its turn while the run lives. Refusing this session over it was a wrong outcome (the task line's observation), so the fix is a defect fix under fix-as-we-go, not a carve-out from the 2026-09-12 rule."
+    },
+    {
+     "id": "fix1-hops",
+     "summary": "still_running follows an agent the transcript never names up its meta's parentAgentId, at most HOPS 4 (a CONVENTION): waited on while that sub-agent runs, judged as a detached run once it stopped.",
+     "class": "within",
+     "why": "Extends T85's reading of a builder's run (its launch line's by) to a builder's own sub-agent; a live starter still holds the wait and a stopped one falls back to the existing detached-run judgment, so nothing the guard protects is dropped. The hop bound is a labeled convention."
+    },
+    {
+     "id": "fix1-gone",
+     "summary": "Procs::gone drops a pid whose stat is gone or a zombie's, asked after its status.",
+     "class": "within",
+     "why": "A run that ended while /proc was read is no run; the 05:45:17 refusal over an ended make quick was a wrong outcome (a check refusing good work). A defect fix."
+    },
+    {
+     "id": "fix2-unnamed",
+     "summary": "builders() returns named, unnamed and landing; a session-dispatched (spawnDepth 1) general-purpose agent whose brief does not read as a builder's holds its own slot, listed as 'a builder (no task named)'.",
+     "class": "within",
+     "why": "This is the task line's own rule (an agent whose description names no task still counts as a builder); 7 of 69 slot refusals read a slot free with three builders running, a wrong outcome. Serves FR-013's builders' loop."
+    },
+    {
+     "id": "D1",
+     "summary": "No time-window matcher ties a detached run to a builder; detached runs stay judged as today.",
+     "class": "within",
+     "why": "It preserves the GM 2026-09-12 rule that a run nothing watches is never abandoned instead of guessing; the refusals the matcher would have removed (a builder's detached verify gate) are a class T164 removed (verify gates run in <clone>-review, which live_runs(clone) does not own) and no_poll refuses the rest. The outcome the task asked for - no refusal over a builder's own gate - is reached without it."
+    },
+    {
+     "id": "D2",
+     "summary": "The unnamed-builder slot rule is narrowed to general-purpose agents at spawnDepth 1, so a typed check agent (round-arbiter, spec-fidelity) takes no slot.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The accepted spec already draws this line: FR-006 defines a builder as 'an agent dispatched with a task's brief, not a defined review agent', so the narrowing is of the task line's wording, not of the spec or the request. Applied literally, the task line would count a running round arbiter as a builder and read three builders with a slot truly free, letting the turn end with the empty slot T88 exists to fill - the literal rule defeats its own purpose, concretely. Seam checked by class: the mechanism excludes every non-general-purpose type, broader than 'a type the project defines', but the measured population of unnamed depth-1 agents is only general-purpose (37) and round-arbiter (11), and nothing in the bundle shows a builder dispatched under any other type."
+    },
+    {
+     "id": "fix3-once",
+     "summary": "An unchanged refusal of the set-down and finished-run guards is said in full once, then as one line 'still: <first 8 words> - unchanged since HH:MM', still exit 2; a changed text, a block back after a passing Stop, a missing session id or an unreadable record says it in full.",
+     "class": "within",
+     "why": "Answers the GM 2026-11-23 ask, 'accomplish the same thing with no loss of fidelity and fewer tokens'. Fidelity held on the block's rules: the one line is emitted only when an identical full text (equal SHA-256) was said earlier in the same unbroken run of refusals, the refusal itself is unchanged (exit 2), and every failure path falls back to the full text. Limiting it to the two guards measured as repeaters is within: the GM asked a question about hook output, not for every guard to be changed in this task. The 8 words, the UTC stamp and the record path are labeled conventions."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T171 (observed 2026-11-23: the coordinator's Stops were refused again and again in the same words - 268 make-run refusals (\"A MAKE RUN THIS SESSION STARTED IS STILL GOING\") in its session, each stored twice in its transcript, which the task line counted as about 550, and 134 set-down refusals since 2026-11-20, measured 2026-11-23 (the session transcript's `stop_hook_summary` records of `l7r-guard`, `/tmp/t171/stops.py`); most named a builder's own gate or a builder the slot count did not see)",
+    "### T171 Approach (checklist part A)",
+    "### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "No time-window matcher ties a detached run (no harness ancestor, no launch line) to a builder; such a run still refuses the Stop.",
+     "class": "within",
+     "why": "Nothing in request.md or the spec asks for detached runs to be attributed by timing. A run with no pid ancestry and no launch line cannot be tied to a builder except by a guess. The class the matcher would serve was measured as gone: 8 detached verify-gate refusals before T164, none after, and 1 refusal since T164, which was the race fix 1 fixes (dated and with its method). FR-008 (spec-index) refuses any other backgrounded make or cargo run. Leaving these runs refused keeps the guard's existing behavior and narrows nothing the GM asked for."
+    },
+    {
+     "id": "D2-type",
+     "summary": "An unnamed depth-1 agent holds a builder slot only if its type is general-purpose; typed check agents (round-arbiter, spec-fidelity) take no slot.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the task line's words ('an agent whose description names no task still counts as a builder'). The exception is already implied by the accepted spec: FR-006 defines a builder as 'an agent dispatched with a task's brief, not a defined review agent'. The block should have cited FR-006; it cites only T88. The purpose test also holds. Fix 2 exists so the slot count sees the builders it missed. Counting a round arbiter as a builder would read three builders running while a builder slot was free, and let the turn end over the empty slot that T88's rolling dispatch exists to fill. The rule's reach past the two types named (every other non-general-purpose type) rests on the measurement: on the 69 slot refusals, the unnamed running depth-1 agents were general-purpose 37 times and round-arbiter 11 times, and no other type appeared (dated, /tmp/t171/slots.py)."
+    },
+    {
+     "id": "D2-depth",
+     "summary": "Only agents at spawnDepth 1 (dispatched by the session itself) are counted as unnamed builders; a builder's own sub-agents take no slot.",
+     "class": "within",
+     "why": "A builder is an agent the session dispatched: FR-006's 'an agent dispatched with a task's brief', and the block's T88 reading. A depth-2 agent works inside its builder's slot. Counting it separately would overcount and refuse nothing wrongly removed. This narrows nothing in the request or the spec."
+    },
+    {
+     "id": "fix1-session",
+     "summary": "A run whose launch line names another session is Status::Session; this session's turn closes and the context line names the owning session.",
+     "class": "within",
+     "why": "The guard's job is that a session does not end its turn over a run it started. A refusal over another session's run is a wrong outcome (block item 12), and fixing it serves FR-013's faster builders' loop. The run is still named in the context line, and nothing in request.md or the spec asks that a session be held over another's run."
+    },
+    {
+     "id": "fix1-hops",
+     "summary": "still_running follows an unnamed agent up parentAgentId at most HOPS=4, a labeled CONVENTION; a sub-agent's run is waited on while it runs and judged detached once it stops.",
+     "class": "within",
+     "why": "This is a bound on an implementation walk, labeled a CONVENTION with its reason. It decides nothing the request or the spec settles."
+    },
+    {
+     "id": "fix1-gone",
+     "summary": "Procs::gone drops a pid whose stat is gone or a zombie's, so a run that ended while /proc was read is no run.",
+     "class": "within",
+     "why": "This fixes a measured defect: 2 refusals with 'output in (no file)', dated, with their method. A wrong refusal is removed and no watched run is released."
+    },
+    {
+     "id": "fix3-once",
+     "summary": "An unchanged refusal is said in full once, then as one line 'still: <first 8 words> - unchanged since HH:MM' that is still exit 2. It is said in full again on a changed text, on a block back after a passing Stop, with no session id, or when the record cannot be read or written.",
+     "class": "within",
+     "why": "This serves the GM's 2026-11-23 ask: 'could we accomplish the same thing with no loss of fidelity and fewer tokens?' The repeat is still a refusal, so it does the same thing. The text appears in full whenever it differs from what this session was last told, and on every failure path. The repeat stands only while that same full text was already said to this session in this block, and the block measures a 32% cut in the Stop blocks' characters. On what the block states, no fidelity is lost."
+    },
+    {
+     "id": "fix3-8words",
+     "summary": "The one-line repeat carries the refusal's first 8 words, a labeled CONVENTION.",
+     "class": "within",
+     "why": "This is the form of the summary line, labeled with its reason. It narrows nothing the request or the spec asks for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T171 (observed 2026-11-23: the coordinator's Stops were refused again and again in the same words - 268 make-run refusals (\"A MAKE RUN THIS SESSION STARTED IS STILL GOING\") in its session, each stored twice in its transcript, which the task line counted as about 550, and 134 set-down refusals since 2026-11-20, measured 2026-11-23 (the session transcript's `stop_hook_summary` records of `l7r-guard`, `/tmp/t171/stops.py`); most named a builder's own gate or a builder the slot count did not see)",
+    "### T171 Approach (checklist part A)",
+    "### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T171-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted T171's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T171"
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T173 (<why: the finding or measurement that files it>)",
+    "### T173 Approach (checklist part A)",
+    "### T178 (<why: the finding or measurement that files it>)",
+    "### T178 Approach (checklist part A)",
+    "### T181 (<why: the finding or measurement that files it>)",
+    "### T181 Approach (checklist part A)",
+    "### T203 (withdrawn: built in T199, its section the T198, T199, T200 bundle's; MODE 4 round 2, 2026-11-23, ruled its deferral NOT LEGITIMATE)",
+    "### T206 (<why: the finding or measurement that files it>)",
+    "### T206 Approach (checklist part A)",
+    "### T208 (<why: the finding or measurement that files it>)",
+    "### T208 Approach (checklist part A)",
+    "### T223 (the round arbiter's process-fault, `ask:mixed-build-241-claims`, 2026-11-24: a green landing of 449 T423 T424 T418 T422 was refused at the push because T197's rule owed its unchanged doc claims a full impl-drift, the only route offered)",
+    "### T223 Approach (checklist part A)",
+    "### T224 (<why: the finding or measurement that files it>)",
+    "### T224 Approach (checklist part A)",
+    "(removed) ### T100 (<why: the finding or measurement that files it>)",
+    "(removed) ### T165 (<why: the finding or measurement that files it>)",
+    "(removed) ### T165 Approach (checklist part A)",
+    "(removed) ### T166 (<why: the finding or measurement that files it>)",
+    "(removed) ### T166 Approach (checklist part A)",
+    "(removed) ### T179 (<why: the finding or measurement that files it>)",
+    "(removed) ### T179 Approach (checklist part A)#2",
+    "(removed) ### T182 (<why: the finding or measurement that files it>)",
+    "(removed) ### T182 Approach (checklist part A)#2",
+    "(removed) ### T215 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T223-walk",
+     "summary": "A landing alone reads each mixed-build row at the newest non-mixed row in dev/claims-index.json's history, walked from HEAD as far as checked_at reaches (landing.rs read).",
+     "class": "within",
+     "why": "Unchanged from the text judged CLEAR. It is the arbiter's tooling_fix for ask:mixed-build-241-claims: re-judge a mixed answer with the landing's clean build instead of owing it a full impl-drift."
+    },
+    {
+     "id": "T223-withdrawn-fields",
+     "summary": "Only the fields a triage writes are withdrawn. The verdict, note, date, claim and rests stay.",
+     "class": "within",
+     "why": "Unchanged. It keeps the 14 edited claims' verdicts, as the ruling's 'what' says."
+    },
+    {
+     "id": "T223-owed-rules",
+     "summary": "A mixed clear or triage owes what claims-owed's ordinary rules find between the answer before and the tree. With no clean answer in the walk it owes impl-drift, failing closed. A full impl-drift verdict is never re-owed.",
+     "class": "within",
+     "why": "Unchanged. This is the ruling's steps (2) to (4), and it matches the convergence rule that only a claim-changing edit re-owes a check."
+    },
+    {
+     "id": "T223-barracks-exception",
+     "summary": "New bullet: a verdict that a mixed build cleared again before the index was next committed fails closed. The walk's row predates the verdict, so the claim is owed in full. That is the barracks row, 1 of 242.",
+     "class": "within",
+     "why": "It does not narrow the request or the ruling. The barracks claim was rewritten, and a claim-changing edit re-owes a check under the request's own convergence rule. The row's last answer is a mixed clear, not the verdict, so the ruling's step (4) sends it to impl-drift as a claim the clean build cannot reproduce. It owes more, not less. The table's count of 1 is the same as in the text judged CLEAR; this bullet only explains it."
+    },
+    {
+     "id": "T223-route",
+     "summary": "The route is L7R_LAND_ALONE=1 make claims-triage. No command is added. claims-owed and the push name the count, the files and the command.",
+     "class": "within",
+     "why": "Unchanged. It honors ask:t197-rejudge-verb's 'no withdrawal verb'."
+    },
+    {
+     "id": "T223-section-words-history",
+     "summary": "section_words also reads the kept words' own history, so removed words are found rather than forced.",
+     "class": "within",
+     "why": "Unchanged. It serves the GM's 'fix all 6' T210/T215 rule and the convergence rule."
+    },
+    {
+     "id": "T223-stamp-build",
+     "summary": "clear_page_moves now stamps its build. Fixed here.",
+     "class": "within",
+     "why": "A defect fixed in the task, which is the default."
+    },
+    {
+     "id": "T223-done-measured",
+     "summary": "Done, measured: 191 passed and 3 failed red-first. After: 196 passed, with two new tests (the kept words' history, and the page-move clear's stamp).",
+     "class": "within",
+     "why": "Enforcement tests of the requested fix. 191+3=194; 194+2=196."
+    },
+    {
+     "id": "T223-perf-no",
+     "summary": "Performance work: no.",
+     "class": "within",
+     "why": "Unchanged and consistent with FR-013's definition."
+    },
+    {
+     "id": "T223-defer-T224",
+     "summary": "Found and left: a withdrawn row that owes nothing keeps its mixed stamp until a landing's triage writes the withdrawal, and claims-owed prompts none. Past the walk the claim would owe a full check. Not fixed here; filed as T224, lands before T22.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A defect is left, not a difference: the block's own Effect is that the gate would owe a full impl-drift for a claim nothing changed for. That is the wrong outcome item 12 names ('the gate answered wrongly') and that the GM's convergence talk asked fixed 'before we do literally anything else'. The arbiter chose a tooling fix over route B because the tool 'should do every time' what a hand comparison does once. The deferral rests on this one landing's triage writing the 242 withdrawals, which is exactly the once-only route the ruling refused. The stated why rebuts only one fix, a write from claims-owed. It does not show that a fix inside T223 is impossible (for example, the landing's or the triage's own write path writing the withdrawal of a row that owes nothing, or a read that does not lose the clean row past the walk). Fitting the existing design is not a legitimating ground. The order 'lands before T22' ties the fix to nothing this bundle shows: not the 449 landing that T223 itself precedes, and not the walk's reach. Fix-as-we-go asks each known defect to be fixed before the next step. T203's heading records a deferral in this same feature ruled NOT LEGITIMATE and built in its task. Required: fix it in T223. Failing that, order T224 so that it demonstrably lands before any mixed-build row can age past the walk unwritten (before the next landing that can record a mixed answer), with a why showing the fix cannot be made in T223."
+    },
+    {
+     "id": "placeholder-sections",
+     "summary": "T173, T178, T181, T206, T208 and T224's sections are unfilled templates, and T203 is a bare withdrawn heading.",
+     "class": "within",
+     "why": "They decide nothing."
+    },
+    {
+     "id": "removed-blocks",
+     "summary": "Removed by hand: the T100, T165, T166, T182 and T179 sections and the T215 performance checklist.",
+     "class": "within",
+     "why": "Each removed block, in earlier.md, was an unfilled template that carried no decision. Removing it drops nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T173 (<why: the finding or measurement that files it>)",
+    "### T173 Approach (checklist part A)",
+    "### T178 (<why: the finding or measurement that files it>)",
+    "### T178 Approach (checklist part A)",
+    "### T181 (<why: the finding or measurement that files it>)",
+    "### T181 Approach (checklist part A)",
+    "### T203 (withdrawn: built in T199, its section the T198, T199, T200 bundle's; MODE 4 round 2, 2026-11-23, ruled its deferral NOT LEGITIMATE)",
+    "### T206 (<why: the finding or measurement that files it>)",
+    "### T206 Approach (checklist part A)",
+    "### T208 (<why: the finding or measurement that files it>)",
+    "### T208 Approach (checklist part A)",
+    "### T223 (the round arbiter's process-fault, `ask:mixed-build-241-claims`, 2026-11-24: a green landing of 449 T423 T424 T418 T422 was refused at the push because T197's rule owed its unchanged doc claims a full impl-drift, the only route offered)",
+    "### T223 Approach (checklist part A)",
+    "(removed) ### T100 (<why: the finding or measurement that files it>)",
+    "(removed) ### T165 (<why: the finding or measurement that files it>)",
+    "(removed) ### T165 Approach (checklist part A)",
+    "(removed) ### T166 (<why: the finding or measurement that files it>)",
+    "(removed) ### T166 Approach (checklist part A)",
+    "(removed) ### T179 (<why: the finding or measurement that files it>)",
+    "(removed) ### T179 Approach (checklist part A)#2",
+    "(removed) ### T182 (<why: the finding or measurement that files it>)",
+    "(removed) ### T182 Approach (checklist part A)#2",
+    "(removed) ### T215 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T224 (<why: the finding or measurement that files it>)",
+    "(removed) ### T224 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T223-rebase-on-walk",
+     "summary": "In a landing alone, a mixed build's clear or triage is withdrawn and the claim is owed whatever claims-owed's ordinary rules find between the newest clean row in dev/claims-index.json's history (the walk) and the tree: nothing where the tree is back where that answer judged it, a triage where a section/page/code moved, a full check where the claim was rewritten or a rest lost.",
+     "class": "within",
+     "why": "This is the arbiter's tooling_fix for ask:mixed-build-241-claims: a mixed answer is re-judged by the landing's clean build, a mechanical clear first, and impl-drift is owed only where neither reproduces it. 'Owes nothing where the tree is where the clean answer judged it' is that mechanical re-derivation, and it matches the request's convergence rule that only a claim-changing edit re-owes a check (2026-11-23)."
+    },
+    {
+     "id": "T223-withdrawn-fields",
+     "summary": "Only the fields a triage writes are withdrawn (research, pages, section, code, core, reads, triaged, cleared, triage, build); verdict, note, date, claim and rests stay.",
+     "class": "within",
+     "why": "It withdraws exactly what the mixed build wrote and nothing the agent's judgment wrote. No requested behavior is dropped."
+    },
+    {
+     "id": "T223-fail-closed-no-walk",
+     "summary": "A mixed answer with no clean row in the walk, or whose claim has no row in a commit of the walk, is owed impl-drift.",
+     "class": "within",
+     "why": "Ruling step (4): impl-drift for what the clean build cannot reproduce. A missing baseline cannot be reproduced, so this sends more to impl-drift, not less."
+    },
+    {
+     "id": "T223-verdicts-kept",
+     "summary": "A full impl-drift verdict is never re-owed (verdict_row builds a row with no build stamp).",
+     "class": "within",
+     "why": "The ruling says it outright: 'The 14 edited claims keep their full impl-drift verdicts'."
+    },
+    {
+     "id": "T223-barracks-exception",
+     "summary": "A verdict recorded and then cleared again by a mixed build before the index was next committed is owed a full check (1 of 242, the barracks claim, rewritten).",
+     "class": "within",
+     "why": "It fails closed. The walk's clean row comes before the rewrite, so the clean build cannot reproduce the latest answer, and the ruling's step (4) sends exactly such a claim to impl-drift. It removes no case from the re-triage the GM's arbiter ordered; it adds one full check."
+    },
+    {
+     "id": "T223-route-rekey",
+     "summary": "The landing's first pass (claims rekey, run by land/cheap.rs) writes the withdrawal into the index it commits. Before that commit, L7R_LAND_ALONE=1 make claims-triage writes it, clears again what it can, and bundles the rest for the claims-triage agent. No command is added.",
+     "class": "within",
+     "why": "This is the changed passage. It does the step the earlier deferral (T224) put off, and the previous MODE 4 ruled that deferral NOT LEGITIMATE. It adds no verb, so ask:t197-rejudge-verb holds: that ruling forbade a separate REJUDGE verb for modal-triage marks, and here the withdrawal is the automatic effect of the landing's own existing pass, which the later ruling ask:mixed-build-241-claims ordered."
+    },
+    {
+     "id": "T223-outside-landing",
+     "summary": "Outside a landing the index is read as it stands.",
+     "class": "within",
+     "why": "The ruling's tooling_fix is scoped to Landing::mixed and landing-mode claims-owed/claims-triage. T197's mixed-build rule applies only to a landing alone, so leaving other runs as they are narrows nothing that was asked."
+    },
+    {
+     "id": "T223-section-words-history",
+     "summary": "section_words also reads the kept words' own history, for words that reached no commit of their document. A page's kept text stays per clone.",
+     "class": "within",
+     "why": "It carries out T210/T215 ('never forced where they can be found'). Keeping page texts per clone matches the answer recorded under the 2026-11-24 T215 heading of the request."
+    },
+    {
+     "id": "T223-stamp-build",
+     "summary": "Found and left: clear_page_moves never stamped its build. Fixed here (stamp_build).",
+     "class": "within",
+     "why": "A wrong outcome (the landing's check answers wrongly) is fixed in the task, which is the default the request's improvement 4 and FR-009 ask for."
+    },
+    {
+     "id": "T223-found-withdrawal-fixed",
+     "summary": "Found and left: a withdrawn row that owed nothing kept its mixed stamp. Now fixed here by claims rekey, and T224 is withdrawn.",
+     "class": "within",
+     "why": "The deferral that was ruled NOT LEGITIMATE is gone and the defect is fixed in this task. Nothing is left."
+    },
+    {
+     "id": "T223-perf-no",
+     "summary": "T223 is not tagged performance work.",
+     "class": "within",
+     "why": "It is a correctness fix of what a landing owes, ordered by the arbiter before the 449 landing re-runs. The tag only affects FR-013 scheduling, and the task is already built and ordered first, so it narrows nothing."
+    },
+    {
+     "id": "T203-withdrawn",
+     "summary": "T203's heading is withdrawn: built in T199, its section is the T198-T200 bundle's.",
+     "class": "within",
+     "why": "This follows the earlier MODE 4 ruling, which found T203's deferral NOT LEGITIMATE. The work is done, not dropped."
+    },
+    {
+     "id": "templates-T173-T178-T181-T206-T208",
+     "summary": "Open tasks' sections are still the empty template, unchanged since last judged.",
+     "class": "within",
+     "why": "They decide nothing. Their earlier BLOCKED came from the bundle (T223's deferral), not from their own text. make decide judges each one when it is filled."
+    },
+    {
+     "id": "removed-T100-T165-T166-T179-T182-T215-checklist",
+     "summary": "Empty-template sections and an empty T215 performance checklist are removed by hand.",
+     "class": "within",
+     "why": "Each removed text was a bare placeholder with no decision in it. Removing it narrows nothing that was asked."
+    },
+    {
+     "id": "removed-T224",
+     "summary": "T224 (the deferred withdrawal-stamp fix) is removed.",
+     "class": "within",
+     "why": "Its work is folded into T223 and fixed there, as the previous MODE 4 required. Nothing requested is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T174 (observed 2026-11-23, 451 T170's census: 17 of the 58 corpus files of `make hooks-test HOOKS_ALL=1` empty, repo-safety's, shell-check's and source-block's among them; 451 T177's ranking: guard-file's notice on a Read of a guard file rendered by no suite)",
+    "### T174 Approach (checklist part A)",
+    "### T174 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 suites render through the hook path",
+     "summary": "case_tables::drive names the process's corpus in the test thread's env, so repo-safety, shell-check, source-block and house-style's table render into the corpus via cli -> protocol::run -> keep",
+     "class": "within",
+     "why": "Carries the task's approach and the GM's 2026-11-23 ask that hook output be held for brevity and fidelity; a message no suite renders is held by nothing. Enforcement of what was asked."
+    },
+    {
+     "id": "D2 guard-file, set-down, finished-run fixtures",
+     "summary": "guard-file's case reads a guard script so the generic Read notice renders; set-down section 4b and finished-run section 4 add the missing forms",
+     "class": "within",
+     "why": "Brings unrendered forms of hook messages to the check; no behavior change."
+    },
+    {
+     "id": "D3 Stop printed lines not held",
+     "summary": "A Stop's printed line (finished-run's 'do not end a turn', 'is still going', the dead-producer waiter) reaches no model per T170's request blobs, so it is not held; the Refuse answers (hookErrors) are held",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own stated purpose, 'That amount of output consumes tokens': text that reaches no model consumes none, and the premise carries a measurement (T170's request blobs). The Refuse answers that do reach a model are held and priced."
+    },
+    {
+     "id": "D4 30 keys BASELINE by break-even, root Makefile notice left",
+     "summary": "Only guard-file's Read notice clears T177's break-even (31,680 characters a key, measured 2026-11-23) and is reviewed; the other 30 newly held wordings are recorded BASELINE with their per-session figure; the root Makefile's notice keeps the cut clause (64 x 436 = 27,904 < 31,680)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's review-of-each-hook idea was put as a question ('Maybe even ... What do you think?'); his purpose is fewer tokens with no loss of fidelity. A review costing more than the wording costs a session defeats that purpose (0 to 10,368 a session per family against 31,680 or more a review). Each wording stays held to its budget and none changes, so no fidelity is lost."
+    },
+    {
+     "id": "D5 BASELINE door",
+     "summary": "make guard-messages VERDICT=BASELINE BY=<figure> records a wording no row holds; refuses a held key, an over-budget wording, a why with no number",
+     "class": "within",
+     "why": "The only means of 'record the rest BASELINE with its figure'; its refusals enforce exactly that. Red first."
+    },
+    {
+     "id": "D6 guard-file notice cut",
+     "summary": "375 -> 312 characters after message-check BREVITY FAIL, FIDELITY PASS; round 2 PASS; superseded FAIL row deleted by key",
+     "class": "within",
+     "why": "Exactly the GM's 'same thing with no loss of fidelity and fewer tokens', reviewed by the subagent check he named."
+    },
+    {
+     "id": "D7 house-style refusal fix",
+     "summary": "Reported words set in code spans; refusal rewritten 977 -> 477 after a FIDELITY FAIL, round 2 PASS; superseded rows deleted",
+     "class": "within",
+     "why": "A defect found in-task (a wrong outcome: the push refused the record) fixed red first, fix as we go; the rewrite reviewed for fidelity."
+    },
+    {
+     "id": "D8 found-and-left: per-word keys; corpus test under guard-cases.sh",
+     "summary": "house-style and shell-check wordings keyed per quoted word; the corpus test would fail if a suite named it under guard-cases.sh, none does",
+     "class": "within",
+     "why": "Neither is a wrong outcome: the same fixed wording keyed by a different quoted word, re-keyed together by one cut; no suite names the test. Differences, not defects."
+    },
+    {
+     "id": "D9 perf class and order",
+     "summary": "[perf] under FR-013; after T170/T177, before T173 and T22; reds left are T179's uncommitted work",
+     "class": "within",
+     "why": "Less context a builder call reads is builders'-loop performance work under FR-013; the reds lie in another task's files, not a decision T174 makes."
+    },
+    {
+     "id": "D10 the corpus files still empty, accounted",
+     "summary": "Re-census 2026-11-23: 15 of 61 corpus files empty; 13 are suites of scripts no hook runs (settings.json's one hook command, l7r-hook, calls none; their output reaches a model as a command result; sync-with-main's reaches a session only via clone-sync's notice, which its own suite renders); 2 are guards that build no Answer (event-log, stall-watchdog)",
+     "class": "within",
+     "why": "Round 1's finding (the 14 left unaccounted) is met by a dated, method-labeled observation covering every empty file. Judged by class: the 13 are not hooks, the GM's noun ('A lot of our hooks have somewhat long output'), so leaving them is outside the request rather than an exception to it, and pulling command output in would be unrequested scope; the 2 guards say nothing, so nothing is left unheld. The census moved 58 -> 61 files and 14 -> 15 empties between T170 and today; all 15 of today's are named, so the extra one is accounted."
+    },
+    {
+     "id": "D11 the task line's premise restated",
+     "summary": "finished-run's and set-down's Stop blocks do not bypass protocol::run (both answer Refuse through decide; their corpus files were not empty); what those suites missed were three forms, filled by D2",
+     "class": "within",
+     "why": "A premise restated to what was measured (corpus lines, record rows by guard, check2.out), with the actual gap still fixed; nothing asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T175 (observed 2026-11-23: 451 T170's builder was refused every `rust/` edit in the clone by 449's building-reviews, which read the review tree `<clone>-review` since 451 T164; the guard log holds 20 engine-freeze refusals that day, all edits in the clone, 18 of them while every live review read the review tree, measured 2026-11-23 by `make guard-log GUARD=engine-freeze SINCE=2026-11-23` against each review transcript's first and last record and its prompt's `Review tree:` line, `/tmp/t175/firings.log`)",
+    "### T175 Approach (checklist part A)",
+    "### T175 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T175-perf",
+     "summary": "The task is filed and scheduled as performance work: it makes the builders' loop faster by ending engine-edit refusals that hold a builder while another bundle's reviews read their own review tree.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work in so many words, and the GM asked that performance work come first (2026-11-20). The 18 refusals measured on 2026-11-23 are the waits the request's purpose is to remove."
+    },
+    {
+     "id": "T175-tree-filter",
+     "summary": "engine_freeze_hooks reads each live review's tree from its dispatch prompt's 'Review tree: ' line (the transcript's first record) and keeps a review as holding an edit only when it names no tree or the edit's realpath lies inside that tree, compared by path components.",
+     "class": "within",
+     "why": "This is the mechanism of the fix. It keeps feature 429's rule (no edit to what a review reads) and its purpose: a review that reads a worktree at a commit cannot see an edit in the clone, so refusing that edit protected nothing. Comparing by components so that <clone> is not a prefix of <clone>-review keeps edits inside the review tree refused. No part of the rule's purpose is given up."
+    },
+    {
+     "id": "T175-malformed-tree",
+     "summary": "A tree that is not absolute or has no .git counts as no tree, so the guard falls back to today's rule and refuses.",
+     "class": "within",
+     "why": "Fails closed. Every case the fix cannot read with confidence keeps the existing protection, so nothing feature 429 guards is loosened past the cases measured."
+    },
+    {
+     "id": "T175-filter-first",
+     "summary": "The tree filter runs before the engine-edit question, so a clone edit under reviews that read only their own trees starts no l7r-gate process.",
+     "class": "within",
+     "why": "Ordering inside the guard. It changes no outcome and removes a process start, which serves FR-013."
+    },
+    {
+     "id": "T175-rolls-unchanged",
+     "summary": "Feature 444's rolls keep freezing the clone; only map reviews are filtered by tree.",
+     "class": "within",
+     "why": "Rolls run in the clone and do read edits made there, so leaving them as they are keeps the freeze where it still protects something. The fix's reach is the incident's shape (reviews reading their own tree) and no wider. This is not a carve-out from anything asked."
+    },
+    {
+     "id": "T175-message-unchanged",
+     "summary": "The refusal's wording is unchanged (it still lists the reviews and rolls holding the edit), so no message-check is owed.",
+     "class": "within",
+     "why": "No new or longer hook output is added, so the GM's 2026-11-23 point about hook output length is not touched. The text listed is the same refusal, now naming only the reviews that really hold the edit."
+    },
+    {
+     "id": "T175-docs-row-handoff",
+     "summary": "The docs/guards.md row is left for the session to apply once 451 T170 lands; its text is kept in the handoff file.",
+     "class": "within",
+     "why": "Sequencing around another task's landing that touches the same file. The documentation change is still made, with its text already written, and nothing the request asks for is dropped. No defect is left behind: 'Found and left: none'."
+    },
+    {
+     "id": "T175-exits-and-figures",
+     "summary": "Done means make crate-checks CRATE=rust/guard green and the engine-freeze shell suite 41/41, red first on the unfixed guard, with the two refused cases proved by a mutant. Before/after figures carry one-shot labels (2026-11-23 plus method).",
+     "class": "within",
+     "why": "Tests whose only effect is to make the fix happen and keep happening serve the request (enforcement, not unrequested scope). The figures carry their dated method, so no NOT-REVIEWABLE return is owed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T175 (observed 2026-11-23: 451 T170's builder was refused every `rust/` edit in the clone by 449's building-reviews, which read the review tree `<clone>-review` since 451 T164; the guard log holds 20 engine-freeze refusals that day, all edits in the clone, 18 of them while every live review read the review tree, measured 2026-11-23 by `make guard-log GUARD=engine-freeze SINCE=2026-11-23` against each review transcript's first and last record and its prompt's `Review tree:` line, `/tmp/t175/firings.log`)",
+    "### T175 Approach (checklist part A)",
+    "### T175 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T175-1 review-tree filter",
+     "summary": "engine_freeze_hooks reads each live review's tree from its dispatch prompt's `Review tree:` line and holds an edit only when the review names no tree or the edit's realpath lies inside that tree (component-wise compare, so <clone> is not a prefix of <clone>-review).",
+     "class": "within",
+     "why": "Performance work under FR-013 (it makes the builders' loop faster, a kind FR-013 names; the GM 2026-11-20 'in general priotitize performance improvements'). It does not narrow feature 429's rule as the block states it ('no edit the review reads'): a review reading its own worktree at a commit cannot read a clone edit, and an edit inside the review tree is still refused, so the rule's purpose is untouched. Grounded on measured refusals (18 of 20 on 2026-11-23)."
+    },
+    {
+     "id": "T175-2 malformed or absent tree refuses",
+     "summary": "A tree that is not absolute or has no .git counts as no tree, so today's refuse rule applies.",
+     "class": "within",
+     "why": "Fails closed; keeps the existing guard's behavior wherever the new premise cannot be confirmed."
+    },
+    {
+     "id": "T175-3 filter before engine-edit question",
+     "summary": "The tree filter runs before the l7r-gate engine-edit question, so a clone edit under tree-reading reviews starts no process.",
+     "class": "within",
+     "why": "Implementation order that removes work; no behavior beyond T175-1."
+    },
+    {
+     "id": "T175-4 rolls unchanged",
+     "summary": "Feature 444's rolls run in the clone and keep freezing it, including under tree-reading reviews.",
+     "class": "within",
+     "why": "Leaves an existing rule exactly as it is; a roll does read the clone, so the freeze still serves its purpose."
+    },
+    {
+     "id": "T175-5 refusal words unchanged",
+     "summary": "The refusal text is unchanged (only the holders listed differ), so no message-check is owed.",
+     "class": "within",
+     "why": "No new hook output; nothing in the 2026-11-23 hook-output request is touched."
+    },
+    {
+     "id": "T175-6 docs/guards.md row via handoff",
+     "summary": "The docs/guards.md row is applied by the session once 451 T170 lands, its text held in a handoff file.",
+     "class": "within",
+     "why": "An ordering choice to avoid colliding with T170's edit of the same file; the row is written, not dropped."
+    },
+    {
+     "id": "T175-7 performance classification",
+     "summary": "Filed as performance work (Performance work? yes).",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work, which is what T175 does."
+    },
+    {
+     "id": "T175-8 second-run red outside T175",
+     "summary": "The second crate-checks run's one red, make_only_hooks::tests::an_escape_is_recorded_with_its_reason, is recorded as outside T175 (green in the first run and under cover); Found and left says none.",
+     "class": "within",
+     "why": "No decision narrows the request: a single intermittent red in an unrelated test on a shared container is not shown to be a wrong outcome, and the task reports it rather than hiding it. Aside: if it recurs it is a check refusing good work and should be filed."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T171 to T175, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

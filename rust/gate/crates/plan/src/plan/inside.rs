@@ -86,8 +86,19 @@ pub fn built_inside(dir: &Path, task: &str) -> Option<Host> {
             if host == task {
                 continue;
             }
-            let clear = section_current(&review, &text, &host, &section, history)
-                || section_clear(&review, &section, history);
+            // an archived host's verdict may stand in the review's parts (462 T545), read for that host alone
+            let merged;
+            let review = if archived {
+                merged = l7r_shared::speckit::archive::review(
+                    &l7r_shared::speckit::archive::files(dir),
+                    &host,
+                );
+                &merged
+            } else {
+                &review
+            };
+            let clear = section_current(review, &text, &host, &section, history)
+                || section_clear(review, &section, history);
             return Some(Host {
                 task: host,
                 what,

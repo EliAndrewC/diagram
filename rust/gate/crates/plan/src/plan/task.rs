@@ -133,7 +133,33 @@ fn ticked(dir: &Path) -> BTreeSet<String> {
         .collect()
 }
 
-fn archivable(dir: &Path) -> Vec<String> {
+/// The ids a section's heading opens with (`plan_text::leading_tasks`), never every id its words name. WHY (462 T555): 451 T18's heading,
+/// `### T18 (FR-011: T="T1,T2" read as one task ...)`, named T1 and T2 as its example, which no tick ever ticks, so its finished
+/// section stood in a closed feature's plan.md (observed 2026-11-27, method: `make plan-archive F=451` on a copy, then each remaining
+/// section's heading read against its ids).
+/// A heading that opens with no id (feature 375's `### Wave 1 (T01)`) keeps every id it names.
+pub(super) fn heading_ids(heading: &str) -> Vec<String> {
+    let lead = leading_tasks(heading.trim_start_matches('#').trim());
+    if lead.is_empty() {
+        return TASK_ID
+            .find_iter(heading)
+            .map_while(Result::ok)
+            .map(|m| m.as_str().to_owned())
+            .collect();
+    }
+    lead.into_iter().map(str::to_owned).collect()
+}
+
+/// Is `dir`'s feature closed - no open box in tasks.md, and a task ticked? Then a finished section needs no current verdict to move:
+/// no review reads it again (462 T555, `make archive-split` alone).
+pub(super) fn closed(dir: &Path) -> bool {
+    let open = read(&dir.join("tasks.md"));
+    !re(r"(?m)^\s*- \[ \] T\d").is_match(&open).unwrap_or(true) && !ticked(dir).is_empty()
+}
+
+/// The sections that may move; where `closed` (the feature has no open task, 462 T555), every section whose tasks are all ticked,
+/// its verdict unasked.
+fn archivable(dir: &Path, closed: bool) -> Vec<String> {
     let plan = dir.join("plan.md");
     let text = read(&plan);
     let done = ticked(dir);
@@ -150,24 +176,21 @@ fn archivable(dir: &Path) -> Vec<String> {
     for sec in sections {
         let at = text.find(&sec);
         let heading = sec.lines().next().unwrap_or("");
-        let ids: Vec<&str> = TASK_ID
-            .find_iter(heading)
-            .map_while(Result::ok)
-            .map(|m| m.as_str())
-            .collect();
+        let ids = heading_ids(heading);
         // a section is skipped only where it lies WHOLLY inside one already taken (451 T487): T475's heading named the ticked 451 T451,
         // whose "section" was that heading block alone; taken first, it hid T475's whole section, which starts at the same byte, and the
         // archive left `### T475 Approach` behind to refuse a landing's later ticks (2026-11-27)
         let end = at.map(|a| a + sec.len());
         if ids.is_empty()
-            || ids.iter().any(|i| !done.contains(*i))
+            || ids.iter().any(|i| !done.contains(i))
             || at
                 .zip(end)
                 .is_some_and(|(a, z)| taken.iter().any(|(lo, hi)| *lo <= a && z <= *hi))
         {
             continue;
         }
-        if ids.iter().any(|i| task_current(&review, &text, i, None))
+        if closed
+            || ids.iter().any(|i| task_current(&review, &text, i, None))
             || section_clear(&review, &sec, Some(&history))
         {
             if let Some(a) = at {
@@ -183,10 +206,10 @@ const MARKER: &str = "\0archived\0";
 
 /// Move the archivable sections out of plan.md into plan-done.md (D62), byte for byte, leaving one generated line where each run of
 /// them stood; the task ids moved. Piece by piece, and only what moved; and again until nothing is left (features 449, 444 T20).
-pub(super) fn archive(dir: &Path, when: Option<&str>) -> Vec<String> {
+pub(super) fn archive(dir: &Path, when: Option<&str>, closed: bool) -> Vec<String> {
     let plan = dir.join("plan.md");
     let mut text = read(&plan);
-    let sections = archivable(dir);
+    let sections = archivable(dir, closed);
     let done = ticked(dir);
     // a bundle's block (451 T141: `### T158, T197, ... part B`) is in every listed task's section, so it moves only once every task it
     // lists is ticked: 449's batch landing, 2026-11-22, archived T197's section with the shared part B 35 open tasks still owed, and
@@ -207,11 +230,7 @@ pub(super) fn archive(dir: &Path, when: Option<&str>) -> Vec<String> {
     let split = re(r"(?m)^(?=#{2,4} )");
     let mut moved: Vec<(String, Vec<String>)> = Vec::new();
     for sec in &sections {
-        let ids: Vec<String> = TASK_ID
-            .find_iter(sec.lines().next().unwrap_or(""))
-            .map_while(Result::ok)
-            .map(|m| m.as_str().to_owned())
-            .collect();
+        let ids = heading_ids(sec.lines().next().unwrap_or(""));
         let pieces = pieces_of(&split, sec);
         let pieces: Vec<String> = if text.contains(sec.as_str()) && !pieces.iter().any(open_bundle)
         {
@@ -271,7 +290,7 @@ pub(super) fn archive(dir: &Path, when: Option<&str>) -> Vec<String> {
             ids.push(id);
         }
     }
-    ids.extend(archive(dir, when));
+    ids.extend(archive(dir, when, false));
     ids
 }
 

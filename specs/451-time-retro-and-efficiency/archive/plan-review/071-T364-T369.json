@@ -1,0 +1,793 @@
+{
+ "blocks": {
+  "### T364, T341 (bundle) (found by T340 and T315, 2026-11-26: a test run of the checks' tool waited for the end of its output pipe, not for the test binary's exit, which cost 3.1 s while a process a test left behind held the pipe, measured 2026-11-26 (T340, the binary by hand into a pipe), and after a one-line edit of a guard crate the tool spent about 2.0 s on one thread before its first cargo build, measured 2026-11-26 (T315, the process list sampled every 50 ms))": {
+   "sha256": "0f9fbcbd62a1fe5a45a6e321571fd59e066b1ab486384801ad129039ff43bfdb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T364, T341 Approach (checklist part A)": {
+   "sha256": "526ab445c54dd9ad7474d9d6f5cc0e480cf21a24efd652e6e625b0a139b050b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T365 Approach (checklist part A)": {
+   "sha256": "4b8387748033b153d970bc52af69e0cc005b8a020780f1d9ada5a47e01808e3b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T365 (the guard crate's test binary ran 5.3 to 6.0 s under the default `TMPDIR` against 2.0 s under a fresh one, found by T340, measured 2026-11-26 (the task line's three runs of each by hand in `diagram-backlog-t270`, load 10 to 13))": {
+   "sha256": "855e1889b3341daa14e7e82811e398b5bc5da3bd71180f371291ecb89637e0dc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T367, T411 (bundle) (found by 451 T347 and T355: the small lane's key of a test build and of each lint pass is written only by a passing wide build of the checks, and the pre-warm built `cargo test --no-run` only, keeping no key and running no clippy, so a builder's first test build and first lint of each crate after a handout took a wide build slot; measured 2026-11-27 from the clone's event log, 00:20Z to 03:30Z: 28 of 29 first test builds after a handout told wide (`dev/measurements/2026-11-27/prewarm-keys/tellings.py`))": {
+   "sha256": "3433643fc6e1f83aa4d66bd49ba386f75786a9b22bde8e8ed70a1c712d8dbdec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T367, T411 Approach (checklist part A)": {
+   "sha256": "22f9aa240e8ad9314116f272c494305577ae1465db2b4b500b544e50c63d71ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T367 part B (2026-11-27T04:14Z)": {
+   "sha256": "4ea88c80cb88993df1b09be3dd9d1d62cf00a7107ac69c26e66af4bb81a32291",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T368 (<why: the finding or measurement that files it>)": {
+   "sha256": "e28fb3242556fd7d0b4a0da1cf0a4e391ddf554aa60e0a7284920608b49aaa0f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T368 Approach (checklist part A)": {
+   "sha256": "122aa37830f20d0d330d3d765d7d2b4eb358dd0519c652d6feb2d891d078bc3b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T369 Approach (checklist part A)": {
+   "sha256": "8049105ee3099f3ccc7ac9153ae80f61b4c5ae51717e9153048fb688a1939ac2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T369 (found by 451 T359's closing half, 2026-11-26, by reading: a task started in a second tree overwrote the first tree's mark, so the second tree's `make task-unstart` left the first tree's start row live in the log with no mark behind it)": {
+   "sha256": "b879389d289b45d609c412c8a053cfce09ac86ff9633fde55fc7675acc5ed7c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T364": {
+   "section_sha256": "38dcd269d467de402c8116c5707e32fd25174ec3a6e22b2d1eb32040f8a80f81",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T364-a1",
+     "summary": "T364: run_in's Command::output replaced by a spawn, each pipe read on its own thread, the run waiting on the child's exit rather than on the pipes' end",
+     "class": "within",
+     "why": "This is T364's own finding: the run waited for the end of the pipe, not for the binary's exit. Ending a run at its program's exit is what the task asks for. It serves FR-013 and the GM's 2026-11-20 priority on performance."
+    },
+    {
+     "id": "T364-a2",
+     "summary": "T364: a new DRAIN constant of 250 ms, a GUESS knob, for the readers to reach the pipe's end after the exit",
+     "class": "within",
+     "why": "A bound has to exist for a run that stops at the exit to still collect what was written before it. The constant is labeled a GUESS, and the plan states its cost: at most 250 ms past the exit, where the holder's whole life was spent before."
+    },
+    {
+     "id": "T364-a3",
+     "summary": "T364: a pipe still open after DRAIN is cut only where another process holds it; where none holds it, the run waits for the pipe's end",
+     "class": "within",
+     "why": "This keeps every byte written before the exit, so a test build's last executable lines are never dropped. That is the plan's constraint 2, and the test a_late_reader_with_no_holder_is_waited_for_not_cut pins it. Nothing asked for is narrowed: the leak case, which is the one T364 names, is still cut."
+    },
+    {
+     "id": "T364-a4",
+     "summary": "T364: the naming half of T363 built here - holders scans /proc/*/fd and writes one HELD line, which answer also prints for a green crate",
+     "class": "within",
+     "why": "T363 is an open task of this feature, so bringing its smallest half forward adds no new behavior outside the feature. The line only prints. It refuses, blocks and rewrites nothing. The GM's 2026-11-22 words allow small tasks to be worked together."
+    },
+    {
+     "id": "T364-a5",
+     "summary": "T364: T363's other half (failing the crate, ending the leftover processes, checking the process group) stays open as its own task",
+     "class": "within",
+     "why": "That is T363's scope, not T364's, and T364 is complete without it: the run ends at the exit and the leak is named. T363 stays filed, and the plan orders T364 before it."
+    },
+    {
+     "id": "T341-b1",
+     "summary": "T341: the code-views cache stamp gains the binary's content id, so a touched binary (l7r-gate.sh touches it after a guard build that did not change it) keeps its views and has its new mtime written back, while a rebuilt binary is still another binary",
+     "class": "within",
+     "why": "This is T341's finding: about 2.0 s before the first build after a one-line guard edit, which falls under the GM's 2026-11-26 complaint that more of the compilation was not able to be cached. The fix is measured: 6.95 to 7.66 s fell to 0.30 to 0.33 s. Constraint 2's rule that a rebuilt tool never reads another binary's views is kept, and a test pins it."
+    },
+    {
+     "id": "T341-b2",
+     "summary": "T341: fixed by a different mechanism from the one T341's line guessed (a kept key over the guard's sources and declared reads), after step lines showed the guessed cost to be 0.02 to 0.2 s and the cost to be the views recompute",
+     "class": "within",
+     "why": "The task line's mechanism was a guess, and the measurement showed the time going elsewhere. The goal, a fast start after an edit, is delivered. Choosing the mechanism by measurement follows the project's standing rule and narrows nothing the GM asked."
+    },
+    {
+     "id": "T341-left1",
+     "summary": "T341: a real rebuild of l7r-rust (an edit of rust/guard/shared, core, tree or rustc) still recomputes all 1,504 files' views, 1.9 s; left, and filed as T434, to land before T365",
+     "class": "within",
+     "why": "Slowness is not a wrong outcome, so under the definition of a defect (constitution XIV, the GM 2026-11-19) it is no defect, and the fix-as-we-go rule does not hold this task to it. The work is not dropped: it is filed as T434 with an order ('lands before T365'), which is the deferral form FR-009 requires. The reason given for not fixing it here is real: keying by the code that computes the views needs a test that holds the key to its functions, which is a mechanism of its own. Filing found work as new tasks is the GM's 2026-11-22 process ('we can file new tasks just as fast as we are now if we bundle them'), and nothing he asked is narrowed out of the feature."
+    },
+    {
+     "id": "T364-left2",
+     "summary": "T364: a green cover run does not show the HELD line, because cover_ran rebuilds its result from the lines it missed; left to T363, to land before T365",
+     "class": "within",
+     "why": "The time saving, which is T364's purpose, holds in the cover run too. Only the naming is missing there, and the naming is T363's half carried forward, not T364's own requirement. T363's failing half makes a held pipe a red crate, and a red cover run shows its stderr. The work is filed and ordered before T365."
+    },
+    {
+     "id": "both-perf",
+     "summary": "Both tasks classed as [perf] work (FR-013) with before and after figures; no engine speed is involved, so no engine-speed checklist",
+     "class": "within",
+     "why": "Both make the checks faster, which is FR-013's own example of performance work. The note is a factual one about which checklist applies, and it decides nothing the request asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T367": {
+   "section_sha256": "ac7ef5e9ba807080e0b07fa37b6504fd516cc7ac107d8d05640395514b2eccae",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T367-A",
+     "summary": "The pre-warm keeps the small lane's key of each passing build it runs, and after the test builds runs each lint pass of each moved crate, so a builder's first builder-checks of a crate after a handout is told alone at its test build and every lint pass (T367, T411 jointly).",
+     "class": "within",
+     "why": "Completes what the GM asked about on T316 ('would it make sense to begin compiling immediately within a work tree builder?') on the lane T347's section records; the section heading, the only statement of the two tasks in the bundle, names exactly the test build and the lint passes. Performance work, FR-013."
+    },
+    {
+     "id": "T367-reuse",
+     "summary": "Told gains keeping (cargo_with's key-keeping half, which cargo_with now calls); lint.rs exposes passes, DENY and told; kept.rs binary_args pub(super).",
+     "class": "within",
+     "why": "Implementation shape; reuses the checks' own key writing rather than copying it. Decides nothing about scope."
+    },
+    {
+     "id": "T367-D1",
+     "summary": "The pre-warm tells its test build by binary_args('test') words under the name test, its passes by lint::told, reading content ids as a test run reads them; moved still asks reads_any with prewarm.",
+     "class": "within",
+     "why": "Measured: a key only stands if it holds the words and reads the builder's own build is told by; otherwise the warm key would never match. What is built does not change."
+    },
+    {
+     "id": "T367-D2",
+     "summary": "Pre-warm writes beside the key under its own suffix (.prewarm vs the checks' .new), joining no run lock.",
+     "class": "within",
+     "why": "Concurrency correctness of the key write; no scope effect."
+    },
+    {
+     "id": "T367-D3",
+     "summary": "Lint after every test build, passes in lint::passes order, each its own job under the test builds' rules (slot only while another is spare, never cut); a red pass drops the crate's later passes and keeps no key.",
+     "class": "within",
+     "why": "Follows T336's never-cut rule and T316's yield-between-crates as built; a red pass keeping no key is T355-D3's rule. Nothing asked is left out."
+    },
+    {
+     "id": "T367-knob",
+     "summary": "L7R_PREWARM_LINT=0 warms test builds alone; default on (GUESS).",
+     "class": "within",
+     "why": "Default is the full behavior the section names; the knob adds an off switch, narrowing nothing by default."
+    },
+    {
+     "id": "T367-D4",
+     "summary": "Log lines per lint pass and ending-line counts; slot-tell lines the pre-warm writes carry make target prewarm so a count of a builder's tellings excludes them.",
+     "class": "within",
+     "why": "Keeps the measurement honest (the GM's 2026-11-22 'we want everything measured so we know where our time goes'); no behavior beyond the task."
+    },
+    {
+     "id": "T367-gate",
+     "summary": "Built although the plan's own measurement does not meet the gate it attributes to the task lines (first builds 42% of wide test tellings by count, 1.4% of seconds waited), because the brief orders it.",
+     "class": "within",
+     "why": "The gate is attributed to the task lines, which are the coordinating session's (the plan's checklist item 3: 'G: none'); neither the task lines nor the brief is in the bundle, so what they say is taken from the plan only. No GM words in request.md and no accepted requirement in spec-index carry such a gate; the GM's words reached (T316's pre-warm question, FR-013's performance priority) ask for the warming, not for it to be withheld. Building it adds nothing beyond the section heading's scope, and the weak benefit is disclosed in full in the Performance line. Cost-benefit is not a fidelity finding."
+    },
+    {
+     "id": "T367-notwarmed",
+     "summary": "The counting build (test-counters) and the coverage build are not warmed, as before.",
+     "class": "within",
+     "why": "Neither is named by the section heading (test build and lint passes only); the line restates T316's existing boundary and changes nothing, so it narrows nothing these two tasks ask."
+    },
+    {
+     "id": "T367-tests",
+     "summary": "Three new red-first tests pin the behavior; four older pre-warm tests restated for the new line counts rather than run red.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior; the restated tests follow the intended change of the pre-warm's output and are not a departure."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T364, T341 (bundle) (found by T340 and T315, 2026-11-26: a test run of the checks' tool waited for the end of its output pipe, not for the test binary's exit, which cost 3.1 s while a process a test left behind held the pipe, measured 2026-11-26 (T340, the binary by hand into a pipe), and after a one-line edit of a guard crate the tool spent about 2.0 s on one thread before its first cargo build, measured 2026-11-26 (T315, the process list sampled every 50 ms))",
+    "### T364, T341 Approach (checklist part A)",
+    "### T434 (<why: the finding or measurement that files it>)",
+    "### T434 Approach (checklist part A)",
+    "(removed) ### T341 (<why: the finding or measurement that files it>)",
+    "(removed) ### T341 Approach (checklist part A)",
+    "(removed) ### T341 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T364 (<why: the finding or measurement that files it>)",
+    "(removed) ### T364 Approach (checklist part A)",
+    "(removed) ### T364 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T364-T341-bundle",
+     "summary": "T364 and T341 are worked as one bundle; their separate template blocks (including the two Performance checklist blocks) are removed in favour of the bundle's blocks.",
+     "class": "within",
+     "why": "Bundling small tasks is the GM's own ask (2026-11-22, T141: 'small defects can be bundled together and worked at the same time'). The removed blocks were unfilled templates; the performance checklist is stated as for engine-speed tasks only and as 'prompts, never a gate', and these are checks-tool tasks, so dropping it removes nothing asked."
+    },
+    {
+     "id": "T364-a-spawn-drain",
+     "summary": "Command::output replaced by a spawn with per-pipe reader threads; the run ends at the child's exit, readers get DRAIN = 250 ms (a GUESS knob) to reach the pipe's end, then the run takes what was read and goes on.",
+     "class": "within",
+     "why": "Serves T364's finding (a run waited 3.1 s on a pipe a leftover process held) and FR-013 / the GM's 2026-11-20 'prioritize performance improvements'. Nothing asked is narrowed: every byte written before the exit is still read (constraint 2, with the 64 KiB-buffer reasoning), T101's leak pin is kept unchanged, and the bound is labeled a GUESS knob, not presented as measured."
+    },
+    {
+     "id": "T364-a-holder-naming",
+     "summary": "A pipe still held after DRAIN is named by pid and command line on the run's stderr (also printed for a green crate); this is T363's naming half, built here, with T363's other half (failing the crate, killing leftovers, checking the process group) left open as T363.",
+     "class": "within",
+     "why": "Naming the holder keeps the cut from hiding the leak - the 250 ms bound would otherwise silently swallow it - so it serves T364's own fix. Leaving the rest of T363 open does not narrow T364 or T341: it is a separately filed task's scope, ordered after this one (item 5), not a part of what these two tasks asked."
+    },
+    {
+     "id": "T341-b-content-id-stamp",
+     "summary": "The code-views cache stamp adds the binary's content id: matching size and time is accepted without reading; a moved time with a matching content id is accepted and the new time written back; a rebuilt binary is another binary as before.",
+     "class": "within",
+     "why": "Serves T341's finding (about 2.0 s before the first cargo build after a one-line guard-crate edit, which the measurement traced to l7r-gate.sh touching the binary and invalidating the size+mtime stamp). The constraint 'a rebuilt tool never reads another binary's views' keeps correctness; the test is red with the content check off, then green."
+    },
+    {
+     "id": "T341-found-and-left-T434",
+     "summary": "A real rebuild of l7r-rust still recomputes all 1,504 files' code views (1.9 s at load 12); not fixed here, filed as T434, lands before T365.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T341's measured case was the touch (the binary unchanged, its stamp moved), and that case is fixed and measured (0.30-0.33 s). The rebuild case is a further cost found during the work, not the case T341's line measured. It is a missed speed-up, not a wrong outcome (constitution XIV: a defect is a wrong outcome), so leaving it is not a known defect carried forward; and it is left in exactly the form the GM's approved FR-009 / D15 requires (why: keying views by the code that computes them needs its own mechanism and test; filed as T434; lands before T365). It stays in this feature as performance work, so FR-013's ordering still puts it first."
+    },
+    {
+     "id": "T434-template",
+     "summary": "T434's two blocks are the unfilled task template.",
+     "class": "within",
+     "why": "A filed task's empty template makes no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T364, T341 (bundle) (found by T340 and T315, 2026-11-26: a test run of the checks' tool waited for the end of its output pipe, not for the test binary's exit, which cost 3.1 s while a process a test left behind held the pipe, measured 2026-11-26 (T340, the binary by hand into a pipe), and after a one-line edit of a guard crate the tool spent about 2.0 s on one thread before its first cargo build, measured 2026-11-26 (T315, the process list sampled every 50 ms))",
+    "### T364, T341 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T364-a-spawn-and-drain",
+     "summary": "T364: Command::output replaced by a spawn whose pipes are read on their own threads and whose run waits on the child; after the child's exit the readers get DRAIN (250 ms, a GUESS knob) and the run then takes what was read and goes on.",
+     "class": "within",
+     "why": "This is the fix T364's line asks for: the run ends at the program's exit, not at the pipe's end, which a leftover process can hold open. All bytes written before the exit are still read, because the pipe buffer is drained within the bound and T101's leak pin is unchanged. It serves FR-013 and the GM's 2026-11-20 'prioritize performance improvements'. The red-then-green test pins it."
+    },
+    {
+     "id": "T364-DRAIN-value",
+     "summary": "T364: DRAIN set at 250 ms, labeled a GUESS knob.",
+     "class": "within",
+     "why": "Choosing a new constant's value inside the fix narrows nothing that was asked, and the plan labels the value a GUESS."
+    },
+    {
+     "id": "T364-naming-half-of-T363",
+     "summary": "T364: the naming half of T363 is built here. holders reads /proc/*/fd and a HELD line names the pid and command line at the end of stderr, and answer prints it for a green crate too. T363's other half stays open as its own task (failing the crate, ending leftover processes, the process group).",
+     "class": "within",
+     "why": "It is a filed task's work done early, not a change to T364. It adds diagnostics only: it refuses, blocks and rewrites nothing. T363's remaining half is left as T363 itself, still filed and ordered after this, so nothing T363 asks for is dropped."
+    },
+    {
+     "id": "T341-b-content-id-stamp",
+     "summary": "T341: the code-views cache stamp gains the binary's content id. A matching size and mtime is a hit without reading. A moved mtime with a matching content id is a hit, and the new time is written back. A rebuilt binary misses, as before.",
+     "class": "within",
+     "why": "It fixes the cause T341's measured pre-build window turned out to have. The window was the views recomputed because l7r-gate.sh touches the binary. A rebuilt tool still never reads another binary's views, which is the constraint kept. The test is red with the content check off."
+    },
+    {
+     "id": "T341-not-the-guessed-fix",
+     "summary": "T341: the fix guessed in T341's line (the kept key over the guard's sources and declared reads) is not built, because the step lines measured it at 0.02 to 0.2 s and the views at 5.8 to 6.5 s.",
+     "class": "within",
+     "why": "The task line's guessed mechanism was a hypothesis about where the 2 s went. The plan measured it, then fixed the measured cause of the same symptom. The outcome T341 asks for, a fast start after a one-line guard edit, is delivered (0.30 to 0.33 s)."
+    },
+    {
+     "id": "T341-gate-script-unchanged",
+     "summary": "T341: l7r-gate.sh's rebuild-and-touch on any rust/guard change is left as it is, and the stamp absorbs the touch.",
+     "class": "within",
+     "why": "The request asks for the time to be cut, not for that script to change. The touch's cost is removed by the stamp, and a touch is not a defect once the stamp tolerates it."
+    },
+    {
+     "id": "T341-found-and-left-T434",
+     "summary": "Found and left: a real rebuild of l7r-rust (an edit of rust/guard/shared, core, tree or rustc) still recomputes all 1,504 files' views, about 1.9 s at load 12, because the views are keyed by the whole binary. It is filed as T434 and lands before T365.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T341's 2 s window after a guard-crate edit stays for edits to the four crates the tool is built from. That is a narrowing of the case, judged separately from the touch case, which is fixed. It is not a defect under constitution XIV v2.36.0: recomputing views when the binary that computes them really changed is the cache behaving correctly, a speed opportunity rather than a wrong outcome, and NOT LEGITIMATE is reserved for a defect left. The deferral meets FR-009: it gives why (keying by the computing code needs a test holding that key to every function the views call, or a stale view can be served), its filed task (T434) and its order (lands before T365). As a [perf] task, T434 goes first under FR-013."
+    },
+    {
+     "id": "T364-T341-order",
+     "summary": "Order: after T340, before T363, one landing for both tasks.",
+     "class": "within",
+     "why": "This is sequencing inside the feature. T363's failing half reads the same holders, so it follows."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T364, T341 (bundle) (found by T340 and T315, 2026-11-26: a test run of the checks' tool waited for the end of its output pipe, not for the test binary's exit, which cost 3.1 s while a process a test left behind held the pipe, measured 2026-11-26 (T340, the binary by hand into a pipe), and after a one-line edit of a guard crate the tool spent about 2.0 s on one thread before its first cargo build, measured 2026-11-26 (T315, the process list sampled every 50 ms))",
+    "### T364, T341 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T364-a-drain",
+     "summary": "A run spawns the program, reads each pipe on its own thread and waits on the child; after the exit the readers get DRAIN = 250 ms (GUESS knob); a pipe still open then is cut only where another process holds it (named via /proc/*/fd), and where no other process holds it the run waits for the pipe's end and loses no output.",
+     "class": "within",
+     "why": "The change since the last CLEAR verdict narrows the cut to the case it exists for (a leftover holder) and otherwise keeps every byte, which is the block's own constraint 2 and protects a test build's last executable lines; the time saved on a leak (T340's 3.1 s to at most 250 ms) is unchanged. Serves the performance priority (FR-013, GM 2026-11-20) without changing what any crate runs. Pinned by a_late_reader_with_no_holder_is_waited_for_not_cut, red on the first build that cut it."
+    },
+    {
+     "id": "T364-a-naming-half-of-T363",
+     "summary": "The HELD line naming the holding process is built here (including for a green crate via drain::held_on); failing the crate, ending leftovers and checking the process group stay in T363.",
+     "class": "within",
+     "why": "Unchanged from the block judged CLEAR. Naming the leak is a diagnostic beside the time fix; the rest of T363 remains its own open task, so nothing asked is dropped."
+    },
+    {
+     "id": "T341-b-content-id-stamp",
+     "summary": "The code-views cache stamp adds the binary's content id, so a touched-but-unchanged l7r-rust keeps its views (time written back), and a rebuilt binary is still another binary.",
+     "class": "within",
+     "why": "Answers T315's finding (the GM: 'more of the compilation was not able to be cached') by removing the 1,504-file recompute after a touch; the only text change since CLEAR is a factual correction (the tool builds from rust/guard/shared alone), which also explains why an edit there is a real rebuild, the case left to T434."
+    },
+    {
+     "id": "found-left-T434",
+     "summary": "A real rebuild of l7r-rust still recomputes all views (1.9 s); keying views by the code that computes them is filed as T434, lands before T365.",
+     "class": "within",
+     "why": "Unchanged from the block judged CLEAR; FR-009's why, filed id and order are all stated, and it is further speed-up rather than a wrong outcome of this fix."
+    },
+    {
+     "id": "found-left-cover-HELD-line",
+     "summary": "A green cover run does not show the HELD line because cover_ran rebuilds its result from the missed lines and drops stderr; the time cut still applies; deferred to T363 (whose failing half makes a held pipe a red crate through leak_checked, which cover also takes, and a red cover run shows its stderr), lands before T365.",
+     "class": "within",
+     "why": "The request asks for the time (FR-013 performance work; T340/T315); the naming line is an add-on diagnostic, and its absence on one closing-tier path (builders run no coverage, GM 2026-11-26) costs no time and gives no wrong verdict, so it narrows nothing the GM asked for. The deferral carries FR-009's three parts: why not here (T363's failing half covers it by the same route), the filed task T363, and its order (lands before T365). The callers searched are named (side.rs, cover.rs, times.rs, cargo_in), as the census rule asks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T364, T341 (bundle) (found by T340 and T315, 2026-11-26: a test run of the checks' tool waited for the end of its output pipe, not for the test binary's exit, which cost 3.1 s while a process a test left behind held the pipe, measured 2026-11-26 (T340, the binary by hand into a pipe), and after a one-line edit of a guard crate the tool spent about 2.0 s on one thread before its first cargo build, measured 2026-11-26 (T315, the process list sampled every 50 ms))",
+    "### T364, T341 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T364-a1",
+     "summary": "T364: run_in's Command::output replaced by a spawn, each pipe read on its own thread, the run waiting on the child's exit rather than on the pipes' end",
+     "class": "within",
+     "why": "This is T364's own finding: the run waited for the end of the pipe, not for the binary's exit. Ending a run at its program's exit is what the task asks for. It serves FR-013 and the GM's 2026-11-20 priority on performance."
+    },
+    {
+     "id": "T364-a2",
+     "summary": "T364: a new DRAIN constant of 250 ms, a GUESS knob, for the readers to reach the pipe's end after the exit",
+     "class": "within",
+     "why": "A bound has to exist for a run that stops at the exit to still collect what was written before it. The constant is labeled a GUESS, and the plan states its cost: at most 250 ms past the exit, where the holder's whole life was spent before."
+    },
+    {
+     "id": "T364-a3",
+     "summary": "T364: a pipe still open after DRAIN is cut only where another process holds it; where none holds it, the run waits for the pipe's end",
+     "class": "within",
+     "why": "This keeps every byte written before the exit, so a test build's last executable lines are never dropped. That is the plan's constraint 2, and the test a_late_reader_with_no_holder_is_waited_for_not_cut pins it. Nothing asked for is narrowed: the leak case, which is the one T364 names, is still cut."
+    },
+    {
+     "id": "T364-a4",
+     "summary": "T364: the naming half of T363 built here - holders scans /proc/*/fd and writes one HELD line, which answer also prints for a green crate",
+     "class": "within",
+     "why": "T363 is an open task of this feature, so bringing its smallest half forward adds no new behavior outside the feature. The line only prints. It refuses, blocks and rewrites nothing. The GM's 2026-11-22 words allow small tasks to be worked together."
+    },
+    {
+     "id": "T364-a5",
+     "summary": "T364: T363's other half (failing the crate, ending the leftover processes, checking the process group) stays open as its own task",
+     "class": "within",
+     "why": "That is T363's scope, not T364's, and T364 is complete without it: the run ends at the exit and the leak is named. T363 stays filed, and the plan orders T364 before it."
+    },
+    {
+     "id": "T341-b1",
+     "summary": "T341: the code-views cache stamp gains the binary's content id, so a touched binary (l7r-gate.sh touches it after a guard build that did not change it) keeps its views and has its new mtime written back, while a rebuilt binary is still another binary",
+     "class": "within",
+     "why": "This is T341's finding: about 2.0 s before the first build after a one-line guard edit, which falls under the GM's 2026-11-26 complaint that more of the compilation was not able to be cached. The fix is measured: 6.95 to 7.66 s fell to 0.30 to 0.33 s. Constraint 2's rule that a rebuilt tool never reads another binary's views is kept, and a test pins it."
+    },
+    {
+     "id": "T341-b2",
+     "summary": "T341: fixed by a different mechanism from the one T341's line guessed (a kept key over the guard's sources and declared reads), after step lines showed the guessed cost to be 0.02 to 0.2 s and the cost to be the views recompute",
+     "class": "within",
+     "why": "The task line's mechanism was a guess, and the measurement showed the time going elsewhere. The goal, a fast start after an edit, is delivered. Choosing the mechanism by measurement follows the project's standing rule and narrows nothing the GM asked."
+    },
+    {
+     "id": "T341-left1",
+     "summary": "T341: a real rebuild of l7r-rust (an edit of rust/guard/shared, core, tree or rustc) still recomputes all 1,504 files' views, 1.9 s; left, and filed as T434, to land before T365",
+     "class": "within",
+     "why": "Slowness is not a wrong outcome, so under the definition of a defect (constitution XIV, the GM 2026-11-19) it is no defect, and the fix-as-we-go rule does not hold this task to it. The work is not dropped: it is filed as T434 with an order ('lands before T365'), which is the deferral form FR-009 requires. The reason given for not fixing it here is real: keying by the code that computes the views needs a test that holds the key to its functions, which is a mechanism of its own. Filing found work as new tasks is the GM's 2026-11-22 process ('we can file new tasks just as fast as we are now if we bundle them'), and nothing he asked is narrowed out of the feature."
+    },
+    {
+     "id": "T364-left2",
+     "summary": "T364: a green cover run does not show the HELD line, because cover_ran rebuilds its result from the lines it missed; left to T363, to land before T365",
+     "class": "within",
+     "why": "The time saving, which is T364's purpose, holds in the cover run too. Only the naming is missing there, and the naming is T363's half carried forward, not T364's own requirement. T363's failing half makes a held pipe a red crate, and a red cover run shows its stderr. The work is filed and ordered before T365."
+    },
+    {
+     "id": "both-perf",
+     "summary": "Both tasks classed as [perf] work (FR-013) with before and after figures; no engine speed is involved, so no engine-speed checklist",
+     "class": "within",
+     "why": "Both make the checks faster, which is FR-013's own example of performance work. The note is a factual one about which checklist applies, and it decides nothing the request asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T365 (the guard crate's test binary ran 5.3 to 6.0 s under the default `TMPDIR` against 2.0 s under a fresh one, found by T340, measured 2026-11-26 (the task line's three runs of each by hand in `diagram-backlog-t270`, load 10 to 13))",
+    "### T365 Approach (checklist part A)",
+    "### T373 (a PreToolUse hook on an Edit took 342 ms where one on a Bash call took 32, found by T365, measured 2026-11-26 (`t365-hook-times.txt`, 20 alternating runs a call))",
+    "### T373 Approach (checklist part A)",
+    "### T408 (<why: the finding or measurement that files it>)",
+    "### T408 Approach (checklist part A)",
+    "### T412 (<why: the finding or measurement that files it>)",
+    "### T412 Approach (checklist part A)",
+    "### T415 (<why: the finding or measurement that files it>)",
+    "### T415 Approach (checklist part A)",
+    "### T416 (<why: the finding or measurement that files it>)",
+    "### T416 Approach (checklist part A)",
+    "### T418 (<why: the finding or measurement that files it>)",
+    "### T418 Approach (checklist part A)",
+    "### T420 (T367's record counted 279.5 of 283.5 s of `slot-wait` from 2026-11-27 00:20Z to 03:30Z in builds after a dependency's edit, measured 2026-11-27 (`dev/measurements/2026-11-27/prewarm-keys/results.md`, the event log's `slot-wait` lines))",
+    "### T420 Approach (checklist part A)",
+    "### T421 (<why: the finding or measurement that files it>)",
+    "### T421 Approach (checklist part A)",
+    "### T431 (<why: the finding or measurement that files it>)",
+    "### T431 Approach (checklist part A)",
+    "### T432 (<why: the finding or measurement that files it>)",
+    "### T432 Approach (checklist part A)",
+    "### T439 (<why: the finding or measurement that files it>)",
+    "### T439 Approach (checklist part A)",
+    "(removed) ### T313 (<why: the finding or measurement that files it>)",
+    "(removed) ### T365 (<why: the finding or measurement that files it>)",
+    "(removed) ### T365 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T373 (<why: the finding or measurement that files it>)",
+    "(removed) ### T373 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T413 (<why: the finding or measurement that files it>)",
+    "(removed) ### T420 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T365-measure-only",
+     "summary": "T365 is a measurement: no source changed, nothing removed from /tmp by hand; the cause (sweep_dead's whole-directory listing at every TempDir::new) named and its arithmetic closed",
+     "class": "within",
+     "why": "The task line asked which of sweep_dead and the fixtures' scans makes the binary slow and who else pays; the section answers exactly that. The GM (2026-11-20) counts a measurement task as performance work."
+    },
+    {
+     "id": "T365-levers",
+     "summary": "Levers A (T370) and C (T372) built; B (T371) and E1 (T377) filed as alternatives, build one; E2 (T378) and F (T379) dominated, to be withdrawn when B/E1 or B and C land",
+     "class": "within",
+     "why": "Each lever priced is filed or given a stated withdrawal condition with its number; nothing that saves time is dropped unrecorded."
+    },
+    {
+     "id": "T365-lever-D",
+     "summary": "Lever D (the scratch sweep's /tmp rule widened: at most 90 s a day, 0 s beside B and C, up to 4.9 GB) filed as T374, 'a decision for the GM about disk'",
+     "class": "within",
+     "why": "The lever is filed as an open task, not dropped or narrowed; whether T374 needs the GM or is already decided by his words (2026-11-22 'clean up after ourselves', 2026-11-25 the container's leftovers, 2026-11-26 'time saved is more important than disk usage') is T374's question, and T365 settles nothing against them."
+    },
+    {
+     "id": "T365-defer-T373",
+     "summary": "The Edit hook's 342 ms deferred to T373, lands before T302",
+     "class": "within",
+     "why": "Not a temp-directory cost, so outside the task line; FR-009/D15 form, to an open task of this feature, which the GM's 2026-11-26 'fix all of this ... before resuming our port' keeps ahead of the port."
+    },
+    {
+     "id": "T365-defer-T375",
+     "summary": "Four rust/guard tests red under a scratchpad TMPDIR deferred to T375, lands before T379",
+     "class": "within",
+     "why": "A defect (a red crate run) left by a measurement builder that changes no source, in FR-009/D15 form. The order is causal: T379 (a TMPDIR per pool tree) is itself 'blocked by T375'. Should T379 be withdrawn, the order binds nothing, but T375 stays an open task of 451, so the defect is still fixed before the port resumes."
+    },
+    {
+     "id": "T365-defer-T376",
+     "summary": "An unknown runner of the land crate's test binary under /tmp, leaving 29 leftovers, deferred to T376, lands before T371",
+     "class": "within",
+     "why": "FR-009/D15 form; the reason (who runs it is not in the logs) is a measurement of its own. T371 is one of two alternatives (with T377) and may not be built, so this order may come to bind nothing; T376 still stays an open task of 451 ahead of the port, so the defect is not dropped."
+    },
+    {
+     "id": "T365-T373-checklist-removed",
+     "summary": "The PERF=1 engine-speed performance checklist blocks of T365 and T373 removed; the 'Performance work?' answer says yes, a measurement task",
+     "class": "within",
+     "why": "The template asks the docs/performance-checklist.md answers only of an engine-speed task, and calls them prompts, never a gate; these are tooling measurements. The FR-013 performance classification is kept."
+    },
+    {
+     "id": "T373-measure-only",
+     "summary": "T373 is a measurement in a sandbox with a leak check: two guards named (event-log-hooks' reversal parse, clone-sync's transcript read), their sum within 2% of the binary's, the Bash plan-hold cost found beside them",
+     "class": "within",
+     "why": "Answers the task line (which guard spends the Edit hook's time, by --only) and no more; no source changed."
+    },
+    {
+     "id": "T373-levers",
+     "summary": "A, C built (T383, T385); A2 kept in T383, passed to T392 to price; B, D, E filed (T384, T386, T387); G filed as a measurement (T388)",
+     "class": "within",
+     "why": "Pricing and filing levers is the measurement's own exit; every lever with a saving to price has a task."
+    },
+    {
+     "id": "T373-lever-F-declined",
+     "summary": "Lever F (git diff-index --quiet HEAD before git status --porcelain: 52.1 against 110.9 ms a call, at most 2 s a day) DECLINED below a 3 s a day cut-off, noted in T384",
+     "class": "within",
+     "why": "A speed-up worth at most 2 s a day, not a wrong outcome, so declining it leaves no defect (constitution XIV v2.36.0); the decline is written down with its number. The block shows no reopening condition and no audit-register entry for it, unlike T420's declines; that is a recording gap, not a narrowing."
+    },
+    {
+     "id": "T373-found-and-left",
+     "summary": "The 15 to 17 ms a hook call outside the guard binary filed as a measurement, T439, before T302; the plan-hold Bash slowness is lever E, T387, before T302",
+     "class": "within",
+     "why": "FR-009/D15 form, each to an open task of this feature; T439 is a measurement of the hop that spends the time, which the GM counts as performance work (2026-11-20)."
+    },
+    {
+     "id": "T420-premise",
+     "summary": "The task's premise was a measurement's own waits: 221.9 s of T367's were T355's scripted holds; real waits 7.1 s wide and 87.4 s on the small lane; L7R_BUILD_SLOTS and L7R_BUILD_SLOTS_SMALL left as they are",
+     "class": "within",
+     "why": "Answers each question of the task line (which builds, what held the slots, whether a third slot or a dependency lane fits T347's budget); a measured premise that did not hold is a finding, not a narrowing."
+    },
+    {
+     "id": "T420-decline-third-slot",
+     "summary": "A third wide slot DECLINED: at most 7.1 s / 47 s a day saved, 7.4 GiB on paper over the 7 GiB margin",
+     "class": "within",
+     "why": "Nothing to save and over the budget the task asked it to be judged against; no defect left."
+    },
+    {
+     "id": "T420-decline-coverage-one-slot",
+     "summary": "The batch gate's coverage build taking one slot DECLINED as moot: it takes one already",
+     "class": "within",
+     "why": "Already the case (cover.rs); nothing to do."
+    },
+    {
+     "id": "T420-decline-dep-lane",
+     "summary": "A lane for one crate and its changed dependencies DECLINED: at most 1.5 s / 10 s a day, 7.6 GiB on paper over the margin",
+     "class": "within",
+     "why": "Priced against T347's budget as the task line asked; over the margin and near nothing saved; no defect left."
+    },
+    {
+     "id": "T420-decline-prewarm-yield",
+     "summary": "The pre-warm yielding its slot before a builder's build DECLINED: about 1.3 s / 9 s a day; it already yields between crates (T336)",
+     "class": "within",
+     "why": "Near nothing to save and largely already the case; no defect left."
+    },
+    {
+     "id": "T420-decline-lane-two-wide",
+     "summary": "A lane two wide DECLINED: about 87 s / 578 s a day but 8.2 GiB on paper, over the margin, where the filed overflow lever (T425) saves as much inside the budget",
+     "class": "within",
+     "why": "Not a loss of time saved: the same saving is filed as T425 inside the budget."
+    },
+    {
+     "id": "T420-file-T425",
+     "summary": "A build told alone takes a free wide slot when the lane is held: FILED as T425, 85.7 of 87.4 s / about 570 s a day, inside the paper budget",
+     "class": "within",
+     "why": "The lever that saves the measured waits is filed."
+    },
+    {
+     "id": "T420-reopen",
+     "summary": "What would reopen the declined levers: real wide waits passing about 5 minutes a day, read with waits.py over a new window (a GUESS knob)",
+     "class": "within",
+     "why": "The falsifier the GM asked a decision to carry (2026-11-25, the audit register)."
+    },
+    {
+     "id": "T420-found-and-left",
+     "summary": "A slot-wait on a scratch slot directory is logged like a real one, so make task-time books scripted holds as waiting: filed as T426, before T380",
+     "class": "within",
+     "why": "A defect (a reader books wrong minutes) deferred in FR-009/D15's form to an open task of this feature, by a measurement builder that changes no source."
+    },
+    {
+     "id": "stubs-and-removals",
+     "summary": "T408, T412, T415, T416, T418, T421, T431, T432, T439: unfilled template stubs of open tasks; T313 and T413 stubs removed; T365, T373 and T420 stubs replaced by the sections above",
+     "class": "within",
+     "why": "A template stub decides nothing; removing an unfilled stub removes no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T367, T411 (bundle) (found by 451 T347 and T355: the small lane's key of a test build and of each lint pass is written only by a passing wide build of the checks, and the pre-warm built `cargo test --no-run` only, keeping no key and running no clippy, so a builder's first test build and first lint of each crate after a handout took a wide build slot; measured 2026-11-27 from the clone's event log, 00:20Z to 03:30Z: 28 of 29 first test builds after a handout told wide (`dev/measurements/2026-11-27/prewarm-keys/tellings.py`))",
+    "### T367, T411 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T367-A",
+     "summary": "The pre-warm keeps the small lane's key of each passing build it runs, and after the test builds runs each lint pass of each moved crate, so a builder's first builder-checks of a crate after a handout is told alone at its test build and every lint pass (T367, T411 jointly).",
+     "class": "within",
+     "why": "Completes what the GM asked about on T316 ('would it make sense to begin compiling immediately within a work tree builder?') on the lane T347's section records; the section heading, the only statement of the two tasks in the bundle, names exactly the test build and the lint passes. Performance work, FR-013."
+    },
+    {
+     "id": "T367-reuse",
+     "summary": "Told gains keeping (cargo_with's key-keeping half, which cargo_with now calls); lint.rs exposes passes, DENY and told; kept.rs binary_args pub(super).",
+     "class": "within",
+     "why": "Implementation shape; reuses the checks' own key writing rather than copying it. Decides nothing about scope."
+    },
+    {
+     "id": "T367-D1",
+     "summary": "The pre-warm tells its test build by binary_args('test') words under the name test, its passes by lint::told, reading content ids as a test run reads them; moved still asks reads_any with prewarm.",
+     "class": "within",
+     "why": "Measured: a key only stands if it holds the words and reads the builder's own build is told by; otherwise the warm key would never match. What is built does not change."
+    },
+    {
+     "id": "T367-D2",
+     "summary": "Pre-warm writes beside the key under its own suffix (.prewarm vs the checks' .new), joining no run lock.",
+     "class": "within",
+     "why": "Concurrency correctness of the key write; no scope effect."
+    },
+    {
+     "id": "T367-D3",
+     "summary": "Lint after every test build, passes in lint::passes order, each its own job under the test builds' rules (slot only while another is spare, never cut); a red pass drops the crate's later passes and keeps no key.",
+     "class": "within",
+     "why": "Follows T336's never-cut rule and T316's yield-between-crates as built; a red pass keeping no key is T355-D3's rule. Nothing asked is left out."
+    },
+    {
+     "id": "T367-knob",
+     "summary": "L7R_PREWARM_LINT=0 warms test builds alone; default on (GUESS).",
+     "class": "within",
+     "why": "Default is the full behavior the section names; the knob adds an off switch, narrowing nothing by default."
+    },
+    {
+     "id": "T367-D4",
+     "summary": "Log lines per lint pass and ending-line counts; slot-tell lines the pre-warm writes carry make target prewarm so a count of a builder's tellings excludes them.",
+     "class": "within",
+     "why": "Keeps the measurement honest (the GM's 2026-11-22 'we want everything measured so we know where our time goes'); no behavior beyond the task."
+    },
+    {
+     "id": "T367-gate",
+     "summary": "Built although the plan's own measurement does not meet the gate it attributes to the task lines (first builds 42% of wide test tellings by count, 1.4% of seconds waited), because the brief orders it.",
+     "class": "within",
+     "why": "The gate is attributed to the task lines, which are the coordinating session's (the plan's checklist item 3: 'G: none'); neither the task lines nor the brief is in the bundle, so what they say is taken from the plan only. No GM words in request.md and no accepted requirement in spec-index carry such a gate; the GM's words reached (T316's pre-warm question, FR-013's performance priority) ask for the warming, not for it to be withheld. Building it adds nothing beyond the section heading's scope, and the weak benefit is disclosed in full in the Performance line. Cost-benefit is not a fidelity finding."
+    },
+    {
+     "id": "T367-notwarmed",
+     "summary": "The counting build (test-counters) and the coverage build are not warmed, as before.",
+     "class": "within",
+     "why": "Neither is named by the section heading (test build and lint passes only); the line restates T316's existing boundary and changes nothing, so it narrows nothing these two tasks ask."
+    },
+    {
+     "id": "T367-tests",
+     "summary": "Three new red-first tests pin the behavior; four older pre-warm tests restated for the new line counts rather than run red.",
+     "class": "within",
+     "why": "Enforcement of the requested behavior; the restated tests follow the intended change of the pre-warm's output and are not a departure."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T367 part B (2026-11-27T04:14Z)",
+    "### T411 part B (2026-11-27T04:14Z)",
+    "### T413 (<why: the finding or measurement that files it>)",
+    "### T413 Approach (checklist part A)",
+    "### T414 part B (2026-11-27T04:14Z)",
+    "### T417 (<why: the finding or measurement that files it>)",
+    "### T417 Approach (checklist part A)",
+    "### T419 (<why: the finding or measurement that files it>)",
+    "### T419 Approach (checklist part A)",
+    "### T420 (<why: the finding or measurement that files it>)",
+    "### T420 Approach (checklist part A)",
+    "### T424 (<why: the finding or measurement that files it>)",
+    "### T424 Approach (checklist part A)",
+    "(removed) ### T314 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T367/T411/T414 part B: pipe-race line",
+     "summary": "The line of tests/hooks/test-parts.3.sh that piped into grep -q, refused by the pipe-race check, is rewritten with a here-string; nothing else of the tasks changes.",
+     "class": "within",
+     "why": "A check catching a real race in a test line is fixed where it was found (fix as we go); it narrows no task's goal or any request clause."
+    },
+    {
+     "id": "T367/T411/T414 part B: pre-warm test to T424",
+     "summary": "The prewarm test it_never_waits_in_the_slots_queue_and_stops_at_its_ceiling, red once under coverage and green on three later runs, is not diagnosed here; its cause is T424's to find.",
+     "class": "within",
+     "why": "The known defect is not left: it goes to a filed task (T424, present in the plan) and the two tasks whose change it covers wait for that fix, so it is fixed before they land. The GM's 2026-11-26 words on T104 ('prioritizing the test that fails under load being fixed') ask for exactly such a test to be fixed, which T424 does; nothing is dropped."
+    },
+    {
+     "id": "T367/T411/T414 part B: landing order",
+     "summary": "The batch gate is run once more as it stands (the arbiter's continue); if red only on the prewarm test, T367 and T411 are taken out, T414 lands alone, and T367 and T411 wait for T424's fix.",
+     "class": "within",
+     "why": "An ordering of landings that delays two tasks behind a fix of the test that covers their loop; it removes no requested work (the GM's 2026-11-27 go-ahead for all load-bearing and refinement tasks still stands for both) and keeps a red test from being landed over."
+    },
+    {
+     "id": "T413/T417/T419/T420/T424 sections and Approach blocks",
+     "summary": "Newly filed task sections holding the template's placeholders only.",
+     "class": "within",
+     "why": "A placeholder decides nothing; there is no decision in these blocks to rule on. Their content is judged when it is written and decided."
+    },
+    {
+     "id": "(removed) T314 section",
+     "summary": "The empty template section of T314 is removed from plan.md; T314 was ticked at its landing.",
+     "class": "within",
+     "why": "Its earlier text was a placeholder that decided nothing (verdict CLEAR); removing a finished task's empty section drops no decision and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T369 (found by 451 T359's closing half, 2026-11-26, by reading: a task started in a second tree overwrote the first tree's mark, so the second tree's `make task-unstart` left the first tree's start row live in the log with no mark behind it)",
+    "### T369 Approach (checklist part A)",
+    "(removed) ### T369 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T369-D1",
+     "summary": "Per-tree started-task marks (task-marks/<feature>/<task>/<tree key>.json) instead of refusing a second tree's start",
+     "class": "within",
+     "why": "The GM's request names no form for this fix; the refusal is the coordinating session's task line, and the brief left the choice to the reading. The chosen form closes the defect the task files (marks and the start log disagree after one tree's unstart) in every case, including the common builder-then-clone path (14 of 103 starts, dated and method-labeled), where the refusal would reopen it through the stale-pool-tree exception. It keeps one mark a task in its own tree (T254) and the start log's per-tree filter (T359-D9). It narrows nothing asked; it fixes a defect fully (fix as we go)."
+    },
+    {
+     "id": "T369-D2",
+     "summary": "Tree key is the resolved path with characters outside [A-Za-z0-9._-] written as _; marks found by the tree their file names",
+     "class": "within",
+     "why": "Naming convention inside the D1 form; touches no request clause or requirement."
+    },
+    {
+     "id": "T369-D3",
+     "summary": "Pre-T369 layout (<task>.json) read as written by every reader and replaced by its own tree's next start; six existing old-layout marks left to go at their landing",
+     "class": "within",
+     "why": "Backward-compatible reading, so no existing mark is lost; leaving the six old files is not a defect left (they are read correctly and swept at landing by D4)."
+    },
+    {
+     "id": "T369-D4",
+     "summary": "Landing sweep removes every tree's mark of a landed task (both layouts); an empty task id removes nothing; set-down clears only its own tree's files, found by what each names",
+     "class": "within",
+     "why": "Completes the D1 form for the sweep and set-down; the empty-id guard prevents deleting a feature directory. No narrowing."
+    },
+    {
+     "id": "T369-readers",
+     "summary": "Reader census from grep of marks:: and task-marks over rust/, scripts/, tests/hooks/ and the Makefile; changed readers task_unstart, marks::clear/remove, closing-checks.sh; the start-log readers unchanged as already per tree",
+     "class": "within",
+     "why": "Enumeration with its search space stated, covering the shell script and Makefile string forms as well as the Rust API; no guard message changed (the brief's constraint)."
+    },
+    {
+     "id": "(removed) T369 template heading",
+     "summary": "The unfilled template block for T369 removed, superseded by the filled-in T369 block",
+     "class": "within",
+     "why": "Replacing a placeholder with its filled-in content; nothing that was approved is removed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T369 Approach (checklist part A)",
+    "### T437 (<why: the finding or measurement that files it>)",
+    "### T437 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T369-own-mark-per-tree",
+     "summary": "Readers (the mark, the live start row, the landing hold) agree by keeping each tree's own mark (marks::own_file) and filtering the start log by it, so a task started in two trees and unstarted in one reads as started in the other alone, which can unstart it too.",
+     "class": "within",
+     "why": "Unchanged from the block's earlier CLEAR text: the fix of T369's own defect, held to T254's one mark a task per tree, T141's bundle mark and T359-D9's filter; no guard message changed. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T369-found-stale-dead-tree-mark",
+     "summary": "A mark whose tree no longer exists (a dropped pool tree, a removed worktree) stays until its task lands, so make task-unstart names a make -C that cannot run and make task-withdraw refuses the task as started; deferred to T437, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a tool refusing valid input, naming a command that cannot run), not a difference, so it is a narrowing of T369's fix and is ruled. The GM approved briefs that 'default to fixing in the task' (2026-11-19 approval, improvement 4) and FR-009's deferral form (why, a filed open task, an order); the default is a default, and the GM's standard is per step ('fix all known bugs in each step before moving on to porting the next step', 2026-11-18; 'fix all of this as part of our tasking ... before resuming our port', 2026-11-26), which a filed open task of this feature ordered before T302 meets. Purpose test: the block says a clone's start used to take the mark over, so T369's per-tree marks are what keep a dead tree's mark, and item 1's 'that tree can unstart it too' fails when that tree is gone; with T394 releasing pool trees as soon as their work is committed this path is routine, not rare. But before T369 the same path was already broken (the marks named no tree while the log named the first tree, T369's own defect), so this does not regress a working path, and which marks are stale (no tree at all versus a tree the pool released and handed to another builder, whose mark may be live) is a decision of its own across unstart, withdrawal and hold, not merely more code. The ruling rests on the order holding: where T302 sits against the port's next step was not verified from this bundle (D15 makes both ids open tasks of this feature, checked by make decide)."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T364 to T369, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

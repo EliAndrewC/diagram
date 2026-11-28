@@ -1,0 +1,794 @@
+{
+ "blocks": {
+  "### T232 (the 2026-11-24 landing: modal-research passed sheet/guest-quarters in the morning and found the alcove gap in the afternoon on one fingerprint, the fix re-owing a depiction check; claims-triage sent 5 then 2 of 44 claims on)": {
+   "sha256": "894c5d6e6269151eeb29e9d6c9003d632053a41e6e4a66e2eaf923a2e3166a1e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter"
+  },
+  "### T232 Approach (checklist part A)": {
+   "sha256": "52967542fbc8b5979c711e5439f044686d12d11e5fe5061d691a2026ed3d708b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter"
+  },
+  "### T233 (`docs/gm-rulings.md`, section 'NOT a ruling', 2026-11-24: 0006's comment calling dry plots against the canal a ruling of his was never his; the audit of that day found 74 of 180 such comments with no recorded words behind them)": {
+   "sha256": "d605366578987d08dd8a7c74593beddf20734315bee1ea6b45d681090e575831",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T233 Approach (checklist part A)": {
+   "sha256": "aebb2fe60545e8c49426ffe06a2fb72466a5e6957444cdd9196c71a51da9035e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T234 (the P3b cascade record, 2026-11-25, `/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p3b-cascade.md`: after page session P3b moved 0005's rice-shoots section to the new drawing page 0346, `hamlet/paddy`'s `Drawing:` still named only 0005, the tool cleared it, and D5 and modal-depiction's LINKS contract, saying nothing of a split, would read 0346 as a missing link)": {
+   "sha256": "e596184a68ada9281b12e52cb159291911d918b316d8b3173e010b89542c83b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T234 Approach (checklist part A)": {
+   "sha256": "9824bc2de6ac73eaae3af7b7cf08a9d368d8fb39d65f5658b9b83791702ab382",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T235 (the Stop hook's QUESTION UNFILTERED fired on statements, `Nothing is waiting on you.` and `That lets you see, for example, whether ...` among them, each costing an escalation-check run that kept the reply as information; the GM asked 2026-11-25 for efficiencies in that check (request.md, \"the escalation check's cost\"), and the session's reply named a mechanical pre-filter as T235's shape)": {
+   "sha256": "d47cb904476b8df066b5e02d198959089b73239a3ea127249aed3626707cefdd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter"
+  },
+  "### T235 Approach (checklist part A)": {
+   "sha256": "1dd8dac511b10694976c89dbcdb48c65589b4220fe44712d5006fc096af56372",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter"
+  }
+ },
+ "tasks": {
+  "T232": {
+   "section_sha256": "d6babb9db243ca95bc69947370ac582a7925c5a4719c4c304af9a2f94dd28b83",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T232@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T232's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "ae8aa2cb7699eca0089d256984c5ada01d9cef02c4ac7c545d5ea45a9089ad25",
+    "reviewed": "2026-11-25",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1 route (1) already holds",
+      "summary": "No change to make record-owed: an answered unit on an unchanged fingerprint is not re-owed; the incident's re-run was forced by the arbiter's ruling ask:mixed-build-53-record-answers, not owed.",
+      "class": "within",
+      "why": "Leaves existing correct behavior as it is; the ruling quoted in rulings.md itself ordered the 4 guest-quarters answers re-run."
+     },
+     {
+      "id": "D2 route (3) rejected alone",
+      "summary": "No new contract line as the whole fix, because the variance came from a contract line an agent did not follow.",
+      "class": "within",
+      "why": "Choosing a tool-enforced mechanism over an instruction matches the GM's 2026-11-19 'make sure all of the enforcement is real enforcement and not just instructions'."
+     },
+     {
+      "id": "D3 route (2) narrowed to wording",
+      "summary": "A re-run's new WORDING finding on text an earlier answer stood on is held and listed, not applied; a re-run's FACTUAL finding applies and cascades as a first round's does (checks::reply::factual).",
+      "class": "within",
+      "why": "Carries the GM's 2026-11-23 rules verbatim in request.md: 'style edits are just a different category of thing than factual inaccuracies ... when we are cascading, we are only interested in factual inaccuracies', approved as 'only factual findings cascade' and 'settled choices stay settled'. Letting factual findings through keeps the alcove-gap class of correction landing. A held wording finding is a difference, not a defect (XIV v2.36), and it is kept, not dropped."
+     },
+     {
+      "id": "D4 the re-run mark",
+      "summary": "make record-checked marks an answer at a fingerprint already answered (rerun: fingerprint and earlier result), says so one line per unit, records the answer and re-stamps the build; the mark clears with the next answer or settle at another fingerprint.",
+      "class": "within",
+      "why": "The mechanism that makes D3 enforceable; recording the forced answer is what the arbiter ruling asked for."
+     },
+     {
+      "id": "D5 every-check rule for a mixed reply",
+      "summary": "apply-edits holds a wording EDIT only when the unit carries rerun at its current fingerprint for EVERY check of the reply; a reply mixing a re-run and a first round holds nothing.",
+      "class": "within",
+      "why": "Errs to the prior behavior (apply) rather than wrongly holding a first round's edits. Observed 2026-11-25 (WORDING_CHECKS / WORDING_CATEGORIES against reply_checks) that every pop-up reply with wording EDITs names one check today, so no case reaches the gap; no defect is left. Should a multi-check wording reply appear, re-run wording edits in it would apply - worth revisiting then."
+     },
+     {
+      "id": "D6 held EDITs kept in noted.jsonl",
+      "summary": "Each held EDIT becomes a row of the feature's noted.jsonl via T229's keep_noted_rows, counted by make found-list, reaching the next session.",
+      "class": "within",
+      "why": "451 T219/T229: a note outside the change is listed and kept, never filed or applied; nothing the check found is lost."
+     },
+     {
+      "id": "D7 RERUN_OK escape and dry run",
+      "summary": "RERUN_OK=\"<reason, two words or more>\" applies held edits, logged to dev/bypass-log/; a dry run holds nothing.",
+      "class": "within",
+      "why": "The project's guard rule (FR-012's form: a recorded escape of two words or more)."
+     },
+     {
+      "id": "D8 git-history proxy not used",
+      "summary": "The 30-pair/25-difference proxy is rejected as measuring fix rounds; the decision rests on the two true same-fingerprint pairs and a six-unit re-run sample, stated as unable to bound a rate.",
+      "class": "within",
+      "why": "Measurement method; the limit of six units is stated rather than hidden."
+     },
+     {
+      "id": "D9 claims-triage left unmeasured",
+      "summary": "The 5-then-2 triage difference is not shown to be variance on one bundle (no triage reply kept; the claims crate held T223's uncommitted fix between the dispatches); the hold does not cover triage.",
+      "class": "within",
+      "why": "No wrong outcome is shown; triage sends claims on rather than applying EDITs, so the hold's purpose does not reach it."
+     },
+     {
+      "id": "D10 round-5 snapshot restored (found and fixed)",
+      "summary": "The measurement's historical bundle overwrote sheet/guest-quarters' round-5 snapshot, producing a false change section; set back to the text that round judged.",
+      "class": "within",
+      "why": "A defect found and fixed in the task (fix defects where you find them)."
+     },
+     {
+      "id": "D11 research-page record re-runs not held (found and left, T249)",
+      "summary": "The hold covers pop-up files only; a record check re-run on a research page answered before at its text still applies its EDITs and re-owes. Filed as T249, lands before T246.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "The task's goal ('a check run again on text nothing changed leaves that text's wording as it was') is generic and the build reaches pop-ups only, so it narrows. Legitimate because it is scheduled, not dropped: FR-009's form is met (why: a page's units are its notes and questions, a different mapping; filed id; order 'lands before T246'), no record-check re-run has been measured to occur, and the observed incident's class (pop-up re-runs) is fully covered. The GM's 'settled choices stay settled' is still owed in T249."
+     },
+     {
+      "id": "D12 no line saying what a round covers (found and left, T249)",
+      "summary": "Where a subject's last round predates the kept snapshots (451 T189), a later round gets no change section and no line saying what it covers - the cause of the 2026-11-24 morning round missing the alcove gap. Not fixed here (bundle::earlier, outside this task's hold); filed as T249, lands before T246.",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "This is a defect (a check round passing work with a factual gap), so leaving it narrows. Legitimate as a scheduled deferral meeting FR-009 (reason, filed id, order before T246), not an abandonment; the factual finding itself still lands under D3, and the arbiter-forced whole-text re-run caught the gap. Note: D11 and D12 are two unlike defects both 'Filed as T249'; T249's line must carry both, or one needs its own id."
+     }
+    ],
+    "verdict": "CLEAR"
+   }
+  },
+  "T233": {
+   "section_sha256": "88bd91fe0f2889a69c2c4ecacf3101f53a3267c989dac5e83c54048e5a681519",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "check-not-guard",
+     "summary": "A static text check, gm-attributions, run in make quick and the push's checks, registered; not an Edit guard",
+     "class": "within",
+     "why": "The task line (request.md, T233 section) asks for 'a check'. The Edit guard was the other way to build it, and turning it down narrows nothing."
+    },
+    {
+     "id": "what-it-reads",
+     "summary": "HTML comments of research/questions/*.html; CANON claim lines in rust/ as claims::units::walked walks them (tooling trees out, rust/parked in) and the two procedure docs",
+     "class": "within",
+     "why": "The task line names 'a research page's comment or a claim's CANON label'. A claim is what the claims system walks, and the plan keeps parked claims in rather than dropping them."
+    },
+    {
+     "id": "what-names-a-ruling",
+     "summary": "The task's three forms, the comma date form, and the near-twins rule/doctrine/correction",
+     "class": "within",
+     "why": "These are the task line's three forms. The near-twins are named in the task line's baseline ('the about 60 unaudited near-twins'), so they have to be detected. The comma form is 'GM <date>' with punctuation. All of it widens the check toward the purpose."
+    },
+    {
+     "id": "what-backs-it",
+     "summary": "An existing path: specs/<slug>/request.md or gm-request.md, docs/gm-rulings.md, or specs/<slug>/gm-review.jsonl; a bare 'request.md' or 'feature 280' is no pointer",
+     "class": "within",
+     "why": "These are the task line's three record kinds. gm-request.md holds his request verbatim, so it is the same kind of record. Refusing 'feature 280' as a pointer is stricter than the task line. Pointing at the gm-review.jsonl file rather than one row is the same coarseness ruled on under existence-only."
+    },
+    {
+     "id": "existence-only",
+     "summary": "The check confirms the pointed-at record exists, not that it holds the attributed words",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured against the GM's own words (2026-11-24: rulings he never made must not be built on as his) and the session's task line. Two grounds hold. First, no static text check can judge whether a paraphrase is supported by a record: that takes reading and judgment. docs/gm-rulings.md puts that judgment 'before anything is built on it', and the pointer makes it possible. Second, the purpose survives. 0006's comment had nothing to point at, and under this check it would need a path a reader can follow, so a silent attribution becomes one that can be checked. A deliberately wrong pointer passes, and the plan states that cost. The ruling does NOT rest on the GM's 2026-10-25 words: they concern a map choice the research does not settle, and the strictness of a tool is not that kind of choice. Nothing measures the premise that a verbatim rule 'would refuse most correct pointers', and the ruling does not need it."
+    },
+    {
+     "id": "baseline-shrink-only",
+     "summary": "dev/gm-attribution-baseline.jsonl keyed by a text hash; three refusals (unlisted, stale with --prune, entry the merge base lacks); --seed only where none exists",
+     "class": "within",
+     "why": "The task line asks for the baseline to shrink as pages are edited, and these three refusals enforce that. Seeding the old attributions into the baseline is the requested mechanism."
+    },
+    {
+     "id": "baseline-scope-341-comments",
+     "summary": "The baseline holds 341 comments (176 four-word, 165 near-twins), more than the task line's '74 and about 60'",
+     "class": "within",
+     "why": "The task line's counts were estimates from the audit. The census also finds the audit's BACKED rows that name no path, and the comma-form near-twins. Each listed entry still owes a pointer when its text is edited, so the larger baseline excuses nothing for good."
+    },
+    {
+     "id": "parked-claims-fixed",
+     "summary": "The 3 rust/parked CANON claims get their request.md pointers here",
+     "class": "within",
+     "why": "This fixes found defects in this task."
+    },
+    {
+     "id": "defer-page-comments",
+     "summary": "The 341 page comments are not fixed here; a follow-up, filed by the coordinating session, runs once the research switch reopens",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged by class. (a) For the audit's 74 unbacked and the unaudited near-twins, 'saying whose rule it is' means finding what the research shows (the GM 2026-11-24: 'if that is not what the research shows, then we shouldn't do it'). That is research, and his 2026-11-25 words defer it ('defer all of it until at least tomorrow'), so the deferral follows from his own words. (b) The BACKED rows lack only a path to words that exist. That is not a wrong outcome, so leaving them is no defect left. The task line itself puts this work after the research switch."
+    },
+    {
+     "id": "defer-walked-claims",
+     "summary": "The 10 walked CANON claims are not fixed here; a follow-up lands the non-page-tied ones first and the four tied to 0039/0058/0100/0222 beside their pages",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged by group. (a) Pointer found: what is left is a missing path where his words exist. No reader gets a wrong outcome, so this is no defect left, though it is cheap and the block does not say why these differ from the parked three. (b) Needing a relabel or a GM question: a possible MISLABELED in the claims record. Under the GM's 2026-11-25 'sounds good please do that ASAP', the claims round is split off from the builder, so the relabel is not the builder's to judge. The follow-up orders these first and does not hold them for research. (c) The four tied to pages: their fix has to agree with the page comment's, and that fix waits on the research deferral above."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T234": {
+   "section_sha256": "f29ec3ed5c186896038b7b6c3ed59a0766a5a7d7269917ac2851c49a098827ff",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T234-literal",
+     "summary": "The task's words read literally: a split ADDS the target page to the Drawing: line of each pop-up whose Drawing: names the source and whose Depiction states a moved block, rather than M14's 'the pointer counts as listed, the line is not edited'.",
+     "class": "within",
+     "why": "It is the task's own wording. It serves the GM's split rule (2026-11-23: 'nothing needs to cascade simply because a split occurs') and the approved rule 'a split is a move': without it, D5/LINKS would read the target as a missing link, and a check would be owed because of the split."
+    },
+    {
+     "id": "T234-writer",
+     "summary": "split_links.rs follows each split pointer from a pop-up's listed Drawing: pages to an unnamed .drawing.html target and appends it to the line, a continued line included.",
+     "class": "within",
+     "why": "It is the mechanical addition the task names."
+    },
+    {
+     "id": "T234-condition",
+     "summary": "The appended target carries the condition of the listed page that reaches it ([settlement_form=dispersed]), or none where an unconditional listed page reaches it.",
+     "class": "within",
+     "why": "Without this, the link would apply under conditions where the pop-up does not rest on the page, which is a wrong outcome under D5/LINKS ('every drawing page the modal rests on, and no other'). Carrying the condition is part of adding the page correctly and does not narrow the task."
+    },
+    {
+     "id": "T234-owing-nothing",
+     "summary": "The fingerprint rule (Drawing: is part of depiction()) is left unchanged. The pop-up's existing answer is carried to the new fingerprint with answers::settle, because an applied LINKS fix states no fact (451 T188).",
+     "class": "within",
+     "why": "This implements 'owing nothing' as the task states it. Leaving the fingerprint rule unchanged avoids moving every pop-up's fingerprint, which would itself be a cascade."
+    },
+    {
+     "id": "T234-unanswered-left",
+     "summary": "A pop-up that is not answered as it stands is not edited. It is named, and its owed check makes the link as a LINKS fix. The writer runs after modal-triage's own clears so that this set is as small as it can be.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task says the split adds the target to EACH such pop-up, mechanically and owing nothing. For a pop-up that already owes a check, those two clauses conflict: the edit would turn the triage it is owed into a full check, so the split would cause more owing, against 'owing nothing' and against the GM's 'nothing needs to cascade simply because a split occurs'. Following the literal reading there would defeat the request's stated purpose. The carve-out does not empty the rule: the link is still made, by the check the pop-up already owes (now bound by the new D5/LINKS clause), and the pop-up is named rather than skipped silently. It covers exactly one class: pop-ups that already owe a check."
+    },
+    {
+     "id": "T234-states",
+     "summary": "'States a moved block' is made mechanical: at least 3 shared word trigrams of at least 2 naming words between the Depiction and the target's blocks, with a pointer back excluded. Two knobs, measured 2026-11-25 over 52 (pop-up, target) pairs; they select exactly the two pairs that state the moved sections, as read by eye.",
+     "class": "within",
+     "why": "The task requires a test for 'states', and this is that test, with its thresholds measured against the whole tree and checked by eye. Nothing the request covers is left out: hamlet/well and settlement_form--nucleated are excluded with the reasons given (water, not the rice's reach; a single repeated phrase). If the rule misses a pop-up, the D5/LINKS clause still makes the link as a fact-free LINKS fix."
+    },
+    {
+     "id": "T234-contract",
+     "summary": "dev/modals.md D5 gains the clause and is copied to each modal check by agent-sync. modal-depiction's LINKS contract gains it too. modal_split_pointer.rs pins both.",
+     "class": "within",
+     "why": "'D5 says so' is the task's own words. The LINKS clause and the pin only enforce that same rule where the check reads it; their sole effect is that the requested behavior happens and keeps happening."
+    },
+    {
+     "id": "T234-dispersed-fix",
+     "summary": "The tool's run also adds 0349 to choice/settlement_form--dispersed, the same gap left by P11's split.",
+     "class": "within",
+     "why": "This is the same rule applied to every pop-up it covers ('each pop-up'), not a new behavior."
+    },
+    {
+     "id": "T234-timing",
+     "summary": "The addition runs inside make modal-triage, and announces each addition before making it, rather than at the moment of the split.",
+     "class": "within",
+     "why": "It remains a mechanical addition that owes nothing; the timing is an implementation choice the task leaves open, and the outcome the request asks for is unchanged."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T235": {
+   "section_sha256": "2f4c9034767d0c1fd08105b4c385ece3662929ee213c34db6c3c516f71c62abf",
+   "reviewed": "2026-11-25",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T235@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T235's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "18d6d2be2479cca1c308136364f80ee08aad8d032bed406b93b8e39aa4c08d3d",
+    "reviewed": "2026-11-25",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "T235-which",
+      "summary": "`which` kept in ASK only as the interrogative (`which (one |of these|...)?(do you|would you|should I|shall I)`)",
+      "class": "within",
+      "why": "The task is to stop statements firing as asks (the task line, and the GM's 2026-11-25 question about efficiencies in the check). On the corpus this alternative fired on 18 F (relative clauses) and on no T that another alternative missed, so no ask is lost; the interrogative form is kept."
+     },
+     {
+      "id": "T235-stated-negation",
+      "summary": "A STATED decision (`your call`, `needs your ...`, `ask you`, `waiting on you`, ...) is exempt when `nothing`/`none`/`nobody`/`neither`/`no one` stands earlier in its clause, or `not`/`never`/`-n't` within two words before it",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "Exempting a negated statement (`Nothing is waiting on you`, `didn't ask you anything`) serves the purpose: the GM asked for efficiencies and each false firing costs an escalation-check run. But the bound as written also exempts ordinary asks, which feature 429 FR-002 says are refused and which this section's own goal (item 1) and its Recall paragraph say still fire. The `-n't` within-two-words window exempts `This can't land without your call.` (can't [land without] your call). The clause-wide `nothing` exempts `Nothing else needs your decision except the budget.` and `Nothing is left but your call on the split.` The old rule refused all three. A tighter bound is possible: the negation governs the stated phrase itself, with no `without`/`until`/`unless`/`but`/`except` between them. So the case is not impossible, it is not implied by the GM's words, and the literal rule does not defeat the purpose. The corpus shows no real T lost, but round 1 judged the same way on a constructed form (`Waiting on your go-ahead to land it.`). Fix: tighten the bound, and pin these forms as asks in the new test."
+     },
+     {
+      "id": "T235-stated-measure",
+      "summary": "A STATED decision after `of` or `spent` (`442 minutes of waiting on you`, `the time spent waiting on you`) is a measure, not an ask",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "These are reports of time, and they fired on corpus F messages. `of`/`spent` immediately before the phrase does not reach a decision put to him in any ordinary form, so the bound holds to its purpose: stopping statements from costing a check run, as the GM asked on 2026-11-25."
+     },
+     {
+      "id": "T235-stated-measure-name",
+      "summary": "A sentence-opening `waiting ...` is a measure's name when it is the subject of is/was/were, or when it is a table cell with no `:`",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "Judged in two parts. (a) The subject of is/was/were (`**Waiting on you** is still reported`) is a measure's name. That part is LEGITIMATE on its own and is bounded. (b) 'A table cell with no `:`' reaches past measure names to status rows. `| T26 | Waiting on your budget answer |` and `| T22 | Waiting on your go-ahead |` are exempted. In sentence form this section itself treats them as asks or borderline-kept (`T26 is still waiting on your budget answer` stays firing; `Waiting on your go-ahead to land it.` fires). The pinned table ask has a colon, so the test does not reach this form. A tighter bound exists: the row's first cell, or a cell followed by a numeric cell, as in the measure example `| Waiting for you to answer | 0.5 | 1% |`. Fix: bound (b) so that a status cell still fires, and pin a no-colon status cell as an ask."
+     },
+     {
+      "id": "T235-offers",
+      "summary": "OFFER gains `if you agree` and a sentence opening `Say if`",
+      "class": "within",
+      "why": "This adds refusals and removes none. It enforces feature 429 amendment 1's rule that an offer owes the filter, so it is enforcement of what was asked, not unrequested scope. Measured over 6,374 end-of-turn messages: 28 new firings, each an offer on reading. Amendment 1's text is not in the bundle (spec-cited.md carries only 429 FR-002 and 375 FR-044), so this ruling rests on the block's citation of it."
+     },
+     {
+      "id": "T235-borderline",
+      "summary": "The 8 borderline firings stay firing",
+      "class": "within",
+      "why": "No change to them. Each puts something to the GM (a pointer to a question, a deferred decision, a pause for his word, an invitation), so they keep firing under FR-002. The feature-432 kept-id exemption is unchanged. Feature 432's text is not in the bundle, so this rests on the block's citation of it."
+     },
+     {
+      "id": "T235-narrow-prompt",
+      "summary": "A narrower prompt to escalation-check (only the flagged sentences, not the draft) is not built",
+      "class": "within",
+      "why": "The GM's words ask whether more efficient ways exist and do not request this lever. The session's own reply named the narrower bundle as a separate change. Leaving it out drops nothing the GM asked for in T235."
+     },
+     {
+      "id": "T235-strict-question-rule",
+      "summary": "A strict '?'-or-offer detector is not adopted",
+      "class": "within",
+      "why": "The '?'-or-offer wording is the session's sketch, not the GM's words. The sketch's purpose is that only messages putting something to him reach the agent, and the plan's rule implements that purpose. The literal form would drop 24 of the 74 true asks on the corpus (measured 2026-11-25), contrary to feature 429 FR-002. Even read as a narrowing of the relayed brief, it would be LEGITIMATE, because the literal rule defeats the check's purpose."
+     },
+     {
+      "id": "T235-corpus-private",
+      "summary": "The 112-message labeled corpus stays in the session scratchpad, not the repository; the task's named statements are the committed cases",
+      "class": "within",
+      "why": "FR-002 asks for the detector's hit rate, a sample of hits and recall to be recorded, not for the raw messages to be committed. The section records the figures (with date and method) and quotes a sample of the forms, and the repository is public."
+     },
+     {
+      "id": "T235-not-performance",
+      "summary": "`Performance work? no`",
+      "class": "within",
+      "why": "This label decides only scheduling under FR-013, and the task is being done now, so no ordering the GM asked for is lost. It arguably undersells the work: each false firing avoided saves an escalation-check run and a turn, which is the efficiency the GM's 2026-11-25 words ask about. That is not a narrowing of what is built."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T232 (the 2026-11-24 landing: modal-research passed sheet/guest-quarters in the morning and found the alcove gap in the afternoon on one fingerprint, the fix re-owing a depiction check; claims-triage sent 5 then 2 of 44 claims on)",
+    "### T232 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "route-1-not-built",
+     "summary": "Route (1) is not built: an answered unit on an unchanged fingerprint is already not re-owed (make record-owed).",
+     "class": "within",
+     "why": "Nothing changes, and the block says why: the incident's re-run was forced by an arbiter ruling, not owed by the tool."
+    },
+    {
+     "id": "route-3-rejected",
+     "summary": "Route (3), another contract line on its own, is rejected because the variance came from a line an agent did not follow.",
+     "class": "within",
+     "why": "This is a design choice between routes the brief offered. It drops nothing the GM asked for."
+    },
+    {
+     "id": "proxy-not-used",
+     "summary": "The git-history proxy (30 pairs, 25 differences) is not used because it measures fix rounds, not same-fingerprint variance.",
+     "class": "within",
+     "why": "Measurement method. The block states the reason, which is measured (2 to 10 minutes apart, counts falling)."
+    },
+    {
+     "id": "claims-triage-unmeasurable",
+     "summary": "The claims-triage 5-then-2 is declared not measurable as variance on one bundle, because the claims crate held T223's uncommitted fix between the two dispatches and no triage reply is kept. Nothing is built for it.",
+     "class": "within",
+     "why": "The finding is measured and leaves no defect: the two bundles differed. The block states this rather than assuming variance."
+    },
+    {
+     "id": "rerun-mark",
+     "summary": "make record-checked marks an answer at a fingerprint the unit was already answered at (rerun: the fingerprint and the earlier result). The answer is still recorded and re-stamps the build. The mark clears with the next answer or settle at another fingerprint.",
+     "class": "within",
+     "why": "Bookkeeping that makes a re-run visible. The forced re-run still does its job of re-stamping the build. A test enforces it."
+    },
+    {
+     "id": "hold-rejudged-settled-text",
+     "summary": "Route (2), for text an earlier round judged and passed: a re-run's new EDIT on a pop-up whose text that answer stood on is held and kept in noted.jsonl, not applied mid-landing. RERUN_OK applies it. A dry run holds nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is implied by the GM's own words: 'settled choices stay settled' and 're-reviews scoped to the change' (the seven rules he approved on 2026-11-23), and on the cascade, 'cascading set of changes that is mostly not finding actual problems ... we have to fix that before we move forward.' The sheet/barracks case is this class: a scoped round 6, then a re-run that raised a different NOTE on a paragraph earlier rounds had passed, with two EDITs. Holding that re-litigation serves the request's purpose."
+    },
+    {
+     "id": "hold-factual-finding-with-no-route",
+     "summary": "The hold makes no distinction between a factual correction and a style note. It keys on the unit's fingerprint, not on what the earlier round covered. So a factual EDIT on text the earlier round never opened is held as a noted.jsonl row too: the incident's own alcove gap, which the morning round said it 'did not re-open' and which the GM's commit 1b064aa0de landed. The block says this costs 'one session's delay'. But its own constraint line says such notes are 'listed and kept, never filed or applied' (451 T219, T229), and the only route it names for applying one is the RERUN_OK bypass.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Judged on its purpose, not its wording. The GM separated factual findings from style: 'style edits are just a different category of thing than factual inaccuracies ... when we are cascading, we are only interested in factual inaccuracies'. He approved 'only factual findings cascade' and asked on 2026-11-24 that 'we really are cascading in situations that do call for it.' 'Settled choices stay settled' protects judgment calls that were made, not a factual gap in text no round opened. Run through this tool, the incident's valid finding ends as a never-applied note. The block's 'one session's delay' names no mechanism that delivers it, so the decision does not do what it says. That also cuts against 'fix defects where you find them' (constitution XIV), which the block cites as a constraint. One argument is stretched over two unlike things: a style re-litigation and a factual correction. To pass, the block must do one of two things. (i) Name the route by which a held factual EDIT is applied: a target the next session runs, or each one filed as a task ordered before the next step, with a test that a held EDIT reaches it. Or (ii) not hold an EDIT that corrects a factual error (or a GUESS/attested label), so the hold covers only re-litigated notes and wording. The cause of the morning miss (no line saying what a round covers) is deferred to T249 while this hold lands first. That deferral is why the hold must not, meanwhile, swallow the factual findings that miss produces."
+    },
+    {
+     "id": "hold-any-of-the-replys-checks",
+     "summary": "apply-edits holds every EDIT on a pop-up file whose unit carries rerun at its current fingerprint 'for any of the reply's checks'. A reply that mixes a re-run check with a first-round check therefore has the first-round check's EDITs held as well.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Taken on its own, this reach is outside even the rule that justifies the hold. A check answering a fingerprint for the first time has had no earlier round pass that text, so 'what an earlier round passed stays passed' cannot apply to its findings. Nothing in the GM's words settles text that no round of that check judged. The block must hold only the EDITs of a check that is itself a re-run at that fingerprint. Alternatively it must state, measured, that a reply never mixes a re-run check with a first-round one, or that its EDITs cannot be attributed and why holding all of them is still confined to re-judged text."
+    },
+    {
+     "id": "snapshot-repair",
+     "summary": "Found and fixed here: the measurement's replay overwrote sheet/guest-quarters' kept round-5 snapshot, which produced a false change section. The snapshot is restored to the text that round judged, and a rebuilt bundle shows no change section.",
+     "class": "within",
+     "why": "A defect found and fixed in the task (constitution XIV, fix as we go)."
+    },
+    {
+     "id": "defer-research-page-rerun-hold",
+     "summary": "A re-run of a record check on a research page is not held. This is filed as T249 and lands before T246.",
+     "class": "within",
+     "why": "This is not a wrong outcome. The EDITs are findings, and applying them costs re-owed checks but changes no map or verdict wrongly. No record-check re-runs on pages have been measured. The deferral carries FR-009's three parts: why, filed id, order."
+    },
+    {
+     "id": "defer-coverage-line",
+     "summary": "When a subject's last round predates the kept snapshots, a later round gets no change section and no line saying what it covers. This is filed as T249 and lands before T246, because bundle::earlier lies outside this task's hold.",
+     "class": "within",
+     "why": "This is a real defect by the project's definition: a round passed text it never opened and missed the alcove gap. The deferral alone stays within because it carries FR-009's why, filed id and order inside the feature, and the bundle does not show that T246 is a later port step. T249 must land before the next port step (fix as we go). Its interaction with the hold is ruled under hold-factual-finding-with-no-route. Note too that the block rejects route (3) as 'another line would repeat it', while T249's fix is itself a bundle line."
+    },
+    {
+     "id": "no-performance-work",
+     "summary": "'Performance work? no.'",
+     "class": "within",
+     "why": "A declaration. Nothing is decided against the request."
+    }
+   ],
+   "tasks": [
+    "T232"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T232 (the 2026-11-24 landing: modal-research passed sheet/guest-quarters in the morning and found the alcove gap in the afternoon on one fingerprint, the fix re-owing a depiction check; claims-triage sent 5 then 2 of 44 claims on)",
+    "### T232 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 route (1) already holds",
+     "summary": "No change to make record-owed: an answered unit on an unchanged fingerprint is not re-owed; the incident's re-run was forced by the arbiter's ruling ask:mixed-build-53-record-answers, not owed.",
+     "class": "within",
+     "why": "Leaves existing correct behavior as it is; the ruling quoted in rulings.md itself ordered the 4 guest-quarters answers re-run."
+    },
+    {
+     "id": "D2 route (3) rejected alone",
+     "summary": "No new contract line as the whole fix, because the variance came from a contract line an agent did not follow.",
+     "class": "within",
+     "why": "Choosing a tool-enforced mechanism over an instruction matches the GM's 2026-11-19 'make sure all of the enforcement is real enforcement and not just instructions'."
+    },
+    {
+     "id": "D3 route (2) narrowed to wording",
+     "summary": "A re-run's new WORDING finding on text an earlier answer stood on is held and listed, not applied; a re-run's FACTUAL finding applies and cascades as a first round's does (checks::reply::factual).",
+     "class": "within",
+     "why": "Carries the GM's 2026-11-23 rules verbatim in request.md: 'style edits are just a different category of thing than factual inaccuracies ... when we are cascading, we are only interested in factual inaccuracies', approved as 'only factual findings cascade' and 'settled choices stay settled'. Letting factual findings through keeps the alcove-gap class of correction landing. A held wording finding is a difference, not a defect (XIV v2.36), and it is kept, not dropped."
+    },
+    {
+     "id": "D4 the re-run mark",
+     "summary": "make record-checked marks an answer at a fingerprint already answered (rerun: fingerprint and earlier result), says so one line per unit, records the answer and re-stamps the build; the mark clears with the next answer or settle at another fingerprint.",
+     "class": "within",
+     "why": "The mechanism that makes D3 enforceable; recording the forced answer is what the arbiter ruling asked for."
+    },
+    {
+     "id": "D5 every-check rule for a mixed reply",
+     "summary": "apply-edits holds a wording EDIT only when the unit carries rerun at its current fingerprint for EVERY check of the reply; a reply mixing a re-run and a first round holds nothing.",
+     "class": "within",
+     "why": "Errs to the prior behavior (apply) rather than wrongly holding a first round's edits. Observed 2026-11-25 (WORDING_CHECKS / WORDING_CATEGORIES against reply_checks) that every pop-up reply with wording EDITs names one check today, so no case reaches the gap; no defect is left. Should a multi-check wording reply appear, re-run wording edits in it would apply - worth revisiting then."
+    },
+    {
+     "id": "D6 held EDITs kept in noted.jsonl",
+     "summary": "Each held EDIT becomes a row of the feature's noted.jsonl via T229's keep_noted_rows, counted by make found-list, reaching the next session.",
+     "class": "within",
+     "why": "451 T219/T229: a note outside the change is listed and kept, never filed or applied; nothing the check found is lost."
+    },
+    {
+     "id": "D7 RERUN_OK escape and dry run",
+     "summary": "RERUN_OK=\"<reason, two words or more>\" applies held edits, logged to dev/bypass-log/; a dry run holds nothing.",
+     "class": "within",
+     "why": "The project's guard rule (FR-012's form: a recorded escape of two words or more)."
+    },
+    {
+     "id": "D8 git-history proxy not used",
+     "summary": "The 30-pair/25-difference proxy is rejected as measuring fix rounds; the decision rests on the two true same-fingerprint pairs and a six-unit re-run sample, stated as unable to bound a rate.",
+     "class": "within",
+     "why": "Measurement method; the limit of six units is stated rather than hidden."
+    },
+    {
+     "id": "D9 claims-triage left unmeasured",
+     "summary": "The 5-then-2 triage difference is not shown to be variance on one bundle (no triage reply kept; the claims crate held T223's uncommitted fix between the dispatches); the hold does not cover triage.",
+     "class": "within",
+     "why": "No wrong outcome is shown; triage sends claims on rather than applying EDITs, so the hold's purpose does not reach it."
+    },
+    {
+     "id": "D10 round-5 snapshot restored (found and fixed)",
+     "summary": "The measurement's historical bundle overwrote sheet/guest-quarters' round-5 snapshot, producing a false change section; set back to the text that round judged.",
+     "class": "within",
+     "why": "A defect found and fixed in the task (fix defects where you find them)."
+    },
+    {
+     "id": "D11 research-page record re-runs not held (found and left, T249)",
+     "summary": "The hold covers pop-up files only; a record check re-run on a research page answered before at its text still applies its EDITs and re-owes. Filed as T249, lands before T246.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's goal ('a check run again on text nothing changed leaves that text's wording as it was') is generic and the build reaches pop-ups only, so it narrows. Legitimate because it is scheduled, not dropped: FR-009's form is met (why: a page's units are its notes and questions, a different mapping; filed id; order 'lands before T246'), no record-check re-run has been measured to occur, and the observed incident's class (pop-up re-runs) is fully covered. The GM's 'settled choices stay settled' is still owed in T249."
+    },
+    {
+     "id": "D12 no line saying what a round covers (found and left, T249)",
+     "summary": "Where a subject's last round predates the kept snapshots (451 T189), a later round gets no change section and no line saying what it covers - the cause of the 2026-11-24 morning round missing the alcove gap. Not fixed here (bundle::earlier, outside this task's hold); filed as T249, lands before T246.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a check round passing work with a factual gap), so leaving it narrows. Legitimate as a scheduled deferral meeting FR-009 (reason, filed id, order before T246), not an abandonment; the factual finding itself still lands under D3, and the arbiter-forced whole-text re-run caught the gap. Note: D11 and D12 are two unlike defects both 'Filed as T249'; T249's line must carry both, or one needs its own id."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T232 (the 2026-11-24 landing: modal-research passed sheet/guest-quarters in the morning and found the alcove gap in the afternoon on one fingerprint, the fix re-owing a depiction check; claims-triage sent 5 then 2 of 44 claims on)",
+    "### T232 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T232@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T232's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T232"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T233 (`docs/gm-rulings.md`, section 'NOT a ruling', 2026-11-24: 0006's comment calling dry plots against the canal a ruling of his was never his; the audit of that day found 74 of 180 such comments with no recorded words behind them)",
+    "### T233 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "check-not-guard",
+     "summary": "A static text check, gm-attributions, run in make quick and the push's checks, registered; not an Edit guard",
+     "class": "within",
+     "why": "The task line (request.md, T233 section) asks for 'a check'. The Edit guard was the other way to build it, and turning it down narrows nothing."
+    },
+    {
+     "id": "what-it-reads",
+     "summary": "HTML comments of research/questions/*.html; CANON claim lines in rust/ as claims::units::walked walks them (tooling trees out, rust/parked in) and the two procedure docs",
+     "class": "within",
+     "why": "The task line names 'a research page's comment or a claim's CANON label'. A claim is what the claims system walks, and the plan keeps parked claims in rather than dropping them."
+    },
+    {
+     "id": "what-names-a-ruling",
+     "summary": "The task's three forms, the comma date form, and the near-twins rule/doctrine/correction",
+     "class": "within",
+     "why": "These are the task line's three forms. The near-twins are named in the task line's baseline ('the about 60 unaudited near-twins'), so they have to be detected. The comma form is 'GM <date>' with punctuation. All of it widens the check toward the purpose."
+    },
+    {
+     "id": "what-backs-it",
+     "summary": "An existing path: specs/<slug>/request.md or gm-request.md, docs/gm-rulings.md, or specs/<slug>/gm-review.jsonl; a bare 'request.md' or 'feature 280' is no pointer",
+     "class": "within",
+     "why": "These are the task line's three record kinds. gm-request.md holds his request verbatim, so it is the same kind of record. Refusing 'feature 280' as a pointer is stricter than the task line. Pointing at the gm-review.jsonl file rather than one row is the same coarseness ruled on under existence-only."
+    },
+    {
+     "id": "existence-only",
+     "summary": "The check confirms the pointed-at record exists, not that it holds the attributed words",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured against the GM's own words (2026-11-24: rulings he never made must not be built on as his) and the session's task line. Two grounds hold. First, no static text check can judge whether a paraphrase is supported by a record: that takes reading and judgment. docs/gm-rulings.md puts that judgment 'before anything is built on it', and the pointer makes it possible. Second, the purpose survives. 0006's comment had nothing to point at, and under this check it would need a path a reader can follow, so a silent attribution becomes one that can be checked. A deliberately wrong pointer passes, and the plan states that cost. The ruling does NOT rest on the GM's 2026-10-25 words: they concern a map choice the research does not settle, and the strictness of a tool is not that kind of choice. Nothing measures the premise that a verbatim rule 'would refuse most correct pointers', and the ruling does not need it."
+    },
+    {
+     "id": "baseline-shrink-only",
+     "summary": "dev/gm-attribution-baseline.jsonl keyed by a text hash; three refusals (unlisted, stale with --prune, entry the merge base lacks); --seed only where none exists",
+     "class": "within",
+     "why": "The task line asks for the baseline to shrink as pages are edited, and these three refusals enforce that. Seeding the old attributions into the baseline is the requested mechanism."
+    },
+    {
+     "id": "baseline-scope-341-comments",
+     "summary": "The baseline holds 341 comments (176 four-word, 165 near-twins), more than the task line's '74 and about 60'",
+     "class": "within",
+     "why": "The task line's counts were estimates from the audit. The census also finds the audit's BACKED rows that name no path, and the comma-form near-twins. Each listed entry still owes a pointer when its text is edited, so the larger baseline excuses nothing for good."
+    },
+    {
+     "id": "parked-claims-fixed",
+     "summary": "The 3 rust/parked CANON claims get their request.md pointers here",
+     "class": "within",
+     "why": "This fixes found defects in this task."
+    },
+    {
+     "id": "defer-page-comments",
+     "summary": "The 341 page comments are not fixed here; a follow-up, filed by the coordinating session, runs once the research switch reopens",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged by class. (a) For the audit's 74 unbacked and the unaudited near-twins, 'saying whose rule it is' means finding what the research shows (the GM 2026-11-24: 'if that is not what the research shows, then we shouldn't do it'). That is research, and his 2026-11-25 words defer it ('defer all of it until at least tomorrow'), so the deferral follows from his own words. (b) The BACKED rows lack only a path to words that exist. That is not a wrong outcome, so leaving them is no defect left. The task line itself puts this work after the research switch."
+    },
+    {
+     "id": "defer-walked-claims",
+     "summary": "The 10 walked CANON claims are not fixed here; a follow-up lands the non-page-tied ones first and the four tied to 0039/0058/0100/0222 beside their pages",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged by group. (a) Pointer found: what is left is a missing path where his words exist. No reader gets a wrong outcome, so this is no defect left, though it is cheap and the block does not say why these differ from the parked three. (b) Needing a relabel or a GM question: a possible MISLABELED in the claims record. Under the GM's 2026-11-25 'sounds good please do that ASAP', the claims round is split off from the builder, so the relabel is not the builder's to judge. The follow-up orders these first and does not hold them for research. (c) The four tied to pages: their fix has to agree with the page comment's, and that fix waits on the research deferral above."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T234 (the P3b cascade record, 2026-11-25, `/home/agent/.claude/jobs/c6fd72d1/tmp/cascade/p3b-cascade.md`: after page session P3b moved 0005's rice-shoots section to the new drawing page 0346, `hamlet/paddy`'s `Drawing:` still named only 0005, the tool cleared it, and D5 and modal-depiction's LINKS contract, saying nothing of a split, would read 0346 as a missing link)",
+    "### T234 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T234-literal",
+     "summary": "The task's words read literally: a split ADDS the target page to the Drawing: line of each pop-up whose Drawing: names the source and whose Depiction states a moved block, rather than M14's 'the pointer counts as listed, the line is not edited'.",
+     "class": "within",
+     "why": "It is the task's own wording. It serves the GM's split rule (2026-11-23: 'nothing needs to cascade simply because a split occurs') and the approved rule 'a split is a move': without it, D5/LINKS would read the target as a missing link, and a check would be owed because of the split."
+    },
+    {
+     "id": "T234-writer",
+     "summary": "split_links.rs follows each split pointer from a pop-up's listed Drawing: pages to an unnamed .drawing.html target and appends it to the line, a continued line included.",
+     "class": "within",
+     "why": "It is the mechanical addition the task names."
+    },
+    {
+     "id": "T234-condition",
+     "summary": "The appended target carries the condition of the listed page that reaches it ([settlement_form=dispersed]), or none where an unconditional listed page reaches it.",
+     "class": "within",
+     "why": "Without this, the link would apply under conditions where the pop-up does not rest on the page, which is a wrong outcome under D5/LINKS ('every drawing page the modal rests on, and no other'). Carrying the condition is part of adding the page correctly and does not narrow the task."
+    },
+    {
+     "id": "T234-owing-nothing",
+     "summary": "The fingerprint rule (Drawing: is part of depiction()) is left unchanged. The pop-up's existing answer is carried to the new fingerprint with answers::settle, because an applied LINKS fix states no fact (451 T188).",
+     "class": "within",
+     "why": "This implements 'owing nothing' as the task states it. Leaving the fingerprint rule unchanged avoids moving every pop-up's fingerprint, which would itself be a cascade."
+    },
+    {
+     "id": "T234-unanswered-left",
+     "summary": "A pop-up that is not answered as it stands is not edited. It is named, and its owed check makes the link as a LINKS fix. The writer runs after modal-triage's own clears so that this set is as small as it can be.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task says the split adds the target to EACH such pop-up, mechanically and owing nothing. For a pop-up that already owes a check, those two clauses conflict: the edit would turn the triage it is owed into a full check, so the split would cause more owing, against 'owing nothing' and against the GM's 'nothing needs to cascade simply because a split occurs'. Following the literal reading there would defeat the request's stated purpose. The carve-out does not empty the rule: the link is still made, by the check the pop-up already owes (now bound by the new D5/LINKS clause), and the pop-up is named rather than skipped silently. It covers exactly one class: pop-ups that already owe a check."
+    },
+    {
+     "id": "T234-states",
+     "summary": "'States a moved block' is made mechanical: at least 3 shared word trigrams of at least 2 naming words between the Depiction and the target's blocks, with a pointer back excluded. Two knobs, measured 2026-11-25 over 52 (pop-up, target) pairs; they select exactly the two pairs that state the moved sections, as read by eye.",
+     "class": "within",
+     "why": "The task requires a test for 'states', and this is that test, with its thresholds measured against the whole tree and checked by eye. Nothing the request covers is left out: hamlet/well and settlement_form--nucleated are excluded with the reasons given (water, not the rice's reach; a single repeated phrase). If the rule misses a pop-up, the D5/LINKS clause still makes the link as a fact-free LINKS fix."
+    },
+    {
+     "id": "T234-contract",
+     "summary": "dev/modals.md D5 gains the clause and is copied to each modal check by agent-sync. modal-depiction's LINKS contract gains it too. modal_split_pointer.rs pins both.",
+     "class": "within",
+     "why": "'D5 says so' is the task's own words. The LINKS clause and the pin only enforce that same rule where the check reads it; their sole effect is that the requested behavior happens and keeps happening."
+    },
+    {
+     "id": "T234-dispersed-fix",
+     "summary": "The tool's run also adds 0349 to choice/settlement_form--dispersed, the same gap left by P11's split.",
+     "class": "within",
+     "why": "This is the same rule applied to every pop-up it covers ('each pop-up'), not a new behavior."
+    },
+    {
+     "id": "T234-timing",
+     "summary": "The addition runs inside make modal-triage, and announces each addition before making it, rather than at the moment of the split.",
+     "class": "within",
+     "why": "It remains a mechanical addition that owes nothing; the timing is an implementation choice the task leaves open, and the outcome the request asks for is unchanged."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T235 (the Stop hook's QUESTION UNFILTERED fired on statements, `Nothing is waiting on you.` and `That lets you see, for example, whether ...` among them, each costing an escalation-check run that kept the reply as information; the GM asked 2026-11-25 for efficiencies in that check (request.md, \"the escalation check's cost\"), and the session's reply named a mechanical pre-filter as T235's shape)",
+    "### T235 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T235-which",
+     "summary": "`which` kept in ASK only as the interrogative (`which (one |of these|...)?(do you|would you|should I|shall I)`)",
+     "class": "within",
+     "why": "The task is to stop statements firing as asks (the task line, and the GM's 2026-11-25 question about efficiencies in the check). On the corpus this alternative fired on 18 F (relative clauses) and on no T that another alternative missed, so no ask is lost; the interrogative form is kept."
+    },
+    {
+     "id": "T235-stated-negation",
+     "summary": "A STATED decision (`your call`, `needs your ...`, `ask you`, `waiting on you`, ...) is exempt when `nothing`/`none`/`nobody`/`neither`/`no one` stands earlier in its clause, or `not`/`never`/`-n't` within two words before it",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Exempting a negated statement (`Nothing is waiting on you`, `didn't ask you anything`) serves the purpose: the GM asked for efficiencies and each false firing costs an escalation-check run. But the bound as written also exempts ordinary asks, which feature 429 FR-002 says are refused and which this section's own goal (item 1) and its Recall paragraph say still fire. The `-n't` within-two-words window exempts `This can't land without your call.` (can't [land without] your call). The clause-wide `nothing` exempts `Nothing else needs your decision except the budget.` and `Nothing is left but your call on the split.` The old rule refused all three. A tighter bound is possible: the negation governs the stated phrase itself, with no `without`/`until`/`unless`/`but`/`except` between them. So the case is not impossible, it is not implied by the GM's words, and the literal rule does not defeat the purpose. The corpus shows no real T lost, but round 1 judged the same way on a constructed form (`Waiting on your go-ahead to land it.`). Fix: tighten the bound, and pin these forms as asks in the new test."
+    },
+    {
+     "id": "T235-stated-measure",
+     "summary": "A STATED decision after `of` or `spent` (`442 minutes of waiting on you`, `the time spent waiting on you`) is a measure, not an ask",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are reports of time, and they fired on corpus F messages. `of`/`spent` immediately before the phrase does not reach a decision put to him in any ordinary form, so the bound holds to its purpose: stopping statements from costing a check run, as the GM asked on 2026-11-25."
+    },
+    {
+     "id": "T235-stated-measure-name",
+     "summary": "A sentence-opening `waiting ...` is a measure's name when it is the subject of is/was/were, or when it is a table cell with no `:`",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Judged in two parts. (a) The subject of is/was/were (`**Waiting on you** is still reported`) is a measure's name. That part is LEGITIMATE on its own and is bounded. (b) 'A table cell with no `:`' reaches past measure names to status rows. `| T26 | Waiting on your budget answer |` and `| T22 | Waiting on your go-ahead |` are exempted. In sentence form this section itself treats them as asks or borderline-kept (`T26 is still waiting on your budget answer` stays firing; `Waiting on your go-ahead to land it.` fires). The pinned table ask has a colon, so the test does not reach this form. A tighter bound exists: the row's first cell, or a cell followed by a numeric cell, as in the measure example `| Waiting for you to answer | 0.5 | 1% |`. Fix: bound (b) so that a status cell still fires, and pin a no-colon status cell as an ask."
+    },
+    {
+     "id": "T235-offers",
+     "summary": "OFFER gains `if you agree` and a sentence opening `Say if`",
+     "class": "within",
+     "why": "This adds refusals and removes none. It enforces feature 429 amendment 1's rule that an offer owes the filter, so it is enforcement of what was asked, not unrequested scope. Measured over 6,374 end-of-turn messages: 28 new firings, each an offer on reading. Amendment 1's text is not in the bundle (spec-cited.md carries only 429 FR-002 and 375 FR-044), so this ruling rests on the block's citation of it."
+    },
+    {
+     "id": "T235-borderline",
+     "summary": "The 8 borderline firings stay firing",
+     "class": "within",
+     "why": "No change to them. Each puts something to the GM (a pointer to a question, a deferred decision, a pause for his word, an invitation), so they keep firing under FR-002. The feature-432 kept-id exemption is unchanged. Feature 432's text is not in the bundle, so this rests on the block's citation of it."
+    },
+    {
+     "id": "T235-narrow-prompt",
+     "summary": "A narrower prompt to escalation-check (only the flagged sentences, not the draft) is not built",
+     "class": "within",
+     "why": "The GM's words ask whether more efficient ways exist and do not request this lever. The session's own reply named the narrower bundle as a separate change. Leaving it out drops nothing the GM asked for in T235."
+    },
+    {
+     "id": "T235-strict-question-rule",
+     "summary": "A strict '?'-or-offer detector is not adopted",
+     "class": "within",
+     "why": "The '?'-or-offer wording is the session's sketch, not the GM's words. The sketch's purpose is that only messages putting something to him reach the agent, and the plan's rule implements that purpose. The literal form would drop 24 of the 74 true asks on the corpus (measured 2026-11-25), contrary to feature 429 FR-002. Even read as a narrowing of the relayed brief, it would be LEGITIMATE, because the literal rule defeats the check's purpose."
+    },
+    {
+     "id": "T235-corpus-private",
+     "summary": "The 112-message labeled corpus stays in the session scratchpad, not the repository; the task's named statements are the committed cases",
+     "class": "within",
+     "why": "FR-002 asks for the detector's hit rate, a sample of hits and recall to be recorded, not for the raw messages to be committed. The section records the figures (with date and method) and quotes a sample of the forms, and the repository is public."
+    },
+    {
+     "id": "T235-not-performance",
+     "summary": "`Performance work? no`",
+     "class": "within",
+     "why": "This label decides only scheduling under FR-013, and the task is being done now, so no ordering the GM asked for is lost. It arguably undersells the work: each false firing avoided saves an escalation-check run and a turn, which is the efficiency the GM's 2026-11-25 words ask about. That is not a narrowing of what is built."
+    }
+   ],
+   "tasks": [
+    "T235"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T235 (the Stop hook's QUESTION UNFILTERED fired on statements, `Nothing is waiting on you.` and `That lets you see, for example, whether ...` among them, each costing an escalation-check run that kept the reply as information; the GM asked 2026-11-25 for efficiencies in that check (request.md, \"the escalation check's cost\"), and the session's reply named a mechanical pre-filter as T235's shape)",
+    "### T235 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T235@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T235's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T235"
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T232 to T235, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

@@ -1,0 +1,863 @@
+{
+ "blocks": {
+  "### T355 Approach (checklist part A)": {
+   "sha256": "96fa7f5149f2fc19272d0a0f327a066c449e4e46f4d66a793dc7290c5259d777",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T355 (2026-11-27, found by 451 T347's build: a builder's lint took one of the machine's two wide build slots whatever it compiled; with both held, the lint of `rust/gate/crates/reviews` after a body edit waited 55.5 and 49.9 s for 2.6 s of work, measured 2026-11-27 (`dev/measurements/2026-11-27/lint-memory/lint-wait.sh`, rows `before1` and `before2`))": {
+   "sha256": "c3b114e1cef2eb021917cd8d320d022ea3723f5c78f22855470654ab1a3e2164",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T357 (<why: the finding or measurement that files it>)": {
+   "sha256": "593aaf1ff5285f7878ce042baf3de41ea1524af66b8f2fcfde35f5aff5e42d6e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T359 (a filed task found a duplicate or no defect had no way out but a full landing, and a task started by mistake no way out but moving its mark by hand: on 2026-11-26 `make land` refused T322, T323, T356 and T358 for their unfilled plan stubs)": {
+   "sha256": "3e91777ce515f52eed3e4c0b4ffab3eaf3ab6df1ba97d647e6ab5e98f26b6404",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T359 Approach (checklist part A)": {
+   "sha256": "e0de8d62065bf5df884928489ad17f717ca5e9d0c552e0b8f0deea43883a233e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T360 Approach (checklist part A)": {
+   "sha256": "50a0159ae9d98f7c743529fc7d07eacb5d18590dfc49150844317a0b0951121d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)": {
+   "sha256": "ef89f867db0f78301b46a682f167169fce60934457786adb4e2407f63311d90d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T361 (<why: the finding or measurement that files it>)": {
+   "sha256": "6c10b4d99323dfde61ca8e5d1a723a309cdac32f57f2922ba083677cbe2c235c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T361 Approach (checklist part A)": {
+   "sha256": "d01fff52c476d4318950ee987e7cbfd42cb68acd39432280d00b1fc2e4374de7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T362 (<why: the finding or measurement that files it>)": {
+   "sha256": "584997e44d3ec1d404fae97c2c159ce5fa62ec0bac1af1892b0e5476db5d235b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T362 Approach (checklist part A)": {
+   "sha256": "f74921e37f78f045f5e38587a6aca7a4567bb176cd92bb2a70112ec280460366",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T363 Approach (checklist part A)": {
+   "sha256": "3ccc6a58c509a87aed6235ae884884ddc52a1b4737540f85146a742d04897e30",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)": {
+   "sha256": "68bb92cbb0b7cc5661d239898afdb6fbb12b05cd97fb6c7a1ced55152de7ce57",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T355": {
+   "section_sha256": "f8276b3172633b4287603470f4a467fa7de9a3eb861008d639d0c1e97defa7b9",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T355-approach",
+     "summary": "Each clippy pass whose crate the telling can vouch for compiles alone takes T347's small lane; a pass it cannot vouch for stays wide",
+     "class": "within",
+     "why": "The task's line (the coordinating session's, under the GM's T284 words 'address that with some synchronization rather than pre-emptively limiting builders') asks exactly this once the lint is measured to be of the test build's class; measured 0.08-0.66 GiB a pass against the lane's 1.42 GiB sizing. Performance work, which the GM asked be prioritized (2026-11-20)."
+    },
+    {
+     "id": "T355-D1",
+     "summary": "Same lane, width and budget unmoved; SMALL_DEFAULT not moved",
+     "class": "within",
+     "why": "Reuses T347's lane whole; the lint's measured ceiling is under what the lane was sized for, so nothing the GM or the spec settled is changed."
+    },
+    {
+     "id": "T355-D2",
+     "summary": "One key a pass, of the test build's kind but never the test build's own key; key inputs unchanged",
+     "class": "within",
+     "why": "Measured that clippy's check units have their own fingerprints, so sharing the test build's key would tell wrong; a separate key a pass is the conservative implementation of the task, not a narrowing."
+    },
+    {
+     "id": "T355-D3",
+     "summary": "A red pass told alone keeps its key; a red wide pass keeps none, so later passes stay wide until green",
+     "class": "within",
+     "why": "Carries T347's Deviation 3; it errs to the wide (safe) side and leaves a residual wait stated with its cost. It narrows nothing the GM asked: the pre-change behavior was always wide."
+    },
+    {
+     "id": "T355-D4",
+     "summary": "Outside a repository nothing is told (wide); a FRESH=1 run is told like any other",
+     "class": "within",
+     "why": "The first is the safe side (no content id, no vouching). The second departs from T347-D4's outcome with a stated reason (the lint's telling reads no kept results and cargo fingerprints ignore FRESH=1); it widens the lane's use rather than narrowing the request."
+    },
+    {
+     "id": "T355-D5",
+     "summary": "No new step; the lint's slot-tell / slot-small lines are told from a test build's by the check span they lie in; a lane wait stays slot-wait",
+     "class": "within",
+     "why": "Keeps the readers' booking (FR-005's columns) as built; the time stays visible in make where-time / task-time. Implementation choice inside the spec."
+    },
+    {
+     "id": "T355-D6",
+     "summary": "The passes move to rustc/lint.rs; check's lint arm with no ids is a wide lint",
+     "class": "within",
+     "why": "File layout under the 1,000-line bar; callers outside a run keep the old (wide) behavior."
+    },
+    {
+     "id": "T355-D7",
+     "summary": "The build-slot audit's falsifier is reworded for a lint pass: more clippy-driver than the crate has targets (three at most here)",
+     "class": "within",
+     "why": "The old count (more than two rustc) would falsely fire on a legitimate three-target lint; the new bound is derived from an observed census with its method stated, and the memory falsifier stays. It keeps the audit doing its job rather than loosening it."
+    },
+    {
+     "id": "Deviation 1",
+     "summary": "The negative edits a dependency AND the crate, since a dependency's body edit alone re-lints nothing",
+     "class": "within",
+     "why": "A deviation from the coordinating session's brief, not from the GM's words or the spec; measured, and the negative still shows a changed dependency sends the lint wide (the red-first test pins it)."
+    },
+    {
+     "id": "Deviation 2",
+     "summary": "Two crates beyond the brief's seven measured (owed, mode_a)",
+     "class": "within",
+     "why": "Extra measurement so the third pass and the feature pass are seen; it enforces the brief's 'each pass accounted for' and changes no behavior."
+    },
+    {
+     "id": "NOT measured",
+     "summary": "Three passes in the lane on a real self-naming crate in the built tool, a lane pass beside two compiling wide holders, and the day's slot-wait minutes after the change are stated limits",
+     "class": "within",
+     "why": "Each is named with where it is read (the fixture, make sampler-report's memory falsifier, T380); the arithmetic (5.4 + 0.66 GiB against 7) is within the measured budget. Stated limits, not a carve-out from what was asked."
+    },
+    {
+     "id": "Found and left / T411",
+     "summary": "A builder's first lint of each crate after a handout (and after a red wide pass) is still wide; filed as T411, lands before T302; T367 not built here",
+     "class": "within",
+     "why": "Not a defect (a wrong outcome) but a residual wait the lane cannot yet remove because no key exists before the first lint; it is the same first-run property as T347's test build (T367's). FR-009's form is met: why not fixed, the filed id, and its order."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T359": {
+   "section_sha256": "bc03f57bbf670138d747a63e0db0c6a553878bb1b03f1bc844e188f4d0542821",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "Two commands, make task-withdraw and make task-unstart, and the four filed tasks (T322 T323 T356 T358) withdrawn with the first. Now built in two halves.",
+     "class": "within",
+     "why": "Process tooling filed by the coordinating session from two observations of 2026-11-26. The GM's words name neither command, and having them narrows nothing in request.md. The GM's approval asks for real enforcement, and both commands refuse rather than instruct. Splitting the build in two halves is the order of the work, not a scope decision."
+    },
+    {
+     "id": "T359-D1",
+     "summary": "A withdrawn box is ticked and carries ' Withdrawn YYYY-MM-DD: <why>'. The date is added to the form the task line gave.",
+     "class": "within",
+     "why": "Unchanged since round 1. A tooling form. It deviates from the coordinating session's task line, not from the GM's words."
+    },
+    {
+     "id": "T359-D2",
+     "summary": "Only a stub that is the template byte for byte is removed, by the one stub test plan::template::stubs that the plan gate also uses. A filled section is refused.",
+     "class": "within",
+     "why": "Round 1 ruled it within. The only change is that without_stub now uses the same stub test as the plan gate (T359-D15). One test serving both places narrows nothing."
+    },
+    {
+     "id": "T359-D3",
+     "summary": "A task with an entry in plan-review.json's tasks is refused",
+     "class": "within",
+     "why": "Unchanged. It keeps reviewed work on the landing path."
+    },
+    {
+     "id": "T359-D4",
+     "summary": "Code carried means a commit in origin/main..HEAD whose subject head names the feature and the task",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D5",
+     "summary": "Two refusals beyond the brief: a box with an open box under it, and the feature's last open boxes",
+     "class": "within",
+     "why": "Unchanged. Adding refusals narrows nothing."
+    },
+    {
+     "id": "T359-D6",
+     "summary": "Every refusal is printed together, nothing is written while one stands, the filing lock is held, and the id stays reserved",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D7",
+     "summary": "A TaskWithdrawn event line through the hooks' own writer",
+     "class": "within",
+     "why": "Unchanged. It records who withdrew the task and why."
+    },
+    {
+     "id": "T359-D8",
+     "summary": "The unstart row's shape, with feature and task nested",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D9a",
+     "summary": "An unstart cancels every earlier start of its feature and task in its tree, so the filtered start log agrees with the tree's mark",
+     "class": "within",
+     "why": "Unchanged in substance. Every filtered reader agrees with the one mark, and that narrows nothing."
+    },
+    {
+     "id": "T359-D9b",
+     "summary": "An unstart followed by a new start resets no count of make static runs: static_runs_hooks reads the raw log for the count and counts the runs since the task's last landing from its first start, whatever unstarts lie between. STATIC_OK=\"<reason>\" stays the one escape.",
+     "class": "within",
+     "why": "Round 1's item is answered. This is round 1's option (a), which is FR-007's own wording ('a third make static in one task since its last landing'): the count no longer restarts at an unstart, so task-unstart is no longer an escape from FR-007 without a recorded reason, and the one escape left is STATIC_OK with its reason (FR-012). Item 1 restates the goal to match. The test an_unstart_and_a_new_start_restart_no_count pins it, and item 9 reports it red first (rust/guard 550 passed, 1 failed, then 551 passed). The test cases are: start, the allowed runs, unstart, new start, next run refused; and a landing between resets the count. This was re-classed within because the narrowing is gone."
+    },
+    {
+     "id": "T359-D9c",
+     "summary": "A task worked, then unstarted and never started again, loses its earlier start in the time breakdown",
+     "class": "within",
+     "why": "Unchanged since round 1. The unstart row stays in the log, and the GM's definition of the breakdown does not ask it to be exact."
+    },
+    {
+     "id": "T359-D9d",
+     "summary": "Newly stated: a task unstarted and not started again 'carries no task, so it has no count and owes no closing order'. The guard's reading of whose task a call is uses the filtered view.",
+     "class": "within",
+     "why": "Weighed for one sequence: start, two runs, unstart, N runs while no task is started, start again. The N runs in the gap are not refused by FR-007. That is FR-007's own scope, which is runs 'in one task'. Leaving the started state by command is not new: D12 cites make set-down, which already clears a tree's mark. Once the task is started again it meets its full count, and the runs before the unstart still count (D9b). Neither the GM's words nor FR-007 ask for a count of runs made while no task is started. So this case opens no route past FR-007 that the no-task state did not already have. Nothing in the bundle shows that the no-task state was unreachable mid-work before T359. If it was, this entry would need to be reopened."
+    },
+    {
+     "id": "T359-D10",
+     "summary": "A bundle is unstarted whole under its first task",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D11",
+     "summary": "The legacy one-mark file is unstarted as its own tree's mark, and a phase hold is lifted along with the start",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D12",
+     "summary": "Another tree's mark is refused, and the refusal names make -C <that tree>",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D13",
+     "summary": "The filter is used by every reader but one (fifteen call sites in seven crates). static_runs_hooks reads the raw log for its count of runs on purpose.",
+     "class": "within",
+     "why": "This was restated from 'all sixteen readers'. The one raw reader is the mechanism that enforces FR-007 (D9b), and the task it counts for is still taken through the filtered filed.rs. The list counts to fifteen, with land/ready.rs's two reads counted separately, across seven crates. The search space is stated in item 7: one search for the log's name over rust/, scripts/ and the Makefile. Each reader has a test in item 9's table."
+    },
+    {
+     "id": "T359-D14",
+     "summary": "T366 is covered here: a withdrawal is refused when a builder holds a pool tree for the task, and the refusal names make builder-tree-release",
+     "class": "within",
+     "why": "Unchanged. An added refusal that names its compliant command."
+    },
+    {
+     "id": "T359-D15a",
+     "summary": "A withdrawn task's removed block owes no plan review only where its earlier text is a block of that task's template stub byte for byte, by the one stub test, with the trailing newlines aside",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is round 1's LEGITIMATE narrowing, now bounded as round 1 required. The plan-stage gate exists so that decisions do not reach a tick without an independent verdict. A block that is the unfilled template holds no decisions. Matching per block, with the trailing newlines aside, still decides nothing, because a filled block of the same section remains owed on its own. Round 1's case (a)-(b) did not depend on whether the stub is compared whole or by its blocks."
+    },
+    {
+     "id": "T359-D15b",
+     "summary": "The exemption is narrowed: the Withdrawn form of a box alone exempts nothing. A Withdrawn-form box whose filled section was deleted is answered for at the tick and at the push. A removed block whose earlier text cannot be read is owed.",
+     "class": "within",
+     "why": "Round 1's item is answered. The exemption now requires both a Withdrawn-form box and earlier text that is the stub byte for byte. That earlier text is read from the kept record or from the plan's history at the recorded digest, the same way removed_blocks reads it. So the hand-written case round 1 described (a box ticked by hand in the Withdrawn form, its filled section deleted) is caught at the gate, not only inside make task-withdraw. Unreadable earlier text is treated as owed, which fails closed. The red fixture round 1 asked for is pinned: a_withdrawn_form_box_whose_filled_block_was_removed_is_still_answered_for. Item 9 reports it red first (rust/gate/crates/plan 195 passed, 1 failed, then 197 passed). The case of a live block under a withdrawn heading that has no other owner stays owed. This entry narrows nothing, so it carries no ruling."
+    },
+    {
+     "id": "Found-and-left T369",
+     "summary": "The second-tree overwrite of a task's mark is deferred to T369, which lands before T302",
+     "class": "within",
+     "why": "Unchanged. It states why it is not fixed here, its filed id and its order, as FR-009 asks."
+    },
+    {
+     "id": "Performance work",
+     "summary": "Not performance work by FR-013's test",
+     "class": "within",
+     "why": "Unchanged. The tooling speeds nothing that FR-013 names and measures no time."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T355 (2026-11-27, found by 451 T347's build: a builder's lint took one of the machine's two wide build slots whatever it compiled; with both held, the lint of `rust/gate/crates/reviews` after a body edit waited 55.5 and 49.9 s for 2.6 s of work, measured 2026-11-27 (`dev/measurements/2026-11-27/lint-memory/lint-wait.sh`, rows `before1` and `before2`))",
+    "### T355 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T355-approach",
+     "summary": "Each clippy pass whose crate the telling can vouch for compiles alone takes T347's small lane; a pass it cannot vouch for stays wide",
+     "class": "within",
+     "why": "The task's line (the coordinating session's, under the GM's T284 words 'address that with some synchronization rather than pre-emptively limiting builders') asks exactly this once the lint is measured to be of the test build's class; measured 0.08-0.66 GiB a pass against the lane's 1.42 GiB sizing. Performance work, which the GM asked be prioritized (2026-11-20)."
+    },
+    {
+     "id": "T355-D1",
+     "summary": "Same lane, width and budget unmoved; SMALL_DEFAULT not moved",
+     "class": "within",
+     "why": "Reuses T347's lane whole; the lint's measured ceiling is under what the lane was sized for, so nothing the GM or the spec settled is changed."
+    },
+    {
+     "id": "T355-D2",
+     "summary": "One key a pass, of the test build's kind but never the test build's own key; key inputs unchanged",
+     "class": "within",
+     "why": "Measured that clippy's check units have their own fingerprints, so sharing the test build's key would tell wrong; a separate key a pass is the conservative implementation of the task, not a narrowing."
+    },
+    {
+     "id": "T355-D3",
+     "summary": "A red pass told alone keeps its key; a red wide pass keeps none, so later passes stay wide until green",
+     "class": "within",
+     "why": "Carries T347's Deviation 3; it errs to the wide (safe) side and leaves a residual wait stated with its cost. It narrows nothing the GM asked: the pre-change behavior was always wide."
+    },
+    {
+     "id": "T355-D4",
+     "summary": "Outside a repository nothing is told (wide); a FRESH=1 run is told like any other",
+     "class": "within",
+     "why": "The first is the safe side (no content id, no vouching). The second departs from T347-D4's outcome with a stated reason (the lint's telling reads no kept results and cargo fingerprints ignore FRESH=1); it widens the lane's use rather than narrowing the request."
+    },
+    {
+     "id": "T355-D5",
+     "summary": "No new step; the lint's slot-tell / slot-small lines are told from a test build's by the check span they lie in; a lane wait stays slot-wait",
+     "class": "within",
+     "why": "Keeps the readers' booking (FR-005's columns) as built; the time stays visible in make where-time / task-time. Implementation choice inside the spec."
+    },
+    {
+     "id": "T355-D6",
+     "summary": "The passes move to rustc/lint.rs; check's lint arm with no ids is a wide lint",
+     "class": "within",
+     "why": "File layout under the 1,000-line bar; callers outside a run keep the old (wide) behavior."
+    },
+    {
+     "id": "T355-D7",
+     "summary": "The build-slot audit's falsifier is reworded for a lint pass: more clippy-driver than the crate has targets (three at most here)",
+     "class": "within",
+     "why": "The old count (more than two rustc) would falsely fire on a legitimate three-target lint; the new bound is derived from an observed census with its method stated, and the memory falsifier stays. It keeps the audit doing its job rather than loosening it."
+    },
+    {
+     "id": "Deviation 1",
+     "summary": "The negative edits a dependency AND the crate, since a dependency's body edit alone re-lints nothing",
+     "class": "within",
+     "why": "A deviation from the coordinating session's brief, not from the GM's words or the spec; measured, and the negative still shows a changed dependency sends the lint wide (the red-first test pins it)."
+    },
+    {
+     "id": "Deviation 2",
+     "summary": "Two crates beyond the brief's seven measured (owed, mode_a)",
+     "class": "within",
+     "why": "Extra measurement so the third pass and the feature pass are seen; it enforces the brief's 'each pass accounted for' and changes no behavior."
+    },
+    {
+     "id": "NOT measured",
+     "summary": "Three passes in the lane on a real self-naming crate in the built tool, a lane pass beside two compiling wide holders, and the day's slot-wait minutes after the change are stated limits",
+     "class": "within",
+     "why": "Each is named with where it is read (the fixture, make sampler-report's memory falsifier, T380); the arithmetic (5.4 + 0.66 GiB against 7) is within the measured budget. Stated limits, not a carve-out from what was asked."
+    },
+    {
+     "id": "Found and left / T411",
+     "summary": "A builder's first lint of each crate after a handout (and after a red wide pass) is still wide; filed as T411, lands before T302; T367 not built here",
+     "class": "within",
+     "why": "Not a defect (a wrong outcome) but a residual wait the lane cannot yet remove because no key exists before the first lint; it is the same first-run property as T347's test build (T367's). FR-009's form is met: why not fixed, the filed id, and its order."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T359 (a filed task found a duplicate or no defect had no way out but a full landing, and a task started by mistake no way out but moving its mark by hand: on 2026-11-26 `make land` refused T322, T323, T356 and T358 for their unfilled plan stubs)",
+    "### T359 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "Two commands, make task-withdraw and make task-unstart, and the four filed tasks (T322 T323 T356 T358) withdrawn with the first",
+     "class": "within",
+     "why": "Process tooling filed by the coordinating session from two observations of 2026-11-26. The GM's words name neither command, but nothing in request.md is narrowed by having them. The GM's approval asks for real enforcement, and both commands refuse rather than instruct."
+    },
+    {
+     "id": "T359-D1",
+     "summary": "A withdrawn box is ticked and carries ' Withdrawn YYYY-MM-DD: <why>'. The date is added to the form the task line gave.",
+     "class": "within",
+     "why": "A tooling form. The deviation is from the coordinating session's task line, not from the GM's words."
+    },
+    {
+     "id": "T359-D2",
+     "summary": "Only a stub that is the template byte for byte is removed. A filled section is refused.",
+     "class": "within",
+     "why": "Keeps decided work on the landing path, so it narrows nothing."
+    },
+    {
+     "id": "T359-D3",
+     "summary": "A task with an entry in plan-review.json's tasks is refused",
+     "class": "within",
+     "why": "Keeps reviewed work on the landing path."
+    },
+    {
+     "id": "T359-D4",
+     "summary": "Code carried means a commit in origin/main..HEAD whose subject head names the feature and the task",
+     "class": "within",
+     "why": "A tooling convention for which commits count as carrying the task's code. Narrows nothing the GM asked."
+    },
+    {
+     "id": "T359-D5",
+     "summary": "Two refusals beyond the brief: a box with an open box under it, and the feature's last open boxes",
+     "class": "within",
+     "why": "Added refusals narrow nothing."
+    },
+    {
+     "id": "T359-D6",
+     "summary": "Every refusal is printed together, nothing is written while one stands, the filing lock is held, and the id stays reserved",
+     "class": "within",
+     "why": "Tooling convention."
+    },
+    {
+     "id": "T359-D7",
+     "summary": "A TaskWithdrawn event line through the hooks' own writer",
+     "class": "within",
+     "why": "Records who withdrew the task and why. This is consistent with the GM's ask that the time data be kept."
+    },
+    {
+     "id": "T359-D8",
+     "summary": "The unstart row's shape, with feature and task nested",
+     "class": "within",
+     "why": "Tooling convention."
+    },
+    {
+     "id": "T359-D9a",
+     "summary": "An unstart cancels every earlier start of its feature and task in its tree, so the start log agrees with the tree's mark",
+     "class": "within",
+     "why": "Makes every reader agree with the one mark. It narrows nothing."
+    },
+    {
+     "id": "T359-D9b",
+     "summary": "An unstart followed by a new start resets the task's count of make static runs, and task-unstart takes no WHY",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-007, which carries the GM's approved improvement 2, refuses a third make static in one task since its last landing. FR-012 requires every escape from that refusal to carry a recorded reason of two words or more. Under D9 a session can run static, static, then task-unstart and task-start, and its next static is the first of a fresh count, though no landing came between. That makes task-unstart an escape from FR-007 with no reason recorded. 'The unstart's row in the log is the record of it' is a record, not a reason, and the GM's approval asked for real enforcement, not instructions. Nothing makes the rule impossible to keep, and nothing in the GM's words implies the carve-out. It should read one of two ways: (a) static_runs_hooks counts the task's runs since its last landing whatever unstarts lie between, which is FR-007's own words; or (b) task-unstart takes WHY= of two words or more, and an unstart that resets the count is recorded in the escape log as FR-012 requires. The rest of D9 stands: a task unstarted and never started again owes no closing order."
+    },
+    {
+     "id": "T359-D9c",
+     "summary": "A task worked, then unstarted and never started again, loses its earlier start in the time breakdown",
+     "class": "within",
+     "why": "The command exists for a mistaken start, where the minutes were not that task's work. The unstart row stays in the log. The GM's definition of the breakdown says it 'doesn't have to be 100% exact', since the aim is a broad understanding of where the time goes. The cost is stated in the plan, and the minutes are not silently dropped from the window."
+    },
+    {
+     "id": "T359-D10",
+     "summary": "A bundle is unstarted whole under its first task",
+     "class": "within",
+     "why": "Follows 451 T141's one mark per bundle."
+    },
+    {
+     "id": "T359-D11",
+     "summary": "The legacy one-mark file is unstarted as its own tree's mark, and a phase hold is lifted along with the start",
+     "class": "within",
+     "why": "Tooling convention."
+    },
+    {
+     "id": "T359-D12",
+     "summary": "Another tree's mark is refused, and the refusal names make -C <that tree>",
+     "class": "within",
+     "why": "A refusal that names the compliant command."
+    },
+    {
+     "id": "T359-D13",
+     "summary": "The live_starts filter is used by all sixteen readers, where the brief named one crate",
+     "class": "within",
+     "why": "Wider than the brief, which is the coordinating session's text. Every reader agreeing narrows nothing. The search space is stated: one search for the log's name over rust/, scripts/ and the Makefile."
+    },
+    {
+     "id": "T359-D14",
+     "summary": "T366 is covered here: a withdrawal is refused when a builder holds a pool tree for the task, and the refusal names make builder-tree-release",
+     "class": "within",
+     "why": "An added refusal that names its compliant command."
+    },
+    {
+     "id": "T359-D15a",
+     "summary": "The removal of a withdrawn task's unfilled template stub owes no plan review",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The plan-stage gate exists so that a plan's decisions do not reach a tick without an independent verdict. A byte-for-byte template stub holds no decisions, and its removal decides nothing. Requiring a verdict on it asks for a review of nothing, and exempting it does not weaken what the gate is for."
+    },
+    {
+     "id": "T359-D15b",
+     "summary": "As worded, the exemption reaches any (removed) block whose own task's box carries ' Withdrawn YYYY-MM-DD: ', in tasks.md or tasks-done.md. It is not bounded to a block that was the template, or to a line written by the command.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "One justification is stretched over two unlike things. 'Nothing was decided in it' is true of the template stub (D15a) and false of a filled or reviewed section. The block's own control row shows that a box can be ticked by hand and that this gate is what catches it. Under D15 as worded, a hand-written ' Withdrawn 2026-11-26: x' on a box, with its filled section deleted, passes the tick and the push's plan check with no verdict. D2 and D3 refuse that case only inside make task-withdraw, not at the gate. That is the plan-stage gate's purpose gutted for a case the argument does not reach. It contradicts the GM's 'let's make sure all of the enforcement is real enforcement and not just instructions'. In the exemption, in_scope should owe nothing only for a (removed) block whose earlier text is the template stub, by D2's own test (plan::template::TEMPLATE with the id filled in, with or without the performance checklist). A removed block of any other text still owes its verdict, whatever its box says. A red fixture should be pinned beside the existing test: a Withdrawn-form box whose filled block was removed is still answered for."
+    },
+    {
+     "id": "Found-and-left T369",
+     "summary": "The second-tree overwrite of a task's mark is deferred to T369, which lands before T302",
+     "class": "within",
+     "why": "The deferral states why it is not fixed here, its filed id and its order, as FR-009 asks. Nothing is narrowed."
+    },
+    {
+     "id": "Performance work",
+     "summary": "Not performance work by FR-013's test",
+     "class": "within",
+     "why": "The tooling speeds no engine, check, gate, landing or builder's loop, and measures no time. So FR-013's ordering applies to it as written."
+    }
+   ],
+   "tasks": [
+    "T359"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T359 (a filed task found a duplicate or no defect had no way out but a full landing, and a task started by mistake no way out but moving its mark by hand: on 2026-11-26 `make land` refused T322, T323, T356 and T358 for their unfilled plan stubs)",
+    "### T359 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "Two commands, make task-withdraw and make task-unstart, and the four filed tasks (T322 T323 T356 T358) withdrawn with the first. Now built in two halves.",
+     "class": "within",
+     "why": "Process tooling filed by the coordinating session from two observations of 2026-11-26. The GM's words name neither command, and having them narrows nothing in request.md. The GM's approval asks for real enforcement, and both commands refuse rather than instruct. Splitting the build in two halves is the order of the work, not a scope decision."
+    },
+    {
+     "id": "T359-D1",
+     "summary": "A withdrawn box is ticked and carries ' Withdrawn YYYY-MM-DD: <why>'. The date is added to the form the task line gave.",
+     "class": "within",
+     "why": "Unchanged since round 1. A tooling form. It deviates from the coordinating session's task line, not from the GM's words."
+    },
+    {
+     "id": "T359-D2",
+     "summary": "Only a stub that is the template byte for byte is removed, by the one stub test plan::template::stubs that the plan gate also uses. A filled section is refused.",
+     "class": "within",
+     "why": "Round 1 ruled it within. The only change is that without_stub now uses the same stub test as the plan gate (T359-D15). One test serving both places narrows nothing."
+    },
+    {
+     "id": "T359-D3",
+     "summary": "A task with an entry in plan-review.json's tasks is refused",
+     "class": "within",
+     "why": "Unchanged. It keeps reviewed work on the landing path."
+    },
+    {
+     "id": "T359-D4",
+     "summary": "Code carried means a commit in origin/main..HEAD whose subject head names the feature and the task",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D5",
+     "summary": "Two refusals beyond the brief: a box with an open box under it, and the feature's last open boxes",
+     "class": "within",
+     "why": "Unchanged. Adding refusals narrows nothing."
+    },
+    {
+     "id": "T359-D6",
+     "summary": "Every refusal is printed together, nothing is written while one stands, the filing lock is held, and the id stays reserved",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D7",
+     "summary": "A TaskWithdrawn event line through the hooks' own writer",
+     "class": "within",
+     "why": "Unchanged. It records who withdrew the task and why."
+    },
+    {
+     "id": "T359-D8",
+     "summary": "The unstart row's shape, with feature and task nested",
+     "class": "within",
+     "why": "Unchanged. A tooling convention."
+    },
+    {
+     "id": "T359-D9a",
+     "summary": "An unstart cancels every earlier start of its feature and task in its tree, so the filtered start log agrees with the tree's mark",
+     "class": "within",
+     "why": "Unchanged in substance. Every filtered reader agrees with the one mark, and that narrows nothing."
+    },
+    {
+     "id": "T359-D9b",
+     "summary": "An unstart followed by a new start resets no count of make static runs: static_runs_hooks reads the raw log for the count and counts the runs since the task's last landing from its first start, whatever unstarts lie between. STATIC_OK=\"<reason>\" stays the one escape.",
+     "class": "within",
+     "why": "Round 1's item is answered. This is round 1's option (a), which is FR-007's own wording ('a third make static in one task since its last landing'): the count no longer restarts at an unstart, so task-unstart is no longer an escape from FR-007 without a recorded reason, and the one escape left is STATIC_OK with its reason (FR-012). Item 1 restates the goal to match. The test an_unstart_and_a_new_start_restart_no_count pins it, and item 9 reports it red first (rust/guard 550 passed, 1 failed, then 551 passed). The test cases are: start, the allowed runs, unstart, new start, next run refused; and a landing between resets the count. This was re-classed within because the narrowing is gone."
+    },
+    {
+     "id": "T359-D9c",
+     "summary": "A task worked, then unstarted and never started again, loses its earlier start in the time breakdown",
+     "class": "within",
+     "why": "Unchanged since round 1. The unstart row stays in the log, and the GM's definition of the breakdown does not ask it to be exact."
+    },
+    {
+     "id": "T359-D9d",
+     "summary": "Newly stated: a task unstarted and not started again 'carries no task, so it has no count and owes no closing order'. The guard's reading of whose task a call is uses the filtered view.",
+     "class": "within",
+     "why": "Weighed for one sequence: start, two runs, unstart, N runs while no task is started, start again. The N runs in the gap are not refused by FR-007. That is FR-007's own scope, which is runs 'in one task'. Leaving the started state by command is not new: D12 cites make set-down, which already clears a tree's mark. Once the task is started again it meets its full count, and the runs before the unstart still count (D9b). Neither the GM's words nor FR-007 ask for a count of runs made while no task is started. So this case opens no route past FR-007 that the no-task state did not already have. Nothing in the bundle shows that the no-task state was unreachable mid-work before T359. If it was, this entry would need to be reopened."
+    },
+    {
+     "id": "T359-D10",
+     "summary": "A bundle is unstarted whole under its first task",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D11",
+     "summary": "The legacy one-mark file is unstarted as its own tree's mark, and a phase hold is lifted along with the start",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D12",
+     "summary": "Another tree's mark is refused, and the refusal names make -C <that tree>",
+     "class": "within",
+     "why": "Unchanged."
+    },
+    {
+     "id": "T359-D13",
+     "summary": "The filter is used by every reader but one (fifteen call sites in seven crates). static_runs_hooks reads the raw log for its count of runs on purpose.",
+     "class": "within",
+     "why": "This was restated from 'all sixteen readers'. The one raw reader is the mechanism that enforces FR-007 (D9b), and the task it counts for is still taken through the filtered filed.rs. The list counts to fifteen, with land/ready.rs's two reads counted separately, across seven crates. The search space is stated in item 7: one search for the log's name over rust/, scripts/ and the Makefile. Each reader has a test in item 9's table."
+    },
+    {
+     "id": "T359-D14",
+     "summary": "T366 is covered here: a withdrawal is refused when a builder holds a pool tree for the task, and the refusal names make builder-tree-release",
+     "class": "within",
+     "why": "Unchanged. An added refusal that names its compliant command."
+    },
+    {
+     "id": "T359-D15a",
+     "summary": "A withdrawn task's removed block owes no plan review only where its earlier text is a block of that task's template stub byte for byte, by the one stub test, with the trailing newlines aside",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is round 1's LEGITIMATE narrowing, now bounded as round 1 required. The plan-stage gate exists so that decisions do not reach a tick without an independent verdict. A block that is the unfilled template holds no decisions. Matching per block, with the trailing newlines aside, still decides nothing, because a filled block of the same section remains owed on its own. Round 1's case (a)-(b) did not depend on whether the stub is compared whole or by its blocks."
+    },
+    {
+     "id": "T359-D15b",
+     "summary": "The exemption is narrowed: the Withdrawn form of a box alone exempts nothing. A Withdrawn-form box whose filled section was deleted is answered for at the tick and at the push. A removed block whose earlier text cannot be read is owed.",
+     "class": "within",
+     "why": "Round 1's item is answered. The exemption now requires both a Withdrawn-form box and earlier text that is the stub byte for byte. That earlier text is read from the kept record or from the plan's history at the recorded digest, the same way removed_blocks reads it. So the hand-written case round 1 described (a box ticked by hand in the Withdrawn form, its filled section deleted) is caught at the gate, not only inside make task-withdraw. Unreadable earlier text is treated as owed, which fails closed. The red fixture round 1 asked for is pinned: a_withdrawn_form_box_whose_filled_block_was_removed_is_still_answered_for. Item 9 reports it red first (rust/gate/crates/plan 195 passed, 1 failed, then 197 passed). The case of a live block under a withdrawn heading that has no other owner stays owed. This entry narrows nothing, so it carries no ruling."
+    },
+    {
+     "id": "Found-and-left T369",
+     "summary": "The second-tree overwrite of a task's mark is deferred to T369, which lands before T302",
+     "class": "within",
+     "why": "Unchanged. It states why it is not fixed here, its filed id and its order, as FR-009 asks."
+    },
+    {
+     "id": "Performance work",
+     "summary": "Not performance work by FR-013's test",
+     "class": "within",
+     "why": "Unchanged. The tooling speeds nothing that FR-013 names and measures no time."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)",
+    "### T363 Approach (checklist part A)",
+    "### T470 (found by 451 T463: its line asked for libtest's per-test times on a slow test run beside the live record, not built there because whether the words move cargo's fingerprint was unmeasured)",
+    "### T470 Approach (checklist part A)",
+    "(removed) ### T363 (<why: the finding or measurement that files it>)",
+    "(removed) ### T470 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T363-D1",
+     "summary": "The leak pin (run.rs leak_checked) also fails a crate whose tests left a process running, naming it (pid and command line), and SIGKILLs it; covers the built-binary, cargo test and doctest paths.",
+     "class": "within",
+     "why": "T363's own finding is that leaked processes held the test phase's pipe and nothing failed for it; failing and ending them is what the task is for, and it serves FR-013 (the GM 2026-11-20: prioritize work that makes the checks faster)."
+    },
+    {
+     "id": "T363-D2",
+     "summary": "A leaked process is found by its environ holding exactly the run's fresh TMPDIR, not by a process group (the task line's suggestion); a process started with a cleared environment escapes, and the two env_clear sites under rust/ were observed to wait on their children.",
+     "class": "within",
+     "why": "The mechanism is not in the GM's words (the process-group idea is the coordinating session's task line), and the GM's request asks only that the checks be fast and the time measured. The choice keeps land's stop able to TERM the run's process group (land/stop.rs kill_group), which a test run moved to its own group would escape. Its stated reach: the check matches the run's TMPDIR exactly, so a child started with a cleared environment, or given a different TMPDIR, is not seen; the block's search covered the first form only (grep of rust/ for env_clear, two sites, each read and each waiting on its child, observed 2026-11-27). That is a stated limit of a detector, not a wrong outcome found, and it does not narrow anything the GM asked for."
+    },
+    {
+     "id": "T363-D3",
+     "summary": "GRACE, 100 ms, a new GUESS knob, re-reads /proc only where a process was found.",
+     "class": "within",
+     "why": "A labeled guess knob with its reason; a clean run costs one /proc read."
+    },
+    {
+     "id": "T363-D4",
+     "summary": "T364's holder of the output pipe, still cut at DRAIN and named on its HELD line, now also turns the crate red.",
+     "class": "within",
+     "why": "A pipe holder is a process the tests left, which T363 exists to fail; the batch gate turning red for a leaking crate is the point, and rust/guard, the motivating crate, was measured green fresh through the new pin."
+    },
+    {
+     "id": "T363-D5",
+     "summary": "Tagged [perf] under FR-013; ordered after T364, before T365.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the checks faster; ending a leaked process that held the phase 3.1 s and keeping such leaks from going unseen is that. Ordering after T364 follows from keeping its HELD line."
+    },
+    {
+     "id": "T470-D1",
+     "summary": "A crate's built test binary run directly is given `-Z unstable-options --report-time` (in place of -q) under RUSTC_BOOTSTRAP=1 in the binary's environment; alive::split strips the per-test lines so the checks read what -q left; on a run past its bound the times are appended to the alive record, slowest first, cut at T463's CAP; no new file in alive/.",
+     "class": "within",
+     "why": "This is what T463's and T470's lines ask: per-test times on a slow test run beside the live record. Measurement work counts as performance work (the GM 2026-11-20)."
+    },
+    {
+     "id": "T470-D2",
+     "summary": "Departure from the line's literal `--format json`: the human format with --report-time is used, because test_line's summary, only::judge and a red crate's shown output read libtest's human stdout; --logfile beside -q rejected for its stderr deprecation warning on every run.",
+     "class": "within",
+     "why": "The output format is the coordinating session's line, not the GM's words; the GM asked to see where time goes, and per-test times are delivered either way. JSON would break the checks that read the human stdout, a wrong outcome; the choice is a mechanism within what was asked."
+    },
+    {
+     "id": "T470-D3",
+     "summary": "The crate's cargo test path (tested: a fresh run, a failed key build) is not given the words and records no per-test times, because RUSTC_BOOTSTRAP in cargo's environment rebuilt proc-macro2 and its dependents, and the next plain run rebuilt again (measured 2026-11-27, three runs on a scratch crate over thiserror 2.0.21).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM asked that everything be measured so we know where our time goes, especially compiling and running tests (2026-11-22), and FR-003 books each crate's test seconds; neither the request nor the spec asks for per-test times on every path, which are T463's own refinement. The cargo test fallback (a fresh run, a failed key build) keeps its crate-level test seconds, so nothing the GM asked to be measured goes unmeasured. What was measured, on which graph: with RUSTC_BOOTSTRAP=1 in cargo's environment a scratch crate over thiserror 2.0.21 rebuilt proc-macro2, thiserror, quote, syn and thiserror-impl, and rebuilt again on the next plain run (three runs, 2026-11-27); the rustc crate stayed Fresh (22 units); only rust/mode_a builds proc-macro2 among the seven manifests read. So the rebuild cost is shown for proc-macro2 graphs only; for the rest the choice is a design choice inside what was asked, not a narrowing, and it is consistent with the GM's principle that time saved comes first (2026-11-26)."
+    },
+    {
+     "id": "T470-D4",
+     "summary": "RUSTC_BOOTSTRAP=1 is inherited only by what a test spawns; no test under rust/ runs cargo or make on a real target (grep observed 2026-11-27), the one real cargo test building in a scratch target. The pins in side.rs and only.rs on a binary's words now name the new words.",
+     "class": "within",
+     "why": "Checks that the inherited variable does not move a fingerprint elsewhere. Its stated search space: grep of rust/ for Command::new(\"cargo\"), Command::new(\"make\"), l7r-gate.sh and var(\"CARGO\"), observed 2026-11-27, which would not see a cargo or rustc started through another variable or env!(\"CARGO\"); the one real cargo test named builds in a scratch target. Within what was asked; the pins follow the words."
+    },
+    {
+     "id": "T470-D5",
+     "summary": "Tagged [perf] under FR-013; ordered after T463, before T435.",
+     "class": "within",
+     "why": "FR-013 and the GM's words of 2026-11-20 count a task that measures where the time goes as performance work."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The two placeholder T363 and T470 sections (the template's `<why: ...>` headings) are removed, replaced by the filled sections above.",
+     "class": "within",
+     "why": "A template heading replaced by the task's real heading; nothing the GM asked for is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)",
+    "### T363 Approach (checklist part A)",
+    "### T470 (found by 451 T463: its line asked for libtest's per-test times on a slow test run beside the live record, not built there because whether the words move cargo's fingerprint was unmeasured)",
+    "### T470 Approach (checklist part A)",
+    "(removed) ### T363 (<why: the finding or measurement that files it>)",
+    "(removed) ### T470 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T363-D1",
+     "summary": "The leak pin (run.rs leak_checked) also fails a crate whose tests left a process running, naming it (pid and command line), and SIGKILLs it; covers the built-binary, cargo test and doctest paths.",
+     "class": "within",
+     "why": "T363's own finding is that leaked processes held the test phase's pipe and nothing failed for it; failing and ending them is what the task is for, and it serves FR-013 (the GM 2026-11-20: prioritize work that makes the checks faster)."
+    },
+    {
+     "id": "T363-D2",
+     "summary": "A leaked process is found by its environ holding exactly the run's fresh TMPDIR, not by a process group (the task line's suggestion); a process started with a cleared environment escapes, and the two env_clear sites under rust/ were observed to wait on their children.",
+     "class": "within",
+     "why": "The mechanism is not in the GM's words (the process-group idea is the coordinating session's task line), and the GM's request asks only that the checks be fast and the time measured. The choice keeps land's stop able to TERM the run's process group (land/stop.rs kill_group), which a test run moved to its own group would escape. Its stated reach: the check matches the run's TMPDIR exactly, so a child started with a cleared environment, or given a different TMPDIR, is not seen; the block's search covered the first form only (grep of rust/ for env_clear, two sites, each read and each waiting on its child, observed 2026-11-27). That is a stated limit of a detector, not a wrong outcome found, and it does not narrow anything the GM asked for."
+    },
+    {
+     "id": "T363-D3",
+     "summary": "GRACE, 100 ms, a new GUESS knob, re-reads /proc only where a process was found.",
+     "class": "within",
+     "why": "A labeled guess knob with its reason; a clean run costs one /proc read."
+    },
+    {
+     "id": "T363-D4",
+     "summary": "T364's holder of the output pipe, still cut at DRAIN and named on its HELD line, now also turns the crate red.",
+     "class": "within",
+     "why": "A pipe holder is a process the tests left, which T363 exists to fail; the batch gate turning red for a leaking crate is the point, and rust/guard, the motivating crate, was measured green fresh through the new pin."
+    },
+    {
+     "id": "T363-D5",
+     "summary": "Tagged [perf] under FR-013; ordered after T364, before T365.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the checks faster; ending a leaked process that held the phase 3.1 s and keeping such leaks from going unseen is that. Ordering after T364 follows from keeping its HELD line."
+    },
+    {
+     "id": "T470-D1",
+     "summary": "A crate's built test binary run directly is given `-Z unstable-options --report-time` (in place of -q) under RUSTC_BOOTSTRAP=1 in the binary's environment; alive::split strips the per-test lines so the checks read what -q left; on a run past its bound the times are appended to the alive record, slowest first, cut at T463's CAP; no new file in alive/.",
+     "class": "within",
+     "why": "This is what T463's and T470's lines ask: per-test times on a slow test run beside the live record. Measurement work counts as performance work (the GM 2026-11-20)."
+    },
+    {
+     "id": "T470-D2",
+     "summary": "Departure from the line's literal `--format json`: the human format with --report-time is used, because test_line's summary, only::judge and a red crate's shown output read libtest's human stdout; --logfile beside -q rejected for its stderr deprecation warning on every run.",
+     "class": "within",
+     "why": "The output format is the coordinating session's line, not the GM's words; the GM asked to see where time goes, and per-test times are delivered either way. JSON would break the checks that read the human stdout, a wrong outcome; the choice is a mechanism within what was asked."
+    },
+    {
+     "id": "T470-D3",
+     "summary": "The crate's cargo test path (tested: a fresh run, a failed key build) is not given the words and records no per-test times, because RUSTC_BOOTSTRAP in cargo's environment rebuilt proc-macro2 and its dependents, and the next plain run rebuilt again (measured 2026-11-27, three runs on a scratch crate over thiserror 2.0.21).",
+     "class": "within",
+     "why": "The GM asked that everything be measured so we know where our time goes, especially compiling and running tests (2026-11-22), and FR-003 books each crate's test seconds; neither the request nor the spec asks for per-test times on every path, which are T463's own refinement. The cargo test fallback (a fresh run, a failed key build) keeps its crate-level test seconds, so nothing the GM asked to be measured goes unmeasured. What was measured, on which graph: with RUSTC_BOOTSTRAP=1 in cargo's environment a scratch crate over thiserror 2.0.21 rebuilt proc-macro2, thiserror, quote, syn and thiserror-impl, and rebuilt again on the next plain run (three runs, 2026-11-27); the rustc crate stayed Fresh (22 units); only rust/mode_a builds proc-macro2 among the seven manifests read. So the rebuild cost is shown for proc-macro2 graphs only; for the rest the choice is a design choice inside what was asked, not a narrowing, and it is consistent with the GM's principle that time saved comes first (2026-11-26)."
+    },
+    {
+     "id": "T470-D4",
+     "summary": "RUSTC_BOOTSTRAP=1 is inherited only by what a test spawns; no test under rust/ runs cargo or make on a real target (grep observed 2026-11-27), the one real cargo test building in a scratch target. The pins in side.rs and only.rs on a binary's words now name the new words.",
+     "class": "within",
+     "why": "Checks that the inherited variable does not move a fingerprint elsewhere. Its stated search space: grep of rust/ for Command::new(\"cargo\"), Command::new(\"make\"), l7r-gate.sh and var(\"CARGO\"), observed 2026-11-27, which would not see a cargo or rustc started through another variable or env!(\"CARGO\"); the one real cargo test named builds in a scratch target. Within what was asked; the pins follow the words."
+    },
+    {
+     "id": "T470-D5",
+     "summary": "Tagged [perf] under FR-013; ordered after T463, before T435.",
+     "class": "within",
+     "why": "FR-013 and the GM's words of 2026-11-20 count a task that measures where the time goes as performance work."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The two placeholder T363 and T470 sections (the template's `<why: ...>` headings) are removed, replaced by the filled sections above.",
+     "class": "within",
+     "why": "A template heading replaced by the task's real heading; nothing the GM asked for is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T363 (found by T340, 2026-11-26: rust/guard's stand-in sessions left nine `sleep 5` processes a run, which held the test phase's output pipe 3.1 s past the binary's exit, measured 2026-11-26 (T340, the binary by hand into a pipe), and nothing failed for it; T364 cut the wait and names a pipe's holder, failing nothing)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T363-grace-1s",
+     "summary": "The only change since the CLEAR verdict: GRACE, the re-read slack before a left process is declared leaked, raised from 100 ms to 1 s (a GUESS knob), because a falsely red batch gate costs about ten minutes and an arbiter round and load reached 37 (observed 2026-11-27, uptime); waited only where a process was found.",
+     "class": "within",
+     "why": "A tuning value inside the block's already-cleared mechanism. It removes no case the pin is for: T340's motivating `sleep 5` holders and the red-first fixture's `sleep 46.7` still outlive 1 s and are still named, killed and failed; a clean run still pays nothing. Avoiding false reds under load serves the GM's own 2026-11-26 words in request.md (\"I agree with prioritizing the test that fails under load being fixed\") and the feature's time purpose. The figure carries an observed label with date and method."
+    },
+    {
+     "id": "T363-env-marker",
+     "summary": "Leftover processes found by the run's own TMPDIR in /proc environ, not by a process group, so land's kill_group still reaches test runs; env_clear sites checked by grep (unchanged text).",
+     "class": "within",
+     "why": "Unchanged since the CLEAR verdict; a mechanism choice that catches the leaked descendants T363 names, with the env_clear blind spot censused by a stated search."
+    },
+    {
+     "id": "T363-red-and-kill",
+     "summary": "A process found both times is named by pid and command line, sent SIGKILL, and the crate fails, on both the direct-binary and cargo-test paths and doctests; T364's pipe holder is now red too (unchanged text).",
+     "class": "within",
+     "why": "Unchanged since the CLEAR verdict; it is the fix the T363 line asks for: a run that leaves a process behind no longer passes silently."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T355 to T363, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

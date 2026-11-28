@@ -1,0 +1,225 @@
+{
+ "blocks": {
+  "### T241 (page session P15's cascade, 2026-11-25: hamlet/marsh contradicted 0057's new UNRESEARCHED block `toe-shoulder-past-corner` and was briefed as not owed by `make record-owed`; a directed read found it)": {
+   "sha256": "9c3174b8c10f29abcc161e936869a9a647c5d0cbe45605c9d1ae2a84b9681e8c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T241 Approach (checklist part A)": {
+   "sha256": "6466f364702401ab2e218372671cf2ac2c3e5f2f49ac29b73865a4bdae5c51ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T242 (451 T238's landing, 2026-11-25: its tick left staged, the push refusing the dirty clone, the revert refused; T238 reached main only with T240's landing)": {
+   "sha256": "3add0364b4d61b1afb35a29c168f8f354787e6a988fdb1c21e096f9e50160f28",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T242 Approach (checklist part A)": {
+   "sha256": "52eb35ad09cb14dad2fd74ed2742fcdc5bc58b60e097fa7181bce043c34180b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T241": {
+   "section_sha256": "8ec13257a74fd01177499903bb42566421fb9b6f4419408df46451fc519acd69",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T241-fix",
+     "summary": "The cause is placed in the reading, not the owing: the plan records three readings (a replay at 01549f3828~1, P15's check-session listing, the cascade's report, all 2026-11-25) that record-owed already owed modal-depiction:hamlet/marsh, and that the coordinator's `| tail -6` cut the count off the listing's first line. The fix makes report's last line repeat the count and list every pop-up an unanswered unit owes, so a tail still shows both.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-24 'we really are cascading in situations that do call for it': the pop-up that called for a cascade was nearly briefed as not owed, and the fix closes the route by which it was. The fix reaches the stated case (any tail that includes the last line shows the count and the owed pop-ups). Pure tooling; nothing on a map changes."
+    },
+    {
+     "id": "T241-red-on-the-pair",
+     "summary": "The task line's 'make that pop-up owed, red-first on the pair' is met by a red-first test on the listing's last line (recorded red on HEAD, 125 passed / 1 failed; 126 passed on the fix), not a red on the pair, because the pair was owed on HEAD's code and on the fix.",
+     "class": "within",
+     "why": "The task line is the session's wording, not the GM's; the GM asks that cascades fire where called for, and a red on a pair that was never unowed cannot exist. The red-first test enforces the defect actually found."
+    },
+    {
+     "id": "T241-over-flag-left",
+     "summary": "The over-flag measured on the same run (windbreak and both wells owed through 0031's moved drawing page; of 43 owed, the tool cleared 32, the agent 8, 3 sent on) is judged the intended filter and left unchanged.",
+     "class": "within",
+     "why": "The GM's concern is 'unnecessary edits as a result of something trivial changing'; the owing is cheap and the triage dropped the trivial ones before any edit, so no wrong outcome exists (constitution XIV: a defect is a wrong outcome). Leaving a non-defect is within what was asked and needs no ruling."
+    },
+    {
+     "id": "T241-T226-sequenced",
+     "summary": "Found and left: a moved Drawing: page owes only modal-depiction, never modal-form, so a page's new labeled guess (here 0057's UNRESEARCHED block, marsh's Guesses bullet) never owes the Guesses-tab check. Left to the already-open 451 T226, which 'lands before T242', with 0057/hamlet-marsh given to it as a second fixture.",
+     "class": "within",
+     "why": "Nothing the GM asked for is undone, only ordered: the defect is already carried by its own open task in this feature, and the block states why it is not fixed here (T226's own rule, a check owed by a new item, outside this listing), its id and its order, the shape FR-009 provides for a deferred defect. T241's own pair was owed and sent on through modal-depiction, so T241's scope is not narrowed. T226 itself serves the 2026-11-24 clause 'we really are cascading in situations that do call for it'."
+    },
+    {
+     "id": "T241-not-performance",
+     "summary": "'Performance work? no: one line more in a listing.'",
+     "class": "within",
+     "why": "Under FR-013 and the GM's 2026-11-20 measurement ruling, a listing's last line is neither performance nor measurement work, so it takes no scheduling precedence."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T242": {
+   "section_sha256": "85e218247e3754c5ab67b72cea83166f64e8cd1f78e447f9b86dcaf24fed0e69",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T242-1",
+     "summary": "The first pass's 'uncommitted changes' refusal becomes writer_refusal: it lists the clone's foreign git status lines (first six and a count), the landing's own escape records committed first (408).",
+     "class": "within",
+     "why": "A fix to the landing's refusal message, which makes the landing tooling report what blocks it. It keeps the refusal and narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T242-2",
+     "summary": "An open builder handoff names the clone only when its text names the clone root as a whole path, its task is not being landed, its task is open in some tasks.md, and it was written in the last 24 h (HANDOFF_FRESH_S, a CONVENTION knob). A handoff is named only beside changes, never as a refusal on its own.",
+     "class": "within",
+     "why": "These conditions decide which pointer the refusal prints. They never decide whether a dirty clone is refused, because the changes alone decide that. The 24 h bound is measured 2026-11-25: 26 of 538 handoffs would otherwise be wrongly named, all 2 to 5 days old. Nothing in request.md or the spec asks for a handoff to be named, so the bound narrows nothing that was asked."
+    },
+    {
+     "id": "T242-3",
+     "summary": "The same check runs again at the push step's start, before the ticks; a refusal there ticks and pushes nothing.",
+     "class": "within",
+     "why": "Extends the refusal to the window between the claims wait and the ticks. It adds a refusal and carves nothing out."
+    },
+    {
+     "id": "T242-4",
+     "summary": "The tick's git add and git commit are read (commit_tick). A commit refused for index.lock is retried 3 times, 500 ms apart (CONVENTION knobs). On a failure the ticks are put back by unstaging and a checkout from HEAD, archives removed, fix rows set pending again, and the tick's escape record committed. Nothing is left staged.",
+     "class": "within",
+     "why": "Fixes the measured defect: an unread commit left the tick staged and sent the revert at the wrong commit. The undo is a checkout and never a history rewrite, which follows CLAUDE.md. The cause of the commit failure is left as a hypothesis, but the fix reads every failure, so the cause does not limit what it covers."
+    },
+    {
+     "id": "T242-5",
+     "summary": "After a failed push the revert always names the tick's own commit. Where another writer's edit blocks that revert, the tick commit stands, committed and never staged, with the existing message.",
+     "class": "within",
+     "why": "Corrects the revert's target. When the revert is blocked, the tick is left committed and stated, which is the outcome the plan's goal names ('committed or put back'). No defect is left: nothing is staged and the message says what happened."
+    },
+    {
+     "id": "T242-6",
+     "summary": "A clone dirty at make land's start still lands alone (451 T88/T101): alone_owed is asked before the first pass, and the new refusal is not placed before it.",
+     "class": "within",
+     "why": "Keeps earlier approved behavior that this task was not asked to change. It is not an exception to anything this task or the request asks for."
+    },
+    {
+     "id": "T242-7",
+     "summary": "The claims wait (CLAIMS_WAIT_S, 20 min) keeps waiting rather than refusing; check (2) covers the seconds after it.",
+     "class": "within",
+     "why": "Leaves an existing, pinned behavior as it is, with a stated reason (the claims round's records are committed beside the gate). Nothing asked is narrowed."
+    },
+    {
+     "id": "T242-8",
+     "summary": "A builder's linked worktree with uncommitted work, and a handoff naming that worktree, bear on nothing; such a landing lands (pinned).",
+     "class": "within",
+     "why": "A worktree's files and index are not in the clone's git status, so the rule's own subject (another writer in the tree the landing ticks in) does not include them. This states the rule's reach and carves no case out of it."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T241 (page session P15's cascade, 2026-11-25: hamlet/marsh contradicted 0057's new UNRESEARCHED block `toe-shoulder-past-corner` and was briefed as not owed by `make record-owed`; a directed read found it)",
+    "### T241 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T241-fix",
+     "summary": "The cause is placed in the reading, not the owing: the plan records three readings (a replay at 01549f3828~1, P15's check-session listing, the cascade's report, all 2026-11-25) that record-owed already owed modal-depiction:hamlet/marsh, and that the coordinator's `| tail -6` cut the count off the listing's first line. The fix makes report's last line repeat the count and list every pop-up an unanswered unit owes, so a tail still shows both.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-24 'we really are cascading in situations that do call for it': the pop-up that called for a cascade was nearly briefed as not owed, and the fix closes the route by which it was. The fix reaches the stated case (any tail that includes the last line shows the count and the owed pop-ups). Pure tooling; nothing on a map changes."
+    },
+    {
+     "id": "T241-red-on-the-pair",
+     "summary": "The task line's 'make that pop-up owed, red-first on the pair' is met by a red-first test on the listing's last line (recorded red on HEAD, 125 passed / 1 failed; 126 passed on the fix), not a red on the pair, because the pair was owed on HEAD's code and on the fix.",
+     "class": "within",
+     "why": "The task line is the session's wording, not the GM's; the GM asks that cascades fire where called for, and a red on a pair that was never unowed cannot exist. The red-first test enforces the defect actually found."
+    },
+    {
+     "id": "T241-over-flag-left",
+     "summary": "The over-flag measured on the same run (windbreak and both wells owed through 0031's moved drawing page; of 43 owed, the tool cleared 32, the agent 8, 3 sent on) is judged the intended filter and left unchanged.",
+     "class": "within",
+     "why": "The GM's concern is 'unnecessary edits as a result of something trivial changing'; the owing is cheap and the triage dropped the trivial ones before any edit, so no wrong outcome exists (constitution XIV: a defect is a wrong outcome). Leaving a non-defect is within what was asked and needs no ruling."
+    },
+    {
+     "id": "T241-T226-sequenced",
+     "summary": "Found and left: a moved Drawing: page owes only modal-depiction, never modal-form, so a page's new labeled guess (here 0057's UNRESEARCHED block, marsh's Guesses bullet) never owes the Guesses-tab check. Left to the already-open 451 T226, which 'lands before T242', with 0057/hamlet-marsh given to it as a second fixture.",
+     "class": "within",
+     "why": "Nothing the GM asked for is undone, only ordered: the defect is already carried by its own open task in this feature, and the block states why it is not fixed here (T226's own rule, a check owed by a new item, outside this listing), its id and its order, the shape FR-009 provides for a deferred defect. T241's own pair was owed and sent on through modal-depiction, so T241's scope is not narrowed. T226 itself serves the 2026-11-24 clause 'we really are cascading in situations that do call for it'."
+    },
+    {
+     "id": "T241-not-performance",
+     "summary": "'Performance work? no: one line more in a listing.'",
+     "class": "within",
+     "why": "Under FR-013 and the GM's 2026-11-20 measurement ruling, a listing's last line is neither performance nor measurement work, so it takes no scheduling precedence."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T242 (451 T238's landing, 2026-11-25: its tick left staged, the push refusing the dirty clone, the revert refused; T238 reached main only with T240's landing)",
+    "### T242 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T242-1",
+     "summary": "The first pass's 'uncommitted changes' refusal becomes writer_refusal: it lists the clone's foreign git status lines (first six and a count), the landing's own escape records committed first (408).",
+     "class": "within",
+     "why": "A fix to the landing's refusal message, which makes the landing tooling report what blocks it. It keeps the refusal and narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T242-2",
+     "summary": "An open builder handoff names the clone only when its text names the clone root as a whole path, its task is not being landed, its task is open in some tasks.md, and it was written in the last 24 h (HANDOFF_FRESH_S, a CONVENTION knob). A handoff is named only beside changes, never as a refusal on its own.",
+     "class": "within",
+     "why": "These conditions decide which pointer the refusal prints. They never decide whether a dirty clone is refused, because the changes alone decide that. The 24 h bound is measured 2026-11-25: 26 of 538 handoffs would otherwise be wrongly named, all 2 to 5 days old. Nothing in request.md or the spec asks for a handoff to be named, so the bound narrows nothing that was asked."
+    },
+    {
+     "id": "T242-3",
+     "summary": "The same check runs again at the push step's start, before the ticks; a refusal there ticks and pushes nothing.",
+     "class": "within",
+     "why": "Extends the refusal to the window between the claims wait and the ticks. It adds a refusal and carves nothing out."
+    },
+    {
+     "id": "T242-4",
+     "summary": "The tick's git add and git commit are read (commit_tick). A commit refused for index.lock is retried 3 times, 500 ms apart (CONVENTION knobs). On a failure the ticks are put back by unstaging and a checkout from HEAD, archives removed, fix rows set pending again, and the tick's escape record committed. Nothing is left staged.",
+     "class": "within",
+     "why": "Fixes the measured defect: an unread commit left the tick staged and sent the revert at the wrong commit. The undo is a checkout and never a history rewrite, which follows CLAUDE.md. The cause of the commit failure is left as a hypothesis, but the fix reads every failure, so the cause does not limit what it covers."
+    },
+    {
+     "id": "T242-5",
+     "summary": "After a failed push the revert always names the tick's own commit. Where another writer's edit blocks that revert, the tick commit stands, committed and never staged, with the existing message.",
+     "class": "within",
+     "why": "Corrects the revert's target. When the revert is blocked, the tick is left committed and stated, which is the outcome the plan's goal names ('committed or put back'). No defect is left: nothing is staged and the message says what happened."
+    },
+    {
+     "id": "T242-6",
+     "summary": "A clone dirty at make land's start still lands alone (451 T88/T101): alone_owed is asked before the first pass, and the new refusal is not placed before it.",
+     "class": "within",
+     "why": "Keeps earlier approved behavior that this task was not asked to change. It is not an exception to anything this task or the request asks for."
+    },
+    {
+     "id": "T242-7",
+     "summary": "The claims wait (CLAIMS_WAIT_S, 20 min) keeps waiting rather than refusing; check (2) covers the seconds after it.",
+     "class": "within",
+     "why": "Leaves an existing, pinned behavior as it is, with a stated reason (the claims round's records are committed beside the gate). Nothing asked is narrowed."
+    },
+    {
+     "id": "T242-8",
+     "summary": "A builder's linked worktree with uncommitted work, and a handoff naming that worktree, bear on nothing; such a landing lands (pinned).",
+     "class": "within",
+     "why": "A worktree's files and index are not in the clone's git status, so the rule's own subject (another writer in the tree the landing ticks in) does not include them. This states the rule's reach and carves no case out of it."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T241 to T242, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

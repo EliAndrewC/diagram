@@ -1,0 +1,753 @@
+{
+ "blocks": {
+  "### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)": {
+   "sha256": "4076e8d50a09c63a4964c3a2b4e6ce37149fa6625a1fac0a7b194ade9491731d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "4c8a27c228ccee88e27bd444ebd0b08ef01f7505ffdfefe9dab6ee727ddc7b75",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T29": {
+   "section_sha256": "0157af618107c50eaac4bd94f1900acdb53e0eb377f5863cf120ce20bf79c8f3",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T29-clear",
+     "summary": "make set-down removes the clone's active-task mark once the set-down row is written, when the mark names the set-down feature, and says so in its reply; the next task-start writes it again",
+     "class": "within",
+     "why": "Fixes a defect in the sense of constitution XIV (a tool refusing valid work: a set-down feature's stale mark held every push touching its specs and refused T06's landing). It removes friction from the landings this feature exists to speed up (request 2026-11-20: prioritize the improvement fixes and performance work), and it matches FR-013's own reading that a set-down feature holds no started task. It narrows nothing that was asked."
+    },
+    {
+     "id": "T29-leave",
+     "summary": "A refused set-down, another feature's mark, or a mark that cannot be read or names no feature is left as it stands and fails nothing",
+     "class": "within",
+     "why": "None of these cases is the defect. Clearing another feature's mark, or clearing the mark after a refused set-down, would be wrong. Leaving an unreadable mark as it is does not take back any part of the stated goal: a set-down feature no longer holds pushes through its own mark."
+    },
+    {
+     "id": "T29-perf",
+     "summary": "Tagged [perf] in FR-013's sense (it makes the landings faster), not filed with PERF=1 because it touches no engine stage's counted operations or time",
+     "class": "within",
+     "why": "FR-013 defines performance work to include a task that makes the landings faster. A stale mark cost a refused landing and reverted ticks. The PERF=1 distinction follows FR-013's two routes as written."
+    },
+    {
+     "id": "T29-exits",
+     "summary": "Red-first test, 100% line coverage of the task crate, the clear deleted to show the test turns red, a scratch-repo replay of the incident, and the usual green exits",
+     "class": "within",
+     "why": "Verification that the fix does what it says. It is not new behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T30": {
+   "section_sha256": "33723825a309b82b8c4eda26347fee24f5bea6e3d976b5259c0c2868b8dc62ae",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T30-withdrawn-folded-into-T15",
+     "summary": "T30 does no work of its own: the shared shell readers' fix (strip_heredocs, strip_quotes, make::invoked) was folded into T15 by T15's plan review and landed there red-first, with the corpora replayed through every guard; T30 closes when T15 ticks.",
+     "class": "within",
+     "why": "Nothing is narrowed or left: the defect T30 was filed for is fixed, only in a different task, because T15's plan review ruled leaving it NOT LEGITIMATE. Moving where a fix lands does not shrink what was asked; 'Found and left? none'."
+    },
+    {
+     "id": "T30-exits-and-done",
+     "summary": "Done is T15 ticked with the fix; the red exit records what failed, sets the task down, and routes any cannot-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "A completion condition and a standard failure route; it carves out no case and defers no defect."
+    },
+    {
+     "id": "T30-perf-tag",
+     "summary": "Kept as a [perf] task under FR-013, folded into T15.",
+     "class": "within",
+     "why": "Classification under FR-013's own definition (work that makes the checks/gate/builders' loop faster or correct); it narrows nothing the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T31": {
+   "section_sha256": "ccd4d29f4d6486cfb01d6af7232ed44123f8e418dd4d1188152d2da1b5aaac4b",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D5-narrowed",
+     "summary": "Feature 204's D5 ('every python3 -c is a write') narrowed: a -c program a denylist of known writers judges read-only (read-mode opens only, no substitution/expansion, no relative or locally-answerable import) is marked how=read and is no write, unless the command also runs Python from stdin.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not a narrowing of feature 451's request or spec (the D5/D6 in spec-cited.md are 451's own decisions; 204's D5 is known only as the plan quotes it). Ruled anyway. rulings.md is empty, so the session's own ruling carries no weight; the ground is the constitution's defect definition: a guard that refuses or rewrites a read refuses good work. D5's premise ('its cost is now zero') is measured false where no clone resolves (80 corpus rows refused clone-unresolved, 79 rewritten, replay 2026-11-20). D5's purpose (no false allow) is kept by the conservative conditions and the stdin rule (parse#72, window#61 refused as before). The denylist ends in '...', so its full reach is not visible in the bundle; not a finding."
+    },
+    {
+     "id": "stdin-rule",
+     "summary": "A -c read stays a write when any segment of the same command runs Python from stdin (python3 -, heredoc, < file, | python3).",
+     "class": "within",
+     "why": "Keeps T31 from turning measured heredoc writers (parse#72, window#61) from refused into allowed; it adds no allowance."
+    },
+    {
+     "id": "stdin-rule-cost",
+     "summary": "Three real heredoc reads (main-tree#147, window#339, window#361) stay refused or rewritten, as before T31, as the stdin rule's cost; recorded under Found and left and homed in T42, which retires the stdin rule once stdin bodies are judged, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The previous round's BLOCKED asked for exactly this: the known defect now has a home. Found and left names the three rows, how they were found (the replays' rows that moved back against the stage-1 build, each hand-read), why T31 does not fix them (no stdin reader exists, and lifting the rule without one lets parse#72's and window#61's writes through - trading a refused read for an allowed write), and a filed task (T42) that retires the rule once stdin bodies are judged, ordered before T22. T31 does not worsen these rows (they were refused or rewritten before it). Limit: T42's own task line (said in the dispatch to commit to retiring the rule, red first on these three rows) is not in the bundle; the block's own words 'which retires the rule once stdin bodies are judged' are what was read."
+    },
+    {
+     "id": "script-runs",
+     "summary": "Four rows that also run a script (main-tree#103 scratch script; window#60, #62, #308 the mirror's own test suites and hooks), refused or moved before only by the -c write, now run as typed without being shown to write nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T31 changes nothing about how a script run is judged: the same commands without the -c read are allowed today, so their earlier refusal was a side effect of the defect fixed (a read misjudged as a write). The hand-read found no writer in any of the four, unlike parse#72/window#61, so no defect is shown, and keeping a misjudged read refused to cover an unjudged segment would keep the defect. Item 1's 'every write is still moved or refused as before' slightly overstates this for these rows; item 4 discloses it."
+    },
+    {
+     "id": "heredoc-bodies-T42",
+     "summary": "Judging Python heredoc/stdin bodies for writes (301 corpus rows main-tree allows before and after) deferred to T42, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect left (writes in the mirror passed), but it predates T31 and T31 does not worsen it (301 allowed before and after, measured 2026-11-20). It is outside the -c scope, needs a new reader with its own replay, is recorded under Found and left with its reason, and is homed in a filed task (T42) with an ordering (before T22)."
+    },
+    {
+     "id": "gm-tree-skip",
+     "summary": "gm_tree_hooks offending skips the read mark, so a read in gm-assistant's tree is no longer refused.",
+     "class": "within",
+     "why": "The same defect (a read refused) in the second guard that reads a walk's targets; red first (gmred.log)."
+    },
+    {
+     "id": "fixture-relabel",
+     "summary": "main-tree-refusals-2026-09.json relabeled: 57 rows rewrote->allowed, matching the replay's main-tree moves; main-tree#147 stays rewrote.",
+     "class": "within",
+     "why": "Records the fix's measured outcome; no new behavior."
+    },
+    {
+     "id": "curl-o-rows",
+     "summary": "curl -o writes the walk does not judge left as is; their targets are absolute scratch paths outside the mirror.",
+     "class": "within",
+     "why": "Measured 2026-11-20 at 0 rows writing into the mirror, so no defect is left."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "T31 tagged [perf] under FR-013 (builders' loop), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 accepts either PERF=1 or a [perf] tag; each refused or rewritten read costs a builder a model round trip, builders'-loop speed in FR-013's sense."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T32": {
+   "section_sha256": "62223132fbe25e07082d9f9ed8ec7c685cd37c0a0068f087e8cfabe004872c20",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T32-reader",
+     "summary": "One environment reader for the guard crate, shared::env (opt, var; test-build set, unset): the process variable outside cfg(test), a per-test-thread map under it; consulted::var and VARS become re-exports of it (T24's seam, one map); arbiter/tests.rs pins the seam.",
+     "class": "within",
+     "why": "Implementation design of the fix T32 exists for. The defect is a wrong outcome: guard tests go red because a page session's shell exports a variable. A builder no longer losing rounds to that red serves the GM's 2026-11-20 request to put performance improvements first (FR-013: the builders' loop). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T32-sweep-fixes",
+     "summary": "Fix the 6 tests that the 79-variable sweep showed moving (RECORD_CHECKS_DIR, L7R_GUARD_TREE, SET_DOWN_ROOT, L7R_PERMIT_NOW x2, L7R_DISPATCHER), and stop the event-log tests writing fixture logs into an exported L7R_EVENTS_DIR.",
+     "class": "within",
+     "why": "Known defects of the same kind, fixed in the task that found them (fix as we go). The stray event-log writes matter directly to this feature, because they corrupt the logs that where-time and the GM's retrospective read."
+    },
+    {
+     "id": "T32-setvar-tests",
+     "summary": "Convert the 7 tests that set the process environment to set the test thread's own map, converting their reads with them.",
+     "class": "within",
+     "why": "Same mechanism, same task. It widens no behavior beyond the guard crate's tests."
+    },
+    {
+     "id": "T32-left-guard-log-dir",
+     "summary": "Leave log::quiet's GUARD_LOG_DIR set once for the whole process (T009), and leave the binary's main.rs and bench.rs reading the real environment.",
+     "class": "within",
+     "why": "Neither is a wrong outcome. GUARD_LOG_DIR is set once on purpose, to keep test logs out of real ones. main.rs and bench.rs are not tests and must read the real environment. The GM's request asks for no rule against process-environment mutation; that wording is the task line's own. Leaving a difference that works is not a narrowing (constitution XIV)."
+    },
+    {
+     "id": "T32-left-not-defects",
+     "summary": "Leave MEASURE_STATE_DIR (a test created the directory empty and wrote nothing into it) and the reads that the sweep showed moving no test, as not defects.",
+     "class": "within",
+     "why": "Measured to produce no wrong outcome (ls of the exported directory; per-var.tsv). Under constitution XIV these are not defects, and nothing the GM asked is left undone."
+    },
+    {
+     "id": "T32-gate-crates-T38",
+     "summary": "The gate crates' tests reading the real environment through the guard (49 tests in 7 crates red with L7R_FEATURE_DIRECTORY and L7R_EVENTS_DIR exported) are not fixed in T32. They are filed as T38, ordered to land before T22, with the reason stated: the guard's test map is cfg(test) of the guard alone, so the fix is a reader threaded to 17 call sites in 7 crates, each owing its own test, lint and cover.",
+     "class": "within",
+     "why": "The defect is not dropped or left unfixed in the feature. It is scheduled as its own task in the same feature, with a stated reason and an ordering, which is what FR-009 requires of a deferral. T32's filed scope is the guard crate's own tests, so moving work outside that crate into a separate task narrows nothing the GM asked for. This would be a finding only if T38 were not performance-tagged or never landed, and this block cannot show either."
+    },
+    {
+     "id": "T32-no-poll-hooks",
+     "summary": "no_poll_hooks, named by T14's run, is not fixed: it failed in none of 4 exported runs and none of the sweep's 91, and it is named in the report.",
+     "class": "within",
+     "why": "No wrong outcome was reproduced, so no known defect is left. Naming it in the report is the honest handling."
+    },
+    {
+     "id": "T32-perf-tag",
+     "summary": "T32 is classed as performance work ([perf], FR-013): a builder's make rust-test on the guard is green whatever the session exports.",
+     "class": "within",
+     "why": "FR-013 counts 'the builders' loop faster' as performance work. A false red that costs a builder a round falls inside that definition and inside the GM's 2026-11-20 'prioritize performance improvements'."
+    },
+    {
+     "id": "T32-order-exits",
+     "summary": "Order: after T24 (its seam is reused), independent of T20. Exits: crate-scoped lint and cover, make quick, make static once, make hooks-test; on red, the task is set down and any claim that it cannot be done goes through make arbiter-ask.",
+     "class": "within",
+     "why": "The ordering and exits are consistent with FR-007 (make static once, crate-scoped checks while iterating). Nothing requested is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T33": {
+   "section_sha256": "d1d9c7e983cd79ba4f01251b779d962a6eb45cd1768b598f9929b42796329bf1",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T33-1-interp",
+     "summary": "Part 1: guard_write reads an inline interpreter body (Python literals resolved where the shell stands, -c/heredoc bodies as commands, Perl/Ruby/Node by the same literal reading, a for loop's variable per word), with a literal only read, a subprocess argv and a dict value exempt.",
+     "class": "within",
+     "why": "Closes the observed T14 hole (a heredoc rewrite of a guard source). The three exemptions each answer a measured false refusal of correct work (replay round 1: window#56, #299, #312, #267), and no real write in the 1,134 rows passes through them. That is a precision choice inside the task, not a narrowing of what was asked."
+    },
+    {
+     "id": "T33-1-permit",
+     "summary": "A shell or interpreter write of a guard file stays refused under a live guard-edit permit, as sed -i is at HEAD; the permit is for the Edit tool.",
+     "class": "within",
+     "why": "This keeps HEAD's rule for sed -i and extends it to the new forms. It narrows nothing, because the compliant route (the Edit tool under the permit) remains, and the block message names it."
+    },
+    {
+     "id": "T33-2-rustfmt",
+     "summary": "A bare rustfmt is refused as bare-rustfmt, and the message names make format FILE= / CRATE=.",
+     "class": "within",
+     "why": "Closes the observed T34 hole, with the compliant command named."
+    },
+    {
+     "id": "T33-3-gate-write",
+     "summary": "shell_write refuses a write that the walk or a Python literal places in the gated tree while its gate runs. Only a literal that resolves to a path where the shell stands counts, and an unresolvable path fails open, as the walk does.",
+     "class": "within",
+     "why": "Closes the observed T34 hole (git apply / cp under a running land). Failing open on an unresolvable path is the gate's existing rule, not a new carve-out, and the 18 outside-the-tree rows it lets through were measured as correct work."
+    },
+    {
+     "id": "T33-3-fail-closed-function-literal / window#72 (filed T49)",
+     "summary": "A literal handed to a function of the program's own is counted where the shell stands (fail-closed). window#72, a correct write into another clone that HEAD allowed, is now refused under a running gate. Left unfixed, filed as T49, lands before T22.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is the only item T33 leaves that makes HEAD worse. By the block's own account window#72 is a correct write that moves allowed->refused, a check refusing good work, which is a defect by constitution XIV. It contradicts the section's goal 1 ('nothing correct is refused by the new reading') and its constraint 2 (XIII, no known regressions). The reason given, that placing the literal needs the function's body and no reader of interp does, is a cost argument. It meets none of the criteria: nothing is physically impossible, the request implies no such case, and fixing it would not defeat the request's purpose. The block also stretches one justification over two unlike guards. It cites make-only's fail-closed count for this literal, while it states gate-write's own rule as failing open on a path it cannot place. The available escape (GATE_WRITE_OK, or waiting for the gate) does not make a false refusal correct, and a feature whose purpose is efficiency is worse off for a guard that stops correct work. FR-009's form (why, id, order) is met, but the form is not legitimacy. To clear it, window#72 is not refused by what lands in T33, or the section gives a reason that meets one of the three criteria."
+    },
+    {
+     "id": "T33-3-chmod-chown",
+     "summary": "chmod's mode and chown's owner are no longer read as files (shared/tree.rs tool_paths).",
+     "class": "within",
+     "why": "Fixes HEAD's own false refusals that the replay found (refusals#132, window#256), as FIX AS WE GO requires."
+    },
+    {
+     "id": "T33-4-git-output",
+     "summary": "git_output reads the writing options of the read-only subcommands (--output, archive -o, format-patch, bundle create, bugreport, diagnose). stash list/show are reads, and the gate's commit-or-add rule reads git's subcommand, not the word anywhere in the segment.",
+     "class": "within",
+     "why": "Closes the observed T44 hole (git diff --output read as a read). The stash and commit-or-add changes fix false refusals the replay measured (parse#148, #171, #173, #229, refusals#88, window#279), plus one the new check would otherwise have introduced."
+    },
+    {
+     "id": "T33-4-drop-git-more (filed T50)",
+     "summary": "The addition reading twelve git subcommands outside GIT_WRITES as writes was built, measured and dropped, and filed as a measure-first task T50, lands before T22.",
+     "class": "within",
+     "why": "The observed hole (git diff --output) is fixed. What is left is inherited from HEAD, and no wrong outcome is recorded for it: the replay of 1,134 rows caught no real write with the addition, and its only moves were its own false refusals. Under the defect definition nothing defective is left, so the drop does not narrow the request. The dispatch's and the session's rulings are not the GM's and carry no weight here; this is judged on the end state alone."
+    },
+    {
+     "id": "T33-found-left-script-files (filed T51)",
+     "summary": "A program run from a file (python3 script.py) is not read. One real case was found (window#215 rewriting a clone's Makefile), plus seven clone writes the gate would see. Filed as T51, lands before T22.",
+     "class": "within",
+     "why": "I read this as a fifth form outside T33's four observed holes, not as part of hole 1. Hole 1's mechanism reads a body handed inline to the interpreter, and a script file is a separate artifact needing a reader no guard has. HEAD has the same gap (T33 does not worsen it). It was found by a census the section records with its method, and it is filed with an id and an order under FR-009. If hole 1 were read as covering every interpreter write, this would be a narrowing whose reason (cost, plus the need for its own replay) meets no criterion. I chose the narrower reading of the task's observed forms."
+    },
+    {
+     "id": "T33-depth",
+     "summary": "DEPTH 3 for nested bodies, stated as a convention past any shape in the corpora.",
+     "class": "within",
+     "why": "Measured as covering every row; it narrows nothing asked."
+    },
+    {
+     "id": "T33-order-exits",
+     "summary": "After T14 and T15, lands with T07, one landing. Exits include make static once, plus rust-test, lint, format, cover, quick and hooks-test.",
+     "class": "within",
+     "why": "Sequencing and exits consistent with FR-007 (make static once) and the guard rules."
+    },
+    {
+     "id": "T33-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A classification. Whether T33 may start while a performance task is open is FR-013's guard's call on task state that the bundle does not carry; it is not a decision of this section."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T34": {
+   "section_sha256": "a0fdd92bd399ebc8ecf7812c73cdd2314c6730ce62fa0bafc06dbecff010b1e7",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T34-D1",
+     "summary": "Add `make format FILE=<path...>` and `make format CRATE=<dir>`, which format only what they name; bare `make format` is unchanged.",
+     "class": "within",
+     "why": "A [perf] task on the builders' loop under FR-013, which comes from the GM's 2026-11-20 'can we in general priotitize performance improvements going forward?'. It is also the same kind of fix as approved improvement 2 (a crate-scoped step while iterating instead of a whole-tree one). Nothing asked for is narrowed, since the whole-tree form stays as it was."
+    },
+    {
+     "id": "T34-D2",
+     "summary": "The one-file path feeds the file to the toolchain's rustfmt on standard input, run from the file's directory (so rustfmt.toml is found), with --edition taken from the owning crate's Cargo.toml (2015 where it names none), and writes the file only where rustfmt passed and changed it.",
+     "class": "within",
+     "why": "This is how the requested behavior gets done. Standard input was chosen on a dated scratch measurement showing that a path argument rewrites the file's `mod` children, which would break 'formats only what it names'. The plan's step 9 records that `--check --crate` was clean after FILE= runs, so the output matches cargo fmt."
+    },
+    {
+     "id": "T34-D3",
+     "summary": "A Cargo.toml edition that is not a literal (for example an inherited one) is refused on the FILE= path.",
+     "class": "within",
+     "why": "This refuses an input it cannot read rather than guessing an edition and formatting wrongly. CRATE= and bare `make format` still cover such a crate. It does not narrow anything the request or spec asks for."
+    },
+    {
+     "id": "T34-D4",
+     "summary": "FILE=/CRATE= format takes no run lock and never waits on another run's tests, because it builds nothing.",
+     "class": "within",
+     "why": "This serves the performance purpose (FR-013, the builders' loop) and does not narrow any requirement."
+    },
+    {
+     "id": "T34-D5",
+     "summary": "FILE= given together with CRATE= is refused (exit 2), and the `format` failure's tip names CRATE= and FILE= instead of bare `make format`.",
+     "class": "within",
+     "why": "Usage guarding, and pointing builders at the scoped forms, serve the task's own purpose (not rewriting another builder's in-progress files). Nothing is narrowed."
+    },
+    {
+     "id": "T34-FL1a",
+     "summary": "Found and left (a): the make-only guard does not refuse a bare `rustfmt`. Deferred to T33 (held writes through a route the guard does not read), which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing because the block calls it a defect (a check that lets bad work through), and approved improvement 4 makes fixing in the task the default for briefs. FR-009, judged against its index line only since the bundle carries nothing more, requires a deferral to state why the defect is not fixed here, and this one does. The guard is rust/guard, where T31's builder has work in progress. Fixing it inside T34 means editing, linting and covering a crate that holds another builder's half-done files, which is the clobbering of in-progress work that T34 exists to stop, and T34's green exit cannot be met honestly over that crate now. So a literal fix-in-task would defeat the task's purpose. The defect is not left: it is filed in this feature as T33, with an order (before T22), and T33's class (writes by a route the guard does not read) matches it exactly."
+    },
+    {
+     "id": "T34-FL1b",
+     "summary": "Found and left (b): the make-only guard's block message advertises bare `make format`, which rewrites every crate. Deferred with (a), 'Filed as T33'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled separately from (a), because a message's wording is not a 'route the guard does not read' and T33's class argument does not reach it. Only the location argument carries it. That argument is enough: the message text lives in rust/guard, where T31's builder works now, so the same purpose-level and exit-level reasons as (a) apply. The interim harm is reduced inside T34 itself, since `make format`'s own failure tip and `make help` now name FILE= and CRATE=. The block's 'Filed as T33' covers its whole bullet, both the guard gap and the message, so T33 owes the message fix as well as the refusal. A T33 that fixes only the refusal would leave (b) unfixed."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)",
+    "### T29 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T29-clear",
+     "summary": "make set-down removes the clone's active-task mark once the set-down row is written, when the mark names the set-down feature, and says so in its reply; the next task-start writes it again",
+     "class": "within",
+     "why": "Fixes a defect in the sense of constitution XIV (a tool refusing valid work: a set-down feature's stale mark held every push touching its specs and refused T06's landing). It removes friction from the landings this feature exists to speed up (request 2026-11-20: prioritize the improvement fixes and performance work), and it matches FR-013's own reading that a set-down feature holds no started task. It narrows nothing that was asked."
+    },
+    {
+     "id": "T29-leave",
+     "summary": "A refused set-down, another feature's mark, or a mark that cannot be read or names no feature is left as it stands and fails nothing",
+     "class": "within",
+     "why": "None of these cases is the defect. Clearing another feature's mark, or clearing the mark after a refused set-down, would be wrong. Leaving an unreadable mark as it is does not take back any part of the stated goal: a set-down feature no longer holds pushes through its own mark."
+    },
+    {
+     "id": "T29-perf",
+     "summary": "Tagged [perf] in FR-013's sense (it makes the landings faster), not filed with PERF=1 because it touches no engine stage's counted operations or time",
+     "class": "within",
+     "why": "FR-013 defines performance work to include a task that makes the landings faster. A stale mark cost a refused landing and reverted ticks. The PERF=1 distinction follows FR-013's two routes as written."
+    },
+    {
+     "id": "T29-exits",
+     "summary": "Red-first test, 100% line coverage of the task crate, the clear deleted to show the test turns red, a scratch-repo replay of the incident, and the usual green exits",
+     "class": "within",
+     "why": "Verification that the fix does what it says. It is not new behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T30 (the shared shell readers' gaps)",
+    "### T30 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T30-withdrawn-folded-into-T15",
+     "summary": "T30 does no work of its own: the shared shell readers' fix (strip_heredocs, strip_quotes, make::invoked) was folded into T15 by T15's plan review and landed there red-first, with the corpora replayed through every guard; T30 closes when T15 ticks.",
+     "class": "within",
+     "why": "Nothing is narrowed or left: the defect T30 was filed for is fixed, only in a different task, because T15's plan review ruled leaving it NOT LEGITIMATE. Moving where a fix lands does not shrink what was asked; 'Found and left? none'."
+    },
+    {
+     "id": "T30-exits-and-done",
+     "summary": "Done is T15 ticked with the fix; the red exit records what failed, sets the task down, and routes any cannot-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "A completion condition and a standard failure route; it carves out no case and defers no defect."
+    },
+    {
+     "id": "T30-perf-tag",
+     "summary": "Kept as a [perf] task under FR-013, folded into T15.",
+     "class": "within",
+     "why": "Classification under FR-013's own definition (work that makes the checks/gate/builders' loop faster or correct); it narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T31 (found by T15's corpus replay, 2026-11-20: main-tree refused `python3 -c \"data = open('$SP/x.html','rb').read() ...\"` - a read - as a write where the shell stands, with no escape, the same before and after T15's shared-reader fix; observed 2026-11-20, method: T15's replay of the main-tree refusals corpus)",
+    "### T31 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D5-narrowed",
+     "summary": "Feature 204's D5 ('every python3 -c is a write') narrowed: a -c program a denylist of known writers judges read-only (read-mode opens only, no substitution/expansion, no relative or locally-answerable import) is marked how=read and is no write, unless the command also runs Python from stdin.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not a narrowing of feature 451's request or spec (the D5/D6 in spec-cited.md are 451's own decisions; 204's D5 is known only as the plan quotes it). Ruled anyway. rulings.md is empty, so the session's own ruling carries no weight; the ground is the constitution's defect definition: a guard that refuses or rewrites a read refuses good work. D5's premise ('its cost is now zero') is measured false where no clone resolves (80 corpus rows refused clone-unresolved, 79 rewritten, replay 2026-11-20). D5's purpose (no false allow) is kept by the conservative conditions and the stdin rule (parse#72, window#61 refused as before). The denylist ends in '...', so its full reach is not visible in the bundle; not a finding."
+    },
+    {
+     "id": "stdin-rule",
+     "summary": "A -c read stays a write when any segment of the same command runs Python from stdin (python3 -, heredoc, < file, | python3).",
+     "class": "within",
+     "why": "Keeps T31 from turning measured heredoc writers (parse#72, window#61) from refused into allowed; it adds no allowance."
+    },
+    {
+     "id": "stdin-rule-cost",
+     "summary": "Three real heredoc reads (main-tree#147, window#339, window#361) stay refused or rewritten, as before T31, as the stdin rule's cost; recorded under Found and left and homed in T42, which retires the stdin rule once stdin bodies are judged, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The previous round's BLOCKED asked for exactly this: the known defect now has a home. Found and left names the three rows, how they were found (the replays' rows that moved back against the stage-1 build, each hand-read), why T31 does not fix them (no stdin reader exists, and lifting the rule without one lets parse#72's and window#61's writes through - trading a refused read for an allowed write), and a filed task (T42) that retires the rule once stdin bodies are judged, ordered before T22. T31 does not worsen these rows (they were refused or rewritten before it). Limit: T42's own task line (said in the dispatch to commit to retiring the rule, red first on these three rows) is not in the bundle; the block's own words 'which retires the rule once stdin bodies are judged' are what was read."
+    },
+    {
+     "id": "script-runs",
+     "summary": "Four rows that also run a script (main-tree#103 scratch script; window#60, #62, #308 the mirror's own test suites and hooks), refused or moved before only by the -c write, now run as typed without being shown to write nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T31 changes nothing about how a script run is judged: the same commands without the -c read are allowed today, so their earlier refusal was a side effect of the defect fixed (a read misjudged as a write). The hand-read found no writer in any of the four, unlike parse#72/window#61, so no defect is shown, and keeping a misjudged read refused to cover an unjudged segment would keep the defect. Item 1's 'every write is still moved or refused as before' slightly overstates this for these rows; item 4 discloses it."
+    },
+    {
+     "id": "heredoc-bodies-T42",
+     "summary": "Judging Python heredoc/stdin bodies for writes (301 corpus rows main-tree allows before and after) deferred to T42, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect left (writes in the mirror passed), but it predates T31 and T31 does not worsen it (301 allowed before and after, measured 2026-11-20). It is outside the -c scope, needs a new reader with its own replay, is recorded under Found and left with its reason, and is homed in a filed task (T42) with an ordering (before T22)."
+    },
+    {
+     "id": "gm-tree-skip",
+     "summary": "gm_tree_hooks offending skips the read mark, so a read in gm-assistant's tree is no longer refused.",
+     "class": "within",
+     "why": "The same defect (a read refused) in the second guard that reads a walk's targets; red first (gmred.log)."
+    },
+    {
+     "id": "fixture-relabel",
+     "summary": "main-tree-refusals-2026-09.json relabeled: 57 rows rewrote->allowed, matching the replay's main-tree moves; main-tree#147 stays rewrote.",
+     "class": "within",
+     "why": "Records the fix's measured outcome; no new behavior."
+    },
+    {
+     "id": "curl-o-rows",
+     "summary": "curl -o writes the walk does not judge left as is; their targets are absolute scratch paths outside the mirror.",
+     "class": "within",
+     "why": "Measured 2026-11-20 at 0 rows writing into the mirror, so no defect is left."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "T31 tagged [perf] under FR-013 (builders' loop), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 accepts either PERF=1 or a [perf] tag; each refused or rewritten read costs a builder a model round trip, builders'-loop speed in FR-013's sense."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T32 (the guard's own tests read the real environment: with `L7R_FEATURE_DIRECTORY` exported, as a page session exports it, 17-20 tests of the check state and its guards failed, found by T14, observed 2026-11-20, method: T14's `make rust-test` log)",
+    "### T32 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T32-reader",
+     "summary": "One environment reader for the guard crate, shared::env (process variable outside cfg(test), a per-test-thread map under it); consulted::var and VARS become re-exports of it (T24's seam, one map); the swept reads and the 7 set_var tests converted to it; arbiter/tests.rs pins the seam.",
+     "class": "within",
+     "why": "A design choice for how the guard's tests stop reading a session's exports. It removes nothing the request or spec asks for, and it keeps test lines out of a real feature's event log, which make where-time reads (FR-005, SC-001)."
+    },
+    {
+     "id": "T32-left-process-wide",
+     "summary": "log::quiet's GUARD_LOG_DIR, set once for the whole process by design (T009), and the binary's own main.rs and bench.rs are left as they are.",
+     "class": "within",
+     "why": "The block reports no wrong outcome from either: one value set once, and the binary's own reads of its environment. A difference from the task line's wording that is not a defect is within what was asked (constitution XIV v2.36.0) and needs no ruling."
+    },
+    {
+     "id": "T32-measure-state-dir",
+     "summary": "An exported MEASURE_STATE_DIR is ruled not a defect: a test created the directory empty and wrote nothing into it.",
+     "class": "within",
+     "why": "An empty directory changes no outcome: no test result, no log, no map. Under the GM's definition this is not a defect, so leaving it is within what was asked."
+    },
+    {
+     "id": "T32-no-poll-hooks",
+     "summary": "no_poll_hooks, named by T14's run, failed in none of 4 exported runs or the sweep's 91, so it is named in the report rather than fixed.",
+     "class": "within",
+     "why": "The failure was not reproduced, so there is no known defect left. Reporting it keeps the evidence in view, which leaves nothing that was asked out."
+    },
+    {
+     "id": "T32-perf-class",
+     "summary": "T32 is tagged [perf] under FR-013, so a non-performance task is refused task-start while it stays open, and the Stop hook names it first.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster. A guard test that goes red only because of the shell's exports costs every page-session builder a round on a false red, so clearing it is that kind of work. Under FR-013 the tag puts T32 first; it does not widen what the feature does."
+    },
+    {
+     "id": "T32-gate-crates-T38",
+     "summary": "The gate crates' 49 tests in 7 crates, red with L7R_FEATURE_DIRECTORY and L7R_EVENTS_DIR exported (a known defect that T32 found), are not fixed in T32. They are filed as T38, which lands before T22: a reader of the environment threaded to 17 call sites in 7 crates, each crate owing its own test, lint and cover.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a known defect left by this section, so it is a narrowing and is presumed wrong. The block's own grounds, that it is 'a task's worth of work' and that each crate owes its own test, lint and cover, are cost arguments and carry no weight. What carries it is the GM's approved improvements. Improvement 4 says briefs 'default to fixing in the task', and a default admits a stated exception. Improvement 1, 'A fresh builder per stage', asks for one builder per bounded piece of work, and 17 call sites in 7 crates outside the guard are a separate piece. The defect is also not dropped: it is filed as T38 and ordered before T22, so it is fixed before work moves on. The ruling rests on two things the bundle does not show. First, T38 must exist and be tagged [perf]: by this block's own reasoning it is the same class of work as T32, and without the tag FR-013 would hold it behind other performance tasks. Second, T38 must actually land before T22. If either is untrue, the deferral is NOT LEGITIMATE."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T32 (the guard's own tests read the real environment: with `L7R_FEATURE_DIRECTORY` exported, as a page session exports it, 17-20 tests of the check state and its guards failed, found by T14, observed 2026-11-20, method: T14's `make rust-test` log)",
+    "### T32 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T32-reader",
+     "summary": "One environment reader for the guard crate, shared::env (opt, var; test-build set, unset): the process variable outside cfg(test), a per-test-thread map under it; consulted::var and VARS become re-exports of it (T24's seam, one map); arbiter/tests.rs pins the seam.",
+     "class": "within",
+     "why": "Implementation design of the fix T32 exists for. The defect is a wrong outcome: guard tests go red because a page session's shell exports a variable. A builder no longer losing rounds to that red serves the GM's 2026-11-20 request to put performance improvements first (FR-013: the builders' loop). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T32-sweep-fixes",
+     "summary": "Fix the 6 tests that the 79-variable sweep showed moving (RECORD_CHECKS_DIR, L7R_GUARD_TREE, SET_DOWN_ROOT, L7R_PERMIT_NOW x2, L7R_DISPATCHER), and stop the event-log tests writing fixture logs into an exported L7R_EVENTS_DIR.",
+     "class": "within",
+     "why": "Known defects of the same kind, fixed in the task that found them (fix as we go). The stray event-log writes matter directly to this feature, because they corrupt the logs that where-time and the GM's retrospective read."
+    },
+    {
+     "id": "T32-setvar-tests",
+     "summary": "Convert the 7 tests that set the process environment to set the test thread's own map, converting their reads with them.",
+     "class": "within",
+     "why": "Same mechanism, same task. It widens no behavior beyond the guard crate's tests."
+    },
+    {
+     "id": "T32-left-guard-log-dir",
+     "summary": "Leave log::quiet's GUARD_LOG_DIR set once for the whole process (T009), and leave the binary's main.rs and bench.rs reading the real environment.",
+     "class": "within",
+     "why": "Neither is a wrong outcome. GUARD_LOG_DIR is set once on purpose, to keep test logs out of real ones. main.rs and bench.rs are not tests and must read the real environment. The GM's request asks for no rule against process-environment mutation; that wording is the task line's own. Leaving a difference that works is not a narrowing (constitution XIV)."
+    },
+    {
+     "id": "T32-left-not-defects",
+     "summary": "Leave MEASURE_STATE_DIR (a test created the directory empty and wrote nothing into it) and the reads that the sweep showed moving no test, as not defects.",
+     "class": "within",
+     "why": "Measured to produce no wrong outcome (ls of the exported directory; per-var.tsv). Under constitution XIV these are not defects, and nothing the GM asked is left undone."
+    },
+    {
+     "id": "T32-gate-crates-T38",
+     "summary": "The gate crates' tests reading the real environment through the guard (49 tests in 7 crates red with L7R_FEATURE_DIRECTORY and L7R_EVENTS_DIR exported) are not fixed in T32. They are filed as T38, ordered to land before T22, with the reason stated: the guard's test map is cfg(test) of the guard alone, so the fix is a reader threaded to 17 call sites in 7 crates, each owing its own test, lint and cover.",
+     "class": "within",
+     "why": "The defect is not dropped or left unfixed in the feature. It is scheduled as its own task in the same feature, with a stated reason and an ordering, which is what FR-009 requires of a deferral. T32's filed scope is the guard crate's own tests, so moving work outside that crate into a separate task narrows nothing the GM asked for. This would be a finding only if T38 were not performance-tagged or never landed, and this block cannot show either."
+    },
+    {
+     "id": "T32-no-poll-hooks",
+     "summary": "no_poll_hooks, named by T14's run, is not fixed: it failed in none of 4 exported runs and none of the sweep's 91, and it is named in the report.",
+     "class": "within",
+     "why": "No wrong outcome was reproduced, so no known defect is left. Naming it in the report is the honest handling."
+    },
+    {
+     "id": "T32-perf-tag",
+     "summary": "T32 is classed as performance work ([perf], FR-013): a builder's make rust-test on the guard is green whatever the session exports.",
+     "class": "within",
+     "why": "FR-013 counts 'the builders' loop faster' as performance work. A false red that costs a builder a round falls inside that definition and inside the GM's 2026-11-20 'prioritize performance improvements'."
+    },
+    {
+     "id": "T32-order-exits",
+     "summary": "Order: after T24 (its seam is reused), independent of T20. Exits: crate-scoped lint and cover, make quick, make static once, make hooks-test; on red, the task is set down and any claim that it cannot be done goes through make arbiter-ask.",
+     "class": "within",
+     "why": "The ordering and exits are consistent with FR-007 (make static once, crate-scoped checks while iterating). Nothing requested is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)",
+    "### T33 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "hole-1-interp",
+     "summary": "guard_write reads an interpreter's body (Python literals resolved where the shell stands, -c and heredoc bodies as commands, Perl/Ruby/Node by literal reading, a for loop's variable per word), fail-closed as make-only counts a literal",
+     "class": "within",
+     "why": "Closes an observed bypass of the guard-file rule (T14's Python heredoc rewrote a guard source); it makes an existing guard's refusal real, which is what 'real enforcement and not just instructions' asks of the guards this feature relies on. Its argv and dict-value exemptions answer false refusals the replay found red first."
+    },
+    {
+     "id": "hole-1-live-permit",
+     "summary": "A shell write of a guard file stays refused under a live guard-edit permit, as sed -i is at HEAD (the permit is for the Edit tool); 'like sed -i' read as sed's rule",
+     "class": "within",
+     "why": "Stricter, not narrower: it matches the existing sed -i rule at HEAD and the Edit tool route remains open under the permit, so no correct work loses its route. Nothing in request.md or the spec asks for a permit to open a shell path."
+    },
+    {
+     "id": "hole-2-bare-rustfmt",
+     "summary": "A bare rustfmt refused as bare-rustfmt; the message names make format FILE= / CRATE=",
+     "class": "within",
+     "why": "An observed pass of make-only (T34); refusing with the compliant command named is the project's guard rule, and it serves real enforcement."
+    },
+    {
+     "id": "hole-3-gate-write",
+     "summary": "shell_write refuses each write the walk or a Python literal places in the gated tree while the gate runs (not .git/, not ignored, not unseen --would-write)",
+     "class": "within",
+     "why": "Answers an observed failure (T34's landing failed by a write under its gate); the refusals the replay added (84 in the replay mirror) are each accounted as writes in the tree, and the false ones were fixed red first."
+    },
+    {
+     "id": "hole-3-fail-open-and-placed",
+     "summary": "Only a literal that is a path where the shell stands counts (no placeholder, glob, URL, anchor, computed base, regex/string-method/comparison text); an unresolvable path fails open, as the walk's does",
+     "class": "within",
+     "why": "Keeps the existing gate-write rule that an unresolvable path fails open, and the exclusions each answer a false refusal of correct work the round-3/4 replays found (18 rows, then window#280/#358). The request does not ask the gate-write guard to fail closed; refusing correct work would be a defect the GM's rule names. This is a separate rule from hole 1's fail-closed counting, and the two do not conflict: one guards guard sources, the other a running gate's tree."
+    },
+    {
+     "id": "chmod-chown-not-files",
+     "summary": "chmod's mode and chown's owner are no longer read as files (shared/tree.rs tool_paths)",
+     "class": "within",
+     "why": "Corrects a false refusal at HEAD (refusals#132, window#256: '+x' read as a mirror write), shown red first."
+    },
+    {
+     "id": "hole-4-git-output",
+     "summary": "git_output: the writing options of read-only subcommands (--output, archive -o, format-patch, bundle create, bugreport, diagnose) are writes",
+     "class": "within",
+     "why": "An observed miss (T44's builder: git diff --output read as a read); the class is enumerated with its forms, as FR-009 asks of a class fix."
+    },
+    {
+     "id": "hole-4-git-more",
+     "summary": "git_more: writing forms of switch, bisect, sparse-checkout, submodule, worktree, clone, init, config, fetch, notes, update-ref, symbolic-ref are writes, each read form none; clone/init <dir>/worktree add write the directory they name",
+     "class": "within",
+     "why": "Widens what counts as a write while each read form passes; the corpora's uses of these subcommands were counted and the replay moved no other row, and the clone false refusals (main-tree#10, #11) were fixed red first. Judged on its own: the block's 'ruling on part 4's hole' is a dispatch, not an arbiter ruling (rulings.md is empty) and not the GM's words, so it carries no authority here, and none is needed for a within decision."
+    },
+    {
+     "id": "gate-lets-git-dot-git-only",
+     "summary": "The gate lets through fetch, notes, config, init and worktree where they write only .git, as push, tag and branch",
+     "class": "within",
+     "why": "Prevents hole 4's new reading from refusing correct work under a running gate, consistent with the existing push/tag/branch treatment; red first (the gate's git notes add refused)."
+    },
+    {
+     "id": "commit-or-add-reads-subcommand",
+     "summary": "The gate's commit-or-add rule reads git's subcommand, not the word anywhere in the segment",
+     "class": "within",
+     "why": "Corrects ten false refusals at HEAD (moved.add(, git worktree add, a note's text), each accounted in the gate replay."
+    },
+    {
+     "id": "depth-3",
+     "summary": "DEPTH 3 (a body inside a body) as a convention",
+     "class": "within",
+     "why": "A reading limit past any nesting the corpora hold, measured by the replay; no requested behavior is cut by it."
+    },
+    {
+     "id": "order",
+     "summary": "After T14 and T15 (their shared readers); lands with T07 in one clone",
+     "class": "within",
+     "why": "Sequencing on shared code. Whether T33 runs ahead of the GM's 'improvements first' order (2026-11-20) is not visible in this bundle and is not ruled here."
+    },
+    {
+     "id": "found-left-window72",
+     "summary": "A literal handed to a function of the program's own is counted where the shell stands (fail-closed); window#72's correct write into another clone is refused under a running gate, waiting for the gate or GATE_WRITE_OK; filed as T49, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect left (a check refusing correct work), and this landing creates it: HEAD allowed the row. So the block's goal sentence 'nothing correct is refused' is untrue by this one row. The stated reason (no reader of interp reads a function's body) is an implementation-cost argument, which would not by itself legitimise anything. What carries it is the accepted spec's own deferral path, FR-009, from the GM-approved improvement 4: a found-and-left defect is allowed when it states why it is not fixed here, its filed task id and its order. All three are present (T49, 'lands before T22'), and the refusal names a recorded escape. The purpose test holds too. Failing open here would reopen the interpreter write the hole exists to close, so the fail-closed choice serves 'real enforcement'. The cost is one row of 1,134, it can be escaped, and its fix is ordered."
+    },
+    {
+     "id": "found-left-python-script-file",
+     "summary": "A Python program run from a file (python3 script.py) is not read; its writes are judged only by the walk; recorded as not a defect",
+     "class": "within",
+     "why": "Under the GM's defect rule (constitution XIV, 2026-11-19), a defect is a wrong outcome observed. The bundle shows none by this route, so leaving the form unread is within and needs no ruling. But the block's evidence does not establish its claim: 'no row's moved verdict turns on one' cannot detect a write the guards never read. The honest statement is that no row was searched for a script-file write of a guard source or into a gated tree. If such a row is ever found, it is an instance of hole 1/3's class and becomes a defect owed a fix or an FR-009 deferral."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)",
+    "### T33 Approach (checklist part A)",
+    "### T48 Approach (checklist part A)",
+    "### T49 (<why: the finding or measurement that files it>)",
+    "### T49 Approach (checklist part A)",
+    "### T50 (<why: the finding or measurement that files it>)",
+    "### T50 Approach (checklist part A)",
+    "### T51 (<why: the finding or measurement that files it>)",
+    "### T51 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T33-third-round",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T34 (found by T14, 2026-11-20: four builders formatted with a bare `rustfmt` outside make, because `make format` rewrites every crate and another builder's in-progress files with them)",
+    "### T34 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T34-D1",
+     "summary": "Add `make format FILE=<path...>` and `make format CRATE=<dir>`, which format only what they name; bare `make format` is unchanged.",
+     "class": "within",
+     "why": "A [perf] task on the builders' loop under FR-013, which comes from the GM's 2026-11-20 'can we in general priotitize performance improvements going forward?'. It is also the same kind of fix as approved improvement 2 (a crate-scoped step while iterating instead of a whole-tree one). Nothing asked for is narrowed, since the whole-tree form stays as it was."
+    },
+    {
+     "id": "T34-D2",
+     "summary": "The one-file path feeds the file to the toolchain's rustfmt on standard input, run from the file's directory (so rustfmt.toml is found), with --edition taken from the owning crate's Cargo.toml (2015 where it names none), and writes the file only where rustfmt passed and changed it.",
+     "class": "within",
+     "why": "This is how the requested behavior gets done. Standard input was chosen on a dated scratch measurement showing that a path argument rewrites the file's `mod` children, which would break 'formats only what it names'. The plan's step 9 records that `--check --crate` was clean after FILE= runs, so the output matches cargo fmt."
+    },
+    {
+     "id": "T34-D3",
+     "summary": "A Cargo.toml edition that is not a literal (for example an inherited one) is refused on the FILE= path.",
+     "class": "within",
+     "why": "This refuses an input it cannot read rather than guessing an edition and formatting wrongly. CRATE= and bare `make format` still cover such a crate. It does not narrow anything the request or spec asks for."
+    },
+    {
+     "id": "T34-D4",
+     "summary": "FILE=/CRATE= format takes no run lock and never waits on another run's tests, because it builds nothing.",
+     "class": "within",
+     "why": "This serves the performance purpose (FR-013, the builders' loop) and does not narrow any requirement."
+    },
+    {
+     "id": "T34-D5",
+     "summary": "FILE= given together with CRATE= is refused (exit 2), and the `format` failure's tip names CRATE= and FILE= instead of bare `make format`.",
+     "class": "within",
+     "why": "Usage guarding, and pointing builders at the scoped forms, serve the task's own purpose (not rewriting another builder's in-progress files). Nothing is narrowed."
+    },
+    {
+     "id": "T34-FL1a",
+     "summary": "Found and left (a): the make-only guard does not refuse a bare `rustfmt`. Deferred to T33 (held writes through a route the guard does not read), which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing because the block calls it a defect (a check that lets bad work through), and approved improvement 4 makes fixing in the task the default for briefs. FR-009, judged against its index line only since the bundle carries nothing more, requires a deferral to state why the defect is not fixed here, and this one does. The guard is rust/guard, where T31's builder has work in progress. Fixing it inside T34 means editing, linting and covering a crate that holds another builder's half-done files, which is the clobbering of in-progress work that T34 exists to stop, and T34's green exit cannot be met honestly over that crate now. So a literal fix-in-task would defeat the task's purpose. The defect is not left: it is filed in this feature as T33, with an order (before T22), and T33's class (writes by a route the guard does not read) matches it exactly."
+    },
+    {
+     "id": "T34-FL1b",
+     "summary": "Found and left (b): the make-only guard's block message advertises bare `make format`, which rewrites every crate. Deferred with (a), 'Filed as T33'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled separately from (a), because a message's wording is not a 'route the guard does not read' and T33's class argument does not reach it. Only the location argument carries it. That argument is enough: the message text lives in rust/guard, where T31's builder works now, so the same purpose-level and exit-level reasons as (a) apply. The interim harm is reduced inside T34 itself, since `make format`'s own failure tip and `make help` now name FILE= and CRATE=. The block's 'Filed as T33' covers its whole bullet, both the guard gap and the message, so T33 owes the message fix as well as the refusal. A T33 that fixes only the refusal would leave (b) unfixed."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T29 to T34, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

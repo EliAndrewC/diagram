@@ -1,0 +1,686 @@
+{
+ "blocks": {
+  "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)": {
+   "sha256": "e789135ccfa45597df5301fb7396d3261eb98ae774998819f9ea21874f7d0228",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T15 Approach (checklist part A)": {
+   "sha256": "e9f14f789dfef2f0996c1af27d2c5728891651c95bb271d0a36d1456f09bfeaa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T14": {
+   "section_sha256": "93b759b3622bca321ff36e9f822f30685869708e24a31cb2cd37e9f216df95c8",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T14-count-refused-call",
+     "summary": "A make static call another guard refused (a PreToolUse line and no result line) is not counted as a run.",
+     "class": "within",
+     "why": "FR-007 refuses a third `make static`; a call refused before it ran is not a run on the plain reading. D11 as now quoted in spec-cited.md carries this definition (a run is a call that RAN, T14 2026-11-20), and it matches the request's improvement 2 rather than narrowing it."
+    },
+    {
+     "id": "T14-count-unfinished-run",
+     "summary": "A make static still in flight (no PostToolUse/PostToolUseFailure line yet), e.g. a foreground run in another session of the same task, is not yet counted.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged from the earlier ruling, on purpose: improvement 2 targets make static as the edit loop, and each iteration of a loop waits for the previous run's result, so every run feeding a loop has its result line and is counted; the gap admits only a run concurrent with another in the same task, counted the moment it finishes. The edit-loop pattern cannot live in the gap, so the request's purpose survives."
+    },
+    {
+     "id": "T14-makes-field",
+     "summary": "The event log writer adds `makes` (every target of a multi-target call) and the count reads `make` or `makes`, so `make rust-test CRATE=x && make static` is counted.",
+     "class": "within",
+     "why": "Enforcement of FR-007 (and now in D11's text): without it a compound call escapes the count while the trigger fires on it. Delete FR-007 and the field has nothing to do."
+    },
+    {
+     "id": "T14-key-and-shared-count",
+     "summary": "Count keyed on (feature, task) via filed_at's chain, reading only that feature's log; main session and builders share one count.",
+     "class": "within",
+     "why": "FR-007 counts per task; D11: every session and agent's run counts."
+    },
+    {
+     "id": "T14-since",
+     "summary": "Since the task's last landing with landed true naming it in `tasks` (any exit code), else its FIRST task-starts entry (second stamp compared as .000Z), else every line.",
+     "class": "within",
+     "why": "FR-007 'since its last landing'; D11/D10's definition (landed true resets, a refused landing does not; a later task-start resets nothing). Reading `tasks` makes a batch landing reset each of its tasks."
+    },
+    {
+     "id": "T14-no-task-passes",
+     "summary": "A call whose line carries no task passes, logged passed/no-task.",
+     "class": "within",
+     "why": "FR-007 is scoped 'in one task'; D2 files a task wherever one is known (falling back to the clone's last task-start), so a call with no task has nothing to count against. The block's citation of 'D10's precedent' is still not supported by D10 as quoted; the decision stands on FR-007 and D2."
+    },
+    {
+     "id": "T14-refusal-message",
+     "summary": "Refusal names, per crate of the delta, `make rust-test CRATE=<c>` and the gate script's lint/format/cover --crate; `make quick` when no crate changed; then make static once before land; STATIC_OK escape with a reason; each named command pinned as passing the Bash-reading guards.",
+     "class": "within",
+     "why": "FR-007 'naming the crate-scoped checks for the crates the task's delta changes'; FR-012 'a message naming the compliant command' and a recorded escape. The dispatch states STATIC_OK's reason goes through the shared escape reader's two-word floor (FR-012); the block's 'a bare token refused' is consistent with it, and no decision here lowers that floor."
+    },
+    {
+     "id": "T14-knob",
+     "summary": "Knob STATIC_RUNS_A_TASK, GUESS, 2; documented in docs/guards.md's knob table.",
+     "class": "within",
+     "why": "D11 and D14 as written."
+    },
+    {
+     "id": "T14-red-first-and-tests",
+     "summary": "Unit and suite cases for each count/reset/exclusion and escape; condition switched off turns 8 of 11 count tests and 9 of 17 suite checks red.",
+     "class": "within",
+     "why": "FR-012 red-first; enforcement of FR-007 (one-shot labeled measurements)."
+    },
+    {
+     "id": "T14-order-perf",
+     "summary": "Tagged [perf], placed in lane A after T18 and T28.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 order: these improvements first."
+    },
+    {
+     "id": "T14-left-owed-docs",
+     "summary": "docs/guards.md row and knob row, rust/guard/CLAUDE.md mention, D11 and data-model.md restated - T14's own, written before its tick.",
+     "class": "within",
+     "why": "D14 and the documentation duty, held as T14's own work and not deferred. D11's restatement is visible in spec-cited.md; the other files' being written is the block's and dispatch's word (the bundle excludes the repository)."
+    },
+    {
+     "id": "T14-left-env-tests",
+     "summary": "Guard crate tests of six other guards fail under an exported L7R_FEATURE_DIRECTORY; filed as T32, landing before T22.",
+     "class": "within",
+     "why": "A defect (a check failing good work in a page session) not left: filed as a named task in this feature before T22 (SC-005's measurement), with why it is not fixed here (outside T14's files) and how every instance was found, as FR-009 asks."
+    },
+    {
+     "id": "T14-left-guard-file-heredoc",
+     "summary": "guard_file_hooks refuses sed -i on a guard file but not a Python heredoc writing it; filed as T33, landing before T22.",
+     "class": "within",
+     "why": "A defect (a guard passing what it exists to stop), filed as a named task in this feature before T22, outside T14's files; not carried past the feature."
+    },
+    {
+     "id": "T14-left-format-one-file",
+     "summary": "No make target formats one file; filed as T34, landing before T22.",
+     "class": "within",
+     "why": "A tooling gap rather than a defect; filing it narrows nothing of the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T15": {
+   "section_sha256": "839375d8d9fdfe4c698df7989eb0a1b03d93ca5808f4e2bad56101cfa3d29a56",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T15-D12",
+     "summary": "D12 is built in no_poll_hooks with the listed red-first cases. Plain & / nohup / setsid / disown on a make or cargo job is refused, naming run_in_background. A covering wait passes, DETACH_OK escapes and is recorded, and mentions pass.",
+     "class": "within",
+     "why": "FR-008, D12 and FR-012 settle this. It is the GM-approved improvement 3, 'a guard refusing that pattern'."
+    },
+    {
+     "id": "T15-bare-wait-same-shell",
+     "summary": "A bare wait after a loop, if or case body run in the same shell covers the jobs started inside that body. D12 literally asks for 'a command of the same list as the job's &'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is unchanged from the ruling of 2026-11-20. D12's own test is that a covering wait means the call 'does not return before the run ends, so the harness tracks it', and a bare wait 'waits for every job'. Bash runs (timed by EPOCHREALTIME, 2026-11-20) showed that a bare wait in the enclosing same-shell list waits for jobs started in for, if, while, case and { } bodies. Refusing those calls would refuse tracked, correct work, which is a defect under XIV. The purpose of the request, refusing the UNTRACKED pattern, stays whole. The block keeps the ruling's limit: compounds in another shell stay refused, and wait $! and wait %N cover only in the job's own list."
+    },
+    {
+     "id": "T15-other-shell-refused",
+     "summary": "A compound that runs in another shell stays refused even when a later wait follows. 6 compound-in-a-pipeline cases are pinned (for ...; done | cat; wait, { make x & } | cat; wait, ..., the sixth ( make x & ) | cat; wait), and 2 waits inside the part pass. For a bare ( ), a backgrounded loop and $( ), the block states they are refused.",
+     "class": "within",
+     "why": "This is D12's literal rule ('in the same shell (not in a ( ) or $( ) of its own)'), and it is the limit the previous ruling set. The block says the 6 pipeline cases were already refused before they were added. With the pipeline's subshell cut deleted, 5 of the 6 went red, and the sixth is a ( ), which is a separate shell whatever the pipeline does."
+    },
+    {
+     "id": "T15-pid-forms",
+     "summary": "wait $! and wait %N cover only in the job's own list.",
+     "class": "within",
+     "why": "This is D12's literal rule, the stricter reading."
+    },
+    {
+     "id": "T15-shared-readers-fixed",
+     "summary": "The shared readers' defects are fixed in T15, with T30 folded in. strip_heredocs takes a heredoc whose opener line continues past its delimiter. strip_quotes keeps a quoted string only after an interpreter's -c (flags joined: bash -lc, sh -ec, python3 -c), never after grep -c or git -c, and blanks the strings quoted inside a kept one. make::invoked reads setsid [opts] as a wrapper, reads 'make;' as a call, and reads a goal-less make as .DEFAULT_GOAL; a goal it cannot read (make $T) still names none. Each fix has a red-first test, and no_poll_hooks reads through these readers, with its own readers retired.",
+     "class": "within",
+     "why": "This answers the previous BLOCKED finding in the first way it offered: fix the shared readers in T15 and point the guard at them. These are defects (a check passing bad work or refusing good work). Fixing them in the task that found them is the GM-approved improvement 4 ('Briefs that default to fixing in the task') and fix-as-we-go, and it serves D1's single shared detector. It adds no behavior the request did not ask for. The gate's land and rustc callers skip a goal-less make's .DEFAULT_GOAL as they skipped its empty goal before, so they keep their behavior. make $T naming no goal is not a defect left. A goal held in a shell variable cannot be read from the command text, and the job is still refused when it is backgrounded: 'for t in a b; do make $t & done | cat; wait' is among the refused cases. 'Found and left? none' is now true."
+    },
+    {
+     "id": "T15-replay-and-relabel",
+     "summary": "Every guard is replayed on the four frozen corpora (1,134 commands) before and after the shared fix. 3 verdicts moved, each named as a correction: no-poll refuses a setsid nohup make done & launch; no-poll brackets a pkill -f \"pytest\" it had missed; main-tree honors a # MAIN_TREE_OK: reason that the old misreading swallowed. main-tree-refusals-2026-09.json row 130 is relabeled from rewrote to allowed, and its split moves from 109/64 to 110/63.",
+     "class": "within",
+     "why": "Under fix-as-we-go, a check's verdict changing as a bug is fixed is expected and is never a regression. Each moved verdict is named and shown to be a fix of the misreading. The relabeled row was recorded under that misreading, and the suite's own rule is that an escaped command is allowed, not rewritten. Correcting the label matches the guard's intended behavior. It does not change what the guard does."
+    },
+    {
+     "id": "T15-corpus-refusals",
+     "summary": "In the frozen corpora, the refusals (14 on the first replay, 16 now) are all real setsid nohup make done ... & / nohup make done ... & launches, read by hand, so there are 0 false refusals.",
+     "class": "within",
+     "why": "FR-008 and D12 name nohup and setsid at a command position without exception."
+    },
+    {
+     "id": "T15-disown",
+     "summary": "Any disown after a make or cargo job's & refuses the call whatever wait follows, disown -h included.",
+     "class": "within",
+     "why": "D12 settles this explicitly."
+    },
+    {
+     "id": "T15-order",
+     "summary": "Tagged [perf] and ordered first in lane B. It needs only T02's make detector, which has landed.",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'let's prioritize those remaining improvement fixes'. FR-013 puts performance work first, and this is one of the six approved improvements."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T16": {
+   "section_sha256": "56f1e7db22cbe5c0689ecec3b528fed6bf2a8623d050fb16507e6fef5689027f",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T16-placement",
+     "summary": "slow_poll (split into no_poll_hooks/pace.rs under constitution X's 1,000-line bar) is called first in the POLL_OK-escaped branch and before file_wait; a payload with agent_id passes untouched by the pace check; -c strings and backgrounded calls are judged too",
+     "class": "within",
+     "why": "This is D13 as written: both permitted paths, before either returns, and the main session only (no agent_id). A -c string that a shell runs is the same loop spelled another way, so reading it enforces FR-008 and adds no reach. Splitting the file is housekeeping, not a decision about scope."
+    },
+    {
+     "id": "T16-pace",
+     "summary": "the pace is the longest sleep at a command position inside a loop, with the head counted, s/m/h/d units read and several numbers summed as GNU sleep reads them; a quoted string, a sleep with no loop, a sleep after done and a redirection after a sleep are not a pace",
+     "class": "within",
+     "why": "FR-008 refuses a 'wait loop' that checks less often than 60 s. Reading the loop's real interval the way the shell would is that rule. A sleep outside a loop and a quoted string are not a checking loop, so passing them follows FR-008's wording."
+    },
+    {
+     "id": "T16-variable-sleep",
+     "summary": "replaces the earlier pass of sleep $N: a variable the command sets (N=480, export, quoted, an env prefix, several assignments) is read at the largest value it is given, and a length still unreadable ($N set nowhere, arithmetic, a substitution, infinity) is refused as endless, naming the literal sleep 60 form, with SLOW_POLL_OK as the escape",
+     "class": "within",
+     "why": "This no longer narrows. Every main-session wait loop now gets judged, which is FR-008's rule with no carve-out. Refusing a length the guard cannot read is enforcement of the requested rule, not new behavior. The guard cannot show that such a loop checks within 60 s. The refusal names the compliant form and offers FR-012's recorded escape. The spec already does the same for D12's unreadable 'wait $P'. Taking the largest value assigned is a conservative reading of the same rule. The GM asked for 'real enforcement and not just instructions', and this closes the gap my earlier ruling left open. The plan-blocks review overruled that ruling (LEGITIMATE), and this block follows the review."
+    },
+    {
+     "id": "T16-busy-wait-hole",
+     "summary": "a pre-existing defect is fixed: SLEEP_RE and sleep_in_loop required a digit, so a loop whose sleep takes a variable (until curl -s x; do sleep $N; done) never reached the loop branch and passed even the busy-wait refusal, a subagent's included. The branch is now entered wherever the pace reader finds a sleep in a loop",
+     "class": "within",
+     "why": "Under constitution XIV this is a defect: a check that passes bad work. HEAD's guard was observed letting the loop through (rc 0, with a method recorded). It sits in the file and the reader T16 changes, and fixing defects as they are found is the standing rule. The fix does not create new behavior. It makes the existing busy-wait refusal reach a spelling that had slipped past it, and the frozen corpora show 0 of 1,134 verdicts moved. That is consistent with 'the existing no-poll cases unchanged'."
+    },
+    {
+     "id": "T16-message-and-escape",
+     "summary": "the refusal names the same command with every sleep over the knob at sleep 60. SLOW_POLL_OK escapes and is recorded, and it is masked before POLL_OK is read, so it grants nothing POLL_OK grants. Thin reasons (empty, one word quoted or bare, one word after the colon) are refused and pinned",
+     "class": "within",
+     "why": "D13 names the compliant form and the SLOW_POLL_OK escape. FR-012 requires an escape with a reason of two words or more, recorded, and a message naming the compliant command. Pinning the refusal of one-word reasons enforces FR-012's exact wording. The masking makes the escape do only what it says."
+    },
+    {
+     "id": "T16-self-trip",
+     "summary": "the guard's own rewrites and offers, fed back from the main session, are never refused for their pace",
+     "class": "within",
+     "why": "Those forms are at or under the knob, so FR-008 does not reach them. Testing that they pass enforces the compliant side of the rule."
+    },
+    {
+     "id": "T16-wait-grammar-fix",
+     "summary": "a defect that predates T16 is fixed: shared::wait's condition grammar did not read proof_of_life's clause, so the guard refused its own invited file-wait rerun as a busy-wait. One existing test's expectation is changed to ask that the fed-back wait get no answer",
+     "class": "within",
+     "why": "The guard was refusing correct work on one of D13's two permitted paths, the path T16 adds its check to. That is a defect under XIV and is fixed as the work goes. The changed test is where the defect was hidden ('rewritten()' read a refusal as no rewrite), so changing it does not depart from 'the existing no-poll cases unchanged'."
+    },
+    {
+     "id": "T16-knob",
+     "summary": "POLL_CHECK_S = 60 s, labeled GUESS at its point of change",
+     "class": "within",
+     "why": "FR-008 and D13 name the knob as 60 s and GUESS, and D14 asks for the label at the point of change."
+    },
+    {
+     "id": "T16-found-and-left",
+     "summary": "POLL_CHECK_S's row in D14's knob table in docs/guards.md is left to T22, which writes that table and is the close",
+     "class": "within",
+     "why": "This is ordering, not a narrowing. The table is still delivered inside the feature, before it closes, by the task that writes it. It is not a deferred defect, so FR-009 does not reach it. That T22 writes the table rests on the block's word, which this bundle cannot confirm."
+    },
+    {
+     "id": "T16-perf-tag",
+     "summary": "T16 is tagged [perf] under FR-013",
+     "class": "within",
+     "why": "T16 is improvement 3 of the six the GM approved ('a shorter poll loop on my side', 18 min). The GM ruled on 2026-11-20 that those fixes come first because 'doing those first makes everything after them faster'. Under FR-013 it makes the builders' loop faster."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T14 Approach (checklist part A)",
+    "### T15 Approach (checklist part A)",
+    "### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)",
+    "### T29 Approach (checklist part A)",
+    "### T30 (<why: the finding or measurement that files it>)",
+    "### T30 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T14-order",
+     "summary": "T14 (FR-007's third-make-static guard) moves from 'after T13' to lane A after T18 and T28, its real dependencies being only T03's task field and T06's landing end line, both landed.",
+     "class": "within",
+     "why": "Ordering among the six approved improvements and FR-013's rule; it drops a false dependency on T13 (which broke the T12-T15 order loop) and leaves FR-007 untouched. The GM's 2026-11-20 order puts the improvements first; it does not order them among themselves."
+    },
+    {
+     "id": "T15-order",
+     "summary": "T15 (FR-008's untracked-background guard) is first in lane B, needing only T02's make detector, landed.",
+     "class": "within",
+     "why": "Same as T14: an improvement put first, per the GM's 2026-11-20 'prioritize those remaining improvement fixes'; nothing in the spec is changed."
+    },
+    {
+     "id": "T15-review-fixes",
+     "summary": "The guard reads heredocs and quoted strings itself (a heredoc with words after its delimiter, a string after -c that no shell runs, a bash -lc string), and stops treating 'wait $!' or 'wait %N' after a loop as covering every run of it; the frozen corpora go from 14 to 15 refusals, every one a real detached make launch, 0 false.",
+     "class": "within",
+     "why": "Each fix makes the guard read FR-008 and D12 correctly: a heredoc body or a grep -c argument is a mention, not an invocation (constitution XVIII, cited by the block), and D12 already says 'wait $!' covers only the last job. The corpus refusal it adds is a real 'setsid nohup make done ... &', which FR-008 names. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "T15-bare-wait-enclosing-list",
+     "summary": "A BARE 'wait' in an enclosing list of the same shell covers a make/cargo job inside a loop or if body ('for t in a b; do make $t & done; wait' passes), where D12 and T15's line say the wait must be in the job's own list; 'wait $!' and 'wait %N' still cover only in the job's own list.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the guard's literal reach under D12. It is legitimate because refusing the case would defeat the request's own purpose, not because it is more convenient. The approved fix was 'a guard refusing that pattern': T225's plain '&', whose end sent no completion notice so the session sat idle. D12 gives the reason a covering wait passes: 'Such a call does not return before the run ends, so the harness tracks it.' A bare wait waits for every child of its shell. This review measured it on 2026-11-20 by timing bash -c runs with $EPOCHREALTIME: 'for t in 1 2; do sleep 1.5 & done; wait' took 1.51 s and 'if true; then sleep 1.5 & fi; wait' took 1.51 s, so the call cannot return early and the run is tracked. Refusing it would block a tracked run that is not the pattern the GM approved refusing. The reading keeps every other condition D12 sets: command position, same shell (not a subshell), run unconditionally, not backgrounded. It does not widen to 'wait $!' or 'wait %N', which would be wrong after a loop. The earlier CLEAR text had accepted a broader wording ('same list read as same shell' for any wait); this one is tighter."
+    },
+    {
+     "id": "T29-clear-mark-at-set-down",
+     "summary": "A new task: 'make set-down' removes the clone's active-task mark when it names the feature being set down (not for a refused set-down, another feature's mark, or a mark that cannot be read). The next task-start writes the mark again. Red-first test, the clear deleted and red, and the incident replayed.",
+     "class": "within",
+     "why": "It narrows nothing that was asked. It fixes a defect in the sense of constitution XIV, a tool refusing valid work: the stale mark held every push touching 449 and refused T06's valid landing of this feature. A set-down is part of this feature's own mechanism, since FR-013's open-performance-task test reads 'not set down since its last task-start' and T28, the FR-013 task-start refusal, is the same tool. A set-down that still holds pushes as the parked task's does not set it down. The GM's 2026-11-20 reason for the order ('doing those first makes everything after them faster') covers a fix to a refused landing. The plan searched the mark's readers (grep active-task over rust/: shared::speckit::active_task, the plan door, task_start), and each reads a missing mark as no task."
+    },
+    {
+     "id": "T30-template",
+     "summary": "T30's section and its checklist are the unfilled task template, all placeholders.",
+     "class": "within",
+     "why": "It decides nothing yet: no approach, constraint, order or exit is stated. Once it is filled, the filled text is a changed block and is owed its own review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)",
+    "### T14 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T14-count-refused-call",
+     "summary": "A make static call another guard refused (a PreToolUse line and no result line) is not counted as a run.",
+     "class": "within",
+     "why": "FR-007 refuses a third `make static`; a call refused before it ran is not a run of make static on the plain reading, and counting it would spend a run on nothing (measured 1 of 33 and 8 of 340 such lines, one-shot labeled). D11 is restated to it; the restatement matches the request rather than narrowing it."
+    },
+    {
+     "id": "T14-count-unfinished-run",
+     "summary": "A make static still in flight (no PostToolUse/PostToolUseFailure line yet), e.g. a foreground run in another session of the same task, is not yet counted.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled on purpose. The request's improvement 2 targets make static as the edit loop: each iteration of a loop waits for the previous run's result, so every run that feeds a loop has its result line and is counted; the in-flight window only admits a run concurrent with another in the same task, and that run is counted the moment it finishes, so the next call is refused. The edit-loop pattern cannot live in the gap; the purpose survives. Not ruled on an impossibility claim (the bundle does not measure whether the guard log could tell a refused call from an in-flight one)."
+    },
+    {
+     "id": "T14-makes-field",
+     "summary": "The event log writer adds `makes` (every target of a multi-target call) and the count reads `make` or `makes`, so `make rust-test CRATE=x && make static` is counted.",
+     "class": "within",
+     "why": "Enforcement of FR-007: without it a compound call escapes the count while the trigger fires on it. Delete FR-007 and the field has nothing to do."
+    },
+    {
+     "id": "T14-key-and-shared-count",
+     "summary": "Count keyed on (feature, task) via filed_at's chain, reading only that feature's log; main session and builders share one count.",
+     "class": "within",
+     "why": "FR-007 counts per task; D11: every session and agent's run counts."
+    },
+    {
+     "id": "T14-since",
+     "summary": "Since the task's last landing with landed true naming it in `tasks` (any exit code), else its FIRST task-starts entry (second stamp compared as .000Z), else every line.",
+     "class": "within",
+     "why": "FR-007 'since its last landing'; D11/D10's definition (landed true resets, a refused landing does not; a later task-start resets nothing). Reading `tasks` rather than `task` makes a batch landing reset each of its tasks, as D11 requires."
+    },
+    {
+     "id": "T14-no-task-passes",
+     "summary": "A call whose line carries no task passes, logged passed/no-task.",
+     "class": "within",
+     "why": "FR-007 is scoped 'in one task'; D2 files a task on every line where one is known, falling back to the clone's last task-start for the feature, so a call with no task is outside any task and has nothing to count against. Note: the block cites 'D10's precedent' for this, but D10 as quoted in spec-cited.md carries no no-task clause; the citation is unsupported and the decision stands on FR-007 and D2 instead."
+    },
+    {
+     "id": "T14-refusal-message",
+     "summary": "Refusal names, per crate of the delta (merge-base diff plus untracked files, mapped to nearest [package] Cargo.toml), `make rust-test CRATE=<c>` and the gate script's lint/format/cover --crate; `make quick` when no crate changed; then make static once before land; STATIC_OK escape; each named command pinned as passing the Bash-reading guards.",
+     "class": "within",
+     "why": "FR-007 'naming the crate-scoped checks for the crates the task's delta changes'; FR-012 'a message naming the compliant command'. Naming make quick for a delta with no crate fills a case FR-007 does not cover without narrowing it. Note: FR-012 asks for an escape reason of two words or more; the block says 'a bare token refused' and 'with a reason' and does not state the two-word floor - silence, not a decision, so no ruling, but the built check should be the FR-012 one."
+    },
+    {
+     "id": "T14-knob",
+     "summary": "Knob STATIC_RUNS_A_TASK, GUESS, 2; documented in docs/guards.md's knob table.",
+     "class": "within",
+     "why": "D11 and D14 as written."
+    },
+    {
+     "id": "T14-red-first-and-tests",
+     "summary": "Unit and suite cases for each count/reset/exclusion and escape; condition switched off turns 8 of 11 count tests and 9 of 17 suite checks red.",
+     "class": "within",
+     "why": "FR-012 red-first, enforcement of FR-007 (one-shot labeled measurements)."
+    },
+    {
+     "id": "T14-order-perf",
+     "summary": "Tagged [perf], placed in lane A after T18 and T28.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 order: these improvements first."
+    },
+    {
+     "id": "T14-left-owed-docs",
+     "summary": "docs/guards.md row and knob row, rust/guard/CLAUDE.md mention, D11 and data-model.md restated - owed before the tick.",
+     "class": "within",
+     "why": "D14 and the project's documentation duty; held owed before the tick, not deferred. The hashed block still lists them as owed; that they are now written is the dispatch's word, not verified here (the bundle excludes the repository)."
+    },
+    {
+     "id": "T14-left-env-tests",
+     "summary": "Guard crate tests of six other guards read the process environment and fail under an exported L7R_FEATURE_DIRECTORY; filed as a new task landing before T22.",
+     "class": "within",
+     "why": "A defect (a check failing good work in a page session), not left: filed to be fixed in this feature before T22, which measures SC-005 on work that runs these tests, with how every instance was found. FR-009's full text is not in the bundle; on what is visible the deferral states its reason. The block says 'a new task the session files'; T32-T34 are the dispatch's word."
+    },
+    {
+     "id": "T14-left-guard-file-heredoc",
+     "summary": "guard_file_hooks refuses sed -i on a guard file but not a Python heredoc writing it; filed as a new task landing before T22.",
+     "class": "within",
+     "why": "A defect (a guard passing what it exists to stop), filed to be fixed in this feature before T22, outside T14's files; not carried past the feature."
+    },
+    {
+     "id": "T14-left-format-one-file",
+     "summary": "No make target formats one file; filed as a new task landing before T22.",
+     "class": "within",
+     "why": "A tooling gap, not a defect by the project's definition; filing it is in the spirit of the request's efficiency improvements and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)",
+    "### T14 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T14-count-refused-call",
+     "summary": "A make static call another guard refused (a PreToolUse line and no result line) is not counted as a run.",
+     "class": "within",
+     "why": "FR-007 refuses a third `make static`; a call refused before it ran is not a run on the plain reading. D11 as now quoted in spec-cited.md carries this definition (a run is a call that RAN, T14 2026-11-20), and it matches the request's improvement 2 rather than narrowing it."
+    },
+    {
+     "id": "T14-count-unfinished-run",
+     "summary": "A make static still in flight (no PostToolUse/PostToolUseFailure line yet), e.g. a foreground run in another session of the same task, is not yet counted.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged from the earlier ruling, on purpose: improvement 2 targets make static as the edit loop, and each iteration of a loop waits for the previous run's result, so every run feeding a loop has its result line and is counted; the gap admits only a run concurrent with another in the same task, counted the moment it finishes. The edit-loop pattern cannot live in the gap, so the request's purpose survives."
+    },
+    {
+     "id": "T14-makes-field",
+     "summary": "The event log writer adds `makes` (every target of a multi-target call) and the count reads `make` or `makes`, so `make rust-test CRATE=x && make static` is counted.",
+     "class": "within",
+     "why": "Enforcement of FR-007 (and now in D11's text): without it a compound call escapes the count while the trigger fires on it. Delete FR-007 and the field has nothing to do."
+    },
+    {
+     "id": "T14-key-and-shared-count",
+     "summary": "Count keyed on (feature, task) via filed_at's chain, reading only that feature's log; main session and builders share one count.",
+     "class": "within",
+     "why": "FR-007 counts per task; D11: every session and agent's run counts."
+    },
+    {
+     "id": "T14-since",
+     "summary": "Since the task's last landing with landed true naming it in `tasks` (any exit code), else its FIRST task-starts entry (second stamp compared as .000Z), else every line.",
+     "class": "within",
+     "why": "FR-007 'since its last landing'; D11/D10's definition (landed true resets, a refused landing does not; a later task-start resets nothing). Reading `tasks` makes a batch landing reset each of its tasks."
+    },
+    {
+     "id": "T14-no-task-passes",
+     "summary": "A call whose line carries no task passes, logged passed/no-task.",
+     "class": "within",
+     "why": "FR-007 is scoped 'in one task'; D2 files a task wherever one is known (falling back to the clone's last task-start), so a call with no task has nothing to count against. The block's citation of 'D10's precedent' is still not supported by D10 as quoted; the decision stands on FR-007 and D2."
+    },
+    {
+     "id": "T14-refusal-message",
+     "summary": "Refusal names, per crate of the delta, `make rust-test CRATE=<c>` and the gate script's lint/format/cover --crate; `make quick` when no crate changed; then make static once before land; STATIC_OK escape with a reason; each named command pinned as passing the Bash-reading guards.",
+     "class": "within",
+     "why": "FR-007 'naming the crate-scoped checks for the crates the task's delta changes'; FR-012 'a message naming the compliant command' and a recorded escape. The dispatch states STATIC_OK's reason goes through the shared escape reader's two-word floor (FR-012); the block's 'a bare token refused' is consistent with it, and no decision here lowers that floor."
+    },
+    {
+     "id": "T14-knob",
+     "summary": "Knob STATIC_RUNS_A_TASK, GUESS, 2; documented in docs/guards.md's knob table.",
+     "class": "within",
+     "why": "D11 and D14 as written."
+    },
+    {
+     "id": "T14-red-first-and-tests",
+     "summary": "Unit and suite cases for each count/reset/exclusion and escape; condition switched off turns 8 of 11 count tests and 9 of 17 suite checks red.",
+     "class": "within",
+     "why": "FR-012 red-first; enforcement of FR-007 (one-shot labeled measurements)."
+    },
+    {
+     "id": "T14-order-perf",
+     "summary": "Tagged [perf], placed in lane A after T18 and T28.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 order: these improvements first."
+    },
+    {
+     "id": "T14-left-owed-docs",
+     "summary": "docs/guards.md row and knob row, rust/guard/CLAUDE.md mention, D11 and data-model.md restated - T14's own, written before its tick.",
+     "class": "within",
+     "why": "D14 and the documentation duty, held as T14's own work and not deferred. D11's restatement is visible in spec-cited.md; the other files' being written is the block's and dispatch's word (the bundle excludes the repository)."
+    },
+    {
+     "id": "T14-left-env-tests",
+     "summary": "Guard crate tests of six other guards fail under an exported L7R_FEATURE_DIRECTORY; filed as T32, landing before T22.",
+     "class": "within",
+     "why": "A defect (a check failing good work in a page session) not left: filed as a named task in this feature before T22 (SC-005's measurement), with why it is not fixed here (outside T14's files) and how every instance was found, as FR-009 asks."
+    },
+    {
+     "id": "T14-left-guard-file-heredoc",
+     "summary": "guard_file_hooks refuses sed -i on a guard file but not a Python heredoc writing it; filed as T33, landing before T22.",
+     "class": "within",
+     "why": "A defect (a guard passing what it exists to stop), filed as a named task in this feature before T22, outside T14's files; not carried past the feature."
+    },
+    {
+     "id": "T14-left-format-one-file",
+     "summary": "No make target formats one file; filed as T34, landing before T22.",
+     "class": "within",
+     "why": "A tooling gap rather than a defect; filing it narrows nothing of the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)",
+    "### T15 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T15-D12",
+     "summary": "D12 is built in no_poll_hooks with the listed red-first cases. Plain & / nohup / setsid / disown on a make or cargo job is refused, naming run_in_background. A covering wait passes, DETACH_OK escapes and is recorded, and mentions pass.",
+     "class": "within",
+     "why": "FR-008, D12 and FR-012 settle this. It is the GM-approved improvement 3, 'a guard refusing that pattern'."
+    },
+    {
+     "id": "T15-bare-wait-same-shell",
+     "summary": "A bare wait after a loop, if or case body run in the same shell covers the jobs started inside that body. D12 literally asks for 'a command of the same list as the job's &'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is unchanged from the ruling of 2026-11-20. D12's own test is that a covering wait means the call 'does not return before the run ends, so the harness tracks it', and a bare wait 'waits for every job'. Bash runs (timed by EPOCHREALTIME, 2026-11-20) showed that a bare wait in the enclosing same-shell list waits for jobs started in for, if, while, case and { } bodies. Refusing those calls would refuse tracked, correct work, which is a defect under XIV. The purpose of the request, refusing the UNTRACKED pattern, stays whole. The block keeps the ruling's limit: compounds in another shell stay refused, and wait $! and wait %N cover only in the job's own list."
+    },
+    {
+     "id": "T15-other-shell-refused",
+     "summary": "A compound that runs in another shell stays refused even when a later wait follows. 6 compound-in-a-pipeline cases are pinned (for ...; done | cat; wait, { make x & } | cat; wait, ..., the sixth ( make x & ) | cat; wait), and 2 waits inside the part pass. For a bare ( ), a backgrounded loop and $( ), the block states they are refused.",
+     "class": "within",
+     "why": "This is D12's literal rule ('in the same shell (not in a ( ) or $( ) of its own)'), and it is the limit the previous ruling set. The block says the 6 pipeline cases were already refused before they were added. With the pipeline's subshell cut deleted, 5 of the 6 went red, and the sixth is a ( ), which is a separate shell whatever the pipeline does."
+    },
+    {
+     "id": "T15-pid-forms",
+     "summary": "wait $! and wait %N cover only in the job's own list.",
+     "class": "within",
+     "why": "This is D12's literal rule, the stricter reading."
+    },
+    {
+     "id": "T15-shared-readers-fixed",
+     "summary": "The shared readers' defects are fixed in T15, with T30 folded in. strip_heredocs takes a heredoc whose opener line continues past its delimiter. strip_quotes keeps a quoted string only after an interpreter's -c (flags joined: bash -lc, sh -ec, python3 -c), never after grep -c or git -c, and blanks the strings quoted inside a kept one. make::invoked reads setsid [opts] as a wrapper, reads 'make;' as a call, and reads a goal-less make as .DEFAULT_GOAL; a goal it cannot read (make $T) still names none. Each fix has a red-first test, and no_poll_hooks reads through these readers, with its own readers retired.",
+     "class": "within",
+     "why": "This answers the previous BLOCKED finding in the first way it offered: fix the shared readers in T15 and point the guard at them. These are defects (a check passing bad work or refusing good work). Fixing them in the task that found them is the GM-approved improvement 4 ('Briefs that default to fixing in the task') and fix-as-we-go, and it serves D1's single shared detector. It adds no behavior the request did not ask for. The gate's land and rustc callers skip a goal-less make's .DEFAULT_GOAL as they skipped its empty goal before, so they keep their behavior. make $T naming no goal is not a defect left. A goal held in a shell variable cannot be read from the command text, and the job is still refused when it is backgrounded: 'for t in a b; do make $t & done | cat; wait' is among the refused cases. 'Found and left? none' is now true."
+    },
+    {
+     "id": "T15-replay-and-relabel",
+     "summary": "Every guard is replayed on the four frozen corpora (1,134 commands) before and after the shared fix. 3 verdicts moved, each named as a correction: no-poll refuses a setsid nohup make done & launch; no-poll brackets a pkill -f \"pytest\" it had missed; main-tree honors a # MAIN_TREE_OK: reason that the old misreading swallowed. main-tree-refusals-2026-09.json row 130 is relabeled from rewrote to allowed, and its split moves from 109/64 to 110/63.",
+     "class": "within",
+     "why": "Under fix-as-we-go, a check's verdict changing as a bug is fixed is expected and is never a regression. Each moved verdict is named and shown to be a fix of the misreading. The relabeled row was recorded under that misreading, and the suite's own rule is that an escaped command is allowed, not rewritten. Correcting the label matches the guard's intended behavior. It does not change what the guard does."
+    },
+    {
+     "id": "T15-corpus-refusals",
+     "summary": "In the frozen corpora, the refusals (14 on the first replay, 16 now) are all real setsid nohup make done ... & / nohup make done ... & launches, read by hand, so there are 0 false refusals.",
+     "class": "within",
+     "why": "FR-008 and D12 name nohup and setsid at a command position without exception."
+    },
+    {
+     "id": "T15-disown",
+     "summary": "Any disown after a make or cargo job's & refuses the call whatever wait follows, disown -h included.",
+     "class": "within",
+     "why": "D12 settles this explicitly."
+    },
+    {
+     "id": "T15-order",
+     "summary": "Tagged [perf] and ordered first in lane B. It needs only T02's make detector, which has landed.",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'let's prioritize those remaining improvement fixes'. FR-013 puts performance work first, and this is one of the six approved improvements."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)",
+    "### T16 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T16-placement",
+     "summary": "slow_poll in no_poll_hooks, called first in the POLL_OK-escaped branch and before file_wait; a payload with agent_id passes untouched; -c strings and backgrounded calls judged too",
+     "class": "within",
+     "why": "D13 as written: both permitted paths, before either returns, main session only (no agent_id). Reading a -c string a shell runs is the same loop by another spelling, so it enforces FR-008 rather than adding reach."
+    },
+    {
+     "id": "T16-pace",
+     "summary": "the pace is the longest sleep at a command position inside a loop, head counted, s/m/h/d units read and several numbers summed as GNU sleep reads them; a quoted string, a sleep with no loop and a sleep after done are not a pace",
+     "class": "within",
+     "why": "FR-008 refuses a 'wait loop' that checks less often than 60 s; reading the loop's actual interval as the shell would is the rule. A non-loop sleep and a quoted string are not a checking loop, so passing them follows FR-008's wording."
+    },
+    {
+     "id": "T16-variable-sleep",
+     "summary": "a sleep whose number the text does not give (sleep $N) is no pace and passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-008 refuses a loop that checks less often than 60 s, and this lets one through unjudged, so it narrows. It is legitimate because the hook reads the command text before the shell expands it, so a pace absent from the text cannot be judged. Refusing every unreadable sleep instead would refuse compliant loops (sleep $N with N=5), which would be new behavior the GM did not ask for. The 45-of-45 replay does not support this: it selected literal sleeps of 300 or more. The bundle does not say whether a literal assigned in the same command (N=480; ... sleep $N) is resolved. That sub-case is readable from the text and would be better caught, but leaving it is not a ruling on this block's decision."
+    },
+    {
+     "id": "T16-message-and-escape",
+     "summary": "the refusal names the same command with every sleep over the knob at sleep 60; SLOW_POLL_OK escapes and is recorded, masked before POLL_OK is read so it grants nothing POLL_OK grants",
+     "class": "within",
+     "why": "D13 names the compliant form and the SLOW_POLL_OK escape. FR-012 requires a recorded escape and a message naming the compliant command. The masking makes the escape do only what it says."
+    },
+    {
+     "id": "T16-self-trip",
+     "summary": "the guard's own rewrites and offers, fed back from the main session, are never refused for their pace",
+     "class": "within",
+     "why": "Those forms sit at or under the knob, so FR-008 does not reach them. Testing that they pass is enforcement of the rule's compliant side."
+    },
+    {
+     "id": "T16-wait-grammar-fix",
+     "summary": "a defect that predates T16 is fixed: shared::wait's condition grammar did not read proof_of_life's clause, so the guard refused its own invited file-wait rerun as a busy-wait. One existing test's expectation is changed to ask that the fed-back wait get no answer",
+     "class": "within",
+     "why": "The guard was refusing correct work on one of D13's two permitted paths, the one T16 adds its check to. That is a defect under XIV and is fixed as the work goes. The changed test is the place where the defect was hidden ('rewritten()' read a refusal as no rewrite), so it does not depart from 'the existing no-poll cases unchanged'."
+    },
+    {
+     "id": "T16-knob",
+     "summary": "POLL_CHECK_S = 60 s, labeled GUESS at its point of change",
+     "class": "within",
+     "why": "FR-008 and D13 name the knob as 60 s and GUESS, and D14 asks for the label at the point of change."
+    },
+    {
+     "id": "T16-found-and-left",
+     "summary": "POLL_CHECK_S's row in D14's knob table in docs/guards.md is left to T22, which writes that table and is the close",
+     "class": "within",
+     "why": "This is ordering, not a narrowing. The table is still delivered within the feature, before it closes, by the task that writes it. It is not a deferred defect, so FR-009 does not reach it. That T22 writes the table rests on the block's word and the dispatch's word, which this bundle cannot confirm."
+    },
+    {
+     "id": "T16-perf-tag",
+     "summary": "T16 is tagged [perf] under FR-013",
+     "class": "within",
+     "why": "T16 is improvement 3 of the six the GM approved ('a shorter poll loop on my side', 18 min). The GM ruled on 2026-11-20 that those fixes come first because 'doing those first makes everything after them faster'. Under FR-013 it makes the builders' loop faster."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)",
+    "### T16 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T16-placement",
+     "summary": "slow_poll (split into no_poll_hooks/pace.rs under constitution X's 1,000-line bar) is called first in the POLL_OK-escaped branch and before file_wait; a payload with agent_id passes untouched by the pace check; -c strings and backgrounded calls are judged too",
+     "class": "within",
+     "why": "This is D13 as written: both permitted paths, before either returns, and the main session only (no agent_id). A -c string that a shell runs is the same loop spelled another way, so reading it enforces FR-008 and adds no reach. Splitting the file is housekeeping, not a decision about scope."
+    },
+    {
+     "id": "T16-pace",
+     "summary": "the pace is the longest sleep at a command position inside a loop, with the head counted, s/m/h/d units read and several numbers summed as GNU sleep reads them; a quoted string, a sleep with no loop, a sleep after done and a redirection after a sleep are not a pace",
+     "class": "within",
+     "why": "FR-008 refuses a 'wait loop' that checks less often than 60 s. Reading the loop's real interval the way the shell would is that rule. A sleep outside a loop and a quoted string are not a checking loop, so passing them follows FR-008's wording."
+    },
+    {
+     "id": "T16-variable-sleep",
+     "summary": "replaces the earlier pass of sleep $N: a variable the command sets (N=480, export, quoted, an env prefix, several assignments) is read at the largest value it is given, and a length still unreadable ($N set nowhere, arithmetic, a substitution, infinity) is refused as endless, naming the literal sleep 60 form, with SLOW_POLL_OK as the escape",
+     "class": "within",
+     "why": "This no longer narrows. Every main-session wait loop now gets judged, which is FR-008's rule with no carve-out. Refusing a length the guard cannot read is enforcement of the requested rule, not new behavior. The guard cannot show that such a loop checks within 60 s. The refusal names the compliant form and offers FR-012's recorded escape. The spec already does the same for D12's unreadable 'wait $P'. Taking the largest value assigned is a conservative reading of the same rule. The GM asked for 'real enforcement and not just instructions', and this closes the gap my earlier ruling left open. The plan-blocks review overruled that ruling (LEGITIMATE), and this block follows the review."
+    },
+    {
+     "id": "T16-busy-wait-hole",
+     "summary": "a pre-existing defect is fixed: SLEEP_RE and sleep_in_loop required a digit, so a loop whose sleep takes a variable (until curl -s x; do sleep $N; done) never reached the loop branch and passed even the busy-wait refusal, a subagent's included. The branch is now entered wherever the pace reader finds a sleep in a loop",
+     "class": "within",
+     "why": "Under constitution XIV this is a defect: a check that passes bad work. HEAD's guard was observed letting the loop through (rc 0, with a method recorded). It sits in the file and the reader T16 changes, and fixing defects as they are found is the standing rule. The fix does not create new behavior. It makes the existing busy-wait refusal reach a spelling that had slipped past it, and the frozen corpora show 0 of 1,134 verdicts moved. That is consistent with 'the existing no-poll cases unchanged'."
+    },
+    {
+     "id": "T16-message-and-escape",
+     "summary": "the refusal names the same command with every sleep over the knob at sleep 60. SLOW_POLL_OK escapes and is recorded, and it is masked before POLL_OK is read, so it grants nothing POLL_OK grants. Thin reasons (empty, one word quoted or bare, one word after the colon) are refused and pinned",
+     "class": "within",
+     "why": "D13 names the compliant form and the SLOW_POLL_OK escape. FR-012 requires an escape with a reason of two words or more, recorded, and a message naming the compliant command. Pinning the refusal of one-word reasons enforces FR-012's exact wording. The masking makes the escape do only what it says."
+    },
+    {
+     "id": "T16-self-trip",
+     "summary": "the guard's own rewrites and offers, fed back from the main session, are never refused for their pace",
+     "class": "within",
+     "why": "Those forms are at or under the knob, so FR-008 does not reach them. Testing that they pass enforces the compliant side of the rule."
+    },
+    {
+     "id": "T16-wait-grammar-fix",
+     "summary": "a defect that predates T16 is fixed: shared::wait's condition grammar did not read proof_of_life's clause, so the guard refused its own invited file-wait rerun as a busy-wait. One existing test's expectation is changed to ask that the fed-back wait get no answer",
+     "class": "within",
+     "why": "The guard was refusing correct work on one of D13's two permitted paths, the path T16 adds its check to. That is a defect under XIV and is fixed as the work goes. The changed test is where the defect was hidden ('rewritten()' read a refusal as no rewrite), so changing it does not depart from 'the existing no-poll cases unchanged'."
+    },
+    {
+     "id": "T16-knob",
+     "summary": "POLL_CHECK_S = 60 s, labeled GUESS at its point of change",
+     "class": "within",
+     "why": "FR-008 and D13 name the knob as 60 s and GUESS, and D14 asks for the label at the point of change."
+    },
+    {
+     "id": "T16-found-and-left",
+     "summary": "POLL_CHECK_S's row in D14's knob table in docs/guards.md is left to T22, which writes that table and is the close",
+     "class": "within",
+     "why": "This is ordering, not a narrowing. The table is still delivered inside the feature, before it closes, by the task that writes it. It is not a deferred defect, so FR-009 does not reach it. That T22 writes the table rests on the block's word, which this bundle cannot confirm."
+    },
+    {
+     "id": "T16-perf-tag",
+     "summary": "T16 is tagged [perf] under FR-013",
+     "class": "within",
+     "why": "T16 is improvement 3 of the six the GM approved ('a shorter poll loop on my side', 18 min). The GM ruled on 2026-11-20 that those fixes come first because 'doing those first makes everything after them faster'. Under FR-013 it makes the builders' loop faster."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T14 to T16, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

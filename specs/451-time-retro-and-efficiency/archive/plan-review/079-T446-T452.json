@@ -1,0 +1,841 @@
+{
+ "blocks": {
+  "### T446 Approach (checklist part A)": {
+   "sha256": "d0cd5db812cbeebe84b2b260ce5a8b5ce51e57edb2b4b542d0fa2dbd24555710",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T446 (451 T304's remainder, part 2: the guards' work-tree `git diff` calls took the index lock whatever `GIT_OPTIONAL_LOCKS` says, 142 of 200 commits refused beside three such loops, measured 2026-11-26 (T304's loop))": {
+   "sha256": "012215fbb1c57920b8eed590a4fea29ffd0e1ec954813df1f6760f3d928cc978",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T447 Approach (checklist part A)": {
+   "sha256": "20e685faf5fb84fa0b03c666873b1b1ae61d670fcd9e80d4a935ac3c4252d8d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T447 (Superseded by T397: `make land` carries its tasks' done commits before its first pass, so the refusal this task would add can never fire)": {
+   "sha256": "7d67e37b1a4bf5c6be47f6c02ae2add8c262f41ed16b7755e85d22004890d2ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T448 Approach (checklist part A)": {
+   "sha256": "28ab2be2d39852779d66462859213d3fa8867d08841e6045a34adee6727923d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T448 (451 T286's Found and left: `make builder-tree`'s handout build of a new tree's guard took the wrapper's lock with `flock -n`, so beside another call's build it said \"its guard binary did NOT build\", and its note said the first closing checks \"may stop on the hook wrapper's 45 s limit\" (`L7R_GUARD_BUILD_SECS`, a GUESS knob), stale since T286's bounded floor)": {
+   "sha256": "34e07fe49f66fb14f52c9c5383744ae95ff3293ecba48118547b42e65289b405",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T449 (found by the batch gate of 2026-11-27: its `make hooks-test` was red for a cause no suite named - from 05:47Z the clone's tool-profile build of `l7r_guard` failed to link, `guard.failed` was stamped, every hook ran the 05:03Z `l7r-guard.good`, and the print-fresh call named no binary, so `test-parts.3.sh` exec'd an empty path (14 FAIL, observed 2026-11-27, method: the session's repair of the clone) and `test-context-cap-hooks.sh` ran the old rules; moving the two crates' deps and fingerprints aside made it link in 40 s at 06:36Z, observed 2026-11-27, method: the session's repair of the clone)": {
+   "sha256": "d24ffed31d9ee12867dae91ff148fe131ada72135b4fd6af7e924e265a4853ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T450 Approach (checklist part A)": {
+   "sha256": "a76b127b10a0e162d738c9930fea838ca56c4580e2e8e2b0d53bd7742064031e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T450 (451 T397 part (c): `make land` carries its tasks' done commits, but three places still sent the session to carry by hand first)": {
+   "sha256": "aa0b9f0e2b49771fd1ff1722bb5dd89816e5c7856fffa5fc2e855b8fcddb4407",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T451 Approach (checklist part A)": {
+   "sha256": "ae1380c60353b8c5544a8e629c61dd0bb254b2da18dc6f5808a213025a7a2c17",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T451 (451 T286's Found and left: a bare `make closing-checks` that died before `make static` was still counted as a static run, so after two such deaths a correct third start needed `STATIC_OK`)": {
+   "sha256": "444697da90a42a8ad9227c11c0e38718f706d76617cfec7665ac4592a358df61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T452 Approach (checklist part A)": {
+   "sha256": "3af27de412112342816d43c7ced6fccf18eb7b5029d03e872539b072998415b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T452 (found by T449's reading of the night's bad rlib: `scripts/hooks/l7r-guard.sh` cut its own build with `timeout` (SIGTERM at `L7R_GUARD_BUILD_SECS`, 45 s), the cut T336 measured breaking the next link 16 of 31 times on `rust/guard` (`dev/measurements/2026-11-26/prewarm-link/`), observed 2026-11-27, method: the evidence of T449 (1) and the wrapper's `build` read)": {
+   "sha256": "31fcaeb9a01f080268d71105d81077130aff533568d661789d4e024ece399785",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T446": {
+   "section_sha256": "eb95755c021c8cfd24a889b777f33badc27e94bcd239d3d0104504dd75605382",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T446-D1",
+     "summary": "The guards' work-tree reads at the four named sites (static_runs delta_crates, ledger stages_ledger, conflict_marker git_lines) run on a private copy of the tree's index through one new asker, shared::tool::ask_git_private (GIT_INDEX_FILE on an mtime-kept copy).",
+     "class": "within",
+     "why": "Fixes the task's defect (a guard read makes the session's add or commit die on index.lock, and the conflict guard reads an empty add beside another writer's lock) at every named site; a wrong outcome under constitution XIV, and performance work under FR-013 (a refused commit is a retry)."
+    },
+    {
+     "id": "T446-D2",
+     "summary": "A fifth site found by the stated search, the gate's preflight.rs tree (git diff --name-only HEAD) which the gate-write guard asks, is changed the same way.",
+     "class": "within",
+     "why": "Same defect, same class, found by a search whose space is stated (grep of rust/guard/src and rust/guard/shared/src for the git verbs, then every script and gate subcommand a guard asks); fixing every instance of the class widens nothing the task asked for."
+    },
+    {
+     "id": "T446-D3",
+     "summary": "freeze.rs changed_lines takes -c diff.autoRefreshIndex=false instead of a private copy.",
+     "class": "within",
+     "why": "Same outcome by a lighter means: a sum of added and deleted lines is unchanged by a stat-only stale entry, measured to give the plain call's lines and to refuse 0 of 200 commits beside a committer against 151 of 200 for the plain form."
+    },
+    {
+     "id": "T446-D4",
+     "summary": "Where there is no index to copy (no index yet, or no repository) the asker runs the plain call.",
+     "class": "within",
+     "why": "No tree lock exists there to meet; the defect cannot arise, and the read still answers."
+    },
+    {
+     "id": "T446-D5",
+     "summary": "The copy keeps the index file's mtime so git's racy-entry test is unchanged.",
+     "class": "within",
+     "why": "Keeps the read's answer the same as the plain call's (a copy stamped now could miss a same-size edit); implementation detail of the fix."
+    },
+    {
+     "id": "T446-D6",
+     "summary": "The gate's and scripts' git status calls (land.rs, writers.rs, cheap.rs, preflight.rs status_lines, builder_tree.rs, sync-with-main.sh, land-tooling.sh, l7r-gate.sh) were read for the tree each asks and none changed.",
+     "class": "within",
+     "why": "The task is the guards' work-tree diff and add reads; git status under T304's GIT_OPTIONAL_LOCKS=0 was measured neither to write nor to fail, and those run as the session's own work or under that variable where a guard asks them. Nothing defective is left: no wrong tree, no lock taken by a guard read."
+    },
+    {
+     "id": "T446-D7",
+     "summary": "Tree-to-tree and --cached diffs and the non-git matches found by the search are left as they are.",
+     "class": "within",
+     "why": "They take no index lock (diff --cached measured neither to write nor fail), so they carry no instance of the defect."
+    },
+    {
+     "id": "T446-D8",
+     "summary": "No guard message changes; tool.rs's command comment names what GIT_OPTIONAL_LOCKS does not cover and where it goes.",
+     "class": "within",
+     "why": "The fix changes how the reads take the lock, not what any guard says; the comment records the class for later writers."
+    },
+    {
+     "id": "T446-D9",
+     "summary": "Exits: first tier green in the builder's tree with each site's test red on the old code; the full gate and coverage are the landing's. Order after T304, before T302; one landing; performance work: yes.",
+     "class": "within",
+     "why": "Matches the GM's two-tier checking (2026-11-26, a builder runs no coverage) and FR-013's ordering of performance work first."
+    },
+    {
+     "id": "T446-D10",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "Every instance the stated search found was changed or shown to take no lock; no defect is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T448": {
+   "section_sha256": "d60d11303c93d04835a0aef942a1074386bac0a734d825cea5f7984edaef0c57",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T448's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T450": {
+   "section_sha256": "c1e31df03dbeb80618fc3c6117484ed66095f6b22eb2fcb01c6bc9cb869f91d2",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T450-D1",
+     "summary": "make builder-done's printed step 2 and NEXT line name make land, which carries the done commit itself; make carry kept for a hand carry or one a landing stopped on; T398's closing-half exception kept as it is",
+     "class": "within",
+     "why": "Corrects a printed next step that sent the session to do by hand what make land already does (T397 part (c)); it serves the GM's 2026-11-27 asks under T394 (make land carrying by commit) and T285/T313 (the tooling, not the session's memory, carries the right step). Keeping make carry for the stopped case removes nothing that was asked for, and keeping the closing-half exception leaves an earlier ruled behavior alone."
+    },
+    {
+     "id": "T450-D2",
+     "summary": "builder-brief.md's TWO TIERS and AT A BUILDER'S END bullets say make land carries each done commit first, make carry kept for a hand or stopped carry",
+     "class": "within",
+     "why": "The same correction in the builders' brief, so the two places agree; no requested behavior is reduced."
+    },
+    {
+     "id": "T450-D3",
+     "summary": "the Makefile's land help line opens with 'each task's done commit carried first', edited through make guard-edit, make docs regenerating docs/make-targets.html",
+     "class": "within",
+     "why": "The same correction in the help text. Going through the guard-edit route and regenerating the docs follows the project's procedure and changes nothing about scope."
+    },
+    {
+     "id": "T450-tests",
+     "summary": "the three builder_done tests that pin printed step 2 are moved to the new wording, red on the old code (3 of 12 failed) and green with the change (12 of 12)",
+     "class": "within",
+     "why": "A test whose only effect is to make the corrected next step stay corrected. It enforces what was asked and is not extra scope."
+    },
+    {
+     "id": "T450-scope-and-class",
+     "summary": "the fix covers the three places T450's line names (Found and left: none); classed 'Performance work: no'",
+     "class": "within",
+     "why": "Nothing that was asked is excluded. The scope is the places T397's builder left, taken from the task line (labeled O). The section gives no search command for the claim that these are every place naming make carry as the step after builder-done, so the census cannot be checked from the bundle. That is a weakness in the evidence, not a narrowing. The performance class only sets queue order and narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T446 (451 T304's remainder, part 2: the guards' work-tree `git diff` calls took the index lock whatever `GIT_OPTIONAL_LOCKS` says, 142 of 200 commits refused beside three such loops, measured 2026-11-26 (T304's loop))",
+    "### T446 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1-private-index",
+     "summary": "The guards' work-tree reads run on a private copy of the tree's index (GIT_INDEX_FILE), through one new asker shared::tool::ask_git_private, found by rev-parse --git-path index so a linked worktree's index is the one copied.",
+     "class": "within",
+     "why": "This is the mechanism of the fix the task line asks for: a guard read that no longer takes the tree's index lock. It was measured on the same git version beside a held lock, and in a 200-commit loop it went from 125 and 200 refusals to 0. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "D2-mtime-kept",
+     "summary": "The copy keeps the index file's mtime (cp -p), so git's racy-entry test answers as it does on the real index.",
+     "class": "within",
+     "why": "This is a correctness detail of D1. It keeps the private read equal to the plain one, including on a same-size edit, and does not narrow the request."
+    },
+    {
+     "id": "D3-no-index-plain",
+     "summary": "Where there is no index to copy (none yet, or no repository), the plain call answers.",
+     "class": "within",
+     "why": "With no index there is no tree lock for the read to meet, so the defect cannot happen. The asker's pinning test covers this case."
+    },
+    {
+     "id": "D4-changed-lines-autorefresh",
+     "summary": "freeze.rs changed_lines uses -c diff.autoRefreshIndex=false diff --numstat <base> instead of a private copy.",
+     "class": "within",
+     "why": "It was measured to give the plain call's lines and write nothing. A stale entry whose content is unchanged adds 0 lines, so the sum is the same. The read no longer rewrites the index, which is the goal, and leaving out a copy is an implementation choice, not a narrowing."
+    },
+    {
+     "id": "D5-cached-reads-left",
+     "summary": "stages_ledger's diff --cached and rev-parse stay on Ctx::git; every git_lines call in conflict_marker_hooks (add --dry-run, diff --cached, diff, status -- <paths>) takes the private asker.",
+     "class": "within",
+     "why": "diff --cached was measured to neither write nor fail with the lock standing, so leaving it on the plain call leaves no defect. Putting all of conflict_marker's calls on the private index goes no further than the sites the task changes."
+    },
+    {
+     "id": "D6-copy-cost",
+     "summary": "At most three index copies per judged add or commit are accepted, about 25 ms on the clone.",
+     "class": "within",
+     "why": "The cost is measured and the trade fits the GM's direction (time saved over other resources; a refused commit costs a retry). Cost is not a fidelity finding."
+    },
+    {
+     "id": "D7-no-message-change",
+     "summary": "No guard message changes.",
+     "class": "within",
+     "why": "The task concerns how the guards read, not what they say, so leaving the messages unchanged narrows nothing."
+    },
+    {
+     "id": "D8-gate-scripts-status-unchanged",
+     "summary": "The gate's and the scripts' git status calls (land.rs, writers.rs, cheap.rs, preflight.rs, builder_tree.rs, sync-with-main.sh, land-tooling.sh, l7r-gate.sh) were read and none was changed.",
+     "class": "within",
+     "why": "The task line covers the guards' work-tree reads, so these calls are outside its class, and no wrong outcome is shown for them. That keeps this decision within. A gap stays on record: the block judged them on whether each asks the right tree, not on the lock. Every lock probe ran with GIT_OPTIONAL_LOCKS=0, so 'takes the lock as the session's own work' is not measured, even though the block itself says a backgrounded make land or make carry commits beside the session's own calls. If any of these calls is shown to refuse a concurrent commit, it is a defect for a filed task."
+    },
+    {
+     "id": "D9-site-set",
+     "summary": "The fix covers four guard sites (static_runs delta_crates, freeze changed_lines, ledger stages_ledger, conflict_marker added/committed). Item 12 states the search behind that list as 'every work-tree git read the task line names and every ask in conflict_marker_hooks.rs'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Part A's goal 1 is 'No guard's read makes a session's git add or git commit die on index.lock'. The block's own probes found two forms that take the lock whatever GIT_OPTIONAL_LOCKS says: a work-tree git diff (any of --name-only, <base>, --numstat) and git add (--dry-run, with . and -u). The census does not cover that class. The diff form was taken only from the task line's own list, and the add form, a new finding of this task, was looked for in one file (conflict_marker_hooks.rs). No line states a search of every guard's git calls for either form, so the fix is limited to the instances that happened to be named, under a goal that covers all of them. Any guard site the search missed would be a refused commit, a wrong outcome under the block's own item 2 (constitution XIV), and FR-009 asks a fix that names a class of defect to say how every instance was found. To clear this, add an observation line with its method: the command run over every guard and the shared asker (for example a grep over rust/guard for the git-asking calls and their arguments, plus any guard that calls a script holding a git call), its hits, and for each hit of a work-tree diff or an add, either the change or why it cannot meet another writer's commit. If that search finds only these four sites, the decision becomes within. The other way to clear it is to narrow goal 1 to the named sites, and that narrowing would itself need a ruling."
+    }
+   ],
+   "tasks": [
+    "T446"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T446 (451 T304's remainder, part 2: the guards' work-tree `git diff` calls took the index lock whatever `GIT_OPTIONAL_LOCKS` says, 142 of 200 commits refused beside three such loops, measured 2026-11-26 (T304's loop))",
+    "### T446 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T446-D1",
+     "summary": "The guards' work-tree reads at the four named sites (static_runs delta_crates, ledger stages_ledger, conflict_marker git_lines) run on a private copy of the tree's index through one new asker, shared::tool::ask_git_private (GIT_INDEX_FILE on an mtime-kept copy).",
+     "class": "within",
+     "why": "Fixes the task's defect (a guard read makes the session's add or commit die on index.lock, and the conflict guard reads an empty add beside another writer's lock) at every named site; a wrong outcome under constitution XIV, and performance work under FR-013 (a refused commit is a retry)."
+    },
+    {
+     "id": "T446-D2",
+     "summary": "A fifth site found by the stated search, the gate's preflight.rs tree (git diff --name-only HEAD) which the gate-write guard asks, is changed the same way.",
+     "class": "within",
+     "why": "Same defect, same class, found by a search whose space is stated (grep of rust/guard/src and rust/guard/shared/src for the git verbs, then every script and gate subcommand a guard asks); fixing every instance of the class widens nothing the task asked for."
+    },
+    {
+     "id": "T446-D3",
+     "summary": "freeze.rs changed_lines takes -c diff.autoRefreshIndex=false instead of a private copy.",
+     "class": "within",
+     "why": "Same outcome by a lighter means: a sum of added and deleted lines is unchanged by a stat-only stale entry, measured to give the plain call's lines and to refuse 0 of 200 commits beside a committer against 151 of 200 for the plain form."
+    },
+    {
+     "id": "T446-D4",
+     "summary": "Where there is no index to copy (no index yet, or no repository) the asker runs the plain call.",
+     "class": "within",
+     "why": "No tree lock exists there to meet; the defect cannot arise, and the read still answers."
+    },
+    {
+     "id": "T446-D5",
+     "summary": "The copy keeps the index file's mtime so git's racy-entry test is unchanged.",
+     "class": "within",
+     "why": "Keeps the read's answer the same as the plain call's (a copy stamped now could miss a same-size edit); implementation detail of the fix."
+    },
+    {
+     "id": "T446-D6",
+     "summary": "The gate's and scripts' git status calls (land.rs, writers.rs, cheap.rs, preflight.rs status_lines, builder_tree.rs, sync-with-main.sh, land-tooling.sh, l7r-gate.sh) were read for the tree each asks and none changed.",
+     "class": "within",
+     "why": "The task is the guards' work-tree diff and add reads; git status under T304's GIT_OPTIONAL_LOCKS=0 was measured neither to write nor to fail, and those run as the session's own work or under that variable where a guard asks them. Nothing defective is left: no wrong tree, no lock taken by a guard read."
+    },
+    {
+     "id": "T446-D7",
+     "summary": "Tree-to-tree and --cached diffs and the non-git matches found by the search are left as they are.",
+     "class": "within",
+     "why": "They take no index lock (diff --cached measured neither to write nor fail), so they carry no instance of the defect."
+    },
+    {
+     "id": "T446-D8",
+     "summary": "No guard message changes; tool.rs's command comment names what GIT_OPTIONAL_LOCKS does not cover and where it goes.",
+     "class": "within",
+     "why": "The fix changes how the reads take the lock, not what any guard says; the comment records the class for later writers."
+    },
+    {
+     "id": "T446-D9",
+     "summary": "Exits: first tier green in the builder's tree with each site's test red on the old code; the full gate and coverage are the landing's. Order after T304, before T302; one landing; performance work: yes.",
+     "class": "within",
+     "why": "Matches the GM's two-tier checking (2026-11-26, a builder runs no coverage) and FR-013's ordering of performance work first."
+    },
+    {
+     "id": "T446-D10",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "Every instance the stated search found was changed or shown to take no lock; no defect is deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T447 (Superseded by T397: `make land` carries its tasks' done commits before its first pass, so the refusal this task would add can never fire)",
+    "### T447 Approach (checklist part A)",
+    "### T485 (451 T481's `make guard-messages` named two escalation-hooks refusals, keys a01405381091d548 and eee895a7b090e5af, as rendered at HEAD with no verdict)",
+    "### T485 Approach (checklist part A)",
+    "(removed) ### T447 (<why: the finding or measurement that files it>)",
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T447-close",
+     "summary": "T447 closed Superseded by T397 with no code: the first-pass refusal of a landing task whose done commit HEAD lacks is not added, because Land::land runs carry_done (to_carry over exactly that set, a failed carry returning 2 before the first pass) before cheap_refusals, on both the direct and the land-alone route; pinned by T397's carry_done tests (4 ran, 0 failed, measured 2026-11-27).",
+     "class": "within",
+     "why": "The task's purpose - no landing ticks a task whose done commit HEAD lacks - is held by T397's carry-before-first-pass, and the plan traces the single route into the first pass to show the refusal could never fire. A refusal that cannot fire enforces nothing the request asked for; closing it leaves the request's outcome intact. The close is what the brief asked for."
+    },
+    {
+     "id": "T485-D1",
+     "summary": "The two keys are traced to the pre-T282 renderings (the offer/question texts without the line 148fa78bdf added) hashed under T282's mask, read from pool-tree stores older than that commit; HEAD's renderings key to e8301989f2d8f60f and 7dd4088ec3ff42c4, both PASS.",
+     "class": "within",
+     "why": "A measured finding (keys recomputed exactly, store mtimes read, dated with method), not a decision that narrows anything: it answers the task's 'the keys are explained' goal and shows HEAD's escalation wordings already hold verdicts as 451 T170 requires."
+    },
+    {
+     "id": "T485-D2",
+     "summary": "No message-check dispatch and no verdict recorded for the two keys, departing from the brief's literal step (render, one message-check dispatch on the bundle, record verdicts, cut a FAIL).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against the purpose, not the brief's step words (the brief is the coordinating session's, not the GM's; the GM's request names no T485). The purpose of the verdict record is that every refusal wording a guard actually renders has been reviewed (T170). Measured at HEAD, the suite renders 494/479-character texts that already carry PASS rows, and the bundle holds no escalation unit; the keys are no wording any guard renders. Recording verdicts on them would put rows in the record for text no one is shown, and 'cutting a FAIL' would edit a guard over a message nobody reaches - following the step literally would defeat its own purpose rather than serve it. The exit kept is the real one: l7r-guard messages check over HEAD's rendering clean (5 wordings, exit 0). This is not a session completing the GM's thought: the premise the step rested on (the keys are rendered at HEAD) was measured false, and the outcome the step exists for is measured true."
+    },
+    {
+     "id": "T485-found-and-left",
+     "summary": "The stale pool-tree message store that made make guard-messages name non-rendered wordings as owed is not fixed here; filed as T486, landing before T338.",
+     "class": "within",
+     "why": "A real defect (a tool answering wrongly: it names wordings owed that no guard renders) found outside the task's job, deferred in the form the checklist sets ('Not fixed here: <why>. Filed as T<n>; lands before T<m>.'), with its visible effect and dated method. It narrows nothing T485 was asked to do."
+    },
+    {
+     "id": "removed-T447-template",
+     "summary": "The unfilled T447 template heading block removed, replaced by the filled T447 section.",
+     "class": "within",
+     "why": "The removed text was placeholders only; it carried no decision. Its replacement is judged above."
+    },
+    {
+     "id": "removed-T475-template",
+     "summary": "The unfilled T475 template block (placeholders only) removed from the plan.",
+     "class": "within",
+     "why": "The earlier text holds no approach, no decision and no figure - only the template's angle-bracket prompts - so removing it drops no decision about what the GM asked. Whether T475 still needs a filled section before its own work is a tooling matter (task-add/plan-lint), not a fidelity one."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T448's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T448"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "### T451 (<why: the finding or measurement that files it>)",
+    "### T451 Approach (checklist part A)",
+    "### T457 (a landing's first pass grew from about 40 s to 34 min over 2026-11-27 - its cheap Phase lines 43-119 s until 04:17Z, then 226, 379, 719, 1,399, 757 and 2,031 s, growing with the batch: 6, 6, 13, 22, 23, 23 and 35 tasks, observed 2026-11-27, method: the clone's event log, `step: cheap` and `step: end` lines - with the landing process at 86-91% CPU feeding `git cat-file --batch` over plan.md, 1,017,606 bytes with 477 versions)",
+    "### T457 Approach (checklist part A)",
+    "### T464 (<why: the finding or measurement that files it>)",
+    "### T464 Approach (checklist part A)",
+    "### T465 (<why: the finding or measurement that files it>)",
+    "### T465 Approach (checklist part A)",
+    "(removed) ### T449 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T457-cache",
+     "summary": "Each plan.md version is fetched and indexed once per process (block key -> digest and text, task -> section digest and section) in a thread-local store keyed by (commit, path), shared by every History and question; the raw text dropped once indexed.",
+     "class": "within",
+     "why": "Performance work on the landings, which FR-013 and the GM's 2026-11-20 words put first; it changes how fast answers are reached, not what they are."
+    },
+    {
+     "id": "T457-answers-kept",
+     "summary": "The newest-first walk in chunks of 25 (D63) is kept, each answer the one the walk gave; an unreadable version indexed as empty text, as the walk read it; CHUNK stays 25; the 69 distinct answers and both commands' outputs diffed the same before and after.",
+     "class": "within",
+     "why": "Keeps existing plan-answer behavior that the request does not ask to change; a speed change that alters no verdict."
+    },
+    {
+     "id": "T457-version-list",
+     "summary": "A History's version list is keyed by (path, the commit its reference names when asked), so a commit made between two Histories during a landing gives the second its own list.",
+     "class": "within",
+     "why": "Correctness of the same answers under the landing's own commits; pinned by the test's 31-version case."
+    },
+    {
+     "id": "T457-tests",
+     "summary": "Two tests in history/tests.rs: one red on the old code pinning one fetch and one parse per version across Histories and questions (plus first-block-of-key, #2 headings, newest section, a mid-run commit); one green on both pinning a shared digest's newest text.",
+     "class": "within",
+     "why": "Enforcement of the requested change and of the unchanged answers; serves the request, not unrequested scope."
+    },
+    {
+     "id": "T457-defer-T464",
+     "summary": "About 2.4 s a task of in-process CPU outside History is left; Not fixed here, filed as T464, lands before T22.",
+     "class": "within",
+     "why": "A remaining slowness, not a wrong outcome (no crash, hang, wrong answer or refused good work), so not a known defect owed under fix-as-we-go; it is filed as its own performance task in D15's deferral form."
+    },
+    {
+     "id": "T457-defer-T465",
+     "summary": "Versions are still indexed once per process (about 5 s each in tick checks, plan push and the push table's plan row); an on-disk index is left; Not fixed here, filed as T465, lands before T22.",
+     "class": "within",
+     "why": "Further speed-up, not a defect; filed in D15's form as its own task. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T448/T451/T464/T465-templates",
+     "summary": "The four tasks' blocks are the unfilled task template, the same text as when last judged (only their digests in the bundle markers differ).",
+     "class": "within",
+     "why": "An unfilled template decides nothing the spec left open."
+    },
+    {
+     "id": "T449-removed",
+     "summary": "T449's block, an unfilled task template when last judged (CLEAR), is removed.",
+     "class": "within",
+     "why": "Removing an empty template takes away no decision and no requested behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T448 (451 T286's Found and left: `make builder-tree`'s handout build of a new tree's guard took the wrapper's lock with `flock -n`, so beside another call's build it said \"its guard binary did NOT build\", and its note said the first closing checks \"may stop on the hook wrapper's 45 s limit\" (`L7R_GUARD_BUILD_SECS`, a GUESS knob), stale since T286's bounded floor)",
+    "### T448 Approach (checklist part A)",
+    "### T451 (451 T286's Found and left: a bare `make closing-checks` that died before `make static` was still counted as a static run, so after two such deaths a correct third start needed `STATIC_OK`)",
+    "### T451 Approach (checklist part A)",
+    "(removed) ### T441 (<why: the finding or measurement that files it>)",
+    "(removed) ### T442 (<why: the finding or measurement that files it>)",
+    "(removed) ### T448 (<why: the finding or measurement that files it>)",
+    "(removed) ### T451 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T448-a",
+     "summary": "L7R_GUARD_COLD_SECS is not passed from the handout's guard build, against the task line's sketch, because the lock half was closed by 451 T449 (print-fresh waits on the lock within L7R_GUARD_BUILD_SECS) and the seam would add a second wait (measured 2026-11-27, scratch script)",
+     "class": "within",
+     "why": "The sketch is the coordinating session's means, not the GM's words or a requirement. The end the task serves (a new tree's handout builds its guard beside another call's build, bounded; the GM's T316 pre-warm and T284 synchronization over caps) is met on HEAD and measured, and a pin already stands (tests/hooks/test-l7r-guard.sh, T449's case). Nothing asked is narrowed; the reason and the reopening condition are recorded in build_guard's doc comment."
+    },
+    {
+     "id": "T448-b",
+     "summary": "The handout's failure note is restated to name the disk floor's bounded build (L7R_GUARD_COLD_SECS, 600 s, a GUESS knob) instead of the stale 45 s limit, with a red-first test",
+     "class": "within",
+     "why": "A message that told a builder something false (a wrong outcome, constitution XIV) is made true; the fix as we go of a defect T286 found."
+    },
+    {
+     "id": "T448-c",
+     "summary": "Checklist part A: order after T286 and T449, before T296; one landing; classed a [perf] task of the builders' loop",
+     "class": "within",
+     "why": "Fill-in of the template; perf classing follows FR-013 and the GM's 2026-11-20 words."
+    },
+    {
+     "id": "T451-a",
+     "summary": "The defect (a bare make closing-checks that died before make static was counted as a static run) is fixed by refusing the bare form at PreToolUse, naming make closing-checks T=<task> F=<feature>, rather than tying a bare run's launch line to its call",
+     "class": "within",
+     "why": "A choice between two fixes of a known defect in D11/FR-007's count. The refused call gets no end line, so D11's 'only runs that RAN count' holds; 'every session and agent's run counts' is untouched, as the T= form is the closing step's form since 451 T86 and was used by all 625 closing calls since 2026-11-21 (0 bare, measured 2026-11-27, dated method given). The guard matches invocations (shared::make::invoked) and the heredoc-stripped own_task, per the guard rules. Design and cost here are not fidelity findings; the escape is ruled apart (T451-b)."
+    },
+    {
+     "id": "T451-b",
+     "summary": "The new bare-closing refusal has 'No escape' (reason given: an escaped bare start that died would be counted again; a whole-clone run is still make static, make hooks-test and make quick)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The refusal is added to FR-007's guard (static_runs_hooks) to make FR-007's count correct, so it is a refusal of FR-007, and FR-012 gives every refusal of FR-006 to FR-009 a recorded escape of a reason of two words or more (the project's guard rules). The block's constraints quote the guard rules but leave out the escape, and do not cite FR-012. An escape is not impossible here. Nothing the GM said implies leaving it out. And it does not defeat the purpose: an escaped bare start that dies counts against only that recorded, chosen call, and the STATIC_OK escape already bounds what that costs. The escape exists for cases the guard cannot foresee: own_task misreading a call's task (for example an environment-prefixed T=), or a caller with no task line, where the compliant 'T=<task> F=<feature>' cannot be named. A 'no escape' leaves that caller stuck. The 'counted again' argument holds only because the tie was turned down on cost, and cost does not make an exception legitimate. Fix: give the refusal FR-012's recorded escape (a reason of two words or more), with a red-first test that it fires and that the escaped call passes. Or put the claim that FR-012 does not reach this refusal to the round arbiter through make arbiter-ask before ticking."
+    },
+    {
+     "id": "T451-c",
+     "summary": "The count's path for bare lines written before this task stays",
+     "class": "within",
+     "why": "It keeps D11's count readable over the existing log. 0 bare calls since 2026-11-21 (measured 2026-11-27), so no open task is shown to carry a dead bare start the old path miscounts. No defect with a visible effect is left."
+    },
+    {
+     "id": "T451-d",
+     "summary": "own_t (fields.rs) and the guard read a call's task through one predicate (event_log_hooks::own_task); four existing test cases that ran a bare closing-checks now name T=T06; the refusal's message passed its message-check (fidelity and brevity, round 2)",
+     "class": "within",
+     "why": "Supporting changes: one reading of a call's task, tests kept on their own rules, and the message route 451 T170/T338 requires."
+    },
+    {
+     "id": "T451-e",
+     "summary": "Checklist part A: goal, constraints (D11, T86, guard rules, message-check), order after T286 before T296, one landing, classed [perf] of the builders' loop, not engine-speed",
+     "class": "within",
+     "why": "Template fill-in consistent with FR-013 and the GM's 2026-11-20 words; the constraints line's omission of FR-012 is the T451-b finding."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The four (removed) blocks T441, T442, T448, T451 were empty template stubs; T448 and T451 are replaced by the filled blocks above",
+     "class": "within",
+     "why": "Each removed block held only placeholder text, so removing it drops no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T448 (451 T286's Found and left: `make builder-tree`'s handout build of a new tree's guard took the wrapper's lock with `flock -n`, so beside another call's build it said \"its guard binary did NOT build\", and its note said the first closing checks \"may stop on the hook wrapper's 45 s limit\" (`L7R_GUARD_BUILD_SECS`, a GUESS knob), stale since T286's bounded floor)",
+    "### T448 Approach (checklist part A)",
+    "### T451 (451 T286's Found and left: a bare `make closing-checks` that died before `make static` was still counted as a static run, so after two such deaths a correct third start needed `STATIC_OK`)",
+    "### T451 Approach (checklist part A)",
+    "(removed) ### T441 (<why: the finding or measurement that files it>)",
+    "(removed) ### T442 (<why: the finding or measurement that files it>)",
+    "(removed) ### T448 (<why: the finding or measurement that files it>)",
+    "(removed) ### T451 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T448-lock",
+     "summary": "The lock half (a handout's build beside another call's build) is found already closed on HEAD by 451 T449's bounded print-fresh wait; no code change, pinned by the wrapper suite's T449 case.",
+     "class": "within",
+     "why": "The task's outcome - a handout builds its guard beside another call's build, within a bound - holds, measured 2026-11-27 (lock held 2 s under a 5 s limit: built; held 8 s: a bounded refusal naming the limit). Nothing asked is left undone."
+    },
+    {
+     "id": "T448-no-cold-secs",
+     "summary": "Self-labeled deviation from the task line's sketch: L7R_GUARD_COLD_SECS is not passed from the handout; the reason goes in build_guard's doc comment, with what would reopen it.",
+     "class": "within",
+     "why": "The sketch is the coordinating session's task line, not the GM's request or the accepted spec; nothing in request.md, FR-006..FR-013 or D11 carries it. The outcome the sketch served (a bounded wait for another call's build) is already delivered by T449's print-fresh wait, and passing the knob was measured 2026-11-27 to add a second wait (two 5 s bounds waited 10.0 s) with the seam's line printed twice - a mechanism choice inside the asked outcome, not a narrowing of it."
+    },
+    {
+     "id": "T448-note",
+     "summary": "The handout's note restated: a failed or timed-out guard build names the disk floor of the first closing-checks/done/land as what builds it next, waiting up to L7R_GUARD_COLD_SECS; the stale '45 s limit' wording removed (one place, by grep of rust, scripts, docs); red-first test in builder_tree tests.",
+     "class": "within",
+     "why": "Fixes the wrong outcome T286 found (a note telling a builder of a limit that no longer applies), red first (7 of 8 then 8 of 8)."
+    },
+    {
+     "id": "T451-refusal",
+     "summary": "The defect (a bare make closing-checks that died before make static counted as a static run) fixed by refusing the bare form at PreToolUse, naming make closing-checks T=<task> F=<feature>, rather than tying a bare call's launch line to its call; tests that used the bare form now name T=T06.",
+     "class": "within",
+     "why": "A refused call gets no end line, so the count never sees it; this fixes a defect in FR-007/D11's count (refusing a correct third start) by making the closing step's own form (451 T86) the only unescaped one. Measured 2026-11-27: 0 bare calls since 2026-11-21, and the guard's own task reading finds its task in all 625 calls with T=, so it refuses no current practice. It carries FR-012's three parts: red-first test, recorded escape, message naming the compliant command (message-checked, FIDELITY and BREVITY pass)."
+    },
+    {
+     "id": "T451-escape",
+     "summary": "CLOSING_BARE_OK=\"<reason>\" (two words or more, recorded escaped under closing-bare-ok; no reason refused by the shared helper) added after round 1 ruled the no-escape version a narrowing of FR-012.",
+     "class": "within",
+     "why": "Exactly what FR-012 requires of a refusal of FR-007's guard; tested in both suites."
+    },
+    {
+     "id": "T451-escaped-counted",
+     "summary": "An escaped bare call is counted by its call as before (the old count path kept for it and for lines written before this task), so a bare start that was escaped and then died before make static still costs its task a static run - while checklist item 1 states the goal as 'bare or not'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not resting on the cost argument in 'Why a refusal'. The residual is reachable only through the escape FR-012 itself requires of this refusal: an escape by definition lets through what the rule stops, with its known consequence, and is recorded so its cost is visible. Both escape cases are measured at zero - 0 of 625 T= calls misread, 0 bare calls since 2026-11-21 - and a caller filed under no task has no task's count to cost. Where it is reached, the cost is a STATIC_OK round, itself FR-007's recorded escape, not a silent wrong verdict. So no defect is left on any unescaped path. Note for the author: item 1's 'bare or not' overclaims and should read 'but for a recorded CLOSING_BARE_OK escape'; this is wording, not a block."
+    },
+    {
+     "id": "T451-own-task-fields",
+     "summary": "own_task placed in event_log_hooks/fields.rs, re-exported, keeping event_log_hooks.rs at the 1,000-line bar; own_t read through the one predicate.",
+     "class": "within",
+     "why": "Code placement under the project's file-scale check; no behavior asked is changed."
+    },
+    {
+     "id": "T451-found-left-T475",
+     "summary": "The shared escape helper's no-reason refusal wording (519 to 555 characters, BREVITY fail, recorded BASELINE like every other token's) is left; filed as T475, lands before T296.",
+     "class": "within",
+     "why": "A pre-existing shared wording that every guard's token uses, not introduced by this task. Changing it means re-rendering every guard's no-reason message, which is outside this guard. Deferred in FR-009's form (why, filed id, order before T296), so it is not carried past the next step."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "Four template placeholder blocks (T441, T442, T448, T451 '<why: ...>' skeletons with empty tables) removed.",
+     "class": "within",
+     "why": "They held no decision; T448 and T451 now have real sections, and the T441/T442 skeletons were empty."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T449 (found by the batch gate of 2026-11-27: its `make hooks-test` was red for a cause no suite named - from 05:47Z the clone's tool-profile build of `l7r_guard` failed to link, `guard.failed` was stamped, every hook ran the 05:03Z `l7r-guard.good`, and the print-fresh call named no binary, so `test-parts.3.sh` exec'd an empty path (14 FAIL, observed 2026-11-27, method: the session's repair of the clone) and `test-context-cap-hooks.sh` ran the old rules; moving the two crates' deps and fingerprints aside made it link in 40 s at 06:36Z, observed 2026-11-27, method: the session's repair of the clone)",
+    "### T449 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T449-heal-remove",
+     "summary": "the heal removes l7r_guard's and l7r_shared's tool/deps, .fingerprint and incremental entries rather than setting them aside",
+     "class": "within",
+     "why": "a design detail of the fix; no GM word or cited requirement asks the set-aside evidence kept"
+    },
+    {
+     "id": "T449-heal-glob-reach",
+     "summary": "the glob also drops the gate's l7r_shared variant, which the gate's next tool build recompiles (35 s on the night, labeled)",
+     "class": "within",
+     "why": "wider, not narrower, than the drop the constraints name; its cost is stated and it removes nothing the fix needs"
+    },
+    {
+     "id": "T449-heal-cargo-lock",
+     "summary": "the heal waits for tool/.cargo-lock inside the same limit and takes the time left; lock held to the limit drops nothing, stamps nothing, the next call heals",
+     "class": "within",
+     "why": "keeps the heal inside the one build limit the plan states for T004 (judged on the plan's paraphrase of T004; T004's text is not in the bundle) and drops only under cargo's lock as T142/T336 ask"
+    },
+    {
+     "id": "T449-heal-once-per-source-change",
+     "summary": "the heal is tried once per source change (guard.healed, cleared by a good build); a link that fails again before the sources move is stamped guard.failed",
+     "class": "within",
+     "why": "a bound inside the fix so a real linker fault does not cost the limit on every hook call. Its residual - a heal rebuild (about 40 s) cut in a 45 s limit, carried on, then broken by the cut (T336's 16 of 31) is stamped and leaves hooks on the old binary - is the cut's effect, deferred in Found and left as T452 with why not here and its order (lands before T365), as FR-009 asks; and hooks-test now names the cause either way. No defect is left undeferred."
+    },
+    {
+     "id": "T449-print-fresh-wait-and-reasons",
+     "summary": "print-fresh (never a hook's) waits for guard.lock within its limit and asks again; its no-binary line names the first error line, the lock held past the limit, or the build not finished",
+     "class": "within",
+     "why": "print-fresh is in no hook, so the hook bound is untouched; the reason list covers every way it can name no binary, the dropped 'none built yet' case now falls under a build that errs or does not finish"
+    },
+    {
+     "id": "T449-unchanged",
+     "summary": "unchanged and judged CLEAR before on the same text: hooks-test asks print-fresh first with 600 s (a GUESS knob, an existing figure) and stops on the named line; test-parts.3.sh refuses an empty BIN; the T452 deferral; the [perf] tag under FR-013",
+     "class": "within",
+     "why": "same text as the CLEAR verdict in earlier.md; serves the defect's fix and FR-013's ordering"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T449 Approach (checklist part A)",
+    "(removed) ### T433 (<why: the finding or measurement that files it>)",
+    "(removed) ### T436 (<why: the finding or measurement that files it>)",
+    "(removed) ### T443 (<why: the finding or measurement that files it>)",
+    "(removed) ### T446 (<why: the finding or measurement that files it>)",
+    "(removed) ### T450 (<why: the finding or measurement that files it>)",
+    "(removed) ### T454 (<why: the finding or measurement that files it>)",
+    "(removed) ### T455 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T449-heal",
+     "summary": "A guard build that fails to link drops exactly what the linker needs rebuilt (T142/T336's method, under cargo's lock), rebuilds once, and says so in build.log, rather than leaving every hook silently on the old binary.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (hooks silently running a stale binary for 49 minutes, a red gate whose cause no line named), which the GM's standing rule to fix known defects before moving on and his 2026-11-20 performance-first instruction both cover. It keeps feature 449 D7: the healed build must still link and self-check before it replaces the good binary, and a failed heal leaves the last good one in place."
+    },
+    {
+     "id": "T449-same-limit",
+     "summary": "The heal runs inside the build's existing limit, with no second limit; no hook timeout moves.",
+     "class": "within",
+     "why": "Keeps feature 449 T004 (the build is bounded inside a hook's timeout and never waited on) and the settings check on dispatcher timeouts. It adds no new time budget."
+    },
+    {
+     "id": "T449-hooks-test-stop",
+     "summary": "make hooks-test with no fresh guard binary stops on the build's first error, using the 600 s figure that test-l7r-guard.sh case 7 already uses for a real build, instead of failing fixtures for a reason it does not name.",
+     "class": "within",
+     "why": "This is the D7 line 'make land-tooling runs make hooks-test, which builds and replays it' made to name its own failure. The 600 s figure is an existing one reused, not a constant moved."
+    },
+    {
+     "id": "T449-perf-tag",
+     "summary": "T449 is classed [perf] under FR-013.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the gate or the builders' loop faster. Avoiding a red batch gate (8 minutes, observed) plus a hand repair, and 49 minutes on an old binary, is time saved in that loop. Prioritizing it follows the GM's 2026-11-20 words 'can we in general priotitize performance improvements going forward?'"
+    },
+    {
+     "id": "T449-found-and-left-T452",
+     "summary": "The likely cause, the wrapper's own timeout sending SIGTERM to the build mid-write (which T336 measured breaking the next link 16 of 31 times), is not fixed in T449. It is filed as T452, ordered to land before T365, with the reason that changing the wrapper's bounding (T004) needs its own measurement on a loaded machine. T449 heals the effect whatever the cause.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's rule is per step, not per task: 'fix all known bugs in each step before moving on to porting the next step' (2026-11-18), and 'fix all of this as part of our tasking that we are doing before resuming our port' (2026-11-26). T452 is an open task in this same feature, so the defect is fixed before the port resumes and is not carried into the next step. Meanwhile T449's heal removes the visible wrong outcome. The deferral has the FR-009 form (a reason, a filed task, an order). The reason is a real dependency: T004 is a constraint from feature 449, and changing it needs its own measurement. It is not convenience."
+    },
+    {
+     "id": "removed-template-blocks",
+     "summary": "The unfilled template headings for T433, T436, T446, T443, T450, T454 and T455 are deleted. Their earlier text was only placeholders.",
+     "class": "within",
+     "why": "The earlier text (earlier.md) holds only template placeholders: no approach, no table rows, no decision. Removing them takes no decision out of the plan and narrows nothing the GM asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T450 (451 T397 part (c): `make land` carries its tasks' done commits, but three places still sent the session to carry by hand first)",
+    "### T450 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T450-D1",
+     "summary": "make builder-done's printed step 2 and NEXT line name make land, which carries the done commit itself; make carry kept for a hand carry or one a landing stopped on; T398's closing-half exception kept as it is",
+     "class": "within",
+     "why": "Corrects a printed next step that sent the session to do by hand what make land already does (T397 part (c)); it serves the GM's 2026-11-27 asks under T394 (make land carrying by commit) and T285/T313 (the tooling, not the session's memory, carries the right step). Keeping make carry for the stopped case removes nothing that was asked for, and keeping the closing-half exception leaves an earlier ruled behavior alone."
+    },
+    {
+     "id": "T450-D2",
+     "summary": "builder-brief.md's TWO TIERS and AT A BUILDER'S END bullets say make land carries each done commit first, make carry kept for a hand or stopped carry",
+     "class": "within",
+     "why": "The same correction in the builders' brief, so the two places agree; no requested behavior is reduced."
+    },
+    {
+     "id": "T450-D3",
+     "summary": "the Makefile's land help line opens with 'each task's done commit carried first', edited through make guard-edit, make docs regenerating docs/make-targets.html",
+     "class": "within",
+     "why": "The same correction in the help text. Going through the guard-edit route and regenerating the docs follows the project's procedure and changes nothing about scope."
+    },
+    {
+     "id": "T450-tests",
+     "summary": "the three builder_done tests that pin printed step 2 are moved to the new wording, red on the old code (3 of 12 failed) and green with the change (12 of 12)",
+     "class": "within",
+     "why": "A test whose only effect is to make the corrected next step stay corrected. It enforces what was asked and is not extra scope."
+    },
+    {
+     "id": "T450-scope-and-class",
+     "summary": "the fix covers the three places T450's line names (Found and left: none); classed 'Performance work: no'",
+     "class": "within",
+     "why": "Nothing that was asked is excluded. The scope is the places T397's builder left, taken from the task line (labeled O). The section gives no search command for the claim that these are every place naming make carry as the step after builder-done, so the census cannot be checked from the bundle. That is a weakness in the evidence, not a narrowing. The performance class only sets queue order and narrows nothing the GM asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T452 (found by T449's reading of the night's bad rlib: `scripts/hooks/l7r-guard.sh` cut its own build with `timeout` (SIGTERM at `L7R_GUARD_BUILD_SECS`, 45 s), the cut T336 measured breaking the next link 16 of 31 times on `rust/guard` (`dev/measurements/2026-11-26/prewarm-link/`), observed 2026-11-27, method: the evidence of T449 (1) and the wrapper's `build` read)",
+    "### T452 Approach (checklist part A)",
+    "(removed) ### T441 (<why: the finding or measurement that files it>)",
+    "(removed) ### T442 (<why: the finding or measurement that files it>)",
+    "(removed) ### T452 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T452-detach",
+     "summary": "Past the call's limit the guard build is left to finish in its own session (setsid, inheriting guard.lock on fd 9) instead of being cut by timeout; the call waits on the lock for what is left of its limit, then runs the last good binary (or fails open where none was ever built) as before; a second call mid-build runs what is there, as before.",
+     "class": "within",
+     "why": "Fixes a known defect - a wrong outcome, not a difference: a cut build left a stale rlib that broke the next link (16 of 31 in T336's measurement; the night's 49-minute outage, observed 2026-11-27) and every next call rebuilt a cut build. Owed under the standing fix-as-we-go rule (the GM 2026-11-18, constitution XIV, not request.md) and FR-013's performance-first ordering (the GM 2026-11-20: 'can we in general priotitize performance improvements going forward?'). It keeps 449 T004's bound (the call returns within its limit and never waits on another call's build) and 449 D7 (only a linked, self-checked build replaces the good binary). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T452-FR-008",
+     "summary": "The detached build is started with setsid by the hook wrapper itself, a cargo build in the background that nobody waits on; FR-008 refuses a make target or cargo run put in the background (setsid among the forms) inside a Bash call.",
+     "class": "within",
+     "why": "Scope: FR-008 is a guard on an agent's Bash tool call; a hook wrapper's own child process is not a Bash call and nothing in FR-008's words reaches it. Purpose (request.md, improvement 3): a long run started where the session cannot track its end, so the session sits idle waiting on it. Here nothing waits: the call returns at its limit and runs the last good binary, a second call runs what is there, and the build's end and overrun are written to build.log and picked up by the next call. The detach does not create the untracked wait FR-008 exists to prevent, so it neither contradicts nor narrows FR-008."
+    },
+    {
+     "id": "T452-descriptors",
+     "summary": "The detached build closes every inherited descriptor but stdio, fd 9 and 255, and runs cargo, the heal's rm and the self-check with 9>&-.",
+     "class": "within",
+     "why": "Rendering of the detach, so a harness pipe or a caller's lock is not held to the build's end and a lingering grandchild cannot pin guard.lock; pinned by a red-first case (98/10 on a copy without the loop)."
+    },
+    {
+     "id": "T452-start-stamp",
+     "summary": "Each result (l7r-guard.good, guard.failed, guard.healed) is stamped with the build's start time (touch -r guard.started), so a source edited while a detached build ran is read as newer and rebuilt.",
+     "class": "within",
+     "why": "Keeps 449 D7's 'the binary built from its own tree' true under the new detach; without it edits during a build would be read as built - a defect the change would otherwise introduce. Pinned by case 6g (106/2 without the stamps)."
+    },
+    {
+     "id": "T452-ceiling",
+     "summary": "One cut is kept, for a hung build: L7R_GUARD_DETACHED_SECS, 600 s, a GUESS knob from case 7's figure, never under the call's own limit, so builder-tree's 1800 s and hooks-test's 600 s keep their bounds.",
+     "class": "within",
+     "why": "A bound on a hung detached process, not a carve-out from anything the GM asked: the GM's words do not ask that no build ever be bounded, and the defect being fixed is the 45 s cut of a live build, which the ceiling (13x the hook limit, and never below a caller's own limit) does not reproduce. Stated as a GUESS knob."
+    },
+    {
+     "id": "T452-slots-measurement",
+     "summary": "A guard build may now run up to the 600 s ceiling outside any call, where it was cut at 45 s and restarted by each next call.",
+     "class": "within",
+     "why": "Against T284's 'synchronization rather than pre-emptively limiting' and the GM's 'we want everything measured ... especially for compiling' (2026-11-22): the block does not change whether the guard build takes a build slot (the bundle says nothing either way, before or after), and it replaces repeated cut 45 s builds with one finished build, less total compile. It adds a record the wrapper lacked (the overrun's duration in build.log, T449 (1)'s missing record) and removes no existing measurement, so neither clause is narrowed."
+    },
+    {
+     "id": "T452-heal-window",
+     "summary": "T449's heal waits for cargo's tool/.cargo-lock and rebuilds within what is left of the detached ceiling rather than the hook's 45 s.",
+     "class": "within",
+     "why": "Follows from the detach; a gate build holding the profile is waited out instead of the heal being deferred to the next call - more of T449's fix done, nothing narrowed."
+    },
+    {
+     "id": "T452-print-fresh",
+     "summary": "Under L7R_GUARD_PRINT_FRESH=1 a call whose own build is still running past the limit prints its existing 'did not finish inside the <n> s limit; run again' line rather than waiting a second limit on its own build's lock.",
+     "class": "within",
+     "why": "Keeps the caller-visible behavior of print-fresh as it was and keeps the call within its limit; no request clause touched."
+    },
+    {
+     "id": "T452-flock-wait",
+     "summary": "The call waits with flock -w rather than wait $! or a polling loop, measured at +8 ms median (160.5 vs 152.5 ms, 10 runs, load 12 to 14, 2026-11-27) on a call whose build finishes inside its limit, which happens only on the first call after a guard source changes.",
+     "class": "within",
+     "why": "An implementation choice with its cost measured and dated; the added fork is dwarfed by the real build it accompanies and the overrun case's wall is unchanged (1.027 vs 1.034 s median), while the next call now runs the build 10 of 10 against 0 of 10 - a net speed-up, in line with FR-013. Not a narrowing of any request clause, and not a defect (no wrong outcome). Classed against request.md and the spec only: the brief's 'a hook never waits longer than today' is the coordinating session's text, not the GM's and not in the bundle, so the builder's acceptance of +8 ms against it was not verified and is not a fidelity question."
+    },
+    {
+     "id": "T452-order-perf",
+     "summary": "Lands after T449 (which heals the effect) and before T365; tagged [perf] under FR-013; found-and-left none; the effect on the night's broken link is stated as inferred from T336's measurement, not observed on a second night.",
+     "class": "within",
+     "why": "Ordering and classification follow FR-013 (it makes the builders' loop and the gate faster) and the GM's fix-known-defects-before-moving-on; the inferred-not-observed claim is labeled as such rather than overstated."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The unfilled template blocks headed T441, T442 and T452 ('<why: the finding or measurement that files it>') are removed; T452's is replaced by the filled block above.",
+     "class": "within",
+     "why": "Their earlier text was placeholder template only, carrying no decision; removing them drops no approach, constraint or ruling."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T446 to T452, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

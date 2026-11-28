@@ -1,0 +1,746 @@
+{
+ "blocks": {
+  "### T313 Approach (checklist part A)": {
+   "sha256": "862d0efb5e32c78f5d4c18838f1ef96ff9edcf50e304f0ce2c0e4f977d614ec6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: \"what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight\"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))": {
+   "sha256": "3680896620d3b8988335c110538c7172363d457d7f98114f83a222b84e64b824",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T313 part B (2026-11-27T07:20Z)": {
+   "sha256": "564018b43584d3271db3befc6a9eda174b444aec410da7eacf54068e5c010cda",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T314 Approach (checklist part A)": {
+   "sha256": "4543522facd30e43e87b05485b1a7667ea39cab9ce61387097754381aaa7a9e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T314 (the batch gate of 2026-11-26 18:27 UTC: `tests/hooks/test-state-sync.sh` red beside three builders, 41 of 41 alone a minute later)": {
+   "sha256": "d57b29c16c246728f7d8618d3c735f8d6fdd5efb82e9edabd7d3a89e5ca89f32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T313": {
+   "section_sha256": "1187fa445a81834f9cd5c2e2c25bd0498d3620611563448458f1b2dcadd999e5",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Stop-time refusal brought back (DECISION, reverses T183's D10)",
+     "summary": "A Stop guard blocks the coordinating session's turn end while a pool tree is free, the count is not reached, and a queue holds a READY entry that overlaps nothing in flight; it names the one command, and its escape is POOL_IDLE_OK on a line of its own.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-26 for the tooling to 'actually enforce' keeping tasks in flight, and request.md line 13 asks for 'real enforcement and not just instructions'. The Stop check itself comes from the session's line (request.md 460-463), not from the GM. The rule the GM approved on 2026-11-23 was that Stop hooks block only for what the session must do before stopping. Handing a free tree to a READY task is that kind of work. The incident behind that rule, a block firing while the session correctly waited under a hold, is covered by the quiet cases: waits=GM is written once in the file, every entry waiting is quiet, an unreadable queue is quiet, and the escape is recorded. This adds enforcement and narrows nothing."
+    },
+    {
+     "id": "rule kept thin",
+     "summary": "The guard holds no state and judges only shared::builder_queue::idle, which the gate's commands also read.",
+     "class": "within",
+     "why": "This is design. It narrows nothing that was asked."
+    },
+    {
+     "id": "queue format",
+     "summary": "queue.txt uses two positional words and key=value fields; crates= or files= is required, and so is measures= for a measurement.",
+     "class": "within",
+     "why": "Format design. The task line asks for a queue that code reads."
+    },
+    {
+     "id": "state computed, never typed",
+     "summary": "Each entry's state (landed, built, in flight, waiting, READY) is computed from tasks.md, tasks-done.md, the pool and the done refs.",
+     "class": "within",
+     "why": "This serves the purpose that the session need not remember."
+    },
+    {
+     "id": "built when a done line names its entry (T416)",
+     "summary": "ENTRY=<k> passes from builder-next through builder-brief's log line to builder-done's done line. Done lines that name no entry still count one each.",
+     "class": "within",
+     "why": "It fixes a defect the review found (entries misfired both ways). It narrows nothing."
+    },
+    {
+     "id": "performance entry offered first",
+     "summary": "next and idle() take a READY open performance task's entry first, from any queue at Stop, using set_down_hooks::performance. Within each class the order is the file's.",
+     "class": "within",
+     "why": "This implements FR-013 and the GM's words of 2026-11-20. Measurement tasks are read through the [perf] tag the spec's tasks carry. File order within a class is the GM's queue order of 2026-11-26."
+    },
+    {
+     "id": "unlisted open performance task named first on every surface (T421; ruling ask:451-T313-plan-round3 item 1)",
+     "summary": "unlisted() lists every open performance task of every active feature that no queue line names. The Stop block, make builder-next, make builder-done's step 1 and make queue name each one first, with the runnable make queue-add command. A line, including one with waits=, quiets it.",
+     "class": "within",
+     "why": "This builds the arbiter's ruling item (1) as written. All three surfaces the ruling names carry it, and make queue does too. It is red first."
+    },
+    {
+     "id": "Stop block fires with a free tree when nothing is READY but an open performance task is unlisted",
+     "summary": "The one place the block's reach grew.",
+     "class": "within",
+     "why": "The arbiter's item (1) requires it: the Stop block names an unlisted open performance task first, and FR-013's last clause says the Stop hook's 'start the next' names an open performance task before any other. It goes quiet once the task has a line, so it cannot become the every-Stop block T183 retired."
+    },
+    {
+     "id": "builder-done step 1 prefers performance work of any queue (ruling item 2)",
+     "summary": "dispatch reads every readable queue as idle() does, through the shared offer(boards, prefer).",
+     "class": "within",
+     "why": "This is the ruling's item (2) as written, done with one shared change in builder_queue.rs as the ruling allowed."
+    },
+    {
+     "id": "the 'not assumed' point answered by a test",
+     "summary": "make builder-brief runs no make task-start. A test runs the printed command for a performance entry as named and gets code 0, then make task-start on it, also code 0. It also pins the converse: a non-performance task started while one is open is refused, naming it, with PERF_LATER_OK as its route.",
+     "class": "within",
+     "why": "This answers the arbiter's round-3 question from both sides. It is consistent with FR-013: next offers a non-performance entry only when no performance entry can take the tree, and in that case task-start's refusal and its recorded escape are what FR-013 provides."
+    },
+    {
+     "id": "the six [perf] queue lines, T22 waits=GM",
+     "summary": "Queue lines are written for T341, T342, T364, T365, T22 and T394. T22 gets waits=GM, standing in for 'a full day of work after T02-T21 land', and its note says so. T394 waits=T401.",
+     "class": "within",
+     "why": "The ruling directs these lines and says 'a performance task given a line with waits=<what> quiets it' (or waits= lines). T22 genuinely waits, which is FR-013's own named escape case, so leaving it un-offered is the correct outcome. The missing word for a time window is a vocabulary gap, not a wrong outcome."
+    },
+    {
+     "id": "carried means the done ref is gone",
+     "summary": "A done commit is waiting while refs/l7r/done/<feature>-<task> stands.",
+     "class": "within",
+     "why": "Design. It errs on the safe side."
+    },
+    {
+     "id": "overlap rule (T297 first half)",
+     "summary": "Paths overlap by whole-component prefix, checked against in-flight entries only. A held tree the queue does not list is 'not checked'. waits=alone works both ways.",
+     "class": "within",
+     "why": "It follows the task line's 'the tasks in flight'. It narrows nothing the GM asked."
+    },
+    {
+     "id": "deviation: overlap named by builder-next/builder-done, not builder-tree (T408)",
+     "summary": "A handout made by hand names no overlap. This is filed as T408, which lands before T22.",
+     "class": "within",
+     "why": "The words come from the session's task line, not from the GM's request or the spec. The deferral carries FR-009's reason, filed id and order."
+    },
+    {
+     "id": "deviation: the command named is make builder-brief, not make builder-tree",
+     "summary": "Since T334, builder-brief is the one dispatch command.",
+     "class": "within",
+     "why": "Naming builder-tree would name a command whose output the brief guard refuses, which would defeat enforcement. This serves the purpose."
+    },
+    {
+     "id": "count L7R_BUILDERS default 3 (GUESS knob)",
+     "summary": "The guard keeps whatever count is set. The default is the pool as it is run.",
+     "class": "within",
+     "why": "It matches the GM's 'start it at 3 builders' (request.md, T308 record) and settles nothing new."
+    },
+    {
+     "id": "escape starts its line; the walk goes past an unreadable queue.txt",
+     "summary": "The escape is line-anchored and the block's wording says so. The guard no longer stops at the 269 and 280 queue files.",
+     "class": "within",
+     "why": "Both fix defects found by the closing half, red first."
+    },
+    {
+     "id": "live queue.txt converted; T313 keeps one line",
+     "summary": "43 entries, made true from the clone's records. T416's line is removed as built here.",
+     "class": "within",
+     "why": "Data that serves the mechanism."
+    },
+    {
+     "id": "found-and-left: second-tier gate proposal not printed (T415)",
+     "summary": "The last clause of T313's line goes to T415 because the threshold is trial 458's to settle.",
+     "class": "within",
+     "why": "This clause is the session's, not the GM's (request.md 460-463). It is filed with a reason and an order under FR-009, and a threshold that is not settled cannot be printed."
+    },
+    {
+     "id": "found-and-left: fix entries whose lines builder-brief reads as a mechanism (T412)",
+     "summary": "For four entries, the Stop block can name a builder-brief command that the sizing rule refuses, with SIZING_OK as the escape. Each entry's note says so.",
+     "class": "within",
+     "why": "This is the one deferred case where the guard names a refused command. The refusal is a visible one with its own escape, so the work is not passed silently. FR-009's route is met: the reason (it puts the sizing rule into the parser), the filed id T412, and 'lands before T22'."
+    },
+    {
+     "id": "found-and-left: no-F= listing stops at other-form queues (T418); after-measurement (T401); T297 second half",
+     "summary": "Each is filed with a reason and an order.",
+     "class": "within",
+     "why": "FR-009's route is met. The guard's walk is already fixed. T401 needs a window of use that a builder cannot supply."
+    },
+    {
+     "id": "part B (red gate re-check)",
+     "summary": "It records that the batch gate's red came from a stale guard link and one test's bound. T313's change is untouched.",
+     "class": "within",
+     "why": "No decision of the plan changes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T314": {
+   "section_sha256": "5838fe3706290176a47c3579f0e81e0321d79fcbaa491ce368ce6e47d8c02e43",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 condition waits to a 120 s GUESS deadline",
+     "summary": "The suite's three silent 100 x sleep 0.1 waits (case 11 twice, case 13) become await-on-condition, ending the moment the condition holds, to a deadline of 120 s (STATE_SYNC_WAIT, a GUESS knob).",
+     "class": "within",
+     "why": "Fixes a check that refuses good work (a defect under constitution XIV; the GM's 2026-11-26 words on T104 prioritize fixing tests that fail under load). The departure from the brief's 'a few seconds' is from the coordinating session's brief, not the GM's words, and is argued from measurement: the bounds that failed were already about 11 s. A green run pays nothing; a run that never ends still reddens. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D2 a wait that runs out is its own FAIL, pinned by new case 16",
+     "summary": "await returns 1 with a FAIL line naming what never came; case 16 pins both directions (late condition waited for silently; WAIT=0 never-condition fails with its words). Pass count 41 to 43.",
+     "class": "within",
+     "why": "Enforcement of the fix itself: delete the requested fix and case 16 has nothing to check. Previously a wait that ran out went on silently; making it say what it waited for serves the suite's job."
+    },
+    {
+     "id": "D3 the lock is probed after the run's own sign",
+     "summary": "failed_twice reads the log first and probes the lock (flock -n) only after, since the probe could make the detached push skip itself and log nothing.",
+     "class": "within",
+     "why": "A fourth race found while fixing the suite, shown red on the old order and green on the new with a probe-holding copy; fixed in the task that found it (fix as we go)."
+    },
+    {
+     "id": "D4 scripts/state-sync.sh not changed",
+     "summary": "The tool was read for a race of its own and none was found; a skipped detached push on a held lock is its designed behavior.",
+     "class": "within",
+     "why": "No defect found in the tool, so nothing owed there; T258's behavior (a push refuses no landing) is kept as the GM's tooling-state request has it."
+    },
+    {
+     "id": "D5 reproduced by a delay in scratch copies, not under load",
+     "summary": "The task line's 'under load by T99's method' was overruled by the brief (load loops froze the host); each race is made certain by a copy of state-sync.sh whose nth background launch sleeps 30 s holding the lock: old suite 9 of 9 red on the predicted lines, fixed suite 9 of 9 green; 30 of 30 real runs green.",
+     "class": "within",
+     "why": "A verification method set by the coordinating session's task line and brief, not by the GM's words; the substitute is stronger (deterministic) and still shows the fix works. Nothing of what the GM asked is narrowed."
+    },
+    {
+     "id": "D6 found and left: hooks-test keeps no output of a failed suite (T414, lands before T302)",
+     "summary": "The runner kept only an event line of the red run, so the failing case could not be read afterwards; left to T414 as the hooks-test runner's mechanism, ordered before T302.",
+     "class": "within",
+     "why": "Outside T314's scope (one suite's flaky waits); not a narrowing of what T314 was asked to do. Recorded per FR-009: why not fixed here, its filed task id, and its order."
+    },
+    {
+     "id": "D7 exits: first tier only, full gate at landing",
+     "summary": "Green is the suite itself 43 of 43 in the first tier; no crate is changed so builder-checks has nothing to run; the full gate is the landing's.",
+     "class": "within",
+     "why": "Matches the GM's 2026-11-26 two-tier ruling (T308): full rigor deferred to the session clone's landing gate."
+    },
+    {
+     "id": "D8 not performance work",
+     "summary": "Classed as a flaky-check defect, nothing made faster.",
+     "class": "within",
+     "why": "FR-013 ordering is unaffected; a red on good work is a defect fix, and the classification is accurate."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: \"what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight\"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))",
+    "### T313 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D-reversal: a Stop-time refusal brought back over 451 T183's D10",
+     "summary": "pool-idle-hooks blocks the coordinating session's Stop while a pool tree is free, fewer than L7R_BUILDERS are held and a queue holds a READY next entry; escape POOL_IDLE_OK, falsifier 1 Stop in 5 escaped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled against both passages. The GM's 2026-11-26 words ask for enforcement by name ('something that we want our tooling to actually enforce ... otherwise you just have to remember to keep our tasks in flight'). His 2026-11-23 approval kept Stop blocks for what the session must do before stopping, with speech only on idle-with-actionable-work and respect for binding holds. A free tree and a READY, non-overlapping entry is actionable work the session must hand out or the tree idles (46 of the 336 idle minutes fell with the session stopped). T88's failure case, a ruling that held new work, is met by waits=GM written once per hold in the file (per entry, as the block states it: a one-time edit, not an answer at every Stop), or by the recorded escape the falsifier counts. Not the per-Stop cost of T88's 23 turns."
+    },
+    {
+     "id": "D-thin",
+     "summary": "the guard holds no state and judges only shared::builder_queue::idle",
+     "class": "within",
+     "why": "A design choice inside the request. Note: the block states 'The GM is weighing whether the primary session becomes a pure orchestrator' as fact, but request.md marks it as 'the session's report of it, not his words'."
+    },
+    {
+     "id": "D-format",
+     "summary": "queue.txt, two positional words then key=value fields; crates=/files= and measures= required",
+     "class": "within",
+     "why": "A format convention. It narrows nothing asked."
+    },
+    {
+     "id": "D-state",
+     "summary": "an entry is one dispatch and its state is computed, never typed",
+     "class": "within",
+     "why": "It serves 'not having to remember': typed states went stale."
+    },
+    {
+     "id": "D-built-by-count and Found-and-left T416",
+     "summary": "built = count of done lines for the task down to the entry; the known misfires are left to T416",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block itself states two wrong outcomes of the new mechanism. (1) A second builder-done run for one entry (a builder at its cap and its successor) makes the task's NEXT entry read built while it was never dispatched. The tooling then silently fails to keep that task in flight, and the session has to remember it: the exact failure the GM's words name. (2) One run ending two entries leaves the later one READY after the carry, so the new guard refuses a Stop for a dispatch already made. That is a check refusing correct work, and a block for something the session need not do, against the 2026-11-23 limit. This is a defect this task introduces in its own guard, not a pre-existing one. The stated reason for leaving it ('changes make builder-done's log line and every reader of it') is cost. It is not impossibility, not implied by the GM's words, and not needed for the purpose. FR-009's why/id/order is the form a deferral must take, not a ground that makes one legitimate. Fix it here (the block's own priced cure: the done line names the entry it ends), or show the misfire cannot arise under how dispatches are made."
+    },
+    {
+     "id": "D-carried",
+     "summary": "carried = refs/l7r/done/<feature>-<task> gone",
+     "class": "within",
+     "why": "Errs on the safe side (a hand carry reads waiting until the next builder-done). It narrows nothing asked."
+    },
+    {
+     "id": "D-overlap",
+     "summary": "path-prefix overlap by whole components, asked against entries in flight; waits=alone both ways",
+     "class": "within",
+     "why": "It follows the line's 'the tasks in flight'."
+    },
+    {
+     "id": "D-overlap-unlisted-tree",
+     "summary": "a held tree whose task the queue does not list is named 'not checked' and holds nothing back",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Comparing against files nobody recorded is impossible. Holding on such a tree would idle the pool for every dispatch made outside the queue, against the request's purpose. The tree is named, not hidden."
+    },
+    {
+     "id": "DEV-T297: overlap named by builder-next/builder-done, not builder-tree; Found-and-left T408",
+     "summary": "a handout made by hand names no overlap; filed T408, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The overlap check is the coordinating session's T297 line, not the GM's words. His one sentence on T313 asks that the session not have to remember to keep tasks in flight, and the enforced route (the queue's next entry, at builder-done and at Stop) does name the overlap. What is left is a path that bypasses the queue by hand. It is filed with its order."
+    },
+    {
+     "id": "DEV-T313: the block names make builder-brief, not make builder-tree T=<n>",
+     "summary": "the command named is the dispatch command T334 made the only one",
+     "class": "within",
+     "why": "It carries the line's intent. The literal command would be refused by the brief guard. It is a substitution, not a narrowing."
+    },
+    {
+     "id": "D-count",
+     "summary": "L7R_BUILDERS default 3, a GUESS knob; the guard settles no count",
+     "class": "within",
+     "why": "It matches the pool as run. It is consistent with the GM on T284 against pre-emptively limiting builders. A knob, not a settled number."
+    },
+    {
+     "id": "D-escape-line-anchored",
+     "summary": "POOL_IDLE_OK must start a line; the wording says so",
+     "class": "within",
+     "why": "A tooling convention matching BUILDER_BRIEF_OK."
+    },
+    {
+     "id": "D-quiet-on-unreadable-queue",
+     "summary": "a queue that cannot be read passes, recorded as queue-unread",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This fails open on enforcement, so it is ruled on purpose. A guard that cannot read the queue cannot know there is actionable work. Blocking then would repeat T88's blocking-without-knowing that the GM's 2026-11-23 words retired, which implies the exception. The pass is recorded, make queue names the bad line, and queue-add writes only through the parser."
+    },
+    {
+     "id": "D-next-is-file-order (unlabeled)",
+     "summary": "next = the first READY entry in file order; the Stop block and builder-done step 1 name it, with no regard to FR-013",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The accepted spec's SC-006 (FR-013, the GM 2026-11-20: 'can we in general priotitize performance improvements going forward?') requires that 'every Stop-hook \"start the next\" names an open performance task while one exists'. This guard is a new Stop hook that names the next task to start, and the block neither names FR-013 nor says how its choice honors it. Under file order it names a non-performance entry ahead of an open performance task whenever the hand-written order puts one there. The general rule is not impossible here (next can prefer a READY performance entry), is not implied away by any GM words, and does not defeat the request. State how the named entry satisfies FR-013/SC-006: next prefers an open performance task's READY entry while one exists, or the section shows (measured) why the queue's order already guarantees it."
+    },
+    {
+     "id": "Found-and-left T412",
+     "summary": "a fix entry whose task line builder_brief reads as a mechanism reads READY; its dispatch is refused (SIZING_OK); four live entries noted",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The tree really is free and the entry really is unhanded work. The block leads to an actionable fix (the entry's kind or line) through builder-brief's own refusal and escape, so it does not block for nothing. The four live instances are found by a stated method and each carries a note. Filed with its order."
+    },
+    {
+     "id": "Found-and-left T415 + landing ticks T313 with its last clause moved",
+     "summary": "the second tier's gate proposed at the threshold is not built; T313 is ticked, the clause living in T415",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "That clause is the coordinating session's, not the GM's. His words concern keeping tasks in flight, not when the second tier runs. The threshold is trial 458's to measure, and the clause is not dropped: it is filed in T415 with its order."
+    },
+    {
+     "id": "Found-and-left T401",
+     "summary": "the mechanism's effect on idle share is not measured here",
+     "class": "within",
+     "why": "This is an after-measurement needing a window of use, not a part of the requested behavior. It is filed."
+    },
+    {
+     "id": "Found-and-left T297 second half",
+     "summary": "how a mid-work message reaches a builder is not built",
+     "class": "within",
+     "why": "Another task's half, outside T313's request."
+    },
+    {
+     "id": "Landing: T395 ticked as built here",
+     "summary": "builder-done's step 1 reads the queue's next entry",
+     "class": "within",
+     "why": "It is the notice at a builder's end the line asks for."
+    }
+   ],
+   "tasks": [
+    "T313"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: \"what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight\"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))",
+    "### T313 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D-retirement-reversed",
+     "summary": "A Stop-time block over a free pool tree and a READY queue entry, reversing 451 T183's retirement of T88's rolling-dispatch block",
+     "class": "within",
+     "why": "The GM's words on T313 (2026-11-26, three days after the 2026-11-23 retirement) ask for this by name: 'something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight'. What he objected to on 2026-11-23 was a block that fired while the session was correctly waiting, and the approved rule was that Stop hooks block only for what the session must do before stopping. This block is quiet with every entry waiting (a held queue is written waits=GM), with the count reached, in subagents and on an unreadable queue. It names the one command and has a recorded escape. Handing a READY entry to a free tree is now a must-do by his 2026-11-26 words."
+    },
+    {
+     "id": "D-thin-rule",
+     "summary": "The guard holds no state and judges only shared::builder_queue::idle",
+     "class": "within",
+     "why": "This is how it is built. It narrows nothing asked."
+    },
+    {
+     "id": "D-format",
+     "summary": "queue.txt, two positional words then key=value fields; crates=/files= required, measures= for a measurement",
+     "class": "within",
+     "why": "A format choice inside 'the queue in a form code reads' (T395). It narrows nothing."
+    },
+    {
+     "id": "D-state-computed",
+     "summary": "An entry is one dispatch and its state is computed (landed, built, waiting, in flight, READY), never typed",
+     "class": "within",
+     "why": "This serves the GM's purpose that the session need not remember. It narrows nothing."
+    },
+    {
+     "id": "D-built-by-named-entry",
+     "summary": "An entry is built when a done line names it (ENTRY= through builder-brief, the pool log and builder-done); a count fallback for unnamed lines; builds T416 whole",
+     "class": "within",
+     "why": "It corrects how built is told. Where entries are misnamed it errs toward re-offering an entry rather than skipping one. It narrows nothing."
+    },
+    {
+     "id": "D-perf-first-in-queue",
+     "summary": "next offers, among READY non-overlapping entries, the first naming an open performance task (set_down_hooks::performance), else file order; the measurement clause is read through the [perf] tag",
+     "class": "within",
+     "why": "This implements FR-013 for entries that have a line. It uses the same test as make task-start's refusal and the Stop hook. The GM's 2026-11-26 queue ordering is kept within each class."
+    },
+    {
+     "id": "D-perf-no-line (T421)",
+     "summary": "An open performance task with no queue.txt line is never offered; the queue's next entry, the Stop block and builder-done's notice name non-performance work while such tasks are open. Left as T421",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-013 says 'Performance work goes first, in every feature' (the GM 2026-11-20: 'can we in general priotitize performance improvements going forward?'). SC-006 says every Stop-hook 'start the next' names an open performance task while one exists. This plan cites FR-013 under SC-006 for its own ordering, so FR-013 reaches next. The plan's own observation is that no open [perf] task has a queue line. So the case left out is the live case: today every block and every builder-done notice names non-performance work. Performance-first then rests on the session remembering to write those lines, which is exactly the remembering the GM's T313 words were against. The stated reason ('an entry needs a kind and its crates or files, which only its author can write') explains why code cannot dispatch such a task. It does not explain leaving undone the notice the item itself names as the cure. Nor does it explain why the block and the notice name a non-performance dispatch without mentioning the open performance task. Required: when an open performance task (FR-013's test, any active feature) has no queue line, the Stop block, builder-done's step 1 and make builder-next name that task first, with the make queue-add command that writes its entry, rather than offering a non-performance entry silently. A performance task that waits gets its line with waits=<what>, and the guard is then quiet about it. Red first like the others. Not assumed: that make builder-brief passes through make task-start's refusal. The bundle does not show it, and the block's own command is what gets acted on."
+    },
+    {
+     "id": "D-builder-done-own-feature",
+     "summary": "make builder-done's step 1 reads the done task's own feature's queue and prefers performance work within it alone ('the limit, said here')",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-013's ordering holds 'in any active feature'. The plan's idle() already reads every queue for that reason. builder-done's notice is what the session acts on first, when a tree frees. The any-queue Stop rule catches the miss only while the tree stays free, and acting on the notice ends that. The plan gives no reason for the limit and files no task for it. None of the legitimacy grounds is shown: it is not impossible (idle() already walks every queue), it is not implied by the GM's words, and the literal rule does not defeat the purpose. Required: builder-done's step 1 applies the same any-queue performance preference as idle(), naming a performance entry of another active feature's queue before its own feature's first pick, or the limit is removed by the D-perf-no-line fix."
+    },
+    {
+     "id": "D-carried-ref",
+     "summary": "A done commit counts as carried when refs/l7r/done/<feature>-<task> is gone",
+     "class": "within",
+     "why": "An implementation test that errs on the safe side (waiting). It narrows nothing."
+    },
+    {
+     "id": "D-overlap",
+     "summary": "T297's first half: paths overlap by whole-component prefix, checked against entries in flight; held trees with no queue line 'not checked'; waits=alone both ways",
+     "class": "within",
+     "why": "It builds part of another task that stays open. A tree dispatched outside the queue has no recorded files, so nothing can be compared for it."
+    },
+    {
+     "id": "DEV-overlap-not-in-builder-tree (T408)",
+     "summary": "The overlap is named by builder-next and builder-done, not builder-tree; handouts made by hand name none",
+     "class": "within",
+     "why": "The line departed from is T297's, the coordinating session's words, not the GM's. T297 stays open, and the remainder is filed as T408 with its order. Nothing asked of T313 is narrowed."
+    },
+    {
+     "id": "DEV-builder-brief-not-builder-tree",
+     "summary": "The block names make builder-brief rather than make builder-tree T=<n>",
+     "class": "within",
+     "why": "The departure is from the session's words on T313's line, which predate T334. make builder-brief is the one dispatch command (T334, which came from the GM's question about dispatching through the tooling). Naming builder-tree would name a command whose output the brief guard refuses."
+    },
+    {
+     "id": "D-count-L7R_BUILDERS",
+     "summary": "The count is L7R_BUILDERS, default 3, a GUESS knob, rather than process-decisions' two",
+     "class": "within",
+     "why": "'The settled builder count' is the session's phrase. The guard keeps whatever count is set. The default follows the pool as it is run and the GM's T284 words against limiting builders pre-emptively. The knob is labeled."
+    },
+    {
+     "id": "D-escape-line-anchored",
+     "summary": "POOL_IDLE_OK must start a line; the wording says so",
+     "class": "within",
+     "why": "A recorded escape of a reason, which the project's guard rules require."
+    },
+    {
+     "id": "D-unreadable-queue-walk",
+     "summary": "idle() walks past an unreadable queue.txt; make queue / builder-next with no F= still stop at one (T418)",
+     "class": "within",
+     "why": "The guard, which is the enforcement asked for, is fixed. The rough edge left is in a no-F= convenience form that nothing asked for. F=451 works. Filed with its order under FR-009."
+    },
+    {
+     "id": "D-fix-entries-sizing (T412)",
+     "summary": "A fix entry whose line builder-brief reads as a mechanism shows READY, and the block names a command that is refused (SIZING_OK escape); four noted in their entries",
+     "class": "within",
+     "why": "It carves no case out of the enforcement. The block still fires and leads to the dispatch through the brief's own check. Filed with why, id and order under FR-009. It narrows nothing asked."
+    },
+    {
+     "id": "D-second-tier-proposal (T415)",
+     "summary": "The second tier's gate is not proposed at the threshold; left as T415 behind trial 458",
+     "class": "within",
+     "why": "That clause is the coordinating session's on T313's line, not the GM's words. Its threshold is named as trial 458's, and that trial is still running. Filed with its order. Nothing the GM or an FR asked is narrowed."
+    },
+    {
+     "id": "D-after-measure (T401) and waits=GM stand-in",
+     "summary": "The mechanism's effect is not measured here (T401); waits=GM stands for 'a window must pass' on T401 and T354",
+     "class": "within",
+     "why": "The re-measurement is T394's line's ask, filed as T401. The stand-in is a data convention, noted in each entry."
+    },
+    {
+     "id": "D-one-line-for-T313",
+     "summary": "T313 keeps one queue line for both halves; T416's line removed as built here",
+     "class": "within",
+     "why": "Bookkeeping consistent with the named-entry rule. It narrows nothing."
+    },
+    {
+     "id": "D-checks-not-run",
+     "summary": "Coverage, make static, hooks-test and quick are not run in the builder's tree, and are left to the batch gate",
+     "class": "within",
+     "why": "Follows the GM's two-tier ruling of 2026-11-26 (request.md, T308)."
+    }
+   ],
+   "tasks": [
+    "T313"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: \"what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight\"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))",
+    "### T313 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D-unlisted-perf-named-first",
+     "summary": "builder_queue::unlisted lists every open performance task (set_down_hooks::open_performance, FR-013's walk over active features, without the picker's wait skip) that no line of its feature's queue.txt names, in any state; the Stop block, make builder-next and make builder-done's step 1 name it FIRST with a runnable make queue-add F= T= KIND= command; any line for it, waits= included, quiets it; the Stop block fires with a free tree under the count even when nothing is READY; an unparseable queue file names none of its feature's tasks, so they are listed.",
+     "class": "within",
+     "why": "This is ruling ask:451-T313-plan-round3 part (1), point by point: all three surfaces, any active feature, the queue-add command, and a waits= line as the thing that quiets it. Treating an unreadable queue as naming nothing makes the listing wider, not narrower. Red first: 4 tests failed with the two halves reverted, then passed."
+    },
+    {
+     "id": "D-builder-done-any-queue",
+     "summary": "make builder-done's step 1 (dispatch) now reads every readable queue, as idle() does, through the shared offer(boards, prefer): a READY performance entry of any queue first, then the done task's feature's pick, then the first queue's.",
+     "class": "within",
+     "why": "This is ruling part (2), done in the one shared module the ruling allowed. Preferring the done task's feature comes after performance work of any queue, so it narrows nothing FR-013 asks for. Red first: the_next_dispatch_prefers_performance_work_of_any_queue."
+    },
+    {
+     "id": "D-not-assumed-brief-vs-task-start",
+     "summary": "make builder-brief calls no make task-start. The test the_named_brief_for_performance_work_meets_no_performance_first_refusal runs the printed builder-brief words as named (code 0), then make task-start on that performance task (code 0), and pins the converse: a non-performance task of the same queue is refused naming the open one, with PERF_LATER_OK as its recorded escape.",
+     "class": "within",
+     "why": "This answers the round-2 'not assumed' point with a test that runs the command rather than an assertion that it works. The converse keeps FR-013's refusal and its reason escape whole."
+    },
+    {
+     "id": "D-six-queue-lines",
+     "summary": "Queue lines for T341, T342, T364, T365, T22 (waits=GM) and T394 (waits=T401), written by a plain edit.",
+     "class": "within",
+     "why": "This is the ruling's last sentence. Each waits= line names its reason, which is how the ruling says a waiting task is quieted."
+    },
+    {
+     "id": "D-round2-decisions",
+     "summary": "The other DECISIONs and DEVIATIONs of the section: the Stop guard reversing T183's retirement, the thin rule, the format, computed states, built when a done line names its entry, the performance entry offered first, carried meaning the done ref is gone, the overlap rule, the builder-brief command, L7R_BUILDERS.",
+     "class": "within",
+     "why": "Round 2 found these within, and round 3 does not reopen them (the arbiter's ruling)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T313 (the GM, 2026-11-26, on the session handing each freed pool tree to the next task by hand: \"what you are doing sounds like something that we want our tooling to actually enforce. Because otherwise you just have to remember to keep our tasks in flight\"; and the measurement of 2026-11-27, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`))",
+    "### T313 Approach (checklist part A)",
+    "### T313 part B (2026-11-27T07:20Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Stop-time refusal brought back (DECISION, reverses T183's D10)",
+     "summary": "A Stop guard blocks the coordinating session's turn end while a pool tree is free, the count is not reached, and a queue holds a READY entry that overlaps nothing in flight; it names the one command, and its escape is POOL_IDLE_OK on a line of its own.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-26 for the tooling to 'actually enforce' keeping tasks in flight, and request.md line 13 asks for 'real enforcement and not just instructions'. The Stop check itself comes from the session's line (request.md 460-463), not from the GM. The rule the GM approved on 2026-11-23 was that Stop hooks block only for what the session must do before stopping. Handing a free tree to a READY task is that kind of work. The incident behind that rule, a block firing while the session correctly waited under a hold, is covered by the quiet cases: waits=GM is written once in the file, every entry waiting is quiet, an unreadable queue is quiet, and the escape is recorded. This adds enforcement and narrows nothing."
+    },
+    {
+     "id": "rule kept thin",
+     "summary": "The guard holds no state and judges only shared::builder_queue::idle, which the gate's commands also read.",
+     "class": "within",
+     "why": "This is design. It narrows nothing that was asked."
+    },
+    {
+     "id": "queue format",
+     "summary": "queue.txt uses two positional words and key=value fields; crates= or files= is required, and so is measures= for a measurement.",
+     "class": "within",
+     "why": "Format design. The task line asks for a queue that code reads."
+    },
+    {
+     "id": "state computed, never typed",
+     "summary": "Each entry's state (landed, built, in flight, waiting, READY) is computed from tasks.md, tasks-done.md, the pool and the done refs.",
+     "class": "within",
+     "why": "This serves the purpose that the session need not remember."
+    },
+    {
+     "id": "built when a done line names its entry (T416)",
+     "summary": "ENTRY=<k> passes from builder-next through builder-brief's log line to builder-done's done line. Done lines that name no entry still count one each.",
+     "class": "within",
+     "why": "It fixes a defect the review found (entries misfired both ways). It narrows nothing."
+    },
+    {
+     "id": "performance entry offered first",
+     "summary": "next and idle() take a READY open performance task's entry first, from any queue at Stop, using set_down_hooks::performance. Within each class the order is the file's.",
+     "class": "within",
+     "why": "This implements FR-013 and the GM's words of 2026-11-20. Measurement tasks are read through the [perf] tag the spec's tasks carry. File order within a class is the GM's queue order of 2026-11-26."
+    },
+    {
+     "id": "unlisted open performance task named first on every surface (T421; ruling ask:451-T313-plan-round3 item 1)",
+     "summary": "unlisted() lists every open performance task of every active feature that no queue line names. The Stop block, make builder-next, make builder-done's step 1 and make queue name each one first, with the runnable make queue-add command. A line, including one with waits=, quiets it.",
+     "class": "within",
+     "why": "This builds the arbiter's ruling item (1) as written. All three surfaces the ruling names carry it, and make queue does too. It is red first."
+    },
+    {
+     "id": "Stop block fires with a free tree when nothing is READY but an open performance task is unlisted",
+     "summary": "The one place the block's reach grew.",
+     "class": "within",
+     "why": "The arbiter's item (1) requires it: the Stop block names an unlisted open performance task first, and FR-013's last clause says the Stop hook's 'start the next' names an open performance task before any other. It goes quiet once the task has a line, so it cannot become the every-Stop block T183 retired."
+    },
+    {
+     "id": "builder-done step 1 prefers performance work of any queue (ruling item 2)",
+     "summary": "dispatch reads every readable queue as idle() does, through the shared offer(boards, prefer).",
+     "class": "within",
+     "why": "This is the ruling's item (2) as written, done with one shared change in builder_queue.rs as the ruling allowed."
+    },
+    {
+     "id": "the 'not assumed' point answered by a test",
+     "summary": "make builder-brief runs no make task-start. A test runs the printed command for a performance entry as named and gets code 0, then make task-start on it, also code 0. It also pins the converse: a non-performance task started while one is open is refused, naming it, with PERF_LATER_OK as its route.",
+     "class": "within",
+     "why": "This answers the arbiter's round-3 question from both sides. It is consistent with FR-013: next offers a non-performance entry only when no performance entry can take the tree, and in that case task-start's refusal and its recorded escape are what FR-013 provides."
+    },
+    {
+     "id": "the six [perf] queue lines, T22 waits=GM",
+     "summary": "Queue lines are written for T341, T342, T364, T365, T22 and T394. T22 gets waits=GM, standing in for 'a full day of work after T02-T21 land', and its note says so. T394 waits=T401.",
+     "class": "within",
+     "why": "The ruling directs these lines and says 'a performance task given a line with waits=<what> quiets it' (or waits= lines). T22 genuinely waits, which is FR-013's own named escape case, so leaving it un-offered is the correct outcome. The missing word for a time window is a vocabulary gap, not a wrong outcome."
+    },
+    {
+     "id": "carried means the done ref is gone",
+     "summary": "A done commit is waiting while refs/l7r/done/<feature>-<task> stands.",
+     "class": "within",
+     "why": "Design. It errs on the safe side."
+    },
+    {
+     "id": "overlap rule (T297 first half)",
+     "summary": "Paths overlap by whole-component prefix, checked against in-flight entries only. A held tree the queue does not list is 'not checked'. waits=alone works both ways.",
+     "class": "within",
+     "why": "It follows the task line's 'the tasks in flight'. It narrows nothing the GM asked."
+    },
+    {
+     "id": "deviation: overlap named by builder-next/builder-done, not builder-tree (T408)",
+     "summary": "A handout made by hand names no overlap. This is filed as T408, which lands before T22.",
+     "class": "within",
+     "why": "The words come from the session's task line, not from the GM's request or the spec. The deferral carries FR-009's reason, filed id and order."
+    },
+    {
+     "id": "deviation: the command named is make builder-brief, not make builder-tree",
+     "summary": "Since T334, builder-brief is the one dispatch command.",
+     "class": "within",
+     "why": "Naming builder-tree would name a command whose output the brief guard refuses, which would defeat enforcement. This serves the purpose."
+    },
+    {
+     "id": "count L7R_BUILDERS default 3 (GUESS knob)",
+     "summary": "The guard keeps whatever count is set. The default is the pool as it is run.",
+     "class": "within",
+     "why": "It matches the GM's 'start it at 3 builders' (request.md, T308 record) and settles nothing new."
+    },
+    {
+     "id": "escape starts its line; the walk goes past an unreadable queue.txt",
+     "summary": "The escape is line-anchored and the block's wording says so. The guard no longer stops at the 269 and 280 queue files.",
+     "class": "within",
+     "why": "Both fix defects found by the closing half, red first."
+    },
+    {
+     "id": "live queue.txt converted; T313 keeps one line",
+     "summary": "43 entries, made true from the clone's records. T416's line is removed as built here.",
+     "class": "within",
+     "why": "Data that serves the mechanism."
+    },
+    {
+     "id": "found-and-left: second-tier gate proposal not printed (T415)",
+     "summary": "The last clause of T313's line goes to T415 because the threshold is trial 458's to settle.",
+     "class": "within",
+     "why": "This clause is the session's, not the GM's (request.md 460-463). It is filed with a reason and an order under FR-009, and a threshold that is not settled cannot be printed."
+    },
+    {
+     "id": "found-and-left: fix entries whose lines builder-brief reads as a mechanism (T412)",
+     "summary": "For four entries, the Stop block can name a builder-brief command that the sizing rule refuses, with SIZING_OK as the escape. Each entry's note says so.",
+     "class": "within",
+     "why": "This is the one deferred case where the guard names a refused command. The refusal is a visible one with its own escape, so the work is not passed silently. FR-009's route is met: the reason (it puts the sizing rule into the parser), the filed id T412, and 'lands before T22'."
+    },
+    {
+     "id": "found-and-left: no-F= listing stops at other-form queues (T418); after-measurement (T401); T297 second half",
+     "summary": "Each is filed with a reason and an order.",
+     "class": "within",
+     "why": "FR-009's route is met. The guard's walk is already fixed. T401 needs a window of use that a builder cannot supply."
+    },
+    {
+     "id": "part B (red gate re-check)",
+     "summary": "It records that the batch gate's red came from a stale guard link and one test's bound. T313's change is untouched.",
+     "class": "within",
+     "why": "No decision of the plan changes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T314 (the batch gate of 2026-11-26 18:27 UTC: `tests/hooks/test-state-sync.sh` red beside three builders, 41 of 41 alone a minute later)",
+    "### T314 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 condition waits to a 120 s GUESS deadline",
+     "summary": "The suite's three silent 100 x sleep 0.1 waits (case 11 twice, case 13) become await-on-condition, ending the moment the condition holds, to a deadline of 120 s (STATE_SYNC_WAIT, a GUESS knob).",
+     "class": "within",
+     "why": "Fixes a check that refuses good work (a defect under constitution XIV; the GM's 2026-11-26 words on T104 prioritize fixing tests that fail under load). The departure from the brief's 'a few seconds' is from the coordinating session's brief, not the GM's words, and is argued from measurement: the bounds that failed were already about 11 s. A green run pays nothing; a run that never ends still reddens. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "D2 a wait that runs out is its own FAIL, pinned by new case 16",
+     "summary": "await returns 1 with a FAIL line naming what never came; case 16 pins both directions (late condition waited for silently; WAIT=0 never-condition fails with its words). Pass count 41 to 43.",
+     "class": "within",
+     "why": "Enforcement of the fix itself: delete the requested fix and case 16 has nothing to check. Previously a wait that ran out went on silently; making it say what it waited for serves the suite's job."
+    },
+    {
+     "id": "D3 the lock is probed after the run's own sign",
+     "summary": "failed_twice reads the log first and probes the lock (flock -n) only after, since the probe could make the detached push skip itself and log nothing.",
+     "class": "within",
+     "why": "A fourth race found while fixing the suite, shown red on the old order and green on the new with a probe-holding copy; fixed in the task that found it (fix as we go)."
+    },
+    {
+     "id": "D4 scripts/state-sync.sh not changed",
+     "summary": "The tool was read for a race of its own and none was found; a skipped detached push on a held lock is its designed behavior.",
+     "class": "within",
+     "why": "No defect found in the tool, so nothing owed there; T258's behavior (a push refuses no landing) is kept as the GM's tooling-state request has it."
+    },
+    {
+     "id": "D5 reproduced by a delay in scratch copies, not under load",
+     "summary": "The task line's 'under load by T99's method' was overruled by the brief (load loops froze the host); each race is made certain by a copy of state-sync.sh whose nth background launch sleeps 30 s holding the lock: old suite 9 of 9 red on the predicted lines, fixed suite 9 of 9 green; 30 of 30 real runs green.",
+     "class": "within",
+     "why": "A verification method set by the coordinating session's task line and brief, not by the GM's words; the substitute is stronger (deterministic) and still shows the fix works. Nothing of what the GM asked is narrowed."
+    },
+    {
+     "id": "D6 found and left: hooks-test keeps no output of a failed suite (T414, lands before T302)",
+     "summary": "The runner kept only an event line of the red run, so the failing case could not be read afterwards; left to T414 as the hooks-test runner's mechanism, ordered before T302.",
+     "class": "within",
+     "why": "Outside T314's scope (one suite's flaky waits); not a narrowing of what T314 was asked to do. Recorded per FR-009: why not fixed here, its filed task id, and its order."
+    },
+    {
+     "id": "D7 exits: first tier only, full gate at landing",
+     "summary": "Green is the suite itself 43 of 43 in the first tier; no crate is changed so builder-checks has nothing to run; the full gate is the landing's.",
+     "class": "within",
+     "why": "Matches the GM's 2026-11-26 two-tier ruling (T308): full rigor deferred to the session clone's landing gate."
+    },
+    {
+     "id": "D8 not performance work",
+     "summary": "Classed as a flaky-check defect, nothing made faster.",
+     "class": "within",
+     "why": "FR-013 ordering is unaffected; a red on good work is a defect fix, and the classification is accurate."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T313 to T314, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

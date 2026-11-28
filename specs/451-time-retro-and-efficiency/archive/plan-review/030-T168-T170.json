@@ -1,0 +1,699 @@
+{
+ "blocks": {
+  "### T168 (observed 2026-11-23, 451 T167's plan section: 449 T330's page sessions' lines sat under T312 and T328 in the 449 log, and `make events-refile` moves lines across features but never re-tasks one within a feature)": {
+   "sha256": "4c6742cd54f243245369ca334bb2269ae6942518c395263c895969429e0ded81",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T168 Approach (checklist part A)": {
+   "sha256": "14fb6f84dcbdfe046588f51a9d683f81de9bf59b917e1fae689893a9779cc35c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T170 (observed 2026-11-23: the GM, request.md \"on hook output length\", asked for fewer tokens with no loss of fidelity, enforced mechanically; the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds 891,521 characters of guard messages the model read, 2,848 texts each counted once, measured 2026-11-23 by `/tmp/t170/rank.py`)": {
+   "sha256": "54ea3b7196a406dff282528cc2f5f0a3963f6916e45d1354894534dda427977a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T170 Approach (checklist part A)": {
+   "sha256": "8065e7b2962e0386969f58875d68211a58c195d2f8694119ffb2f2462c169520",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T170 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "afa327bef2811614a825fa330aeb497668c40e46e4ca7422089f03e3decb0cc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T168": {
+   "section_sha256": "427a70121219f04665d1fbbaa742995ecc63ef00a6936ee6399a46f0a809ac00",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T168-1 retask mode of the existing refile",
+     "summary": "Re-tasking is a new --retask / RETASK= mode of make events-refile (refile/retask.rs, called from refile::cli_in), not a new tool.",
+     "class": "within",
+     "why": "Serves the request's per-task breakdown ('for each task ... where our time went', 2026-11-19) and the tooling question's 'no new tool to learn' (the approved proposal); correcting misbooked lines is what makes FR-005's per-task columns and SC-002 true for 449. Placement in the existing command narrows nothing."
+    },
+    {
+     "id": "T168-2 the brief's task via the shared reader",
+     "summary": "The feature and task a session is re-booked to come from set_down_hooks::page_session_brief (T161), the same reader the writer uses.",
+     "class": "within",
+     "why": "An implementation choice that keeps the correction and the writer (T167) agreeing; nothing asked is narrowed."
+    },
+    {
+     "id": "T168-3 idempotent, DRY=1, write_back, unlisted and task-less sessions reported and left",
+     "summary": "A line already on its brief's task is not rewritten; DRY=1 writes nothing; the rewrite uses refile's write_back to keep lines a live hook appends; a session not in the index or whose brief names no task is reported and left.",
+     "class": "within",
+     "why": "Safety properties of a rewrite of a live log. Leaving a session whose brief names no task is not a carve-out: there is no task to book it to, and it is reported, not silently dropped."
+    },
+    {
+     "id": "T168-4 2647 and f1d2 book to T333, not T330",
+     "summary": "Two of the three sessions the observation calls T330's are booked to T333 because their briefs' first lines name T333.",
+     "class": "within",
+     "why": "The direct consequence of the stated rule (minutes credited to the task the brief names), measured from the briefs' first lines; it applies the rule rather than excepting a case from it."
+    },
+    {
+     "id": "T168-5 where-time's first table T330 row stays 0",
+     "summary": "After the re-booking, the agents table credits T330 (180 agents, 76.2 agent minutes) and T333; the first table's T330 row stays 0 because that table books the main session's own wall time.",
+     "class": "within",
+     "why": "A statement of what each table measures (FR-005 keeps the critical-path wall clock apart from summed agent-minutes, as the approved proposal asked), not a defect left: the fix is to page-session (agent) lines, and the first table never counted those."
+    },
+    {
+     "id": "T168-6 order and [perf] class",
+     "summary": "Lands after T167 and before any landing that reads 449's per-task time; tagged [perf] as measurement work, with no engine-speed checklist.",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task [is] to be counted as a performance task for the purpose of scheduling and coming first'; the order follows the dependency on T167."
+    },
+    {
+     "id": "T168-7 tests written with the code",
+     "summary": "No red run recorded; the tests assert the re-booked counts, untouched lines, the second run's 0, the dry run's unchanged bytes, the unlisted and task-less sessions, and a missing log's exit 1.",
+     "class": "within",
+     "why": "FR-012's red-first requirement covers the refusals of FR-006 to FR-009, FR-011 and FR-013; this is a correction tool, not one of those refusals, so no requirement of the spec is narrowed. Test discipline beyond that is not a fidelity question."
+    },
+    {
+     "id": "T168-8 backup before the real run",
+     "summary": "The 449 log was backed up to .git/l7r-events/449-rust-codebase.jsonl.pre-t168 before the run.",
+     "class": "within",
+     "why": "An operational precaution; narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T169": {
+   "section_sha256": "40374c34e9a338dcb479bf0412876dc3a8ea71a367c78efbc8fc26b4bb9a78d0",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T169-D1 launcher",
+     "summary": "Each of the nine hook entries in .claude/settings.json becomes \"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook <event> (or setup); a new POSIX sh launcher does what the inline commands did (mirror's l7r-guard.sh first if executable, else the copy beside it; setup runs the mirror's setup-dev-env.sh --ensure else the tree's), with the commands' reasons moved into its header.",
+     "class": "within",
+     "why": "The 2026-11-23 amendment asks whether hooks can 'accomplish the same thing with no loss of fidelity and fewer tokens'. The harness prints the entry's command with every block or notice, so the command is part of the hook output the GM named; shortening it from 239-330 to 49-63 characters while keeping the mirror-first dispatcher choice, the events and the behavior (hand comparison: all nine identical) is exactly 'the same thing ... fewer tokens'."
+    },
+    {
+     "id": "T169-D2 timeouts and status unchanged",
+     "summary": "Timeouts (60/600/900 s, above the wrapper's 45 s build limit) and the status message stay as they are.",
+     "class": "within",
+     "why": "Preserves behavior, as 'no loss of fidelity' requires; decides nothing the request left open."
+    },
+    {
+     "id": "T169-D3 escape marker out of the commands",
+     "summary": "The escape marker each command carried (so the guard-file guard would pass the settings edit) is dropped; the edit goes through make guard-edit and its reason into the guard log and commit message.",
+     "class": "within",
+     "why": "The marker was the permit mechanism, not information a hook message's reader needs; the guard-file guard still refuses an unpermitted settings edit, so enforcement is unchanged ('real enforcement', 2026-11-19) and only the repeated token cost goes."
+    },
+    {
+     "id": "T169-D4 launcher held as a guard file",
+     "summary": "scripts/hooks/l7r-hook is added to guard_file_hooks.rs GUARD_SOURCE and make_only_hooks.rs GUARD_FILE/SOURCE_NAMES; named l7r-hook rather than run so make-only's substring screen does not walk most commands.",
+     "class": "within",
+     "why": "The launcher now decides what the settings decided, so holding it as the settings were held keeps the protection the old commands had - no loss of fidelity. The name is an implementation choice inside the request."
+    },
+    {
+     "id": "T169-D5 wave replay sets CLAUDE_PROJECT_DIR",
+     "summary": "workflow_hooks.rs replays a tree's settings commands with CLAUDE_PROJECT_DIR set to that tree, since the new command depends on it and a missing launcher would exit 127 and let a unit through unguarded.",
+     "class": "within",
+     "why": "A defect the change itself would introduce (a guard silently passing work, a wrong outcome), fixed in the same task; keeps behavior the same, as asked."
+    },
+    {
+     "id": "T169-D11 launcher resolved through CLAUDE_PROJECT_DIR always",
+     "summary": "The old command read CLAUDE_PROJECT_DIR only when the mirror had no dispatcher; the new one always finds the launcher through it, so a session whose project directory lacks scripts/hooks/l7r-hook would run no hook.",
+     "class": "within",
+     "why": "The launcher lives in the same tree as the settings that name it, so any session loading these settings from a tree has it; the one consumer that ran settings against another tree (the wave replay) is fixed (D5), and page sessions are observed to run from the clone's root (pages/src/runner.rs current_dir(root)). The block shows no case where these settings load without the launcher, so no behavior is lost."
+    },
+    {
+     "id": "T169-D6 HOOK_COMMAND_BUDGET length test",
+     "summary": "The hooks suite gains a length case refusing any hook command over 64 characters (a knob, GUESS), plus an entry case requiring each entry to be the launcher and launcher cases.",
+     "class": "within",
+     "why": "A test whose only effect is to keep the requested shortening in place (delete the shortening and the check has nothing left to check) is enforcement of the request, not unrequested scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T169-D7 GUARD_FILE whole-name fix",
+     "summary": "make-only's GUARD_FILE alternative l7r-guard\\.sh matched any name ending so and refused a Python write of tests/hooks/test-l7r-guard.sh; the dispatcher's and launcher's names become whole names, pinned by the left-alone case; the pattern's other alternatives were read for the same shape (method stated).",
+     "class": "within",
+     "why": "A check refusing good work is a defect (constitution XIV); fixing it as found, with the class searched and the method recorded, is fix-as-we-go, not a narrowing."
+    },
+    {
+     "id": "T169-D8 live-probe event lines left booked by fallback",
+     "summary": "The two live claude -p probes left 18 lines in 449's event log booked to T341 and 4 in 451's booked to T168 by the clone's mark (fallback), about a minute of where-time; left as the cost of a live test, not a defect. The first probe's one escalation-check pass has its ledger row written by hand, so no landing refuses on it; the second left no review pass.",
+     "class": "within",
+     "why": "The fallback attribution worked as designed on an untagged session; a minute of probe noise is a difference no reader of where-time's report would act on, not a wrong outcome of a tool, so leaving it needs no ruling. The section states it as found-and-left with its measurement."
+    },
+    {
+     "id": "T169-D9 verification shape",
+     "summary": "Hand comparison of all nine old vs new commands (same stdout, stderr, exit), red-first suite and crate tests, two live sessions; SessionStart, setup and PostToolUseFailure, which print nothing on a healthy call, are covered by the hand comparison and suite rather than live.",
+     "class": "within",
+     "why": "Verification of the requested 'no loss of fidelity'; events that emit nothing cannot be observed live, so covering them by the hand comparison narrows nothing the request asked for."
+    },
+    {
+     "id": "T169-D10 performance work",
+     "summary": "Classed as performance work under 451 FR-013 (the builders' loop), claimed in tokens, not time: per-call wall time is measured unchanged within noise.",
+     "class": "within",
+     "why": "The block claims a token saving, not a speed-up. That rests on request.md: the GM framed this amendment as a token cost (2026-11-23, 'That amount of output consumes tokens'), and the approved 2026-11-19 improvement 1 ties a builder's context size to its model calls' speed, so fewer stored characters per hook message serves the builders' loop FR-013 names. The scheduling label decides nothing the request left open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T170": {
+   "section_sha256": "bf1e903a0f0bcca1c259ae0978830dbfac30268519587370c9255c7363ea050e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 approach",
+     "summary": "Measure which guard messages cost most (count x length), shorten the top ones keeping every fix command and escape, and hold every suite-rendered message to a budget and a content-keyed review instead of a per-hook comment",
+     "class": "within",
+     "why": "The GM asked for fewer tokens with no loss of fidelity, mechanically enforced, and asked 'What do you think?' about the comment form. A budget check plus a content-keyed review enforces the same thing mechanically and cannot drift from the text the way a comment can. Every new or changed wording is held to it."
+    },
+    {
+     "id": "D2 clone-sync repeat",
+     "summary": "Mid-task notice in full once, then a 53-character line while unchanged; said in full again after a sync, a failed refresh or a SessionStart",
+     "class": "within",
+     "why": "Fewer tokens. A repeat carries no new information and the full text comes back whenever the state changes."
+    },
+    {
+     "id": "D3 ledger-owed brief",
+     "summary": "A commit's notice gives the count, the first row and make ledger-owed for the rest, with the fix and LEDGER_ROWS_OK in full; history cut to the code comment",
+     "class": "within",
+     "why": "Fewer tokens. The command for the rest, the fix and the escape are all kept."
+    },
+    {
+     "id": "D4 no-poll rewrites",
+     "summary": "Seven rewrite notices say what was done and what to do; the history moves to the code comment",
+     "class": "within",
+     "why": "Fewer tokens. The actionable content is kept."
+    },
+    {
+     "id": "D5 batching",
+     "summary": "Notice trimmed from 278 to 248 characters",
+     "class": "within",
+     "why": "Fewer tokens."
+    },
+    {
+     "id": "D6 house-style code spans",
+     "summary": "House-style notices put each word in a code span, so the record no longer trips the house-style delta check",
+     "class": "within",
+     "why": "A defect the work itself exposed (the push failed), fixed in the task. It costs a few characters."
+    },
+    {
+     "id": "D7 head column",
+     "summary": "The record's head column is the start of the hashed wording, with paths, ids and numbers masked, and it never ends inside a code span",
+     "class": "within",
+     "why": "Keeps the enforcement record stable and keeps it passing the delta check. Fixes a defect the closing checks found."
+    },
+    {
+     "id": "D8 stored head masks relative paths (changed since CLEAR)",
+     "summary": "Masks::stored masks relative paths in the head at the record's one write. Keys are unchanged. REHEAD=1 rewrote the 290 heads, the other columns did not change, and the test went red first",
+     "class": "within",
+     "why": "Fixes a defect found at landing: the preflight refused a head that carried a built research page's path. It changes neither which wordings are enforced nor their keys, so the request's enforcement is untouched. It narrows nothing."
+    },
+    {
+     "id": "D9 list caps",
+     "summary": "A list in a guard message shows its first two items and 'and N more:' with a command (or a kept file) that prints all of them, and the whole list wherever that is no longer. Eight list-growing wordings found by a stated census are capped and held at their worst case. Adds make crate-checks CRATE= and makes stale-terms print every candidate",
+     "class": "within",
+     "why": "Fewer tokens with no loss of fidelity: every item can still be reached in full by the named command, and the fix commands and escapes are kept. The census names its search space. The new target keeps FR-007's naming of each changed crate's checks."
+    },
+    {
+     "id": "D10 review rounds",
+     "summary": "Every changed wording is reviewed by message-check through round 7. One BREVITY suggestion (BACKGROUNDED's clause) was not taken, and round 2 then passed that clause",
+     "class": "within",
+     "why": "This is the subagent review the GM asked for. Declining one cut keeps a piece of information the reader needs (no loss of fidelity), and the reviewer later passed it."
+    },
+    {
+     "id": "D11 budgets",
+     "summary": "NOTICE_BUDGET 900 and REFUSE_BUDGET 1,800, labeled GUESS and set from the longest rendered wordings rounded up",
+     "class": "within",
+     "why": "The mechanical limit the request implies. The knobs are labeled and measured."
+    },
+    {
+     "id": "D12 top-ten items left",
+     "summary": "Left unshortened here: finished-run's detached-run block (3), the set-down blocks (4, 7, 10, T171's), review-round's long refusal (8, seen twice), the persisted context (9, not a guard message whose source is named), and finished-run's Stop notices (they never reach the model)",
+     "class": "within",
+     "why": "Each has a measured reason: each run's text is distinct, the work belongs to another task, it was seen twice, or it costs nothing. None is a wrong outcome left in place."
+    },
+    {
+     "id": "D13 255 wordings baselined unreviewed, filed T177",
+     "summary": "Wordings that stood before T170 are marked BASELINE without review. The pop-ups' batch refusal and set-down's blocks are not held at their worst case. T177 is filed as the next performance work, before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The enforcement the GM asked for exists and holds every new or changed wording. Each baselined wording is within budget and is one sessions already read today, so nothing is a wrong outcome. The rest of the review is a filed and ordered task in the same feature, not dropped. The pop-ups' list is its fix command's own argument, so capping it would lose fidelity."
+    },
+    {
+     "id": "D14 silent suites, filed T174",
+     "summary": "repo-safety, shell-check and source-block render nothing to the check, and the finished-run and set-down blocks bypass protocol::run, so the budget check does not hold them yet. T174 is filed after T170 and before T173",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Reaching them needs each of those suites to drive the binary's hook path, which is outside T170's guards. The gap is measured (17 of 58 corpus files empty), named, filed and ordered in the same feature, so the mechanical enforcement is completed rather than given up."
+    },
+    {
+     "id": "D15 order",
+     "summary": "Runs after T169 and T171. T174 before T173. T177 before T22",
+     "class": "within",
+     "why": "Sequencing that follows FR-013's performance-first rule. Nothing the request asked for is removed."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T168 (observed 2026-11-23, 451 T167's plan section: 449 T330's page sessions' lines sat under T312 and T328 in the 449 log, and `make events-refile` moves lines across features but never re-tasks one within a feature)",
+    "### T168 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T168-1 retask mode of the existing refile",
+     "summary": "Re-tasking is a new --retask / RETASK= mode of make events-refile (refile/retask.rs, called from refile::cli_in), not a new tool.",
+     "class": "within",
+     "why": "Serves the request's per-task breakdown ('for each task ... where our time went', 2026-11-19) and the tooling question's 'no new tool to learn' (the approved proposal); correcting misbooked lines is what makes FR-005's per-task columns and SC-002 true for 449. Placement in the existing command narrows nothing."
+    },
+    {
+     "id": "T168-2 the brief's task via the shared reader",
+     "summary": "The feature and task a session is re-booked to come from set_down_hooks::page_session_brief (T161), the same reader the writer uses.",
+     "class": "within",
+     "why": "An implementation choice that keeps the correction and the writer (T167) agreeing; nothing asked is narrowed."
+    },
+    {
+     "id": "T168-3 idempotent, DRY=1, write_back, unlisted and task-less sessions reported and left",
+     "summary": "A line already on its brief's task is not rewritten; DRY=1 writes nothing; the rewrite uses refile's write_back to keep lines a live hook appends; a session not in the index or whose brief names no task is reported and left.",
+     "class": "within",
+     "why": "Safety properties of a rewrite of a live log. Leaving a session whose brief names no task is not a carve-out: there is no task to book it to, and it is reported, not silently dropped."
+    },
+    {
+     "id": "T168-4 2647 and f1d2 book to T333, not T330",
+     "summary": "Two of the three sessions the observation calls T330's are booked to T333 because their briefs' first lines name T333.",
+     "class": "within",
+     "why": "The direct consequence of the stated rule (minutes credited to the task the brief names), measured from the briefs' first lines; it applies the rule rather than excepting a case from it."
+    },
+    {
+     "id": "T168-5 where-time's first table T330 row stays 0",
+     "summary": "After the re-booking, the agents table credits T330 (180 agents, 76.2 agent minutes) and T333; the first table's T330 row stays 0 because that table books the main session's own wall time.",
+     "class": "within",
+     "why": "A statement of what each table measures (FR-005 keeps the critical-path wall clock apart from summed agent-minutes, as the approved proposal asked), not a defect left: the fix is to page-session (agent) lines, and the first table never counted those."
+    },
+    {
+     "id": "T168-6 order and [perf] class",
+     "summary": "Lands after T167 and before any landing that reads 449's per-task time; tagged [perf] as measurement work, with no engine-speed checklist.",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task [is] to be counted as a performance task for the purpose of scheduling and coming first'; the order follows the dependency on T167."
+    },
+    {
+     "id": "T168-7 tests written with the code",
+     "summary": "No red run recorded; the tests assert the re-booked counts, untouched lines, the second run's 0, the dry run's unchanged bytes, the unlisted and task-less sessions, and a missing log's exit 1.",
+     "class": "within",
+     "why": "FR-012's red-first requirement covers the refusals of FR-006 to FR-009, FR-011 and FR-013; this is a correction tool, not one of those refusals, so no requirement of the spec is narrowed. Test discipline beyond that is not a fidelity question."
+    },
+    {
+     "id": "T168-8 backup before the real run",
+     "summary": "The 449 log was backed up to .git/l7r-events/449-rust-codebase.jsonl.pre-t168 before the run.",
+     "class": "within",
+     "why": "An operational precaution; narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command 6,665 times, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))",
+    "### T169 Approach (checklist part A)",
+    "### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "launcher",
+     "summary": "The nine settings hook entries become \"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook <event> (or setup); timeouts and status message unchanged; the logic moves into a POSIX sh launcher the harness never echoes.",
+     "class": "within",
+     "why": "The GM 2026-11-23 asked whether the hooks' token cost could be cut 'with no loss of fidelity'. The echoed command is part of every hook message's transcript cost; moving it into a file with the same events, timeouts and dispatcher is the same thing in fewer tokens."
+    },
+    {
+     "id": "mirror-first",
+     "summary": "The launcher runs the mirror's l7r-guard.sh if executable, else the tree's copy; setup runs the mirror's setup-dev-env.sh --ensure if present, else the tree's; CLONE_MAIN is its test seam.",
+     "class": "within",
+     "why": "Reproduces the old commands' selection (449 R6) so behavior is unchanged, which is the 'no loss of fidelity' half of the request."
+    },
+    {
+     "id": "escape-marker",
+     "summary": "The GUARD_EDIT_OK marker and reasons leave the commands; the edit goes through make guard-edit, the reasons go in the guard log, the commit and the launcher's header.",
+     "class": "within",
+     "why": "The marker served the guard-file guard, not the reader of a hook message; its supported form is kept and the reasons are retained in the launcher header, so nothing a hook does or says is lost."
+    },
+    {
+     "id": "guard-file",
+     "summary": "The launcher is held as a guard file on both routes (guard_file_hooks GUARD_SOURCE; make_only GUARD_FILE and SOURCE_NAMES), and named l7r-hook rather than run so make-only's substring screen is not widened.",
+     "class": "within",
+     "why": "Keeps the protection the settings' commands had now that the launcher decides what they decided; preserves behavior rather than narrowing anything."
+    },
+    {
+     "id": "wave-replay",
+     "summary": "workflow_hooks.rs replays a tree's settings commands with CLAUDE_PROJECT_DIR set to that tree.",
+     "class": "within",
+     "why": "Fixes a wrong outcome the change would otherwise introduce (a replay exiting 127 and a unit passing unguarded); required for no loss of behavior."
+    },
+    {
+     "id": "budget-test",
+     "summary": "HOOK_COMMAND_BUDGET = 64 (a knob, GUESS) with suite cases for length, entry form, launcher behavior and timeouts.",
+     "class": "within",
+     "why": "Enforcement of what was asked: delete the shorter-command behavior and the check has nothing left to check. The GM's own message asks about mechanical enforcement of hook brevity."
+    },
+    {
+     "id": "make-only-regex",
+     "summary": "make-only's GUARD_FILE alternatives for the dispatcher and launcher become whole names ((?<![\\w-])), fixing the refusal of a write to tests/hooks/test-l7r-guard.sh; other alternatives read and judged suffixes on purpose.",
+     "class": "within",
+     "why": "A check refusing good work is a defect; fixed in the task with its search space stated (every alternative of the pattern read), per fix-as-we-go."
+    },
+    {
+     "id": "probe-lines",
+     "summary": "The live probe's 18 event-log lines, about a minute, stay booked to T341 by the clone's fallback mark; not treated as a defect.",
+     "class": "within",
+     "why": "Leaves a record of a real event under the clone's fallback attribution; about a minute in where-time is a difference no reader of the report would see, not a wrong outcome of the kind the defect rule reaches, and it narrows nothing the GM asked."
+    },
+    {
+     "id": "verification",
+     "summary": "Live session ran under the launcher's first name run; the rename to l7r-hook is proven by the nine-command hand comparison and the suite; SessionStart, setup and PostToolUseFailure are covered by hand comparison and suite since they emit nothing live.",
+     "class": "within",
+     "why": "A choice of verification method for 'fires as before', disclosed in full; it does not reduce what the task delivers or what the GM asked for."
+    },
+    {
+     "id": "perf-class",
+     "summary": "T169 is classed performance work under 451 FR-013, in tokens rather than wall time (the builders' loop).",
+     "class": "within",
+     "why": "The GM's 2026-11-23 message frames hook output as a token cost; the request's own improvement 1 ties context growth to slower model calls, and FR-013 names the builders' loop. Classing a context-size reduction as performance work is inside FR-013's ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command in 6,665 stored occurrences, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))",
+    "### T169 Approach (checklist part A)",
+    "### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T169-D1 launcher",
+     "summary": "Each of the nine hook entries in .claude/settings.json becomes \"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook <event> (or setup); a new POSIX sh launcher does what the inline commands did (mirror's l7r-guard.sh first if executable, else the copy beside it; setup runs the mirror's setup-dev-env.sh --ensure else the tree's), with the commands' reasons moved into its header.",
+     "class": "within",
+     "why": "The 2026-11-23 amendment asks whether hooks can 'accomplish the same thing with no loss of fidelity and fewer tokens'. The harness prints the entry's command with every block or notice, so the command is part of the hook output the GM named; shortening it from 239-330 to 49-63 characters while keeping the mirror-first dispatcher choice, the events and the behavior (hand comparison: all nine identical) is exactly 'the same thing ... fewer tokens'."
+    },
+    {
+     "id": "T169-D2 timeouts and status unchanged",
+     "summary": "Timeouts (60/600/900 s, above the wrapper's 45 s build limit) and the status message stay as they are.",
+     "class": "within",
+     "why": "Preserves behavior, as 'no loss of fidelity' requires; decides nothing the request left open."
+    },
+    {
+     "id": "T169-D3 escape marker out of the commands",
+     "summary": "The escape marker each command carried (so the guard-file guard would pass the settings edit) is dropped; the edit goes through make guard-edit and its reason into the guard log and commit message.",
+     "class": "within",
+     "why": "The marker was the permit mechanism, not information a hook message's reader needs; the guard-file guard still refuses an unpermitted settings edit, so enforcement is unchanged ('real enforcement', 2026-11-19) and only the repeated token cost goes."
+    },
+    {
+     "id": "T169-D4 launcher held as a guard file",
+     "summary": "scripts/hooks/l7r-hook is added to guard_file_hooks.rs GUARD_SOURCE and make_only_hooks.rs GUARD_FILE/SOURCE_NAMES; named l7r-hook rather than run so make-only's substring screen does not walk most commands.",
+     "class": "within",
+     "why": "The launcher now decides what the settings decided, so holding it as the settings were held keeps the protection the old commands had - no loss of fidelity. The name is an implementation choice inside the request."
+    },
+    {
+     "id": "T169-D5 wave replay sets CLAUDE_PROJECT_DIR",
+     "summary": "workflow_hooks.rs replays a tree's settings commands with CLAUDE_PROJECT_DIR set to that tree, since the new command depends on it and a missing launcher would exit 127 and let a unit through unguarded.",
+     "class": "within",
+     "why": "A defect the change itself would introduce (a guard silently passing work, a wrong outcome), fixed in the same task; keeps behavior the same, as asked."
+    },
+    {
+     "id": "T169-D11 launcher resolved through CLAUDE_PROJECT_DIR always",
+     "summary": "The old command read CLAUDE_PROJECT_DIR only when the mirror had no dispatcher; the new one always finds the launcher through it, so a session whose project directory lacks scripts/hooks/l7r-hook would run no hook.",
+     "class": "within",
+     "why": "The launcher lives in the same tree as the settings that name it, so any session loading these settings from a tree has it; the one consumer that ran settings against another tree (the wave replay) is fixed (D5), and page sessions are observed to run from the clone's root (pages/src/runner.rs current_dir(root)). The block shows no case where these settings load without the launcher, so no behavior is lost."
+    },
+    {
+     "id": "T169-D6 HOOK_COMMAND_BUDGET length test",
+     "summary": "The hooks suite gains a length case refusing any hook command over 64 characters (a knob, GUESS), plus an entry case requiring each entry to be the launcher and launcher cases.",
+     "class": "within",
+     "why": "A test whose only effect is to keep the requested shortening in place (delete the shortening and the check has nothing left to check) is enforcement of the request, not unrequested scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T169-D7 GUARD_FILE whole-name fix",
+     "summary": "make-only's GUARD_FILE alternative l7r-guard\\.sh matched any name ending so and refused a Python write of tests/hooks/test-l7r-guard.sh; the dispatcher's and launcher's names become whole names, pinned by the left-alone case; the pattern's other alternatives were read for the same shape (method stated).",
+     "class": "within",
+     "why": "A check refusing good work is a defect (constitution XIV); fixing it as found, with the class searched and the method recorded, is fix-as-we-go, not a narrowing."
+    },
+    {
+     "id": "T169-D8 live-probe event lines left booked by fallback",
+     "summary": "The two live claude -p probes left 18 lines in 449's event log booked to T341 and 4 in 451's booked to T168 by the clone's mark (fallback), about a minute of where-time; left as the cost of a live test, not a defect. The first probe's one escalation-check pass has its ledger row written by hand, so no landing refuses on it; the second left no review pass.",
+     "class": "within",
+     "why": "The fallback attribution worked as designed on an untagged session; a minute of probe noise is a difference no reader of where-time's report would act on, not a wrong outcome of a tool, so leaving it needs no ruling. The section states it as found-and-left with its measurement."
+    },
+    {
+     "id": "T169-D9 verification shape",
+     "summary": "Hand comparison of all nine old vs new commands (same stdout, stderr, exit), red-first suite and crate tests, two live sessions; SessionStart, setup and PostToolUseFailure, which print nothing on a healthy call, are covered by the hand comparison and suite rather than live.",
+     "class": "within",
+     "why": "Verification of the requested 'no loss of fidelity'; events that emit nothing cannot be observed live, so covering them by the hand comparison narrows nothing the request asked for."
+    },
+    {
+     "id": "T169-D10 performance work",
+     "summary": "Classed as performance work under 451 FR-013 (the builders' loop), claimed in tokens, not time: per-call wall time is measured unchanged within noise.",
+     "class": "within",
+     "why": "The block claims a token saving, not a speed-up. That rests on request.md: the GM framed this amendment as a token cost (2026-11-23, 'That amount of output consumes tokens'), and the approved 2026-11-19 improvement 1 ties a builder's context size to its model calls' speed, so fewer stored characters per hook message serves the builders' loop FR-013 names. The scheduling label decides nothing the request left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T170 (observed 2026-11-23: the GM, request.md \"on hook output length\", asked for fewer tokens with no loss of fidelity, enforced mechanically; the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds 891,521 characters of guard messages the model read, 2,848 texts each counted once, measured 2026-11-23 by `/tmp/t170/rank.py`)",
+    "### T170 Approach (checklist part A)",
+    "### T170 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "rank guard messages by frequency x length, each text once, from the records that reach the model (coordinator and its 1,731 subagent transcripts)",
+     "class": "within",
+     "why": "the measurement behind 'fewer tokens'"
+    },
+    {
+     "id": "D2",
+     "summary": "clone-sync mid-task notice in full once, then a 53-character line while unchanged; full again after a sync, a failed refresh or a SessionStart (the guard now taking SessionStart)",
+     "class": "within",
+     "why": "no loss of fidelity: a compacted or cleared context gets the full text back"
+    },
+    {
+     "id": "D3",
+     "summary": "ledger-owed commit notice: count, first row, make ledger-owed for the rest, fix command and LEDGER_ROWS_OK in full (--brief); citation and cost-note history moved to the code's comment",
+     "class": "within",
+     "why": "every row one command away, the actions unchanged"
+    },
+    {
+     "id": "D4",
+     "summary": "no-poll's seven rewrite notices and batching's notice cut, each rule's history moved to the code's comment; BACKGROUNDED's 'whatever follows the loop' kept against round 1's suggestion",
+     "class": "within",
+     "why": "fix commands and escapes kept (FR-008, FR-012); the kept clause keeps fidelity"
+    },
+    {
+     "id": "D5",
+     "summary": "finished-run's Stop NOTICES left",
+     "class": "within",
+     "why": "measured never to reach the model (none of 8,728 request blobs)"
+    },
+    {
+     "id": "D6",
+     "summary": "house-style notices put words in code spans; the record's head column masked and never ends inside a code span; 'someone elses' corrected",
+     "class": "within",
+     "why": "defects found while doing the work, fixed"
+    },
+    {
+     "id": "D7",
+     "summary": "a list in a guard message shows its first two items (SHOWN, GUESS) and 'and N more:' with the command printing them all, or a cat of a kept file; the whole list where no shorter; fix commands and escapes in full",
+     "class": "within",
+     "why": "every item stays whole and one command away; the cap never hides an item to save nothing; the reviews passed each wording for fidelity"
+    },
+    {
+     "id": "D8",
+     "summary": "static-runs' refusal names one new target, make crate-checks CRATE=\"<crates>\" (test, lint, format --check, cover)",
+     "class": "within",
+     "why": "still names the crate-scoped checks for each crate the delta changes (FR-007); the target exists only so the shortened refusal keeps that"
+    },
+    {
+     "id": "D9",
+     "summary": "make stale-terms prints every candidate (it stopped at 25 with no way to the rest); blocked-fetch's notice shows one attempt and make attempts URL=",
+     "class": "within",
+     "why": "the commands the capped lists point to, so nothing is lost; the 25-cap was a defect, fixed"
+    },
+    {
+     "id": "D10",
+     "summary": "the census of list-growing wordings (transcript renderings past 600 and 1.5x their shortest, each confirmed from source) finds eight; each capped and held at its worst case by suite_tools/messages/worst.rs, which make guard-messages checks against budget and verdict",
+     "class": "within",
+     "why": "answers round 1's N3: enforcement of the request at the length sessions read; search space stated; the two other groups the filter keeps (check-wave, round-cap) wrap the tripwire refusal, one of the eight"
+    },
+    {
+     "id": "D11",
+     "summary": "a content-keyed record (dev/guard-messages.tsv: length, budget, review verdict) in place of the per-hook comment; characters, not words",
+     "class": "within",
+     "why": "the GM asked 'What do you think?'; the record keeps each message's size and the review that passed it, as the comment would, without drifting from the text"
+    },
+    {
+     "id": "D12",
+     "summary": "the review: message-check's rubric as an ad-hoc Sonnet agent, seven rounds, each FAILED BREVITY acted on and the declined suggestion reasoned",
+     "class": "within",
+     "why": "the subagent check the GM named"
+    },
+    {
+     "id": "D13",
+     "summary": "check refusals drop the line repeating the escape and the dead scripts/hooks/lib/hm_checks.py path; feature-number citations cut from check-bundle and record-edit refusals",
+     "class": "within",
+     "why": "brevity with the escape still named; a dead path is a defect, fixed"
+    },
+    {
+     "id": "D14",
+     "summary": "NOTICE_BUDGET 900, REFUSE_BUDGET 1,800 (GUESS) from the longest renderings after the cuts, not the 90th percentile",
+     "class": "within",
+     "why": "a knob value; with T177 the baseline it tolerates is time-limited"
+    },
+    {
+     "id": "D15",
+     "summary": "left: finished-run's detached-run block's repeats (distinct runs), set-down's blocks to T171's rule, the persisted context (9)",
+     "class": "within",
+     "why": "each with a stated cost-level reason"
+    },
+    {
+     "id": "D16",
+     "summary": "ordered after T169 and T171; T174 before T173; classed [perf] under FR-013",
+     "class": "within",
+     "why": "order and class under FR-013 and the GM's 2026-11-20 ordering"
+    },
+    {
+     "id": "N1",
+     "summary": "255 wordings stay BASELINE unreviewed (the costliest finished-run's block and make-only's refusal), the pair-hooks citation round 6 failed, and two list-growing messages not held at worst case (pop-ups' batch refusal, set-down's open-task blocks): filed as T177, the next performance work after T170, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "sequencing, not exemption: round 1's N1 fix allowed a filed task ordered as the next performance work and named in found-and-left; T177 is filed (task-add log 03:48) and ordered; the GM's 'each hook ... reviewed' still binds every wording when it lands; holds only while T177 stays filed and ordered"
+    },
+    {
+     "id": "N2",
+     "summary": "the budget check holds only what the suites drive through protocol::run; repo-safety, shell-check and source-block (and, as the block states it, finished-run's and set-down's blocks) deferred to T174, after T170 and before T173",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "unchanged from round 1: the rule still binds those guards, T174 is filed in the same feature with its order and reason; holds only while T174 stays filed and ordered"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T170 (observed 2026-11-23: the GM, request.md \"on hook output length\", asked for fewer tokens with no loss of fidelity, enforced mechanically; the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds 891,521 characters of guard messages the model read, 2,848 texts each counted once, measured 2026-11-23 by `/tmp/t170/rank.py`)",
+    "### T170 Approach (checklist part A)",
+    "### T170 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 approach",
+     "summary": "Measure which guard messages cost most (count x length), shorten the top ones keeping every fix command and escape, and hold every suite-rendered message to a budget and a content-keyed review instead of a per-hook comment",
+     "class": "within",
+     "why": "The GM asked for fewer tokens with no loss of fidelity, mechanically enforced, and asked 'What do you think?' about the comment form. A budget check plus a content-keyed review enforces the same thing mechanically and cannot drift from the text the way a comment can. Every new or changed wording is held to it."
+    },
+    {
+     "id": "D2 clone-sync repeat",
+     "summary": "Mid-task notice in full once, then a 53-character line while unchanged; said in full again after a sync, a failed refresh or a SessionStart",
+     "class": "within",
+     "why": "Fewer tokens. A repeat carries no new information and the full text comes back whenever the state changes."
+    },
+    {
+     "id": "D3 ledger-owed brief",
+     "summary": "A commit's notice gives the count, the first row and make ledger-owed for the rest, with the fix and LEDGER_ROWS_OK in full; history cut to the code comment",
+     "class": "within",
+     "why": "Fewer tokens. The command for the rest, the fix and the escape are all kept."
+    },
+    {
+     "id": "D4 no-poll rewrites",
+     "summary": "Seven rewrite notices say what was done and what to do; the history moves to the code comment",
+     "class": "within",
+     "why": "Fewer tokens. The actionable content is kept."
+    },
+    {
+     "id": "D5 batching",
+     "summary": "Notice trimmed from 278 to 248 characters",
+     "class": "within",
+     "why": "Fewer tokens."
+    },
+    {
+     "id": "D6 house-style code spans",
+     "summary": "House-style notices put each word in a code span, so the record no longer trips the house-style delta check",
+     "class": "within",
+     "why": "A defect the work itself exposed (the push failed), fixed in the task. It costs a few characters."
+    },
+    {
+     "id": "D7 head column",
+     "summary": "The record's head column is the start of the hashed wording, with paths, ids and numbers masked, and it never ends inside a code span",
+     "class": "within",
+     "why": "Keeps the enforcement record stable and keeps it passing the delta check. Fixes a defect the closing checks found."
+    },
+    {
+     "id": "D8 stored head masks relative paths (changed since CLEAR)",
+     "summary": "Masks::stored masks relative paths in the head at the record's one write. Keys are unchanged. REHEAD=1 rewrote the 290 heads, the other columns did not change, and the test went red first",
+     "class": "within",
+     "why": "Fixes a defect found at landing: the preflight refused a head that carried a built research page's path. It changes neither which wordings are enforced nor their keys, so the request's enforcement is untouched. It narrows nothing."
+    },
+    {
+     "id": "D9 list caps",
+     "summary": "A list in a guard message shows its first two items and 'and N more:' with a command (or a kept file) that prints all of them, and the whole list wherever that is no longer. Eight list-growing wordings found by a stated census are capped and held at their worst case. Adds make crate-checks CRATE= and makes stale-terms print every candidate",
+     "class": "within",
+     "why": "Fewer tokens with no loss of fidelity: every item can still be reached in full by the named command, and the fix commands and escapes are kept. The census names its search space. The new target keeps FR-007's naming of each changed crate's checks."
+    },
+    {
+     "id": "D10 review rounds",
+     "summary": "Every changed wording is reviewed by message-check through round 7. One BREVITY suggestion (BACKGROUNDED's clause) was not taken, and round 2 then passed that clause",
+     "class": "within",
+     "why": "This is the subagent review the GM asked for. Declining one cut keeps a piece of information the reader needs (no loss of fidelity), and the reviewer later passed it."
+    },
+    {
+     "id": "D11 budgets",
+     "summary": "NOTICE_BUDGET 900 and REFUSE_BUDGET 1,800, labeled GUESS and set from the longest rendered wordings rounded up",
+     "class": "within",
+     "why": "The mechanical limit the request implies. The knobs are labeled and measured."
+    },
+    {
+     "id": "D12 top-ten items left",
+     "summary": "Left unshortened here: finished-run's detached-run block (3), the set-down blocks (4, 7, 10, T171's), review-round's long refusal (8, seen twice), the persisted context (9, not a guard message whose source is named), and finished-run's Stop notices (they never reach the model)",
+     "class": "within",
+     "why": "Each has a measured reason: each run's text is distinct, the work belongs to another task, it was seen twice, or it costs nothing. None is a wrong outcome left in place."
+    },
+    {
+     "id": "D13 255 wordings baselined unreviewed, filed T177",
+     "summary": "Wordings that stood before T170 are marked BASELINE without review. The pop-ups' batch refusal and set-down's blocks are not held at their worst case. T177 is filed as the next performance work, before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The enforcement the GM asked for exists and holds every new or changed wording. Each baselined wording is within budget and is one sessions already read today, so nothing is a wrong outcome. The rest of the review is a filed and ordered task in the same feature, not dropped. The pop-ups' list is its fix command's own argument, so capping it would lose fidelity."
+    },
+    {
+     "id": "D14 silent suites, filed T174",
+     "summary": "repo-safety, shell-check and source-block render nothing to the check, and the finished-run and set-down blocks bypass protocol::run, so the budget check does not hold them yet. T174 is filed after T170 and before T173",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Reaching them needs each of those suites to drive the binary's hook path, which is outside T170's guards. The gap is measured (17 of 58 corpus files empty), named, filed and ordered in the same feature, so the mechanical enforcement is completed rather than given up."
+    },
+    {
+     "id": "D15 order",
+     "summary": "Runs after T169 and T171. T174 before T173. T177 before T22",
+     "class": "within",
+     "why": "Sequencing that follows FR-013's performance-first rule. Nothing the request asked for is removed."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T168 to T170, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

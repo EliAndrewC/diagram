@@ -80,11 +80,17 @@ fn whole(
     }
 }
 
-/// Ours, then each of theirs' rows that neither the base nor ours holds.
+/// Ours, but a base row theirs dropped, then each of theirs' rows that neither the base nor ours holds. WHY the drop (462 T545):
+/// `make archive-split` moves a closed task's rounds out of the record, so a side still holding the base's row unchanged is not a
+/// newer round - kept, it came back from a pre-split tree carried as ours; a map entry already merges so (`whole`).
 fn rows(base: Option<&Value>, ours: Option<&Value>, theirs: Option<&Value>) -> Value {
     let list = |v: Option<&Value>| v.and_then(Value::as_array).cloned().unwrap_or_default();
-    let (base, mut out) = (list(base), list(ours));
-    for row in list(theirs) {
+    let (base, theirs_rows) = (list(base), list(theirs));
+    let mut out: Vec<Value> = list(ours)
+        .into_iter()
+        .filter(|r| !base.contains(r) || theirs_rows.contains(r))
+        .collect();
+    for row in theirs_rows {
         if !base.contains(&row) && !out.contains(&row) {
             out.push(row);
         }

@@ -1,0 +1,668 @@
+{
+ "blocks": {
+  "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))": {
+   "sha256": "0f370c2bdf21d411f44788d312d9aab07d3927c57a11ea310b5c390e709aa05e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T106 Approach (checklist part A)": {
+   "sha256": "13914cab4af47b4b47bdf7f08fd894e317c9dec152e5e5e44c6c718e7f41012a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T107 (<why: the finding or measurement that files it>)": {
+   "sha256": "c4a9099273d11e181224ec1b4c5fd67b4bf47169d9af9acd68866404cc0505d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T107 Approach (checklist part A)": {
+   "sha256": "3f9c4471e2c83c366ef76fd3e014e3055ae535a11ada0da18dbcf9c8dae394c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T109 (<why: the finding or measurement that files it>)": {
+   "sha256": "c919fc596b8e792f1de4d06838ca7249e692a1bea9fb783100a588b70c999cb3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T109 Approach (checklist part A)": {
+   "sha256": "ef59bdce2e5fdf70cc6e0e83401b5098e290c91e89b26ee82c58aecf864f9f5a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T106": {
+   "section_sha256": "95bc62a80a7396b66e447ca56d1dc403fc6d5ee7a6ec02fd925ae85362c7407d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T106-forward-only",
+     "summary": "A correction is kept per agent and applied to that agent's later lines; lines filed before it stay as filed, with no general rewrite of the live log.",
+     "class": "within",
+     "why": "The spec has no requirement on re-numbered builders; the task exists to stop a re-numbered builder's files being set apart under the old number. In the measured case all three writes came after the SendMessage and the 8 earlier lines wrote nothing, so the forward rule fixes the whole observed wrong outcome. No defect is left: those earlier lines were also re-filed by hand (Found and left). A builder writing before it is corrected was not observed among the 136."
+    },
+    {
+     "id": "T106-signal-order",
+     "summary": "Signals are the coordinator's delivered SendMessage matching `T<new>, not T<old>` first, then the builder's own closing-checks/decide/task-start T= naming a task outside its brief and current filing; a two-task brief's second task moves nothing.",
+     "class": "within",
+     "why": "This is how the fix detects the re-number. The replay measured both directions: the SendMessage is needed to catch writes before the closing step, and the brief rule stops the T28+T29 wrong move. The request is not narrowed."
+    },
+    {
+     "id": "T106-CORRECTION-knob",
+     "summary": "The correction's wording pattern is a GUESS knob fitted on the one observed case, and the negatives are the night's own non-correction messages.",
+     "class": "within",
+     "why": "It is an implementation parameter, labeled GUESS as the project requires. A correction worded another way falls through to the builder's own closing step."
+    },
+    {
+     "id": "T106-store",
+     "summary": "The correction is stored as one file per agent under <events dir>-dispatches/<sid>.tasks/<aid>, not as a row in the dispatches side file, because the side file's TAIL would drop a long builder's correction.",
+     "class": "within",
+     "why": "Where the correction is stored is an implementation choice. It narrows nothing that was asked."
+    },
+    {
+     "id": "T106-chain",
+     "summary": "The corrected task is placed in the filing chain after a command's own T= and an Agent call's own words and before the brief, and corrects the task only, not the feature, so events-refile's BY BRIEF rule leaves corrected lines alone.",
+     "class": "within",
+     "why": "It keeps T26's and T53's chain for every agent that no correction names. It is an implementation decision."
+    },
+    {
+     "id": "T106-files",
+     "summary": "Fixed at the writer (filed.rs, dispatches.rs) with land-alone.sh and closing-checks.sh untouched, because they are T96's files, and event_log_hooks.rs untouched.",
+     "class": "within",
+     "why": "Both splits read each line's raw task, so fixing the writer corrects what both readers see. The end-to-end replay through both real splits measured all three files judged as T101's."
+    },
+    {
+     "id": "T106-hand-refile",
+     "summary": "The 229 lines already misfiled under T100 are rewritten to T101 in place, one byte at an offset, and the coordinator's dispatch line keeps T100.",
+     "class": "within",
+     "why": "It fixes the defect's existing consequence in the per-task breakdown (where-time F=451), which the request's per-task time breakdown needs. The read-back is recorded with its method."
+    },
+    {
+     "id": "T106-handoff-name",
+     "summary": "context_cap_hooks' handoff file takes the corrected task number, because it reads filed_at's task from the same chain.",
+     "class": "within",
+     "why": "It fixes, in this task, a known defect of the same cause (fix as we go)."
+    },
+    {
+     "id": "T106-perf-class",
+     "summary": "Tagged [perf] under FR-013, as work on the event log's data that where-time and the closing checks read.",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data and where-time's readers as performance work for ordering (the GM 2026-11-20). Correct per-task attribution of event-log lines is that data."
+    },
+    {
+     "id": "T106-order",
+     "summary": "After T26, T53, T74 and T96, and lands before T22.",
+     "class": "within",
+     "why": "It orders the task. It narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T108": {
+   "section_sha256": "ebe853af9e1feb146ff82572278c1b71009ee1c3bb0b50e6bdab8d33131541a2",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T108-fix",
+     "summary": "Replace the three copies of the backtracking quoted-string pattern in wait.rs and house_style_hooks.rs (cond_grammar's QUOTED, masked's QUOTED_SPAN, the held re-call shape) with shape::quoted_spans, made pub and must_use, nothing else of shape.rs changed",
+     "class": "within",
+     "why": "T108 is a [perf] task under FR-013 (a hook hang stalls the builders' loop), filed from T103's Found and left, so it falls under the GM's 2026-11-20 ask to prioritize performance work. The fix removes an exponential search, which is what the task is for. It narrows nothing that was asked."
+    },
+    {
+     "id": "T108-re-call-reading",
+     "summary": "RE_CALL plus re_call_patterns reproduce the held shape's reading, including its continuation from the character after the call's r when nothing closes the argument",
+     "class": "within",
+     "why": "An implementation choice that keeps the guard doing its job on the same calls. It neither narrows nor adds to the request."
+    },
+    {
+     "id": "T108-pins",
+     "summary": "Three hang pins, red first: wait's in T103's child-process form with a 10 s deadline (GUESS), and house style's two under the module's 30 s CPU bound (T81, CONVENTION). Both deadlines reused as they stand",
+     "class": "within",
+     "why": "FR-012's red-first form. These are tests that fail only if the hang the task fixes comes back, so they enforce the task rather than add scope."
+    },
+    {
+     "id": "T108-differentials-and-replay",
+     "summary": "Three exhaustive differential tests (55,987 / 55,987 / 66,430 texts, counts that follow from the alphabets and lengths) hold each new reading to the pattern it replaced, and a replay of T93's 9,646 commands shows 0 changed verdicts",
+     "class": "within",
+     "why": "This is evidence that the guards still do their job (the sheets a check passed still pass), which the GM's 2026-11-18 rule says is owed for a changed check. It is not offered as a requirement that bytes must match: the plan treats no difference as a stop and asks for no ruling on one. It is verification of the requested fix, not new scope."
+    },
+    {
+     "id": "T108-file-scope",
+     "summary": "Touch only wait.rs, house_style_hooks.rs, their tests and shape.rs, and nothing of T96's (shared::tree, event_log_hooks) or T92's (the arbiter and plan crates)",
+     "class": "within",
+     "why": "Coordination between concurrent tasks. Every copy left out is filed below with an order, so nothing the request or spec requires is dropped."
+    },
+    {
+     "id": "T108-left-T112",
+     "summary": "The same pattern in T96's tree.rs:70 QUOTED and tree/program.rs:63 TRIPLE, and tree::walk's hang on a plain command (house style still holds past 10 s on that shape after T108), left to T112, which lands before T22",
+     "class": "within",
+     "why": "A found-and-left item in FR-009's form: the reason (T96's builder has live uncommitted work in both files), the filed task id and its order ('lands before T22'). The defect is filed as performance work, so FR-013 schedules it first, and it is not carried past a next step. The Approach's goal states the remaining plain-command hang honestly instead of claiming it fixed. The spec requires no fix in this task, so nothing is narrowed."
+    },
+    {
+     "id": "T108-left-T113",
+     "summary": "The same pattern in make_only_hooks.rs:125, no_poll_hooks/pace.rs:36 and readme_hooks.rs:51 left to T113, which waits on no task and lands before T22. The class census is stated with its method (two greps over rust/, every hit read)",
+     "class": "within",
+     "why": "Again in FR-009's form: reason, id and order, plus the 'how every instance was found' line FR-009 asks for when a fix names a class. Splitting the work into a separately filed perf task, which FR-013 puts first, ordered before the next step, does not narrow what the GM asked or what the spec requires."
+    },
+    {
+     "id": "T108-closing-substitute",
+     "summary": "After two closing runs went RED only on make static's format check, a third make static was refused by FR-007's guard, so the crate-scoped format check (exit 0) stands for it, with lint, tests and cover clean before a whitespace-only rustfmt rewrap",
+     "class": "within",
+     "why": "FR-007 refuses a third make static and names the crate-scoped checks as the compliant command. The GM approved exactly that (improvement 2: crate-scoped checks while iterating). The landing's own gate still runs in full, so following the spec's own guard narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T110": {
+   "section_sha256": "2115b4ead409b19ec48a476c5ac5d85124211d1b2c13ef78542fb7487d9f2b73",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T110-binding",
+     "summary": "THE BINDING in shared::tree::program: a literal handed to a function the program defines once, reaching an open/write_text/write_bytes sink through a join (+, /, os.path.join, Path(a,b), plain f-string) with a module-level literal root bound once, is named at that join; under `placed` not also at the shell, make-only fail-closed keeps both.",
+     "class": "within",
+     "why": "This is the fix of the defect T110's line names (T92's builder's root+path writes missing from the event log's writes and so from land-alone's list), red first on T92's own command (FR-012 discipline). How the readers place the name is design inside the task."
+    },
+    {
+     "id": "T110-fail-open",
+     "summary": "Every other shape fails open as at HEAD: computed or twice-bound root, function defined twice, *args or star calls, parameter handed on or rebound, shadowed root, f-string expressions, mixed joins, other sinks.",
+     "class": "within",
+     "why": "The measured shape (82 literals in 22 session commands, all by +, and T92's 10 calls) is covered; the one measured uncovered shape that writes into the clone (computed root, 3 writes in 1 command) is a found-and-left defect filed as T125 with reason and order. Replays show no row lost a write, so nothing HEAD named is given up."
+    },
+    {
+     "id": "T110-sibling",
+     "summary": "THE SIBLING fixed here: top-level writes joining the root and literals alone (inline or through a name bound once), which joined_on dropped under `placed`, now named; gate-write consequently refuses such writes during a running gate (0 to 2 on 8 + 2 replay rows).",
+     "class": "within",
+     "why": "A defect found in the same reader and fixed in the same files (Principle XIV, fix as we go). The new gate-write refusals are a check that let bad work through now catching it, each replay move read and judged a correction; not new behavior beyond the guard's existing job."
+    },
+    {
+     "id": "T110-gate-write-calls",
+     "summary": "own_args stays: gate-write gets function-call literals blanked to $, so its verdicts on writes through an own function's call stay HEAD's until T49, which adds the query sparing the literals the binding places.",
+     "class": "within",
+     "why": "T110's line asks for the event log's writes (land-alone's list); gate-write's handling of own-function call literals is T49's filed work, which waits on T110 and builds on this reading. Sequencing with an existing task, not a narrowing of what T110 was asked."
+    },
+    {
+     "id": "T110-deferred-T121-T122-T125",
+     "summary": "Found and left: crate-wide make format rewriting other builders' files (T121), closing-checks' set-apart note not naming file-scale reds (T122), root taken from shell arguments (T125); each outside T110's two files, filed, landing before T22.",
+     "class": "within",
+     "why": "Each is a defect outside the task's ground-rule files, carried with the reason, a filed task id and its order as FR-009 requires; none is the defect T110 was filed to fix, and each is scheduled to be fixed inside this feature."
+    },
+    {
+     "id": "T110-closing-red-set-apart",
+     "summary": "Both closing-checks runs are RED only on T83's uncommitted files (format in tree/tests/quotes.rs; file-scale on tree.rs at 1,147 lines), set apart as T83's, not T110's.",
+     "class": "within",
+     "why": "The reds are in another task's files, attributed by the run logs; T110 is not excused from any check on its own files, and the unnamed-cause gap is filed as T122."
+    },
+    {
+     "id": "T110-cost",
+     "summary": "Cost judged against T96's 0.09 ms bar: no difference resolved in a hook call at load 27-31, some 0.04 ms a reading in the whole.",
+     "class": "within",
+     "why": "Measured with method and log; the task adds no performance claim beyond staying inside the existing bar."
+    },
+    {
+     "id": "T110-not-performance",
+     "summary": "Classed as not performance work: a correctness fix of the writes field land-alone reads.",
+     "class": "within",
+     "why": "The writes field serves landing, not the time measurement the GM counted as performance; the classification does not change what the request asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))",
+    "### T106 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T106-forward-only",
+     "summary": "A correction is kept per agent and applied to that agent's later lines; lines filed before it stay as filed, with no general rewrite of the live log.",
+     "class": "within",
+     "why": "The spec has no requirement on re-numbered builders; the task exists to stop a re-numbered builder's files being set apart under the old number. In the measured case all three writes came after the SendMessage and the 8 earlier lines wrote nothing, so the forward rule fixes the whole observed wrong outcome. No defect is left: those earlier lines were also re-filed by hand (Found and left). A builder writing before it is corrected was not observed among the 136."
+    },
+    {
+     "id": "T106-signal-order",
+     "summary": "Signals are the coordinator's delivered SendMessage matching `T<new>, not T<old>` first, then the builder's own closing-checks/decide/task-start T= naming a task outside its brief and current filing; a two-task brief's second task moves nothing.",
+     "class": "within",
+     "why": "This is how the fix detects the re-number. The replay measured both directions: the SendMessage is needed to catch writes before the closing step, and the brief rule stops the T28+T29 wrong move. The request is not narrowed."
+    },
+    {
+     "id": "T106-CORRECTION-knob",
+     "summary": "The correction's wording pattern is a GUESS knob fitted on the one observed case, and the negatives are the night's own non-correction messages.",
+     "class": "within",
+     "why": "It is an implementation parameter, labeled GUESS as the project requires. A correction worded another way falls through to the builder's own closing step."
+    },
+    {
+     "id": "T106-store",
+     "summary": "The correction is stored as one file per agent under <events dir>-dispatches/<sid>.tasks/<aid>, not as a row in the dispatches side file, because the side file's TAIL would drop a long builder's correction.",
+     "class": "within",
+     "why": "Where the correction is stored is an implementation choice. It narrows nothing that was asked."
+    },
+    {
+     "id": "T106-chain",
+     "summary": "The corrected task is placed in the filing chain after a command's own T= and an Agent call's own words and before the brief, and corrects the task only, not the feature, so events-refile's BY BRIEF rule leaves corrected lines alone.",
+     "class": "within",
+     "why": "It keeps T26's and T53's chain for every agent that no correction names. It is an implementation decision."
+    },
+    {
+     "id": "T106-files",
+     "summary": "Fixed at the writer (filed.rs, dispatches.rs) with land-alone.sh and closing-checks.sh untouched, because they are T96's files, and event_log_hooks.rs untouched.",
+     "class": "within",
+     "why": "Both splits read each line's raw task, so fixing the writer corrects what both readers see. The end-to-end replay through both real splits measured all three files judged as T101's."
+    },
+    {
+     "id": "T106-hand-refile",
+     "summary": "The 229 lines already misfiled under T100 are rewritten to T101 in place, one byte at an offset, and the coordinator's dispatch line keeps T100.",
+     "class": "within",
+     "why": "It fixes the defect's existing consequence in the per-task breakdown (where-time F=451), which the request's per-task time breakdown needs. The read-back is recorded with its method."
+    },
+    {
+     "id": "T106-handoff-name",
+     "summary": "context_cap_hooks' handoff file takes the corrected task number, because it reads filed_at's task from the same chain.",
+     "class": "within",
+     "why": "It fixes, in this task, a known defect of the same cause (fix as we go)."
+    },
+    {
+     "id": "T106-perf-class",
+     "summary": "Tagged [perf] under FR-013, as work on the event log's data that where-time and the closing checks read.",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data and where-time's readers as performance work for ordering (the GM 2026-11-20). Correct per-task attribution of event-log lines is that data."
+    },
+    {
+     "id": "T106-order",
+     "summary": "After T26, T53, T74 and T96, and lands before T22.",
+     "class": "within",
+     "why": "It orders the task. It narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T108 (T103's Found and left: the quoted-string pattern T103 gave shape a scan for, `([\"'])(?:\\\\.|(?!\\1).)*\\1`, stood also at `wait.rs:53` and `house_style_hooks.rs:85`; measured 2026-11-21 (`/tmp/t108/probe`, a case a process under `timeout 10`, `/tmp/t108/probe-before.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T108 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "perf-tag",
+     "summary": "T108 is a [perf] task under FR-013: the builders' loop, a Bash call's hooks hanging on an unclosed quote",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the builders' loop faster as performance work; a hook that hangs the loop until a timeout is exactly that. The request's 2026-11-20 'prioritize performance improvements' is served, not narrowed."
+    },
+    {
+     "id": "fix-by-scan",
+     "summary": "the quoted-string pattern in wait::cond_grammar and house_style_hooks::masked replaced by shape::quoted_spans (made pub, #[must_use]); QUOTED and QUOTED_SPAN deleted",
+     "class": "within",
+     "why": "This is the task as filed (T103's Found and left: wait.rs:53 and house_style_hooks.rs:85). It removes a hang, which is a defect under XIV (a tool that hangs). Nothing the GM asked for is cut back."
+    },
+    {
+     "id": "third-copy-re-call",
+     "summary": "the same file's held Python re-call shape (house_style_hooks.rs:79) also moved to the scan (RE_CALL plus re_call_patterns), with the shape's resume-after-r reading kept where nothing closes the argument",
+     "class": "within",
+     "why": "This widens the fix to a third instance of the same defect in a file the task already changes, and its probe shows that instance hung too. It widens the task, so it is not a narrowing, and it fixes a known defect in the task as the approved 'briefs that default to fixing in the task' (improvement 4) asks."
+    },
+    {
+     "id": "pins-and-deadlines",
+     "summary": "the hang pins reuse T103's 10 s child deadline (a GUESS) and T81's 30 s CPU bound (a CONVENTION); they were red first, then green",
+     "class": "within",
+     "why": "FR-012's red-first form applied to the fix. No new knob is introduced and none is moved. Labels as recorded: 370/3, 371/2, 375/1 measured 2026-11-21 by make rust-test."
+    },
+    {
+     "id": "differentials-and-replay",
+     "summary": "three differential tests hold each new reading to the pattern it replaced on exhaustive short texts (55,987 / 55,987 / 66,430, which are the exact counts of strings up to 6 over 6 symbols and up to 5 of 9 pieces); the 9,646-command replay of every wait and house style verdict, 0 changed, is listed as a Green exit",
+     "class": "within",
+     "why": "This narrows nothing that was asked. The replay is the owed showing that a changed check still does its job (the commands it passed still pass, the ones it corrected are still corrected), not an exactness standard over a drawn output. The differentials pin which spans count as quoted, which is behavior, on inputs where the old pattern was correct. Read it as evidence that everything works: a later intended change to these readings that alters a differential is a signal to read, never a stop by itself (the GM 2026-11-18). Today's measured result is 0 changed, so the exit criterion blocks nothing."
+    },
+    {
+     "id": "found-left-T96-copies",
+     "summary": "the copies at tree.rs:70 (QUOTED) and tree/program.rs:63 (TRIPLE), and with them the house style guard's remaining hang on a PLAIN command through tree::walk (hs_plain / tree_plain past 10 s after the fix), are left for T112, which lands before T22 after T96 lands",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a known hang, including one in the very guard T108 fixes, so it is a narrowing and was weighed under the presumption against it. It is legitimate because the files are another live builder's uncommitted work (T96), and editing them now would conflict with that builder's work. That is a real impossibility, not an awkwardness. The section's goal (item 1) states honestly that the guard answers in the heredoc case, not the plain one, so nothing claims a fix it does not make. FR-009's form is met: the reason (T96's builder in them), the filed id (T112) and the order (lands before T22). The class was found by stated greps over rust/ with every hit read, which also accounts for the two interp.rs patterns that do not backtrack. Nothing in the GM's request puts these in T108, and the defect is not carried forward unscheduled."
+    },
+    {
+     "id": "found-left-other-copies",
+     "summary": "the copies at make_only_hooks.rs:125 (MASK_QUOTE), no_poll_hooks/pace.rs:36 (SHELL_STRING) and readme_hooks.rs:51 (TRIPLE), which are not T96's files, are also left for T112",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from the T96 copies because their stated reason is weaker: only 'outside T108's files'. The general rule is not physically impossible here, so impossibility is not what carries it. What carries it is the GM's own approved mechanism. Improvement 4 ('briefs that default to fixing in the task') became FR-009, which accepts a deferral that states why, its task id and its order, and this one states all three. The deferral is ordered immediately (T112 lands before T22) and as performance work it is started first under FR-013. Gathering the five copies into one task does not gut the purpose of either the request's default-to-fix or the fix-as-we-go rule, because the defect is fixed in the next landing in this feature, not carried past a step. Neither T108's task line nor anything the GM wrote names these three guards (make_only, pace, readme), so leaving them is not contrary to an instruction."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T108 (T103's Found and left: the quoted-string pattern T103 gave shape a scan for, `([\"'])(?:\\\\.|(?!\\1).)*\\1`, stood also at `wait.rs:53` and `house_style_hooks.rs:85`; measured 2026-11-21 (`/tmp/t108/probe`, a case a process under `timeout 10`, `/tmp/t108/probe-before.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T108 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T108-fix",
+     "summary": "Replace the three copies of the backtracking quoted-string pattern in wait.rs and house_style_hooks.rs (cond_grammar's QUOTED, masked's QUOTED_SPAN, the held re-call shape) with shape::quoted_spans, made pub and must_use, nothing else of shape.rs changed",
+     "class": "within",
+     "why": "T108 is a [perf] task under FR-013 (a hook hang stalls the builders' loop), filed from T103's Found and left, so it falls under the GM's 2026-11-20 ask to prioritize performance work. The fix removes an exponential search, which is what the task is for. It narrows nothing that was asked."
+    },
+    {
+     "id": "T108-re-call-reading",
+     "summary": "RE_CALL plus re_call_patterns reproduce the held shape's reading, including its continuation from the character after the call's r when nothing closes the argument",
+     "class": "within",
+     "why": "An implementation choice that keeps the guard doing its job on the same calls. It neither narrows nor adds to the request."
+    },
+    {
+     "id": "T108-pins",
+     "summary": "Three hang pins, red first: wait's in T103's child-process form with a 10 s deadline (GUESS), and house style's two under the module's 30 s CPU bound (T81, CONVENTION). Both deadlines reused as they stand",
+     "class": "within",
+     "why": "FR-012's red-first form. These are tests that fail only if the hang the task fixes comes back, so they enforce the task rather than add scope."
+    },
+    {
+     "id": "T108-differentials-and-replay",
+     "summary": "Three exhaustive differential tests (55,987 / 55,987 / 66,430 texts, counts that follow from the alphabets and lengths) hold each new reading to the pattern it replaced, and a replay of T93's 9,646 commands shows 0 changed verdicts",
+     "class": "within",
+     "why": "This is evidence that the guards still do their job (the sheets a check passed still pass), which the GM's 2026-11-18 rule says is owed for a changed check. It is not offered as a requirement that bytes must match: the plan treats no difference as a stop and asks for no ruling on one. It is verification of the requested fix, not new scope."
+    },
+    {
+     "id": "T108-file-scope",
+     "summary": "Touch only wait.rs, house_style_hooks.rs, their tests and shape.rs, and nothing of T96's (shared::tree, event_log_hooks) or T92's (the arbiter and plan crates)",
+     "class": "within",
+     "why": "Coordination between concurrent tasks. Every copy left out is filed below with an order, so nothing the request or spec requires is dropped."
+    },
+    {
+     "id": "T108-left-T112",
+     "summary": "The same pattern in T96's tree.rs:70 QUOTED and tree/program.rs:63 TRIPLE, and tree::walk's hang on a plain command (house style still holds past 10 s on that shape after T108), left to T112, which lands before T22",
+     "class": "within",
+     "why": "A found-and-left item in FR-009's form: the reason (T96's builder has live uncommitted work in both files), the filed task id and its order ('lands before T22'). The defect is filed as performance work, so FR-013 schedules it first, and it is not carried past a next step. The Approach's goal states the remaining plain-command hang honestly instead of claiming it fixed. The spec requires no fix in this task, so nothing is narrowed."
+    },
+    {
+     "id": "T108-left-T113",
+     "summary": "The same pattern in make_only_hooks.rs:125, no_poll_hooks/pace.rs:36 and readme_hooks.rs:51 left to T113, which waits on no task and lands before T22. The class census is stated with its method (two greps over rust/, every hit read)",
+     "class": "within",
+     "why": "Again in FR-009's form: reason, id and order, plus the 'how every instance was found' line FR-009 asks for when a fix names a class. Splitting the work into a separately filed perf task, which FR-013 puts first, ordered before the next step, does not narrow what the GM asked or what the spec requires."
+    },
+    {
+     "id": "T108-closing-substitute",
+     "summary": "After two closing runs went RED only on make static's format check, a third make static was refused by FR-007's guard, so the crate-scoped format check (exit 0) stands for it, with lint, tests and cover clean before a whitespace-only rustfmt rewrap",
+     "class": "within",
+     "why": "FR-007 refuses a third make static and names the crate-scoped checks as the compliant command. The GM approved exactly that (improvement 2: crate-scoped checks while iterating). The landing's own gate still runs in full, so following the spec's own guard narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T110 (the Python program reader placed a path a program builds from its own literals where the shell stood: T92's builder's heredoc `root='/diagram/.clones/diagram-backlog/rust/gate/crates/'`, `def sub(path, old, new, count=1): p=root+path; ... open(p,'w')`, `sub('plan/src/plan.rs', ...)`, so no event line named the files it wrote and land-alone's list missed three of T92's, found 2026-11-21 at T92's landing; the shape is 0 of T93's 9,646 commands, all 10 of T92's command's calls, and 82 literals in 22 of the session's 34,785 subagent Bash calls since 2026-11-12, measured 2026-11-21 (`/tmp/t110/scripts/measure.py`, each corpus streamed a line at a time in one process, 13 MB peak))",
+    "### T110 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "binding",
+     "summary": "THE BINDING in shared::tree::program: a literal handed to a function the program defines once, bound to a parameter that reaches a write through a join (+, /, os.path.join, Path(a,b), an f-string of root and P only) with a module-level literal root, is named at that join; under placed readings (gate-write, readme, the event log) not also at the shell's directory, make-only fail-closed keeps both.",
+     "class": "within",
+     "why": "This is the defect T110's line names: writes built from the program's own literals were placed where the shell stood, so the event log's writes and land-alone's list missed T92's files. Naming them at the join fixes that defect, and keeping make-only fail-closed changes nothing else. The GM's approval asks for enforcement that is real, and land-alone's list depends on these writes being named."
+    },
+    {
+     "id": "sibling",
+     "summary": "THE SIBLING, found and fixed here: top-level writes joining the module-level root and literals alone, inline or through a name bound once (36 in 27 session commands, 18 in 8 through a name, measured 2026-11-21), read by the same join (constants).",
+     "class": "within",
+     "why": "It is the same defect class as the task line: a path the program builds from its own literals, dropped under placed. It was found by the same reading and fixed inside the task's own module. Fixing a known defect in place serves the task and is required by fix-as-we-go, so it is not a widening."
+    },
+    {
+     "id": "fail-open-computed-root",
+     "summary": "A root the program computes (r = pathlib.Path(sys.argv[1]), 3 writes in 1 session command, measured 2026-11-21) fails open as at HEAD and stays unnamed; it has no Found-and-left line and no filed task.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Rarity and 'as at HEAD' are not grounds, and are not relied on here. The task line's class is paths a program builds from its OWN LITERALS, and this root is not one: its value exists only at run time, from argv, and is not in the program text this reader reads. A reader of program text cannot name a value that text does not hold, so the rule is impossible here rather than merely awkward. Naming it would take a different reader, one that binds the shell's argv into the program, which is a new mechanism outside this task's class. No task carries it today."
+    },
+    {
+     "id": "fail-open-neighbors",
+     "summary": "The other fail-open neighbors (a root bound twice, a function defined twice, a *args parameter or a call's star, a parameter handed on or rebound to anything but its join, a shadowed root, an f-string's expression, mixed or floor joins, another sink) stay as at HEAD.",
+     "class": "within",
+     "why": "The block states no known instance of any of these shapes writing onto a root. The only count it gives is *args: 4 literals in T93's corpus, with 0 onto a root overall. An unobserved shape is not a known defect (constitution XIV v2.36.0), so leaving these as at HEAD defers no defect and narrows nothing that was asked."
+    },
+    {
+     "id": "gate-write-call-literals",
+     "summary": "T49'S API (not labeled by the author as a decision): own_args stays, gate-write gets an own function's call literals blanked to $, so for T92's own function-call shape gate-write's verdicts stay HEAD's (the replay: 'none through a function's call'); sparing the placed literals is left to T49, which waits on T110 (item 5).",
+     "class": "within",
+     "why": "T110's line is about the event log's writes and land-alone's list. It asks nothing of gate-write's handling of function-call literals, and that handling is the filed task T49, ordered right after T110. Leaving gate-write's call verdicts at HEAD keeps T49's scope where it was filed and narrows nothing T110 or the request asked. Note: Approach item 1 says these files are named in gate-write's placed reading, which is wider than the mechanism. For the function-call shape that holds only for the event log and readme, plus the sibling's top-level writes in gate-write. It is a wording inaccuracy, not a narrowing."
+    },
+    {
+     "id": "format-deferral",
+     "summary": "Found and left: a crate-wide make format rewrites other builders' uncommitted files; not fixed here, filed T121, lands before T22.",
+     "class": "within",
+     "why": "The defect is in the format tool, outside T110's reader and outside its launcher-bounded files. It is unrelated to the task's defect, and the request asks nothing of it. The deferral states why it is not fixed here, the filed task and its order, which is what FR-009 asks of a deferral, so it defers no defect without a home."
+    },
+    {
+     "id": "not-performance",
+     "summary": "Performance work? No: a correctness fix, its cost measured against T96's bar.",
+     "class": "within",
+     "why": "Tested against the GM's 2026-11-20 measurement amendment ('this kind of measurement task to be counted as a performance task'). T110 changes the event log's writes field, which land-alone reads, and the guards' write readings. It touches no time column, phase second or token cost that where-time or feature-report reports, so it is not measurement work in the amendment's sense. Calling it a correctness fix is the plain reading."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T110 (the Python program reader placed a path a program builds from its own literals where the shell stood: T92's builder's heredoc `root='/diagram/.clones/diagram-backlog/rust/gate/crates/'`, `def sub(path, old, new, count=1): p=root+path; ... open(p,'w')`, `sub('plan/src/plan.rs', ...)`, so no event line named the files it wrote and land-alone's list missed three of T92's, found 2026-11-21 at T92's landing; the shape is 0 of T93's 9,646 commands, all 10 of T92's command's calls, and 82 literals in 22 of the session's 34,785 subagent Bash calls since 2026-11-12, measured 2026-11-21 (`/tmp/t110/scripts/measure.py`, each corpus streamed a line at a time in one process, 13 MB peak))",
+    "### T110 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE BINDING",
+     "summary": "Name a function's literal argument at its join onto a module-level literal root (+, /, os.path.join, Path(a,b), an f-string of root and P), inline or through a name bound once, in the event log's writes and readme's placed reading",
+     "class": "within",
+     "why": "This is T110's filed defect itself (a path a program builds from its own literals placed where the shell stood, so land-alone's list missed three of T92's files); fixing it is the task. The event log's writes are part of the data half (FR-001 to FR-005) and land-alone is 451's own landing tool."
+    },
+    {
+     "id": "the fail-open boundary",
+     "summary": "A computed root, a root bound twice, a function defined twice, *args or a call's star, a parameter handed on or rebound, a shadowed root, f-string expressions, mixed or floor joins and other sinks fail open as at HEAD",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's class is a path built from the program's own literals. A computed root (sys.argv) has no value in the program's text, so it cannot be named at its join by a reader of that text and is outside the class. The literal-derived forms left open are ambiguous to a static reader, and the three corpora measured every one of the 82 plus 10 onto-root literals in the session's and T92's commands as the + form that is covered (the 4 *args literals are written as given, not onto a root). Nothing regresses: each such case answers as at HEAD."
+    },
+    {
+     "id": "THE SIBLING",
+     "summary": "Also fix top-level writes joining the root and literals alone, inline or through a name bound once (constants), gated on a line that could bind a root",
+     "class": "within",
+     "why": "The same defect class as T110's line (a path built from the program's own literals, dropped under placed), found by the same reading and counted (36 writes in 27 session commands, 18 in 8 through a name). Fixing known defects as found is the standing rule, and it widens nothing the GM excluded."
+    },
+    {
+     "id": "gate-write sees the sibling's writes",
+     "summary": "Gate-write now refuses top-level root-joined writes while a gate runs, where HEAD let them through (10 replay calls)",
+     "class": "within",
+     "why": "An existing guard's verdicts corrected by the shared reader it already uses, in its existing purpose (no writes while a gate runs). Each move was read and is a correction. It is no new refusal, command or agent reach."
+    },
+    {
+     "id": "T49'S API: call literals blanked to $ for gate-write",
+     "summary": "Gate-write's verdicts on the literals of an own function's call stay HEAD's until T49 adds the query that lets own_args spare the literals the binding places",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Gate-write's handling of own-function call arguments (own_args) is the filed subject of T49, which waits on T110 and is ordered straight after it (item 5). The plan states why (T49 owns that API and adds the query beside bound), names the task and gives the order, so this is no unowned or unfiled carve-out. Gate-write's answer on those calls is HEAD's, so nothing regresses."
+    },
+    {
+     "id": "make-only keeps both places",
+     "summary": "Make-only, which fails closed, names a placed literal both at the join and where the shell stands",
+     "class": "within",
+     "why": "It keeps the fail-closed guard's existing refusals and adds the correct place. Its verdicts moved on no row in either corpus."
+    },
+    {
+     "id": "Found and left: crate-wide make format (T121)",
+     "summary": "A crate-wide make format rewrites other builders' uncommitted files. Left to T121, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect in the format tool, not in the reader T110 fixes. It is filed with an id and an order, and why it is not fixed here is stated (the launcher's ground rules confine T110 to its two files while T80 and T83 build beside it). That meets the deferral form FR-009 sets, and the defect is not carried unfiled into further work."
+    },
+    {
+     "id": "Found and left: closing-checks set-apart note (T122)",
+     "summary": "closing-checks' set-apart note does not name a file-scale red on another task's file. Left to T122, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect in a different tool, found by its method and filed with an id and an order. Why it is not fixed here is stated (it is outside T110's two files under the ground rules). T110's reader does not depend on it."
+    },
+    {
+     "id": "closing runs' red attributed to T83",
+     "summary": "Both closing-checks runs are recorded RED on T83's uncommitted files (quotes.rs format, tree.rs file-scale), judged not T110's",
+     "class": "within",
+     "why": "This is a recorded measurement attributed by file to another builder's uncommitted work that T110 does not touch. The plan does not claim its green exit met, and item 6 still requires this task's own green closing-checks."
+    },
+    {
+     "id": "Performance work? No",
+     "summary": "T110 is classed as a correctness fix, not performance or measurement work",
+     "class": "within",
+     "why": "It corrects the event log's writes field for landing (which files land-alone commits), not the timing measurement the GM's 2026-11-20 amendment counts as performance work. Its hook cost is measured against T96's bar. The task-start order of FR-013 is enforced at task start, not settled by this section."
+    },
+    {
+     "id": "no map, no constant",
+     "summary": "No map changes and no constant moves",
+     "class": "within",
+     "why": "This states the task's reach and settles nothing the request or spec left open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T110 (the Python program reader placed a path a program builds from its own literals where the shell stood: T92's builder's heredoc `root='/diagram/.clones/diagram-backlog/rust/gate/crates/'`, `def sub(path, old, new, count=1): p=root+path; ... open(p,'w')`, `sub('plan/src/plan.rs', ...)`, so no event line named the files it wrote and land-alone's list missed three of T92's, found 2026-11-21 at T92's landing; the shape is 0 of T93's 9,646 commands, all 10 of T92's command's calls, and 82 literals in 22 of the session's 34,785 subagent Bash calls since 2026-11-12, measured 2026-11-21 (`/tmp/t110/scripts/measure.py`, each corpus streamed a line at a time in one process, 13 MB peak))",
+    "### T110 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the binding's handled forms",
+     "summary": "A call F(<literal>) of a once-defined own function whose parameter reaches open(..,w/a/x)/write_text/write_bytes through a join (+, /, os.path.join, Path(a,b), f-string of root and P only) with a module-level literal root bound once; the literal named at that join in the event log's writes and readme's placed reading, make-only keeping both places.",
+     "class": "within",
+     "why": "This is T110's filed line itself (a path a program builds from its own literals, T92's root='...'; sub(path) shape). Measured in three corpora before writing: the session's 82 literals in 22 commands are all by +, T92's 10 of 10 calls by +; the handled forms cover every observed instance."
+    },
+    {
+     "id": "D2a fail-open: computed root",
+     "summary": "A root the program computes (sys.argv) fails open as at HEAD.",
+     "class": "within",
+     "why": "Not 'its own literals', so outside T110's line; its one measured instance (3 writes, 1 command) is found-and-left as T125 with why, id and order (see D6)."
+    },
+    {
+     "id": "D2b fail-open: forms with no observed instance",
+     "summary": "Root bound twice, function defined twice, *args/star calls, parameter handed on or rebound otherwise, shadowed root, f-string expressions, mixed/floor joins fail open as at HEAD.",
+     "class": "within",
+     "why": "Each answer is HEAD's (no regression); the measurement shows no instance of these forms among the writes onto a literal root (session: all 82 by +; T93: 0 onto a root; the 4 *args literals counted apart). Under the 2026-11-19 defect definition an unobserved form is not a wrong outcome, so leaving it is no deferred defect."
+    },
+    {
+     "id": "D2c fail-open: another sink",
+     "summary": "Writes through sinks other than open/write_text/write_bytes/Path(..).write_.. fail open.",
+     "class": "within",
+     "why": "The one fail-open case measure.py cannot show empty, since it defines the sinks it counts; but no instance of a missed write through another sink is observed anywhere in the bundle (row 145's grab is a read; the open(p+'.new') then mv rows are named by the open). An unobserved form is not a defect (constitution XIV v2.36.0), so this is within the task, not a narrowing."
+    },
+    {
+     "id": "D3 gate-write on a call's literals stays HEAD's until T49",
+     "summary": "Gate-write gets the program with own-function call literals blanked to $, so its verdicts on such calls are unchanged; T49 adds the query that spares them.",
+     "class": "within",
+     "why": "Gate-write's handling of own_args is T49's filed scope, which already exists and waits on T110 (item 5: before T49); the block states why (T49'S API: own_args stays until T49 builds on this reading), the id and the order. T110's line is the event log's writes / land-alone's list, which it fixes whole."
+    },
+    {
+     "id": "D4 the sibling fixed here",
+     "summary": "Top-level writes joining the root with literals alone, inline or through a once-bound name, now named under placed, and gate-write now refuses them under a running gate (0 to 2 on 8+2 replay rows).",
+     "class": "within",
+     "why": "The same defect (a path built from the program's own literals left unnamed) in a second form, found by the task's own measurement; fixing it here is XIV's fix-as-we-go and the GM's approved default of fixing in the task. Each moved verdict was read and is a correction (a real write while a gate runs), not new behavior beyond the existing guard's own purpose."
+    },
+    {
+     "id": "D5 T121 and T122 left",
+     "summary": "Crate-wide make format rewriting other builders' files (T121) and closing-checks' set-apart note missing file-scale reds (T122) filed, lands before T22.",
+     "class": "within",
+     "why": "Defects of other tools (the format tool, closing-checks.sh), outside T110's subject; each carries why, filed id and order as FR-009 requires, and lands before the next step (T22)."
+    },
+    {
+     "id": "D6 T125 left",
+     "summary": "A root from the program's shell arguments (3 writes in 1 command unnamed) filed as T125, lands before T22.",
+     "class": "within",
+     "why": "This is the closest call, since it is T110's own outcome class (files written that no event line names). But it is outside T110's line (the path is not built from the program's own literals), and its fix is the walk's handing of program arguments in tree.rs, a file a concurrent builder (T83) holds under the launcher's ground rules. Improvement 4's 'default to fixing in the task' is a default, not a bar on a filed task. FR-009's three conditions (why, id, order) are met, and the order keeps it ahead of the next step. It is not a narrowing of what was asked."
+    },
+    {
+     "id": "D7 Performance work? No",
+     "summary": "T110 classed not performance work for FR-013 scheduling.",
+     "class": "within",
+     "why": "Ruled on the GM's words alone (FR-013 is cut in the index): 'this kind of measurement task' (2026-11-20) refers to the time-measurement work (where-time's columns, the 14-hour report). T110 corrects the event log's writes field, which feeds land-alone's list of files to commit, not the time buckets. It is a landing-correctness fix, so the classification follows the GM's words."
+    },
+    {
+     "id": "D8 two RED closing runs set apart as T83's",
+     "summary": "Both closing-checks runs RED, each red attributed to T83's uncommitted files (quotes.rs format, tree.rs file-scale), against exit 6's green closing-checks.",
+     "class": "within",
+     "why": "The plan records the reds and their attribution without claiming green or relaxing the GM's request; each red is in another task's files, and the unnamed-cause gap is filed (T122). Whether a landing may proceed on it is the landing tool's enforcement, not a fidelity question about what the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T110 (the Python program reader placed a path a program builds from its own literals where the shell stood: T92's builder's heredoc `root='/diagram/.clones/diagram-backlog/rust/gate/crates/'`, `def sub(path, old, new, count=1): p=root+path; ... open(p,'w')`, `sub('plan/src/plan.rs', ...)`, so no event line named the files it wrote and land-alone's list missed three of T92's, found 2026-11-21 at T92's landing; the shape is 0 of T93's 9,646 commands, all 10 of T92's command's calls, and 82 literals in 22 of the session's 34,785 subagent Bash calls since 2026-11-12, measured 2026-11-21 (`/tmp/t110/scripts/measure.py`, each corpus streamed a line at a time in one process, 13 MB peak))",
+    "### T110 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T110-binding",
+     "summary": "THE BINDING in shared::tree::program: a literal handed to a function the program defines once, reaching an open/write_text/write_bytes sink through a join (+, /, os.path.join, Path(a,b), plain f-string) with a module-level literal root bound once, is named at that join; under `placed` not also at the shell, make-only fail-closed keeps both.",
+     "class": "within",
+     "why": "This is the fix of the defect T110's line names (T92's builder's root+path writes missing from the event log's writes and so from land-alone's list), red first on T92's own command (FR-012 discipline). How the readers place the name is design inside the task."
+    },
+    {
+     "id": "T110-fail-open",
+     "summary": "Every other shape fails open as at HEAD: computed or twice-bound root, function defined twice, *args or star calls, parameter handed on or rebound, shadowed root, f-string expressions, mixed joins, other sinks.",
+     "class": "within",
+     "why": "The measured shape (82 literals in 22 session commands, all by +, and T92's 10 calls) is covered; the one measured uncovered shape that writes into the clone (computed root, 3 writes in 1 command) is a found-and-left defect filed as T125 with reason and order. Replays show no row lost a write, so nothing HEAD named is given up."
+    },
+    {
+     "id": "T110-sibling",
+     "summary": "THE SIBLING fixed here: top-level writes joining the root and literals alone (inline or through a name bound once), which joined_on dropped under `placed`, now named; gate-write consequently refuses such writes during a running gate (0 to 2 on 8 + 2 replay rows).",
+     "class": "within",
+     "why": "A defect found in the same reader and fixed in the same files (Principle XIV, fix as we go). The new gate-write refusals are a check that let bad work through now catching it, each replay move read and judged a correction; not new behavior beyond the guard's existing job."
+    },
+    {
+     "id": "T110-gate-write-calls",
+     "summary": "own_args stays: gate-write gets function-call literals blanked to $, so its verdicts on writes through an own function's call stay HEAD's until T49, which adds the query sparing the literals the binding places.",
+     "class": "within",
+     "why": "T110's line asks for the event log's writes (land-alone's list); gate-write's handling of own-function call literals is T49's filed work, which waits on T110 and builds on this reading. Sequencing with an existing task, not a narrowing of what T110 was asked."
+    },
+    {
+     "id": "T110-deferred-T121-T122-T125",
+     "summary": "Found and left: crate-wide make format rewriting other builders' files (T121), closing-checks' set-apart note not naming file-scale reds (T122), root taken from shell arguments (T125); each outside T110's two files, filed, landing before T22.",
+     "class": "within",
+     "why": "Each is a defect outside the task's ground-rule files, carried with the reason, a filed task id and its order as FR-009 requires; none is the defect T110 was filed to fix, and each is scheduled to be fixed inside this feature."
+    },
+    {
+     "id": "T110-closing-red-set-apart",
+     "summary": "Both closing-checks runs are RED only on T83's uncommitted files (format in tree/tests/quotes.rs; file-scale on tree.rs at 1,147 lines), set apart as T83's, not T110's.",
+     "class": "within",
+     "why": "The reds are in another task's files, attributed by the run logs; T110 is not excused from any check on its own files, and the unnamed-cause gap is filed as T122."
+    },
+    {
+     "id": "T110-cost",
+     "summary": "Cost judged against T96's 0.09 ms bar: no difference resolved in a hook call at load 27-31, some 0.04 ms a reading in the whole.",
+     "class": "within",
+     "why": "Measured with method and log; the task adds no performance claim beyond staying inside the existing bar."
+    },
+    {
+     "id": "T110-not-performance",
+     "summary": "Classed as not performance work: a correctness fix of the writes field land-alone reads.",
+     "class": "within",
+     "why": "The writes field serves landing, not the time measurement the GM counted as performance; the classification does not change what the request asks."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T106 to T110, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

@@ -1,0 +1,331 @@
+{
+ "blocks": {},
+ "tasks": {},
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "(removed) ### T37 (<why: the finding or measurement that files it>)",
+    "(removed) ### T39 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "(removed) ### T45 (<why: the finding or measurement that files it>)",
+    "(removed) ### T47 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-template-removed",
+     "summary": "The unfilled template block '### T45 (<why: ...>)' (placeholder Approach line, empty step table) is deleted; T45's content stands under a named heading reviewed separately.",
+     "class": "within",
+     "why": "The removed block held only template placeholders and an empty table: it decided nothing, so deleting it narrows nothing the GM asked for (request.md) or the spec carries. The T45 [perf] untag and its FR-013 escape are not in this bundle's blocks and are not ruled here."
+    },
+    {
+     "id": "T47-template-removed",
+     "summary": "The unfilled template block '### T47 (<why: ...>)' (placeholder Approach line, empty step table) is deleted; T47's content stands under a named heading reviewed separately.",
+     "class": "within",
+     "why": "The removed block held only template placeholders and an empty table: it decided nothing, so deleting it narrows nothing the GM asked for or the spec carries."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T410 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T425 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T441 (<why: the finding or measurement that files it>)",
+    "(removed) ### T442 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "remove-T441-skeleton",
+     "summary": "Delete the T441 plan block, which held only the unfilled template (placeholder heading, placeholder Approach line, an empty table).",
+     "class": "within",
+     "why": "The block as last judged made no decision: every field is a template placeholder and the table has no rows. Removing it narrows nothing the request or spec asks for; it removes no approach, no figure and no scope."
+    },
+    {
+     "id": "remove-T442-skeleton",
+     "summary": "Delete the T442 plan block, which held only the unfilled template (placeholder heading, placeholder Approach line, an empty table).",
+     "class": "within",
+     "why": "Same as T441: the earlier text is an empty skeleton with no decision in it, so its removal decides nothing the spec left open and narrows nothing asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "remove-T437-stub",
+     "summary": "Deletes an unfilled plan-section template headed T437 (placeholder why, placeholder approach, empty step table).",
+     "class": "within",
+     "why": "The block held only template placeholders and decided nothing; removing it drops no approach, step or scope the request or spec asked for."
+    },
+    {
+     "id": "remove-T440-stub",
+     "summary": "Deletes an unfilled plan-section template headed T440 (placeholder why, placeholder approach, empty step table).",
+     "class": "within",
+     "why": "Template placeholders only; its removal narrows nothing the GM asked for."
+    },
+    {
+     "id": "remove-T464-stub",
+     "summary": "Deletes an unfilled plan-section template headed T464 (placeholder why, placeholder approach, empty step table).",
+     "class": "within",
+     "why": "Template placeholders only; its removal narrows nothing the GM asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T395 (<why: the finding or measurement that files it>)",
+    "(removed) ### T395 Approach (checklist part A)",
+    "(removed) ### T416 (<why: the finding or measurement that files it>)",
+    "(removed) ### T416 Approach (checklist part A)",
+    "(removed) ### T421 (<why: the finding or measurement that files it>)",
+    "(removed) ### T421 Approach (checklist part A)",
+    "(removed) ### T443 (<why: the finding or measurement that files it>)",
+    "(removed) ### T443 Approach (checklist part A)",
+    "(removed) ### T449 (<why: the finding or measurement that files it>)",
+    "(removed) ### T449 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T475-removed",
+     "summary": "The plan block for T475 is deleted. As last judged it was the unfilled section template: its heading still carries the placeholder '<why: the finding or measurement that files it>', its Approach is the placeholder '<what changes, where, and how it was measured ...>', and its step table has a header and no rows.",
+     "class": "within",
+     "why": "The block made no decision: no approach, no step, no requirement cited, no figure. Deleting a placeholder that said nothing removes no work the request or the spec asks for, narrows no FR (no FR-001..FR-013 or SC is named by it or depends on it), and T475 appears nowhere in the GM's request. It is housekeeping of the plan file, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T490 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "remove-T490-stub",
+     "summary": "Delete the T490 block, which was an unfilled template skeleton (placeholder heading, placeholder Approach line, a table header with no rows)",
+     "class": "within",
+     "why": "The removed text carried no decision, no requirement and no commitment owed to the GM's request: every field was the template's own placeholder and the table had no rows. Deleting an empty stub withdraws nothing the request or the accepted spec asks for, so it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "(removed) ### T122 Approach (checklist part A)",
+    "(removed) ### T128 Approach (checklist part A)",
+    "(removed) ### T140 Approach (checklist part A)",
+    "(removed) ### T181 Approach (checklist part A)",
+    "(removed) ### T208 Approach (checklist part A)",
+    "(removed) ### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)",
+    "(removed) ### T22 Approach (checklist part A)",
+    "(removed) ### T264 Approach (checklist part A)",
+    "(removed) ### T266 Approach (checklist part A)",
+    "(removed) ### T273 Approach (checklist part A)",
+    "(removed) ### T280 Approach (checklist part A)",
+    "(removed) ### T283 Approach (checklist part A)",
+    "(removed) ### T291 Approach (checklist part A)",
+    "(removed) ### T301 (the host's scan of 2026-11-26: one cargo target directory holds 20 to 31 hashes of one crate, and the GM asking that day why a builder's repeated test runs could not reuse more of their compilation; PART 1 of the task's four, the measurement of why - the task stays open for parts 2 to 4)",
+    "(removed) ### T301 Approach (checklist part A)",
+    "(removed) ### T302 Approach (checklist part A)",
+    "(removed) ### T319 Approach (checklist part A)",
+    "(removed) ### T330 Approach (checklist part A)",
+    "(removed) ### T335 Approach (checklist part A)",
+    "(removed) ### T350 Approach (checklist part A)",
+    "(removed) ### T357 Approach (checklist part A)",
+    "(removed) ### T484 Approach (checklist part A)",
+    "(removed) ### T503 Approach (checklist part A)",
+    "(removed) ### T509 Approach (checklist part A)",
+    "(removed) ### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)",
+    "(removed) ### T51 Approach (checklist part A)",
+    "(removed) ### T511 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "remove-T22",
+     "summary": "451 T22's plan sections (2 blocks) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T22 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost. T22 is 451's own close (451 SC-001/002/005 and make feature-report F=451); 462's T22 line keeps those 451 SCs and the F=451 report, so the close is carried, not dropped."
+    },
+    {
+     "id": "remove-T51",
+     "summary": "451 T51's plan sections (2 blocks) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T51 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T122",
+     "summary": "451 T122's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T122 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T128",
+     "summary": "451 T128's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T128 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T140",
+     "summary": "451 T140's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T140 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T181",
+     "summary": "451 T181's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T181 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T208",
+     "summary": "451 T208's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T208 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T264",
+     "summary": "451 T264's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T264 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T266",
+     "summary": "451 T266's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T266 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T273",
+     "summary": "451 T273's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T273 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T280",
+     "summary": "451 T280's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T280 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T283",
+     "summary": "451 T283's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T283 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T291",
+     "summary": "451 T291's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T291 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T301",
+     "summary": "451 T301's plan sections (2 blocks) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T301 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T302",
+     "summary": "451 T302's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T302 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost. T302 parts 1 and 4 go to 461 (462 FR-003); its section moves here with parts 2 and 3, unchanged."
+    },
+    {
+     "id": "remove-T330",
+     "summary": "451 T330's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T330 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T319",
+     "summary": "451 T319's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T319 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T335",
+     "summary": "451 T335's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T335 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T350",
+     "summary": "451 T350's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T350 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T357",
+     "summary": "451 T357's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T357 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T484",
+     "summary": "451 T484's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T484 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T503",
+     "summary": "451 T503's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T503 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T509",
+     "summary": "451 T509's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T509 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    },
+    {
+     "id": "remove-T511",
+     "summary": "451 T511's plan section (1 block) removed from 451's plan, moved to feature 462 with the task",
+     "class": "within",
+     "why": "A move, not a decision dropped: 462 FR-002 (FAITHFUL round 3) carries every other open 451 task with its plan section, under the GM's 2026-11-27 go to close 451 and move the rest to a new feature (request.md, 'moving everything new feature'). Checked: 462's plan.md holds both headings of T511 and each removed block's text is identical there; the only lines not carried are trailing plan-archive markers of finished tasks, which remain in 451's plan.md and point to plan-done.md, so no decision is lost."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries other to other, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

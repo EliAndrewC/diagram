@@ -1,0 +1,618 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T83": {
+   "section_sha256": "ae0a8618438c90f517a2ca6c0b202554f89506c81eb2a48f3067753a6e416500",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 THE WORD",
+     "summary": "A quoted body that is no plain word is held as one word via plane-15 stand-ins (0xF0000 + c), unheld where a place is read; a double-quoted body's plain $(...) left for the walk.",
+     "class": "within",
+     "why": "The mechanism that carries T83's own line (a quoted destination read as its place). The request and spec do not reach the shell walk; nothing they ask is narrowed."
+    },
+    {
+     "id": "D2 SIDE EFFECTS folded in",
+     "summary": "touch -d/-t/-r values read as option values, not files; held braces; found by the corpus diff and fixed here.",
+     "class": "within",
+     "why": "Wrong outcomes (phantom writes, a cp hidden at bx#45625) found by this task and fixed in it: the approved default of fixing in the task (improvement 4) and FIX AS WE GO."
+    },
+    {
+     "id": "D3 ESCAPES AND ARITHMETIC, inside and outside quotes",
+     "summary": "\\$( in a held double-quoted body is no substitution; $((...)) and ((...)) are one word read as bash 5.3.9 reads them, including the subshell rule for ((cd x && touch a) && touch b); fixed outside quotes too in tree/split.rs.",
+     "class": "within",
+     "why": "Phantom writes (bx#27391-27393, ux#1441) are wrong outcomes; fixing a defect found by the task, in the task, is the approved default. Widening to fix found defects narrows nothing."
+    },
+    {
+     "id": "D4 THE SPLIT",
+     "summary": "tree.rs split into tree/quoted.rs and tree/split.rs for file scale.",
+     "class": "within",
+     "why": "Constitution X clause 13, a structural move with no behavior of its own."
+    },
+    {
+     "id": "D5 REDIRECT rewrite kept",
+     "summary": "The redirect scan moved to the regex crate's automaton with a lookbehind read by hand, kept for its 0.50 G saving, a differential test pinning its targets to the old pattern's.",
+     "class": "within",
+     "why": "Performance work removing work (FR-013's spirit); its targets are pinned to the old pattern's, so no reading changes."
+    },
+    {
+     "id": "D6 THE SPEED: +4.7% instructions accepted, exit unmet, cure filed T129",
+     "summary": "The walk's instructions rise 56.63 G to 59.31 G over ux; the plan's exit 'at or under HEAD's' is not met and the rise is accepted; ASSIGN's lookbehind priced and filed as T129.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled on the outcome, not the cost argument: the extra work is intrinsic to the fix (a held word's text now stands where an empty pair stood, so the same patterns read more), and the exit it misses was the plan's own, set on a misread profile (the 17 G REDIRECT share did not exist), not a GM rule. The block's wall figures put it at about 0.13 s over 2,311 commands, roughly 56 microseconds a walk; that is no wrong outcome by constitution XIV's definition and does not gut the request's purpose (minutes of builder and landing time). The 'would void the walk diff and replay' sentence is implementation cost and is not what carries this ruling. T129's measured saving (ASSIGN's scans, 20.16 G) exceeds the rise."
+    },
+    {
+     "id": "D7 ux#1913 left as a difference",
+     "summary": "A segment's placeholder renumbered ($__sub_1__ for $__sub_0__) because the walk now walks a substitution bash runs; no reader parses the index.",
+     "class": "within",
+     "why": "A difference, not a wrong outcome (constitution XIV, the GM 2026-11-19); the readers were grepped and none parses it."
+    },
+    {
+     "id": "D8 Found and left: T127 (assignment value cut at a quoted blank)",
+     "summary": "D=/diagram/\"a b\"; cp /tmp/a $D/f is still refused, naming the wrong path; deferred to T127, lands before T118.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect present at HEAD that T83 does not worsen; the write is still refused (main's class), only the path named is wrong. A different mechanism (env_from/bind read raw text), whose fix changes every bound-value expansion; stated why, filed id and order per FR-009, ordered after T133 so it lands on the walk's final quoted-substitution reading."
+    },
+    {
+     "id": "D9 Found and left: T132 (a command holding an unpaired body keeps every body blanked)",
+     "summary": "pairs_within: a command with one body whose parentheses or backquotes do not pair has every quoted body read as at HEAD, including bodies that pair; deferred to T132 (nesting quote scan), lands before T133.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated in two parts. (a) The unpaired body itself: the flat scan pairs `\"$(dirname \"`, `$F`, `\")\"`, so holding it would hold a wrong word; reading it right needs the nesting scan every guard shares, and holding it wrong is worse than HEAD. (b) The other, pairable bodies of such a command (1,559 bx, 227 ux; the block's probe `cp /tmp/a \"/diagram/x y\"; echo \"$(dirname \"$F\")\"`): the Approach's sentence carries it - the quote scan's pairs in such a command are not the shell's, 'so a command with one has every body read as before' - and the block shows the concrete hazard of holding a misbounded body: bx#45625, where a misread held body read the rest of the command as one word and hid a cp into the clone. Keeping HEAD's reading there guarantees no new false negative; T83 loses no reading HEAD had. Filed with id and order (FR-009); the measured exposure (2 destinations, none under /diagram) is noted as exposure, not as the reason."
+    },
+    {
+     "id": "D10 Found and left: T133 (a held body's $(...) holding a quote hidden whole)",
+     "summary": "echo \"$(touch '/diagram/x')\" reads as no write at HEAD and with T83; deferred to T133, lands before T127.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect present at HEAD (HEAD blanked the whole body), not worsened; walking it needs the substitution's own quotes read by T132's nesting scan, so it genuinely depends on T132. Stated why, id and order (T132 before T133 before T127)."
+    },
+    {
+     "id": "D11 Found and left: T134 ([[ ... ]] and $[ ... ] < > read as redirects)",
+     "summary": "[[ a > b ]] and $[ 3 > 2 ] read as writes at HEAD and with T83; deferred to T134, lands before T132.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect present at HEAD, not worsened, and a separate grammar ([[ ]]'s own operators) beside T83's arithmetic; counted absent with a < or > from all three corpora (method stated). Stated why, id and order; the chain T134 > T132 > T133 > T127 > T118 has no cycle."
+    },
+    {
+     "id": "D12 ux#1024 attributed to the replay's race",
+     "summary": "A reworded output in the four-worker replay explained as concurrent rows sharing the attempts note; replayed alone, both binaries print nothing; neither fixed nor filed.",
+     "class": "within",
+     "why": "Both binaries allow the row and print nothing when replayed sequentially, so no hook's outcome is wrong; the reword is the harness's parallelism, outside T83's walk and not a wrong outcome of the product."
+    },
+    {
+     "id": "D13 Evidence base: walk diff and replay on aeb9a0b6b1, T83-on-T110 by the closing run",
+     "summary": "The diff and replay compare T83 alone before T110 landed; T83 on T110 is covered by make closing-checks in the clone.",
+     "class": "within",
+     "why": "A measurement method; T110 touches tree/program.rs, which T83 does not, and the combined tree is checked by the closing run."
+    },
+    {
+     "id": "D14 Third closing run under STATIC_OK",
+     "summary": "The third closing-checks run escaped FR-007's third-make-static refusal because the first two stopped before static's later stages.",
+     "class": "within",
+     "why": "FR-012 provides a recorded escape with a reason; the stated reason (earlier runs did not reach static's later stages) is the case the escape exists for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T84": {
+   "section_sha256": "f5f76714250209bc259b0fa0347cd5ac2732a33ef33adfb16f7421a095d1f85f",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T84-1 task-add lock and own withdrawal",
+     "summary": "make task-add takes a per-feature flock held from the id's read through both quick runs, withdraws only its own box and section from the files as they are; past a 120 s wait (GUESS, knob L7R_TASK_ADD_LOCK_WAIT) it refuses, writing nothing and naming the lock file.",
+     "class": "within",
+     "why": "The brief asks to measure first and lock red first if two filings collide; item 4 measured 6 of 6 rounds losing both filings on a red quick, and item 9 shows red then green. It keeps FR-011's withdraw-and-refuse behavior and only stops it taking another writer's lines. A lock-wait timeout that refuses fails closed."
+    },
+    {
+     "id": "T84-2 nothing built for a builder's own review",
+     "summary": "No new code lets a builder dispatch its own spec-fidelity review: measured, every builder dispatch already passes every guard; only the briefs barred it.",
+     "class": "within",
+     "why": "The finding's cause is that instructions alone barred it; the measurement (35 calls, none refused) shows no guard stands in the way. That the review actually happens is enforced by T84-3's stop guard and the tick gate (T84-4), so this is not enforcement by instruction."
+    },
+    {
+     "id": "T84-3a builder-stop guard: who is held",
+     "summary": "builder_stop_hooks (SubagentStop) answers decision: block to a builder the session dispatched for a started, open task while l7r-gate plan decided says its section is not decided (the verdict store's current CLEAR, plus the decide lint's deferral findings).",
+     "class": "within",
+     "why": "The brief names SubagentStop and reading the verdict store rather than text; builder identity follows D8. A builder with no started task is not held here, but the tick and push gate still refuse its task's landing without a CLEAR section, so no unreviewed work lands through that gap."
+    },
+    {
+     "id": "T84-3b handoff-only state passes",
+     "summary": "A builder past T12's context cap, in its handoff-only state, may stop.",
+     "class": "within",
+     "why": "The brief requires it (the context cap's handoff-only state passing), and FR-006 sends that builder to a handoff and a fresh dispatch; the next builder is held by the same guard and the tick gate stays the backstop."
+    },
+    {
+     "id": "T84-3c the guard's escape",
+     "summary": "The stop guard has an escape of a recorded reason.",
+     "class": "within",
+     "why": "The brief and the project's guard rules (FR-012's form) require it. Approach item 3 does not spell the escape out; item 2 lists it as a constraint and the suite pins the guard (6 passed)."
+    },
+    {
+     "id": "T84-3d ASK_LIMIT 40 s",
+     "summary": "The guard's call to the gate is limited to 40 s (GUESS, under the hook's 60 s).",
+     "class": "within",
+     "why": "A new constant, labeled a GUESS. The section does not say which way a timeout goes (block or let the builder stop). Either way the tick and push gate (T84-4) still refuse an undecided section, so a timed-out ask cannot land unreviewed work. Noted, not blocking."
+    },
+    {
+     "id": "T84-4a plan gate per task: an open task's section not judged",
+     "summary": "The tick's and the push's plan gate (plan::tick_gate, task::push_owed) judges the blocks outside every task's section plus the sections of the task ticked and the tasks ticked before it, and never an open task's section; the land crate keeps no plan check of its own.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows feature 243 / 375 D60's reach (every block owed) at the tick and push. Applying the whole-feature rule literally defeats its own purpose and the GM's 'real enforcement and not just instructions': measured, all 16 of 451's landings took PLAN_REVIEW_OK, 10 of them on correct work, so the gate had become a routine escape. 243's purpose is that a task is not ticked while its decisions lack a verdict. That holds: the ticked task's own section, earlier ticked sections and every shared block are still judged, and an open task's section is judged at its own tick. No task can be ticked or pushed while its own section lacks CLEAR at its digest. The red test a_tick_answers_for_its_own_section_the_ticked_ones_and_the_shared_blocks pins it."
+    },
+    {
+     "id": "T84-4b a filled template's old heading not owed",
+     "summary": "A '(removed) ### T<n> (<why: ...>)' block, the old heading of a filled task template, is not owed once T<n>'s section carries a CLEAR task verdict.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from 4a. D60 owes a deleted block because a decision deleted by hand is a change. A template's placeholder heading carries no decision: the text replacing it is the task's own section, already reviewed CLEAR at its digest. Measured: 4 of 16 landings owed only this. This holds only as far as the forgiveness is limited to the template's placeholder heading of the same task with a current CLEAR section, as the section states. A hand-deleted decision under any other heading stays owed."
+    },
+    {
+     "id": "T84-5 left: arbiter accept not recorded as a task verdict (T92)",
+     "summary": "A round-arbiter accept is not written to the verdict store as the task's verdict; T33, T46, T67 and T79 show BLOCKED there. Left to T92's line, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect that refuses correct work, left in the FR-009 form: its visible effect, measured 2026-11-21, why it is not fixed here (the accept is written by make arbiter-ruled, outside this task's files), filed id T92, and 'lands before T22'. That is the form the four accepts in rulings.md treat as enough. One gap for T92 to cover: the new stop guard reads the same store, so a builder of a task the arbiter accepted would also be held at its stop, not only its tick and push. Same defect, same cure, and an escape exists."
+    },
+    {
+     "id": "T84-6 left: land crate tests take the session's PLAN_REVIEW_OK (T94)",
+     "summary": "The land crate's tests read the session's exported escape and write the real guard log; filed as T94, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a test's verdict follows the session's exports, and make audit lists a fixture's escape as real) left in FR-009's form: the observation and its method, why (the land crate's tests are outside this task's files, and T84 makes the escape rare rather than gone), filed id T94, and its order."
+    },
+    {
+     "id": "T84-7 printf recipe lines: not a defect",
+     "summary": "task_add/quick.rs's lines() drops any quick recipe line opening printf; today no check opens so.",
+     "class": "within",
+     "why": "Measured against the Makefile: no check is skipped, so nothing goes wrong. Under constitution XIV this is a difference, not a defect, and needs no ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T85": {
+   "section_sha256": "fcba9f82d7a56bb8510371844c589404f5aa32d1a2773b6d4ac547a31534cca5",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "starter-identity",
+     "summary": "The run's starter is read from its output path's task id and the event log's PostToolUse launch line (bg = id, by = the payload's agent_id), not from the env",
+     "class": "within",
+     "why": "The brief's constraint: the starter from the run's process (its env or the event log's launch line), not a guess; item 4 measured that the env carries no agent id, so the launch line is the one source that can name it."
+    },
+    {
+     "id": "no-by-is-the-sessions",
+     "summary": "A launch line with no by is the session's own background call, the harness's to wake, permitted",
+     "class": "within",
+     "why": "Feature 246's design as the brief states it: a run the harness tracks is let through. The 10 rows of the 24 are this case."
+    },
+    {
+     "id": "builder-running-permitted",
+     "summary": "A by still running by set_down_hooks' transcript reading (T65's) is the builder's, permitted with one line (builder-running)",
+     "class": "within",
+     "why": "The task's own finding: 14 of the 24 refusals named a run a still-running builder had started."
+    },
+    {
+     "id": "stopped-or-unknown-is-detached",
+     "summary": "Any other by - stopped, or the transcript cannot say - is judged as a detached run: watched by a waiter or refused once per root",
+     "class": "within",
+     "why": "Keeps the refusal the brief requires (still fire for a stopped builder's run) and takes the safe side where the starter's state cannot be read, as 'not a guess' asks."
+    },
+    {
+     "id": "no-launch-line-is-mid-call",
+     "summary": "A run no launch line names is a call an agent is still in, and stays the harness's",
+     "class": "within",
+     "why": "Measured 2026-11-20 23:22:49 (item 4): a background call's PostToolUse can arrive after the Stop. Items 1 and 12 state that a detached unwatched run and a stopped builder's run still refuse once per root, so the block does not let the main session's own detached run through; whether the code holds that is the tests' and the code review's job, not fidelity's."
+    },
+    {
+     "id": "still-running-reader",
+     "summary": "A new read-only set_down_hooks::still_running(path, id); running() and its verdict left as T65 left them",
+     "class": "within",
+     "why": "The brief names one public reader added to set_down_hooks, read-only, and running() unchanged; item 4 measured why running() alone misses interim builders (11 of 14)."
+    },
+    {
+     "id": "background-tasks-list-not-used",
+     "summary": "The Stop payload's background_tasks subagent list is not the reading used",
+     "class": "within",
+     "why": "Measured 2026-11-21 (item 4): every builder missing from a Stop's list had last sent an interim notice, so the list cannot say a builder is waiting on its own run. A choice of source inside the task."
+    },
+    {
+     "id": "harness-by-name-or-argv0",
+     "summary": "Procs::harness takes comm or argv[0]'s first word 'claude', so a version-named harness of a background session is the harness",
+     "class": "within",
+     "why": "A check refusing good work (the 10 rows), a defect found on the way and fixed in this task, as the project's fix-what-you-find rule asks; measured (6 harness processes, 4 version-named)."
+    },
+    {
+     "id": "finding-restated-by-measurement",
+     "summary": "The heading restates the finding by its measurement: 14 builder-started runs and 10 the session's own background call's run",
+     "class": "within",
+     "why": "The restatement widens the fix to the 10 rows the measurement found and drops nothing; no row is a stopped builder's. The filed T85 line itself is not in the bundle, so this is judged on the restatement as given."
+    },
+    {
+     "id": "builder-subagent-run-still-refuses",
+     "summary": "A run started by a builder's own sub-agent (an id the session's transcript never names) still reads as stopped and refuses, as before",
+     "class": "within",
+     "why": "Neither the request nor FR-013 says what this guard must cover, so this leaves nothing asked undone; and no wrong outcome is measured - none in the 24 rows, and the wider window's 34 (19, 14, 1 both) leave none unaccounted for. The default is the guard's safe side for a starter whose state cannot be read. Not a defect left, so FR-009's deferral form is not owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T86": {
+   "section_sha256": "9760128970cdaed7bcc167ab1501b0be012478d99b9641d6013ee1edcad7614a",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T86-callers-files",
+     "summary": "The caller's files are the clone's uncommitted files less those that another task's non-fallback Edit/Write/NotebookEdit event-log lines alone name (newer than the file's last commit, inside a 7-day window); an unnamed file and a shared file are the caller's; the feature comes from F= or the latest task-start naming the task.",
+     "class": "within",
+     "why": "This is how the task's own fix is built (a closing run judges the caller's work, the [perf] builders' loop under FR-013). It errs to the safe side: a miss counts a file as the caller's and gives a false red, never a false green. Choosing it over the active-task mark and over a FILES=/CRATES= list is a design choice, and the plan measured all three."
+    },
+    {
+     "id": "T86-claims-window",
+     "summary": "A new GUESS knob: an edit line claims a file only if it is newer than the file's last commit, within 7 days.",
+     "class": "within",
+     "why": "A parameter of the mechanism. When it misjudges, it counts more files as the caller's, so it can only make the verdict stricter."
+    },
+    {
+     "id": "T86-per-crate-apart",
+     "summary": "In static's per-crate steps, a red crate whose kept-key inputs read none of the caller's files is reported APART and not counted. The key inputs are factored out of verdict_key_with so the two cannot drift. A crate that builds on a caller's crate, or whose tests read the caller's file, is the caller's. A listing or key that cannot be judged counts every crate.",
+     "class": "within",
+     "why": "This is the fix the task's line asks for (shape (a), 5 runs measured). Every case that cannot be judged falls back to counting, as before."
+    },
+    {
+     "id": "T86-treewide-and-hooks-counted",
+     "summary": "Tree-wide steps and hooks-test stay counted whole, and a crate holding both tasks' files is judged whole (shapes (d) and (e), 4 of the 13 measured runs, stay red).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the task's aim of a verdict on the caller's own work, but separating these cases is impossible with the instrument the plan has. Every hooks-test suite's key reads 994-998 paths of the guard's and the gate's crates (measured with l7r-guard deps), so a suite run on another task's edit also ran the caller's code, and no key can clear it. A crate's lint and cover verdict is one verdict over the whole crate. The tree-wide steps, measured through quick's full runs, fired on no other task's file. A red that is kept is not a wrong green, and none of these cases is a check refusing work that could be shown good."
+    },
+    {
+     "id": "T86-blocked-tag",
+     "summary": "A counted red whose every error line names another task's file (the caller's crate or the gate binary unbuildable on another task's half-done dependency) is tagged BLOCKED, names the files and tasks, and stays red.",
+     "class": "within",
+     "why": "Nothing of the caller's was judged there, so keeping it red is correct. The tag only reports which task is responsible."
+    },
+    {
+     "id": "T86-no-T-whole-clone",
+     "summary": "With no T= the whole clone is judged as before. Only the script sets the listing, so make static, make done and a landing judge every crate by construction.",
+     "class": "within",
+     "why": "Keeps the landing's whole-tree check and the default unchanged. Nothing is narrowed."
+    },
+    {
+     "id": "T86-guard-wording",
+     "summary": "T55's decide notice and foreground refusal (order.rs) and the third-static refusal (static_runs_hooks.rs) now name 'make closing-checks T=<task> F=<feature>' from the call's filed task, or T=<your task> when the call is filed under no task. closing-checks.sh's rerun line names T= and F= as given.",
+     "class": "within",
+     "why": "Without this the fix cannot be reached: a builder told to run a bare make closing-checks gets the whole-clone verdict that T86 exists to replace. Fixing the third-static message beside the other two is the same defect (constitution XIV), and its red-first tests are recorded."
+    },
+    {
+     "id": "T86-found-and-left-unlogged-writer",
+     "summary": "Files another builder writes through Bash (sed -i, heredoc, generator) leave no Edit/Write line, so they count as the caller's. This is left to T93 (a write-path field on the event log's Bash lines in rust/guard/shared's event_log_hooks), which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect, a false red on good work, is left out of T86, but it is not dropped. FR-009's deferral form is met in full: why it is not fixed here (a new field on the event log's Bash lines that every reader of the log meets, in another crate's files), the filed id T93, its order 'lands before T22', and an every-instance line labeled observed 2026-11-21 with its method. The GM approved 'briefs that default to fixing in the task' (improvement 4), which allows a deferral that states why. The miss is on the safe side (never a wrong green, and make done judges the whole tree). It does not gut T86's purpose: the 5 measured shape-(a) runs all came apart under the replayed rule."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T83 (shared::tree's walk blanked a quoted word that held a space or a shell character, and a file tool's destination was then read from the word before it, found by T79 2026-11-21: through HEAD's main-tree `cp /tmp/a \"/diagram/x y\"`, `echo x > \"/diagram/a b\"` and `mv /tmp/a \"/diagram/(x)\"` were let through while `cp /tmp/a /diagram/x` was refused, measured 2026-11-21 (`/tmp/t79/probes-q.jsonl` through HEAD's walk, `/tmp/t83/out/q.head.jsonl`: the three read `/tmp/a` or a place nothing is known of, `(None, elsewhere, shell)`))",
+    "### T83 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 THE WORD",
+     "summary": "A quoted body that is no plain word is held as one word via plane-15 stand-ins (0xF0000 + c), unheld where a place is read; a double-quoted body's plain $(...) left for the walk.",
+     "class": "within",
+     "why": "The mechanism that carries T83's own line (a quoted destination read as its place). The request and spec do not reach the shell walk; nothing they ask is narrowed."
+    },
+    {
+     "id": "D2 SIDE EFFECTS folded in",
+     "summary": "touch -d/-t/-r values read as option values, not files; held braces; found by the corpus diff and fixed here.",
+     "class": "within",
+     "why": "Wrong outcomes (phantom writes, a cp hidden at bx#45625) found by this task and fixed in it: the approved default of fixing in the task (improvement 4) and FIX AS WE GO."
+    },
+    {
+     "id": "D3 ESCAPES AND ARITHMETIC, inside and outside quotes",
+     "summary": "\\$( in a held double-quoted body is no substitution; $((...)) and ((...)) are one word read as bash 5.3.9 reads them, including the subshell rule for ((cd x && touch a) && touch b); fixed outside quotes too in tree/split.rs.",
+     "class": "within",
+     "why": "Phantom writes (bx#27391-27393, ux#1441) are wrong outcomes; fixing a defect found by the task, in the task, is the approved default. Widening to fix found defects narrows nothing."
+    },
+    {
+     "id": "D4 THE SPLIT",
+     "summary": "tree.rs split into tree/quoted.rs and tree/split.rs for file scale.",
+     "class": "within",
+     "why": "Constitution X clause 13, a structural move with no behavior of its own."
+    },
+    {
+     "id": "D5 REDIRECT rewrite kept",
+     "summary": "The redirect scan moved to the regex crate's automaton with a lookbehind read by hand, kept for its 0.50 G saving, a differential test pinning its targets to the old pattern's.",
+     "class": "within",
+     "why": "Performance work removing work (FR-013's spirit); its targets are pinned to the old pattern's, so no reading changes."
+    },
+    {
+     "id": "D6 THE SPEED: +4.7% instructions accepted, exit unmet, cure filed T129",
+     "summary": "The walk's instructions rise 56.63 G to 59.31 G over ux; the plan's exit 'at or under HEAD's' is not met and the rise is accepted; ASSIGN's lookbehind priced and filed as T129.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled on the outcome, not the cost argument: the extra work is intrinsic to the fix (a held word's text now stands where an empty pair stood, so the same patterns read more), and the exit it misses was the plan's own, set on a misread profile (the 17 G REDIRECT share did not exist), not a GM rule. The block's wall figures put it at about 0.13 s over 2,311 commands, roughly 56 microseconds a walk; that is no wrong outcome by constitution XIV's definition and does not gut the request's purpose (minutes of builder and landing time). The 'would void the walk diff and replay' sentence is implementation cost and is not what carries this ruling. T129's measured saving (ASSIGN's scans, 20.16 G) exceeds the rise."
+    },
+    {
+     "id": "D7 ux#1913 left as a difference",
+     "summary": "A segment's placeholder renumbered ($__sub_1__ for $__sub_0__) because the walk now walks a substitution bash runs; no reader parses the index.",
+     "class": "within",
+     "why": "A difference, not a wrong outcome (constitution XIV, the GM 2026-11-19); the readers were grepped and none parses it."
+    },
+    {
+     "id": "D8 Found and left: T127 (assignment value cut at a quoted blank)",
+     "summary": "D=/diagram/\"a b\"; cp /tmp/a $D/f is still refused, naming the wrong path; deferred to T127, lands before T118.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect present at HEAD that T83 does not worsen; the write is still refused (main's class), only the path named is wrong. A different mechanism (env_from/bind read raw text), whose fix changes every bound-value expansion; stated why, filed id and order per FR-009, ordered after T133 so it lands on the walk's final quoted-substitution reading."
+    },
+    {
+     "id": "D9 Found and left: T132 (a command holding an unpaired body keeps every body blanked)",
+     "summary": "pairs_within: a command with one body whose parentheses or backquotes do not pair has every quoted body read as at HEAD, including bodies that pair; deferred to T132 (nesting quote scan), lands before T133.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated in two parts. (a) The unpaired body itself: the flat scan pairs `\"$(dirname \"`, `$F`, `\")\"`, so holding it would hold a wrong word; reading it right needs the nesting scan every guard shares, and holding it wrong is worse than HEAD. (b) The other, pairable bodies of such a command (1,559 bx, 227 ux; the block's probe `cp /tmp/a \"/diagram/x y\"; echo \"$(dirname \"$F\")\"`): the Approach's sentence carries it - the quote scan's pairs in such a command are not the shell's, 'so a command with one has every body read as before' - and the block shows the concrete hazard of holding a misbounded body: bx#45625, where a misread held body read the rest of the command as one word and hid a cp into the clone. Keeping HEAD's reading there guarantees no new false negative; T83 loses no reading HEAD had. Filed with id and order (FR-009); the measured exposure (2 destinations, none under /diagram) is noted as exposure, not as the reason."
+    },
+    {
+     "id": "D10 Found and left: T133 (a held body's $(...) holding a quote hidden whole)",
+     "summary": "echo \"$(touch '/diagram/x')\" reads as no write at HEAD and with T83; deferred to T133, lands before T127.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect present at HEAD (HEAD blanked the whole body), not worsened; walking it needs the substitution's own quotes read by T132's nesting scan, so it genuinely depends on T132. Stated why, id and order (T132 before T133 before T127)."
+    },
+    {
+     "id": "D11 Found and left: T134 ([[ ... ]] and $[ ... ] < > read as redirects)",
+     "summary": "[[ a > b ]] and $[ 3 > 2 ] read as writes at HEAD and with T83; deferred to T134, lands before T132.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect present at HEAD, not worsened, and a separate grammar ([[ ]]'s own operators) beside T83's arithmetic; counted absent with a < or > from all three corpora (method stated). Stated why, id and order; the chain T134 > T132 > T133 > T127 > T118 has no cycle."
+    },
+    {
+     "id": "D12 ux#1024 attributed to the replay's race",
+     "summary": "A reworded output in the four-worker replay explained as concurrent rows sharing the attempts note; replayed alone, both binaries print nothing; neither fixed nor filed.",
+     "class": "within",
+     "why": "Both binaries allow the row and print nothing when replayed sequentially, so no hook's outcome is wrong; the reword is the harness's parallelism, outside T83's walk and not a wrong outcome of the product."
+    },
+    {
+     "id": "D13 Evidence base: walk diff and replay on aeb9a0b6b1, T83-on-T110 by the closing run",
+     "summary": "The diff and replay compare T83 alone before T110 landed; T83 on T110 is covered by make closing-checks in the clone.",
+     "class": "within",
+     "why": "A measurement method; T110 touches tree/program.rs, which T83 does not, and the combined tree is checked by the closing run."
+    },
+    {
+     "id": "D14 Third closing run under STATIC_OK",
+     "summary": "The third closing-checks run escaped FR-007's third-make-static refusal because the first two stopped before static's later stages.",
+     "class": "within",
+     "why": "FR-012 provides a recorded escape with a reason; the stated reason (earlier runs did not reach static's later stages) is the case the escape exists for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T84 (the finding as filed, measured 2026-11-21 over the night's 29 tasks: 43 builders, about 16 builder reports asking the session to file a task, and every MODE 4 plan review left to it; four causes, each measured in item 4: two concurrent `make task-add` runs could lose both filings, nothing held a builder's stop, only the briefs kept a builder from its own review, and the tick's and the push's plan gate judged the whole feature, so every landing took `PLAN_REVIEW_OK`)",
+    "### T84 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T84-1 task-add lock and own withdrawal",
+     "summary": "make task-add takes a per-feature flock held from the id's read through both quick runs, withdraws only its own box and section from the files as they are; past a 120 s wait (GUESS, knob L7R_TASK_ADD_LOCK_WAIT) it refuses, writing nothing and naming the lock file.",
+     "class": "within",
+     "why": "The brief asks to measure first and lock red first if two filings collide; item 4 measured 6 of 6 rounds losing both filings on a red quick, and item 9 shows red then green. It keeps FR-011's withdraw-and-refuse behavior and only stops it taking another writer's lines. A lock-wait timeout that refuses fails closed."
+    },
+    {
+     "id": "T84-2 nothing built for a builder's own review",
+     "summary": "No new code lets a builder dispatch its own spec-fidelity review: measured, every builder dispatch already passes every guard; only the briefs barred it.",
+     "class": "within",
+     "why": "The finding's cause is that instructions alone barred it; the measurement (35 calls, none refused) shows no guard stands in the way. That the review actually happens is enforced by T84-3's stop guard and the tick gate (T84-4), so this is not enforcement by instruction."
+    },
+    {
+     "id": "T84-3a builder-stop guard: who is held",
+     "summary": "builder_stop_hooks (SubagentStop) answers decision: block to a builder the session dispatched for a started, open task while l7r-gate plan decided says its section is not decided (the verdict store's current CLEAR, plus the decide lint's deferral findings).",
+     "class": "within",
+     "why": "The brief names SubagentStop and reading the verdict store rather than text; builder identity follows D8. A builder with no started task is not held here, but the tick and push gate still refuse its task's landing without a CLEAR section, so no unreviewed work lands through that gap."
+    },
+    {
+     "id": "T84-3b handoff-only state passes",
+     "summary": "A builder past T12's context cap, in its handoff-only state, may stop.",
+     "class": "within",
+     "why": "The brief requires it (the context cap's handoff-only state passing), and FR-006 sends that builder to a handoff and a fresh dispatch; the next builder is held by the same guard and the tick gate stays the backstop."
+    },
+    {
+     "id": "T84-3c the guard's escape",
+     "summary": "The stop guard has an escape of a recorded reason.",
+     "class": "within",
+     "why": "The brief and the project's guard rules (FR-012's form) require it. Approach item 3 does not spell the escape out; item 2 lists it as a constraint and the suite pins the guard (6 passed)."
+    },
+    {
+     "id": "T84-3d ASK_LIMIT 40 s",
+     "summary": "The guard's call to the gate is limited to 40 s (GUESS, under the hook's 60 s).",
+     "class": "within",
+     "why": "A new constant, labeled a GUESS. The section does not say which way a timeout goes (block or let the builder stop). Either way the tick and push gate (T84-4) still refuse an undecided section, so a timed-out ask cannot land unreviewed work. Noted, not blocking."
+    },
+    {
+     "id": "T84-4a plan gate per task: an open task's section not judged",
+     "summary": "The tick's and the push's plan gate (plan::tick_gate, task::push_owed) judges the blocks outside every task's section plus the sections of the task ticked and the tasks ticked before it, and never an open task's section; the land crate keeps no plan check of its own.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows feature 243 / 375 D60's reach (every block owed) at the tick and push. Applying the whole-feature rule literally defeats its own purpose and the GM's 'real enforcement and not just instructions': measured, all 16 of 451's landings took PLAN_REVIEW_OK, 10 of them on correct work, so the gate had become a routine escape. 243's purpose is that a task is not ticked while its decisions lack a verdict. That holds: the ticked task's own section, earlier ticked sections and every shared block are still judged, and an open task's section is judged at its own tick. No task can be ticked or pushed while its own section lacks CLEAR at its digest. The red test a_tick_answers_for_its_own_section_the_ticked_ones_and_the_shared_blocks pins it."
+    },
+    {
+     "id": "T84-4b a filled template's old heading not owed",
+     "summary": "A '(removed) ### T<n> (<why: ...>)' block, the old heading of a filled task template, is not owed once T<n>'s section carries a CLEAR task verdict.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from 4a. D60 owes a deleted block because a decision deleted by hand is a change. A template's placeholder heading carries no decision: the text replacing it is the task's own section, already reviewed CLEAR at its digest. Measured: 4 of 16 landings owed only this. This holds only as far as the forgiveness is limited to the template's placeholder heading of the same task with a current CLEAR section, as the section states. A hand-deleted decision under any other heading stays owed."
+    },
+    {
+     "id": "T84-5 left: arbiter accept not recorded as a task verdict (T92)",
+     "summary": "A round-arbiter accept is not written to the verdict store as the task's verdict; T33, T46, T67 and T79 show BLOCKED there. Left to T92's line, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect that refuses correct work, left in the FR-009 form: its visible effect, measured 2026-11-21, why it is not fixed here (the accept is written by make arbiter-ruled, outside this task's files), filed id T92, and 'lands before T22'. That is the form the four accepts in rulings.md treat as enough. One gap for T92 to cover: the new stop guard reads the same store, so a builder of a task the arbiter accepted would also be held at its stop, not only its tick and push. Same defect, same cure, and an escape exists."
+    },
+    {
+     "id": "T84-6 left: land crate tests take the session's PLAN_REVIEW_OK (T94)",
+     "summary": "The land crate's tests read the session's exported escape and write the real guard log; filed as T94, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a test's verdict follows the session's exports, and make audit lists a fixture's escape as real) left in FR-009's form: the observation and its method, why (the land crate's tests are outside this task's files, and T84 makes the escape rare rather than gone), filed id T94, and its order."
+    },
+    {
+     "id": "T84-7 printf recipe lines: not a defect",
+     "summary": "task_add/quick.rs's lines() drops any quick recipe line opening printf; today no check opens so.",
+     "class": "within",
+     "why": "Measured against the Makefile: no check is skipped, so nothing goes wrong. Under constitution XIV this is a difference, not a defect, and needs no ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T85 (the finding as filed, restated by its measurement: of the main session's 24 run-still-going refusals of 2026-11-21 00:00-08:00 UTC, 14 named a run a builder still running had started and 10 the session's own background call's run, which the harness tracks but the guard did not see, and none a run whose builder had stopped, measured 2026-11-21 (each guard-log row matched to the event log's Stop line, its in-flight shells' launch lines and each builder's last notice in the session's transcript, `/tmp/t85-measure/final.py`))",
+    "### T85 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "starter-identity",
+     "summary": "The run's starter is read from its output path's task id and the event log's PostToolUse launch line (bg = id, by = the payload's agent_id), not from the env",
+     "class": "within",
+     "why": "The brief's constraint: the starter from the run's process (its env or the event log's launch line), not a guess; item 4 measured that the env carries no agent id, so the launch line is the one source that can name it."
+    },
+    {
+     "id": "no-by-is-the-sessions",
+     "summary": "A launch line with no by is the session's own background call, the harness's to wake, permitted",
+     "class": "within",
+     "why": "Feature 246's design as the brief states it: a run the harness tracks is let through. The 10 rows of the 24 are this case."
+    },
+    {
+     "id": "builder-running-permitted",
+     "summary": "A by still running by set_down_hooks' transcript reading (T65's) is the builder's, permitted with one line (builder-running)",
+     "class": "within",
+     "why": "The task's own finding: 14 of the 24 refusals named a run a still-running builder had started."
+    },
+    {
+     "id": "stopped-or-unknown-is-detached",
+     "summary": "Any other by - stopped, or the transcript cannot say - is judged as a detached run: watched by a waiter or refused once per root",
+     "class": "within",
+     "why": "Keeps the refusal the brief requires (still fire for a stopped builder's run) and takes the safe side where the starter's state cannot be read, as 'not a guess' asks."
+    },
+    {
+     "id": "no-launch-line-is-mid-call",
+     "summary": "A run no launch line names is a call an agent is still in, and stays the harness's",
+     "class": "within",
+     "why": "Measured 2026-11-20 23:22:49 (item 4): a background call's PostToolUse can arrive after the Stop. Items 1 and 12 state that a detached unwatched run and a stopped builder's run still refuse once per root, so the block does not let the main session's own detached run through; whether the code holds that is the tests' and the code review's job, not fidelity's."
+    },
+    {
+     "id": "still-running-reader",
+     "summary": "A new read-only set_down_hooks::still_running(path, id); running() and its verdict left as T65 left them",
+     "class": "within",
+     "why": "The brief names one public reader added to set_down_hooks, read-only, and running() unchanged; item 4 measured why running() alone misses interim builders (11 of 14)."
+    },
+    {
+     "id": "background-tasks-list-not-used",
+     "summary": "The Stop payload's background_tasks subagent list is not the reading used",
+     "class": "within",
+     "why": "Measured 2026-11-21 (item 4): every builder missing from a Stop's list had last sent an interim notice, so the list cannot say a builder is waiting on its own run. A choice of source inside the task."
+    },
+    {
+     "id": "harness-by-name-or-argv0",
+     "summary": "Procs::harness takes comm or argv[0]'s first word 'claude', so a version-named harness of a background session is the harness",
+     "class": "within",
+     "why": "A check refusing good work (the 10 rows), a defect found on the way and fixed in this task, as the project's fix-what-you-find rule asks; measured (6 harness processes, 4 version-named)."
+    },
+    {
+     "id": "finding-restated-by-measurement",
+     "summary": "The heading restates the finding by its measurement: 14 builder-started runs and 10 the session's own background call's run",
+     "class": "within",
+     "why": "The restatement widens the fix to the 10 rows the measurement found and drops nothing; no row is a stopped builder's. The filed T85 line itself is not in the bundle, so this is judged on the restatement as given."
+    },
+    {
+     "id": "builder-subagent-run-still-refuses",
+     "summary": "A run started by a builder's own sub-agent (an id the session's transcript never names) still reads as stopped and refuses, as before",
+     "class": "within",
+     "why": "Neither the request nor FR-013 says what this guard must cover, so this leaves nothing asked undone; and no wrong outcome is measured - none in the 24 rows, and the wider window's 34 (19, 14, 1 both) leave none unaccounted for. The default is the guard's safe side for a starter whose state cannot be read. Not a defect left, so FR-009's deferral form is not owed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T86 (a builder's closing checks went red on another builder's half-done files in the same clone: about 12 of the night's closing runs red only on another task's in-flight files, measured 2026-11-21 (the main session's reading of the night's runs, T86's line); 13 such red runs of 5 shapes, measured 2026-11-21 (item 4))",
+    "### T86 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T86-callers-files",
+     "summary": "The caller's files are the clone's uncommitted files less those that another task's non-fallback Edit/Write/NotebookEdit event-log lines alone name (newer than the file's last commit, inside a 7-day window); an unnamed file and a shared file are the caller's; the feature comes from F= or the latest task-start naming the task.",
+     "class": "within",
+     "why": "This is how the task's own fix is built (a closing run judges the caller's work, the [perf] builders' loop under FR-013). It errs to the safe side: a miss counts a file as the caller's and gives a false red, never a false green. Choosing it over the active-task mark and over a FILES=/CRATES= list is a design choice, and the plan measured all three."
+    },
+    {
+     "id": "T86-claims-window",
+     "summary": "A new GUESS knob: an edit line claims a file only if it is newer than the file's last commit, within 7 days.",
+     "class": "within",
+     "why": "A parameter of the mechanism. When it misjudges, it counts more files as the caller's, so it can only make the verdict stricter."
+    },
+    {
+     "id": "T86-per-crate-apart",
+     "summary": "In static's per-crate steps, a red crate whose kept-key inputs read none of the caller's files is reported APART and not counted. The key inputs are factored out of verdict_key_with so the two cannot drift. A crate that builds on a caller's crate, or whose tests read the caller's file, is the caller's. A listing or key that cannot be judged counts every crate.",
+     "class": "within",
+     "why": "This is the fix the task's line asks for (shape (a), 5 runs measured). Every case that cannot be judged falls back to counting, as before."
+    },
+    {
+     "id": "T86-treewide-and-hooks-counted",
+     "summary": "Tree-wide steps and hooks-test stay counted whole, and a crate holding both tasks' files is judged whole (shapes (d) and (e), 4 of the 13 measured runs, stay red).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the task's aim of a verdict on the caller's own work, but separating these cases is impossible with the instrument the plan has. Every hooks-test suite's key reads 994-998 paths of the guard's and the gate's crates (measured with l7r-guard deps), so a suite run on another task's edit also ran the caller's code, and no key can clear it. A crate's lint and cover verdict is one verdict over the whole crate. The tree-wide steps, measured through quick's full runs, fired on no other task's file. A red that is kept is not a wrong green, and none of these cases is a check refusing work that could be shown good."
+    },
+    {
+     "id": "T86-blocked-tag",
+     "summary": "A counted red whose every error line names another task's file (the caller's crate or the gate binary unbuildable on another task's half-done dependency) is tagged BLOCKED, names the files and tasks, and stays red.",
+     "class": "within",
+     "why": "Nothing of the caller's was judged there, so keeping it red is correct. The tag only reports which task is responsible."
+    },
+    {
+     "id": "T86-no-T-whole-clone",
+     "summary": "With no T= the whole clone is judged as before. Only the script sets the listing, so make static, make done and a landing judge every crate by construction.",
+     "class": "within",
+     "why": "Keeps the landing's whole-tree check and the default unchanged. Nothing is narrowed."
+    },
+    {
+     "id": "T86-guard-wording",
+     "summary": "T55's decide notice and foreground refusal (order.rs) and the third-static refusal (static_runs_hooks.rs) now name 'make closing-checks T=<task> F=<feature>' from the call's filed task, or T=<your task> when the call is filed under no task. closing-checks.sh's rerun line names T= and F= as given.",
+     "class": "within",
+     "why": "Without this the fix cannot be reached: a builder told to run a bare make closing-checks gets the whole-clone verdict that T86 exists to replace. Fixing the third-static message beside the other two is the same defect (constitution XIV), and its red-first tests are recorded."
+    },
+    {
+     "id": "T86-found-and-left-unlogged-writer",
+     "summary": "Files another builder writes through Bash (sed -i, heredoc, generator) leave no Edit/Write line, so they count as the caller's. This is left to T93 (a write-path field on the event log's Bash lines in rust/guard/shared's event_log_hooks), which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect, a false red on good work, is left out of T86, but it is not dropped. FR-009's deferral form is met in full: why it is not fixed here (a new field on the event log's Bash lines that every reader of the log meets, in another crate's files), the filed id T93, its order 'lands before T22', and an every-instance line labeled observed 2026-11-21 with its method. The GM approved 'briefs that default to fixing in the task' (improvement 4), which allows a deferral that states why. The miss is on the safe side (never a wrong green, and make done judges the whole tree). It does not gut T86's purpose: the 5 measured shape-(a) runs all came apart under the replayed rule."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T83 to T86, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

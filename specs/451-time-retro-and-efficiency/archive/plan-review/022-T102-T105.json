@@ -1,0 +1,779 @@
+{
+ "blocks": {
+  "### T102 (the Stop hook's free-slot refusal named T22, which waits on a measured day, in each of its 4 refusals of 2026-11-21 18:48-19:39Z, each with 2 builders running, measured 2026-11-21 (the session transcript's refusal texts, deduplicated by time); T98, measured only after a night of rolling dispatch, the next it would name)": {
+   "sha256": "2486fad997eb687a7452f765a9d542b307729e1e24f80e8acfc884093007d7f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T102 Approach (checklist part A)": {
+   "sha256": "d0f1cfeb89fc337b90a04372b34bf0c58cec2d879b0225d13d1f1639131ca482",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T104 Approach (checklist part A)": {
+   "sha256": "d29e2429d97bfdf9a13e81065b531de03f7c352b01f4cb189e2f177ed916cfa7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")": {
+   "sha256": "e204a734b9eebef413aa68bd46cb744195e52c5114df30979f74ad3283c6c2b5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T102": {
+   "section_sha256": "c28a652f70195821f2e65628b402c328e3adf340cb5df54e9fc119131943e25b",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-positional-clause",
+     "summary": "(waits: <when>) is read only right after the id's bracketed tags, where [perf] is read, so prose quoting the clause waits on nothing",
+     "class": "within",
+     "why": "Parsing detail of how a task line states its wait. It narrows nothing asked and stops stray prose from holding a task."
+    },
+    {
+     "id": "D2-reaches-FR013-picker",
+     "summary": "One wait reading applied in next_independent (free slot), next_performance (task-start's FR-013 picker and the Stop hook's performance-first) and the nothing-running fallback; a waiting performance task no longer triggers FR-013's refusal, its case 'read rather than escaped'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the accepted FR-013. That spec gives a performance task waiting on another's landing an escape of a recorded reason (FR-012, counted by SC-006), and the plan drops it from the refusal instead. The ruling is against the request ('prioritize performance improvements going forward'; measurement tasks 'counted as a performance task for the purpose of scheduling and coming first'). A performance task that cannot start yet cannot go first, and refusing other work for it idles builders, which defeats the purpose of making everything faster. FR-013's own wording names this exact case as a permitted exception. The reason is still recorded, in git, on the waiting task's committed line, not in the escape log. A startable performance task is refused exactly as before, so the enforcement stays real. Each form is ruled separately in D2a-D2d."
+    },
+    {
+     "id": "D2a-waits-landing",
+     "summary": "Form 'T88 lands' / 'T02-T21 land': met when none of the named tasks is open",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is FR-013's named escape case word for word: a performance task waiting on another task's landing. It releases itself when the landing happens, and it is stated on the committed task line."
+    },
+    {
+     "id": "D2b-after-Tn",
+     "summary": "T88's 'after T<n>' rule moved from the free slot into the shared reading, so it now also reaches the FR-013 picker and the nothing-running fallback",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same class as D2a: the task cannot start until T<n> is no longer open. Its reach grew to the picker, but its meaning did not change, and it releases itself when T<n> closes."
+    },
+    {
+     "id": "D2c-lands-before",
+     "summary": "Another open line's 'lands before T<n>' holds T<n> (4 open lines in 451 say 'lands before T22')",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is still 'waiting on another task's landing': another task has committed to land first, and 'lands before ...' is the ordering phrase this feature's own FR-009 requires. It is read from prose on a different line, unlike the positional clause, so a passing mention could hold a performance task. It fails toward hiding rather than starting, against the block's stated direction. But the hold ends when that line closes, so it never hides a task for good. Not a defect now: in 451 all 4 measured lines name T22 on purpose."
+    },
+    {
+     "id": "D2d-full-day-after",
+     "summary": "Form 'a full day after T.. land(s)': met 24 h past the latest logged landing (land end lines, landed true); T22 a full day after T02-T21 (until 2026-11-22T08:00:27.560Z), T98 a full day after T88 (until 2026-11-22T18:40:27.980Z)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "After the landing this is a clock, so it gets D7e's test. Unlike the bare date it is anchored to a logged landing, it has one fixed duration, and it is written on the committed line. A full day's measurement cannot be taken before that day has elapsed (SC-005: 'the first full day after landing'), so the rule is physically impossible to apply sooner, not merely awkward. The GM asked for measurement tasks to count as performance work, and a measurement task taken early measures nothing. T98's stated need is 'a night of rolling dispatch'. The night window cited was 07:50-17:30Z, and the next one after T88's 18:40Z landing is 2026-11-22 07:50-17:30Z. The 24 h hold ends at 18:40Z, about 1h10m after that window closes. So the convention holds T98 only a little longer than its need, and less than the rejected end-of-UTC-day form (00:00Z on 11-23) would. Not a defect."
+    },
+    {
+     "id": "D3-other-text-no-wait",
+     "summary": "Anything else in the parentheses is no wait (fails toward a start the session sees named)",
+     "class": "within",
+     "why": "Unreadable text leaves the task inside FR-013's refusal, so this fails toward enforcement, not away from it."
+    },
+    {
+     "id": "D4-bare-date-dropped",
+     "summary": "A bare date is not a form; pinned as no wait",
+     "class": "within",
+     "why": "This complies with the earlier plan-review ruling D7e (NOT LEGITIMATE), which this block records. With no form of wait unanchored to a landing, FR-013 is left whole."
+    },
+    {
+     "id": "D5-pre-log-landed",
+     "summary": "Tasks ticked before the log carried land end lines (451 T02-T05) count as landed long ago",
+     "class": "within",
+     "why": "Reads history the log cannot hold. Ticked tasks did land. The latest landing that matters, T11, is logged."
+    },
+    {
+     "id": "D6-lines-set",
+     "summary": "T22 and T98 lines carry their waits clauses",
+     "class": "within",
+     "why": "This is the data the mechanism exists for. Both waits are anchored to logged landings, measured 2026-11-21."
+    },
+    {
+     "id": "D7-task-start-unchanged",
+     "summary": "task_start.rs unchanged; it calls the shared next_performance",
+     "class": "within",
+     "why": "Implementation placement. The behavior change is ruled under D2."
+    },
+    {
+     "id": "D8-perf-later-ok-wording",
+     "summary": "The free slot's PERF_LATER_OK reason now reads 'is started or touches a running task's files'",
+     "class": "within",
+     "why": "The message is reworded to match the narrower set of tasks it now covers. Nothing asked is narrowed."
+    },
+    {
+     "id": "D9-clock-seam",
+     "summary": "L7R_WAITS_NOW as the tests' clock seam, else the system clock",
+     "class": "within",
+     "why": "Test seam following the L7R_PERMIT_NOW precedent. It acts only on a full-day wait already written on a committed line."
+    },
+    {
+     "id": "D10-performance-text-check",
+     "summary": "performance() looks for the heading as text before running its pattern over plan.md",
+     "class": "within",
+     "why": "A CPU fix to a cost this change exposed (0.09-0.16 s back to 0.00-0.02 s, measured 2026-11-21). Within the performance work asked for."
+    },
+    {
+     "id": "D11-sc006-left",
+     "summary": "SC-006's count reads off the escape log; a start made while a performance task waits leaves no escape row; left because no SC-006 reader exists",
+     "class": "within",
+     "why": "The same narrowing as D2, seen from the spec's side. It is judged fresh, not on the block's appeal to 'T102's plan review notes', which nothing in this bundle backs. Under the defect test only a wrong outcome now is a defect. The block's grep (2026-11-21) finds no reader of 451's SC-006, so nothing misreads today and nothing defective is left. Record for whoever builds that reader or amends the spec: FR-013 and SC-006 still say 'recorded escape', but a waiting task's reason is now on its own line and in the land log, not in the escape log."
+    },
+    {
+     "id": "D12-red-not-rerun",
+     "summary": "After the date form was dropped, the three tests were rewritten to wait on landings and not rerun red",
+     "class": "within",
+     "why": "FR-012's red-first is owed for a refusal that fires, and T102 adds no new refusal: it makes existing ones skip a task that cannot start. The original tests were red on the unchanged hook (357/3, measured 2026-11-21). That the rewritten tests would still be red is argued, not measured: the unchanged hook does not read the clause at all, so its output cannot depend on what the clause says."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T103": {
+   "section_sha256": "03bb0f565ad10451441973c48d23a0c5b0c68f11180a156b6f3104f11102bb30",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T103-gate",
+     "summary": "Each of shape's strip patterns (HEREDOC, QUOTED_HEREDOC, UNQUOTED_HEREDOC on '<<', BACKTICK_SPAN on a backtick, INTERPRETER_C on a trimmed text ending in 'c') is searched only where its text holds the literal any match needs, reusing T97's shared::regex::Lazy; cut takes a Lazy.",
+     "class": "within",
+     "why": "This is what T103's line asks for (each strip gated on the literal a match needs, as T97 gated the walk's patterns, measured first). It is a [perf] task under FR-013, and the spec's 2026-11-20 request puts performance work first. No answer changes, only the builds."
+    },
+    {
+     "id": "T103-quoted-scan",
+     "summary": "QUOTED is replaced by a linear scan (quoted_spans) that reads quoted strings the way the pattern did, with strip_quotes writing from the spans, because the backtracking pattern hung on an unclosed quote followed by many backslashes (corpus rows 3,148 and 7,510 under no_poll_hooks in the background).",
+     "class": "within",
+     "why": "A guard that hangs is a defect under constitution XIV's definition (a tool that hangs), and T103 found it in its own file. The fix-as-we-go rule has a known defect fixed before moving on. A pattern replaced by a scan builds no pattern at all, which also serves the line's purpose of no pattern build where none is needed. The differential test (scan equals find_iter on all texts up to 7 characters) is the plan's own evidence that the scan does the pattern's job. No reviewer imposed it as an exactness standard, and it enforces the requested behavior rather than adding scope."
+    },
+    {
+     "id": "T103-not-taken-tree-gate",
+     "summary": "tree.rs:348's own '<<' gate before strip_heredocs, now redundant, is left as it stands (outside T103's files).",
+     "class": "within",
+     "why": "A redundant check that still answers correctly is a difference, not a defect (constitution XIV v2.36.0), so leaving it narrows nothing that was asked."
+    },
+    {
+     "id": "T103-left-T108",
+     "summary": "The same QUOTED pattern text at wait.rs:53 and house_style_hooks.rs:85 is not fixed here: it is outside T103's files and neither copy was measured to hang. It is filed as T108 [perf], which measures first whether each copy hangs on row 3,148's shape and then gives each T103's scan as one shared function. T108 lands before T22.",
+     "class": "within",
+     "why": "T103's line covers shared::shape's strips, not the other modules' copies, so deferring them does not narrow what T103 was asked to do. The deferral is in FR-009's form: why it is not fixed here, the filed task id (T108, confirmed on tasks.md line 92) and its order ('lands before T22'). No hang is measured in either copy, so no known defect is carried past this step, and T108 is filed to measure it first rather than assume it."
+    },
+    {
+     "id": "T103-pins",
+     "summary": "Build-count pins (shape/tests/builds.rs, quotes.rs, run as child processes printing regex::BUILT) on plain, redirected, backtick, quoted, -c and heredoc commands, plus a 10 s deadline pin on an unclosed quote before forty escapes, each red first against the snapshot.",
+     "class": "within",
+     "why": "FR-012 red first, and the line asks for a build-count test red first. These tests only fail when the requested gating, or the hang fix, is missing: they enforce the request and add nothing to its scope."
+    },
+    {
+     "id": "T103-scope-files",
+     "summary": "Touches only shape.rs and shape/. Nothing of T99's or T102's files. T96's clippy errors in tree/program/tests.rs, which turned closing-checks run 1 RED, are left as T96's.",
+     "class": "within",
+     "why": "Keeping to the task's own files narrows nothing asked of T103. The red lint belongs to another task's file and is recorded as BLOCKED on T96, not waved off as T103's."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T104": {
+   "section_sha256": "dc65473e8ff3fbf5ead274757ac1ce9eeecb6d4bec314b2bec0494e8091defc9",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 case 6 contends by condition",
+     "summary": "Case 6's run holds the lock while a gate file stands; the gate opens only once the guard's own deferral line stands in two timers' logs and the winner's run has written its start; the check asks 2 deferrals where it asked 1; the sleep 0.3 before the overlap check removed; record waits 12 s -> 90 s upper bounds.",
+     "class": "within",
+     "why": "The GM asked for the test that fails under load to be fixed. This replaces a clock race (a fixed 0.6 s hold, reproduced red 8 of 8 under a 1.0 s stall) with a wait on a condition, and the check gets stricter (2 deferrals, not 1), not looser. The broken-lock guard is still red on it (measured). Nothing is narrowed."
+    },
+    {
+     "id": "D2 case 4b guard defect: state file and records written whole",
+     "summary": "write_json, the one writer of .git/idle-tests.json and of every record, writes beside the file and renames over it, so a timer never reads a truncated arming and exits silently; red-first unit test a_state_file_being_rewritten_is_read_whole.",
+     "class": "within",
+     "why": "Reproduction traced case 4b's red to a real guard defect (an armed timer vanishing with no record: a wrong outcome under constitution XIV), measured on the old guard and absent on the fixed one. Fixing the cause in the guard is fixing the test that fails under load at its root; covering the records too goes through the same single writer, so it is the same fix, not extra scope."
+    },
+    {
+     "id": "D3 case 9 start wait made a check",
+     "summary": "Case 9's unchecked 8 s wait for the run's start becomes a check, 'the run started before the prompt', with a 90 s upper bound.",
+     "class": "within",
+     "why": "Found red under load (1 of 64 beside burners) and was able to pass a green 'aborted' on a run that never was. The GM's words name the test that fails under load; the gate's failing case could not be recovered, so fixing every case reproduced failing under load is what the request asks. The check is stricter than before."
+    },
+    {
+     "id": "D4 case 4 record wait 8 s -> 90 s",
+     "summary": "Case 4's condition wait on its record raised from an 8 s to a 90 s upper bound.",
+     "class": "within",
+     "why": "Reproduced red 6 of 8 under a loaded minute; the bound is an upper bound a green run never pays, and the case's check is unchanged, so what it verifies is not weakened."
+    },
+    {
+     "id": "D5 between-case wait_consumed",
+     "summary": "Cases 5, 6 and 7 end by waiting for the arming to go, so the next case's Stop never meets the last one's timer alive.",
+     "class": "within",
+     "why": "Closes a gap the removed sleep 0.3 had hidden by chance; a direct consequence of D1's fix, inside the same suite."
+    },
+    {
+     "id": "D6 red waits print the timer's state",
+     "summary": "timer_state prints each clone's arming, the timer's liveness and its log when a wait runs out in cases 4, 4b, 6, 7 and 9.",
+     "class": "within",
+     "why": "Diagnostic output on a red only; it changes no verdict and serves the request by letting the next load failure name its cause, which the gate's failure on 2026-11-26 could not."
+    },
+    {
+     "id": "D7 the gate's failing case named as not recoverable",
+     "summary": "The plan does not name which case failed the 16:19Z gate (its output was overwritten or removed) and fixes instead every way reproduction showed the suite going red on good work, with the final suite 0 red in 320 copies under load and 8 of 8 under the stall.",
+     "class": "within",
+     "why": "Not a narrowing: the request is to fix the test that fails under load, and the plan fixes every case reproduced failing and shows the whole suite green under load, rather than fixing only one presumed case. The unrecoverability is measured (search of logs, .git and transcript, 2026-11-26), not assumed."
+    },
+    {
+     "id": "D8 lost red hook-suite output left, named as a candidate",
+     "summary": "A red hook suite's output being lost once its landing is rerun is left unfixed here, judged not a defect of this task's files (a missing record, no wrong outcome), and named in the builder's report for the coordinating session to file.",
+     "class": "within",
+     "why": "Outside what the GM asked (the idle-tests suite failing under load) and outside this task's files; it is not a defect left in the thing being fixed, so leaving it is within scope. Whether it is a defect under XIV for FR-009's found-and-left rule is for make decide's mechanical check, not a fidelity narrowing."
+    },
+    {
+     "id": "D9 checks run and order",
+     "summary": "First-tier checks (make builder-checks CRATE=rust/guard, the suite alone) in the task; the second tier once over the batch in the session clone; independent of other open tasks, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the brief; nothing the GM asked is dropped."
+    },
+    {
+     "id": "D10 new checks never seen red",
+     "summary": "Case 9's new check 'the run started before the prompt' and the between-case wait_consumed are stated never seen red on a broken guard.",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec requires a red-first proof of these (FR-012's red-first rule covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not a hook suite's waits); the suite's own regressions (no lock, no abort) are shown red. Nothing asked is dropped."
+    },
+    {
+     "id": "D11 case 10 counted apart in shadow runs",
+     "summary": "In t104-shadow.sh copies case 10 ('seams ignored in the repository's own tree') is red by construction (the shadow's hook stands outside the repository) and is excluded from the 8-of-8 counts.",
+     "class": "within",
+     "why": "A measurement-method choice about a harness artifact, stated openly; the non-shadow batches (320 + 64 copies) run case 10 normally and count it. Nothing in the request is narrowed."
+    },
+    {
+     "id": "D12 case 4b's bar met on the pre-final suite",
+     "summary": "Case 4b's 0-red-in-200 bar is met on the 320 copies run before case 4's bound was raised; the suite as it lands has 64 more copies plus 8 under the stall.",
+     "class": "within",
+     "why": "Raising case 4's upper bound cannot make case 4b red, and the landing suite was also run under load green; the evidence covers what is landing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T105": {
+   "section_sha256": "27123866b6a5ba0372d896503e613335d00934e65c38b57740f64a4cfd0ddc3f",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T105-merge-order",
+     "summary": "Every held file through git's line merge first; a sectioned file (plan.md, tasks.md, plan-review.json, and now dev/review-ledger.md) merged piece by piece only when its line merge conflicts.",
+     "class": "within",
+     "why": "Carries the task line's 'the sectioned merge on every file it reports' and adds the ledger, the file shape 1 stopped on; it is the mechanism the task exists to fix, and leaves already-merging files on the path they take now."
+    },
+    {
+     "id": "T105-additions-superset",
+     "summary": "Any other file's hunks where both sides only added are taken whole when one side's added lines contain the other's in order (merge3 via git merge-file --diff3).",
+     "class": "within",
+     "why": "Widens 'identical additions merged' to a strict superset of additions, which loses nothing either side wrote; broader than the line, not narrower, and only changes a case that conflicts today."
+    },
+    {
+     "id": "T105-archive-mark-piece",
+     "summary": "In plan.md an archive mark is a piece of its own, not the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stay where the archived section was.",
+     "class": "within",
+     "why": "Directly fixes the measured cause of shapes 2 and 3 (the tick's marks read as the tail of the preceding section); the replays show every clone piece kept and every tip mark kept in order."
+    },
+    {
+     "id": "T105-ledger-tip-wins",
+     "summary": "The ledger is cut at each line and a measured row keyed by its pass (check, wall, tokens); where both sides answer one pass the tip's row is kept and the clone's dropped.",
+     "class": "within",
+     "why": "The landing's rows are the record the push writes; keeping both was the duplicate-row defect (8 rows for 4 passes) the section also repairs. Dropping the clone's duplicate loses no pass, only a second copy of one."
+    },
+    {
+     "id": "T105-conflicts-still-stop",
+     "summary": "A piece both sides changed is line-merged first; a piece the tip archived that the clone changed still conflicts; every file merged before any exit, all conflicts named at once by piece, and a conflict moves nothing.",
+     "class": "within",
+     "why": "Keeps the take safe on the one shape where a choice would lose work, and improves the message (all conflicts, named by section) rather than narrowing anything."
+    },
+    {
+     "id": "T105-hand-write-refusal-scope",
+     "summary": "make ledger-owed WRITE= passes --by-hand and refuses only a recorded plan review's row as the landing's own, naming the count and writing the rest; a hand write of a pass traced to its feature (--write specs/<F>/) stays allowed, and a collision of such a row is left to the merge (tip kept).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the task line's 'the hand rows refused as the landing's own' from both of the landing's sets to one. Refusing the per-feature traced set would be wrong on the measured facts: only make land writes those rows, while land-tooling.sh and sync-with-main.sh's push do not (grep of every ledger-owed caller, 2026-11-21), so on those routes the hand write is the only writer and refusing it would leave the passes unrecorded - defeating the purpose (a ledger with each pass once). The purpose of the refusal (no duplicate rows for the same pass) is still met for that set by the ledger merge's tip-wins rule, so nothing the refusal is for is given up. The rows that every push route writes itself (recorded plan reviews) are the ones refused."
+    },
+    {
+     "id": "T105-step2-marks",
+     "summary": "Step 2's splice moves for 4 of the replayed tasks: it now stages the task's own text and no longer an adjacent mark or blank line.",
+     "class": "within",
+     "why": "A difference from the previous staging that the section measures and explains as step 2 meaning the task's own pieces; constitution XIII asks that everything works, not that staging be unchanged, and the existing landing-alone tests are required green."
+    },
+    {
+     "id": "T105-merge-tree-left",
+     "summary": "The merge of the clone's own commits since the landing began (merge-tree) is not treated as one of the shapes.",
+     "class": "within",
+     "why": "Not a defect left: the measured T82-T101 timeline shows the clone committed after the take's exit-4 advice, which already gives the route (git merge once committed). The task line names three shapes and all three are carried."
+    },
+    {
+     "id": "T105-duplicate-rows-fixed",
+     "summary": "Main's ledger's 8 rows for the 4 T82-T101 plan reviews reduced to the tip's 4, review-census's spec-fidelity judgment 1,526 to 1,522, runs unchanged.",
+     "class": "within",
+     "why": "A known defect the task's own failure produced, fixed in this step as fix-as-we-go requires, by the same rule the new merge applies."
+    },
+    {
+     "id": "T105-not-performance",
+     "summary": "The section classes T105 as not performance work (a correctness fix of the landing's take).",
+     "class": "within",
+     "why": "It is neither a performance improvement nor a measurement of time in the sense of the GM's 2026-11-20 order; classing it so keeps FR-013's scheduling honest rather than narrowing it."
+    },
+    {
+     "id": "T105-mark-length",
+     "summary": "The conflict mark is 31 characters long, labeled a CONVENTION of the parse.",
+     "class": "within",
+     "why": "An implementation convention inside the fix, labeled at its point of use; no requirement speaks to it."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T102 (the Stop hook's free-slot refusal named T22, which waits on a measured day, in each of its 4 refusals of 2026-11-21 18:48-19:39Z, each with 2 builders running, measured 2026-11-21 (the session transcript's refusal texts, deduplicated by time); T98, measured only after a night of rolling dispatch, the next it would name)",
+    "### T102 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-positional-clause",
+     "summary": "(waits: <when>) is read only right after the id's bracketed tags, where [perf] is read, so prose quoting the clause waits on nothing",
+     "class": "within",
+     "why": "Parsing detail of how a task line states its wait. It narrows nothing asked and stops stray prose from holding a task."
+    },
+    {
+     "id": "D2-reaches-FR013-picker",
+     "summary": "One wait reading applied in next_independent (free slot), next_performance (task-start's FR-013 picker and the Stop hook's performance-first) and the nothing-running fallback; a waiting performance task no longer triggers FR-013's refusal, its case 'read rather than escaped'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the accepted FR-013. That spec gives a performance task waiting on another's landing an escape of a recorded reason (FR-012, counted by SC-006), and the plan drops it from the refusal instead. The ruling is against the request ('prioritize performance improvements going forward'; measurement tasks 'counted as a performance task for the purpose of scheduling and coming first'). A performance task that cannot start yet cannot go first, and refusing other work for it idles builders, which defeats the purpose of making everything faster. FR-013's own wording names this exact case as a permitted exception. The reason is still recorded, in git, on the waiting task's committed line, not in the escape log. A startable performance task is refused exactly as before, so the enforcement stays real. Each form is ruled separately in D2a-D2d."
+    },
+    {
+     "id": "D2a-waits-landing",
+     "summary": "Form 'T88 lands' / 'T02-T21 land': met when none of the named tasks is open",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is FR-013's named escape case word for word: a performance task waiting on another task's landing. It releases itself when the landing happens, and it is stated on the committed task line."
+    },
+    {
+     "id": "D2b-after-Tn",
+     "summary": "T88's 'after T<n>' rule moved from the free slot into the shared reading, so it now also reaches the FR-013 picker and the nothing-running fallback",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same class as D2a: the task cannot start until T<n> is no longer open. Its reach grew to the picker, but its meaning did not change, and it releases itself when T<n> closes."
+    },
+    {
+     "id": "D2c-lands-before",
+     "summary": "Another open line's 'lands before T<n>' holds T<n> (4 open lines in 451 say 'lands before T22')",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is still 'waiting on another task's landing': another task has committed to land first, and 'lands before ...' is the ordering phrase this feature's own FR-009 requires. It is read from prose on a different line, unlike the positional clause, so a passing mention could hold a performance task. It fails toward hiding rather than starting, against the block's stated direction. But the hold ends when that line closes, so it never hides a task for good. Not a defect now: in 451 all 4 measured lines name T22 on purpose."
+    },
+    {
+     "id": "D2d-full-day-after",
+     "summary": "Form 'a full day after T.. land(s)': met 24 h past the latest logged landing (land end lines, landed true); T22 a full day after T02-T21 (until 2026-11-22T08:00:27.560Z), T98 a full day after T88 (until 2026-11-22T18:40:27.980Z)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "After the landing this is a clock, so it gets D7e's test. Unlike the bare date it is anchored to a logged landing, it has one fixed duration, and it is written on the committed line. A full day's measurement cannot be taken before that day has elapsed (SC-005: 'the first full day after landing'), so the rule is physically impossible to apply sooner, not merely awkward. The GM asked for measurement tasks to count as performance work, and a measurement task taken early measures nothing. T98's stated need is 'a night of rolling dispatch'. The night window cited was 07:50-17:30Z, and the next one after T88's 18:40Z landing is 2026-11-22 07:50-17:30Z. The 24 h hold ends at 18:40Z, about 1h10m after that window closes. So the convention holds T98 only a little longer than its need, and less than the rejected end-of-UTC-day form (00:00Z on 11-23) would. Not a defect."
+    },
+    {
+     "id": "D3-other-text-no-wait",
+     "summary": "Anything else in the parentheses is no wait (fails toward a start the session sees named)",
+     "class": "within",
+     "why": "Unreadable text leaves the task inside FR-013's refusal, so this fails toward enforcement, not away from it."
+    },
+    {
+     "id": "D4-bare-date-dropped",
+     "summary": "A bare date is not a form; pinned as no wait",
+     "class": "within",
+     "why": "This complies with the earlier plan-review ruling D7e (NOT LEGITIMATE), which this block records. With no form of wait unanchored to a landing, FR-013 is left whole."
+    },
+    {
+     "id": "D5-pre-log-landed",
+     "summary": "Tasks ticked before the log carried land end lines (451 T02-T05) count as landed long ago",
+     "class": "within",
+     "why": "Reads history the log cannot hold. Ticked tasks did land. The latest landing that matters, T11, is logged."
+    },
+    {
+     "id": "D6-lines-set",
+     "summary": "T22 and T98 lines carry their waits clauses",
+     "class": "within",
+     "why": "This is the data the mechanism exists for. Both waits are anchored to logged landings, measured 2026-11-21."
+    },
+    {
+     "id": "D7-task-start-unchanged",
+     "summary": "task_start.rs unchanged; it calls the shared next_performance",
+     "class": "within",
+     "why": "Implementation placement. The behavior change is ruled under D2."
+    },
+    {
+     "id": "D8-perf-later-ok-wording",
+     "summary": "The free slot's PERF_LATER_OK reason now reads 'is started or touches a running task's files'",
+     "class": "within",
+     "why": "The message is reworded to match the narrower set of tasks it now covers. Nothing asked is narrowed."
+    },
+    {
+     "id": "D9-clock-seam",
+     "summary": "L7R_WAITS_NOW as the tests' clock seam, else the system clock",
+     "class": "within",
+     "why": "Test seam following the L7R_PERMIT_NOW precedent. It acts only on a full-day wait already written on a committed line."
+    },
+    {
+     "id": "D10-performance-text-check",
+     "summary": "performance() looks for the heading as text before running its pattern over plan.md",
+     "class": "within",
+     "why": "A CPU fix to a cost this change exposed (0.09-0.16 s back to 0.00-0.02 s, measured 2026-11-21). Within the performance work asked for."
+    },
+    {
+     "id": "D11-sc006-left",
+     "summary": "SC-006's count reads off the escape log; a start made while a performance task waits leaves no escape row; left because no SC-006 reader exists",
+     "class": "within",
+     "why": "The same narrowing as D2, seen from the spec's side. It is judged fresh, not on the block's appeal to 'T102's plan review notes', which nothing in this bundle backs. Under the defect test only a wrong outcome now is a defect. The block's grep (2026-11-21) finds no reader of 451's SC-006, so nothing misreads today and nothing defective is left. Record for whoever builds that reader or amends the spec: FR-013 and SC-006 still say 'recorded escape', but a waiting task's reason is now on its own line and in the land log, not in the escape log."
+    },
+    {
+     "id": "D12-red-not-rerun",
+     "summary": "After the date form was dropped, the three tests were rewritten to wait on landings and not rerun red",
+     "class": "within",
+     "why": "FR-012's red-first is owed for a refusal that fires, and T102 adds no new refusal: it makes existing ones skip a task that cannot start. The original tests were red on the unchanged hook (357/3, measured 2026-11-21). That the rewritten tests would still be red is argued, not measured: the unchanged hook does not read the clause at all, so its output cannot depend on what the clause says."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T103 (T97's Found and left: shape's `strip_heredocs` and `strip_quotes` searched ungated, so the guards that strip a command built shape's patterns on every Bash call; measured 2026-11-21 (`/tmp/t103/scripts/run.py`, T93's 9,646 commands each a hook process of its own through an instrumented `l7r-guard`): every Bash start built 5 of shape's 6 patterns at the median (p90 5), every Bash end 1)",
+    "### T103 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T103-gate",
+     "summary": "Each of shape's strip patterns (HEREDOC, QUOTED_HEREDOC, UNQUOTED_HEREDOC on '<<', BACKTICK_SPAN on a backtick, INTERPRETER_C on a trimmed text ending in 'c') is searched only where its text holds the literal any match needs, reusing T97's shared::regex::Lazy; cut takes a Lazy.",
+     "class": "within",
+     "why": "This is what T103's line asks for (each strip gated on the literal a match needs, as T97 gated the walk's patterns, measured first). It is a [perf] task under FR-013, and the spec's 2026-11-20 request puts performance work first. No answer changes, only the builds."
+    },
+    {
+     "id": "T103-quoted-scan",
+     "summary": "QUOTED is replaced by a linear scan (quoted_spans) that reads quoted strings the way the pattern did, with strip_quotes writing from the spans, because the backtracking pattern hung on an unclosed quote followed by many backslashes (corpus rows 3,148 and 7,510 under no_poll_hooks in the background).",
+     "class": "within",
+     "why": "A guard that hangs is a defect under constitution XIV's definition (a tool that hangs), and T103 found it in its own file. The fix-as-we-go rule has a known defect fixed before moving on. A pattern replaced by a scan builds no pattern at all, which also serves the line's purpose of no pattern build where none is needed. The differential test (scan equals find_iter on all texts up to 7 characters) is the plan's own evidence that the scan does the pattern's job. No reviewer imposed it as an exactness standard, and it enforces the requested behavior rather than adding scope."
+    },
+    {
+     "id": "T103-not-taken-tree-gate",
+     "summary": "tree.rs:348's own '<<' gate before strip_heredocs, now redundant, is left as it stands (outside T103's files).",
+     "class": "within",
+     "why": "A redundant check that still answers correctly is a difference, not a defect (constitution XIV v2.36.0), so leaving it narrows nothing that was asked."
+    },
+    {
+     "id": "T103-left-T108",
+     "summary": "The same QUOTED pattern text at wait.rs:53 and house_style_hooks.rs:85 is not fixed here: it is outside T103's files and neither copy was measured to hang. It is filed as T108 [perf], which measures first whether each copy hangs on row 3,148's shape and then gives each T103's scan as one shared function. T108 lands before T22.",
+     "class": "within",
+     "why": "T103's line covers shared::shape's strips, not the other modules' copies, so deferring them does not narrow what T103 was asked to do. The deferral is in FR-009's form: why it is not fixed here, the filed task id (T108, confirmed on tasks.md line 92) and its order ('lands before T22'). No hang is measured in either copy, so no known defect is carried past this step, and T108 is filed to measure it first rather than assume it."
+    },
+    {
+     "id": "T103-pins",
+     "summary": "Build-count pins (shape/tests/builds.rs, quotes.rs, run as child processes printing regex::BUILT) on plain, redirected, backtick, quoted, -c and heredoc commands, plus a 10 s deadline pin on an unclosed quote before forty escapes, each red first against the snapshot.",
+     "class": "within",
+     "why": "FR-012 red first, and the line asks for a build-count test red first. These tests only fail when the requested gating, or the hang fix, is missing: they enforce the request and add nothing to its scope."
+    },
+    {
+     "id": "T103-scope-files",
+     "summary": "Touches only shape.rs and shape/. Nothing of T99's or T102's files. T96's clippy errors in tree/program/tests.rs, which turned closing-checks run 1 RED, are left as T96's.",
+     "class": "within",
+     "why": "Keeping to the task's own files narrows nothing asked of T103. The red lint belongs to another task's file and is recorded as BLOCKED on T96, not waved off as T103's."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")",
+    "### T104 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T104-D1 failed case unrecoverable, fix every reproduced cause",
+     "summary": "The gate's failing case cannot be recovered from logs, so the task reproduces and fixes every case able to fail the suite under load (6, 4b, 9) rather than guessing one.",
+     "class": "within",
+     "why": "The GM asked for 'the test that fails under load being fixed'; when the failing case is unknowable, fixing each case reproduced red under load is the request itself, not an addition."
+    },
+    {
+     "id": "T104-D2 case 6 contends by a gate on the guard's deferral lines",
+     "summary": "Case 6's run holds the lock while a gate file stands, released only once two timers have logged the deferral and the winner has started; the check asks 2 deferrals instead of 1; record waits 12 s to 90 s upper bounds; the sleep 0.3 before the overlap check removed; stand-in sleeps 0.3 s after the gate.",
+     "class": "within",
+     "why": "Replaces a timing-dependent contention (red 8 of 8 under a 1.0 s stall on HEAD) with a condition, which is the fix asked for; the assertion is strengthened, not weakened, and the case still goes red on a guard that takes no lock (measured)."
+    },
+    {
+     "id": "T104-D3 case 4b fixed in the guard: write_json writes beside and renames",
+     "summary": "The torn read of .git/idle-tests.json (rewritten in place while the new timer reads it) is fixed in the one writer, write_json, so the state file and every record are written whole; red-first unit test a_state_file_being_rewritten_is_read_whole.",
+     "class": "within",
+     "why": "The test failed under load because the guard has a real defect (an armed timer vanishing with no record, a wrong outcome under constitution XIV); fixing the cause rather than masking the test is what fixing the test means. Records gaining atomic writes is the same function, not a separate scope."
+    },
+    {
+     "id": "T104-D4 case 9 start wait made a checked 90 s condition",
+     "summary": "Case 9's unchecked 8 s wait for the run's start, found red 1 of 64 under load, becomes a check with a 90 s bound.",
+     "class": "within",
+     "why": "A third case of the suite failing under load, found by this task's own load runs; the request is to fix the suite's failure under load, which this is."
+    },
+    {
+     "id": "T104-D5 timer_state printed on a red wait",
+     "summary": "When a record wait runs out in cases 4, 4b, 6, 7 and 9, the suite prints each clone's arming, timer liveness and timer log.",
+     "class": "within",
+     "why": "A diagnostic whose only effect is that a future red under load names its cause (4b's left none); it serves the fix and changes no behavior of the guard."
+    },
+    {
+     "id": "T104-D6 wait_consumed between cases 5, 6 and 7",
+     "summary": "Each case waits for the arming to go (to the suite's 30 s deadline) before the next case's Stop, closing a gap the removed sleep 0.3 had hidden.",
+     "class": "within",
+     "why": "Consequence of D2's removal of a sleep; closes an ordering race that would otherwise let the suite fail under load. Part of the requested fix."
+    },
+    {
+     "id": "T104-D7 case 4's short bound kept",
+     "summary": "Case 4's 'record written after the wait' keeps its short bound on a condition wait; recorded as found-and-left, not a defect, red in none of the task's copies; its red now prints the timer's state.",
+     "class": "within",
+     "why": "Not observed failing in any of the 320+ copies under load (258 to 401) or under the lagged shell, so it is not a wrong outcome (constitution XIV) and not 'the test that fails under load'. Leaving a non-defect is within what was asked; if it ever goes red, D5 names why."
+    },
+    {
+     "id": "T104-D8 verification set",
+     "summary": "Exits measured as: HEAD case 6 red 8/8 under the stall vs final green 8/8; 0 red in 320 copies under load; 8/8 green under lagged sleep and date; broken lock and broken abort each red; builder-checks for rust/guard green; second tier run once in the session clone.",
+     "class": "within",
+     "why": "Tests that only fail when the requested fix is absent; enforcement of the request, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")",
+    "### T104 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 case 6 contends by condition",
+     "summary": "Case 6's run holds the lock while a gate file stands; the gate opens only once the guard's own deferral line stands in two timers' logs and the winner's run has written its start; the check asks 2 deferrals where it asked 1; the sleep 0.3 before the overlap check removed; record waits 12 s -> 90 s upper bounds.",
+     "class": "within",
+     "why": "The GM asked for the test that fails under load to be fixed. This replaces a clock race (a fixed 0.6 s hold, reproduced red 8 of 8 under a 1.0 s stall) with a wait on a condition, and the check gets stricter (2 deferrals, not 1), not looser. The broken-lock guard is still red on it (measured). Nothing is narrowed."
+    },
+    {
+     "id": "D2 case 4b guard defect: state file and records written whole",
+     "summary": "write_json, the one writer of .git/idle-tests.json and of every record, writes beside the file and renames over it, so a timer never reads a truncated arming and exits silently; red-first unit test a_state_file_being_rewritten_is_read_whole.",
+     "class": "within",
+     "why": "Reproduction traced case 4b's red to a real guard defect (an armed timer vanishing with no record: a wrong outcome under constitution XIV), measured on the old guard and absent on the fixed one. Fixing the cause in the guard is fixing the test that fails under load at its root; covering the records too goes through the same single writer, so it is the same fix, not extra scope."
+    },
+    {
+     "id": "D3 case 9 start wait made a check",
+     "summary": "Case 9's unchecked 8 s wait for the run's start becomes a check, 'the run started before the prompt', with a 90 s upper bound.",
+     "class": "within",
+     "why": "Found red under load (1 of 64 beside burners) and was able to pass a green 'aborted' on a run that never was. The GM's words name the test that fails under load; the gate's failing case could not be recovered, so fixing every case reproduced failing under load is what the request asks. The check is stricter than before."
+    },
+    {
+     "id": "D4 case 4 record wait 8 s -> 90 s",
+     "summary": "Case 4's condition wait on its record raised from an 8 s to a 90 s upper bound.",
+     "class": "within",
+     "why": "Reproduced red 6 of 8 under a loaded minute; an upper bound a green run never pays does not weaken what the case checks (feature 427 T03: a timing is never a gate)."
+    },
+    {
+     "id": "D5 between-case wait_consumed",
+     "summary": "Cases 5, 6 and 7 end by waiting for the arming to go, so the next case's Stop never meets the last one's timer alive.",
+     "class": "within",
+     "why": "Closes a gap the removed sleep 0.3 had hidden by chance; a direct consequence of D1's fix, inside the same suite."
+    },
+    {
+     "id": "D6 red waits print the timer's state",
+     "summary": "timer_state prints each clone's arming, the timer's liveness and its log when a wait runs out in cases 4, 4b, 6, 7 and 9.",
+     "class": "within",
+     "why": "Diagnostic output on a red only; it changes no verdict and serves the request by letting the next load failure name its cause, which the gate's failure on 2026-11-26 could not."
+    },
+    {
+     "id": "D7 the gate's failing case named as not recoverable",
+     "summary": "The plan does not name which case failed the 16:19Z gate (its output was overwritten or removed) and fixes instead every way reproduction showed the suite going red on good work, with the final suite 0 red in 320 copies under load and 8 of 8 under the stall.",
+     "class": "within",
+     "why": "Not a narrowing: the request is to fix the test that fails under load, and the plan fixes every case reproduced failing and shows the whole suite green under load, rather than fixing only one presumed case. The unrecoverability is measured (search of logs, .git and transcript, 2026-11-26), not assumed."
+    },
+    {
+     "id": "D8 lost red hook-suite output left, named as a candidate",
+     "summary": "A red hook suite's output being lost once its landing is rerun is left unfixed here, judged not a defect of this task's files (a missing record, no wrong outcome), and named in the builder's report for the coordinating session to file.",
+     "class": "within",
+     "why": "Outside what the GM asked (the idle-tests suite failing under load) and outside this task's files; it is not a defect left in the thing being fixed, so leaving it is within scope. Whether it is a defect under XIV for FR-009's found-and-left rule is for make decide's mechanical check, not a fidelity narrowing."
+    },
+    {
+     "id": "D9 checks run and order",
+     "summary": "First-tier checks (make builder-checks CRATE=rust/guard, the suite alone) in the task; the second tier once over the batch in the session clone; independent of other open tasks, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the brief; nothing the GM asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T104 (the idle-tests suite failed a landing gate on good work, 2026-11-26 16:19Z, `make land` for T281 with two builders' checks beside it: `HOOK TESTS FAILED: idle-tests-hooks.sh`, green on the rerun unchanged; T99 had found two of its cases able to do that, case 6 red in 1 of 64 copies at a load of 133.7 and case 4b red 3 of 34 once, measured 2026-11-21 (T99's `many.sh`); the GM, 2026-11-26: \"I agree with prioritizing the test that fails under load being fixed.\")",
+    "### T104 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 case 6 contends by condition",
+     "summary": "Case 6's run holds the lock while a gate file stands; the gate opens only once the guard's own deferral line stands in two timers' logs and the winner's run has written its start; the check asks 2 deferrals where it asked 1; the sleep 0.3 before the overlap check removed; record waits 12 s -> 90 s upper bounds.",
+     "class": "within",
+     "why": "The GM asked for the test that fails under load to be fixed. This replaces a clock race (a fixed 0.6 s hold, reproduced red 8 of 8 under a 1.0 s stall) with a wait on a condition, and the check gets stricter (2 deferrals, not 1), not looser. The broken-lock guard is still red on it (measured). Nothing is narrowed."
+    },
+    {
+     "id": "D2 case 4b guard defect: state file and records written whole",
+     "summary": "write_json, the one writer of .git/idle-tests.json and of every record, writes beside the file and renames over it, so a timer never reads a truncated arming and exits silently; red-first unit test a_state_file_being_rewritten_is_read_whole.",
+     "class": "within",
+     "why": "Reproduction traced case 4b's red to a real guard defect (an armed timer vanishing with no record: a wrong outcome under constitution XIV), measured on the old guard and absent on the fixed one. Fixing the cause in the guard is fixing the test that fails under load at its root; covering the records too goes through the same single writer, so it is the same fix, not extra scope."
+    },
+    {
+     "id": "D3 case 9 start wait made a check",
+     "summary": "Case 9's unchecked 8 s wait for the run's start becomes a check, 'the run started before the prompt', with a 90 s upper bound.",
+     "class": "within",
+     "why": "Found red under load (1 of 64 beside burners) and was able to pass a green 'aborted' on a run that never was. The GM's words name the test that fails under load; the gate's failing case could not be recovered, so fixing every case reproduced failing under load is what the request asks. The check is stricter than before."
+    },
+    {
+     "id": "D4 case 4 record wait 8 s -> 90 s",
+     "summary": "Case 4's condition wait on its record raised from an 8 s to a 90 s upper bound.",
+     "class": "within",
+     "why": "Reproduced red 6 of 8 under a loaded minute; the bound is an upper bound a green run never pays, and the case's check is unchanged, so what it verifies is not weakened."
+    },
+    {
+     "id": "D5 between-case wait_consumed",
+     "summary": "Cases 5, 6 and 7 end by waiting for the arming to go, so the next case's Stop never meets the last one's timer alive.",
+     "class": "within",
+     "why": "Closes a gap the removed sleep 0.3 had hidden by chance; a direct consequence of D1's fix, inside the same suite."
+    },
+    {
+     "id": "D6 red waits print the timer's state",
+     "summary": "timer_state prints each clone's arming, the timer's liveness and its log when a wait runs out in cases 4, 4b, 6, 7 and 9.",
+     "class": "within",
+     "why": "Diagnostic output on a red only; it changes no verdict and serves the request by letting the next load failure name its cause, which the gate's failure on 2026-11-26 could not."
+    },
+    {
+     "id": "D7 the gate's failing case named as not recoverable",
+     "summary": "The plan does not name which case failed the 16:19Z gate (its output was overwritten or removed) and fixes instead every way reproduction showed the suite going red on good work, with the final suite 0 red in 320 copies under load and 8 of 8 under the stall.",
+     "class": "within",
+     "why": "Not a narrowing: the request is to fix the test that fails under load, and the plan fixes every case reproduced failing and shows the whole suite green under load, rather than fixing only one presumed case. The unrecoverability is measured (search of logs, .git and transcript, 2026-11-26), not assumed."
+    },
+    {
+     "id": "D8 lost red hook-suite output left, named as a candidate",
+     "summary": "A red hook suite's output being lost once its landing is rerun is left unfixed here, judged not a defect of this task's files (a missing record, no wrong outcome), and named in the builder's report for the coordinating session to file.",
+     "class": "within",
+     "why": "Outside what the GM asked (the idle-tests suite failing under load) and outside this task's files; it is not a defect left in the thing being fixed, so leaving it is within scope. Whether it is a defect under XIV for FR-009's found-and-left rule is for make decide's mechanical check, not a fidelity narrowing."
+    },
+    {
+     "id": "D9 checks run and order",
+     "summary": "First-tier checks (make builder-checks CRATE=rust/guard, the suite alone) in the task; the second tier once over the batch in the session clone; independent of other open tasks, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the brief; nothing the GM asked is dropped."
+    },
+    {
+     "id": "D10 new checks never seen red",
+     "summary": "Case 9's new check 'the run started before the prompt' and the between-case wait_consumed are stated never seen red on a broken guard.",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec requires a red-first proof of these (FR-012's red-first rule covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not a hook suite's waits); the suite's own regressions (no lock, no abort) are shown red. Nothing asked is dropped."
+    },
+    {
+     "id": "D11 case 10 counted apart in shadow runs",
+     "summary": "In t104-shadow.sh copies case 10 ('seams ignored in the repository's own tree') is red by construction (the shadow's hook stands outside the repository) and is excluded from the 8-of-8 counts.",
+     "class": "within",
+     "why": "A measurement-method choice about a harness artifact, stated openly; the non-shadow batches (320 + 64 copies) run case 10 normally and count it. Nothing in the request is narrowed."
+    },
+    {
+     "id": "D12 case 4b's bar met on the pre-final suite",
+     "summary": "Case 4b's 0-red-in-200 bar is met on the 320 copies run before case 4's bound was raised; the suite as it lands has 64 more copies plus 8 under the stall.",
+     "class": "within",
+     "why": "Raising case 4's upper bound cannot make case 4b red, and the landing suite was also run under load green; the evidence covers what is landing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T105 (land-alone's take-back gave up three times on 2026-11-21, each a hand merge: at the T82-T101 landing the session's `make ledger-owed` and the landing wrote rows for the same four passes and the clone could not take the tip - dev/review-ledger.md 'conflicts' - and plan.md and tasks.md then needed a hand three-way merge; at T113's landing the tick archived T113's section beside the clone's new sections and git's line merge called the adjacent hunks one conflict - measured 2026-11-21 (each shape replayed through the script's own step 7, below))",
+    "### T105 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T105-merge-order",
+     "summary": "Every held file through git's line merge first; a sectioned file (plan.md, tasks.md, plan-review.json, and now dev/review-ledger.md) merged piece by piece only when its line merge conflicts.",
+     "class": "within",
+     "why": "Carries the task line's 'the sectioned merge on every file it reports' and adds the ledger, the file shape 1 stopped on; it is the mechanism the task exists to fix, and leaves already-merging files on the path they take now."
+    },
+    {
+     "id": "T105-additions-superset",
+     "summary": "Any other file's hunks where both sides only added are taken whole when one side's added lines contain the other's in order (merge3 via git merge-file --diff3).",
+     "class": "within",
+     "why": "Widens 'identical additions merged' to a strict superset of additions, which loses nothing either side wrote; broader than the line, not narrower, and only changes a case that conflicts today."
+    },
+    {
+     "id": "T105-archive-mark-piece",
+     "summary": "In plan.md an archive mark is a piece of its own, not the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stay where the archived section was.",
+     "class": "within",
+     "why": "Directly fixes the measured cause of shapes 2 and 3 (the tick's marks read as the tail of the preceding section); the replays show every clone piece kept and every tip mark kept in order."
+    },
+    {
+     "id": "T105-ledger-tip-wins",
+     "summary": "The ledger is cut at each line and a measured row keyed by its pass (check, wall, tokens); where both sides answer one pass the tip's row is kept and the clone's dropped.",
+     "class": "within",
+     "why": "The landing's rows are the record the push writes; keeping both was the duplicate-row defect (8 rows for 4 passes) the section also repairs. Dropping the clone's duplicate loses no pass, only a second copy of one."
+    },
+    {
+     "id": "T105-conflicts-still-stop",
+     "summary": "A piece both sides changed is line-merged first; a piece the tip archived that the clone changed still conflicts; every file merged before any exit, all conflicts named at once by piece, and a conflict moves nothing.",
+     "class": "within",
+     "why": "Keeps the take safe on the one shape where a choice would lose work, and improves the message (all conflicts, named by section) rather than narrowing anything."
+    },
+    {
+     "id": "T105-hand-write-refusal-scope",
+     "summary": "make ledger-owed WRITE= passes --by-hand and refuses only a recorded plan review's row as the landing's own, naming the count and writing the rest; a hand write of a pass traced to its feature (--write specs/<F>/) stays allowed, and a collision of such a row is left to the merge (tip kept).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the task line's 'the hand rows refused as the landing's own' from both of the landing's sets to one. Refusing the per-feature traced set would be wrong on the measured facts: only make land writes those rows, while land-tooling.sh and sync-with-main.sh's push do not (grep of every ledger-owed caller, 2026-11-21), so on those routes the hand write is the only writer and refusing it would leave the passes unrecorded - defeating the purpose (a ledger with each pass once). The purpose of the refusal (no duplicate rows for the same pass) is still met for that set by the ledger merge's tip-wins rule, so nothing the refusal is for is given up. The rows that every push route writes itself (recorded plan reviews) are the ones refused."
+    },
+    {
+     "id": "T105-step2-marks",
+     "summary": "Step 2's splice moves for 4 of the replayed tasks: it now stages the task's own text and no longer an adjacent mark or blank line.",
+     "class": "within",
+     "why": "A difference from the previous staging that the section measures and explains as step 2 meaning the task's own pieces; constitution XIII asks that everything works, not that staging be unchanged, and the existing landing-alone tests are required green."
+    },
+    {
+     "id": "T105-merge-tree-left",
+     "summary": "The merge of the clone's own commits since the landing began (merge-tree) is not treated as one of the shapes.",
+     "class": "within",
+     "why": "Not a defect left: the measured T82-T101 timeline shows the clone committed after the take's exit-4 advice, which already gives the route (git merge once committed). The task line names three shapes and all three are carried."
+    },
+    {
+     "id": "T105-duplicate-rows-fixed",
+     "summary": "Main's ledger's 8 rows for the 4 T82-T101 plan reviews reduced to the tip's 4, review-census's spec-fidelity judgment 1,526 to 1,522, runs unchanged.",
+     "class": "within",
+     "why": "A known defect the task's own failure produced, fixed in this step as fix-as-we-go requires, by the same rule the new merge applies."
+    },
+    {
+     "id": "T105-not-performance",
+     "summary": "The section classes T105 as not performance work (a correctness fix of the landing's take).",
+     "class": "within",
+     "why": "It is neither a performance improvement nor a measurement of time in the sense of the GM's 2026-11-20 order; classing it so keeps FR-013's scheduling honest rather than narrowing it."
+    },
+    {
+     "id": "T105-mark-length",
+     "summary": "The conflict mark is 31 characters long, labeled a CONVENTION of the parse.",
+     "class": "within",
+     "why": "An implementation convention inside the fix, labeled at its point of use; no requirement speaks to it."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T102 to T105, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

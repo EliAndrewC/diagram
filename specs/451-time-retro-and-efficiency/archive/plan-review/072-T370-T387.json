@@ -1,0 +1,920 @@
+{
+ "blocks": {
+  "### T370, T372 (bundle) (T365's measurement, dev/measurements/2026-11-26/tmp-clutter/t365-results.md, levers A and C: the whole temp directory was listed at every `TempDir::new` and globbed before every hook suite, 14 to 16.5 ms each under a `/tmp` of 5,443 entries, measured 2026-11-26 (T365's timing loops))": {
+   "sha256": "3fde1eca132a07c66c90a0ab85b80c48bee1d77d41863ff1cdc56d8004b29bdb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T370, T372 Approach (checklist part A)": {
+   "sha256": "b5504239cf5b0a3aa6c1d6d6d217a17b76f36679543b38839ecf78d0512d971a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T370, T372 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "6920ab80379feb582190a667c74c87b953b5c12736a0f020cf04c16520cccd4b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T371 (<why: the finding or measurement that files it>)": {
+   "sha256": "58726481d0b3bf05655aad9c863d1668b3e06108678c635a143d291f7a9f0b16",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T371 Approach (checklist part A)": {
+   "sha256": "e154c631b4d51e086fc11ca4ade9c7628d8951d88cd385d4e9ed0b8db6946221",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T371 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "162baa13716f74487cb45bb8bff99ea4d4a13014c47c4c1ebe87c0d4242b15d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T373 Approach (checklist part A)": {
+   "sha256": "7e6f9bc68453afa5dc3b97a143d6e259d0d31ba498f46731c7841809346d35c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T373 (a PreToolUse hook on an Edit took 342 ms where one on a Bash call took 32, found by T365, measured 2026-11-26 (`t365-hook-times.txt`, 20 alternating runs a call))": {
+   "sha256": "cd97f29fe51b421b3c072560b9efe4d5d792cc4d12d993aec3b6f4ba24bd9641",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T374 (<why: the finding or measurement that files it>)": {
+   "sha256": "01d20608cec9d2f266dfe2e22174646a8528d77d79825fa3c56ff30a5ba13aeb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T374 Approach (checklist part A)": {
+   "sha256": "fc909fc039f9fed36629c1107bdf6176f0e50ed8753e8b903f35f879995e4105",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T375 (<why: the finding or measurement that files it>)": {
+   "sha256": "3416dcee9676218c551c76bbe75e4824d80d24cb6ba891227099827d155757b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T375 Approach (checklist part A)": {
+   "sha256": "2a6eae704a1761a2a95be9e502a71a2313c3d4ec099bd06a5fe2c0a03d021c7d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T376 (<why: the finding or measurement that files it>)": {
+   "sha256": "b348533682aa4978e1a7c21e29fefbfed07ef5a48b5839aebd756bb19b473d2e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T376 Approach (checklist part A)": {
+   "sha256": "7fa597aa329b08e06524e8c738a5f9afe558b4a306a1c276a56a1d5bd4fcb091",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T377 (<why: the finding or measurement that files it>)": {
+   "sha256": "9dfa16f1190935a00f17c29eb3f238159912b51706c150c74ef8b1f6f2e8e619",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T377 Approach (checklist part A)": {
+   "sha256": "98a737f610dc1b0f1ecc796e448d5c3fb7035f32147f6d2b2d7330d86d90695b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T377 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "7d281b80229e7cc55f9150404b15310719cc7d6c92fad201c62b296e7fff7c00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T378 (<why: the finding or measurement that files it>)": {
+   "sha256": "c65e0caea942a9c51dc60cf0e2180fb87443f4770069eaed0ab97ab7ef017dd6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T378 Approach (checklist part A)": {
+   "sha256": "a8362fb90c17c8d2f357ba0e6e94d87e5e92ce15159651ab0c25f9881d275265",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T378 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "b12d34e5d808ca081222fde9f6751158873c54b811fbc8557faaae5f9ab72941",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T379 (<why: the finding or measurement that files it>)": {
+   "sha256": "8dc025669b7b55fd25912191adaa31f4c30978d4b50711eb6e31a399a4003f8c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T379 Approach (checklist part A)": {
+   "sha256": "b204dde8d8549176631c84b70c92b977c6c45797937e28392adaee14496e8883",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T379 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "8e0036abb9204b32c7ceaafb5a0781c10a9985b045cc3b1555e2fe0ef84b2969",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T380 (<why: the finding or measurement that files it>)": {
+   "sha256": "755aaaa3773165da13812970b3c9968de178a59a4343359b11b919e1ec1dc11f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T380 Approach (checklist part A)": {
+   "sha256": "339b30586abd6ff37d7ebc2f22f1fb994ed403aab9508c56ed9455b5b6a86d87",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T383, T385 (bundle) (found by T373, `dev/measurements/2026-11-26/edit-hook/t373-results.md` levers A and C: a hook on an Edit cost the session about 820 ms in its clone and a builder about 400 ms in a pool worktree, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox), and two reads were most of it - the reversal tripwire parsing every line of the feature's event log, and the session's name read from the transcript's start)": {
+   "sha256": "66347dd7648e4dfcb09ba22d0487f2872fc0a4f6124cfde83284d9b31aae1b92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T383, T385 Approach (checklist part A)": {
+   "sha256": "fc35cf360760dad615650b2e45070e1d7f9ec705d7ca6719c9459e2686cea09f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T384 Approach (checklist part A)": {
+   "sha256": "2bbd7da1fe1e92d9702108baf80c01e927d956adce8d17e98481302d5883c07d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T384 (T373's lever B: clone-sync asked the session's name before it knew it needed it)": {
+   "sha256": "0a0bd6fefebc2998b894b726aebb6b4faf5e0d58a78820b4918b311482e7f01f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T386 Approach (checklist part A)": {
+   "sha256": "64590228fcce8a04298f12b272f3f8f297feb38b4c2365f4191de05f16c8bd61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T386 (T373's lever D: clone-sync's clean path listed the sessions directory once per claim of the clone)": {
+   "sha256": "d34de02685489000010173dd07a2fd873cb34f7320cc4126742fff60261c5fa6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T387 Approach (checklist part A)": {
+   "sha256": "ef481cdbaab176983027d3f87fe3ad612b8dddb6eaedb590b20a0df3a641d964",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T387 (found by 451 T373, lever E: while a plan review holds text every Bash call's PreToolUse loads, snapshots and SAVES the 3.0 MB `checks-open.json`, 97 to 118 ms of CPU, and checks-hooks spends 98 ms on every Agent PostToolUse on the same file, measured 2026-11-26, `dev/measurements/2026-11-26/edit-hook/t373-results.md`)": {
+   "sha256": "cc6c7b78b7efbf7e63e43b6d7f0e9fa7822e0830d4b4ccb48a91462297dfac3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T370": {
+   "section_sha256": "d3738c022117035030e410cb3f87ad19eaadb1a5af5264c10df534ed3e36fa1d",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T370-once",
+     "summary": "TempDir::new runs sweep_dead inside a std::sync::Once: the process's first TempDir lists the temp directory, no later one does.",
+     "class": "within",
+     "why": "Performance work the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'). It is T365's lever A as measured. It removes repeated listings and keeps the removal rule: dead pid, three-hour age, directory test."
+    },
+    {
+     "id": "T370-every-tag",
+     "summary": "sweep_dead takes no tag and reads the name from its end (l7r-, anything, -p<pid>, -<seq>), so one listing takes every tag's leftovers, hyphenated tags included (the 29 l7r-gate-ci-stop-handler leftovers).",
+     "class": "within",
+     "why": "This stays within what was asked. The section says it removes the same set of names as before, taken over all tags, and sooner. The guards that protect work are unchanged: dead pid, three-hour age, directory test. It serves the GM's disk words (2026-11-22: 'clean up after ourselves in terms of the file system'; 2026-11-25: 'this container specifically is leaving artifacts sitting around'). No GM words in the bundle protect a dead process's l7r-<x>-p<pid>-<seq> directory older than three hours. So the wider reach (leftovers of tags this process never makes) is not a narrowing and needs no ruling. The search-space gap in the '.keep()' grep is reported apart from this verdict, as a finding for the builder; it does not block."
+    },
+    {
+     "id": "T370-keep-set",
+     "summary": "Kept and pinned in a_gone_process_s_directories_go_with_the_next_process_of_any_tag: the pre-T101 form, hook-suite directories, l7r-test-scratch, files, a live pid's, anything changed within three hours, untagged names and names not opening l7r-.",
+     "class": "within",
+     "why": "This keeps the constraints the section reports from the GM's 2026-11-11 words as tempdir.rs quotes them: a leftover younger than three hours, and the form before T101, are not touched. Those words are not in this bundle, so this ruling rests on the section's report of them. It also keeps T365's rule that nothing a later run could reuse is deleted."
+    },
+    {
+     "id": "T370-timing-edge",
+     "summary": "A leftover now goes at the next process's first TempDir of any tag, which is sooner. A process that changes its TMPDIR after its first TempDir does not sweep the second directory.",
+     "class": "within",
+     "why": "Cleanup comes sooner in the common case. In the TMPDIR edge the leftover is still removed by a later process whose first TempDir is there, so nothing is lost. A difference from the old behavior is not a defect (constitution XIV), and no caller is said to do this."
+    },
+    {
+     "id": "T372-route",
+     "summary": "Of the task line's two routes, the plan takes the cleanup once a run: hookrun.sh --sweep on the Makefile's fan-out line before xargs. It does not move the suites' directories under one subdirectory.",
+     "class": "within",
+     "why": "The section says the task line offers two routes; the task line itself is not in the bundle. Either route is performance work the GM asked to come first (2026-11-20), and the GM gave no instruction on which to take. The route chosen moves no path, and the grep the section cites (with its method) shows three places that know the path's shape."
+    },
+    {
+     "id": "T372-mark",
+     "summary": "The cleanup loop becomes the function sweep_gone, with unchanged removal. --sweep runs it and exits; --swept skips it; a job without the mark sweeps as before. The mark is a command word, not an exported variable, so nested runners in test-parts.2/3 still sweep.",
+     "class": "within",
+     "why": "This is a mechanism for doing the cleanup once a run. What it removes is unchanged, and a job run by hand or by a test keeps its old behavior."
+    },
+    {
+     "id": "T372-lone-suite-paths",
+     "summary": "A suite run alone stays untouched, and a suite's TMPDIR stays <temp>/l7r-hooks-suite-<guard>-p<pid>.<x>.",
+     "class": "within",
+     "why": "No behavior or path changes for a lone suite or for a guard that reads a fixture by its /tmp path."
+    },
+    {
+     "id": "T372-cost",
+     "summary": "A killed runner's leftover now waits for the next make hooks-test run that has a suite to run, where before it waited for the next suite of any run.",
+     "class": "within",
+     "why": "The section says the task line names this cost; the task line is not in the bundle. A killed runner's leftover waits for the next make hooks-test run that has a suite to run. That is the same event as before except in a run where every suite is skipped, and such a run makes no directory. Nothing is left unswept and no GM words are departed from, so no defect is left and no ruling is needed."
+    },
+    {
+     "id": "T370-T372-residual",
+     "summary": "Each process's first listing stays (the leak pin in rustc.rs, file-scale --selftest's one listing, the ledger and gate-write guards' TempDir per event), left to the already-filed T371 or T377.",
+     "class": "within",
+     "why": "Listing once a process is what T370 is. The remaining first listings are performance not yet taken, not a defect, and filed tasks own them. The hook suites' glob is taken here by T372. Found-and-left is truthfully 'none'."
+    },
+    {
+     "id": "T370-T372-exits",
+     "summary": "One landing. Crate-scoped builder-checks on rust/guard/shared and rust/guard plus tests/hooks/test-parts.2.sh in the builder's tree, then the full gate at landing. Red-first tests are recorded.",
+     "class": "within",
+     "why": "Crate-scoped checks run in the builder's tree and the full gate runs at the landing. That matches the GM's two tiers of checking (2026-11-26, T308: full rigor deferred to the session clone's gate). It is the procedure for checking the work and does not change what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T372": {
+   "section_sha256": "d3738c022117035030e410cb3f87ad19eaadb1a5af5264c10df534ed3e36fa1d",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T370-once",
+     "summary": "TempDir::new runs sweep_dead inside a std::sync::Once: the process's first TempDir lists the temp directory, no later one does.",
+     "class": "within",
+     "why": "Performance work the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'). It is T365's lever A as measured. It removes repeated listings and keeps the removal rule: dead pid, three-hour age, directory test."
+    },
+    {
+     "id": "T370-every-tag",
+     "summary": "sweep_dead takes no tag and reads the name from its end (l7r-, anything, -p<pid>, -<seq>), so one listing takes every tag's leftovers, hyphenated tags included (the 29 l7r-gate-ci-stop-handler leftovers).",
+     "class": "within",
+     "why": "This stays within what was asked. The section says it removes the same set of names as before, taken over all tags, and sooner. The guards that protect work are unchanged: dead pid, three-hour age, directory test. It serves the GM's disk words (2026-11-22: 'clean up after ourselves in terms of the file system'; 2026-11-25: 'this container specifically is leaving artifacts sitting around'). No GM words in the bundle protect a dead process's l7r-<x>-p<pid>-<seq> directory older than three hours. So the wider reach (leftovers of tags this process never makes) is not a narrowing and needs no ruling. The search-space gap in the '.keep()' grep is reported apart from this verdict, as a finding for the builder; it does not block."
+    },
+    {
+     "id": "T370-keep-set",
+     "summary": "Kept and pinned in a_gone_process_s_directories_go_with_the_next_process_of_any_tag: the pre-T101 form, hook-suite directories, l7r-test-scratch, files, a live pid's, anything changed within three hours, untagged names and names not opening l7r-.",
+     "class": "within",
+     "why": "This keeps the constraints the section reports from the GM's 2026-11-11 words as tempdir.rs quotes them: a leftover younger than three hours, and the form before T101, are not touched. Those words are not in this bundle, so this ruling rests on the section's report of them. It also keeps T365's rule that nothing a later run could reuse is deleted."
+    },
+    {
+     "id": "T370-timing-edge",
+     "summary": "A leftover now goes at the next process's first TempDir of any tag, which is sooner. A process that changes its TMPDIR after its first TempDir does not sweep the second directory.",
+     "class": "within",
+     "why": "Cleanup comes sooner in the common case. In the TMPDIR edge the leftover is still removed by a later process whose first TempDir is there, so nothing is lost. A difference from the old behavior is not a defect (constitution XIV), and no caller is said to do this."
+    },
+    {
+     "id": "T372-route",
+     "summary": "Of the task line's two routes, the plan takes the cleanup once a run: hookrun.sh --sweep on the Makefile's fan-out line before xargs. It does not move the suites' directories under one subdirectory.",
+     "class": "within",
+     "why": "The section says the task line offers two routes; the task line itself is not in the bundle. Either route is performance work the GM asked to come first (2026-11-20), and the GM gave no instruction on which to take. The route chosen moves no path, and the grep the section cites (with its method) shows three places that know the path's shape."
+    },
+    {
+     "id": "T372-mark",
+     "summary": "The cleanup loop becomes the function sweep_gone, with unchanged removal. --sweep runs it and exits; --swept skips it; a job without the mark sweeps as before. The mark is a command word, not an exported variable, so nested runners in test-parts.2/3 still sweep.",
+     "class": "within",
+     "why": "This is a mechanism for doing the cleanup once a run. What it removes is unchanged, and a job run by hand or by a test keeps its old behavior."
+    },
+    {
+     "id": "T372-lone-suite-paths",
+     "summary": "A suite run alone stays untouched, and a suite's TMPDIR stays <temp>/l7r-hooks-suite-<guard>-p<pid>.<x>.",
+     "class": "within",
+     "why": "No behavior or path changes for a lone suite or for a guard that reads a fixture by its /tmp path."
+    },
+    {
+     "id": "T372-cost",
+     "summary": "A killed runner's leftover now waits for the next make hooks-test run that has a suite to run, where before it waited for the next suite of any run.",
+     "class": "within",
+     "why": "The section says the task line names this cost; the task line is not in the bundle. A killed runner's leftover waits for the next make hooks-test run that has a suite to run. That is the same event as before except in a run where every suite is skipped, and such a run makes no directory. Nothing is left unswept and no GM words are departed from, so no defect is left and no ruling is needed."
+    },
+    {
+     "id": "T370-T372-residual",
+     "summary": "Each process's first listing stays (the leak pin in rustc.rs, file-scale --selftest's one listing, the ledger and gate-write guards' TempDir per event), left to the already-filed T371 or T377.",
+     "class": "within",
+     "why": "Listing once a process is what T370 is. The remaining first listings are performance not yet taken, not a defect, and filed tasks own them. The hook suites' glob is taken here by T372. Found-and-left is truthfully 'none'."
+    },
+    {
+     "id": "T370-T372-exits",
+     "summary": "One landing. Crate-scoped builder-checks on rust/guard/shared and rust/guard plus tests/hooks/test-parts.2.sh in the builder's tree, then the full gate at landing. Red-first tests are recorded.",
+     "class": "within",
+     "why": "Crate-scoped checks run in the builder's tree and the full gate runs at the landing. That matches the GM's two tiers of checking (2026-11-26, T308: full rigor deferred to the session clone's gate). It is the procedure for checking the work and does not change what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T382": {
+   "section_sha256": "61db892283fd715515ff73bd8d59e50dc8680d1b4e2c7501d05a961b06f6e3c3",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T346: holder read at the run's start",
+     "summary": "tiers::carries books a carry to the last pool-log take of the tree at or before the carry run's START, not its end",
+     "class": "within",
+     "why": "Fixes a wrong outcome in the task time breakdown the GM asked for (2026-11-25, T243): the 2026-11-26 carry of T301's work was booked to T308. Naming the right task is what the breakdown is for."
+    },
+    {
+     "id": "T346: a tree nobody held at the start is no task's carry",
+     "summary": "an unheld tree at run start books to no task, as a tree with no take already did",
+     "class": "within",
+     "why": "Keeps the existing rule for an unheld tree. The section's 27-carry pass over the pinned window found one carry re-booked and none lost, so nothing the breakdown counted is dropped."
+    },
+    {
+     "id": "T346: the carry's time stays its run's end",
+     "summary": "only the holder changes; batches still compares the run's end with the landing's",
+     "class": "within",
+     "why": "Changes nothing the task line asks to change."
+    },
+    {
+     "id": "T346: the live view follows",
+     "summary": "make task-progress reads the same function, so its staged list and carried lines name the start holder",
+     "class": "within",
+     "why": "Serves the GM's live view (2026-11-26, T293). The section measured a one-line diff in the old and new outputs, the expected one."
+    },
+    {
+     "id": "T382: own lines outside every span open a span",
+     "summary": "an agent's own line outside its spans opens a span to its next stop, else to span_end's end",
+     "class": "within",
+     "why": "Fixes a wrong outcome: 557.5 builder-minutes over 2026-11-21 to 11-24 were left out of the builder column while their turns were booked. The GM asked for everything measured (2026-11-22) and every minute named (amendment (c)). The section measured that no new span crosses a stopped stretch."
+    },
+    {
+     "id": "T382: span starts at the first own line, not the stop",
+     "summary": "the stop to the next own line stays T345's 'builders: stopped' time",
+     "class": "within",
+     "why": "Avoids counting the same minutes twice, which would itself distort the breakdown."
+    },
+    {
+     "id": "T382: lone line and kind-from-first-stop-else-?",
+     "summary": "a single own line with no later line or stop opens no span; an agent with no start line takes its kind from its first stop that names one, else ?",
+     "class": "within",
+     "why": "A lone line has no duration to book. Taking the kind from a stop keeps review agents out of the builder column, as the GM's split of reviewing from code work asks (2026-11-25). This is detail inside the requested fix and narrows nothing."
+    },
+    {
+     "id": "T382: new spans are in flight for waits",
+     "summary": "Flight::book treats a new span like a started one, so blocking rises 3539.9 to 3550.8 in the 2026-11-22 window",
+     "class": "within",
+     "why": "Under the GM's definition (l), a wait booked to a builder that was working is a wait on that builder. A session waiting on a builder inside a span that the lines show it working is blocking on that work."
+    },
+    {
+     "id": "T346, T382: two pinned tests restated",
+     "summary": "a_resumed_builder_is_booked_in_every_span_and_stopped_between_them and the_columns_book_make_runs_compile_and_until restated to the new readings",
+     "class": "within",
+     "why": "The tests pinned the wrong readings. Under fix-as-we-go (GM 2026-11-18), checks change as the defect they pinned is fixed. New red-first tests carry each rule."
+    },
+    {
+     "id": "T346, T382: performance work yes",
+     "summary": "counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "T346 (found and left): a bundle's carry is no task's, filed as T393",
+     "summary": "tiers::batches splits a bundle's pool detail '451 T324,T345' on whitespace only, so a bundle's carry is booked to no task; not fixed here, filed T393, lands before T380",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect left. It is a different one from either task line: how a bundle's pool detail is parsed, not when the holder is read. Fixing it needs a new rule for which bundled task a carry run books to. The GM's own words cover filing it: 2026-11-22, 'not bother cutting back on new tasks filed ... we can file new tasks just as fast as we are now if we bundle them together when fixing them'. It is filed and ordered, not dropped. The purpose test holds: T346's own measured mis-booking (T301/T308) and every other non-bundle carry are fixed by this section, so the deferral does not gut what T346 asked. T332 and T344 are pre-existing open tasks the section reports, not decisions it makes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T383": {
+   "section_sha256": "e654621f15f04cf5944c380b636b44eebbb8e50ed1b630196f783dceb7050930",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T383-file",
+     "summary": "T383: the reversal read moves whole to a new event_log_hooks/reversal.rs because event_log_hooks.rs stood at the 1,000-line file-scale bar",
+     "class": "within",
+     "why": "A file layout choice made to keep the file-scale rule; nothing asked for is narrowed and no behavior changes."
+    },
+    {
+     "id": "T383-fallback",
+     "summary": "T383: a path with more than one JSON spelling (quote, backslash, control, DEL, non-ASCII, non-string) is screened by the Edit tool name alone, and its lines are parsed as before",
+     "class": "within",
+     "why": "A strict superset of the old read's lines followed by the old parse test word for word, so the tripwire keeps every catch. It is safer than the task line's sketch, and that sketch is the coordinating session's, not the GM's (the request holds no words on the tripwire or the session name, grep of request.md). Serves FR-013, performance first."
+    },
+    {
+     "id": "T383-needle",
+     "summary": "T383: a printable-ASCII path with no quote or backslash is screened by its own JSON text, trusting that no writer escapes a printable ASCII character it need not",
+     "class": "within",
+     "why": "This is the one place a put-back could be missed. The stated trust is checked against the real writers (serde and events-refile; every line of 34 logs in serde compact form), and the differential over 468,589 real lines dropped 0 of the 8,661 lines the old read used, with 0 of 1,806 paths differing. No wrong outcome is shown anywhere, so the constraint that no reversal is missed holds."
+    },
+    {
+     "id": "T383-no-side-file",
+     "summary": "T383: the side file of Edit lines, the second option on the task line, is not built; the screen is chosen and the remaining whole-log read is filed",
+     "class": "within",
+     "why": "The task line names two options and the plan picks one, with a stated reason (no second file to drift, no missed reversal). The request asks for performance work first, not for a particular mechanism, so nothing asked for is dropped."
+    },
+    {
+     "id": "T385-backward",
+     "summary": "T385: the transcript is read backward in 64 KiB blocks (BLOCK, a GUESS knob) and stops at the last custom-title record; what one line says is the old loop body unchanged",
+     "class": "within",
+     "why": "The same last-rename-wins name comes out at every block size; a test checks this against the forward read kept as its oracle. A performance change inside FR-013."
+    },
+    {
+     "id": "T385-no-object-line",
+     "summary": "T385: a custom-title line that parses but is no object, standing before the last good record, no longer ends the lookup with no name; the good record names the session",
+     "class": "within",
+     "why": "A different output, said openly and pinned by a test, not a wrong outcome: the session gets its last real rename where before it got no name. Under the no-exactness rule (constitution XIII, the GM 2026-11-18) such a difference is the rule, not an exception, and needs no ruling."
+    },
+    {
+     "id": "T385-failed-read",
+     "summary": "T385: a transcript that opens and then fails mid-read gives no name, as one that cannot be opened always did, instead of the name read before the failure",
+     "class": "within",
+     "why": "A different output with a stated reason (a name from part of a file can be the wrong name; the Python original raised), and a test pins it. No wrong outcome is shown; routing and the guard log already handle no name, the outcome for a file that cannot be opened."
+    },
+    {
+     "id": "found-and-left-T392",
+     "summary": "The Edit hook still reads the whole feature log, 78 ms of a worktree's 90 ms after this task; this is filed as T392, to land before T302",
+     "class": "within",
+     "why": "A remaining wait is not a wrong outcome under the defect definition (constitution XIV v2.36.0), so no defect is carried forward. It is filed with its reason, its task id and its order anyway, and as performance work it keeps its priority under FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T384": {
+   "section_sha256": "fb8e398d2bb13428378ff47c11a70c42dba230965af0a128b2dcc4512368a178",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T384-move",
+     "summary": "clone_sync_hooks pretool asks cx.session.canonical() only inside the misrouted(...) argument, after the dirty-clone return; no new branch, every verdict and message unchanged",
+     "class": "within",
+     "why": "A performance task (FR-013; the GM 2026-11-20 'prioritize performance improvements'): the name is read only on the path that judges by it, so the dirty-clone Edit stops reading the transcript; the clean path is untouched and the block keeps every verdict (constitution XIII)."
+    },
+    {
+     "id": "T384-test",
+     "summary": "red-first test a_dirty_clones_edit_reads_no_transcript counts Session::reads (1 before, 0 after) and pins the clean path still reading",
+     "class": "within",
+     "why": "Enforcement of the change the task makes and of the unchanged clean path; it only fails when the requested speed-up is absent or the clean verdict path stops reading the name. Not unrequested scope."
+    },
+    {
+     "id": "T384-leverF-declined",
+     "summary": "T373's lever F (git diff-index --quiet HEAD before git status --porcelain) declined, and its cure (update-index --refresh first) not taken",
+     "class": "within",
+     "why": "Lever F is the session's own proposal, not the GM's words; the block measures that it gives wrong verdicts (a stat-touched clean clone judged dirty skips misrouted's refusals and behind's fast-forward; an untracked file still owes the status call, slowing the clean path) - a defect it would introduce - and the cure would reintroduce an index write under its lock that 451 T304 removed. Declining a lever that changes verdicts narrows nothing the GM asked; prioritizing performance does not ask for a speed-up that breaks a guard."
+    },
+    {
+     "id": "T384-order",
+     "summary": "after T385 (landed, which took the titled case); independent of T386 (the clean path's sessions directory)",
+     "class": "within",
+     "why": "Sequencing only; the remaining clean/untitled cost is named to T386 rather than left unowned, so no known defect is carried and nothing is narrowed."
+    },
+    {
+     "id": "T384-not-a-defect",
+     "summary": "classed as a speed change, not a defect fix; found-and-left none",
+     "class": "within",
+     "why": "No wrong outcome is involved: every verdict is kept, so constitution XIV's defect rules do not reach it; the slower clean-untitled row is the unchanged path under load, as the block states, not a regression the code could cause (it does strictly less on the dirty path and the same on the clean one)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T385": {
+   "section_sha256": "e654621f15f04cf5944c380b636b44eebbb8e50ed1b630196f783dceb7050930",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T383-file",
+     "summary": "T383: the reversal read moves whole to a new event_log_hooks/reversal.rs because event_log_hooks.rs stood at the 1,000-line file-scale bar",
+     "class": "within",
+     "why": "A file layout choice made to keep the file-scale rule; nothing asked for is narrowed and no behavior changes."
+    },
+    {
+     "id": "T383-fallback",
+     "summary": "T383: a path with more than one JSON spelling (quote, backslash, control, DEL, non-ASCII, non-string) is screened by the Edit tool name alone, and its lines are parsed as before",
+     "class": "within",
+     "why": "A strict superset of the old read's lines followed by the old parse test word for word, so the tripwire keeps every catch. It is safer than the task line's sketch, and that sketch is the coordinating session's, not the GM's (the request holds no words on the tripwire or the session name, grep of request.md). Serves FR-013, performance first."
+    },
+    {
+     "id": "T383-needle",
+     "summary": "T383: a printable-ASCII path with no quote or backslash is screened by its own JSON text, trusting that no writer escapes a printable ASCII character it need not",
+     "class": "within",
+     "why": "This is the one place a put-back could be missed. The stated trust is checked against the real writers (serde and events-refile; every line of 34 logs in serde compact form), and the differential over 468,589 real lines dropped 0 of the 8,661 lines the old read used, with 0 of 1,806 paths differing. No wrong outcome is shown anywhere, so the constraint that no reversal is missed holds."
+    },
+    {
+     "id": "T383-no-side-file",
+     "summary": "T383: the side file of Edit lines, the second option on the task line, is not built; the screen is chosen and the remaining whole-log read is filed",
+     "class": "within",
+     "why": "The task line names two options and the plan picks one, with a stated reason (no second file to drift, no missed reversal). The request asks for performance work first, not for a particular mechanism, so nothing asked for is dropped."
+    },
+    {
+     "id": "T385-backward",
+     "summary": "T385: the transcript is read backward in 64 KiB blocks (BLOCK, a GUESS knob) and stops at the last custom-title record; what one line says is the old loop body unchanged",
+     "class": "within",
+     "why": "The same last-rename-wins name comes out at every block size; a test checks this against the forward read kept as its oracle. A performance change inside FR-013."
+    },
+    {
+     "id": "T385-no-object-line",
+     "summary": "T385: a custom-title line that parses but is no object, standing before the last good record, no longer ends the lookup with no name; the good record names the session",
+     "class": "within",
+     "why": "A different output, said openly and pinned by a test, not a wrong outcome: the session gets its last real rename where before it got no name. Under the no-exactness rule (constitution XIII, the GM 2026-11-18) such a difference is the rule, not an exception, and needs no ruling."
+    },
+    {
+     "id": "T385-failed-read",
+     "summary": "T385: a transcript that opens and then fails mid-read gives no name, as one that cannot be opened always did, instead of the name read before the failure",
+     "class": "within",
+     "why": "A different output with a stated reason (a name from part of a file can be the wrong name; the Python original raised), and a test pins it. No wrong outcome is shown; routing and the guard log already handle no name, the outcome for a file that cannot be opened."
+    },
+    {
+     "id": "found-and-left-T392",
+     "summary": "The Edit hook still reads the whole feature log, 78 ms of a worktree's 90 ms after this task; this is filed as T392, to land before T302",
+     "class": "within",
+     "why": "A remaining wait is not a wrong outcome under the defect definition (constitution XIV v2.36.0), so no defect is carried forward. It is filed with its reason, its task id and its order anyway, and as performance work it keeps its priority under FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T370, T372 (bundle) (T365's measurement, dev/measurements/2026-11-26/tmp-clutter/t365-results.md, levers A and C: the whole temp directory was listed at every `TempDir::new` and globbed before every hook suite, 14 to 16.5 ms each under a `/tmp` of 5,443 entries, measured 2026-11-26 (T365's timing loops))",
+    "### T370, T372 Approach (checklist part A)",
+    "### T370, T372 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T370-once",
+     "summary": "TempDir::new runs sweep_dead inside a std::sync::Once: the process's first TempDir lists the temp directory, no later one does.",
+     "class": "within",
+     "why": "Performance work the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'). It is T365's lever A as measured. It removes repeated listings and keeps the removal rule: dead pid, three-hour age, directory test."
+    },
+    {
+     "id": "T370-every-tag",
+     "summary": "sweep_dead takes no tag and reads the name from its end (l7r-, anything, -p<pid>, -<seq>), so one listing takes every tag's leftovers, hyphenated tags included (the 29 l7r-gate-ci-stop-handler leftovers).",
+     "class": "within",
+     "why": "This stays within what was asked. The section says it removes the same set of names as before, taken over all tags, and sooner. The guards that protect work are unchanged: dead pid, three-hour age, directory test. It serves the GM's disk words (2026-11-22: 'clean up after ourselves in terms of the file system'; 2026-11-25: 'this container specifically is leaving artifacts sitting around'). No GM words in the bundle protect a dead process's l7r-<x>-p<pid>-<seq> directory older than three hours. So the wider reach (leftovers of tags this process never makes) is not a narrowing and needs no ruling. The search-space gap in the '.keep()' grep is reported apart from this verdict, as a finding for the builder; it does not block."
+    },
+    {
+     "id": "T370-keep-set",
+     "summary": "Kept and pinned in a_gone_process_s_directories_go_with_the_next_process_of_any_tag: the pre-T101 form, hook-suite directories, l7r-test-scratch, files, a live pid's, anything changed within three hours, untagged names and names not opening l7r-.",
+     "class": "within",
+     "why": "This keeps the constraints the section reports from the GM's 2026-11-11 words as tempdir.rs quotes them: a leftover younger than three hours, and the form before T101, are not touched. Those words are not in this bundle, so this ruling rests on the section's report of them. It also keeps T365's rule that nothing a later run could reuse is deleted."
+    },
+    {
+     "id": "T370-timing-edge",
+     "summary": "A leftover now goes at the next process's first TempDir of any tag, which is sooner. A process that changes its TMPDIR after its first TempDir does not sweep the second directory.",
+     "class": "within",
+     "why": "Cleanup comes sooner in the common case. In the TMPDIR edge the leftover is still removed by a later process whose first TempDir is there, so nothing is lost. A difference from the old behavior is not a defect (constitution XIV), and no caller is said to do this."
+    },
+    {
+     "id": "T372-route",
+     "summary": "Of the task line's two routes, the plan takes the cleanup once a run: hookrun.sh --sweep on the Makefile's fan-out line before xargs. It does not move the suites' directories under one subdirectory.",
+     "class": "within",
+     "why": "The section says the task line offers two routes; the task line itself is not in the bundle. Either route is performance work the GM asked to come first (2026-11-20), and the GM gave no instruction on which to take. The route chosen moves no path, and the grep the section cites (with its method) shows three places that know the path's shape."
+    },
+    {
+     "id": "T372-mark",
+     "summary": "The cleanup loop becomes the function sweep_gone, with unchanged removal. --sweep runs it and exits; --swept skips it; a job without the mark sweeps as before. The mark is a command word, not an exported variable, so nested runners in test-parts.2/3 still sweep.",
+     "class": "within",
+     "why": "This is a mechanism for doing the cleanup once a run. What it removes is unchanged, and a job run by hand or by a test keeps its old behavior."
+    },
+    {
+     "id": "T372-lone-suite-paths",
+     "summary": "A suite run alone stays untouched, and a suite's TMPDIR stays <temp>/l7r-hooks-suite-<guard>-p<pid>.<x>.",
+     "class": "within",
+     "why": "No behavior or path changes for a lone suite or for a guard that reads a fixture by its /tmp path."
+    },
+    {
+     "id": "T372-cost",
+     "summary": "A killed runner's leftover now waits for the next make hooks-test run that has a suite to run, where before it waited for the next suite of any run.",
+     "class": "within",
+     "why": "The section says the task line names this cost; the task line is not in the bundle. A killed runner's leftover waits for the next make hooks-test run that has a suite to run. That is the same event as before except in a run where every suite is skipped, and such a run makes no directory. Nothing is left unswept and no GM words are departed from, so no defect is left and no ruling is needed."
+    },
+    {
+     "id": "T370-T372-residual",
+     "summary": "Each process's first listing stays (the leak pin in rustc.rs, file-scale --selftest's one listing, the ledger and gate-write guards' TempDir per event), left to the already-filed T371 or T377.",
+     "class": "within",
+     "why": "Listing once a process is what T370 is. The remaining first listings are performance not yet taken, not a defect, and filed tasks own them. The hook suites' glob is taken here by T372. Found-and-left is truthfully 'none'."
+    },
+    {
+     "id": "T370-T372-exits",
+     "summary": "One landing. Crate-scoped builder-checks on rust/guard/shared and rust/guard plus tests/hooks/test-parts.2.sh in the builder's tree, then the full gate at landing. Red-first tests are recorded.",
+     "class": "within",
+     "why": "Crate-scoped checks run in the builder's tree and the full gate runs at the landing. That matches the GM's two tiers of checking (2026-11-26, T308: full rigor deferred to the session clone's gate). It is the procedure for checking the work and does not change what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T383, T385 (bundle) (found by T373, `dev/measurements/2026-11-26/edit-hook/t373-results.md` levers A and C: a hook on an Edit cost the session about 820 ms in its clone and a builder about 400 ms in a pool worktree, measured 2026-11-26 (T373's record, 20 runs a row in its sandbox), and two reads were most of it - the reversal tripwire parsing every line of the feature's event log, and the session's name read from the transcript's start)",
+    "### T383, T385 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T383-file",
+     "summary": "T383: the reversal read moves whole to a new event_log_hooks/reversal.rs because event_log_hooks.rs stood at the 1,000-line file-scale bar",
+     "class": "within",
+     "why": "A file layout choice made to keep the file-scale rule; nothing asked for is narrowed and no behavior changes."
+    },
+    {
+     "id": "T383-fallback",
+     "summary": "T383: a path with more than one JSON spelling (quote, backslash, control, DEL, non-ASCII, non-string) is screened by the Edit tool name alone, and its lines are parsed as before",
+     "class": "within",
+     "why": "A strict superset of the old read's lines followed by the old parse test word for word, so the tripwire keeps every catch. It is safer than the task line's sketch, and that sketch is the coordinating session's, not the GM's (the request holds no words on the tripwire or the session name, grep of request.md). Serves FR-013, performance first."
+    },
+    {
+     "id": "T383-needle",
+     "summary": "T383: a printable-ASCII path with no quote or backslash is screened by its own JSON text, trusting that no writer escapes a printable ASCII character it need not",
+     "class": "within",
+     "why": "This is the one place a put-back could be missed. The stated trust is checked against the real writers (serde and events-refile; every line of 34 logs in serde compact form), and the differential over 468,589 real lines dropped 0 of the 8,661 lines the old read used, with 0 of 1,806 paths differing. No wrong outcome is shown anywhere, so the constraint that no reversal is missed holds."
+    },
+    {
+     "id": "T383-no-side-file",
+     "summary": "T383: the side file of Edit lines, the second option on the task line, is not built; the screen is chosen and the remaining whole-log read is filed",
+     "class": "within",
+     "why": "The task line names two options and the plan picks one, with a stated reason (no second file to drift, no missed reversal). The request asks for performance work first, not for a particular mechanism, so nothing asked for is dropped."
+    },
+    {
+     "id": "T385-backward",
+     "summary": "T385: the transcript is read backward in 64 KiB blocks (BLOCK, a GUESS knob) and stops at the last custom-title record; what one line says is the old loop body unchanged",
+     "class": "within",
+     "why": "The same last-rename-wins name comes out at every block size; a test checks this against the forward read kept as its oracle. A performance change inside FR-013."
+    },
+    {
+     "id": "T385-no-object-line",
+     "summary": "T385: a custom-title line that parses but is no object, standing before the last good record, no longer ends the lookup with no name; the good record names the session",
+     "class": "within",
+     "why": "A different output, said openly and pinned by a test, not a wrong outcome: the session gets its last real rename where before it got no name. Under the no-exactness rule (constitution XIII, the GM 2026-11-18) such a difference is the rule, not an exception, and needs no ruling."
+    },
+    {
+     "id": "T385-failed-read",
+     "summary": "T385: a transcript that opens and then fails mid-read gives no name, as one that cannot be opened always did, instead of the name read before the failure",
+     "class": "within",
+     "why": "A different output with a stated reason (a name from part of a file can be the wrong name; the Python original raised), and a test pins it. No wrong outcome is shown; routing and the guard log already handle no name, the outcome for a file that cannot be opened."
+    },
+    {
+     "id": "found-and-left-T392",
+     "summary": "The Edit hook still reads the whole feature log, 78 ms of a worktree's 90 ms after this task; this is filed as T392, to land before T302",
+     "class": "within",
+     "why": "A remaining wait is not a wrong outcome under the defect definition (constitution XIV v2.36.0), so no defect is carried forward. It is filed with its reason, its task id and its order anyway, and as performance work it keeps its priority under FR-013."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T384 (T373's lever B: clone-sync asked the session's name before it knew it needed it)",
+    "### T384 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T384-move",
+     "summary": "clone_sync_hooks pretool asks cx.session.canonical() only inside the misrouted(...) argument, after the dirty-clone return; no new branch, every verdict and message unchanged",
+     "class": "within",
+     "why": "A performance task (FR-013; the GM 2026-11-20 'prioritize performance improvements'): the name is read only on the path that judges by it, so the dirty-clone Edit stops reading the transcript; the clean path is untouched and the block keeps every verdict (constitution XIII)."
+    },
+    {
+     "id": "T384-test",
+     "summary": "red-first test a_dirty_clones_edit_reads_no_transcript counts Session::reads (1 before, 0 after) and pins the clean path still reading",
+     "class": "within",
+     "why": "Enforcement of the change the task makes and of the unchanged clean path; it only fails when the requested speed-up is absent or the clean verdict path stops reading the name. Not unrequested scope."
+    },
+    {
+     "id": "T384-leverF-declined",
+     "summary": "T373's lever F (git diff-index --quiet HEAD before git status --porcelain) declined, and its cure (update-index --refresh first) not taken",
+     "class": "within",
+     "why": "Lever F is the session's own proposal, not the GM's words; the block measures that it gives wrong verdicts (a stat-touched clean clone judged dirty skips misrouted's refusals and behind's fast-forward; an untracked file still owes the status call, slowing the clean path) - a defect it would introduce - and the cure would reintroduce an index write under its lock that 451 T304 removed. Declining a lever that changes verdicts narrows nothing the GM asked; prioritizing performance does not ask for a speed-up that breaks a guard."
+    },
+    {
+     "id": "T384-order",
+     "summary": "after T385 (landed, which took the titled case); independent of T386 (the clean path's sessions directory)",
+     "class": "within",
+     "why": "Sequencing only; the remaining clean/untitled cost is named to T386 rather than left unowned, so no known defect is carried and nothing is narrowed."
+    },
+    {
+     "id": "T384-not-a-defect",
+     "summary": "classed as a speed change, not a defect fix; found-and-left none",
+     "class": "within",
+     "why": "No wrong outcome is involved: every verdict is kept, so constitution XIV's defect rules do not reach it; the slower clean-untitled row is the unchanged path under load, as the block states, not a regression the code could cause (it does strictly less on the dirty path and the same on the clean one)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T384 (T373's lever B: clone-sync asked the session's name before it knew it needed it)",
+    "### T384 Approach (checklist part A)",
+    "### T463 (<why: the finding or measurement that files it>)",
+    "### T463 Approach (checklist part A)",
+    "(removed) ### T384 (<why: the finding or measurement that files it>)",
+    "(removed) ### T395 (<why: the finding or measurement that files it>)",
+    "(removed) ### T395 Approach (checklist part A)",
+    "(removed) ### T416 (<why: the finding or measurement that files it>)",
+    "(removed) ### T416 Approach (checklist part A)",
+    "(removed) ### T421 (<why: the finding or measurement that files it>)",
+    "(removed) ### T421 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T384-move",
+     "summary": "clone_sync_hooks pretool asks cx.session.canonical() only inside the misrouted(...) call after the dirty-clone return, so a dirty clone's Edit/Write reads no transcript; every verdict and message unchanged, pinned red-first by a_dirty_clones_edit_reads_no_transcript (reads 1 -> 0, clean path still >= 1).",
+     "class": "within",
+     "why": "A [perf] task under FR-013 and the GM's 2026-11-20 'can we in general priotitize performance improvements going forward?': it makes the builders' loop faster (untitled dirty Edit 630.6 -> 94.9 ms median, dated and with method) and changes no outcome, so constitution XIII is kept. The clean untitled row moving 712 -> 862 ms is on the unchanged path and is a timing signal, not a stop."
+    },
+    {
+     "id": "T384-figure-restated",
+     "summary": "The saving is restated against T385's landing: the titled transcript is already one 64 KiB block, so what lever B still saves is the transcript with no custom-title record; T373's 383 ms is not claimed.",
+     "class": "within",
+     "why": "Restating a measured figure to what the current code does is the project's standing rule (a figure measured, never remembered); it narrows no request clause."
+    },
+    {
+     "id": "T384-leverF-declined",
+     "summary": "Lever F (git diff-index --quiet HEAD before git status --porcelain) is declined: measured 2026-11-27 it judges a stat-touched clean clone dirty (skipping misrouted's refusals and behind's fast-forward) and an untracked-only clone clean (so status is still owed, the clean path slower); the only cure, update-index --refresh, writes the index under the lock T304 removed; T373 priced it under 3 s a day.",
+     "class": "within",
+     "why": "The GM asked for performance improvements to be prioritized, not for this lever; nothing in request.md or the cited FRs names it. An optimization that would change the guard's verdicts (a clean clone let past its refusals) is a wrong outcome under constitution XIV, so declining it preserves correct behavior rather than narrowing what was asked. The reason is measured, not argued."
+    },
+    {
+     "id": "T384-checklist",
+     "summary": "Part A filled: goal, constraints (every verdict unchanged; XIII), sources O: T373 results and this task's probes, order after T385 and independent of T386, exits green/red, done = read count 1 -> 0 and 630.6 -> 94.9 ms; 'Not a defect' (speed only); Found and left: none; Performance work: yes, [perf], no engine checklist.",
+     "class": "within",
+     "why": "Each answer follows from the approach above; leaving the clean untitled path to T386 is ordering of separately filed perf work, not a defect left."
+    },
+    {
+     "id": "T463-template",
+     "summary": "T463's section and checklist added as the unfilled template.",
+     "class": "within",
+     "why": "Placeholder text only; it decides nothing."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "Unfilled template sections removed: T384's old placeholder header (replaced by the filled T384 section above) and T395, T416 and T421 (both parts), which were ticked in cb852f0a27.",
+     "class": "within",
+     "why": "Each removed block was template text with no decision in it (earlier.md); removing it drops nothing the GM asked for. FR-044 says a removed section owes no review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T386 (T373's lever D: clone-sync's clean path listed the sessions directory once per claim of the clone)",
+    "### T386 Approach (checklist part A)",
+    "(removed) ### T386 (<why: the finding or measurement that files it>)",
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T386-D1",
+     "summary": "Read ~/.claude/sessions at most once per clone-sync decision (a Sessions value behind a OnceCell in misrouted), passed to pid_of, sid_is_live, forked_from and parked_by; pid_of keeps its first-record, all-digit-stem rule",
+     "class": "within",
+     "why": "A speed change to the hook on every clean-clone Edit/Write, every verdict and message kept and pinned by a red-first listing-count test; serves the GM's 2026-11-20 'prioritize performance improvements' (FR-013) and the 2026-11-27 'maximize productivity'."
+    },
+    {
+     "id": "T386-D2",
+     "summary": "The claim-map walk passes a zero-size claim file by its metadata (following links as is_file did) before opening it",
+     "class": "within",
+     "why": "An empty claim file names no clone, so no verdict can move; a pure cost cut inside the same performance request."
+    },
+    {
+     "id": "T386-D3",
+     "summary": "Every clone-sync verdict and message unchanged; constraint is constitution XIII",
+     "class": "within",
+     "why": "Keeps existing behavior while speeding it; nothing the GM asked to change is preserved against him."
+    },
+    {
+     "id": "T386-D4",
+     "summary": "Pruning dead claim files is not done here and not filed, on a 2026-11-27 measurement showing no saving above load noise once empty files are passed by size",
+     "class": "within",
+     "why": "The GM never asked for claim-file pruning; it deletes data, and his 2026-11-26 principle is time saved over disk usage, and the measurement shows no time to save. Leaving dead claim files is no wrong outcome (no verdict or reader-visible effect), so it is not a defect left unfixed and needs no deferral."
+    },
+    {
+     "id": "T386-D5",
+     "summary": "Classed not a defect (a speed change) and tagged [perf] under FR-013, no engine checklist",
+     "class": "within",
+     "why": "Matches FR-013's definition (makes the gate/hooks faster) and constitution XIV's definition of a defect; it is not an engine-speed task."
+    },
+    {
+     "id": "T386-D6",
+     "summary": "Exits: green on the clone-sync tests and the hook suite with one listing a decision; red recorded and set down, an impossibility claim through make arbiter-ask",
+     "class": "within",
+     "why": "The standard exits; decide nothing the spec left open."
+    },
+    {
+     "id": "removed-T386-template",
+     "summary": "The empty T386 template section removed, replaced by the filled T386 block",
+     "class": "within",
+     "why": "The removed text held only placeholders; its content is now the filled section."
+    },
+    {
+     "id": "removed-T475-template",
+     "summary": "An empty T475 template section removed",
+     "class": "within",
+     "why": "The removed text held only placeholders and decided nothing; deleting it narrows nothing asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T387 (found by 451 T373, lever E: while a plan review holds text every Bash call's PreToolUse loads, snapshots and SAVES the 3.0 MB `checks-open.json`, 97 to 118 ms of CPU, and checks-hooks spends 98 ms on every Agent PostToolUse on the same file, measured 2026-11-26, `dev/measurements/2026-11-26/edit-hook/t373-results.md`)",
+    "### T387 Approach (checklist part A)",
+    "(removed) ### T387 (<why: the finding or measurement that files it>)",
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T387-D1",
+     "summary": "The held text is kept once per hold and tree at its first call, not retaken at every call's start; a change no hooked call made is written back at the next call's end.",
+     "class": "within",
+     "why": "A performance task under FR-013 and the GM's 2026-11-20 'prioritize performance improvements'. Taking the text once is how the saving is had, and it also fixes a wrong outcome at HEAD found red-first (a concurrent call's end wrote its change back over the first call's restore). The hold's purpose, text the review reads standing still, is kept and made stricter, not narrowed. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T387-D2",
+     "summary": "restore still reads and removes a call-keyed snapshot written by an older build.",
+     "class": "within",
+     "why": "Compatibility so a session mid-rebuild does not lose a write-back. It narrows nothing asked."
+    },
+    {
+     "id": "T387-A2",
+     "summary": "An Agent launch or return that no dispatch, hold or waiting wave row names is not booked and saves nothing; a TaskStop is always booked.",
+     "class": "within",
+     "why": "The saving the task exists for (T373 lever E). Nothing any reader needs is dropped: a row that names the call is still booked. The first cut was a clone-and-compare, measured slower and replaced."
+    },
+    {
+     "id": "T387-A3",
+     "summary": "A rounded dispatch row's counted and quote_notes are pruned; every other field is kept because it has a reader; marks is left while T488 is open.",
+     "class": "within",
+     "why": "Shrinks the state every hook parses. Every field's readers were inventoried first by grep over rust/ (the brief's constraint), and only fields read solely by the row's own pre-round return are dropped. Nothing requested is removed."
+    },
+    {
+     "id": "T387-A4",
+     "summary": "Red first on the 5 hold_writes tests (3 failed at HEAD), then green across both guard crates and the hook suites.",
+     "class": "within",
+     "why": "Verification that only fails when the requested saving or the write-back is missing, so it enforces the request (FR-012's practice, GM 2026-09-20). Not unrequested scope."
+    },
+    {
+     "id": "T387-F1",
+     "summary": "Defect left: a check-wave dispatch never applies its reading marks, so a wave round's count is wrong. Deferred to T488, which lands before T490.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a wrong outcome that is found and not fixed in this task. The GM's rule is 'fix all known bugs in each step before moving on to porting the next step' (2026-11-18). That binds at a step boundary, not inside one task. T488 is filed in this feature, has an order, and lands before T490 and before any port resumes. It carries FR-009's why, id and order. It is a separate mechanism (how rounds are counted), and fixing it here would change round counting inside a state-saving task. The GM's purpose is still met because the defect is fixed before the next step."
+    },
+    {
+     "id": "T387-F2",
+     "summary": "Defect left: a running hold past HOLD_MAX_S is never purged, so it keeps loading the state on every Bash call and keeps refusing held text. Deferred to T489, which lands before T490.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same footing as F1. It is filed and ordered in this feature before the next step, with FR-009's why, id and order. Purging a running hold changes a guard's refusal, which is not part of this task's saving of the state. The GM's fix-before-moving-on rule is kept."
+    },
+    {
+     "id": "T387-F3",
+     "summary": "The 36 to 43 ms parse floor of the 3.0 MB state is left and filed as T490, which lands before T302.",
+     "class": "within",
+     "why": "This is not a defect, because nothing reads wrong or fails; it is a remaining cost. Filing it as further performance work follows FR-013 and is not a narrowing."
+    },
+    {
+     "id": "removed-stubs",
+     "summary": "Two unfilled template stubs are removed: the T387 placeholder, replaced by the filled block, and a stray T475 placeholder.",
+     "class": "within",
+     "why": "Placeholders decide nothing. Their removal narrows nothing."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T370 to T387, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

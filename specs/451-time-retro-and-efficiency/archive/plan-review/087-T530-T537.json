@@ -1,0 +1,808 @@
+{
+ "blocks": {
+  "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")": {
+   "sha256": "efd573a6fd67aca3d258eeb68c78a30ca7309b8d79a5c2a03457cfbb7e2c3463",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T530 Approach (checklist part A)": {
+   "sha256": "379ad7b271bfa004f43542d85cb0ad564c83e6f306bc3554edd1e08acf0c3f16",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T531 (left by 451 T530: a `git commit` only in a heredoc's TEXT held as a commit while a gate runs and the tree has moved, a false refusal; T530's round 2 plan review ruled a strip of every body but a shell's unbounded)": {
+   "sha256": "23e545e917090c0c019edd4c997a3d9ef5f8b0f03f67882a86847b5c86de1bbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T531 Approach (checklist part A)": {
+   "sha256": "6e15dbacae174c67df67fbe668e38f9bc26364dedac8fa59cea878e203997544",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T532 (the GM's fifteenth process-reviewer message, 2026-11-27, in specs/449-rust-codebase/port-talk-gm-goal.md: a day on Fable must not read as the process costing more)": {
+   "sha256": "c8dee7e46957bbd51f4d32965c6429c3c0e14ea80b35b7fbfcfaffbcfc8f4ce6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T532 Approach (checklist part A)": {
+   "sha256": "80bab0e50ff8c1c0f06a08256ef9db5533def43ba8de99593e45b50b628e88ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T532 (<why: the finding or measurement that files it>)": {
+   "sha256": "9990353d2ef9f1ab21138559026f64fd5fc927b9d350daf96807af24d220b5e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T535 (the batch gate of 2026-11-27 19:10Z failed T364's late-reader test once on good work; the round arbiter's ruling on red-gate@2026-11-27T19:10:08Z: a defect in the test or the drain, found red first)": {
+   "sha256": "b1cd793814425c9e93c849e45be1543698b21a038b96fa24d841fb79c281c2f0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T535 Approach (checklist part A)": {
+   "sha256": "7d393533fb9a58925c654ec3bd1105dca680b63e5131f27c9c0316d985af33a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T536 (462 FR-004 and the GM's seventeenth and eighteenth process-reviewer messages, 2026-11-27: the before figure for T537's split - which tools, hooks and agents read 451's large records whole, while they are whole)": {
+   "sha256": "55b4cd4c7a43117030f8e2d11a44c6951aa7b725932746dd2c65e0b46075fb2f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T536 Approach (checklist part A)": {
+   "sha256": "fcc1587f14a1cb39387d70b87121344485f908a582411259eaf3addd4ebc79e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T537 (462 FR-004 and SC-002, the GM's go of 2026-11-27, \"doing the split that we discussed\", on future sessions \"naively just opening these very large files and then blowing through their own context windows\": 451's finished records cut into parts a reader of one task can open safely, every tool that reads them pointed at the new layout)": {
+   "sha256": "bebaa5b4238810efbe6b2b98889e5cd9d2694577ea01ba742ffae899410fc817",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter"
+  },
+  "### T537 Approach (checklist part A)": {
+   "sha256": "4fb47d1253617682eece7b795145650a924bfcd116b6b7bc20fc7416ee81c9b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter"
+  }
+ },
+ "tasks": {
+  "T530": {
+   "section_sha256": "fb226c0731326eaf179e0c615e4d631ff6f367143c9dd5072ade5926b95416aa",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The task line's cause (GIT_WRITE splitting only at ; & |) is refuted by reading; the fix targets the proved cause, gate_refusal returning on the tree check's --quiet answer before shell_write judged the command's own append.",
+     "class": "within",
+     "why": "Fixing the actual cause of the incident the task names (a commit moved HEAD under a running gate) is the task. Restating a refuted cause is not a narrowing."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen no longer returns None: it falls through to the make check and to the command's own writes (shell_write), which the gate sees.",
+     "class": "within",
+     "why": "This is the fix for the defect. It makes the guard refuse what the task says it missed, and refuses nothing the task did not ask to have refused."
+    },
+    {
+     "id": "T530-commit-check-entry",
+     "summary": "shell_write cedes git commit/add to the commit check, which is entered where the pattern matches OR where the walk places a git commit or add, so quoted spellings ('\"git\" commit', \"'git' add -A\") are held as a commit rather than as a shell write of '.'.",
+     "class": "within",
+     "why": "These forms were held before and are held after. Only the refusal's wording changes, which is a difference and not a defect (constitution XIII, 2026-11-18). It is needed so that a bare git commit is not misread as a shell write once the early return is gone."
+    },
+    {
+     "id": "T530-heredoc-bodies-read",
+     "summary": "The GIT_WRITE pattern keeps reading the whole text, heredoc bodies included, so a commit a body could run (a shell reading it, a pipe, a substitution, a wrapper, an interpreter, a later script) stays held. Eight such shapes are pinned by a test.",
+     "class": "within",
+     "why": "This serves goal item 1 ('however its lines and heredocs are laid out'): the guard fails closed on every form that can run a body. The pinned shapes are correct refusals, so the test enforces what was asked."
+    },
+    {
+     "id": "T530-T531-deferral",
+     "summary": "A git commit that appears only in a heredoc's TEXT, never run, is still refused while a gate runs and the tree has moved. This false refusal is the same as at HEAD. It is left, filed as T531, 'lands before none'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A false refusal is a defect by the GM's definition (a check that refuses good work), so leaving it needs a ruling. 'Needs its own method' is a cost argument and does not carry the ruling. The premise 'round 2 ruled the strip NOT LEGITIMATE' is not in this bundle (earlier.md says the block is new; rulings.md is empty), so it is not relied on. What carries it: (1) purpose. T530's purpose is that a commit cannot move a clone under its gate, and the residual errs only toward refusing, so it does not gut that purpose. A naive strip of the bodies would reopen exactly the fail-open hole the task closes, which is plain from the forms the block lists that run a body. (2) The defect is pre-existing and not made worse, and it lies outside the missed commit the task line names. (3) The block gives FR-009's three parts: why it is not fixed here, a filed id (T531), and an order. Nothing in request.md requires this particular tooling defect to land before any named task. The general fix-as-we-go rule is met because T531 is filed as an open task of this same feature's tasking, not dropped."
+    },
+    {
+     "id": "T530-census-order-budget",
+     "summary": "The newline-gap census of the guard's other matchers (GIT_WRITE, shared::make::invoked/POS, shared::tree::walk_judged/split, OWN_DEF) is read, labeled as an observation of 2026-11-27 with its method. The task runs alone with no dependants, in one landing.",
+     "class": "within",
+     "why": "This gives FR-009's class-of-defect census with its search space stated. Order and budget decide nothing the request settles."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T531": {
+   "section_sha256": "bf03a16290b32e7fb0bad4598d8f60ca5e3e43a2281cf6680f8f884921f01709",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T531-scope",
+     "summary": "A new module inert.rs feeds only the commit pattern (GIT_WRITE) a command with known-inert heredoc bodies blanked; placed, stands_here and shell_write still read the raw command; the shared shape::strip_heredocs is untouched.",
+     "class": "within",
+     "why": "It confines the fix to the defect the task names (a commit present only as heredoc text, held as a commit while a gate runs) and changes no other guard. That is the task's own scope, not a narrowing of anything asked."
+    },
+    {
+     "id": "T531-allowlist",
+     "summary": "The method is a closed allowlist (steps 1-4: bash heredoc grammar, opener outside quotes, no substitution or variable, QUIET command set, cat-only or git commit -F - readers, a DATA-extension knob labeled GUESS). Where any part fails, nothing is stripped and the command is held as at HEAD.",
+     "class": "within",
+     "why": "This is how the defect is fixed, and it fails safe: an unreadable command keeps HEAD's behavior and never loosens the guard. The extension list is labeled a GUESS knob. Design quality is not a fidelity question."
+    },
+    {
+     "id": "T531-held-python-stdin",
+     "summary": "Of the 153 measured commands whose only commit match is in a body, the `python3 -` bodies (about 80) stay held.",
+     "class": "within",
+     "why": "Those bodies are executed by the interpreter, so they are not text that nothing runs. They are outside the defect the task defines (commit text that is only TEXT), and holding them is the guard working."
+    },
+    {
+     "id": "T531-held-written-then-run",
+     "summary": "A body that a later program in the same command compiles or runs (cat >> tests.rs then make rust-test, a file then `. f`, chmod +x and ./f, cat > $F then bash $F) stays held.",
+     "class": "within",
+     "why": "The written text is executed in the same command, so it is not inert. Holding it is correct, and it is outside the defect class."
+    },
+    {
+     "id": "T531-held-interpreter-reads",
+     "summary": "A cat whose command also runs an interpreter on the file it wrote (python3 -c reading it, about 30) stays held.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'let a text-only commit through', because some of these programs only read the file. But a static hook cannot tell a program that reads a file from one that runs it. That is the unbounded class T530's round 2 ruled out, and in general it cannot be decided without running the program, so applying the rule here is impossible rather than merely awkward. Holding means HEAD's existing behavior, a wait while a gate runs, with the escape still available. No new wrong outcome is introduced."
+    },
+    {
+     "id": "T531-held-variable-target",
+     "summary": "A command that names a shell variable anywhere (cat > $S/f, 18) stays held.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The hook sees only the command text, not the environment the variable expands in. Whether $S/f is a plain data file, a hooks or .git path, or a file the same command later runs under another spelling cannot be known from the text. Rule (4)'s own exclusions (.git, hooks, /dev/) would be unenforceable on an unexpanded target, so stripping here would defeat the guard's purpose. The held state is HEAD's behavior, not a new refusal."
+    },
+    {
+     "id": "T531-other-tree",
+     "summary": "`git -C <another tree> commit -F -` with commit text in its message is pinned passing.",
+     "class": "within",
+     "why": "This is unchanged from HEAD (the 451 T307/T406 walk places it in the other tree). The pin records existing behavior and adds none."
+    },
+    {
+     "id": "T531-message-unchanged",
+     "summary": "The guard's refusal message is unchanged, and Found-and-left is none.",
+     "class": "within",
+     "why": "The task fixes which commands the guard holds, not what it says. The residual held forms are stated openly in the Approach with their counts, so nothing is hidden. The two undecidable classes are ruled above."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T532": {
+   "section_sha256": "a3becbac6aad1b656f9f99db28e0a0a9b270539d59ee76389c22339a7ccf8b08",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T532-D1",
+     "summary": "Read each transcript usage row's message.model beside its usage and keep tokens per message id by model (Tokens::models, Models, add_call, add_models; NO_MODEL for a row naming none, e.g. <synthetic>).",
+     "class": "within",
+     "why": "The GM's fifteenth message (request.md 2026-11-27, T532): a switch to Fable for a day must not 'make it look like everything was twice as expensive that day'; splitting the raw counts by model is how a day on another model is told apart. FR-005 already names a 'model' column. A row naming no model is still counted, not dropped, so the split sums to the unsplit figures."
+    },
+    {
+     "id": "T532-D2",
+     "summary": "Book the by-model figures exactly where turns::of books the unsplit ones - builders, review agents and session per landed task, plus a window ByModel holding every agent's and session call's, booked or not - leaving the existing rows and lines unchanged.",
+     "class": "within",
+     "why": "Adds a dimension to the existing booking (451 T512) without changing it; nothing the GM asked to change is preserved and nothing he asked for is narrowed. The window total including unbooked calls makes the mix cover all usage, which serves 'our metrics' as a whole."
+    },
+    {
+     "id": "T532-D3",
+     "summary": "New module task_time/models.rs prints, after the summary table, a per-landed-task table of actors by model (calls, output, fresh input, cache read, cache write, tokens and share) and one window model-mix line beside the window's time-weighted concurrency (Cross.held tree-seconds over window seconds).",
+     "class": "within",
+     "why": "The GM's message asks that a model switch not throw off the numbers; the session's recorded answer makes the model one more dimension of a like window beside concurrency, and 461 FR-010 requires every before-and-after figure stated with its concurrency. Printing them together is the requested comparison, not new scope."
+    },
+    {
+     "id": "T532-D4",
+     "summary": "No rate, weight or dollar figure is stored or printed; tokens stay raw counts.",
+     "class": "within",
+     "why": "The GM: 'we are storing token usage rather than dollar usage, right? ... I don't want to have to go back when prices change'. Not applying a quota weight is what keeps a Fable day from reading as 'twice as expensive in terms of tokens'; the split by model (D1-D3) is what lets a reader compare like with like. Nothing asked for is left out."
+    },
+    {
+     "id": "T532-D5",
+     "summary": "Found and left: fix port-talk-gm-goal.md's note under the fifteenth message, which said 'Filed as 451 T531' for this task, to T532, outside the SOURCE block.",
+     "class": "within",
+     "why": "A wrong pointer sends a reader to the wrong task - a wrong outcome, fixed here as the fix-as-we-go rule asks; the GM's verbatim words in the SOURCE block are untouched."
+    },
+    {
+     "id": "T532-D6",
+     "summary": "Classed as performance work under 451 FR-013 (a measurement of where tokens go in the builders' loop).",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the time goes in the builders' loop as performance work for ordering ('this kind of measurement task to be counted as a performance task'); a by-model token split of make task-time is such a reader."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T537": {
+   "section_sha256": "b3d9f5871e581022e3b201044f5784e69160e2dba611280cc21a9c5e19466ab9",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T537-plan-review-json",
+     "class": "within",
+     "summary": "the round arbiter accepted T537's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")",
+    "### T530 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T530-D1",
+     "summary": "Fix the proved cause: gate_refusal no longer returns on the tree check's --quiet answer; a commit the check calls unseen falls through to the make check and the command's own writes (shell_write), so a command that appends to a file the gate sees and then commits it is refused while a gate runs.",
+     "class": "within",
+     "why": "A defect (a wrong outcome): a commit moved the clone's HEAD under its gate and voided T522's landing gate. Fixing it is owed under fix-as-we-go, and the fix reaches the incident's shape without dropping any case the guard held before."
+    },
+    {
+     "id": "T530-D2",
+     "summary": "shell_write leaves git's commit and add to the commit check, so a bare git commit is not read as a shell write of '.'.",
+     "class": "within",
+     "why": "A consequence D1 needs. Without it, D1's fall-through would refuse good work (every commit read as a write of the tree root). Each part stays judged: commits by the commit check, writes by shell_write."
+    },
+    {
+     "id": "T530-D3",
+     "summary": "GIT_WRITE matches the command with heredoc bodies stripped (shared::shape::strip_heredocs), so a 'git commit' that is only a heredoc's text is not held.",
+     "class": "within",
+     "why": "A second defect of the same guard: a check refusing correct work (text held as a commit, failing closed). The block records it as a wrong outcome it observed, not as a difference in style, and the other matchers (make::POS, the walk) already strip heredocs. It narrows nothing: a real commit is still matched outside the body."
+    },
+    {
+     "id": "T530-D4",
+     "summary": "The task line's stated cause (the pattern splitting only at ; & |) is set aside as refuted by reading, and the fix aims at the measured cause instead of adding newline splitting.",
+     "class": "within",
+     "why": "The goal is the same as the task line's: the incident's shape is refused. Only the diagnosis changes, and it is backed by a measurement (--quiet exit 0 against --would-write exit 1 on a fresh snapshot) and a red-first shell-suite case that runs the real tree check. A refuted premise is not a narrowed request."
+    },
+    {
+     "id": "T530-D5",
+     "summary": "Found and left: none. The guard's other matchers (GIT_WRITE, make::invoked, tree::walk_judged, OWN_DEF) were read for the same newline gap, with that reading's date and method recorded, and none had it; the early return was the only one before shell_write.",
+     "class": "within",
+     "why": "The class check is labeled as an observation with its method (FR-009's form), and no defect is deferred."
+    },
+    {
+     "id": "T530-D6",
+     "summary": "Order: the task stands alone. Running landings in a tree of their own is left to the feature the task line names, and this guard stays the clone's only protection until then.",
+     "class": "within",
+     "why": "That structural change is filed elsewhere by the task line itself and is not part of T530's ask. This task fixes the guard's defect in full rather than carrying it forward, so nothing known is left unfixed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The task line's cause (GIT_WRITE splitting only at ; & |) is refuted by reading; the cause taken is gate_refusal returning on the --quiet tree check before shell_write judges the command's own append.",
+     "class": "within",
+     "why": "Fixing a found defect (a guard passing a commit that the gate then saw move the tree) is what fix-as-we-go asks; correcting the task line's diagnosis to the measured one is the measured-not-assumed rule, not a change of scope."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen falls through to the make check and the command's own writes instead of returning None.",
+     "class": "within",
+     "why": "The fix of the defect itself; unchanged from the block's CLEAR text."
+    },
+    {
+     "id": "T530-shell-write-leaves-git",
+     "summary": "shell_write leaves git commit and add to the commit check, so a bare git commit is not read as a shell write of '.'.",
+     "class": "within",
+     "why": "Needed so the fall-through does not refuse good work (a bare git commit held as a write of '.'); unchanged from the CLEAR text."
+    },
+    {
+     "id": "T530-placed",
+     "summary": "The commit check is entered where the pattern matches OR the walk places a git commit or add, so quoted forms (\"git\" commit, 'git' add -A) that miss the pattern's \\bgit\\s are still checked rather than escaping once shell_write stops judging git.",
+     "class": "within",
+     "why": "Closes the hole the previous decision would otherwise open; it widens what the guard checks to the commits it is for and refuses nothing beyond them. Enforcement of the guard's own job, not new scope."
+    },
+    {
+     "id": "T530-strip-heredocs",
+     "summary": "GIT_WRITE is matched against the command with heredoc bodies stripped, so a git commit only inside a body is text and no longer held while a gate runs and the tree has moved.",
+     "class": "within",
+     "why": "Removes a check refusing good work (a body that merely mentions git commit); unchanged from the CLEAR text."
+    },
+    {
+     "id": "T530-shell-heredoc",
+     "summary": "Except where a shell reads the heredoc (SHELL_HEREDOC: bash <<'EOF', sh -s <<EOF): that body is commands and is matched whole, as at HEAD; the four shapes held at HEAD are pinned held in a_commit_only_inside_a_heredoc_body_is_not_held.",
+     "class": "within",
+     "why": "Not a narrowing of anything asked: it narrows the plan's own stripping, keeping the guard strict (as at HEAD) where the body really is shell commands. Without it the stripping would let a real commit fed to bash pass, a check passing bad work. Pinning HEAD's held shapes in a test is enforcement of the guard's job."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")",
+    "### T530 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The fix targets the cause proved by measurement (gate_refusal returning on the tree check's --quiet answer before shell_write judged the command's own append), not the task line's stated cause (GIT_WRITE splitting only at ;&|), which the block refutes by reading.",
+     "class": "within",
+     "why": "Closes the incident the task was filed for (a commit moved the clone's HEAD under T522's landing gate). Choosing the measured cause over the guessed one is the project's standing rule, not a change of what was asked."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen no longer returns early; it falls through to the make check and the command's own writes.",
+     "class": "within",
+     "why": "This is the defect fix itself: a check that passed bad work (a commit after its own write while a gate ran). It serves the request's 'real enforcement' (2026-11-19) and the gate's rigor at landing (GM 2026-11-26, T316 section)."
+    },
+    {
+     "id": "T530-placed",
+     "summary": "shell_write leaves git commit/add to the commit check, and the commit check is entered where GIT_WRITE matches OR the walk places a git commit or add (quoted forms such as \"git\" commit, 'git' add -A).",
+     "class": "within",
+     "why": "Keeps the coverage HEAD had: those quoted forms were held at HEAD as a shell write of '.', and are now held by the commit check instead. They are pinned held in a test. Nothing is let through that HEAD held."
+    },
+    {
+     "id": "T530-heredoc-text",
+     "summary": "GIT_WRITE matches the command with heredoc bodies stripped, so a git commit that is only a heredoc's text (data written to a file, a commit message body) is no longer held while a gate runs.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the guard's reach: HEAD failed closed on any git commit text. For a body that is data, the narrowing is legitimate. Holding text that never runs is a check refusing good work, which is a defect by constitution XIV's definition. The block's goal names it ('a git commit that is only a heredoc's text is not'), and no commit can move HEAD from such a body. This ruling covers only bodies nothing executes."
+    },
+    {
+     "id": "T530-heredoc-executed",
+     "summary": "Where a heredoc's body is run as commands, the line is drawn at SHELL_HEREDOC, named by two examples (bash <<'EOF', sh -s <<EOF), and only those are pinned held. Every other heredoc body is stripped before the commit pattern.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix names a class ('where a shell reads a heredoc, whose body is commands') with no line saying how every form of it was found. FR-009's second clause requires that observation, and the 'Found and left?' line covers only the newline gap. The block does not show other routes to an executed body held: a body piped to a shell (cat <<'EOF' | bash), a body fed through command substitution (bash -c \"$(cat <<'EOF' ...)\", eval \"$(cat <<EOF)\"), a shell behind a wrapper (env/sudo/ssh/podman exec ... sh <<EOF, /bin/bash, zsh, dash), or an interpreter heredoc that runs git (python3 <<EOF). Each was matched whole at HEAD, so each was held. Any form missed now lets a commit move HEAD under a running gate, which is exactly the incident T530 exists to close. It also contradicts the block's own goal ('refused, however its lines and heredocs are laid out'). Cure: add an observation line, with its method, saying how the forms by which a heredoc body is executed were found. Each form must then be shown held (pinned), or filed as left with its id and order. Alternatively, strip only bodies whose reader is known to be inert, and keep the fail-closed default for the rest."
+    },
+    {
+     "id": "T530-left",
+     "summary": "'Found and left? none' (the newline-gap search across GIT_WRITE, make::invoked, tree::walk_judged and OWN_DEF, observed 2026-11-27 by reading); performance work 'no'; landings in a tree of their own left to the feature the task line names.",
+     "class": "within",
+     "why": "The newline-gap search carries its method and space. Landings in their own tree is separate work the task line assigns elsewhere, and this task does not narrow it. The executed-heredoc class is the open item, and is ruled above."
+    }
+   ],
+   "tasks": [
+    "T530"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T530 (a commit reached the clone while its gate ran, 2026-11-27 about 17:40Z: 451 T522's landing gate failed \"the tree moved while the gate ran\")",
+    "### T530 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T530-cause",
+     "summary": "The task line's cause (GIT_WRITE splitting only at ; & |) is refuted by reading; the fix targets the proved cause, gate_refusal returning on the tree check's --quiet answer before shell_write judged the command's own append.",
+     "class": "within",
+     "why": "Fixing the actual cause of the incident the task names (a commit moved HEAD under a running gate) is the task. Restating a refuted cause is not a narrowing."
+    },
+    {
+     "id": "T530-fallthrough",
+     "summary": "A commit the tree check calls unseen no longer returns None: it falls through to the make check and to the command's own writes (shell_write), which the gate sees.",
+     "class": "within",
+     "why": "This is the fix for the defect. It makes the guard refuse what the task says it missed, and refuses nothing the task did not ask to have refused."
+    },
+    {
+     "id": "T530-commit-check-entry",
+     "summary": "shell_write cedes git commit/add to the commit check, which is entered where the pattern matches OR where the walk places a git commit or add, so quoted spellings ('\"git\" commit', \"'git' add -A\") are held as a commit rather than as a shell write of '.'.",
+     "class": "within",
+     "why": "These forms were held before and are held after. Only the refusal's wording changes, which is a difference and not a defect (constitution XIII, 2026-11-18). It is needed so that a bare git commit is not misread as a shell write once the early return is gone."
+    },
+    {
+     "id": "T530-heredoc-bodies-read",
+     "summary": "The GIT_WRITE pattern keeps reading the whole text, heredoc bodies included, so a commit a body could run (a shell reading it, a pipe, a substitution, a wrapper, an interpreter, a later script) stays held. Eight such shapes are pinned by a test.",
+     "class": "within",
+     "why": "This serves goal item 1 ('however its lines and heredocs are laid out'): the guard fails closed on every form that can run a body. The pinned shapes are correct refusals, so the test enforces what was asked."
+    },
+    {
+     "id": "T530-T531-deferral",
+     "summary": "A git commit that appears only in a heredoc's TEXT, never run, is still refused while a gate runs and the tree has moved. This false refusal is the same as at HEAD. It is left, filed as T531, 'lands before none'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A false refusal is a defect by the GM's definition (a check that refuses good work), so leaving it needs a ruling. 'Needs its own method' is a cost argument and does not carry the ruling. The premise 'round 2 ruled the strip NOT LEGITIMATE' is not in this bundle (earlier.md says the block is new; rulings.md is empty), so it is not relied on. What carries it: (1) purpose. T530's purpose is that a commit cannot move a clone under its gate, and the residual errs only toward refusing, so it does not gut that purpose. A naive strip of the bodies would reopen exactly the fail-open hole the task closes, which is plain from the forms the block lists that run a body. (2) The defect is pre-existing and not made worse, and it lies outside the missed commit the task line names. (3) The block gives FR-009's three parts: why it is not fixed here, a filed id (T531), and an order. Nothing in request.md requires this particular tooling defect to land before any named task. The general fix-as-we-go rule is met because T531 is filed as an open task of this same feature's tasking, not dropped."
+    },
+    {
+     "id": "T530-census-order-budget",
+     "summary": "The newline-gap census of the guard's other matchers (GIT_WRITE, shared::make::invoked/POS, shared::tree::walk_judged/split, OWN_DEF) is read, labeled as an observation of 2026-11-27 with its method. The task runs alone with no dependants, in one landing.",
+     "class": "within",
+     "why": "This gives FR-009's class-of-defect census with its search space stated. Order and budget decide nothing the request settles."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T531 (left by 451 T530: a `git commit` only in a heredoc's TEXT held as a commit while a gate runs and the tree has moved, a false refusal; T530's round 2 plan review ruled a strip of every body but a shell's unbounded)",
+    "### T531 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T531-scope",
+     "summary": "A new module inert.rs feeds only the commit pattern (GIT_WRITE) a command with known-inert heredoc bodies blanked; placed, stands_here and shell_write still read the raw command; the shared shape::strip_heredocs is untouched.",
+     "class": "within",
+     "why": "It confines the fix to the defect the task names (a commit present only as heredoc text, held as a commit while a gate runs) and changes no other guard. That is the task's own scope, not a narrowing of anything asked."
+    },
+    {
+     "id": "T531-allowlist",
+     "summary": "The method is a closed allowlist (steps 1-4: bash heredoc grammar, opener outside quotes, no substitution or variable, QUIET command set, cat-only or git commit -F - readers, a DATA-extension knob labeled GUESS). Where any part fails, nothing is stripped and the command is held as at HEAD.",
+     "class": "within",
+     "why": "This is how the defect is fixed, and it fails safe: an unreadable command keeps HEAD's behavior and never loosens the guard. The extension list is labeled a GUESS knob. Design quality is not a fidelity question."
+    },
+    {
+     "id": "T531-held-python-stdin",
+     "summary": "Of the 153 measured commands whose only commit match is in a body, the `python3 -` bodies (about 80) stay held.",
+     "class": "within",
+     "why": "Those bodies are executed by the interpreter, so they are not text that nothing runs. They are outside the defect the task defines (commit text that is only TEXT), and holding them is the guard working."
+    },
+    {
+     "id": "T531-held-written-then-run",
+     "summary": "A body that a later program in the same command compiles or runs (cat >> tests.rs then make rust-test, a file then `. f`, chmod +x and ./f, cat > $F then bash $F) stays held.",
+     "class": "within",
+     "why": "The written text is executed in the same command, so it is not inert. Holding it is correct, and it is outside the defect class."
+    },
+    {
+     "id": "T531-held-interpreter-reads",
+     "summary": "A cat whose command also runs an interpreter on the file it wrote (python3 -c reading it, about 30) stays held.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows 'let a text-only commit through', because some of these programs only read the file. But a static hook cannot tell a program that reads a file from one that runs it. That is the unbounded class T530's round 2 ruled out, and in general it cannot be decided without running the program, so applying the rule here is impossible rather than merely awkward. Holding means HEAD's existing behavior, a wait while a gate runs, with the escape still available. No new wrong outcome is introduced."
+    },
+    {
+     "id": "T531-held-variable-target",
+     "summary": "A command that names a shell variable anywhere (cat > $S/f, 18) stays held.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The hook sees only the command text, not the environment the variable expands in. Whether $S/f is a plain data file, a hooks or .git path, or a file the same command later runs under another spelling cannot be known from the text. Rule (4)'s own exclusions (.git, hooks, /dev/) would be unenforceable on an unexpanded target, so stripping here would defeat the guard's purpose. The held state is HEAD's behavior, not a new refusal."
+    },
+    {
+     "id": "T531-other-tree",
+     "summary": "`git -C <another tree> commit -F -` with commit text in its message is pinned passing.",
+     "class": "within",
+     "why": "This is unchanged from HEAD (the 451 T307/T406 walk places it in the other tree). The pin records existing behavior and adds none."
+    },
+    {
+     "id": "T531-message-unchanged",
+     "summary": "The guard's refusal message is unchanged, and Found-and-left is none.",
+     "class": "within",
+     "why": "The task fixes which commands the guard holds, not what it says. The residual held forms are stated openly in the Approach with their counts, so nothing is hidden. The two undecidable classes are ruled above."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T532 (the GM's fifteenth process-reviewer message, 2026-11-27, in specs/449-rust-codebase/port-talk-gm-goal.md: a day on Fable must not read as the process costing more)",
+    "### T532 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T532-D1",
+     "summary": "Read each transcript usage row's message.model beside its usage and keep tokens per message id by model (Tokens::models, Models, add_call, add_models; NO_MODEL for a row naming none, e.g. <synthetic>).",
+     "class": "within",
+     "why": "The GM's fifteenth message (request.md 2026-11-27, T532): a switch to Fable for a day must not 'make it look like everything was twice as expensive that day'; splitting the raw counts by model is how a day on another model is told apart. FR-005 already names a 'model' column. A row naming no model is still counted, not dropped, so the split sums to the unsplit figures."
+    },
+    {
+     "id": "T532-D2",
+     "summary": "Book the by-model figures exactly where turns::of books the unsplit ones - builders, review agents and session per landed task, plus a window ByModel holding every agent's and session call's, booked or not - leaving the existing rows and lines unchanged.",
+     "class": "within",
+     "why": "Adds a dimension to the existing booking (451 T512) without changing it; nothing the GM asked to change is preserved and nothing he asked for is narrowed. The window total including unbooked calls makes the mix cover all usage, which serves 'our metrics' as a whole."
+    },
+    {
+     "id": "T532-D3",
+     "summary": "New module task_time/models.rs prints, after the summary table, a per-landed-task table of actors by model (calls, output, fresh input, cache read, cache write, tokens and share) and one window model-mix line beside the window's time-weighted concurrency (Cross.held tree-seconds over window seconds).",
+     "class": "within",
+     "why": "The GM's message asks that a model switch not throw off the numbers; the session's recorded answer makes the model one more dimension of a like window beside concurrency, and 461 FR-010 requires every before-and-after figure stated with its concurrency. Printing them together is the requested comparison, not new scope."
+    },
+    {
+     "id": "T532-D4",
+     "summary": "No rate, weight or dollar figure is stored or printed; tokens stay raw counts.",
+     "class": "within",
+     "why": "The GM: 'we are storing token usage rather than dollar usage, right? ... I don't want to have to go back when prices change'. Not applying a quota weight is what keeps a Fable day from reading as 'twice as expensive in terms of tokens'; the split by model (D1-D3) is what lets a reader compare like with like. Nothing asked for is left out."
+    },
+    {
+     "id": "T532-D5",
+     "summary": "Found and left: fix port-talk-gm-goal.md's note under the fifteenth message, which said 'Filed as 451 T531' for this task, to T532, outside the SOURCE block.",
+     "class": "within",
+     "why": "A wrong pointer sends a reader to the wrong task - a wrong outcome, fixed here as the fix-as-we-go rule asks; the GM's verbatim words in the SOURCE block are untouched."
+    },
+    {
+     "id": "T532-D6",
+     "summary": "Classed as performance work under 451 FR-013 (a measurement of where tokens go in the builders' loop).",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the time goes in the builders' loop as performance work for ordering ('this kind of measurement task to be counted as a performance task'); a by-model token split of make task-time is such a reader."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T532 (<why: the finding or measurement that files it>)",
+    "### T532 Approach (checklist part A)",
+    "### T536 (462 FR-004 and the GM's seventeenth and eighteenth process-reviewer messages, 2026-11-27: the before figure for T537's split - which tools, hooks and agents read 451's large records whole, while they are whole)",
+    "### T536 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T532-blocks",
+     "summary": "T532's section and its checklist are the unfilled template: every field is a placeholder.",
+     "class": "within",
+     "why": "The two blocks decide nothing; there is no decision in them to narrow what was asked. They carry no plan for T532 either, so a later block that fills them is owed its own review."
+    },
+    {
+     "id": "T536-1 read-only on copies",
+     "summary": "T536 is a read-only measurement on copies of the records, written up with its scripts; no source changes, no tooling built.",
+     "class": "within",
+     "why": "462 FR-004: T536 'measures which tools, hooks and agents read 451's large records whole, while they are whole'. Measuring on copies taken while whole is exactly that; the split itself is T537's."
+    },
+    {
+     "id": "T536-2 the large records",
+     "summary": "The large records are plan-review.json, plan-done.md, tasks-done.md and the event log, snapshotted with sizes and sha256.",
+     "class": "within",
+     "why": "Nothing in the request or the cited requirements names another set; these are the records the split (T537) is for."
+    },
+    {
+     "id": "T536-3 code census plus read counter",
+     "summary": "Readers found by a script over non-test Rust lines naming a record or its constant/helper, and bytes a call observed by an LD_PRELOAD read counter on the built binaries run against a clone of the copies.",
+     "class": "within",
+     "why": "FR-004 asks which tools and hooks read the records whole. The read counter observes the file reads of every command run under it in whatever language, so the Rust census is an instrument choice for finding candidates, not a narrowing of which tools count."
+    },
+    {
+     "id": "T536-4 land/tick/carry/plan-verdict by code",
+     "summary": "Commands that push, archive or need a reviewer's reply are judged by their code and the in-process bench, not run.",
+     "class": "within",
+     "why": "FR-004 asks whether each reads a record whole; reading the code answers that, and the bench gives the cost of a whole read. Not running a command that pushes or archives from a measurement copy narrows nothing the GM asked."
+    },
+    {
+     "id": "T536-5 frequency from the day's logs",
+     "summary": "How often each reader ran is counted from 2026-11-27's lines of the 451, 461, 462 and _unassigned event logs.",
+     "class": "within",
+     "why": "A before figure for a split the same day; FR-004 sets no window, and the day the records were whole is the window it needs."
+    },
+    {
+     "id": "T536-6 builder transcripts as the agents' reads",
+     "summary": "Agents' own reads of 451's records are counted over the 146 builder transcripts of the day only; besides those, the only agent measured is one spec-fidelity plan-review dispatch, and that reading is of the tool it runs, not of the agent's own Read calls.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-004 asks which agents read the records whole, and SC-002 then holds that no reader named in the before figure reads a record whole after the split. Counting builders only leaves every other agent type's own reads unmeasured: the reviewers, the verify twins, the arbiter, escalation-check, the process reviewer and the coordinating session. Those agents are then never 'named there', so SC-002 passes for them without anyone having looked. Counting them is not impossible: the same script (t536-builder-reads.py) runs over those transcripts. The GM's own words in the bundle do not imply the exclusion, since request.md line 525 says only 'doing the split that we discussed' and the cited messages are not in the bundle. Keeping the exclusion therefore defeats the before figure's purpose for those agents. Fix: run the same script over the day's other agent transcripts, with a dated method line, and record what it finds, or record that they read none of the four records."
+    },
+    {
+     "id": "T536-7 found and left as costs",
+     "summary": "plan-delta's repeated reads (2.6 s a call) and task-time's 260 s a call are classed as costs, not defects, and filed in 462 as T543 and T544.",
+     "class": "within",
+     "why": "Constitution XIV: a defect is a wrong outcome; a slow but correct command is a cost. 462 FR-001 sends a task filed from now on to 462. D15 passes a 'not a defect' item without an order."
+    },
+    {
+     "id": "T536-8 performance work",
+     "summary": "T536 is counted as performance work, a measurement of where time and context go.",
+     "class": "within",
+     "why": "FR-013: measurement of where the time goes counts as performance work for ordering (the GM, 2026-11-20)."
+    },
+    {
+     "id": "T536-9 after figure by the same scripts",
+     "summary": "T537's after figure is read with the same scripts, which match paths by directory so a split record's parts are counted.",
+     "class": "within",
+     "why": "SC-002 needs the before and after figures to be comparable; using the same instrument does that and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T532 (<why: the finding or measurement that files it>)",
+    "### T532 Approach (checklist part A)",
+    "### T536 (462 FR-004 and the GM's seventeenth and eighteenth process-reviewer messages, 2026-11-27: the before figure for T537's split - which tools, hooks and agents read 451's large records whole, while they are whole)",
+    "### T536 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T532-template",
+     "summary": "T532's two blocks are the unfilled template: every field a placeholder, no approach, no step row.",
+     "class": "within",
+     "why": "A placeholder decides nothing, so it narrows nothing the request or 462 FR-001 (which keeps T532 in the closing set) asks. This CLEAR rules only that no decision in these blocks narrows the request. It is not a ruling that T532's work was planned or matches its line."
+    },
+    {
+     "id": "T536-read-only",
+     "summary": "T536 is a read-only measurement on copies of the records taken at 20:03:07Z, written up in dev/measurements/2026-11-27/t536-record-readers/results.md, with no source changes.",
+     "class": "within",
+     "why": "462 FR-004 asks T536 to MEASURE which tools, hooks and agents read the large records whole while they are whole, before T537 splits them. Measuring on copies of the records while they are whole is exactly that. Changing no source is the brief and leaves the split to T537."
+    },
+    {
+     "id": "T536-records",
+     "summary": "The 'large records' are four: plan-review.json, plan-done.md, tasks-done.md and the event log, each sized and hashed in the snapshot.",
+     "class": "within",
+     "why": "FR-004 says '451's large records' without listing them. The four named are the large ones by the measured sizes (0.6 MB to 54 MB), and the plan says which they are rather than leaving it open."
+    },
+    {
+     "id": "T536-tools-hooks",
+     "summary": "Tools and hooks are found two ways. The census is of non-test Rust lines naming a record or its constant or helper (285 lines, search space stated). Bytes per call are counted by an LD_PRELOAD read counter on the built binaries. land, tick, carry and plan-verdict are given by reading the code, because they push, archive or need a reviewer, and their cost comes from the bench.",
+     "class": "within",
+     "why": "This answers FR-004's 'which tools and hooks' for every reader the census names. The read counter follows the commands' child processes, so a reader in any language behind a measured command is counted. Taking four commands from code because they cannot safely be run on a copy is a choice of method, stated in item 4. It drops none of them from the answer."
+    },
+    {
+     "id": "T536-agents",
+     "summary": "Agents' reads come from the day's transcripts. Builders are counted separately (146 transcripts). Every other agent type and the session are counted with ALL=1. The result: which types read a large record, how many bytes, and that none read one whole (the largest read is 28,207 bytes).",
+     "class": "within",
+     "why": "This carries FR-004's 'agents', which the version last judged covered only for builders. The window is one day, the day the figure is taken, and it is stated. Token figures are marked ESTIMATE."
+    },
+    {
+     "id": "T536-first-review-readers",
+     "summary": "Adds claims-triage, plan-section, where-time and feature-report, measured with the read counter: none, once for a finished task's section, three times and five times whole.",
+     "class": "within",
+     "why": "These extend the census of tools to the readers the earlier round asked about. That is more of FR-004's own measurement, not new scope."
+    },
+    {
+     "id": "T536-found-and-left",
+     "summary": "Two costs are left as 'not a defect' and filed in 462 as performance levers: plan-delta reads plan-done.md 11 times a call (2.6 s), and task-time takes 260 s a call. They are T543 and T544.",
+     "class": "within",
+     "why": "A slow call that gives a correct answer is a cost, not a wrong outcome (constitution XIV as the GM stated it on 2026-11-19), so the D15 deferral form does not apply. Filing new work in 462 rather than 451 is what 462 FR-001 orders. Nothing the request asks of T536 is left undone."
+    },
+    {
+     "id": "T536-order",
+     "summary": "T536 runs before T537 while the records are whole. The after figure is read later with the same scripts, which match paths by directory so a split record's parts are counted.",
+     "class": "within",
+     "why": "This is 462 FR-004's order and SC-002's 'before figure recorded before T537 lands', with the means to read the after figure the same way."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T535 (the batch gate of 2026-11-27 19:10Z failed T364's late-reader test once on good work; the round arbiter's ruling on red-gate@2026-11-27T19:10:08Z: a defect in the test or the drain, found red first)",
+    "### T535 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T535-D1 locate the defect in the drain",
+     "summary": "The false red is put in rustc/drain.rs's holders, which counted a sibling thread's spawn caught between its fork and its exec as a holder of the late pipe. The test is kept as it is.",
+     "class": "within",
+     "why": "The arbiter's ruling (red-gate@2026-11-27T19:10:08Z, quoted in the block heading) is that the defect is in the test or the drain and must be found red first. The GM's 2026-11-26 words in request.md on the test that fails under load ('I agree with prioritizing the test that fails under load being fixed') and the fix-as-we-go rule both call for fixing a check that refuses good work. Fixing the root cause in the drain, rather than relaxing the test, keeps the test's job intact."
+    },
+    {
+     "id": "T535-D2 red-first forced-window test",
+     "summary": "A new test parks a child in the fork-to-exec window past DRAIN with pre_exec, and the child signals that it is there. On the old code it failed 3 of 3 runs and took the existing no-holder test down with it.",
+     "class": "within",
+     "why": "This is enforcement of the fix the arbiter ruled must be found red first. If the fix is deleted the test fails, so it is verification and not new behavior."
+    },
+    {
+     "id": "T535-D3 skip rule in holders",
+     "summary": "A process is not counted as a holder when its parent is this process and its /proc/<pid>/exe is this process's program, i.e. a spawn that has forked but not yet exec'd.",
+     "class": "within",
+     "why": "This is the fix itself. It narrows nothing the GM asked for. T363's leak pin and T364's drain are stated as unchanged, and a real holder (any exec'd process, or anything not a child of this program) is still counted. The soundness premise ('nothing under this program runs a copy of itself') is a design claim. It is not a narrowing of the request."
+    },
+    {
+     "id": "T535-D4 AGAIN double observation",
+     "summary": "ended counts a holder only if it is found twice, AGAIN apart (50 ms, a GUESS knob, paid only when a pipe is still held at DRAIN), as left.rs does with GRACE. This closes the gap where the exe is renamed just before begin_new_exec drops close-on-exec descriptors.",
+     "class": "within",
+     "why": "Part of the same fix, closing a race in the skip rule. It is labeled a GUESS knob. It costs 50 ms only on a real leak's HELD line, and the block states that cost (checklist item 12). It is not a narrowing of anything asked."
+    },
+    {
+     "id": "T535-D5 not performance work, found-and-left none, one landing",
+     "summary": "Classed as a false-red fix, not performance work. Nothing found and left. Budget of one landing. Ordered after T364 and T363.",
+     "class": "within",
+     "why": "A gate check that refuses good work is a defect to fix as it is found. Nothing is deferred, so no narrowing arises. Ordering after the tasks whose code it changes is mechanical."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T537 (462 FR-004 and SC-002, the GM's go of 2026-11-27, \"doing the split that we discussed\", on future sessions \"naively just opening these very large files and then blowing through their own context windows\": 451's finished records cut into parts a reader of one task can open safely, every tool that reads them pointed at the new layout)",
+    "### T537 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T537-layout",
+     "summary": "The archive layout: archive/plan-done and archive/tasks-done parts each with a header, archive/index.json, and archive/INDEX.md, a reader's note saying what is where, how to find one task, and warning off whole reads, cat archive/* and broad greps; an unsplit feature reads its flat files as before.",
+     "class": "within",
+     "why": "This is the GM's 'mechanically split up the large files into smaller files' with notes 'cautioning future sessions ... to avoid like wrecking their context usage', and it names his grep worry. One gap: the GM asked for notes 'explaining what we did and why' as well as cautioning, and the block lists where things are, the lookup route and the warning, but not the why: that the split was made because sessions were blowing their context windows. One sentence in INDEX.md closes that. Not a narrowing of the request's purpose."
+    },
+    {
+     "id": "T537-cut",
+     "summary": "The cut: pieces at ## / ### headings and column-0 boxes, taken in runs in the record's own order, packed under BOUND = 65,536 bytes (a GUESS knob); a run larger than BOUND stands alone.",
+     "class": "within",
+     "why": "How the mechanical split is done, which the request and spec leave open. The record-order choice keeps make plan-section's output as before (observed by the plan, one-shot label). Aside, not a ruling: the goal line says 'at most 64 KiB' but the largest part is 65,652 bytes with its header, and a run larger than BOUND stands alone, so that line should say 'about 64 KiB' or name the exception."
+    },
+    {
+     "id": "T537-fold",
+     "summary": "The fold runs unforced at every tick and in make plan-archive, ONLY where archive/ already stands; no other feature is split unasked; a size trigger is left to 462 T546; a failed tick commit's put-back cleans the feature's archive/.",
+     "class": "within",
+     "why": "The GM spoke of 'this feature', meaning 451's records, and 462 FR-004 names 451's records. Folding new ticks into parts keeps the split records split. Splitting other features automatically was not asked, so leaving the size trigger to T546 narrows nothing."
+    },
+    {
+     "id": "T537-readers-repointed",
+     "summary": "Every reader of the flat records is repointed through archive.rs (done_text and its callers, plan_done, plan-section reading only the task's parts, task-add's next id from the index, builder-tree, the queue, the feature-approval guard, started-answers, spec-lint over the parts); some are left by judgment because they hold names, not reads, or never read the flat records.",
+     "class": "within",
+     "why": "'Every tool that reads them pointed at the new layout' is what the split needs to work. Keeping the readers' outputs as they were is what 'everything works' means here, and no exactness standard is applied."
+    },
+    {
+     "id": "T537-whole-set-readers-left",
+     "summary": "Readers whose job is the whole set (make plan-delta, make decide, stale-terms) are left reading every part as often as they read the flat file; their cost is filed in 462 as T543 and T547 and called a cost, not a defect.",
+     "class": "narrowing",
+     "why": "LEGITIMATE against SC-002's 'no reader named there reads a record whole'. A mechanical cut cannot make a reader whose job needs every task read less, so the literal rule is physically impossible for these readers. The bytes stay inside a tool process and do not reach a session's context window, which is the harm the GM named. Ruled on the plan's own statement of what these readers do; T536's named list is not in the bundle.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T537-task-add-quick-worse",
+     "summary": "make task-add's quick now reads the plan-done parts four times (14.7 MB) where it read the flat plan-done.md not at all; filed as 462 T547 and called a cost, not a defect.",
+     "class": "narrowing",
+     "why": "LEGITIMATE, but recorded. This is a read the split ADDS, not one it leaves. It contradicts block 1's statement that the readers left by judgment each read 'what it read before', and the plan should say which check now reads the parts and why. Under constitution XIV it is a cost, not a wrong outcome: the bytes stay in-process and do not reach a session's context, and it is filed. It does not block. If that check now RULES on archived text it used to skip (refusing or flagging good work), that would be a defect, and the plan should state that it does not.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T537-plan-review-json-deferred",
+     "summary": "The third of FR-004's records, plan-review.json (5.0 MB, observed 2026-11-27, the largest), is not split by T537 and is carried by 462 T545, because its readers parse it as one JSON record and a split changes the plan crate's record rather than cutting text. INDEX.md is not said to warn a session off it meanwhile.",
+     "class": "narrowing",
+     "why": "NOT LEGITIMATE. 462 FR-004 assigns the split of 451's large records to T537, and the plan itself counts three records and splits two. The stated reason, that its readers parse one JSON record so a split changes the plan crate, is 'harder to implement, needs more of the codebase changed'. That is on the not-legitimate list: a JSON record can be split, so it is not impossible. Nothing in the GM's words excludes it, and doing it literally does not defeat his purpose. On purpose, this is the largest file, exactly the one a future session 'naively just opening these very large files' would hit. A filed task in another feature is not a legitimizer, and T545's text and order are not in the bundle. Two things clear this: (a) T537 splits plan-review.json, or the third record is moved to 462 T545 by an amendment to 462's spec (FR-004's T537 assignment) or by an arbiter ruling; and in either case (b) INDEX.md, or a note beside plan-review.json, warns sessions off reading it whole NOW, which costs nothing and need not wait for the split.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T537-real-split-after-landing",
+     "summary": "The real 451 records are not split in T537's push. The session runs make archive-split F=451 once T537's code is on main and commits the flat files' deletions and archive/. The after figure is measured on a copy.",
+     "class": "narrowing",
+     "why": "LEGITIMATE as sequencing. The readers must be on main before the flat files go, or an older guard binary in the mirror reads a missing file. The records also keep changing until 451's closing set lands, so a deletion committed in the same push would conflict. This is a real ordering constraint, not a preference. The 'advisor's ruling' is given no weight; the ordering reason stands on its own. The split still happens. The plan should make that run a tracked step, a ticked task or the exit's green condition, rather than a sentence, so T537 cannot be ticked and the split forgotten.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T537-feature-report-fix",
+     "summary": "make feature-report's tasks_done and tick times, and make where-time's tick windows, read the split layout (done_text, and git log -p over archive/tasks-done beside the flat file); pinned in feature_report/sources/tests.rs.",
+     "class": "within",
+     "why": "A defect the split would cause, a wrong ticked count, fixed in the same task. That is the 'fix as we go' rule and part of 'every tool pointed at the new layout'."
+    },
+    {
+     "id": "T537-owed-tests",
+     "summary": "The owed tests (the tick's fold, plan-archive's fold Err, task-add's index closure, spec-lint over a part, started-answers and the feature-approval guard at a split base, builder-tree and the queue on a split dir, a part with no header, and a landing of a split feature) are written in the closing half.",
+     "class": "within",
+     "why": "Tests whose only effect is making the requested split work and keep working. That is enforcement of the request, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T537 (462 FR-004 and SC-002, the GM's go of 2026-11-27, \"doing the split that we discussed\", on future sessions \"naively just opening these very large files and then blowing through their own context windows\": 451's finished records cut into parts a reader of one task can open safely, every tool that reads them pointed at the new layout)",
+    "### T537 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T537-plan-review-json",
+     "class": "within",
+     "summary": "the round arbiter accepted T537's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T537"
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T530 to T537, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

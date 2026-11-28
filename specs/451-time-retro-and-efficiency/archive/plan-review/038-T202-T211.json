@@ -1,0 +1,795 @@
+{
+ "blocks": {
+  "### T202 (observed 2026-11-23: three landings refused on plan.md and arbiter.jsonl conflicts, each resolved by hand; T195+T197's landing refused on T198's Makefile lines)": {
+   "sha256": "e0ab70020942e5696829ba2a06cde013ef4dd5900c2c2c664627dd0932e16b03",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T202 Approach (checklist part A)": {
+   "sha256": "8bbdc7a6a9396cac89c8783523c5b8e0d113b69d06be82320573c85697cc778f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T202 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "41a86795d07395b514adb35f5367b9b6093047c7157da0774981f0afdb2aada1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T203 (withdrawn: built in T199, its section the T198, T199, T200 bundle's; MODE 4 round 2, 2026-11-23, ruled its deferral NOT LEGITIMATE)": {
+   "sha256": "9cf003fd40f48897825242b120884942d5998b9170b9fe9b3108c0c68c47906d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T204 (451 T192's sample, 2026-11-23: naming the item of 12 GUESS or DEVIATION claims citing 0090's and 0196's drawing pages owed all 12 impl-drift as `code changed`, while a plain pointer flipped to `GUESS ...#id` owed none; method: `make claims-owed` after `.git/t192/claims.py apply`)": {
+   "sha256": "e310b5c817f3cfa88aba1974111871c031379fe96c12ece8e660029511d3da39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T204 Approach (checklist part A)": {
+   "sha256": "c9f2ad1460a1c60e62d7407bc034d90191b700ea1a1a19fb52ffc2458784a45c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T206 (<why: the finding or measurement that files it>)": {
+   "sha256": "82349bfb8caeb97c82c0a9bfe4f0fafb4696c3c7e8a73f326d9327cfe3bcb0d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T206 Approach (checklist part A)": {
+   "sha256": "e904c8f4399cd0164bf5c257f84c41f3f76eb42201a5c5d7373367f8b9fe8be6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T207 (`make_only_hooks::tests::an_escape_is_recorded_with_its_reason` red under the coverage run and green alone, three times on 2026-11-23; the last `landbig2.log` line 143)": {
+   "sha256": "f6c9462fdf4c301279497c6ef646effccfa7a24cea09d5d601ca4c7c861bb6f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T207 Approach (checklist part A)": {
+   "sha256": "0a3923c123ee0588ccd0ac77da841ac79d92874b94762a738603f1542094883a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T208 (<why: the finding or measurement that files it>)": {
+   "sha256": "51d7cb42c72be6e005203afd8289e8bc337d435b582717b5cc9d622f1a772ed7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T209 (the cascade test's stables Depiction miss: a pure addition cleared by the echo)": {
+   "sha256": "e358b3f8f76974ad68cba0c0f884165dc6098e603094a203f090e1568f399697",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T209 Approach (checklist part A)": {
+   "sha256": "66ee6f91068c42de7d304de101cfc08c7599e0540f65e8db8eff046c2f73cf7e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T210 (the cascade test's 147 claims forced after a generated doc's rows were regenerated)": {
+   "sha256": "57e35c88372acce59ac8b35cff8ab6ee1966cada2aa433e0ad3bd5c6a6b884ca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T210 Approach (checklist part A)": {
+   "sha256": "1ac5ee18b289c2895ceb2becca99d4176f520ba0e36ae6e9620e378ef4346236",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T211 (the cascade test's 22 claims forced on T192's #item anchors)": {
+   "sha256": "1f410b5a057e612bcba4e4e72bae7006dc61d87de9e64bcfa723e313fa8ad65d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T211 Approach (checklist part A)": {
+   "sha256": "36012a756d0758d0c665977996fa289d59bca26b691c622c4e5b8063bea3a004",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T202": {
+   "section_sha256": "baa109ad52ad4f260c4902e64dfb592a532db078cb1a9c879ee6bd4f303e9d05",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T202-blank-lines",
+     "summary": "A piece the clone changed only in its blank lines counts as no change of the clone's (merge_pieces, unblank), so the take takes main's rewritten archive mark.",
+     "class": "within",
+     "why": "Fixes the measured cause of both exit-4 takes (land191b.log, land196.log) so the clone holds main's tick: the task line's goal and a defect fix, the whole class (every sectioned file's pieces) covered."
+    },
+    {
+     "id": "T202-append-only-union",
+     "summary": "An append-only .jsonl appended on both sides keeps both sides' new lines (merge3 union); a line rewritten on both sides still conflicts, named.",
+     "class": "within",
+     "why": "Fixes the arbiter.jsonl conflict measured in the same hand merges; it drops no line, and a real two-sided rewrite is still refused, so nothing the task line asks for is narrowed."
+    },
+    {
+     "id": "T202-take-is-the-merge-back",
+     "summary": "Main comes back at the take (land-alone step 7), the existing merge that leaves uncommitted files untouched or merged; no second merge is added after it.",
+     "class": "within",
+     "why": "The task line asks that main be merged back at a landing's end with uncommitted work untouched; the take is that merge, and its giving up on these two shapes was the measured reason the clone fell behind. Fixing it meets the goal (the clone holds main's tick) and does not narrow it."
+    },
+    {
+     "id": "T202-net-zero-edits",
+     "summary": "Step 3 counts a file as the task's own only where some hunk of its uncommitted diff holds a line one of the task's Edits wrote or removed (leaves_change, Edit calls read by tool-use id); a file whose task edits are all put back is listed putback, left uncommitted, not refused.",
+     "class": "within",
+     "why": "Is the task line's 'the own-edit list counts only a change of the task's own', fixing the measured refusal of T195+T197's landing on T198's Makefile lines."
+    },
+    {
+     "id": "T202-replace-all",
+     "summary": "A replace_all Edit's flag is read with its strings; a line of another task's holding its repeated string is not counted as its, only a replacement put back on the hunk's other side.",
+     "class": "within",
+     "why": "Closes the same defect for replace_all edits (a landing refused for another task's lines), red first; inside the task line."
+    },
+    {
+     "id": "T202-unreadable-counts-own",
+     "summary": "A Write, a Bash call's write, or an Edit whose call cannot be read counts as the task's own, so a put-back of one of these is still refused.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows 'counts only a change of the task's own' for three kinds of write, judged one by one. A Bash write and an Edit whose call cannot be read leave no string to look for, so no one can tell whether the change was put back. A Write's string is the whole file, so the hunk test would match common lines ('}', blank lines) from any task and could not separate the task's lines from another task's. In each case, counting the file as own is the only reading that keeps the goal's other half: a landing must never go out missing the task's edit. Treating the file as not own would defeat the task line's purpose, while counting it as own only refuses a landing, and the refusal names the file. No instance of these three was observed, so this leaves no known defect in place."
+    },
+    {
+     "id": "T202-tests-and-exits",
+     "summary": "Red-first tests from the real sides cut to the region (take, append-only log, put-back edit, replace_all put-back), the replay on both real shapes as Done, an arbiter ask on a claim it cannot be done.",
+     "class": "within",
+     "why": "Checks that enforce exactly what the task line asks, red first as it requires; they add no behavior."
+    },
+    {
+     "id": "T202-order",
+     "summary": "Lands after T193's landing (a4e2bf4f0b).",
+     "class": "within",
+     "why": "Scheduling, which narrows nothing that was asked."
+    },
+    {
+     "id": "T202-performance-class",
+     "summary": "The task is classed as performance work (the landings' loop: hand merges and refused-landing reruns).",
+     "class": "within",
+     "why": "The GM asked to prioritize performance improvements (2026-11-20) and the approved six improvements include landing fixes (item 6). Removing measured hand merges and reruns falls under that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T204": {
+   "section_sha256": "d626dad291c770f3a1e5ecfe831940edb2d463443fa81f98957f2bcaaa4b789f",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T204-D1",
+     "summary": "Naming the item of a claim whose class word is unchanged owes no impl-drift re-check: the claims crate reads a stored claim against Claim::unanchored (class kept, anchors dropped) as well as normalized, in a Rust unit's claim (index.rs relabeled_only)",
+     "class": "within",
+     "why": "Carries the GM's 2026-11-23 rules 'only a claim-changing edit triggers review' and 'labels are data and propagate by regeneration', and serves 'tag the rest of the record before resuming our port' (T192): without it every named claim owes an agent check for an edit that changes no meaning."
+    },
+    {
+     "id": "T204-D2",
+     "summary": "The same reading extended to a doc section's claim (index.rs owed_one, units.rs Unit::code_unanchored), whose row stores only code",
+     "class": "within",
+     "why": "Same purpose as D1 on the other unit kind the claims take; the before/after measurement shows the fix does not do what it is for without this arm (77 of 94 still owed)."
+    },
+    {
+     "id": "T204-D3",
+     "summary": "The stale-figure check (stale.rs label_free) given the same symmetry: a constant's doc that only named the item, class kept, is no change; fixed in this task",
+     "class": "within",
+     "why": "A defect found in the work (24 false stale flags on an edit that changes no claim) fixed in the task that found it, as the GM's fix-as-we-go rule requires; same request purpose as D1."
+    },
+    {
+     "id": "T204-D4",
+     "summary": "A class changed with the naming (GUESS p to DEVIATION p#id or plain p#id), or a changed account, still owes",
+     "class": "within",
+     "why": "A claim's own class word changing (GUESS to DEVIATION, or to a plain attested pointer) changes what the claim asserts about the code, so under the GM's 2026-11-23 rule 'only a claim-changing edit triggers review' it still owes; the GM's 'labels are data and propagate by regeneration' / 'cascade mechanically' concerns a page label echoing to the entries that cite it, not a claim changing its own class. The brief's 'its class word staying the same', as the block quotes it, draws the same line. Within, not a narrowing."
+    },
+    {
+     "id": "T204-D5",
+     "summary": "The tag's agreement with the class is left to the label check (item_labels.rs), which refuses a landing on its own, rather than repeated in owed",
+     "class": "within",
+     "why": "The brief's 'agreeing with the tag' condition, as the block quotes it, stays enforced: by the block's account the label check (item_labels.rs) refuses such a landing on its own, so a disagreeing tag cannot land owing nothing. Where the enforcement sits is design, not scope."
+    },
+    {
+     "id": "T204-D6",
+     "summary": "Red-first tests on the 12 sample shapes (both unit kinds) and 3 changed shapes, plus a measurement on a copy of the clone with all 94 unanchored classed drawing-page claims anchored: 94 owed + 24 stale before, 0 and 0 after",
+     "class": "within",
+     "why": "Verification of exactly the requested behavior (enforcement of the request, not unrequested scope). The 94 are, by the block's regex count over rust/mode_a and the two docs on 2026-11-23, every unanchored classed drawing-page claim; the already-anchored ones are already named."
+    },
+    {
+     "id": "T204-D7",
+     "summary": "Order (after T187/T197, before T192's claims pass and T22), exits (red recorded and set down, impossibility ruled through make arbiter-ask), budget one landing",
+     "class": "within",
+     "why": "Places the fix ahead of the T192 tagging the GM asked for before the port resumes; nothing the request settles is changed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T207": {
+   "section_sha256": "6e41a00582a83383da786584178f742fdc6b7052175a00180c5522f8addbb964",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T207-fix1",
+     "summary": "log.rs quiet(): a process that inherits this run's own test log path (<temp>/l7r-test-scratch/guard-tests-log) as GUARD_LOG_DIR, with the directory present, keeps it; any other inherited value is replaced as before; beside_binary unchanged",
+     "class": "within",
+     "why": "Fixes a measured defect (a hang pin's child run emptying its parent's log; 26 of 280 loaded runs red, inotify trace) in test-only code; it changes nothing the request or spec asked for, and leaving beside_binary as it is keeps a non-defect as it is."
+    },
+    {
+     "id": "T207-fix2",
+     "summary": "log::dir() reads the test thread's own GUARD_LOG_DIR first (env::opt), then the process's; the escape test names its own TempDir log; a normal build's answer is unchanged",
+     "class": "within",
+     "why": "Makes FR-012's own red-first escape test (an escape is recorded) own its state and pass under load; enforcement of what was asked, no behavior change in a normal build."
+    },
+    {
+     "id": "T207-fix3",
+     "summary": "scratch_sweep_hooks pace test sets the 40-day mark's mtime by path (touch -m -d) rather than through an open descriptor; the other put(.., true) uses left because their outcome cannot flip",
+     "class": "within",
+     "why": "A found defect (3 red of the same 280 loaded runs) fixed in this task, per the fix-as-we-go rule; the tests left mark files kept either way, observed by grep, so nothing defective is left."
+    },
+    {
+     "id": "T207-silent-write",
+     "summary": "A failed log write stays silent (log.rs's recorded rule kept); the brief's ask that a record never drop silently (wait or fail closed) is not done, and fire is not made to refuse on a failed write",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec asks how a log write that fails on I/O behaves: FR-012 asks that an escape be recorded, and the guard does record it; the brief's premise (a lock wait dropping records) was measured false, no write failed in any run, and the drop was test-only code. A disk-full loss is a hypothetical, not a measured wrong outcome, so keeping existing behavior narrows nothing the GM asked for and needs no ruling. Making fire refuse would add refusal behavior the GM did not ask for."
+    },
+    {
+     "id": "T207-order-budget-exits",
+     "summary": "After T201/T202's files; one landing; green exit is the two red tests passing and 100 loaded runs green (104 of 104 shown); red exit set down, an impossibility claim through make arbiter-ask",
+     "class": "within",
+     "why": "Scheduling and proof choices inside the task; no requirement narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T209": {
+   "section_sha256": "7792e104230612649182560824ad3f5b5e96aa61721293843fb527476cd4aff9",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "addition-rule",
+     "summary": "change::fires gains change::addition: a sentence of a block new outright that shares a word trigram with the pop-up, all three words naming a thing (SUBJECT_WORDS = 3, NOT_SUBJECT excluded), sends the pop-up on with a reason naming sentence and phrase.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 for T209 ('a new fact contradicting a pop-up is cleared'): new facts now reach the agent triage behind a mechanical first filter, the shape the GM approved on 2026-11-23 (echo first, agent after). Dated replay (item 9, 2026-11-24): the stables x 0108 drawing pair is sent, 18 of 167 cleared pairs newly sent."
+    },
+    {
+     "id": "new-outright-only",
+     "summary": "Only blocks new outright are read by the addition rule; a rewritten block stays the echo's.",
+     "class": "within",
+     "why": "A division of labour between two filters, not a reach left out: rewritten blocks already pass through T186's echo, which the GM approved as the first filter for edits on 2026-11-23. The defect T209 names is a pure addition the echo cannot see (the section's title)."
+    },
+    {
+     "id": "arrived-edited-is-a-move",
+     "summary": "A block that arrived with an edit from a page the reader reached before (Change::arrived_edited, paired at PAIR_RATIO) is treated as a move; its edit is read by the echo on the source page, not by the addition rule.",
+     "class": "within",
+     "why": "The GM 2026-11-23: 'a split is a move' and 'nothing needs to cascade simply because a split occurs'. The edit riding on the move is not dropped: the echo still reads it on the source page (T194's rule; the pinned test a_split_like_t184_s_owes_only_the_pop_up_repeating_changed_words still owes the pop-up that repeats the changed words), which is the GM's 'only a claim-changing edit triggers review' applied to it."
+    },
+    {
+     "id": "fires-signature-and-claims-triage",
+     "summary": "fires keeps its signature (found unused) so the claims crate's caller is untouched; the claims triage therefore gets the addition rule and loses the phrase arm with the pop-ups', not replayed on claims.",
+     "class": "within",
+     "why": "Both behaviors are the same two approved fixes (T209 and T212) reaching the one shared function; nothing the GM asked is withheld from either consumer. The lack of a claims replay is a verification gap stated openly (no tool replays a past claims triage), not a narrowing of the fix."
+    },
+    {
+     "id": "order-with-t212",
+     "summary": "Ordered after T186 and T194; landed as one change with T212, whose phrase arm the addition rule replaces.",
+     "class": "within",
+     "why": "Sequencing inside the six fixes the GM asked for together before the port resumes ('Yes let's fix all 6 of those before we resume')."
+    },
+    {
+     "id": "phrase-only-sends-to-agent",
+     "summary": "Of the 18 newly sent pairs, 13 share only a phrase (7 from the north/south/edo town magistracy family) and are left for the agent triage to clear.",
+     "class": "within",
+     "why": "An over-sending first filter whose extra sends reach only the agent triage, not a review or an edit, is the shape the GM accepted on 2026-11-23 (the echo fired on 55 of 119 pairs). Dated replay, item 9: 149 of the 167 cleared pairs stay cleared. Whether the net against T212's 8 removed fixed-phrase sends holds is T212's section's to answer."
+    },
+    {
+     "id": "phrase-not-meaning-left",
+     "summary": "Found and left: the rule matches a 3-word phrase, not a meaning, so a new sentence that contradicts a pop-up in other words is still cleared by the tool (the stables Depiction itself shares no phrase; its pair is sent through the About's 'classic warrior stable').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task as told to the GM is a class ('a new fact contradicting a pop-up is cleared') and the rule catches only the part that shares a subject phrase, so this narrows it. It is legitimate on the GM's own words, not on the record's clean count: on 2026-11-23 he approved a MECHANICAL first filter with the agent triage after it, and a tool cannot match meaning, so meaning-level matching means sending every addition pair to the agent. That would send up to all 167 pairs the tool clears today (item 9, 2026-11-24) instead of 18, and would bring back the cascade of reviews 'mostly not finding actual problems' that he stopped on 2026-11-23. A pair that is sent is read whole by the agent, so the named stables Depiction does reach a judge. SUBJECT_WORDS is a recorded knob to move if a missed case is measured."
+    },
+    {
+     "id": "perf-classing",
+     "summary": "Marked as performance work ([perf]).",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 rule on prioritising performance work; the tool keeps unrelated additions cleared so no full check is owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T210": {
+   "section_sha256": "eb8e51c4113c2b0db9af3a8f81aaf8271dbd6a49c1a73ee2d1dd59b501633889",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T210-keep-section-words",
+     "summary": "A section snapshot keeps its words in the per-clone blob map (key section:<core>), written by each bundle that snapshots a section and kept by every record of a snapshot; section_words reads kept words first, then git history, so a regenerated row shows as a pair judged per claim by T191's filter.",
+     "class": "within",
+     "why": "This is the fix for the defect the GM approved fixing on 2026-11-24 (T210: 147 claims forced after a generated doc regenerated), and it serves the convergence rule that only a claim-changing edit triggers review. It fixes the root cause, not only the 147."
+    },
+    {
+     "id": "T210-section-edit-read-once",
+     "summary": "gather_section reads each section's edit once and its claims share it (Gathered::section_lost), where the history search used to run once per claim; keep_blobs shared.",
+     "class": "within",
+     "why": "This is performance work on the same path (an unfixed replay ran for over 180 s). FR-013 and the GM's 2026-11-20 words put performance first, and no behavior the GM asked for is narrowed."
+    },
+    {
+     "id": "T210-file-split",
+     "summary": "The kept texts and the removed-words search move to triage/kept.rs and the backfills to commands/backfill.rs, re-exported under their old paths, to meet constitution X clause 13's file-size bar.",
+     "class": "within",
+     "why": "This is a mechanical move to meet a standing project rule and changes no behavior."
+    },
+    {
+     "id": "T210-one-force-left",
+     "summary": "A removed block whose words neither the kept snapshot nor the history holds still forces its section's claims to a full impl-drift. That happens for a snapshot recorded before T210, a snapshot of uncommitted words triaged in another clone, or one older than the history depth.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I judged each case separately. (a) Snapshots recorded before T210 of words no commit holds: the old words do not exist anywhere, so no diff can be shown and the general rule is physically impossible. (b) Beyond the 60-commit history: this can arise only for a stale snapshot whose section changed away long ago without a new snapshot. A section unchanged since its snapshot is found one commit back, and every post-T210 snapshot carries kept words. (c) An uncommitted snapshot triaged in a different clone: the snapshotting clone's own landing claims round triages with the kept words and re-records the snapshot (claims-triaged keeps sections), so this needs a stale snapshot to travel unrecorded. In all three cases the outcome is one extra full check, never a missed claim, which is not a wrong outcome under XIV's definition of a defect. The case the GM approved fixing (a regenerated row reverting words the same clone snapshotted) is fixed and measured: 147 owed, 0 forced, 3 sent. The cascade test's own pre-T210 state was already settled by the arbiter's accept ruling (ask:449-T403-claims-147-forced). The carve-out does not gut the purpose."
+    },
+    {
+     "id": "T210-gather-code-unchanged",
+     "summary": "gather_code's empty-hunk force (a code fingerprint moved with no hunk to show) is left as it is.",
+     "class": "within",
+     "why": "This is not part of T210's defect, which concerns a section's words after regeneration. The code did change and there is no hunk to show how, and leaving an unrelated existing path untouched narrows nothing that was asked."
+    },
+    {
+     "id": "T210-not-taken-stale-generated-refusal",
+     "summary": "The plan prices and declines refusing claims-checked while a generated doc is stale against its generator.",
+     "class": "within",
+     "why": "This is a design alternative that was not taken. make quick already turns red on a stale generated doc, and the chosen fix covers every reverted snapshotted section, not just generated rows."
+    },
+    {
+     "id": "T210-order-and-perf-tag",
+     "summary": "T210 runs after T191 and T204, lands beside T211 and T213 in one landing, and is tagged [perf].",
+     "class": "within",
+     "why": "The task depends on T191's filter. The [perf] tag follows FR-013 and the GM's 2026-11-20 rule on scheduling performance work first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T211": {
+   "section_sha256": "2eb9041dc26394feeb9fe81a62647c3762b0085b8d299e3e4094b14779b91a27",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T211-D1",
+     "summary": "One reading of 'did this claim's code move': the triage's gather_code calls index::code_kept (the fingerprint, or the pre-anchor fingerprint with the class word kept, T204) as claims-owed's owed_one does, instead of comparing the fingerprint alone.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 ('Yes let's fix all 6 of those before we resume') for T211, '22 claims forced by the item anchors'; it applies the approved convergence rule that only a claim-changing edit triggers review."
+    },
+    {
+     "id": "T211-D2",
+     "summary": "A cleared row's record writes the anchored fingerprint so the row heals to it.",
+     "class": "within",
+     "why": "Completes the same fix: without it the row would keep reading as unanchored and the anchor would be re-compared each time; it changes no claim."
+    },
+    {
+     "id": "T211-D3",
+     "summary": "Only an anchor named with its class word kept is no code change; a class change still reads as changed (T204's reading, shared).",
+     "class": "within",
+     "why": "The defect is anchors forcing claims; the replay shows all 22 unforced under this reading, so the class condition leaves no part of the defect unfixed, and it reuses the already-accepted T204 rule rather than adding one."
+    },
+    {
+     "id": "T211-D4",
+     "summary": "Exit counted as the 22 no longer forced, each cleared or sent by the filter; one (#wells by use) goes to the triage agent on words of the edit it repeats.",
+     "class": "within",
+     "why": "The one sent is routed by the echo filter the GM approved as T186's first filter, not forced by its anchor; no defect is left."
+    },
+    {
+     "id": "T211-D5",
+     "summary": "Constraints: red test first, 100% coverage, only this crate's files; no map changes; ordered after T204, beside T210 and T213.",
+     "class": "within",
+     "why": "Process and order inside the task; nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T211-D6",
+     "summary": "Booked as performance work: 22 full impl-drift checks per section edit move to the filter.",
+     "class": "within",
+     "why": "Scheduling class under FR-013 and the GM's 2026-11-20 rule; it narrows nothing asked."
+    },
+    {
+     "id": "T211-D7",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "No defect deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T202 (observed 2026-11-23: three landings refused on plan.md and arbiter.jsonl conflicts, each resolved by hand; T195+T197's landing refused on T198's Makefile lines)",
+    "### T202 Approach (checklist part A)",
+    "### T202 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T202-blank-lines",
+     "summary": "A piece the clone changed only in its blank lines counts as no change of the clone's (merge_pieces, unblank), so the take takes main's rewritten archive mark.",
+     "class": "within",
+     "why": "Fixes the measured cause of both exit-4 takes (land191b.log, land196.log) so the clone holds main's tick: the task line's goal and a defect fix, the whole class (every sectioned file's pieces) covered."
+    },
+    {
+     "id": "T202-append-only-union",
+     "summary": "An append-only .jsonl appended on both sides keeps both sides' new lines (merge3 union); a line rewritten on both sides still conflicts, named.",
+     "class": "within",
+     "why": "Fixes the arbiter.jsonl conflict measured in the same hand merges; it drops no line, and a real two-sided rewrite is still refused, so nothing the task line asks for is narrowed."
+    },
+    {
+     "id": "T202-take-is-the-merge-back",
+     "summary": "Main comes back at the take (land-alone step 7), the existing merge that leaves uncommitted files untouched or merged; no second merge is added after it.",
+     "class": "within",
+     "why": "The task line asks that main be merged back at a landing's end with uncommitted work untouched; the take is that merge, and its giving up on these two shapes was the measured reason the clone fell behind. Fixing it meets the goal (the clone holds main's tick) and does not narrow it."
+    },
+    {
+     "id": "T202-net-zero-edits",
+     "summary": "Step 3 counts a file as the task's own only where some hunk of its uncommitted diff holds a line one of the task's Edits wrote or removed (leaves_change, Edit calls read by tool-use id); a file whose task edits are all put back is listed putback, left uncommitted, not refused.",
+     "class": "within",
+     "why": "Is the task line's 'the own-edit list counts only a change of the task's own', fixing the measured refusal of T195+T197's landing on T198's Makefile lines."
+    },
+    {
+     "id": "T202-replace-all",
+     "summary": "A replace_all Edit's flag is read with its strings; a line of another task's holding its repeated string is not counted as its, only a replacement put back on the hunk's other side.",
+     "class": "within",
+     "why": "Closes the same defect for replace_all edits (a landing refused for another task's lines), red first; inside the task line."
+    },
+    {
+     "id": "T202-unreadable-counts-own",
+     "summary": "A Write, a Bash call's write, or an Edit whose call cannot be read counts as the task's own, so a put-back of one of these is still refused.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows 'counts only a change of the task's own' for three kinds of write, judged one by one. A Bash write and an Edit whose call cannot be read leave no string to look for, so no one can tell whether the change was put back. A Write's string is the whole file, so the hunk test would match common lines ('}', blank lines) from any task and could not separate the task's lines from another task's. In each case, counting the file as own is the only reading that keeps the goal's other half: a landing must never go out missing the task's edit. Treating the file as not own would defeat the task line's purpose, while counting it as own only refuses a landing, and the refusal names the file. No instance of these three was observed, so this leaves no known defect in place."
+    },
+    {
+     "id": "T202-tests-and-exits",
+     "summary": "Red-first tests from the real sides cut to the region (take, append-only log, put-back edit, replace_all put-back), the replay on both real shapes as Done, an arbiter ask on a claim it cannot be done.",
+     "class": "within",
+     "why": "Checks that enforce exactly what the task line asks, red first as it requires; they add no behavior."
+    },
+    {
+     "id": "T202-order",
+     "summary": "Lands after T193's landing (a4e2bf4f0b).",
+     "class": "within",
+     "why": "Scheduling, which narrows nothing that was asked."
+    },
+    {
+     "id": "T202-performance-class",
+     "summary": "The task is classed as performance work (the landings' loop: hand merges and refused-landing reruns).",
+     "class": "within",
+     "why": "The GM asked to prioritize performance improvements (2026-11-20) and the approved six improvements include landing fixes (item 6). Removing measured hand merges and reruns falls under that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T204 (451 T192's sample, 2026-11-23: naming the item of 12 GUESS or DEVIATION claims citing 0090's and 0196's drawing pages owed all 12 impl-drift as `code changed`, while a plain pointer flipped to `GUESS ...#id` owed none; method: `make claims-owed` after `.git/t192/claims.py apply`)",
+    "### T204 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T204-D1",
+     "summary": "Naming the item of a claim whose class word is unchanged owes no impl-drift re-check: the claims crate reads a stored claim against Claim::unanchored (class kept, anchors dropped) as well as normalized, in a Rust unit's claim (index.rs relabeled_only)",
+     "class": "within",
+     "why": "Carries the GM's 2026-11-23 rules 'only a claim-changing edit triggers review' and 'labels are data and propagate by regeneration', and serves 'tag the rest of the record before resuming our port' (T192): without it every named claim owes an agent check for an edit that changes no meaning."
+    },
+    {
+     "id": "T204-D2",
+     "summary": "The same reading extended to a doc section's claim (index.rs owed_one, units.rs Unit::code_unanchored), whose row stores only code",
+     "class": "within",
+     "why": "Same purpose as D1 on the other unit kind the claims take; the before/after measurement shows the fix does not do what it is for without this arm (77 of 94 still owed)."
+    },
+    {
+     "id": "T204-D3",
+     "summary": "The stale-figure check (stale.rs label_free) given the same symmetry: a constant's doc that only named the item, class kept, is no change; fixed in this task",
+     "class": "within",
+     "why": "A defect found in the work (24 false stale flags on an edit that changes no claim) fixed in the task that found it, as the GM's fix-as-we-go rule requires; same request purpose as D1."
+    },
+    {
+     "id": "T204-D4",
+     "summary": "A class changed with the naming (GUESS p to DEVIATION p#id or plain p#id), or a changed account, still owes",
+     "class": "within",
+     "why": "A claim's own class word changing (GUESS to DEVIATION, or to a plain attested pointer) changes what the claim asserts about the code, so under the GM's 2026-11-23 rule 'only a claim-changing edit triggers review' it still owes; the GM's 'labels are data and propagate by regeneration' / 'cascade mechanically' concerns a page label echoing to the entries that cite it, not a claim changing its own class. The brief's 'its class word staying the same', as the block quotes it, draws the same line. Within, not a narrowing."
+    },
+    {
+     "id": "T204-D5",
+     "summary": "The tag's agreement with the class is left to the label check (item_labels.rs), which refuses a landing on its own, rather than repeated in owed",
+     "class": "within",
+     "why": "The brief's 'agreeing with the tag' condition, as the block quotes it, stays enforced: by the block's account the label check (item_labels.rs) refuses such a landing on its own, so a disagreeing tag cannot land owing nothing. Where the enforcement sits is design, not scope."
+    },
+    {
+     "id": "T204-D6",
+     "summary": "Red-first tests on the 12 sample shapes (both unit kinds) and 3 changed shapes, plus a measurement on a copy of the clone with all 94 unanchored classed drawing-page claims anchored: 94 owed + 24 stale before, 0 and 0 after",
+     "class": "within",
+     "why": "Verification of exactly the requested behavior (enforcement of the request, not unrequested scope). The 94 are, by the block's regex count over rust/mode_a and the two docs on 2026-11-23, every unanchored classed drawing-page claim; the already-anchored ones are already named."
+    },
+    {
+     "id": "T204-D7",
+     "summary": "Order (after T187/T197, before T192's claims pass and T22), exits (red recorded and set down, impossibility ruled through make arbiter-ask), budget one landing",
+     "class": "within",
+     "why": "Places the fix ahead of the T192 tagging the GM asked for before the port resumes; nothing the request settles is changed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T207 (`make_only_hooks::tests::an_escape_is_recorded_with_its_reason` red under the coverage run and green alone, three times on 2026-11-23; the last `landbig2.log` line 143)",
+    "### T207 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T207-cause",
+     "summary": "The cause is taken from measurement, not from the lock-timeout lead: a hang pin's child run calls log::quiet(), and tempdir::beside_binary empties the log directory it inherited while the parent's tests still read it.",
+     "class": "within",
+     "why": "The plan measures the cause before fixing it (reproduced at 26 of 280 loaded runs, the record caught written, an inotify trace of the deletion). This is defect diagnosis inside the task and narrows nothing the GM asked."
+    },
+    {
+     "id": "T207-fix-1",
+     "summary": "log.rs quiet(): a process that inherits this run's own test log path as GUARD_LOG_DIR keeps it. Any other inherited value, a session's real log included, is replaced as before. beside_binary is unchanged.",
+     "class": "within",
+     "why": "Fixes the measured defect at its source: a child run deleted its parent's log. The 'beside_binary unchanged' choice changes nothing else, and leaves no defect behind on the plan's own account (no hang pin's child reaches another shared fixture)."
+    },
+    {
+     "id": "T207-fix-2",
+     "summary": "log::dir() reads the test thread's own GUARD_LOG_DIR first, then the process's. The escape test names its own TempDir log and asserts its one record. In a normal build env::opt is the process variable, so nothing changes there.",
+     "class": "within",
+     "why": "The test owning its state is one of the task's own constraints. Production behavior is stated to be unchanged."
+    },
+    {
+     "id": "T207-fix-3",
+     "summary": "scratch_sweep_hooks' pace test, found red 3 times in the same loaded runs, now sets its mark's time by path instead of through an open descriptor.",
+     "class": "within",
+     "why": "A defect found during the task and fixed in it, which is what fix-as-we-go asks for. Nothing is deferred."
+    },
+    {
+     "id": "T207-silent-write",
+     "summary": "Declines the brief's ask that a record never be dropped silently (wait or fail closed). log.rs's rule stands: a failed write is silent and never costs the guard its answer. Making fire refuse on a failed write was considered and rejected.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ask comes from the session's brief, not from the GM's words. Its premise was the lock lead, and measurement refuted that lead: place() takes no lock, so there is nothing to wait on, and no write failed in any measured run. The drop was test-only: quiet() and beside_binary are built only under test or test-env, and the plan says a grep of every Cargo.toml confirms it. So no real escape record was ever lost this way, and FR-012's 'recorded' escape is not undercut by this task. Failing closed is the one remaining branch of the ask, and it would make a guard refuse correct work over a log fault. Constitution XIV names a check that refuses good work as a defect, so applying the ask literally would create a defect in order to cure an unobserved one. The plan states the cost plainly: a disk-full or permission failure loses a record with no word."
+    },
+    {
+     "id": "T207-found-and-left",
+     "summary": "The other tests that set a time through an open descriptor (put(.., true)) are left as they are, because they mark files that are kept either way, so their outcome cannot flip.",
+     "class": "within",
+     "why": "On the plan's account there is no wrong outcome, so under XIV this is a difference and not a defect, and leaving it narrows nothing. Aside: the line does not give the search that produced that set of callers (FR-009's how-every-instance-was-found line, which make decide checks mechanically)."
+    },
+    {
+     "id": "T207-exits-and-proof",
+     "summary": "Green exit: the two red-first tests pass and 100 or more loaded runs are green (104 of 104 recorded), plus closing-checks. Red exit: the failure is recorded, the task is set down, and any claim that it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "These match the brief's stated constraints (red first, 100 loaded runs green) and the project's set-down and arbiter route. Nothing is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T207 (`make_only_hooks::tests::an_escape_is_recorded_with_its_reason` red under the coverage run and green alone, three times on 2026-11-23; the last `landbig2.log` line 143)",
+    "### T207 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T207-fix1",
+     "summary": "log.rs quiet(): a process that inherits this run's own test log path (<temp>/l7r-test-scratch/guard-tests-log) as GUARD_LOG_DIR, with the directory present, keeps it; any other inherited value is replaced as before; beside_binary unchanged",
+     "class": "within",
+     "why": "Fixes a measured defect (a hang pin's child run emptying its parent's log; 26 of 280 loaded runs red, inotify trace) in test-only code; it changes nothing the request or spec asked for, and leaving beside_binary as it is keeps a non-defect as it is."
+    },
+    {
+     "id": "T207-fix2",
+     "summary": "log::dir() reads the test thread's own GUARD_LOG_DIR first (env::opt), then the process's; the escape test names its own TempDir log; a normal build's answer is unchanged",
+     "class": "within",
+     "why": "Makes FR-012's own red-first escape test (an escape is recorded) own its state and pass under load; enforcement of what was asked, no behavior change in a normal build."
+    },
+    {
+     "id": "T207-fix3",
+     "summary": "scratch_sweep_hooks pace test sets the 40-day mark's mtime by path (touch -m -d) rather than through an open descriptor; the other put(.., true) uses left because their outcome cannot flip",
+     "class": "within",
+     "why": "A found defect (3 red of the same 280 loaded runs) fixed in this task, per the fix-as-we-go rule; the tests left mark files kept either way, observed by grep, so nothing defective is left."
+    },
+    {
+     "id": "T207-silent-write",
+     "summary": "A failed log write stays silent (log.rs's recorded rule kept); the brief's ask that a record never drop silently (wait or fail closed) is not done, and fire is not made to refuse on a failed write",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec asks how a log write that fails on I/O behaves: FR-012 asks that an escape be recorded, and the guard does record it; the brief's premise (a lock wait dropping records) was measured false, no write failed in any run, and the drop was test-only code. A disk-full loss is a hypothetical, not a measured wrong outcome, so keeping existing behavior narrows nothing the GM asked for and needs no ruling. Making fire refuse would add refusal behavior the GM did not ask for."
+    },
+    {
+     "id": "T207-order-budget-exits",
+     "summary": "After T201/T202's files; one landing; green exit is the two red tests passing and 100 loaded runs green (104 of 104 shown); red exit set down, an impossibility claim through make arbiter-ask",
+     "class": "within",
+     "why": "Scheduling and proof choices inside the task; no requirement narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T209 (the cascade test's stables Depiction miss: a pure addition cleared by the echo)",
+    "### T209 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "addition-rule",
+     "summary": "change::fires gains change::addition: a sentence of a block new outright that shares a word trigram with the pop-up, all three words naming a thing (SUBJECT_WORDS = 3, NOT_SUBJECT excluded), sends the pop-up on with a reason naming sentence and phrase.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 for T209 ('a new fact contradicting a pop-up is cleared'): new facts now reach the agent triage behind a mechanical first filter, the shape the GM approved on 2026-11-23 (echo first, agent after). Dated replay (item 9, 2026-11-24): the stables x 0108 drawing pair is sent, 18 of 167 cleared pairs newly sent."
+    },
+    {
+     "id": "new-outright-only",
+     "summary": "Only blocks new outright are read by the addition rule; a rewritten block stays the echo's.",
+     "class": "within",
+     "why": "A division of labour between two filters, not a reach left out: rewritten blocks already pass through T186's echo, which the GM approved as the first filter for edits on 2026-11-23. The defect T209 names is a pure addition the echo cannot see (the section's title)."
+    },
+    {
+     "id": "arrived-edited-is-a-move",
+     "summary": "A block that arrived with an edit from a page the reader reached before (Change::arrived_edited, paired at PAIR_RATIO) is treated as a move; its edit is read by the echo on the source page, not by the addition rule.",
+     "class": "within",
+     "why": "The GM 2026-11-23: 'a split is a move' and 'nothing needs to cascade simply because a split occurs'. The edit riding on the move is not dropped: the echo still reads it on the source page (T194's rule; the pinned test a_split_like_t184_s_owes_only_the_pop_up_repeating_changed_words still owes the pop-up that repeats the changed words), which is the GM's 'only a claim-changing edit triggers review' applied to it."
+    },
+    {
+     "id": "fires-signature-and-claims-triage",
+     "summary": "fires keeps its signature (found unused) so the claims crate's caller is untouched; the claims triage therefore gets the addition rule and loses the phrase arm with the pop-ups', not replayed on claims.",
+     "class": "within",
+     "why": "Both behaviors are the same two approved fixes (T209 and T212) reaching the one shared function; nothing the GM asked is withheld from either consumer. The lack of a claims replay is a verification gap stated openly (no tool replays a past claims triage), not a narrowing of the fix."
+    },
+    {
+     "id": "order-with-t212",
+     "summary": "Ordered after T186 and T194; landed as one change with T212, whose phrase arm the addition rule replaces.",
+     "class": "within",
+     "why": "Sequencing inside the six fixes the GM asked for together before the port resumes ('Yes let's fix all 6 of those before we resume')."
+    },
+    {
+     "id": "phrase-only-sends-to-agent",
+     "summary": "Of the 18 newly sent pairs, 13 share only a phrase (7 from the north/south/edo town magistracy family) and are left for the agent triage to clear.",
+     "class": "within",
+     "why": "An over-sending first filter whose extra sends reach only the agent triage, not a review or an edit, is the shape the GM accepted on 2026-11-23 (the echo fired on 55 of 119 pairs). Dated replay, item 9: 149 of the 167 cleared pairs stay cleared. Whether the net against T212's 8 removed fixed-phrase sends holds is T212's section's to answer."
+    },
+    {
+     "id": "phrase-not-meaning-left",
+     "summary": "Found and left: the rule matches a 3-word phrase, not a meaning, so a new sentence that contradicts a pop-up in other words is still cleared by the tool (the stables Depiction itself shares no phrase; its pair is sent through the About's 'classic warrior stable').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task as told to the GM is a class ('a new fact contradicting a pop-up is cleared') and the rule catches only the part that shares a subject phrase, so this narrows it. It is legitimate on the GM's own words, not on the record's clean count: on 2026-11-23 he approved a MECHANICAL first filter with the agent triage after it, and a tool cannot match meaning, so meaning-level matching means sending every addition pair to the agent. That would send up to all 167 pairs the tool clears today (item 9, 2026-11-24) instead of 18, and would bring back the cascade of reviews 'mostly not finding actual problems' that he stopped on 2026-11-23. A pair that is sent is read whole by the agent, so the named stables Depiction does reach a judge. SUBJECT_WORDS is a recorded knob to move if a missed case is measured."
+    },
+    {
+     "id": "perf-classing",
+     "summary": "Marked as performance work ([perf]).",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 rule on prioritising performance work; the tool keeps unrelated additions cleared so no full check is owed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T210 (the cascade test's 147 claims forced after a generated doc's rows were regenerated)",
+    "### T210 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T210-keep-section-words",
+     "summary": "A section snapshot keeps its words in the per-clone blob map (key section:<core>), written by each bundle that snapshots a section and kept by every record of a snapshot; section_words reads kept words first, then git history, so a regenerated row shows as a pair judged per claim by T191's filter.",
+     "class": "within",
+     "why": "This is the fix for the defect the GM approved fixing on 2026-11-24 (T210: 147 claims forced after a generated doc regenerated), and it serves the convergence rule that only a claim-changing edit triggers review. It fixes the root cause, not only the 147."
+    },
+    {
+     "id": "T210-section-edit-read-once",
+     "summary": "gather_section reads each section's edit once and its claims share it (Gathered::section_lost), where the history search used to run once per claim; keep_blobs shared.",
+     "class": "within",
+     "why": "This is performance work on the same path (an unfixed replay ran for over 180 s). FR-013 and the GM's 2026-11-20 words put performance first, and no behavior the GM asked for is narrowed."
+    },
+    {
+     "id": "T210-file-split",
+     "summary": "The kept texts and the removed-words search move to triage/kept.rs and the backfills to commands/backfill.rs, re-exported under their old paths, to meet constitution X clause 13's file-size bar.",
+     "class": "within",
+     "why": "This is a mechanical move to meet a standing project rule and changes no behavior."
+    },
+    {
+     "id": "T210-one-force-left",
+     "summary": "A removed block whose words neither the kept snapshot nor the history holds still forces its section's claims to a full impl-drift. That happens for a snapshot recorded before T210, a snapshot of uncommitted words triaged in another clone, or one older than the history depth.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I judged each case separately. (a) Snapshots recorded before T210 of words no commit holds: the old words do not exist anywhere, so no diff can be shown and the general rule is physically impossible. (b) Beyond the 60-commit history: this can arise only for a stale snapshot whose section changed away long ago without a new snapshot. A section unchanged since its snapshot is found one commit back, and every post-T210 snapshot carries kept words. (c) An uncommitted snapshot triaged in a different clone: the snapshotting clone's own landing claims round triages with the kept words and re-records the snapshot (claims-triaged keeps sections), so this needs a stale snapshot to travel unrecorded. In all three cases the outcome is one extra full check, never a missed claim, which is not a wrong outcome under XIV's definition of a defect. The case the GM approved fixing (a regenerated row reverting words the same clone snapshotted) is fixed and measured: 147 owed, 0 forced, 3 sent. The cascade test's own pre-T210 state was already settled by the arbiter's accept ruling (ask:449-T403-claims-147-forced). The carve-out does not gut the purpose."
+    },
+    {
+     "id": "T210-gather-code-unchanged",
+     "summary": "gather_code's empty-hunk force (a code fingerprint moved with no hunk to show) is left as it is.",
+     "class": "within",
+     "why": "This is not part of T210's defect, which concerns a section's words after regeneration. The code did change and there is no hunk to show how, and leaving an unrelated existing path untouched narrows nothing that was asked."
+    },
+    {
+     "id": "T210-not-taken-stale-generated-refusal",
+     "summary": "The plan prices and declines refusing claims-checked while a generated doc is stale against its generator.",
+     "class": "within",
+     "why": "This is a design alternative that was not taken. make quick already turns red on a stale generated doc, and the chosen fix covers every reverted snapshotted section, not just generated rows."
+    },
+    {
+     "id": "T210-order-and-perf-tag",
+     "summary": "T210 runs after T191 and T204, lands beside T211 and T213 in one landing, and is tagged [perf].",
+     "class": "within",
+     "why": "The task depends on T191's filter. The [perf] tag follows FR-013 and the GM's 2026-11-20 rule on scheduling performance work first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T211 (the cascade test's 22 claims forced on T192's #item anchors)",
+    "### T211 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T211-D1",
+     "summary": "One reading of 'did this claim's code move': the triage's gather_code calls index::code_kept (the fingerprint, or the pre-anchor fingerprint with the class word kept, T204) as claims-owed's owed_one does, instead of comparing the fingerprint alone.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 ('Yes let's fix all 6 of those before we resume') for T211, '22 claims forced by the item anchors'; it applies the approved convergence rule that only a claim-changing edit triggers review."
+    },
+    {
+     "id": "T211-D2",
+     "summary": "A cleared row's record writes the anchored fingerprint so the row heals to it.",
+     "class": "within",
+     "why": "Completes the same fix: without it the row would keep reading as unanchored and the anchor would be re-compared each time; it changes no claim."
+    },
+    {
+     "id": "T211-D3",
+     "summary": "Only an anchor named with its class word kept is no code change; a class change still reads as changed (T204's reading, shared).",
+     "class": "within",
+     "why": "The defect is anchors forcing claims; the replay shows all 22 unforced under this reading, so the class condition leaves no part of the defect unfixed, and it reuses the already-accepted T204 rule rather than adding one."
+    },
+    {
+     "id": "T211-D4",
+     "summary": "Exit counted as the 22 no longer forced, each cleared or sent by the filter; one (#wells by use) goes to the triage agent on words of the edit it repeats.",
+     "class": "within",
+     "why": "The one sent is routed by the echo filter the GM approved as T186's first filter, not forced by its anchor; no defect is left."
+    },
+    {
+     "id": "T211-D5",
+     "summary": "Constraints: red test first, 100% coverage, only this crate's files; no map changes; ordered after T204, beside T210 and T213.",
+     "class": "within",
+     "why": "Process and order inside the task; nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T211-D6",
+     "summary": "Booked as performance work: 22 full impl-drift checks per section edit move to the filter.",
+     "class": "within",
+     "why": "Scheduling class under FR-013 and the GM's 2026-11-20 rule; it narrows nothing asked."
+    },
+    {
+     "id": "T211-D7",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "No defect deferred."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T202 to T211, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

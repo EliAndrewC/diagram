@@ -1,0 +1,678 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T94": {
+   "section_sha256": "1812f6b4a40e24ba8ecaf8376d42321d73d583f45b239d978cbb7e9dba4c2772",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D-a",
+     "summary": "The fix reads the landing's escapes (tick_env's PLAN_REVIEW_OK; new_in's LAND_BOXES, ARBITER_OK, HOME) through the landing's own Rooted map in land.rs, not by a test-side change alone",
+     "class": "within",
+     "why": "The defect is test runs taking the session's escapes; the measured read sits in land.rs and the tests already hand their own map, so routing the read through it is the fix itself, not a scope change. The brief naming tests alone is the caller's wording, not the GM's."
+    },
+    {
+     "id": "D-a refusal",
+     "summary": "shared's test-env feature on the land crate's dev-dependency priced and refused",
+     "class": "within",
+     "why": "A choice between two ways of reaching the same fix; design, not fidelity."
+    },
+    {
+     "id": "D-a alone()",
+     "summary": "alone() removes LAND_BOXES and COVER_OK from land-alone.sh's environment",
+     "class": "within",
+     "why": "The same escape reaching the same crate's tests through the script; part of the measured defect."
+    },
+    {
+     "id": "D-b",
+     "summary": "The land tests' census is a process-wide GUARD_LOG_DIR set once in template() to beside_binary(\"land-census\"), as the plan and task crates do",
+     "class": "within",
+     "why": "How the fixture rows are kept off the live log; the measured writer takes no directory, and the census lives in the run's own temporary directory. Design only."
+    },
+    {
+     "id": "pin and red-first",
+     "summary": "One pin test, each of the four changes red alone off, green plain and with the escapes exported, the planted guard log left with no new file",
+     "class": "within",
+     "why": "Enforcement that the fix holds. The byte-identical planted log is a nothing-was-written check, not an exactness standard on an output."
+    },
+    {
+     "id": "item 7 env reads left",
+     "summary": "LAND_NOTE, scripts_of's and inproc::Real's L7R_GATE_TREE and replay_owing's L7R_GATE_TREE stay process reads",
+     "class": "within",
+     "why": "The plan names its search (grep -n std::env over the land crate, 2026-11-22) and gives each remaining read a reason: none is a session escape, so none is the defect."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T94 is not counted as performance or measurement work",
+     "class": "within",
+     "why": "T94 fixes test isolation and the guard log's fixture rows. It does not measure where time goes, which is the measurement work the GM's 2026-11-20 words put first."
+    },
+    {
+     "id": "found-and-left: existing 988 rows",
+     "summary": "The live log's existing test-written rows stay",
+     "class": "within",
+     "why": "The log is append-only and the brief says to leave the rows. Removing them is not available, so leaving them narrows nothing."
+    },
+    {
+     "id": "found-and-left: audit does not set fixture rows apart",
+     "summary": "make audit's guards count (measure crate) keeps counting the fixture rows, reading plan-gate's escape rate as 43% where the real rows' is 65.5%; deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect, a wrong figure, and it is left by this task. Accepted FR-009 allows such a deferral when the section gives a why, a filed id and an order; the section gives all three (T143, lands before T22). Taking it into one bundle with the other leaks is what the GM's 2026-11-22 bundling words ask for. It is legitimate on those grounds, not on 'outside this task's files', which alone would not carry it. I took T143's existence and ordering on the block's word; the bundle does not carry it."
+    },
+    {
+     "id": "found-and-left: task crate's task_add tests read QUICK_OK",
+     "summary": "3 task-crate tests read QUICK_OK from the process (red with it exported) and can write the live log (9 rows); deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the same defect in another crate. The sweep that found it is labeled with its method (every crate's binary run plain and with all 59 *_OK names exported), which meets FR-009's class clause, and the deferral carries FR-009's why, id and order. Default-fix-in-task (improvement 4) is a default, and FR-009 is the accepted spec's allowance for this exception. Filing the leaks as one bundled task matches the GM's 2026-11-22 bundling words. T143 and T22 were taken on the block's word."
+    },
+    {
+     "id": "found-and-left: arbiter and cohort tests write the live log",
+     "summary": "arbiter's close_answers_its_usage_and_its_verdict (2 rows a run) and cohort's a_closing_refusal_ends_the_run (1 row a run) write the live guard log; deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are found by the same labeled sweep and deferred with FR-009's three elements. They are bundled with the other test-log leaks under the GM's 2026-11-22 bundling approval, and ordered before T22, so they are not left without a home. I took T143 and its order on the block's word."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T95": {
+   "section_sha256": "a01de36a6561571829ac0ad2c4ac010d98e2f9758b073662a2ee3a9af987670c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T95-D1",
+     "summary": "blocked() reads cover's '<path> - lines no test reaches: <lines>' lines (path stripped to the clone's, first line a real one) beside the '-->' and 'Diff in' paths; a coverage red whose every named file is another task's is tagged BLOCKED naming each file and task.",
+     "class": "within",
+     "why": "This is the defect T95's line names (a coverage red on another's files went untagged) fixed as found, in the closing checks the GM had filed as a performance task (2026-11-21). It adds no behavior beyond making T86's tag read the coverage output it missed."
+    },
+    {
+     "id": "T95-D2",
+     "summary": "A BLOCKED red stays counted red; 'red' and the exit are untouched.",
+     "class": "within",
+     "why": "Keeps T86's rule as it was. The tag only informs the builder and blocks or passes nothing new."
+    },
+    {
+     "id": "T95-D3",
+     "summary": "The tag's wording says which lines it read: errors only keep T86's words, uncovered lines only say 'yours are covered ... re-run once their tests reach them', both say 'nothing of yours failed there'.",
+     "class": "within",
+     "why": "Message wording that comes with D1. It neither narrows nor adds scope."
+    },
+    {
+     "id": "T95-D4",
+     "summary": "A failed coverage run's marker '<crate> - lines no test reaches: 0' is not read as a path.",
+     "class": "within",
+     "why": "The marker names a crate, not a file. Reading it as a path would wrongly untag a run whose cover build broke on another task's file (the 12:47Z run, measured). Leaving it out keeps D1 correct, and the run is still tagged from its '-->' errors (red-first case: BLOCKED)."
+    },
+    {
+     "id": "T95-D5",
+     "summary": "An APART crate's block (its 'rust-checks: APART' header up to the next 'rust-checks:' line) is not read, so another task's APART lines no longer tag a caller's own red BLOCKED. The caller's own uncovered line beside another's error is also no longer tagged.",
+     "class": "within",
+     "why": "Two wrong-tag defects in the same function, found while building it and fixed here. The project's fix-as-we-go rule covers this, and it is not unrequested scope. Each is pinned by a red-first suite case."
+    },
+    {
+     "id": "T95-D6",
+     "summary": "T81's run (the run cited in T95's line) stays untagged after the fix. Two of its three uncovered files were named by no task's event line before the run, so T86's rule counts them as the caller's. Naming them is left to the split's tasks T93 (Bash writes) and T96 (a Python program's writes).",
+     "class": "within",
+     "why": "The defect T95's line names (blocked() not reading cover's lines) is fully fixed, and the replay shows the fixed function tags T84's 17:10Z coverage-only red, which HEAD did not. T81's run stays untagged because of a different, already-filed defect: which files the split attributes to which task. Under T86's rule an unattributed file is the caller's, so the result is a missing tag, never a wrong one. Neither the GM's request nor the spec asks T95 to change attribution, so nothing is narrowed. The plan states T81's run is not tagged and does not overclaim it."
+    },
+    {
+     "id": "T95-D7",
+     "summary": "Red-first suite cases (46 passed, 3 failed against the unfixed function; 49 of 49 fixed) and the task's own closing run as the exits. Other tasks' files (T93, T88, T97, T82) are not touched.",
+     "class": "within",
+     "why": "Verification of what the task fixes, plus scope discipline. Both are within."
+    },
+    {
+     "id": "T95-D8",
+     "summary": "T95 is not classed as performance work (no [perf]).",
+     "class": "within",
+     "why": "The task changes what a tag reads, not how long a run takes. Under FR-013 the class only sets scheduling order. It does not narrow what the GM asked for or what the spec requires."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T96": {
+   "section_sha256": "1b2816c04e3ea23a21a481d94c1ea96e565aee8f6649e9847466d4185b27c35a",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "THE MOVE",
+     "summary": "program_names and its helpers move from make_only_hooks/interp.rs to shared::tree::program behind one visitor `each`; interp.rs re-exports program_names so readme's and gate-write's callers are unedited; the caller's `wanted` is asked before joined_on's and only_read's scans (results unchanged, guard verdicts unchanged on 9,646 replayed commands).",
+     "class": "within",
+     "why": "An internal relocation so the event log can call the reader make-only already has; it serves T96's line (the closing checks, which the GM filed as a performance task on 2026-11-21) and narrows nothing. The unchanged-verdict replay shows the moved check still does its job; it is not held to an exactness standard."
+    },
+    {
+     "id": "THE FIELD",
+     "summary": "bash_writes adds, after a writing target's path, the files a Python program's literals name, resolved against the cwd, only when the literal names an existing regular file; a literal only read, or joined onto a computed base, names nothing (labeled fail direction).",
+     "class": "within",
+     "why": "This is the fix T96's line asks for (a heredoc or -c Python program named no file in writes). The fail direction is a design choice inside that fix: a missed name leaves a file judged as the caller's (a red, a lost saving), while an extra name would give a wrong green, so it removes nothing the GM asked for. The cost it states (a file a backgrounded program has not yet written is missed) is a trade-off it names, not a wrong outcome left unfixed."
+    },
+    {
+     "id": "THE BUILDS",
+     "summary": "The reader's 10 other patterns are each a shared::regex::Lazy behind a gate that is a necessary condition, and the literal pattern is read as plain code (a labeled addition past the brief); JOINED's gate is tightened; pinned by the build-count, gate-necessity and literal-equivalence tests.",
+     "class": "within",
+     "why": "It fixes, before landing, a cost the field added to every Python program's Bash end (measured from 3.67 ms down to 0.09 ms median CPU in one run, cost5.log). That is performance work the GM asked to come first (FR-013, request 2026-11-20). Going past the brief is a choice inside the task, not something taken out of what was asked."
+    },
+    {
+     "id": "THE LIST",
+     "summary": "land-alone.sh's 'commit these' list reads the closing checks' attribution (Edit paths and Bash writes from PostToolUse and PostToolUseFailure, exact path, no fallback, inside the commit and landing window), and lists another task's files under that task rather than landing them (labeled addition).",
+     "class": "within",
+     "why": "T96's line names this defect (the list read only Edit lines and left out four files at T82-T101's landing), and fixing a landing tool that leaves out a file its tests need fixes a wrong outcome. Listing another task's files by task only shows the session files it would otherwise not see, and it lands none of them, so it adds no behavior beyond the fix."
+    },
+    {
+     "id": "Found and left: re-numbered builder's attribution",
+     "summary": "A builder re-numbered mid-task keeps filing its lines under the old task id; T96 fixes only the visible effect on the list and files the attribution fix as T106, outside T96's files (filed.rs, dispatches.rs), to land before T22.",
+     "class": "within",
+     "why": "T96's line never asks for this defect to be fixed. It is not dropped: it is filed as T106 with the reason it is not fixed here, its id and its order ('lands before T22'), as FR-009 requires, so it is fixed inside the feature before the step it would harm. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Performance classification and the n/a rows",
+     "summary": "T96 is tagged [perf] as builders'-loop work with no performance checklist (not engine speed), and its step table is n/a (no map).",
+     "class": "within",
+     "why": "The GM's 2026-11-21 words ('yes please file that as a performance task'), about the closing checks, and FR-013's definition (the builders' loop) cover the tag. No map changes, so the map rows do not apply."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T97": {
+   "section_sha256": "b0a38aaf0a735cdbed6dacd74851dbb0970f0eba9e810be0b5351c10e90ac346",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T97-gate",
+     "summary": "Every walk static (40 in tree.rs, tree/bind.rs, tree/python.rs, tree/py_c.rs) becomes shared::regex::Lazy: built on first use as before, searched only where a necessary literal of the pattern stands in the text, else no match and nothing built.",
+     "class": "within",
+     "why": "This is the [perf] task T97's line files under FR-013 (the builders' loop, every Bash call's hooks), and the GM asked that performance work go first (request.md 2026-11-20). The plan states each gate is a literal every match holds; its replay of 9,646 commands shows the guards' verdicts unchanged, so the hooks still do their job. It removes work and narrows nothing that was asked."
+    },
+    {
+     "id": "T97-gate-errors",
+     "summary": "is_match/captures read a search error as no match, as every call site already did; captures_iter/find_iter keep yielding Result items so each of their 12 call sites keeps .map_while(Result::ok).",
+     "class": "within",
+     "why": "This keeps the existing handling and the checks crate's regex_scans rule. It is an implementation detail inside the task and narrows nothing."
+    },
+    {
+     "id": "T97-pass-all",
+     "summary": "Five patterns that need no literal (CHMOD_MODE, py_c's WRITES, READ_MODE, ANY_MODE, EXPANDS) get a gate that passes every text.",
+     "class": "within",
+     "why": "These are unchanged behavior where no gate is sound. Nothing is narrowed."
+    },
+    {
+     "id": "T97-plain-quote-body",
+     "summary": "PLAIN_QUOTE_BODY is replaced by plain code (plain_quote_body), with char::is_whitespace standing for \\s, pinned by a differential test over every character to U+3100 plus U+180E, U+200B, U+FEFF.",
+     "class": "within",
+     "why": "It does the same job faster, and the differential test enforces that the answers agree. That serves the performance request."
+    },
+    {
+     "id": "T97-replace-literal",
+     "summary": "py_c's REPLACE (the literal replace\\() becomes contains(\"replace(\").",
+     "class": "within",
+     "why": "A literal pattern is turned into a literal search with the same meaning, faster. Within the perf task."
+    },
+    {
+     "id": "T97-not-taken-assign",
+     "summary": "A hand-written scan for ASSIGN's shape is not taken. About 12.4% of commands (an estimate, measured 2026-11-21) still build ASSIGN when they hold an = that is not an assignment.",
+     "class": "within",
+     "why": "Judged against request.md, FR-013 and this section's own statement of T97's line, since the line itself is not in the bundle. None of them sets a target for this task. Leaving a further speedup untaken is a design choice, not a defect (constitution XIV: only slower, every answer right). The task's purpose is still met: from a median of 12 builds a command to 2."
+    },
+    {
+     "id": "T97-pin",
+     "summary": "A child-process pin test prints the patterns its process built (regex::BUILT, a list kept in test builds alone): simple commands build none, and a redirect builds exactly REDIRECT.",
+     "class": "within",
+     "why": "This is a test that fails only when the requested speedup is absent. Under FR-012 it is enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T97-nopoll-race",
+     "summary": "Fix a race in tests/hooks/test-no-poll-hooks.sh, outside T97's files, that turned its closing run 2 red. The case now ages the quiet file again first.",
+     "class": "within",
+     "why": "A flaky test that refuses good work is a defect under XIV. Fix-as-we-go asks known defects to be fixed as found, and this widens no requested behavior."
+    },
+    {
+     "id": "T97-closing-not-repeated",
+     "summary": "The closing checks are not run a fourth time. Run 3's static was red at its format step on T100's in-flight file before reaching any T97 crate; T97's crates are shown green by crate-scoped test, lint and cover after the last edit.",
+     "class": "within",
+     "why": "No requirement in spec-index or request.md asks a task for a green closing run. FR-007 and improvement 2 point the other way: they cap make static at two, with crate-scoped checks while iterating and make static once at the end, which the landing's gate supplies. Run 3 was already a recorded STATIC_OK escape. This does depart from the plan's own exit in item 6 (a green make closing-checks), and the caller should square that line with item 9. It is not a narrowing of what the GM asked."
+    },
+    {
+     "id": "T97-shape-strips-left",
+     "summary": "shape's strip_heredocs and strip_quotes stay ungated: they are outside T97's files and are proposed as a separate [perf] task, not fixed here.",
+     "class": "within",
+     "why": "FR-009 bites only on a deferred DEFECT. This is not one: every answer is right and only slower (XIV, the GM 2026-11-19 definition), so leaving it unchanged stays within scope. Aside: no task id is filed for it yet, and under FR-013's ordering the caller may wish to file it."
+    },
+    {
+     "id": "T97-whole-event-estimate",
+     "summary": "The saving over the dispatcher's whole event (about 2.7 ms at a Bash start) is left an estimate. A replay through every guard would write real guard state in a shared clone.",
+     "class": "within",
+     "why": "It is labeled an estimate and its arithmetic reconciles (3.23 - 0.21 - 0.30). It decides no scope: the per-guard saving is measured, and the estimate only reports what the task gains."
+    },
+    {
+     "id": "T97-perf-class",
+     "summary": "T97 is classed as performance work ([perf], FR-013: the builders' loop).",
+     "class": "within",
+     "why": "It speeds every Bash call's hooks, which is within FR-013's 'the builders' loop'."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T98": {
+   "section_sha256": "0de09f959db4e0c47fedfba77007d87ea25585bbf98c6296e9679d44684e7ea2",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T98-D1 measurement only",
+     "summary": "T98 is a measurement of builder-slot occupancy under T88's rolling dispatch; no engine or hook code changes and L7R_BUILDERS stays at 3.",
+     "class": "within",
+     "why": "A measurement task of the builders' loop, counted as performance work by FR-013 and the GM's 2026-11-20 words on measurement tasks; the measurement finds no wrong outcome to fix, so leaving the constant and code as they are narrows nothing."
+    },
+    {
+     "id": "T98-D2 the window",
+     "summary": "The night window runs from T88's landing (2026-11-21T18:40:16Z) to the last night builder's end (07:06Z), 745 minutes, and leaves out the 3-hour builder-free gap before T147.",
+     "class": "within",
+     "why": "Chosen by the same rule as T88's before window (the builders' day, first start to last end); the before is reproduced to the minute by the same script, so before and after are one method."
+    },
+    {
+     "id": "T98-D3 two readings",
+     "summary": "Occupancy is reported both for 451's builders alone (the before's method) and for every feature's builders (what the Stop hook counts).",
+     "class": "within",
+     "why": "Reports more, hides nothing; the before has no 449 builder so its row is the same in both readings."
+    },
+    {
+     "id": "T98-D4 replay rule kept",
+     "summary": "The replay's independent-task rule (a line naming no file a running task edits) is kept although it does not read 'after T<n>' and so over-reports for the 449-slot minutes.",
+     "class": "within",
+     "why": "Kept so before and after are one method, and the over-report is disclosed with its cause; a difference of method that is stated, not a defect left."
+    },
+    {
+     "id": "T98-D5 no defect found",
+     "summary": "The stretches below three are attributed to a recorded choice to give the slot to 449 when no 451 task could start, to landings, and to 30-80 s dispatch latency; the Stop hook's count is found correct for the window, and nothing is fixed.",
+     "class": "within",
+     "why": "Each cause is named with its source; none is a wrong outcome (the weekly cap and T156's miscount are each ruled out with evidence), so there is no known defect carried past this task."
+    },
+    {
+     "id": "T98-D6 order",
+     "summary": "T98 runs after T88 and a full day, and before T22.",
+     "class": "within",
+     "why": "Ordering inside the feature's own task list; narrows nothing the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T94 (the land crate's tests read the session's `PLAN_REVIEW_OK` and write the real guard log, measured 2026-11-21 by T84 (the guard log's `plan-gate` rows naming the land tests' fixture feature `449-x`: 20-odd `plan-review-stale 449-x` blocks and `plan-review-ok 449-x: 451 T41 and T43 reviewed CLEAR ...`, the session's own escape text, taken by a fixture's tick during a landing's `make done`))",
+    "### T94 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D-a",
+     "summary": "The fix reads the landing's escapes (tick_env's PLAN_REVIEW_OK; new_in's LAND_BOXES, ARBITER_OK, HOME) through the landing's own Rooted map in land.rs, not by a test-side change alone",
+     "class": "within",
+     "why": "The defect is test runs taking the session's escapes; the measured read sits in land.rs and the tests already hand their own map, so routing the read through it is the fix itself, not a scope change. The brief naming tests alone is the caller's wording, not the GM's."
+    },
+    {
+     "id": "D-a refusal",
+     "summary": "shared's test-env feature on the land crate's dev-dependency priced and refused",
+     "class": "within",
+     "why": "A choice between two ways of reaching the same fix; design, not fidelity."
+    },
+    {
+     "id": "D-a alone()",
+     "summary": "alone() removes LAND_BOXES and COVER_OK from land-alone.sh's environment",
+     "class": "within",
+     "why": "The same escape reaching the same crate's tests through the script; part of the measured defect."
+    },
+    {
+     "id": "D-b",
+     "summary": "The land tests' census is a process-wide GUARD_LOG_DIR set once in template() to beside_binary(\"land-census\"), as the plan and task crates do",
+     "class": "within",
+     "why": "How the fixture rows are kept off the live log; the measured writer takes no directory, and the census lives in the run's own temporary directory. Design only."
+    },
+    {
+     "id": "pin and red-first",
+     "summary": "One pin test, each of the four changes red alone off, green plain and with the escapes exported, the planted guard log left with no new file",
+     "class": "within",
+     "why": "Enforcement that the fix holds. The byte-identical planted log is a nothing-was-written check, not an exactness standard on an output."
+    },
+    {
+     "id": "item 7 env reads left",
+     "summary": "LAND_NOTE, scripts_of's and inproc::Real's L7R_GATE_TREE and replay_owing's L7R_GATE_TREE stay process reads",
+     "class": "within",
+     "why": "The plan names its search (grep -n std::env over the land crate, 2026-11-22) and gives each remaining read a reason: none is a session escape, so none is the defect."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T94 is not counted as performance or measurement work",
+     "class": "within",
+     "why": "T94 fixes test isolation and the guard log's fixture rows. It does not measure where time goes, which is the measurement work the GM's 2026-11-20 words put first."
+    },
+    {
+     "id": "found-and-left: existing 988 rows",
+     "summary": "The live log's existing test-written rows stay",
+     "class": "within",
+     "why": "The log is append-only and the brief says to leave the rows. Removing them is not available, so leaving them narrows nothing."
+    },
+    {
+     "id": "found-and-left: audit does not set fixture rows apart",
+     "summary": "make audit's guards count (measure crate) keeps counting the fixture rows, reading plan-gate's escape rate as 43% where the real rows' is 65.5%; deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect, a wrong figure, and it is left by this task. Accepted FR-009 allows such a deferral when the section gives a why, a filed id and an order; the section gives all three (T143, lands before T22). Taking it into one bundle with the other leaks is what the GM's 2026-11-22 bundling words ask for. It is legitimate on those grounds, not on 'outside this task's files', which alone would not carry it. I took T143's existence and ordering on the block's word; the bundle does not carry it."
+    },
+    {
+     "id": "found-and-left: task crate's task_add tests read QUICK_OK",
+     "summary": "3 task-crate tests read QUICK_OK from the process (red with it exported) and can write the live log (9 rows); deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the same defect in another crate. The sweep that found it is labeled with its method (every crate's binary run plain and with all 59 *_OK names exported), which meets FR-009's class clause, and the deferral carries FR-009's why, id and order. Default-fix-in-task (improvement 4) is a default, and FR-009 is the accepted spec's allowance for this exception. Filing the leaks as one bundled task matches the GM's 2026-11-22 bundling words. T143 and T22 were taken on the block's word."
+    },
+    {
+     "id": "found-and-left: arbiter and cohort tests write the live log",
+     "summary": "arbiter's close_answers_its_usage_and_its_verdict (2 rows a run) and cohort's a_closing_refusal_ends_the_run (1 row a run) write the live guard log; deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are found by the same labeled sweep and deferred with FR-009's three elements. They are bundled with the other test-log leaks under the GM's 2026-11-22 bundling approval, and ordered before T22, so they are not left without a home. I took T143 and its order on the block's word."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T95 (the closing checks' BLOCKED tag missed a coverage red: `blocked()` read only `-->` and `Diff in` lines, not cover's lines no test reaches, found by T86's builder, 2026-11-21; T81's second closing run red on cover alone, 3 files of T88's, measured 2026-11-21 (its kept run directory, item 4))",
+    "### T95 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T95-D1",
+     "summary": "blocked() reads cover's '<path> - lines no test reaches: <lines>' lines (path stripped to the clone's, first line a real one) beside the '-->' and 'Diff in' paths; a coverage red whose every named file is another task's is tagged BLOCKED naming each file and task.",
+     "class": "within",
+     "why": "This is the defect T95's line names (a coverage red on another's files went untagged) fixed as found, in the closing checks the GM had filed as a performance task (2026-11-21). It adds no behavior beyond making T86's tag read the coverage output it missed."
+    },
+    {
+     "id": "T95-D2",
+     "summary": "A BLOCKED red stays counted red; 'red' and the exit are untouched.",
+     "class": "within",
+     "why": "Keeps T86's rule as it was. The tag only informs the builder and blocks or passes nothing new."
+    },
+    {
+     "id": "T95-D3",
+     "summary": "The tag's wording says which lines it read: errors only keep T86's words, uncovered lines only say 'yours are covered ... re-run once their tests reach them', both say 'nothing of yours failed there'.",
+     "class": "within",
+     "why": "Message wording that comes with D1. It neither narrows nor adds scope."
+    },
+    {
+     "id": "T95-D4",
+     "summary": "A failed coverage run's marker '<crate> - lines no test reaches: 0' is not read as a path.",
+     "class": "within",
+     "why": "The marker names a crate, not a file. Reading it as a path would wrongly untag a run whose cover build broke on another task's file (the 12:47Z run, measured). Leaving it out keeps D1 correct, and the run is still tagged from its '-->' errors (red-first case: BLOCKED)."
+    },
+    {
+     "id": "T95-D5",
+     "summary": "An APART crate's block (its 'rust-checks: APART' header up to the next 'rust-checks:' line) is not read, so another task's APART lines no longer tag a caller's own red BLOCKED. The caller's own uncovered line beside another's error is also no longer tagged.",
+     "class": "within",
+     "why": "Two wrong-tag defects in the same function, found while building it and fixed here. The project's fix-as-we-go rule covers this, and it is not unrequested scope. Each is pinned by a red-first suite case."
+    },
+    {
+     "id": "T95-D6",
+     "summary": "T81's run (the run cited in T95's line) stays untagged after the fix. Two of its three uncovered files were named by no task's event line before the run, so T86's rule counts them as the caller's. Naming them is left to the split's tasks T93 (Bash writes) and T96 (a Python program's writes).",
+     "class": "within",
+     "why": "The defect T95's line names (blocked() not reading cover's lines) is fully fixed, and the replay shows the fixed function tags T84's 17:10Z coverage-only red, which HEAD did not. T81's run stays untagged because of a different, already-filed defect: which files the split attributes to which task. Under T86's rule an unattributed file is the caller's, so the result is a missing tag, never a wrong one. Neither the GM's request nor the spec asks T95 to change attribution, so nothing is narrowed. The plan states T81's run is not tagged and does not overclaim it."
+    },
+    {
+     "id": "T95-D7",
+     "summary": "Red-first suite cases (46 passed, 3 failed against the unfixed function; 49 of 49 fixed) and the task's own closing run as the exits. Other tasks' files (T93, T88, T97, T82) are not touched.",
+     "class": "within",
+     "why": "Verification of what the task fixes, plus scope discipline. Both are within."
+    },
+    {
+     "id": "T95-D8",
+     "summary": "T95 is not classed as performance work (no [perf]).",
+     "class": "within",
+     "why": "The task changes what a tag reads, not how long a run takes. Under FR-013 the class only sets scheduling order. It does not narrow what the GM asked for or what the spec requires."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T96 (a Python program run from a heredoc or `-c` named no file in the event log's `writes`, so T86's closing checks still counted another builder's Python-written files as the caller's - T84's 5 plan- and task-crate files in T86's runs 2 and 3, and 15 of the night's 51 still-missed landed files, measured 2026-11-21 (T93's item 4, its replay); and land-alone's 'commit these' list read only Edit lines, so at T82-T101's landing it named 18 files and left out `bundle.rs`, `ready.rs`, `speckit.rs` and `land-alone.sh`, observed 2026-11-21 (the session's landing, T96's line))",
+    "### T96 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE MOVE",
+     "summary": "program_names and its helpers move from make_only_hooks/interp.rs to shared::tree::program behind one visitor `each`; interp.rs re-exports program_names so readme's and gate-write's callers are unedited; the caller's `wanted` is asked before joined_on's and only_read's scans (results unchanged, guard verdicts unchanged on 9,646 replayed commands).",
+     "class": "within",
+     "why": "An internal relocation so the event log can call the reader make-only already has; it serves T96's line (the closing checks, which the GM filed as a performance task on 2026-11-21) and narrows nothing. The unchanged-verdict replay shows the moved check still does its job; it is not held to an exactness standard."
+    },
+    {
+     "id": "THE FIELD",
+     "summary": "bash_writes adds, after a writing target's path, the files a Python program's literals name, resolved against the cwd, only when the literal names an existing regular file; a literal only read, or joined onto a computed base, names nothing (labeled fail direction).",
+     "class": "within",
+     "why": "This is the fix T96's line asks for (a heredoc or -c Python program named no file in writes). The fail direction is a design choice inside that fix: a missed name leaves a file judged as the caller's (a red, a lost saving), while an extra name would give a wrong green, so it removes nothing the GM asked for. The cost it states (a file a backgrounded program has not yet written is missed) is a trade-off it names, not a wrong outcome left unfixed."
+    },
+    {
+     "id": "THE BUILDS",
+     "summary": "The reader's 10 other patterns are each a shared::regex::Lazy behind a gate that is a necessary condition, and the literal pattern is read as plain code (a labeled addition past the brief); JOINED's gate is tightened; pinned by the build-count, gate-necessity and literal-equivalence tests.",
+     "class": "within",
+     "why": "It fixes, before landing, a cost the field added to every Python program's Bash end (measured from 3.67 ms down to 0.09 ms median CPU in one run, cost5.log). That is performance work the GM asked to come first (FR-013, request 2026-11-20). Going past the brief is a choice inside the task, not something taken out of what was asked."
+    },
+    {
+     "id": "THE LIST",
+     "summary": "land-alone.sh's 'commit these' list reads the closing checks' attribution (Edit paths and Bash writes from PostToolUse and PostToolUseFailure, exact path, no fallback, inside the commit and landing window), and lists another task's files under that task rather than landing them (labeled addition).",
+     "class": "within",
+     "why": "T96's line names this defect (the list read only Edit lines and left out four files at T82-T101's landing), and fixing a landing tool that leaves out a file its tests need fixes a wrong outcome. Listing another task's files by task only shows the session files it would otherwise not see, and it lands none of them, so it adds no behavior beyond the fix."
+    },
+    {
+     "id": "Found and left: re-numbered builder's attribution",
+     "summary": "A builder re-numbered mid-task keeps filing its lines under the old task id; T96 fixes only the visible effect on the list and files the attribution fix as T106, outside T96's files (filed.rs, dispatches.rs), to land before T22.",
+     "class": "within",
+     "why": "T96's line never asks for this defect to be fixed. It is not dropped: it is filed as T106 with the reason it is not fixed here, its id and its order ('lands before T22'), as FR-009 requires, so it is fixed inside the feature before the step it would harm. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Performance classification and the n/a rows",
+     "summary": "T96 is tagged [perf] as builders'-loop work with no performance checklist (not engine speed), and its step table is n/a (no map).",
+     "class": "within",
+     "why": "The GM's 2026-11-21 words ('yes please file that as a performance task'), about the closing checks, and FR-013's definition (the builders' loop) cover the tag. No map changes, so the map rows do not apply."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T97 (T93's Found and left: the walk's first use in a hook process cost 3.2-8.6 ms against 9-57 us a walk after, 3.89 ms of each Bash end's 7.30 ms in the event log, measured 2026-11-21 (T93's item 4: `/tmp/t93/cost.py`, and its scratch binary's `-first` mode, 5 commands twice each in fresh processes); main-tree's walk paid the same on every Bash start)",
+    "### T97 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T97-gate",
+     "summary": "Every walk static (40 in tree.rs, tree/bind.rs, tree/python.rs, tree/py_c.rs) becomes shared::regex::Lazy: built on first use as before, searched only where a necessary literal of the pattern stands in the text, else no match and nothing built.",
+     "class": "within",
+     "why": "This is the [perf] task T97's line files under FR-013 (the builders' loop, every Bash call's hooks), and the GM asked that performance work go first (request.md 2026-11-20). The plan states each gate is a literal every match holds; its replay of 9,646 commands shows the guards' verdicts unchanged, so the hooks still do their job. It removes work and narrows nothing that was asked."
+    },
+    {
+     "id": "T97-gate-errors",
+     "summary": "is_match/captures read a search error as no match, as every call site already did; captures_iter/find_iter keep yielding Result items so each of their 12 call sites keeps .map_while(Result::ok).",
+     "class": "within",
+     "why": "This keeps the existing handling and the checks crate's regex_scans rule. It is an implementation detail inside the task and narrows nothing."
+    },
+    {
+     "id": "T97-pass-all",
+     "summary": "Five patterns that need no literal (CHMOD_MODE, py_c's WRITES, READ_MODE, ANY_MODE, EXPANDS) get a gate that passes every text.",
+     "class": "within",
+     "why": "These are unchanged behavior where no gate is sound. Nothing is narrowed."
+    },
+    {
+     "id": "T97-plain-quote-body",
+     "summary": "PLAIN_QUOTE_BODY is replaced by plain code (plain_quote_body), with char::is_whitespace standing for \\s, pinned by a differential test over every character to U+3100 plus U+180E, U+200B, U+FEFF.",
+     "class": "within",
+     "why": "It does the same job faster, and the differential test enforces that the answers agree. That serves the performance request."
+    },
+    {
+     "id": "T97-replace-literal",
+     "summary": "py_c's REPLACE (the literal replace\\() becomes contains(\"replace(\").",
+     "class": "within",
+     "why": "A literal pattern is turned into a literal search with the same meaning, faster. Within the perf task."
+    },
+    {
+     "id": "T97-not-taken-assign",
+     "summary": "A hand-written scan for ASSIGN's shape is not taken. About 12.4% of commands (an estimate, measured 2026-11-21) still build ASSIGN when they hold an = that is not an assignment.",
+     "class": "within",
+     "why": "Judged against request.md, FR-013 and this section's own statement of T97's line, since the line itself is not in the bundle. None of them sets a target for this task. Leaving a further speedup untaken is a design choice, not a defect (constitution XIV: only slower, every answer right). The task's purpose is still met: from a median of 12 builds a command to 2."
+    },
+    {
+     "id": "T97-pin",
+     "summary": "A child-process pin test prints the patterns its process built (regex::BUILT, a list kept in test builds alone): simple commands build none, and a redirect builds exactly REDIRECT.",
+     "class": "within",
+     "why": "This is a test that fails only when the requested speedup is absent. Under FR-012 it is enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T97-nopoll-race",
+     "summary": "Fix a race in tests/hooks/test-no-poll-hooks.sh, outside T97's files, that turned its closing run 2 red. The case now ages the quiet file again first.",
+     "class": "within",
+     "why": "A flaky test that refuses good work is a defect under XIV. Fix-as-we-go asks known defects to be fixed as found, and this widens no requested behavior."
+    },
+    {
+     "id": "T97-closing-not-repeated",
+     "summary": "The closing checks are not run a fourth time. Run 3's static was red at its format step on T100's in-flight file before reaching any T97 crate; T97's crates are shown green by crate-scoped test, lint and cover after the last edit.",
+     "class": "within",
+     "why": "No requirement in spec-index or request.md asks a task for a green closing run. FR-007 and improvement 2 point the other way: they cap make static at two, with crate-scoped checks while iterating and make static once at the end, which the landing's gate supplies. Run 3 was already a recorded STATIC_OK escape. This does depart from the plan's own exit in item 6 (a green make closing-checks), and the caller should square that line with item 9. It is not a narrowing of what the GM asked."
+    },
+    {
+     "id": "T97-shape-strips-left",
+     "summary": "shape's strip_heredocs and strip_quotes stay ungated: they are outside T97's files and are proposed as a separate [perf] task, not fixed here.",
+     "class": "within",
+     "why": "FR-009 bites only on a deferred DEFECT. This is not one: every answer is right and only slower (XIV, the GM 2026-11-19 definition), so leaving it unchanged stays within scope. Aside: no task id is filed for it yet, and under FR-013's ordering the caller may wish to file it."
+    },
+    {
+     "id": "T97-whole-event-estimate",
+     "summary": "The saving over the dispatcher's whole event (about 2.7 ms at a Bash start) is left an estimate. A replay through every guard would write real guard state in a shared clone.",
+     "class": "within",
+     "why": "It is labeled an estimate and its arithmetic reconciles (3.23 - 0.21 - 0.30). It decides no scope: the per-guard saving is measured, and the estimate only reports what the task gains."
+    },
+    {
+     "id": "T97-perf-class",
+     "summary": "T97 is classed as performance work ([perf], FR-013: the builders' loop).",
+     "class": "within",
+     "why": "It speeds every Bash call's hooks, which is within FR-013's 'the builders' loop'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T98 (builders at three: 522 of the first night's 745 minutes counting 451's builders alone, 70%, a mean of 2.69, and 698, 94%, a mean of 2.99, counting every feature's, against before's 191 of 580, 33%, a mean of 1.66, measured 2026-11-22 (T88's replay, `/tmp/t88/occupancy.py`, over 2026-11-21T18:40:16Z to 2026-11-22T07:06:00Z))",
+    "### T98 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T98-approach",
+     "summary": "T98 is a measurement with no engine code: T88's replay rerun by T88's own method (builder spans from subagent metas, sampled at each minute's middle).",
+     "class": "within",
+     "why": "A [perf] measurement of the builders' loop counts as performance work under FR-013 and the GM's 2026-11-20 words on measurement tasks; reusing T88's method keeps before and after comparable. It narrows nothing asked."
+    },
+    {
+     "id": "T98-window",
+     "summary": "The window runs from T88's landing (2026-11-21T18:40:16Z) to the end of the last night builder (07:05:55Z), 745 minutes, and leaves out the 3-hour gap with no builder before T147.",
+     "class": "within",
+     "why": "It is chosen the way T88 chose its window (the builders' day from first start to last end). A gap with no builder at all is outside the builders' day by that rule, so leaving it out drops nothing the measurement is meant to cover."
+    },
+    {
+     "id": "T98-two-readings",
+     "summary": "Occupancy is reported twice, once for 451's builders alone (the before's method) and once for every feature's builders (what the Stop hook counts).",
+     "class": "within",
+     "why": "Both readings are reported and the 451-only row keeps the before's method. The second row adds the view the Stop hook actually acts on and hides nothing."
+    },
+    {
+     "id": "T98-causes",
+     "summary": "Each stretch below three is given a cause: 176 minutes were a 449 builder given the slot on purpose, it was not the weekly cap and not T156's miscount, and the remaining 47 minutes were landings and 30-80 s of dispatch latency.",
+     "class": "within",
+     "why": "Attributing the below-three time is the measurement itself, and each cause carries its observation and method. No requirement is narrowed by it."
+    },
+    {
+     "id": "T98-independent-count-rule",
+     "summary": "The independent-task count keeps T88's rule (a line naming no file a running task edits), which does not read 'after T<n>' and so over-reports for the 176 minutes of 449's slot.",
+     "class": "within",
+     "why": "The over-report is disclosed and the rule is kept so that before and after use one method. It is the replay script's counting rule, not a project check that passes bad work, so leaving it as it is leaves no defect (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T98-no-change",
+     "summary": "No code changes, L7R_BUILDERS stays at 3, nothing is found and left, and T98's ask is met (70% vs 33% at three, a mean of 2.69 vs 1.66, counting 451 alone).",
+     "class": "within",
+     "why": "The measurement finds no wrong outcome. The 449 slots were a recorded choice made when no 451 task could start, which FR-013 allows. The 10 minutes of dispatch latency are a gap, not a defect. With no defect, leaving the constant alone narrows nothing."
+    },
+    {
+     "id": "T98-order",
+     "summary": "T98 runs after T88 and a full day, and before T22, whose measured day follows it.",
+     "class": "within",
+     "why": "Ordering inside the feature, consistent with FR-013's performance-first rule; both tasks are measurement or performance work."
+    },
+    {
+     "id": "T98-perf-class",
+     "summary": "T98 is filed as [perf] work on the builders' loop but is not an engine-speed task, so no engine-speed checklist answers are owed.",
+     "class": "within",
+     "why": "FR-013 names the builders' loop as performance work and counts measurement as performance work for ordering. The classification matches the spec."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T98 (builders at three: 522 of the first night's 745 minutes counting 451's builders alone, 70%, a mean of 2.69, and 698, 94%, a mean of 2.99, counting every feature's, against before's 191 of 580, 33%, a mean of 1.66, measured 2026-11-22 (T88's replay, `/tmp/t88/occupancy.py`, over 2026-11-21T18:40:16Z to 2026-11-22T07:06:00Z))",
+    "### T98 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T98-D1 measurement only",
+     "summary": "T98 is a measurement of builder-slot occupancy under T88's rolling dispatch; no engine or hook code changes and L7R_BUILDERS stays at 3.",
+     "class": "within",
+     "why": "A measurement task of the builders' loop, counted as performance work by FR-013 and the GM's 2026-11-20 words on measurement tasks; the measurement finds no wrong outcome to fix, so leaving the constant and code as they are narrows nothing."
+    },
+    {
+     "id": "T98-D2 the window",
+     "summary": "The night window runs from T88's landing (2026-11-21T18:40:16Z) to the last night builder's end (07:06Z), 745 minutes, and leaves out the 3-hour builder-free gap before T147.",
+     "class": "within",
+     "why": "Chosen by the same rule as T88's before window (the builders' day, first start to last end); the before is reproduced to the minute by the same script, so before and after are one method."
+    },
+    {
+     "id": "T98-D3 two readings",
+     "summary": "Occupancy is reported both for 451's builders alone (the before's method) and for every feature's builders (what the Stop hook counts).",
+     "class": "within",
+     "why": "Reports more, hides nothing; the before has no 449 builder so its row is the same in both readings."
+    },
+    {
+     "id": "T98-D4 replay rule kept",
+     "summary": "The replay's independent-task rule (a line naming no file a running task edits) is kept although it does not read 'after T<n>' and so over-reports for the 449-slot minutes.",
+     "class": "within",
+     "why": "Kept so before and after are one method, and the over-report is disclosed with its cause; a difference of method that is stated, not a defect left."
+    },
+    {
+     "id": "T98-D5 no defect found",
+     "summary": "The stretches below three are attributed to a recorded choice to give the slot to 449 when no 451 task could start, to landings, and to 30-80 s dispatch latency; the Stop hook's count is found correct for the window, and nothing is fixed.",
+     "class": "within",
+     "why": "Each cause is named with its source; none is a wrong outcome (the weekly cap and T156's miscount are each ruled out with evidence), so there is no known defect carried past this task."
+    },
+    {
+     "id": "T98-D6 order",
+     "summary": "T98 runs after T88 and a full day, and before T22.",
+     "class": "within",
+     "why": "Ordering inside the feature's own task list; narrows nothing the GM asked."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T94 to T98, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

@@ -3343,32 +3343,37 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T545 (<why: the finding or measurement that files it>)
+### T545 (moved here from 462 FR-004's 451 T537 by the round arbiter's accept, ask:451-T537-plan-review-json, 2026-11-27: 451's plan-review.json stood at 5,074,158 bytes, its live entries a small part, and the tools read it whole every call; observed 2026-11-27, method: `ls -la` of the feature directory)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make archive-split` (`l7r-gate plan split`, now `plan/split.rs`) cuts the record after plan-done.md and tasks-done.md are folded: the flat `plan-review.json` keeps its own format and its LIVE entries only, and each closed task's entries go to JSON parts under `archive/plan-review/` beside T537's, named in `archive/index.json` (`parts` and `tasks` under `plan-review.json`) and in `archive/INDEX.md`.
+  - **What is live** (decided here): every key but the three maps kept; `blocks` of a block key plan.md holds (`plan_text::blocks`); `tasks` of a task with a section in plan.md or an open box in tasks.md; `block_reviews` rounds naming a live block or a live task. Each closed entry is grouped under its task (a tasks entry by its key, a block by its heading's leading task, a round by its first `tasks` id, else its first block's), groups packed in id order into parts of at most `archive::BOUND` (64 KiB, T537's GUESS knob), a group larger than it alone in its part; each part names every task it holds, its rounds' too. The parts are written before the flat file is rewritten (the plan crate's `pretty`, so the next `plan-verdict` does not reformat it): a failure between leaves an entry in both places, never in neither.
+  - **The readers, checked first** (observed 2026-11-27, method: `grep -rn plan-review.json` over `rust/`, each hit read): the writers (`record.rs`, `slim`), the plan gate (`status.rs`, `task.rs`'s `push_held` at HEAD through `judge_held`), `plan-delta`'s bundle, the review-round guard (`review_round_hooks.rs`, its streaming reader), `task_withdraw.rs`, `accept_scope` and the arbiter bundle's `plan_rounds` read live tasks or the latest rounds - the flat file, unchanged. Two read a CLOSED task's verdict and are repointed to `archive::review(read, task)` (the parts the index names for that task, then the flat record): `inside.rs` `built_inside` for a host archived in plan-done.md, and the ledger's `rows.rs` `in_the_record` where the live record has no entry for the task. `left.rs` reads tasks.md, not the record. `feature_report/sources.rs`'s `plan_blocks` reads every committed version of the flat file through `git log -p`, so the split loses it no version. Name-keyed skips extended to the parts: `research_pointers::exempt` and `stale_terms::skipped`.
+  - **The merge driver** (`merge.rs`): a map entry the split removed, unchanged on the other side from the base, already stays removed (`whole`); the `block_reviews` rows did not - a pre-split tree carried as OURS kept every base row (pinned red: `a_pre_split_side_resurrects_no_archived_entry`, 1 of 1 failing on the old `rows`). Fixed here: a base row the other side dropped is dropped, as a map entry is. The carry's usual direction (the clone ours, the builder's pre-split tree theirs) was already safe.
+  - **The real split of 451** (observed 2026-11-27, method: `make archive-split F=451` in this tree, then the parts and the flat record joined in Python against a copy taken before): the flat record 5,074,158 -> 129,646 bytes, 12 of 788 blocks, 0 of 323 tasks and 15 of 588 rounds live (451 is closed, so the task line's 36/8/42 of before its close no longer hold); 88 parts, every one at most 65,536 bytes but T243's own group (70,116 bytes, alone in its part); parts plus flat equal the original's `blocks` and `tasks` maps key for key and its rounds as a multiset, no entry in two places.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the review's cut, its reader, the two readers repointed, the rows merge, the real split of 451 | n/a: tooling, no map drawn | n/a | none | n/a |
 
 ### T545 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A session that opens 451's plan-review.json meets its live entries (129,646 bytes, observed 2026-11-27, method: `ls -la` after the split), and a closed task's verdict is one part away through `index.json`; every tool reads what it read before.
+2. **The constraints.** 462 FR-004 and SC-002; T545's line; T537's layout (`archive.rs`, the index, the note); the record's writers, merge driver and gate unchanged in format.
+3. **Where each comes from.** G: the GM's words of 2026-11-27 (462 request.md); R: the round arbiter's accept, ask:451-T537-plan-review-json; O: the readers' census and the real split above.
+4. **Do they describe the world here?** Yes: measured on 451's own record in this tree, 2026-11-27 (the split, then the join against the copy).
+5. **The order.** After 462 T548 (the real split of plan-done.md and tasks-done.md); inside the same `make archive-split` run as T555, after its plan.md move, so the live blocks are the closed plan.md's.
+6. **The exits.** Green: the new tests green, `make builder-checks` green over the six changed crates, the join equal. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The flat record 129,646 bytes (observed 2026-11-27, method: `ls -la` after the split), parts plus flat equal to the original, `built_inside` and `in_the_record` answering from a part (their tests).
+10. **Before moving a constant.** n/a: `BOUND` is T537's, unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows. The rows merge: a carry from a pre-split tree would have brought back archived rounds, which the review-round guard counts.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Fixed here: the rows merge kept a base row one side dropped (above), observed 2026-11-27, method: the new test over both orders of the two sides.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes: it bounds what a reader of 451's review record reads (5,074,158 to 129,646 bytes flat, observed 2026-11-27, method: `ls -la` after the split), which the GM tied to builders' context use; no engine-speed work.
 
 ### T546 (<why: the finding or measurement that files it>)
 
@@ -3516,31 +3521,37 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T555 (<why: the finding or measurement that files it>)
+### T555 (observed 2026-11-27, method: `ls -la` of specs/451-time-retro-and-efficiency/ after 462 T548: report.md 1,496,878 bytes and plan.md 267,986 stood whole past the 64 KiB part the split keeps)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make archive-split` cuts the report too (`archive::report`, new), and first moves a CLOSED feature's finished plan.md sections to plan-done.md, so the fold takes them.
+  - **Why plan.md held sections** (observed 2026-11-27, method: `make plan-archive F=451` on a copy, 0 moved, then each remaining section's heading and `l7r-gate plan decided` read): 19 tasks' sections stood, every task ticked. Two causes. (1) 18 of them carry `part B (2026-11-27T07:20Z ... 09:53Z)` blocks, appended by the red-gate tripwire's arbiter rulings to every task of that batch after the task's review and never reviewed, so the archive's test (`task_current` at plan.md, or `section_clear` of the whole section) found no current CLEAR and the archive moves only a CLEAR section (13 of them say so at `l7r-gate plan decided`; five pass it by its other route, `owed_for`). (2) T18's heading, `### T18 (FR-011: T="T1,T2" read as one task ...)`, named T1 and T2 as its example: the archive took every id a heading names (`TASK_ID`), and T1 and T2 are no ticked tasks, so the section never moved - a defect, fixed here: a heading's tasks are its leading ids (`plan_text::leading_tasks`), every named id only for a heading that opens with none (375's `### Wave 1 (T01)`). Measured: with the fix alone, `make plan-archive F=451` on a copy moved T18 and nothing else (observed 2026-11-27, method: a copy of HEAD's 451 directory in a fresh repository).
+  - **The closed move** (decided here): where tasks.md holds no open box and a task is ticked, `make archive-split` - and it alone - moves every section whose tasks are all ticked, its verdict unasked (`task::archive(dir, when, closed)`): no review reads a closed feature's section again. The tick's archive keeps its CLEAR rule, so a feature's last tick never archives an unreviewed section.
+  - **The report's cut** (decided here): `report.md` is cut at its `## ` sections; a section past `INLINE` (16 KiB, a GUESS knob: 451's ran 83 to 24,344 bytes but for its tables) moves to `report/NN-<slug>-K.md` parts, each at most `BOUND`, cut between table rows - every table of the section (451's critical path holds eight), a part opening with the section's heading and, inside a table, its header and separator; a task's rows (the first cell) stay together up to half of `BOUND`, longer runs (451's decision-log skeleton held runs of 120 KB) cut between rows. `report.md` becomes the index: its title, a marker line, a note opening "Load this file when:" with its WHY, the small sections inline and each moved one's heading with its parts, bytes and row range. `make feature-report WRITE=1` writes through the same `report::write`, split only where the feature has `archive/` (as T537's fold), so an unsplit feature's report is as before and the close's check (`closing.rs`, `report.md` stands) holds.
+  - **The real split of 451** (observed 2026-11-27, method: `make archive-split F=451` in this tree, its outputs compared with copies taken before): plan.md 267,986 -> 28,573 bytes (19 sections moved, T18 T312 T313 T341 T364 T365 T369 T373 T403 T404 T406 T409 T413 T419 T420 T424 T425 T427 T428); `make plan-section F=451` of those 19 printed every line it printed before (0 missing), now from plan-done.md, where each task's earlier-archived sections print beside them (253,729 -> 314,480 bytes); report.md 1,496,878 -> 27,636 bytes and 29 parts, the largest 65,435 bytes, every table row of the original in a part.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the closed move and the heading-ids fix, the report's cut and its writer, the real split of 451 | n/a: tooling, no map drawn | n/a | none | n/a |
 
 ### T555 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** 451's report.md and plan.md open at under 30 KB each, a reader sent to one part by an index, and no finished section left in a closed plan.md.
+2. **The constraints.** 462 FR-004 and SC-002; T555's line; T537's layout and `BOUND`; the close's check that `report.md` stands.
+3. **Where each comes from.** G: the GM's words of 2026-11-27 (462 request.md); O: the plan-archive run on a copy and the report's sections measured, 2026-11-27.
+4. **Do they describe the world here?** Yes: measured 2026-11-27 (`make archive-split F=451` on 451's own files in this tree, the split above).
+5. **The order.** After 462 T548; in one `make archive-split` run before T545's review cut.
+6. **The exits.** Green: the new tests green (the heading test and the closed split red on the old code, 2 of 3 failing), `make builder-checks` green, the real split's figures above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** plan.md 28,573 and report.md 27,636 bytes, every report part at most 65,536, nothing lost (observed 2026-11-27, method: `ls -la` after the split and the joins above).
+10. **Before moving a constant.** n/a: `INLINE` is new, a GUESS knob.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a map shows. The heading-ids defect kept a finished section in plan.md, where `make plan-delta` and every plan reader read it (observed 2026-11-27, method: the 19 remaining sections' headings read against `TASK_ID` and `leading_tasks`, T18 the one instance).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Fixed here: the archive's heading ids (cause 2 above), observed 2026-11-27, method: each of the 19 remaining sections' headings read against `TASK_ID` and `leading_tasks`; T18 the only heading naming ids it does not lead with.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: it bounds what a reader of 451's report and plan reads (1,496,878 to 27,636 and 267,986 to 28,573 bytes, observed 2026-11-27, method: `ls -la` after the split); no engine-speed work.
 
 
 ### T557 (<why: the finding or measurement that files it>)

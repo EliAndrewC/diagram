@@ -1,0 +1,760 @@
+{
+ "blocks": {
+  "### T473 (found by 451 T463's build: nothing prunes the event-log directory's `alive/` records it writes, at most 64 KiB each (`CAP`, a GUESS knob), one for each test program run past 30 s, so the directory grows without bound, observed 2026-11-27, method: reading `rust/gate/crates/rustc/src/rustc/alive.rs`'s `write`)": {
+   "sha256": "646a8391da8d30e3e9ec361dd0ba3023dccab9d6e89bb37dd4c42bed5833f596",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T473 Approach (checklist part A)": {
+   "sha256": "ec5eac28aa118ab3ac6b770d5b710bc4fe9298faba536076ee739e5535c03567",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T474 (T465's index checked a parser change by a probe plan's digests and one canary commit only: a change to `blocks`, `task_sections` or the archive rule that digests only older versions otherwise would pass both and answer from stale digests, found by T465's build half, 2026-11-27, method: reading its `load` and `header`)": {
+   "sha256": "4fe7b26c90dbb91d8c694bcafa4173c0dc9e999e4dfa0c9f8e45ea7860e20072",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T474 Approach (checklist part A)": {
+   "sha256": "d014b6b974916b82045afae6a2531841456745d44934d10a5f6f1dd8d5009f87",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T475 Approach (checklist part A)": {
+   "sha256": "3cad61483e4cf04223536293e44dcbe5e11c7fcc639b24ba82ec77c24ea58004",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T475 (failed message-check BREVITY on 2026-11-27: the shared escape helper's no-reason refusal, one wording for every token at 519-555 characters, BASELINE in dev/guard-messages.tsv, judged on 451 T451's CLOSING_BARE_OK unit ebf269213127bfc4)": {
+   "sha256": "9c852a48824511e5b05863c6f93b80cfd4e5905dee4bc182a5a93090df136a51",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T477 (left by the round arbiter's ruling on red-gate@2026-11-27T09:39:16Z, an id no guard owed: its bundle's MANIFEST said \"(not in arbiter-owed.json)\", the ruling discharged nothing and the next landing was refused for red-gate@2026-11-27T09:39:13Z, 451 arbiter.jsonl rows 73 and 74)": {
+   "sha256": "7a9aea5e92a7d19482a7e6917a5004e8c8ccd07d52b52c85195efe1d102d351f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T477 Approach (checklist part A)": {
+   "sha256": "87892c49d72cf6190510efc87c243a1f644da2c4a2505a9bc4e117d3ae758721",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T478 (found by 451 T465's build half: plan.md's digest index keeps every answered text under the clone's `.git/plan-index/texts/` and nothing prunes it, 60 files, 728 KB after one 35-task `tick --land-check` and `plan push`, measured 2026-11-27, method: `du` over T457's scratch clone, and the clone diagram-backlog's own directory held 108 files, 1.3 MB, observed 2026-11-27, method: `ls | wc -l` and `du -sh`)": {
+   "sha256": "e5365af802c18048f010f0473428e48a5b5c5753f1fa781634ca1c47f1cb7b27",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T478 Approach (checklist part A)": {
+   "sha256": "e6bc9470b33c833d7a1be1c5f58675614dd2172b76472a965c776ab38001f822",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T479 (found by 451 T432, 2026-11-27, by reading: a landing's ticks exempted every feature's started task of the same id)": {
+   "sha256": "47fc1548ab214e4847d3cc2a65ff1b84397e503de5dc00f79afd091c70decd72",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T479 Approach (checklist part A)": {
+   "sha256": "3b9fa1a4b75b060fa77f0d637b86d628aac73be34fb71a33cd6ed871e8658c31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T480 Approach (checklist part A)": {
+   "sha256": "9d5ccb4bd546246f39291a3bcb5c8b77d63cda6c033a98ed5a3f2c6f502b0384",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T480 (found by 451 T468-D3: `make audit`'s sync-with-main line reads `escape rate unknown` for as long as the 656 `closing-owes` rows before the event logs' first Phase line, 2026-11-20T11:57:18Z, stay on ~/.claude/guard-log, measured 2026-11-27 over a copy of the live log, method: `GUARD_LOG_DIR=<copy> l7r-gate.sh measure audit guards`)": {
+   "sha256": "8f913c28dd1a2183de8d487406d2c5930f2ff5204c3fa95e27710a83d03995fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T481 (left by 451 T412: the pool-idle Stop block named a fix command `make builder-brief` refuses, unflagged)": {
+   "sha256": "c4d30c2fb1ba90a25988940013dc2f806629b060803aee63b1a2a75bf6fe02d5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T481 Approach (checklist part A)": {
+   "sha256": "1d295ef1b6493c1192d72da0def397b311076daed43ebded2731d373892fc8a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T482 (left by 451 T477's found-and-left: `make arbiter-ruled` recorded a ruling on red-gate@2026-11-27T09:39:16Z at 09:45:54Z while arbiter-owed.json held only red-gate@2026-11-27T09:39:13Z, so the ruling discharged nothing, 451 arbiter.jsonl row 73)": {
+   "sha256": "435ebc08333d4fde2a9835a4fadb907f0745fbaf85784a2b3e563947532b45c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T482 Approach (checklist part A)": {
+   "sha256": "589ab4d276054714c59e7d6d50987840e5e74a69e0a5a99f96f4e25882749949",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T483 (found by message-check a02ac623b053dacd2, 2026-11-27: the gate-write refusal, key 0f7f266f923e6e4f, 453 characters, FAIL on BREVITY - its feature trail and the aside \"its exit is the notification\" spare; every gate-write rendering stood BASELINE in `dev/guard-messages.tsv`, 9 keys, observed 2026-11-27, method: `grep gate-write dev/guard-messages.tsv`)": {
+   "sha256": "3d27d44cb0c73005d811eb036c852616bab70184b1896f3f7d04e1d341c237b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T483 Approach (checklist part A)": {
+   "sha256": "3ab10080ef0bc69b1d81854d437737c1f397de573b4942923b59e75392202a41",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T484 (<why: the finding or measurement that files it>)": {
+   "sha256": "767d7941bb772d250d2a944dca313753ac3546ebdcea494fe713f437980434b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T485 (451 T481's `make guard-messages` named two escalation-hooks refusals, keys a01405381091d548 and eee895a7b090e5af, as rendered at HEAD with no verdict)": {
+   "sha256": "e84368f319e2281aaa845cd0b98387348429663f57d9e861e5367b99048cf2a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T485 Approach (checklist part A)": {
+   "sha256": "7b88ba1400022db5e54e90c4df4a82ea44eb9ec3adfccf98425cf06b8dfb2250",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T486 (451 T485's keys were a pool tree's stale store of rendered guard messages, not a wording HEAD renders)": {
+   "sha256": "b0d600f88c5a163d6273f824533cc4758f6059d84804ee45b559b1150acac6da",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T486 Approach (checklist part A)": {
+   "sha256": "410588ae87f98ba4e0ffd69055480acac9b2d91c6d4428c44031d67e2df87464",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T487 (a removed stub's verdict and an archive split refused a 12-task landing's ticks twice while `make plan-delta` owed nothing)": {
+   "sha256": "b0d75f3b7bb9be6cd32d2b2f8201a8ccec61e283400b7283a42d175d9017562c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T487 Approach (checklist part A)": {
+   "sha256": "56bf302810cb3cb3e748920ccdc9040c1889a1ef60dce4e1173882578e7146ca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T488 (found by 451 T387: a check-wave dispatch never applies its reading marks - `rounds::pair_wave` sets a wave row running without `apply_marks`, which only `rounds::launched` calls; 362 of the clone's 3,054 dispatches carried unapplied marks, observed 2026-11-27, method: counting rows with `marks` by `wave` and `state` in the clone's state)": {
+   "sha256": "2ec2c6129b38382901816ea514257552744509f8ccd562648193cbcab852ce70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T488 Approach (checklist part A)": {
+   "sha256": "48a966b79f55494c48c71ead1f04c1873953fbf475dade6b248e90b893133cbd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T489 (found by 451 T387: a running plan hold past its knob `HOLD_MAX_S` (1800 s, a GUESS) is never purged - `planhold::purge` drops only pending holds - so a review whose return never came keeps `plan_holds` non-empty, every Bash call of the clone loading the 3.0 MB state, and its held text refused without `PLAN_EDIT_OK`)": {
+   "sha256": "becb59e29ce70c30b116cc6202914579e3e18a3079e4f348c4665c4930c219d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T489 Approach (checklist part A)": {
+   "sha256": "a573e802fdea540501ad62a0dd5a465873f4c1d5abae5a671a9f58e8be5e20a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T473": {
+   "section_sha256": "396d8bda3d869abb7cfb091dda05c7b73b1d6a04cb17ca4b54ae0f23b4e43829",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T473-D1",
+     "summary": "Bound alive/ by a count (the newest KEEP), not by age",
+     "class": "within",
+     "why": "The task line offers both forms; choosing one of the offered forms narrows nothing. A count bounds disk at KEEP x CAP whatever the rate, which serves the GM's 2026-11-22 ask that we clean up after ourselves on the file system, and keeping the newest slow-run records honors his 2026-11-26 principle that time saved outranks disk (the newest catches stay, so nothing a later diagnosis needs is thrown away by idleness)."
+    },
+    {
+     "id": "T473-(1)",
+     "summary": "KEEP = 50, a GUESS knob with its why beside it (about 3.2 MiB at CAP; slow runs rare per T455's measured window)",
+     "class": "within",
+     "why": "The newest-N form needs an N; it is labeled GUESS with its reasoning and measured source, as the project's knob rule asks. No part of the request is narrowed."
+    },
+    {
+     "id": "T473-(2)",
+     "summary": "Prune at each write: other files ordered oldest first by mtime then name, oldest removed until KEEP remain, removal failures ignored, the just-written record never dropped, a failed write prunes nothing",
+     "class": "within",
+     "why": "Mechanism of the prune where the record is written, as the task asks. Tie-breaking by name, tolerating a concurrent prune's removal and protecting the new record are correctness details of doing the asked thing, not exceptions to it."
+    },
+    {
+     "id": "T473-(3)",
+     "summary": "The lingering stand-in test waits for crate rust/a's own record rather than any file",
+     "class": "within",
+     "why": "A fixture adjustment so the existing test still tests what it did once the directory is seeded; enforcement of existing behavior, no scope change."
+    },
+    {
+     "id": "T473-(4)",
+     "summary": "Red-first test a_record_written_keeps_only_the_newest_records (60 seeded, 61 left on old code, 50 owed)",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the requested bound; it fails only when the prune is absent. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T473-perf",
+     "summary": "Filed as a [perf] task under 451 FR-013 (disk bound), not an engine-speed task",
+     "class": "within",
+     "why": "The GM 2026-11-25 (T245): disk audit 'is probably something we should add to our performance tuning and checks'. Classing disk-bounding work as performance work follows his words and narrows nothing; the plan also states disk ranks below time, consistent with his 2026-11-26 principle."
+    },
+    {
+     "id": "T473-order",
+     "summary": "Lands after T463 (which writes the records), with T478 in one builder's tree; found-and-left none",
+     "class": "within",
+     "why": "Ordering and bundling; no defect is deferred and nothing asked is set aside."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T475": {
+   "section_sha256": "368002f27cc268d93880c636379fd017c4c69043c745afcb5d696ed9b293912e",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T475-D1",
+     "summary": "The shared no-reason refusal shows one form, TOKEN=\"<why this case is legitimate>\", in place of the comment form; the reason reader still accepts both.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-23 ask for hook output with fewer tokens and no loss of fidelity: the assignment form fits every kind of input the helper's callers pass (command, prompt, summary, Stop message), matches the form other guards already print, and nothing the session could do before is refused now. The reason floor (feature 170) is unchanged."
+    },
+    {
+     "id": "T475-D2",
+     "summary": "The workaround rationale, the CI-is-down example, the TOKEN: ok sentence and the GM 2026-08-30 history are cut from the rendered text (history kept in a WHY comment); the header 'TOKEN with no reason given' is kept.",
+     "class": "within",
+     "why": "This is the brevity the GM asked for (2026-11-23, 'the same thing with no loss of fidelity and fewer tokens') and the BREVITY finding asked for. What the reader needs stays: the token, the two-word and eight-character bar, where it goes, that make audit shows it, and its form. message-check judged the 14 re-rendered wordings FIDELITY and BREVITY PASS. The history is kept in the source, not lost."
+    },
+    {
+     "id": "T475-order",
+     "summary": "Lands after T482 in this tree.",
+     "class": "within",
+     "why": "Ordering only. It narrows nothing that was asked."
+    },
+    {
+     "id": "T475-red-first",
+     "summary": "A red-first test pins the short refusal (at most 260 characters, names the bar and the form, carries no history), and the old test's assertion of 'GATE_OK: ok' is moved to the header.",
+     "class": "within",
+     "why": "A test whose only job is to make the requested brevity happen and keep happening is enforcement of the request, not added scope (GM 2026-09-20)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T478": {
+   "section_sha256": "1b24bd94255ebcee1eef6b7981db148264ecb904f399c0b90c0200cd9a60086d",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T478-D1",
+     "summary": "Bound .git/plan-index/texts/ by a byte cap evicted least recently used first (mtime touched on read), not a time window or FIFO.",
+     "class": "within",
+     "why": "The GM asked (2026-11-22) that we clean up after ourselves so stuff is not 'suddenly eaten without us realizing it', and (2026-11-26) that time saved outranks disk, so nothing is cleaned if it costs time later. A size cap bounds the store whatever the landing rate; LRU ordering keeps the texts asked again and again, so the only cost is a git re-fetch of a text nobody has asked for recently. That serves both of his statements and narrows neither."
+    },
+    {
+     "id": "T478-D2",
+     "summary": "Prune on every text write rather than once per process.",
+     "class": "within",
+     "why": "The brief says to prune when a text is written. The cost is measured (1.5 ms a write, about 0.09 s of a 12 s cold pass, 2026-11-27, with method), and a once-per-process prune would let one process push past the cap. This is an implementation choice inside what was asked."
+    },
+    {
+     "id": "T478-A1",
+     "summary": "TEXTS_CAP = 4 MiB over the whole texts/ directory, shared by every plan path, a GUESS knob with its why beside it.",
+     "class": "within",
+     "why": "The value is a labeled guess, about five passes' working set at T465's 728 KB a pass and about three times what the clone holds now. That leaves room so hot texts are not evicted, as the time-before-disk principle wants. It is a tunable value, not a narrowing."
+    },
+    {
+     "id": "T478-A2",
+     "summary": "The prune counts every file in the directory (temporary leftovers too), ignores removal failures, and never drops the text just written.",
+     "class": "within",
+     "why": "These are mechanics of the bound. Never dropping the text just written means a write never costs an immediate re-fetch. Ignoring a removal failure matches T465-D3/D4: a lost race costs a re-fetch, never a wrong answer."
+    },
+    {
+     "id": "T478-A3",
+     "summary": "A read hit, or a rewrite of an identical text, touches the mtime with File::set_modified (never atime, which relatime makes unreliable). A miss touches nothing.",
+     "class": "within",
+     "why": "This is the recency signal that D1's LRU ordering needs. It is a design detail inside the task."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T479": {
+   "section_sha256": "12efd2a0e4cfeb7d6073758e3219bcaae11622fd083e41ea8b83f25b31010b7f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T479 Approach",
+     "summary": "Fix the defect where a landing's ticks (L7R_LAND_TICKS) exempted a started task of the same id in EVERY feature, so another feature's half-done task could reach main; the exemption is scoped to the landed feature at the push and in the first pass.",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (constitution XIV), and the GM asked for the parallel-building tooling's defects to be fixed as part of this tasking before the port resumes ('we should make sure to fix all of this as part of our tasking...', 2026-11-26; the go-ahead of 2026-11-27). The fix restores feature 133's in-progress rule. It does not narrow anything that was asked."
+    },
+    {
+     "id": "T479-D1",
+     "summary": "New holding_for(d, ticks, landed): ticks apply only where landed names the asked directory. holding (push and CI merge) passes SPECIFY_FEATURE, which make land exports, and a push with ticks but no feature named exempts nothing (fails closed). The in-process callers inside l7r-gate land keep holding_with(d, ticks) meaning the directory's own ticks, because the session's SPECIFY_FEATURE may name another feature.",
+     "class": "within",
+     "why": "This is how the fix is built, following T432's scoping of L7R_LAND_READY. Failing closed is stricter than before and only refuses an unscoped push. It removes no exemption the request or spec grants. Keeping holding_with for the in-process callers rests on the plan's own reading of every caller (labeled O, no search command given). That is a premise for the builder's tests to bear out, not a narrowing."
+    },
+    {
+     "id": "T479-D2",
+     "summary": "speckit-todo --holding reads SPECIFY_FEATURE beside L7R_LAND_TICKS and asks holding_for; the in-process holding_reply keeps holding_with.",
+     "class": "within",
+     "why": "The same scoping, applied to the CLI that sync-with-main.sh asks for each touched feature. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T479-D3",
+     "summary": "others_in_progress asks another feature's directory with no ticks, as the push now does; its unused tasks parameter is dropped; push_parity's pin changes from [T1] to [].",
+     "class": "within",
+     "why": "It keeps the first pass refusing what the push refuses (451 T413). The changed pin pinned the defective behavior, so moving it is part of the fix and not a loosened check."
+    },
+    {
+     "id": "T479 checklist",
+     "summary": "Constraints (no guard message changes, 100% new-line coverage), exits (red is recorded, and any can't-be-done claim goes through make arbiter-ask), done = the named tests and builder-checks green, found-and-left none.",
+     "class": "within",
+     "why": "Standard procedure. Nothing is deferred and no requested behavior is left out."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T481": {
+   "section_sha256": "9037672e070f4a54c7f1320c468c94759ef6528a9053011973f06cca75cfc0fe",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T481-D1",
+     "summary": "The gate's fix-entry flag functions (flag, flagged) move whole into l7r_shared::builder_queue and the gate imports them, so the Stop block and make queue / make builder-next say one text from one copy, under T431's mechanism test.",
+     "class": "within",
+     "why": "Serves T313's request that the tooling keep the pool full (request.md 2026-11-26, 'something that we want our tooling to actually enforce') and T334's dispatch-through-the-tooling: a Stop block naming a command make builder-brief refuses, unflagged, is a wrong outcome (a tool answering wrongly), so fixing it is owed by the fix-as-we-go rule. One shared copy instead of a guard-side duplicate is a means, narrows nothing asked."
+    },
+    {
+     "id": "T481-D2",
+     "summary": "Idle gains a flag field: idle reads the clone's Makefile targets and keeps flagged(...) beside the command; held writes it under the command line; empty for any other kind or a line naming no mechanism, so other blocks are unchanged.",
+     "class": "within",
+     "why": "The mechanism that carries D1's flag into the pool-idle block; scoping it to exactly the case the flag exists for (a fix entry whose line names a new mechanism) leaves no requested behavior out - every other block was already correct. T313's 'Stop rule kept thin' is respected: no new rule, one conditional line."
+    },
+    {
+     "id": "T481-msg",
+     "summary": "The guard-message change taken through 451 T338's route; the brevity cut ('make -C: 451 T431)' to 'make -C)') applied in the one shared flag, so make queue's text shortens too and the gate's MISREAD pin with it; 'T3's line names' and T313's 'Hand it out before this turn ends' kept.",
+     "class": "within",
+     "why": "A wording change to an output that still does its job, reviewed PASS (round 2, 710 of 1800 characters) under the GM's hook-output-length concern (2026-11-23); a differing text is not a regression under the no-exactness standard, and keeping the task name in the line is needed for bundle entries. Nothing asked is dropped."
+    },
+    {
+     "id": "T481-order",
+     "summary": "Lands after T412 and T431 (landed), independent of T479; found-and-left none; not performance work.",
+     "class": "within",
+     "why": "Sequencing and classing only. The gap is the one known defect and it is fixed in this task, so nothing is carried into later work; a guard message's gap is not performance or measurement work under FR-013 or the 2026-11-20 measurement amendment."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T482": {
+   "section_sha256": "b9236e98513c5a290cddd9e0f478abbaa6f3bc250413ff3a76762fc4badd9d1e",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T482-D1",
+     "summary": "ruling_at asks T477's unowed_red_gate (the rule's one reader) after its already-ruled check and before validation or any row is written, refusing with the owed red-gate ids as make arbiter-bundle TRIGGER=<id> commands, or saying none is owed",
+     "class": "within",
+     "why": "It carries the task's own line (refuse it there too, naming the owed red-gate keys) and fixes the defect T477 found and left (arbiter.jsonl row 73: a ruling recorded on red-gate@...09:39:16Z that discharged nothing). Reusing the bundle's reader adds no behavior beyond the refusal asked for; it narrows nothing."
+    },
+    {
+     "id": "T482-D2",
+     "summary": "batch_at asks unowed_red_gate of every trigger the batch names before the first row, so a batch with one unowed red gate writes nothing",
+     "class": "within",
+     "why": "A batch is the other path a ruling is recorded by. Leaving it open would leave the same defect in one copy, so closing it is the fix, not added scope. Refusing the whole batch before any row matches the batch's existing refusals (451 T179). Nothing the request or task asked for is narrowed."
+    },
+    {
+     "id": "T482-test-change",
+     "summary": "the existing arbiter test's ruled batch of an unowed red-gate@2 now asserts the refusal, then owes red-gate@2 and asserts the batch records",
+     "class": "within",
+     "why": "The old fixture depended on the very behavior being fixed. The rewrite enforces the fix and keeps the batch's success path tested, so it is enforcement, not narrowed coverage."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T473 (found by 451 T463's build: nothing prunes the event-log directory's `alive/` records it writes, at most 64 KiB each (`CAP`, a GUESS knob), one for each test program run past 30 s, so the directory grows without bound, observed 2026-11-27, method: reading `rust/gate/crates/rustc/src/rustc/alive.rs`'s `write`)",
+    "### T473 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T473-D1",
+     "summary": "Bound alive/ by a count (the newest KEEP), not by age",
+     "class": "within",
+     "why": "The task line offers both forms; choosing one of the offered forms narrows nothing. A count bounds disk at KEEP x CAP whatever the rate, which serves the GM's 2026-11-22 ask that we clean up after ourselves on the file system, and keeping the newest slow-run records honors his 2026-11-26 principle that time saved outranks disk (the newest catches stay, so nothing a later diagnosis needs is thrown away by idleness)."
+    },
+    {
+     "id": "T473-(1)",
+     "summary": "KEEP = 50, a GUESS knob with its why beside it (about 3.2 MiB at CAP; slow runs rare per T455's measured window)",
+     "class": "within",
+     "why": "The newest-N form needs an N; it is labeled GUESS with its reasoning and measured source, as the project's knob rule asks. No part of the request is narrowed."
+    },
+    {
+     "id": "T473-(2)",
+     "summary": "Prune at each write: other files ordered oldest first by mtime then name, oldest removed until KEEP remain, removal failures ignored, the just-written record never dropped, a failed write prunes nothing",
+     "class": "within",
+     "why": "Mechanism of the prune where the record is written, as the task asks. Tie-breaking by name, tolerating a concurrent prune's removal and protecting the new record are correctness details of doing the asked thing, not exceptions to it."
+    },
+    {
+     "id": "T473-(3)",
+     "summary": "The lingering stand-in test waits for crate rust/a's own record rather than any file",
+     "class": "within",
+     "why": "A fixture adjustment so the existing test still tests what it did once the directory is seeded; enforcement of existing behavior, no scope change."
+    },
+    {
+     "id": "T473-(4)",
+     "summary": "Red-first test a_record_written_keeps_only_the_newest_records (60 seeded, 61 left on old code, 50 owed)",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the requested bound; it fails only when the prune is absent. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T473-perf",
+     "summary": "Filed as a [perf] task under 451 FR-013 (disk bound), not an engine-speed task",
+     "class": "within",
+     "why": "The GM 2026-11-25 (T245): disk audit 'is probably something we should add to our performance tuning and checks'. Classing disk-bounding work as performance work follows his words and narrows nothing; the plan also states disk ranks below time, consistent with his 2026-11-26 principle."
+    },
+    {
+     "id": "T473-order",
+     "summary": "Lands after T463 (which writes the records), with T478 in one builder's tree; found-and-left none",
+     "class": "within",
+     "why": "Ordering and bundling; no defect is deferred and nothing asked is set aside."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T475 (<why: the finding or measurement that files it>)",
+    "### T475 Approach (checklist part A)",
+    "### T480 (<why: the finding or measurement that files it>)",
+    "### T480 Approach (checklist part A)",
+    "(removed) ### T463 (<why: the finding or measurement that files it>)",
+    "(removed) ### T463 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T463-removal",
+     "summary": "The two T463 sections are removed from plan.md; their earlier text (earlier.md) was the unfilled template - every field a <placeholder> - with no approach, constraint, exit or deferral filled in.",
+     "class": "within",
+     "why": "Removing a section that held only template placeholders drops no decision, constraint or deferral, so nothing the request or spec asks for is narrowed; it is the plan housekeeping FR-044 describes (finished sections leave the plan), and the archive comments beside it are generated lines that owe no review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T475 (failed message-check BREVITY on 2026-11-27: the shared escape helper's no-reason refusal, one wording for every token at 519-555 characters, BASELINE in dev/guard-messages.tsv, judged on 451 T451's CLOSING_BARE_OK unit ebf269213127bfc4)",
+    "### T475 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T475-D1",
+     "summary": "The no-reason refusal shows one form, TOKEN=\"<why this case is legitimate>\", in place of the comment form '<your command>  # TOKEN: <why>'; both forms are still accepted, and the text says 'where the token is' because the helper's callers pass commands, prompts, summaries and Stop messages.",
+     "class": "within",
+     "why": "The GM's 2026-11-23 hook-output request asks for the same thing in fewer tokens with no loss of fidelity. Which form a message shows is a wording choice inside that request. No accepted form is removed, the reason floor is unchanged, and the one form shown works for every caller, so the reader loses nothing it needs."
+    },
+    {
+     "id": "T475-D2",
+     "summary": "The workaround rationale, the 'CI is down' example, the 'TOKEN: ok' sentence and the GM 2026-08-30 history are cut from the text, and the history moves to a WHY comment. The header 'TOKEN with no reason given' stays, because builder_stop_hooks/tests.rs pins it.",
+     "class": "within",
+     "why": "This is the brevity the 2026-11-23 request asks for. It answers the message-check BREVITY finding, and message-check found FIDELITY PASS on all 14 re-rendered wordings. What the reader acts on stays in the text: the token, the bar of two words and eight characters (which already rules out 'ok'), where the reason goes, that make audit shows it, and the form. The history is kept, in the source. No requirement is narrowed."
+    },
+    {
+     "id": "T475-test",
+     "summary": "A red-first test escape::tests::the_no_reason_refusal_names_the_token_the_bar_and_the_form_briefly pins the text: at most 260 characters, 'two words or more', the GATE_OK=\"<why form, and neither '# GATE_OK:' nor the history. The old assertion on 'GATE_OK: ok' now asserts the header.",
+     "class": "within",
+     "why": "Enforcement of the requested brevity and fidelity, and of 451 T170's per-message budget and verdict. With the cut removed from the spec, the test would have nothing left to check. It serves the request."
+    },
+    {
+     "id": "T475-rerender",
+     "summary": "The eleven guard suites whose recorded wordings held the old text are re-run with the tree's message store, then make guard-messages records 14 new wordings (176-200 characters against the 1,800 budget), with message-check's PASS on each.",
+     "class": "within",
+     "why": "This keeps the message store and its reviewed verdicts true to the new text, as T170 and the 2026-11-23 subagent brevity and fidelity check require. It adds no behavior. The set of suites comes from the recorded store's rows, and the 30 call sites carry their grep, so the census states its search space."
+    },
+    {
+     "id": "T475-order",
+     "summary": "The task lands after T482 in this tree, as T477's found-and-left line orders it.",
+     "class": "within",
+     "why": "Sequencing only. It changes nothing about what is built."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T475 (failed message-check BREVITY on 2026-11-27: the shared escape helper's no-reason refusal, one wording for every token at 519-555 characters, BASELINE in dev/guard-messages.tsv, judged on 451 T451's CLOSING_BARE_OK unit ebf269213127bfc4)",
+    "### T475 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T475-D1",
+     "summary": "The shared no-reason refusal shows one form, TOKEN=\"<why this case is legitimate>\", in place of the comment form; the reason reader still accepts both.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-23 ask for hook output with fewer tokens and no loss of fidelity: the assignment form fits every kind of input the helper's callers pass (command, prompt, summary, Stop message), matches the form other guards already print, and nothing the session could do before is refused now. The reason floor (feature 170) is unchanged."
+    },
+    {
+     "id": "T475-D2",
+     "summary": "The workaround rationale, the CI-is-down example, the TOKEN: ok sentence and the GM 2026-08-30 history are cut from the rendered text (history kept in a WHY comment); the header 'TOKEN with no reason given' is kept.",
+     "class": "within",
+     "why": "This is the brevity the GM asked for (2026-11-23, 'the same thing with no loss of fidelity and fewer tokens') and the BREVITY finding asked for. What the reader needs stays: the token, the two-word and eight-character bar, where it goes, that make audit shows it, and its form. message-check judged the 14 re-rendered wordings FIDELITY and BREVITY PASS. The history is kept in the source, not lost."
+    },
+    {
+     "id": "T475-order",
+     "summary": "Lands after T482 in this tree.",
+     "class": "within",
+     "why": "Ordering only. It narrows nothing that was asked."
+    },
+    {
+     "id": "T475-red-first",
+     "summary": "A red-first test pins the short refusal (at most 260 characters, names the bar and the form, carries no history), and the old test's assertion of 'GATE_OK: ok' is moved to the header.",
+     "class": "within",
+     "why": "A test whose only job is to make the requested brevity happen and keep happening is enforcement of the request, not added scope (GM 2026-09-20)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T478 (found by 451 T465's build half: plan.md's digest index keeps every answered text under the clone's `.git/plan-index/texts/` and nothing prunes it, 60 files, 728 KB after one 35-task `tick --land-check` and `plan push`, measured 2026-11-27, method: `du` over T457's scratch clone, and the clone diagram-backlog's own directory held 108 files, 1.3 MB, observed 2026-11-27, method: `ls | wc -l` and `du -sh`)",
+    "### T478 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T478-D1",
+     "summary": "Bound .git/plan-index/texts/ by a byte cap evicted least recently used first (mtime touched on read), not a time window or FIFO.",
+     "class": "within",
+     "why": "The GM asked (2026-11-22) that we clean up after ourselves so stuff is not 'suddenly eaten without us realizing it', and (2026-11-26) that time saved outranks disk, so nothing is cleaned if it costs time later. A size cap bounds the store whatever the landing rate; LRU ordering keeps the texts asked again and again, so the only cost is a git re-fetch of a text nobody has asked for recently. That serves both of his statements and narrows neither."
+    },
+    {
+     "id": "T478-D2",
+     "summary": "Prune on every text write rather than once per process.",
+     "class": "within",
+     "why": "The brief says to prune when a text is written. The cost is measured (1.5 ms a write, about 0.09 s of a 12 s cold pass, 2026-11-27, with method), and a once-per-process prune would let one process push past the cap. This is an implementation choice inside what was asked."
+    },
+    {
+     "id": "T478-A1",
+     "summary": "TEXTS_CAP = 4 MiB over the whole texts/ directory, shared by every plan path, a GUESS knob with its why beside it.",
+     "class": "within",
+     "why": "The value is a labeled guess, about five passes' working set at T465's 728 KB a pass and about three times what the clone holds now. That leaves room so hot texts are not evicted, as the time-before-disk principle wants. It is a tunable value, not a narrowing."
+    },
+    {
+     "id": "T478-A2",
+     "summary": "The prune counts every file in the directory (temporary leftovers too), ignores removal failures, and never drops the text just written.",
+     "class": "within",
+     "why": "These are mechanics of the bound. Never dropping the text just written means a write never costs an immediate re-fetch. Ignoring a removal failure matches T465-D3/D4: a lost race costs a re-fetch, never a wrong answer."
+    },
+    {
+     "id": "T478-A3",
+     "summary": "A read hit, or a rewrite of an identical text, touches the mtime with File::set_modified (never atime, which relatime makes unreliable). A miss touches nothing.",
+     "class": "within",
+     "why": "This is the recency signal that D1's LRU ordering needs. It is a design detail inside the task."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T479 (found by 451 T432, 2026-11-27, by reading: a landing's ticks exempted every feature's started task of the same id)",
+    "### T479 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T479 Approach",
+     "summary": "Fix the defect where a landing's ticks (L7R_LAND_TICKS) exempted a started task of the same id in EVERY feature, so another feature's half-done task could reach main; the exemption is scoped to the landed feature at the push and in the first pass.",
+     "class": "within",
+     "why": "A check that passes bad work is a defect (constitution XIV), and the GM asked for the parallel-building tooling's defects to be fixed as part of this tasking before the port resumes ('we should make sure to fix all of this as part of our tasking...', 2026-11-26; the go-ahead of 2026-11-27). The fix restores feature 133's in-progress rule. It does not narrow anything that was asked."
+    },
+    {
+     "id": "T479-D1",
+     "summary": "New holding_for(d, ticks, landed): ticks apply only where landed names the asked directory. holding (push and CI merge) passes SPECIFY_FEATURE, which make land exports, and a push with ticks but no feature named exempts nothing (fails closed). The in-process callers inside l7r-gate land keep holding_with(d, ticks) meaning the directory's own ticks, because the session's SPECIFY_FEATURE may name another feature.",
+     "class": "within",
+     "why": "This is how the fix is built, following T432's scoping of L7R_LAND_READY. Failing closed is stricter than before and only refuses an unscoped push. It removes no exemption the request or spec grants. Keeping holding_with for the in-process callers rests on the plan's own reading of every caller (labeled O, no search command given). That is a premise for the builder's tests to bear out, not a narrowing."
+    },
+    {
+     "id": "T479-D2",
+     "summary": "speckit-todo --holding reads SPECIFY_FEATURE beside L7R_LAND_TICKS and asks holding_for; the in-process holding_reply keeps holding_with.",
+     "class": "within",
+     "why": "The same scoping, applied to the CLI that sync-with-main.sh asks for each touched feature. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T479-D3",
+     "summary": "others_in_progress asks another feature's directory with no ticks, as the push now does; its unused tasks parameter is dropped; push_parity's pin changes from [T1] to [].",
+     "class": "within",
+     "why": "It keeps the first pass refusing what the push refuses (451 T413). The changed pin pinned the defective behavior, so moving it is part of the fix and not a loosened check."
+    },
+    {
+     "id": "T479 checklist",
+     "summary": "Constraints (no guard message changes, 100% new-line coverage), exits (red is recorded, and any can't-be-done claim goes through make arbiter-ask), done = the named tests and builder-checks green, found-and-left none.",
+     "class": "within",
+     "why": "Standard procedure. Nothing is deferred and no requested behavior is left out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T480 (found by 451 T468-D3: `make audit`'s sync-with-main line reads `escape rate unknown` for as long as the 656 `closing-owes` rows before the event logs' first Phase line, 2026-11-20T11:57:18Z, stay on ~/.claude/guard-log, measured 2026-11-27 over a copy of the live log, method: `GUARD_LOG_DIR=<copy> l7r-gate.sh measure audit guards`)",
+    "### T480 Approach (checklist part A)",
+    "### T483 (found by message-check a02ac623b053dacd2, 2026-11-27: the gate-write refusal, key 0f7f266f923e6e4f, 453 characters, FAIL on BREVITY - its feature trail and the aside \"its exit is the notification\" spare; every gate-write rendering stood BASELINE in `dev/guard-messages.tsv`, 9 keys, observed 2026-11-27, method: `grep gate-write dev/guard-messages.tsv`)",
+    "### T483 Approach (checklist part A)",
+    "(removed) ### T480 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T480-D1",
+     "summary": "Beside `escape rate unknown`, give the rate over the rows since the event logs began (the told rows), never a guess at the 656 untold rows.",
+     "class": "within",
+     "why": "The task line and brief ask for a rate over the told rows once past a GUESS count; T468 ruled the untold rows cannot be told, so no split of them is the rule, not an exception. The line names its shorter window."
+    },
+    {
+     "id": "T480 (1) told test",
+     "summary": "A kept sync-with-main row is told when utc >= the first Phase line, the exact complement of the untold test; no event log means none told.",
+     "class": "within",
+     "why": "A mechanism for the asked rate; the complement leaves no row in both or neither class, and the no-log case still prints the short form rather than hiding the line."
+    },
+    {
+     "id": "T480 (2) line form",
+     "summary": "Past TOLD_ENOUGH: `since the event logs began <rate> (<n> told)`; below it: `<n> told, <k> short of a rate`.",
+     "class": "within",
+     "why": "Exactly the brief's two branches: a rate once past the count, else how many more."
+    },
+    {
+     "id": "T480 (3) TOLD_ENOUGH = 20, no dev/audits entry",
+     "summary": "A GUESS knob of 20 with its why beside it; not entered in the audit register.",
+     "class": "within",
+     "why": "The brief asks for a GUESS count. The register (T259) is for optimizations, processes and procedures; a display threshold on a report line is none of those, so leaving it out narrows nothing. (The block's stated reason - the detector's word list - is the weaker ground; the substance holds regardless.)"
+    },
+    {
+     "id": "T483 cuts",
+     "summary": "Drop the aside 'its exit is the notification' and the feature trail 'feature 385, plan D13' from the gate-write refusal.",
+     "class": "within",
+     "why": "The GM's hook-output request: same thing, no loss of fidelity, fewer tokens. message-check named both as spare; the instructions (wait with make verify-wait in the background, then the change; the escape) stay."
+    },
+    {
+     "id": "T483 escape bar wording",
+     "summary": "The escape line states 'two words or more' and leaves the eight-character minimum to the bare-token refusal's own text.",
+     "class": "within",
+     "why": "FR-012's own wording of the bar is 'a reason of two words or more'; the full bar is still told to anyone whose reason falls short, so no instruction is lost."
+    },
+    {
+     "id": "T483 old BASELINE rows kept",
+     "summary": "The 9 old gate-write BASELINE rows stay in dev/guard-messages.tsv as recorded wordings no suite renders.",
+     "class": "within",
+     "why": "The tool's existing behavior for superseded wordings; every new rendering was reviewed and passed, which is what the request asks."
+    },
+    {
+     "id": "removed T480 placeholder",
+     "summary": "The template-only T480 section removed, replaced by the filled section.",
+     "class": "within",
+     "why": "A placeholder with no content replaced by the section it stood for; nothing asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T481 (left by 451 T412: the pool-idle Stop block named a fix command `make builder-brief` refuses, unflagged)",
+    "### T481 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T481-D1",
+     "summary": "The gate's fix-entry flag functions (flag, flagged) move whole into l7r_shared::builder_queue and the gate imports them, so the Stop block and make queue / make builder-next say one text from one copy, under T431's mechanism test.",
+     "class": "within",
+     "why": "Serves T313's request that the tooling keep the pool full (request.md 2026-11-26, 'something that we want our tooling to actually enforce') and T334's dispatch-through-the-tooling: a Stop block naming a command make builder-brief refuses, unflagged, is a wrong outcome (a tool answering wrongly), so fixing it is owed by the fix-as-we-go rule. One shared copy instead of a guard-side duplicate is a means, narrows nothing asked."
+    },
+    {
+     "id": "T481-D2",
+     "summary": "Idle gains a flag field: idle reads the clone's Makefile targets and keeps flagged(...) beside the command; held writes it under the command line; empty for any other kind or a line naming no mechanism, so other blocks are unchanged.",
+     "class": "within",
+     "why": "The mechanism that carries D1's flag into the pool-idle block; scoping it to exactly the case the flag exists for (a fix entry whose line names a new mechanism) leaves no requested behavior out - every other block was already correct. T313's 'Stop rule kept thin' is respected: no new rule, one conditional line."
+    },
+    {
+     "id": "T481-msg",
+     "summary": "The guard-message change taken through 451 T338's route; the brevity cut ('make -C: 451 T431)' to 'make -C)') applied in the one shared flag, so make queue's text shortens too and the gate's MISREAD pin with it; 'T3's line names' and T313's 'Hand it out before this turn ends' kept.",
+     "class": "within",
+     "why": "A wording change to an output that still does its job, reviewed PASS (round 2, 710 of 1800 characters) under the GM's hook-output-length concern (2026-11-23); a differing text is not a regression under the no-exactness standard, and keeping the task name in the line is needed for bundle entries. Nothing asked is dropped."
+    },
+    {
+     "id": "T481-order",
+     "summary": "Lands after T412 and T431 (landed), independent of T479; found-and-left none; not performance work.",
+     "class": "within",
+     "why": "Sequencing and classing only. The gap is the one known defect and it is fixed in this task, so nothing is carried into later work; a guard message's gap is not performance or measurement work under FR-013 or the 2026-11-20 measurement amendment."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T482 (left by 451 T477's found-and-left: `make arbiter-ruled` recorded a ruling on red-gate@2026-11-27T09:39:16Z at 09:45:54Z while arbiter-owed.json held only red-gate@2026-11-27T09:39:13Z, so the ruling discharged nothing, 451 arbiter.jsonl row 73)",
+    "### T482 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T482-D1",
+     "summary": "ruling_at asks T477's unowed_red_gate (the rule's one reader) after its already-ruled check and before validation or any row is written, refusing with the owed red-gate ids as make arbiter-bundle TRIGGER=<id> commands, or saying none is owed",
+     "class": "within",
+     "why": "It carries the task's own line (refuse it there too, naming the owed red-gate keys) and fixes the defect T477 found and left (arbiter.jsonl row 73: a ruling recorded on red-gate@...09:39:16Z that discharged nothing). Reusing the bundle's reader adds no behavior beyond the refusal asked for; it narrows nothing."
+    },
+    {
+     "id": "T482-D2",
+     "summary": "batch_at asks unowed_red_gate of every trigger the batch names before the first row, so a batch with one unowed red gate writes nothing",
+     "class": "within",
+     "why": "A batch is the other path a ruling is recorded by. Leaving it open would leave the same defect in one copy, so closing it is the fix, not added scope. Refusing the whole batch before any row matches the batch's existing refusals (451 T179). Nothing the request or task asked for is narrowed."
+    },
+    {
+     "id": "T482-test-change",
+     "summary": "the existing arbiter test's ruled batch of an unowed red-gate@2 now asserts the refusal, then owes red-gate@2 and asserts the batch records",
+     "class": "within",
+     "why": "The old fixture depended on the very behavior being fixed. The rewrite enforces the fix and keeps the batch's success path tested, so it is enforcement, not narrowed coverage."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T473 to T489, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

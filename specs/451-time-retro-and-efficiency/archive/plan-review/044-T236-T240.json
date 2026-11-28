@@ -1,0 +1,707 @@
+{
+ "blocks": {
+  "### T236 (the GM 2026-11-25, request.md \"a research backlog\": of eight hamlet searches in two days two changed what is drawn; \"yes please\" to UNRESEARCHED as a fifth label and a backlog in place of a search before every guess)": {
+   "sha256": "3dec818274c657ea2db89948d7f37f2cffebeeb9bb354a972307871576681566",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T236 Approach (checklist part A)": {
+   "sha256": "f676c21a77ad09c32a8b84a69a9e00640098ae6879f2c8bda4d430ffac6e2355",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T237 (the GM 2026-11-25, request.md: \"sounds good please do that ASAP\": five 449 code builders and the 451 T218-T222 builder hit the 300k context cap and handed off, the claims round the part that ran them out; the brief template half landed as `scripts/container/builder-brief.md`)": {
+   "sha256": "1d08063f9e29c48bf0eb2874508ab96e4ced2db245b1010198cf206707236d98",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T237 Approach (checklist part A)": {
+   "sha256": "b05977f7d8353b146438b5e1c6834839fa53d40478d8efecc9b5ef08ae953414",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T237 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "fe7fd32b829bb6d3d58bf7352f1e1fc19f85ad96139f045bcfe5d05d6e5ec1d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T238 (page session P12, 2026-11-25: its correction to 0006's drawing page from a search pass, b75ade5b7e, read as a SIZE EDIT at 21,792 bytes against the 20,000 cap while `make question-sizes` listed no page over 20,000 bytes of prose, measured 2026-11-25 (the refusal and the report as the landing printed them); the landing needed SIZE_EDIT_OK)": {
+   "sha256": "b939eacbae3709e39067953d86827b32ddee6882938005f49212ad7c4e4b6d95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T238 Approach (checklist part A)": {
+   "sha256": "204266b1ff5ff9bc01c91345248e573efe1ef1bd15fd311acc90e298cc2fc273",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T239 (T230's duplicate: the same empty BLOCKED list, filed again from 449 T433's builder, 2026-11-25)": {
+   "sha256": "f43d5e567efb13e6c0abe037354959886f820765d1f5369b536e8686cd1c86ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T239 Approach (checklist part A)": {
+   "sha256": "4372f1d141cb249dcc1b87180e24eef002adcd9aedb09d44ab105e058a8f6ca2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T240 (449 T432's builder, 2026-11-25: spec-fidelity MODE 4 was dispatched a third time on T432's section after two BLOCKED rounds and no guard refused it; the arbiter, asked after, ruled no fault, ask:449-T432-plan-round3)": {
+   "sha256": "c4b813b1b2ed1c5bdab73b887f0ff1a0d18d7b95a8bfc278bd1796a032a43187",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T240 Approach (checklist part A)": {
+   "sha256": "7b7167f0ed4e5891acfe0a28dd767767c527337f0a9a1972af1c482514b4caa9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T236": {
+   "section_sha256": "723b3cb905bf3fdd2e59386c0af43f52f2efcb9055498851f260756b7628d686",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 fifth label in the tooling",
+     "summary": "UNRESEARCHED becomes a fifth label: the page item tag's LABELS, the claims grammar (UNRESEARCHED [<file>#<id>] parses and is held to its tag), the registry's Guesses tab, Mode A's CLASSES",
+     "class": "within",
+     "why": "The GM accepted 'UNRESEARCHED a fifth label on the research pages as well as in the claims' ('yes please', 2026-11-25). The registry and Mode A changes are what make that label usable: without them an UNRESEARCHED item would be dropped from the pop-up reader or refused as a class."
+    },
+    {
+     "id": "D2 the rules restated",
+     "summary": "The root CLAUDE.md, research/CLAUDE.md, docs/research-doctrine.md, docs/research-record-rules.md, the page-session rules, the plan template's XII entry, the constitution 2.39.0 (XII narrowed), research-pass.md and escalation-check.md: a new guess is recorded UNRESEARCHED with no search; a search still comes first where a decision is foundational or a guess is likely visibly wrong; UNRESEARCHED is a question for the backlog, never for the GM",
+     "class": "within",
+     "why": "This is the rule change the GM accepted, exception included. 'XII narrowed' narrows the search-first rule, which is the change he asked for, not a narrowing of his request. The copies were found by a grep of the tree for the old wording, so the search space is stated."
+    },
+    {
+     "id": "D3 the check agents",
+     "summary": "quote-check: an UNRESEARCHED sentence owes no footnote. impl-drift: five classes; UNRESEARCHED is never a finding for lacking a source, and is MISLABELED where its account states as found what no page gives. record-format: UNRESEARCHED is no session note. modal-research: an UNRESEARCHED bullet is not a finding for want of a search",
+     "class": "within",
+     "why": "These carry the GM's rule into the checks: a session may record an unsearched guess and move on. The MISLABELED case enforces his own distinction ('unresearched would mean that we know we have not yet checked'), so it is enforcement, not new scope."
+    },
+    {
+     "id": "D4 GUESS-UNNOTED and the 148 blocks",
+     "summary": "quote-check's old step 5 exempted every labeled GUESS. It now flags a GUESS with no absence note as GUESS-UNNOTED. The 148 GUESS blocks without a footnote (a proxy scan, 2026-11-25) are fixed as their pages are rechecked, by an absence note or by relabeling them UNRESEARCHED, with no sweep",
+     "class": "within",
+     "why": "One reading covers both halves. GUESS-UNNOTED only flags; it does not block or rewrite work. It enforces the GM's line between unsupported ('we did research and couldn't find anything') and unresearched, and that line means nothing if a GUESS need not record that a search ran. The 148 blocks are not defects under constitution XIV v2.36.0: a missing absence note changes no map, contradicts no research finding, and is a record gap no reader of the map sees. Leaving them to page rechecks with no sweep therefore carries no defect forward. It also fits the GM's purpose (move forward faster) and the 2026-11-23 rule against cascades that fix no real flaw."
+    },
+    {
+     "id": "D5 dev/modals.md M8",
+     "summary": "A standard question the record does not answer no longer owes a research pass before the modal is written. Its guess bullet is labeled UNRESEARCHED until the backlog reaches it, or GUESS where a search found nothing. A search still comes first where the answer is foundational or the guess is likely visibly wrong. Carried by agent-sync to modal-research, modal-form and modal-depiction",
+     "class": "within",
+     "why": "This applies 'a new guess recorded as UNRESEARCHED with no search' to pop-ups, with the exception the GM accepted, worded as he accepted it."
+    },
+    {
+     "id": "D6 make research-backlog as the backlog's reader",
+     "summary": "A new target lists every UNRESEARCHED claim (the same filter as make claims-report's list) and every UNRESEARCHED page item, grouped by code file, with an item no claim names listed under its page. make claims-report's UNRESEARCHED count is kept",
+     "class": "within",
+     "why": "The offer named claims-report's UNRESEARCHED list as the backlog. This target adds grouping and a stage filter on top of that list and keeps claims-report's count, so nothing the GM accepted is removed. It serves 'searched at each port stage's end for the items that stage touched', and it adds page items because the label also lives on the pages."
+    },
+    {
+     "id": "D7 what STAGE= reaches",
+     "summary": "STAGE= selects the stage's own module (<stage>.rs and <stage>/) in the crates that define stage_<name>, plus every file of those crates that no stage's module holds, listed under a heading marking it shared. It does not use the work budget's stage_files, and it matches names in the stages' crate only, so Mode A's labels/ is excluded. A path glob is the alternative, and anything else is refused",
+     "class": "within",
+     "why": "This is the mechanism for 'the items that stage touched', and it reaches wider than stage_files: shared driver code is included, and seat/fords.rs, which stage_files misses, is caught. Excluding rust/mode_a only stops a name collision ('labels' matched eight Mode A files). No UNRESEARCHED item disappears: the unfiltered list shows every claim and item, and a glob reaches any path. Both choices rest on figures measured 2026-11-25."
+    },
+    {
+     "id": "D8 where the stage-end search lives",
+     "summary": "The block's goal: 'the not-yet-searched decisions are one list, by code file and stage, for each port stage's end'. The rules restated (D2) carry the new rule, but the block does not name which line sets the stage-end search",
+     "class": "within",
+     "why": "The block does not drop the stage-end search, and it builds the per-stage listing the search needs. Which restated rule line holds the duty is not named in the bundle, and the rule files are outside it. This is not a narrowing, but the restated root CLAUDE.md search bullet should say that the backlog is searched at each port stage's end for the items that stage touched."
+    },
+    {
+     "id": "D9 order",
+     "summary": "After T237 (a builder's claims round split off) and before page sessions P13 and P14, 'which the GM's rule drops from the pre-port list'",
+     "class": "within",
+     "why": "This is ordering only: nothing is removed from P13 or P14 here. The GM accepted 'most of page sessions P13 and P14 dropped from the pre-port list, P12 kept', so 'drops' overstates it a little. Whatever part of P13/P14 survives is decided where those sessions are scheduled, not by this block."
+    },
+    {
+     "id": "D10 no map changes; exits, proofs and done",
+     "summary": "No figure or map moves. Red-first tests for each step. Both-ways stand-in proofs of the changed check agents and of M8. closing-checks green",
+     "class": "within",
+     "why": "The GM's own premise is that punting research would not change maps in practice. The tests and proofs only verify that the rule he asked for holds."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T237": {
+   "section_sha256": "d75b70cdda2fa72ac5eb855d2fffb4a1840d22feed8707809406c119b490b47d",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T237-placement",
+     "summary": "The split's enforcement lives in the context-cap guard as a new submodule context_cap_hooks/split.rs, reusing D8's builder test and D9's transcript read.",
+     "class": "within",
+     "why": "Where the enforcement lives is design; the request (2026-11-25, 'sounds good please do that ASAP') asks for the claims round split off code builders, and the feature's 2026-11-19 approval asks that enforcement be real. Placing it in the guard that already reads builders' transcripts narrows nothing."
+    },
+    {
+     "id": "T237-code-builders-only",
+     "summary": "The rule applies to code builders, not every builder: record and pop-up bundles, page-session cascades and claims-round dispatches keep their own claims work.",
+     "class": "within",
+     "why": "The request is about code builders ('most code builders ... hit the 300k context cap', the cause 'one builder doing the fix, ... and the claims round'). A cascade's or bundle's claims round is that builder's own correct work and was never asked to be split off; the block's measurement (the P15 cascade on the split's first day) shows an every-builder rule would refuse it."
+    },
+    {
+     "id": "T237-marker-opt-in",
+     "summary": "A code builder is recognized only by a line opening STOP POINT in its brief (the brief template sets it); an unmarked builder passes, so the guard is silent where the coordinating session omits the template.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows enforcement: an unmarked code builder (the session dispatching without scripts/container/builder-brief.md) is unguarded, and the split there rests on the session remembering the template - the gap is real and is named in the block ('silent where the brief is omitted'). It is legitimate on purpose, not on consistency: the block's own evidence shows that no transcript-only test separates a code builder from other builders without refusing correct work - an every-builder rule refused the P15 cascade on the split's first day, and even the claims round's own dispatches are not worded uniformly (3 of the 85 opened 'Claims round: arch claim re-check' and 'Finish 449 T430's claims round', which an opener-keyed rule would refuse). A default-on test from prompt wording would therefore refuse correct work, which the project's guard rule ranks worse than none, so the only false-positive-free mark of a code builder is one its brief sets. The purpose - keep the claims round out of a code builder's context - is enforced on every builder dispatched as a code builder through the template, which is the coordinating session's standing order and the same brief that tells a builder where to stop at all; the 06:21Z-on measurement (12 briefed builders, 0 claims dispatches) is consistent with this but is not the ground."
+    },
+    {
+     "id": "T237-claims-round-exclusion",
+     "summary": "A builder whose prompt itself opens 'Run the claims round' is not a code builder even if it quotes a STOP POINT line.",
+     "class": "within",
+     "why": "The claims round's own dispatch is the half the request moves to the coordinating session; refusing it would refuse the requested split's own work. A claims round worded otherwise that quotes the brief would be refused and has SPLIT_OK, which is an escape, not a narrowing."
+    },
+    {
+     "id": "T237-fail-open-read",
+     "summary": "Any transcript read that fails passes; the main session and defined agents are never read.",
+     "class": "within",
+     "why": "The accepted D8/D9 design of this same guard: it passes what it cannot tell and never reads the main session or a defined agent. No narrowing of the request beyond the accepted spec."
+    },
+    {
+     "id": "T237-what-is-refused",
+     "summary": "A code builder's Agent call of claims-triage or impl-drift, or a Workflow naming either as an agentType (args, a unit's then step, a script literal), is refused, naming the agent, the brief's STOP POINT (make claims-triage and stop) and what to report.",
+     "class": "within",
+     "why": "This is the requested split, enforced; covering the Workflow form closes a hole (check-wave units replay without agent_id) rather than adding behavior beyond the request. The message names the compliant action per FR-012."
+    },
+    {
+     "id": "T237-escape",
+     "summary": "Escape SPLIT_OK=\"<reason>\" in the prompt, recorded split-ok; firings recorded builder-split.",
+     "class": "within",
+     "why": "The project's guard rule restated in FR-012 (a reason escape, recorded); 'by default' in the request admits a deliberate exception path."
+    },
+    {
+     "id": "T237-handoff-line",
+     "summary": "The cap's handoff refusal, for a code builder only, adds one line: hand off at the STOP POINT and do not run the claims round; a claims-round dispatch past its cap is not told that.",
+     "class": "within",
+     "why": "The task's own enforcement line ('the context-cap guard's handoff names the split'); scoping it to code builders follows the request's subject."
+    },
+    {
+     "id": "T237-brief-names-marker",
+     "summary": "The brief template states that the guard keys on its STOP POINT line.",
+     "class": "within",
+     "why": "Documents the mark the guard reads; no behavior beyond the request."
+    },
+    {
+     "id": "T237-found-and-left-replay",
+     "summary": "workflow_hooks' replay of check-wave units without agent_id is left as it is; this rule reads the Workflow call itself instead.",
+     "class": "within",
+     "why": "Not a defect left: the wrong outcome for this rule (a builder's wave of claims checks passing) is fixed here, and the block states no other builder-keyed Agent rule exists today (its premise, not measured by this review; nothing in D8, D9 or FR-006 contradicts it - the cap refuses the builder's own Workflow call directly). Leaving a difference that causes no wrong outcome stays within (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T237-not-performance-work",
+     "summary": "Declared not performance work; the performance checklist is left as its template.",
+     "class": "within",
+     "why": "A guard that refuses a dispatch; the checklist is prompts, never a gate. No narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T238": {
+   "section_sha256": "0fe8d889580d3044acc4074ea33f86dcbcd7face343c09da4bc66004948261a5",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T238-measure",
+     "summary": "The size-edit rule (T184) reads the same measure as the cap and make question-sizes: one prose(text) function (money marks unwrapped, item tags stripped), called by size() and by size_edit_refusal on base and new text.",
+     "class": "within",
+     "why": "Fixes a defect (a wrong outcome: a search pass's claim correction was refused as a size trim and needed an escape) in T184, which implements the GM's 2026-11-23 'no edit to maintain entry size should ever be substantive'. An edit is 'to maintain entry size' only against the cap, and the cap is on prose; a correction under the cap by prose before, after and with its removed words restored is not maintaining size. Measuring the rule by the cap's own measure serves the purpose rather than narrowing it."
+    },
+    {
+     "id": "T238-rule-kept",
+     "summary": "is_size_edit keeps T184's rule unchanged (over before, or the removed words putting it back over: the add-then-trim clause), now on the prose measure.",
+     "class": "within",
+     "why": "Preserves the requested protection in full; only the unit it compares changes."
+    },
+    {
+     "id": "T238-wording",
+     "summary": "The refusal says 'bytes of prose'; make question-sizes's help line, which said 'question + notes', now says it counts the question's prose.",
+     "class": "within",
+     "why": "Makes the message and help state what is actually measured; no behavior beyond the fix."
+    },
+    {
+     "id": "T238-test",
+     "summary": "Red-first test carrying P12's real block on a page whose item tags put the raw file over 20,000 bytes while its prose stays under; red on HEAD, green on the fix.",
+     "class": "within",
+     "why": "Enforcement of the fix the task makes; serves the request."
+    },
+    {
+     "id": "T238-cap",
+     "summary": "The 20,000-byte cap is unchanged.",
+     "class": "within",
+     "why": "No change to the limit the GM's size rules address."
+    },
+    {
+     "id": "T238-order",
+     "summary": "Lands alone; T237 (performance work) is ordered after T240 by the coordinating session under a PERF_LATER_OK escape recorded at task-start.",
+     "class": "within",
+     "why": "FR-013/SC-006 provide a recorded escape for starting non-performance work while a performance task is open; this block records the escape the spec's own mechanism allows and does not alter the performance-first rule."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T239": {
+   "section_sha256": "f691abeb73483bc85d2b8b436b42f9d9e9d6f03a703a694e582d959efdb088d0",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T239-duplicate-of-T230",
+     "summary": "T239 carries T230's fix and tests and nothing of its own, ticking in T230's landing (make land F=451 T=T230,T239).",
+     "class": "within",
+     "why": "The same closing-checks fault filed twice; deferring wholly to T230's within-scope fix decides nothing new and leaves no defect."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T240": {
+   "section_sha256": "eb1eeddf16e518558bd08556634cc107500e32f295d027023b1fa21797e515f4",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "blocked-section-row",
+     "summary": "record_task appends a block_reviews row for a BLOCKED section verdict, naming the section's blocks (the CLEAR path's keys) and in tasks the task plus any bundle member sharing the section; the blocks' own verdicts stay unwritten",
+     "class": "within",
+     "why": "Fixes the defect the task was filed for: a section's BLOCKED rounds left no row, so the root CLAUDE.md tripwire on a check's third round never fired (T432). Listing bundle members follows 451 T141 (one review of a bundle is one round of each of its tasks). Leaving the blocks' verdicts unwritten keeps a BLOCKED from posing as their CLEAR review."
+    },
+    {
+     "id": "count-from-recorded-verdicts",
+     "summary": "a round is a recorded verdict, not a dispatch: a NOT-REVIEWABLE return (records nothing) and a dispatch another guard refused do not count",
+     "class": "within",
+     "why": "The agent contract itself says a NOT-REVIEWABLE return does not consume a round, because nothing was reviewed, and a refused dispatch reviewed nothing either. The section cites the ask's `asked` text for T432's case. That text is not in this bundle (rulings.md carries only the ruling, why and what), so the quote is unconfirmed here. Nothing in the ruling contradicts it, and the rule stands on the contract without it. This keeps the existing row-based counter and does not narrow the tripwire."
+    },
+    {
+     "id": "same-verdict-rerecorded",
+     "summary": "the same verdict recorded again on unchanged bytes (the same tasks.<id> entry) is the same round",
+     "class": "within",
+     "why": "Tied by its parenthetical to the identical tasks.<id> entry, this makes re-recording idempotent rather than letting a double write count as two rounds. A fresh reviewer's new verdict is not excluded by this text."
+    },
+    {
+     "id": "subject-from-dispatch",
+     "summary": "the guard takes its subject from the section the dispatch names (feature and task, task_prompt's words) or, for a block review, the feature its prompt names and the tasks in its bundle directory's name, each counted with the first past its cap holding; a plan round's continue/accept is read from its trigger's feature's arbiter.jsonl",
+     "class": "within",
+     "why": "Answers round 1's NOT LEGITIMATE finding by option (c): a block review of task blocks now counts against those tasks, not against the active task under .specify/feature.json. Reading the ruling from the trigger's feature fixes a found defect: a hold under another active feature could never be lifted. Both serve the tripwire as written."
+    },
+    {
+     "id": "fallback-to-active-task",
+     "summary": "only a dispatch naming neither a section nor a task-bearing block bundle (a hand-written prompt, or a block review of no task's blocks) falls back to the active task",
+     "class": "within",
+     "why": "Each case judged separately. (1) A hand-written prompt names no subject, so there is nothing to read one from, and falling back is the only reading available. (2) A block review of no task's blocks: the cap's unit is the task, in the section's own terms (plan_rounds counts the task's rows, the refusal reads 'round 3 of <T>'s', the trigger is plan:<slug>#<T>@3). Such a review holds no task whose third round is at stake, so round 1's failure, a task's third round going unheld, cannot pass through this path. It leaves a difference, not a shown defect."
+    },
+    {
+     "id": "refusal-wording-and-arbiter-ok-hint",
+     "summary": "the refusal's first line is shortened to 'BLOCKED: round 3 of <T>'s plan review. Nothing was dispatched.' with the arbiter-bundle line after; the shared refusal's ARBITER_OK hint gains '<reason, two words or more>'",
+     "class": "within",
+     "why": "Message wording under message-check's BREVITY and FIDELITY findings. The hint fixes a found defect (a one-word reason was refused with no hint why) in the one function that writes it, and the search's method is stated. No requested behavior is removed: the rule is still stated on the next line."
+    },
+    {
+     "id": "t227-separate",
+     "summary": "T227 (the record checks' counter kept per active feature) is left as a separate task",
+     "class": "within",
+     "why": "A separate, already-filed task about a different counter. This task's own counter no longer carries that flaw. No defect of this task's subject is carried forward."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T236 (the GM 2026-11-25, request.md \"a research backlog\": of eight hamlet searches in two days two changed what is drawn; \"yes please\" to UNRESEARCHED as a fifth label and a backlog in place of a search before every guess)",
+    "### T236 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 fifth label in the tooling",
+     "summary": "UNRESEARCHED becomes a fifth label: the page item tag's LABELS, the claims grammar (UNRESEARCHED [<file>#<id>] parses and is held to its tag), the registry's Guesses tab, Mode A's CLASSES",
+     "class": "within",
+     "why": "The GM accepted 'UNRESEARCHED a fifth label on the research pages as well as in the claims' ('yes please', 2026-11-25). The registry and Mode A changes are what make that label usable: without them an UNRESEARCHED item would be dropped from the pop-up reader or refused as a class."
+    },
+    {
+     "id": "D2 the rules restated",
+     "summary": "The root CLAUDE.md, research/CLAUDE.md, docs/research-doctrine.md, docs/research-record-rules.md, the page-session rules, the plan template's XII entry, the constitution 2.39.0 (XII narrowed), research-pass.md and escalation-check.md: a new guess is recorded UNRESEARCHED with no search; a search still comes first where a decision is foundational or a guess is likely visibly wrong; UNRESEARCHED is a question for the backlog, never for the GM",
+     "class": "within",
+     "why": "This is the rule change the GM accepted, exception included. 'XII narrowed' narrows the search-first rule, which is the change he asked for, not a narrowing of his request. The copies were found by a grep of the tree for the old wording, so the search space is stated."
+    },
+    {
+     "id": "D3 the check agents",
+     "summary": "quote-check: an UNRESEARCHED sentence owes no footnote. impl-drift: five classes; UNRESEARCHED is never a finding for lacking a source, and is MISLABELED where its account states as found what no page gives. record-format: UNRESEARCHED is no session note. modal-research: an UNRESEARCHED bullet is not a finding for want of a search",
+     "class": "within",
+     "why": "These carry the GM's rule into the checks: a session may record an unsearched guess and move on. The MISLABELED case enforces his own distinction ('unresearched would mean that we know we have not yet checked'), so it is enforcement, not new scope."
+    },
+    {
+     "id": "D4 GUESS-UNNOTED and the 148 blocks",
+     "summary": "quote-check's old step 5 exempted every labeled GUESS. It now flags a GUESS with no absence note as GUESS-UNNOTED. The 148 GUESS blocks without a footnote (a proxy scan, 2026-11-25) are fixed as their pages are rechecked, by an absence note or by relabeling them UNRESEARCHED, with no sweep",
+     "class": "within",
+     "why": "One reading covers both halves. GUESS-UNNOTED only flags; it does not block or rewrite work. It enforces the GM's line between unsupported ('we did research and couldn't find anything') and unresearched, and that line means nothing if a GUESS need not record that a search ran. The 148 blocks are not defects under constitution XIV v2.36.0: a missing absence note changes no map, contradicts no research finding, and is a record gap no reader of the map sees. Leaving them to page rechecks with no sweep therefore carries no defect forward. It also fits the GM's purpose (move forward faster) and the 2026-11-23 rule against cascades that fix no real flaw."
+    },
+    {
+     "id": "D5 dev/modals.md M8",
+     "summary": "A standard question the record does not answer no longer owes a research pass before the modal is written. Its guess bullet is labeled UNRESEARCHED until the backlog reaches it, or GUESS where a search found nothing. A search still comes first where the answer is foundational or the guess is likely visibly wrong. Carried by agent-sync to modal-research, modal-form and modal-depiction",
+     "class": "within",
+     "why": "This applies 'a new guess recorded as UNRESEARCHED with no search' to pop-ups, with the exception the GM accepted, worded as he accepted it."
+    },
+    {
+     "id": "D6 make research-backlog as the backlog's reader",
+     "summary": "A new target lists every UNRESEARCHED claim (the same filter as make claims-report's list) and every UNRESEARCHED page item, grouped by code file, with an item no claim names listed under its page. make claims-report's UNRESEARCHED count is kept",
+     "class": "within",
+     "why": "The offer named claims-report's UNRESEARCHED list as the backlog. This target adds grouping and a stage filter on top of that list and keeps claims-report's count, so nothing the GM accepted is removed. It serves 'searched at each port stage's end for the items that stage touched', and it adds page items because the label also lives on the pages."
+    },
+    {
+     "id": "D7 what STAGE= reaches",
+     "summary": "STAGE= selects the stage's own module (<stage>.rs and <stage>/) in the crates that define stage_<name>, plus every file of those crates that no stage's module holds, listed under a heading marking it shared. It does not use the work budget's stage_files, and it matches names in the stages' crate only, so Mode A's labels/ is excluded. A path glob is the alternative, and anything else is refused",
+     "class": "within",
+     "why": "This is the mechanism for 'the items that stage touched', and it reaches wider than stage_files: shared driver code is included, and seat/fords.rs, which stage_files misses, is caught. Excluding rust/mode_a only stops a name collision ('labels' matched eight Mode A files). No UNRESEARCHED item disappears: the unfiltered list shows every claim and item, and a glob reaches any path. Both choices rest on figures measured 2026-11-25."
+    },
+    {
+     "id": "D8 where the stage-end search lives",
+     "summary": "The block's goal: 'the not-yet-searched decisions are one list, by code file and stage, for each port stage's end'. The rules restated (D2) carry the new rule, but the block does not name which line sets the stage-end search",
+     "class": "within",
+     "why": "The block does not drop the stage-end search, and it builds the per-stage listing the search needs. Which restated rule line holds the duty is not named in the bundle, and the rule files are outside it. This is not a narrowing, but the restated root CLAUDE.md search bullet should say that the backlog is searched at each port stage's end for the items that stage touched."
+    },
+    {
+     "id": "D9 order",
+     "summary": "After T237 (a builder's claims round split off) and before page sessions P13 and P14, 'which the GM's rule drops from the pre-port list'",
+     "class": "within",
+     "why": "This is ordering only: nothing is removed from P13 or P14 here. The GM accepted 'most of page sessions P13 and P14 dropped from the pre-port list, P12 kept', so 'drops' overstates it a little. Whatever part of P13/P14 survives is decided where those sessions are scheduled, not by this block."
+    },
+    {
+     "id": "D10 no map changes; exits, proofs and done",
+     "summary": "No figure or map moves. Red-first tests for each step. Both-ways stand-in proofs of the changed check agents and of M8. closing-checks green",
+     "class": "within",
+     "why": "The GM's own premise is that punting research would not change maps in practice. The tests and proofs only verify that the rule he asked for holds."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T237 (the GM 2026-11-25, request.md: \"sounds good please do that ASAP\": five 449 code builders and the 451 T218-T222 builder hit the 300k context cap and handed off, the claims round the part that ran them out; the brief template half landed as `scripts/container/builder-brief.md`)",
+    "### T237 Approach (checklist part A)",
+    "### T237 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T237-1 placement",
+     "summary": "The enforcement goes in the context-cap guard as a new submodule context_cap_hooks/split.rs, reusing its builder test (D8) and transcript read (D9).",
+     "class": "within",
+     "why": "Where the guard lives is design. It narrows nothing the GM asked for ('sounds good please do that ASAP')."
+    },
+    {
+     "id": "T237-2 claims-round exclusion",
+     "summary": "A builder whose brief opens 'Run the claims round' is not a code builder, so the claims round's own dispatch may still dispatch claims-triage and impl-drift.",
+     "class": "within",
+     "why": "The split moves the claims round into its own dispatch, so that dispatch has to be able to run it. Measured 2026-11-25: 6 claims-round dispatches, none would be refused."
+    },
+    {
+     "id": "T237-3 fail open",
+     "summary": "A failed read of the transcript passes.",
+     "class": "within",
+     "why": "The guard rule is that a guard which fires on correct work is worse than none. A read failure is not evidence of drift."
+    },
+    {
+     "id": "T237-4 what is refused",
+     "summary": "A code builder's Agent call of claims-triage or impl-drift is refused, and so is a Workflow naming either as an agentType (args, a then step, a script literal). The refusal names the STOP POINT and what to report. Escape SPLIT_OK=\"<reason>\", recorded split-ok; a firing is recorded builder-split.",
+     "class": "within",
+     "why": "This is the split, enforced, with an FR-012-shaped escape and message. The Workflow reach closes the check-wave route a builder would otherwise take around an Agent-only rule. The bundle never defines which agents make up the claims round, so whether these two are all of it is the session's claim, not one this bundle shows."
+    },
+    {
+     "id": "T237-5 handoff line",
+     "summary": "For a code builder only, the cap's refusal adds a line: hand off at the STOP POINT and do not run the claims round. A claims-round dispatch is not told that.",
+     "class": "within",
+     "why": "The task line has it: 'enforced, not remembered: the context-cap guard's handoff names the split'. Withholding the line from the claims-round dispatch keeps it from being wrong there."
+    },
+    {
+     "id": "T237-6 workflow_hooks replay left",
+     "summary": "workflow_hooks still replays check-wave units without the caller's agent_id. This rule works around that by reading the Workflow call itself.",
+     "class": "within",
+     "why": "No outcome is wrong today: this rule covers itself, and the block states that no other builder-keyed Agent rule exists. So this is not a defect deferred under FR-009 or the FIX AS WE GO rule."
+    },
+    {
+     "id": "T237-7 keyed on the brief's STOP POINT marker; silent where the brief is omitted",
+     "summary": "Only a builder whose brief holds a line opening STOP POINT counts as a code builder. A code builder dispatched without the template's marker is not read, and its claims dispatches pass 'by design'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Purpose: the GM approved splitting the claims round off a code builder ('sounds good please do that ASAP'), under feature 451's standing 'let's make sure all of the enforcement is real enforcement and not just instructions'. The block's own finding is that 'the split was remembered (in the brief), not enforced'. Keying the guard on a marker that only the brief sets leaves enforcement resting on the session remembering to use the brief, one step removed. The block's own census sharpens this: the only builders that ever dispatched claims agents themselves (449 T426, T427, T429/T430, and T430's finisher: 5, 1, 4 and 3 calls) were unmarked, the very population this guard never reads, and the 12 marked builders made 0. Impossibility is asserted, not measured: 'the unmarked builder is no code builder it can tell' carries no count. The 579-transcript census does not report any unmarked builder, outside a claims-round dispatch, whose claims dispatch was correct work under the split (a page session, for instance). That count is the only thing that would make the obvious key, a D8 builder minus a brief opening 'Run the claims round', refuse correct work. D8 itself turned down a marker key for the same reason ('requiring a T<n> in it would let a builder with an unnamed brief pass'). 'By default' does not rescue it: a default's exceptions go through the recorded SPLIT_OK escape, not through an unrecorded omitted marker. Nothing in the bundle requires a code builder's dispatch to carry the marker. Either cure clears this: (a) key on D8's builder minus the claims-round prefix, or refuse a code builder's dispatch whose brief lacks the STOP POINT marker, so the unmarked gap closes; or (b) measure from the same 579 transcripts how many unmarked, non-claims-round builders made a claims dispatch that is correct work under the split, and if any are, name the key that tells them apart and state why the remaining gap cannot be closed."
+    }
+   ],
+   "tasks": [
+    "T237"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T237 (the GM 2026-11-25, request.md: \"sounds good please do that ASAP\": five 449 code builders and the 451 T218-T222 builder hit the 300k context cap and handed off, the claims round the part that ran them out; the brief template half landed as `scripts/container/builder-brief.md`)",
+    "### T237 Approach (checklist part A)",
+    "### T237 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T237-placement",
+     "summary": "The split's enforcement lives in the context-cap guard as a new submodule context_cap_hooks/split.rs, reusing D8's builder test and D9's transcript read.",
+     "class": "within",
+     "why": "Where the enforcement lives is design; the request (2026-11-25, 'sounds good please do that ASAP') asks for the claims round split off code builders, and the feature's 2026-11-19 approval asks that enforcement be real. Placing it in the guard that already reads builders' transcripts narrows nothing."
+    },
+    {
+     "id": "T237-code-builders-only",
+     "summary": "The rule applies to code builders, not every builder: record and pop-up bundles, page-session cascades and claims-round dispatches keep their own claims work.",
+     "class": "within",
+     "why": "The request is about code builders ('most code builders ... hit the 300k context cap', the cause 'one builder doing the fix, ... and the claims round'). A cascade's or bundle's claims round is that builder's own correct work and was never asked to be split off; the block's measurement (the P15 cascade on the split's first day) shows an every-builder rule would refuse it."
+    },
+    {
+     "id": "T237-marker-opt-in",
+     "summary": "A code builder is recognized only by a line opening STOP POINT in its brief (the brief template sets it); an unmarked builder passes, so the guard is silent where the coordinating session omits the template.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows enforcement: an unmarked code builder (the session dispatching without scripts/container/builder-brief.md) is unguarded, and the split there rests on the session remembering the template - the gap is real and is named in the block ('silent where the brief is omitted'). It is legitimate on purpose, not on consistency: the block's own evidence shows that no transcript-only test separates a code builder from other builders without refusing correct work - an every-builder rule refused the P15 cascade on the split's first day, and even the claims round's own dispatches are not worded uniformly (3 of the 85 opened 'Claims round: arch claim re-check' and 'Finish 449 T430's claims round', which an opener-keyed rule would refuse). A default-on test from prompt wording would therefore refuse correct work, which the project's guard rule ranks worse than none, so the only false-positive-free mark of a code builder is one its brief sets. The purpose - keep the claims round out of a code builder's context - is enforced on every builder dispatched as a code builder through the template, which is the coordinating session's standing order and the same brief that tells a builder where to stop at all; the 06:21Z-on measurement (12 briefed builders, 0 claims dispatches) is consistent with this but is not the ground."
+    },
+    {
+     "id": "T237-claims-round-exclusion",
+     "summary": "A builder whose prompt itself opens 'Run the claims round' is not a code builder even if it quotes a STOP POINT line.",
+     "class": "within",
+     "why": "The claims round's own dispatch is the half the request moves to the coordinating session; refusing it would refuse the requested split's own work. A claims round worded otherwise that quotes the brief would be refused and has SPLIT_OK, which is an escape, not a narrowing."
+    },
+    {
+     "id": "T237-fail-open-read",
+     "summary": "Any transcript read that fails passes; the main session and defined agents are never read.",
+     "class": "within",
+     "why": "The accepted D8/D9 design of this same guard: it passes what it cannot tell and never reads the main session or a defined agent. No narrowing of the request beyond the accepted spec."
+    },
+    {
+     "id": "T237-what-is-refused",
+     "summary": "A code builder's Agent call of claims-triage or impl-drift, or a Workflow naming either as an agentType (args, a unit's then step, a script literal), is refused, naming the agent, the brief's STOP POINT (make claims-triage and stop) and what to report.",
+     "class": "within",
+     "why": "This is the requested split, enforced; covering the Workflow form closes a hole (check-wave units replay without agent_id) rather than adding behavior beyond the request. The message names the compliant action per FR-012."
+    },
+    {
+     "id": "T237-escape",
+     "summary": "Escape SPLIT_OK=\"<reason>\" in the prompt, recorded split-ok; firings recorded builder-split.",
+     "class": "within",
+     "why": "The project's guard rule restated in FR-012 (a reason escape, recorded); 'by default' in the request admits a deliberate exception path."
+    },
+    {
+     "id": "T237-handoff-line",
+     "summary": "The cap's handoff refusal, for a code builder only, adds one line: hand off at the STOP POINT and do not run the claims round; a claims-round dispatch past its cap is not told that.",
+     "class": "within",
+     "why": "The task's own enforcement line ('the context-cap guard's handoff names the split'); scoping it to code builders follows the request's subject."
+    },
+    {
+     "id": "T237-brief-names-marker",
+     "summary": "The brief template states that the guard keys on its STOP POINT line.",
+     "class": "within",
+     "why": "Documents the mark the guard reads; no behavior beyond the request."
+    },
+    {
+     "id": "T237-found-and-left-replay",
+     "summary": "workflow_hooks' replay of check-wave units without agent_id is left as it is; this rule reads the Workflow call itself instead.",
+     "class": "within",
+     "why": "Not a defect left: the wrong outcome for this rule (a builder's wave of claims checks passing) is fixed here, and the block states no other builder-keyed Agent rule exists today (its premise, not measured by this review; nothing in D8, D9 or FR-006 contradicts it - the cap refuses the builder's own Workflow call directly). Leaving a difference that causes no wrong outcome stays within (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T237-not-performance-work",
+     "summary": "Declared not performance work; the performance checklist is left as its template.",
+     "class": "within",
+     "why": "A guard that refuses a dispatch; the checklist is prompts, never a gate. No narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T238 (page session P12, 2026-11-25: its correction to 0006's drawing page from a search pass, b75ade5b7e, read as a SIZE EDIT at 21,792 bytes against the 20,000 cap while `make question-sizes` listed no page over 20,000 bytes of prose, measured 2026-11-25 (the refusal and the report as the landing printed them); the landing needed SIZE_EDIT_OK)",
+    "### T238 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T238-measure",
+     "summary": "The size-edit rule (T184) reads the same measure as the cap and make question-sizes: one prose(text) function (money marks unwrapped, item tags stripped), called by size() and by size_edit_refusal on base and new text.",
+     "class": "within",
+     "why": "Fixes a defect (a wrong outcome: a search pass's claim correction was refused as a size trim and needed an escape) in T184, which implements the GM's 2026-11-23 'no edit to maintain entry size should ever be substantive'. An edit is 'to maintain entry size' only against the cap, and the cap is on prose; a correction under the cap by prose before, after and with its removed words restored is not maintaining size. Measuring the rule by the cap's own measure serves the purpose rather than narrowing it."
+    },
+    {
+     "id": "T238-rule-kept",
+     "summary": "is_size_edit keeps T184's rule unchanged (over before, or the removed words putting it back over: the add-then-trim clause), now on the prose measure.",
+     "class": "within",
+     "why": "Preserves the requested protection in full; only the unit it compares changes."
+    },
+    {
+     "id": "T238-wording",
+     "summary": "The refusal says 'bytes of prose'; make question-sizes's help line, which said 'question + notes', now says it counts the question's prose.",
+     "class": "within",
+     "why": "Makes the message and help state what is actually measured; no behavior beyond the fix."
+    },
+    {
+     "id": "T238-test",
+     "summary": "Red-first test carrying P12's real block on a page whose item tags put the raw file over 20,000 bytes while its prose stays under; red on HEAD, green on the fix.",
+     "class": "within",
+     "why": "Enforcement of the fix the task makes; serves the request."
+    },
+    {
+     "id": "T238-cap",
+     "summary": "The 20,000-byte cap is unchanged.",
+     "class": "within",
+     "why": "No change to the limit the GM's size rules address."
+    },
+    {
+     "id": "T238-order",
+     "summary": "Lands alone; T237 (performance work) is ordered after T240 by the coordinating session under a PERF_LATER_OK escape recorded at task-start.",
+     "class": "within",
+     "why": "FR-013/SC-006 provide a recorded escape for starting non-performance work while a performance task is open; this block records the escape the spec's own mechanism allows and does not alter the performance-first rule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T239 (T230's duplicate: the same empty BLOCKED list, filed again from 449 T433's builder, 2026-11-25)",
+    "### T239 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T239-duplicate-of-T230",
+     "summary": "T239 carries T230's fix and tests and nothing of its own, ticking in T230's landing (make land F=451 T=T230,T239).",
+     "class": "within",
+     "why": "The same closing-checks fault filed twice; deferring wholly to T230's within-scope fix decides nothing new and leaves no defect."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T240 (449 T432's builder, 2026-11-25: spec-fidelity MODE 4 was dispatched a third time on T432's section after two BLOCKED rounds and no guard refused it; the arbiter, asked after, ruled no fault, ask:449-T432-plan-round3)",
+    "### T240 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "blocked-section-row",
+     "summary": "record_task appends a block_reviews row for a BLOCKED section verdict, naming the section's blocks (the CLEAR path's keys) and in tasks the task plus any bundle member sharing the section; the blocks' own verdicts stay unwritten",
+     "class": "within",
+     "why": "Fixes a wrong outcome: the CLAUDE.md tripwire on a check's third round on one subject did not fire, because a BLOCKED section verdict left no row, so T432's third dispatch counted as round 1. The approval asked that all enforcement be real enforcement (request.md 2026-11-19). Listing bundle members follows 451 T141 (one review of a bundle is one round of each of its tasks). Leaving the blocks' verdicts unwritten keeps a BLOCKED from standing as their review."
+    },
+    {
+     "id": "round-is-a-recorded-verdict",
+     "summary": "Rounds are counted from recorded verdicts, not from the dispatch log: a NOT-REVIEWABLE return or a dispatch another guard refused is no round, and the same verdict recorded again on unchanged bytes is the same round",
+     "class": "within",
+     "why": "The guard already counted recorded rows, so this keeps the existing unit and does not narrow it. The spec-fidelity contract says a NOT-REVIEWABLE return consumes no round, and a refused dispatch reviewed nothing. One line on the citation: 'the ask itself says it does not count' cannot be checked from the bundle. The only 'does not count' in rulings.md is about the round-3 dispatch launched before the ask, so this ruling rests on the existing counting unit, not on that citation."
+    },
+    {
+     "id": "subject-from-section-dispatch",
+     "summary": "The guard takes the subject from the section the dispatch names ('feature <NNN-slug>, task <T>') when that feature is in the clone, no longer from the .git/active-task mark",
+     "class": "within",
+     "why": "Fixes a wrong outcome measured red on HEAD: 'the held round followed the active task (rc=0)'. A third section round under another active feature was not held."
+    },
+    {
+     "id": "block-review-falls-back-to-active-task",
+     "summary": "A block review (make plan-delta, BLOCKS=1), whose prompt names no task, still takes its subject from the active task. Item 5: 'This task's counter no longer has that flaw for a section review ... A block review still falls back to the active task.' Found-and-left does not list it, and no task is filed for it",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The plan's own words call counting by the active feature a 'flaw' that the section path 'no longer has'. Its red case on HEAD is exactly 'the held round followed the active task'. The block says nothing about why that outcome is wrong for a section review but fine for a block review. As the block states it, a third block-review round on a feature other than the active one may go through unheld: a check passing bad work, which is a defect, not a mere difference. This is unmeasured from here, and the ruling rests on the plan's own wording. It is also not physically impossible to address, it is not implied by the GM's words, and leaving it weakens the tripwire the task exists to make real. A known defect carried forward with no filed task, why and order is what FIX AS WE GO and 451's FR-009 forbid. To clear it, do ANY ONE of: (a) a measured statement that a third block-review round under another active feature is held (or cannot arise, e.g. plan-delta only runs on the active feature), with its method; (b) a Found-and-left line giving why it is not fixed in T240, its filed task id and its order ('lands before ...'); (c) the fix, taking the subject from the feature the plan-delta dispatch names."
+    },
+    {
+     "id": "rulings-from-trigger-feature",
+     "summary": "A plan round's continue or accept is read from the arbiter.jsonl of the feature its trigger names (checks::arbiter::continues/closed take rulings(root, prefix)), not from the active feature's",
+     "class": "within",
+     "why": "Fixes a wrong outcome listed in Found-and-left and marked fixed here: a hold under another active feature could not be lifted by its own ruling. Without this, the round cap could not be released as the tripwire intends."
+    },
+    {
+     "id": "arbiter-bundle-sees-blocked-rounds",
+     "summary": "The arbiter bundle's plan_rounds lists a section review's BLOCKED rounds, through the same row",
+     "class": "within",
+     "why": "Fixes a wrong outcome: the arbiter ruled on a third round without seeing the first two. It falls out of the same row as the main fix."
+    },
+    {
+     "id": "refusal-unchanged",
+     "summary": "The refusal text and its make arbiter-bundle TRIGGER are unchanged",
+     "class": "within",
+     "why": "Nothing is narrowed. The existing refusal now fires where it should."
+    },
+    {
+     "id": "not-performance-work",
+     "summary": "'Performance work? no': the task holds a review round and makes no check faster or slower, which sets its place in FR-013's order",
+     "class": "within",
+     "why": "FR-013's full text is not in the bundle (only its first sentence is in spec-index.md), so this ruling is on the GM's 2026-11-20 words in request.md: prioritize performance improvements, with measurement tasks counted as performance. A guard fix that measures nothing and speeds nothing is neither. Classing it as not performance work narrows nothing the GM asked for."
+    }
+   ],
+   "tasks": [
+    "T240"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T240 (449 T432's builder, 2026-11-25: spec-fidelity MODE 4 was dispatched a third time on T432's section after two BLOCKED rounds and no guard refused it; the arbiter, asked after, ruled no fault, ask:449-T432-plan-round3)",
+    "### T240 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "blocked-section-row",
+     "summary": "record_task appends a block_reviews row for a BLOCKED section verdict, naming the section's blocks (the CLEAR path's keys) and in tasks the task plus any bundle member sharing the section; the blocks' own verdicts stay unwritten",
+     "class": "within",
+     "why": "Fixes the defect the task was filed for: a section's BLOCKED rounds left no row, so the root CLAUDE.md tripwire on a check's third round never fired (T432). Listing bundle members follows 451 T141 (one review of a bundle is one round of each of its tasks). Leaving the blocks' verdicts unwritten keeps a BLOCKED from posing as their CLEAR review."
+    },
+    {
+     "id": "count-from-recorded-verdicts",
+     "summary": "a round is a recorded verdict, not a dispatch: a NOT-REVIEWABLE return (records nothing) and a dispatch another guard refused do not count",
+     "class": "within",
+     "why": "The agent contract itself says a NOT-REVIEWABLE return does not consume a round, because nothing was reviewed, and a refused dispatch reviewed nothing either. The section cites the ask's `asked` text for T432's case. That text is not in this bundle (rulings.md carries only the ruling, why and what), so the quote is unconfirmed here. Nothing in the ruling contradicts it, and the rule stands on the contract without it. This keeps the existing row-based counter and does not narrow the tripwire."
+    },
+    {
+     "id": "same-verdict-rerecorded",
+     "summary": "the same verdict recorded again on unchanged bytes (the same tasks.<id> entry) is the same round",
+     "class": "within",
+     "why": "Tied by its parenthetical to the identical tasks.<id> entry, this makes re-recording idempotent rather than letting a double write count as two rounds. A fresh reviewer's new verdict is not excluded by this text."
+    },
+    {
+     "id": "subject-from-dispatch",
+     "summary": "the guard takes its subject from the section the dispatch names (feature and task, task_prompt's words) or, for a block review, the feature its prompt names and the tasks in its bundle directory's name, each counted with the first past its cap holding; a plan round's continue/accept is read from its trigger's feature's arbiter.jsonl",
+     "class": "within",
+     "why": "Answers round 1's NOT LEGITIMATE finding by option (c): a block review of task blocks now counts against those tasks, not against the active task under .specify/feature.json. Reading the ruling from the trigger's feature fixes a found defect: a hold under another active feature could never be lifted. Both serve the tripwire as written."
+    },
+    {
+     "id": "fallback-to-active-task",
+     "summary": "only a dispatch naming neither a section nor a task-bearing block bundle (a hand-written prompt, or a block review of no task's blocks) falls back to the active task",
+     "class": "within",
+     "why": "Each case judged separately. (1) A hand-written prompt names no subject, so there is nothing to read one from, and falling back is the only reading available. (2) A block review of no task's blocks: the cap's unit is the task, in the section's own terms (plan_rounds counts the task's rows, the refusal reads 'round 3 of <T>'s', the trigger is plan:<slug>#<T>@3). Such a review holds no task whose third round is at stake, so round 1's failure, a task's third round going unheld, cannot pass through this path. It leaves a difference, not a shown defect."
+    },
+    {
+     "id": "refusal-wording-and-arbiter-ok-hint",
+     "summary": "the refusal's first line is shortened to 'BLOCKED: round 3 of <T>'s plan review. Nothing was dispatched.' with the arbiter-bundle line after; the shared refusal's ARBITER_OK hint gains '<reason, two words or more>'",
+     "class": "within",
+     "why": "Message wording under message-check's BREVITY and FIDELITY findings. The hint fixes a found defect (a one-word reason was refused with no hint why) in the one function that writes it, and the search's method is stated. No requested behavior is removed: the rule is still stated on the next line."
+    },
+    {
+     "id": "t227-separate",
+     "summary": "T227 (the record checks' counter kept per active feature) is left as a separate task",
+     "class": "within",
+     "why": "A separate, already-filed task about a different counter. This task's own counter no longer carries that flaw. No defect of this task's subject is carried forward."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T236 to T240, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

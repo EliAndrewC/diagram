@@ -1,0 +1,517 @@
+{
+ "blocks": {
+  "### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))": {
+   "sha256": "0f45fd16e088bc477808ec6bc3559839eeda96d1d7df5ec0012379a5c21c9ff6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T308 Approach (checklist part A)": {
+   "sha256": "4a0ac25d3a6d48edcc17f35a17abcc0152ba97db89ebfb4cc1ab8329f4264957",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T308 part 2 (the remainder: after a day of the two-tier trial, parts of the tooling still spoke the one-tier language - the closing half's brief block, the builder brief's rules file, the order notice in the session clone and the plan template's performance prompt - each of which cost a round or a correction on 2026-11-26/27; and the trial's own record, so the task's box can close)": {
+   "sha256": "62df8003f6a89e25b75db96d90626ac5d25b0a5532b6de0bc96d179173b76e32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T308 part 2 Approach (checklist part A)": {
+   "sha256": "4d3603f6aca03e25f7997d4f918048eaa0aba1ef90ede5c260d802eb18450ff4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T309 (2026-11-26: the landing gate of 451 T295 went red on `rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs` line 221, \"no test reaches\", and green on the re-run minutes later; the same red was listed apart at T272's closing checks that morning)": {
+   "sha256": "dce5bf58c5a00c8a4ccd26279728f626f0d7afbc25a386513a402d8155609e91",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T309 Approach (checklist part A)": {
+   "sha256": "7d9273a74a8aa9e80a838aff9c86312278d5ce5285ef7e7cc65cfbe8755eaa88",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T308": {
+   "section_sha256": "7629a6c7539b112fda7a303c0eff96793500f55822597d0d1c383759415aea30",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T308 part 1 (measurement, D1-D6, Found and left)",
+     "summary": "The plan-review part: the later rounds classed, D1 (GM words on the task line in request.md or decide refuses), D2 (two figure forms), D3 (decide's notice of what voids a verdict), D4/D5 not built, D6 (order notice names the first tier to a builder), T333/T337 filed.",
+     "class": "within",
+     "why": "Byte-identical to the text in earlier.md that was judged CLEAR (diffed); serves the coordinating session's ALSO on T308's line and the GM's two-tier words; not re-ruled."
+    },
+    {
+     "id": "T308 part 2 retirement: coverage run beside the review",
+     "summary": "Part 1's remainder named 'the changed crate's coverage run tried beside the review'; part 2 does not build it, citing the GM's ruling that a builder runs no coverage.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It drops an item of T308's remainder, which was the coordinating session's build, not the GM's words (request.md says so of T308's line). The GM's own words of 2026-11-26 ('Why is a builder's closing step also running coverage? ... Our goal is to maximize task throughput.') forbid exactly this run, so the retirement is implied by his words; building it would contradict them."
+    },
+    {
+     "id": "T308-D7",
+     "summary": "make builder-brief KIND=closing-half drops the coverage STOP POINT and crate-checks CHECKS line; every source-changing kind prints one CHECKS line: builder-checks and a changed guard's own suite, no closing-checks/static/hooks-test/coverage; the refusal's hint says the owed tests; block bound kept under 2,000 characters.",
+     "class": "within",
+     "why": "Directly implements the GM's 2026-11-26 ruling that a builder's closing step runs no coverage, and his two-tier words (full rigor deferred to the session clone's gates). The bound is a test that enforces an existing limit, not new scope."
+    },
+    {
+     "id": "T308-D7 exception: a coverage-repair brief runs make crate-checks",
+     "summary": "One exception to 'a builder runs no coverage': a brief whose JOB is the coverage repair of a red batch gate runs make crate-checks on the crates it names.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words imply it: 'a few coverage failures that we have to fix later'. The repair IS that later fix, and a coverage repair that cannot run coverage could check its work only with another full batch gate. That would defeat his stated purpose ('maximize task throughput'), since a crate-scoped run is cheaper than a second red gate. The seam holds: it covers only a fresh agent whose job is that repair, on the crates named; the session's own repair in its clone is checked by the batch gate (D8), and no ordinary builder's closing step gains coverage."
+    },
+    {
+     "id": "T308-D8",
+     "summary": "scripts/container/builder-brief.md: THE FOUR KINDS no longer tells the closing half to run coverage; TWO TIERS states that a builder runs no coverage, why, the one exception, and that in the session clone the check of a repair is the batch gate.",
+     "class": "within",
+     "why": "The same ruling written into the rules file the builders read; the grep census of the file names its search space."
+    },
+    {
+     "id": "T308-D9",
+     "summary": "The T55 order notice, for the main session: silent while a landing it started is running; names make land (run_in_background) when a make carry has staged work since the last landing that went out; otherwise unchanged. Two known quiet-side misses are stated; message-check PASS recorded.",
+     "class": "within",
+     "why": "Implements the GM's 2026-11-26 words: the session clone is where tested things are staged and the full rigor is the session clone's own gate, so telling the session to run closing-checks a second time contradicted him. The two misses fall on the silent side of a notice that refuses nothing, and the session's next step (land) is the same either way, so neither is a wrong outcome (XIV v2.36.0)."
+    },
+    {
+     "id": "T308-D10 (T410)",
+     "summary": "The plan template's [perf] prompt names FR-013's measurement clause; lint/perf_line.rs refuses at decide a Performance line whose answer opens 'no' and holds 'measurement', with the sentence to write; old stub forms kept so 151 filed stubs are not orphaned; replay refuses none of 193 lines.",
+     "class": "within",
+     "why": "Enforces the GM's 2026-11-20 words, that a measurement task is 'counted as a performance task for the purpose of scheduling and coming first' (FR-013's second sentence), at the place the misclassification arises. It refuses only that one misstatement, so it passes the 'exact thing asked enforced' test. Its admitted false refusal (a real non-perf no that uses the word) has the shape of D1's two accepted false refusals, with a one-edit way out, and the replay over the committed plans found none. FR-012's recorded-reason escape is owed by 'every refusal of ... FR-013', and on the plain reading that is make task-start's refusal, not a decide lint; non-blocking."
+    },
+    {
+     "id": "T308-D11",
+     "summary": "The trial's record from existing readings: tasks through, builder minutes a task (stated as not like for like), batch gates red and their causes, what a red batch cost, and five things the trial has NOT shown.",
+     "class": "within",
+     "why": "Records the measurement T308's line asks for and states its limits rather than overclaiming. Item (iv) reads the GM's ruling as saying what would reopen a builder's coverage run. His recorded words state no such condition. It is an inference from 'Our goal is to maximize task throughput' and should be worded as that, but his words are in request.md, so it is not an unrecorded ruling. Non-blocking."
+    },
+    {
+     "id": "T308-D12",
+     "summary": "A RECOMMENDATION for the GM to confirm at the talk: T308's box closes with the two tiers adopted as the trial stands; the arrangement's verdict stays with feature 458 and T401; if he does not confirm, the box stays open.",
+     "class": "within",
+     "why": "Puts the closure to the GM rather than deciding it. Ruled on D12's own reading, that the box stays open unless he confirms; the Approach's 'can be ticked' is read as permission once he does. The trial's like-for-like measurement against round one was the coordinating session's build, not his words, so leaving (iii)-(v) unshown narrows nothing he asked. They are unmeasured, not defects."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T309": {
+   "section_sha256": "a63baea0b9e2a4daf7942bb76b70619333e8e0c40753ae1327f833cd1f2bf317",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The cause is the fixture transcripts' clock-given modified times (measured by probe, empty-HOME cover run and a 300-round tie count), not the live transcripts the task line supposed; the fix sets the old fixture's times to 100/200/300 and adds spec_rounds_of_one_time_keep_their_paths_order, which pins the stable sort's path order and reaches line 221.",
+     "class": "within",
+     "why": "Fixing the red-then-green landing gate on line 221 is the task line itself; correcting the task line's supposed cause by measurement and pinning the line by a deterministic fixture does what was asked and claims no more than the test proves."
+    },
+    {
+     "id": "D2",
+     "summary": "reviews.rs transcripts_base in a test build returns the test's TRANSCRIPTS directory or the empty path, never the machine's ~/.claude/projects; the binary's build unchanged.",
+     "class": "within",
+     "why": "Serves the stated goal that the crate's tests give one answer whatever the home directory holds; touches test builds only, so the binary's behavior (a stated constraint) is kept."
+    },
+    {
+     "id": "D3",
+     "summary": "bundle.rs's two reads of a round's reply take the same base (marks::reply_in) instead of marks::reply_of reading the machine's transcripts for any dispatch with an aid.",
+     "class": "within",
+     "why": "The same closure of the arbiter crate's tests to machine state, applied to the second read path in the same crate; binary behavior unchanged."
+    },
+    {
+     "id": "D4",
+     "summary": "close_in(root, args) carries close_cli's work; close_answers_its_usage_and_its_verdict runs it on a scratch tree, and the process's GUARD_LOG_DIR is the test binary's own directory, so the test no longer reads the live tree's check state or writes CHECK_CLOSED escapes to ~/.claude/guard-log.",
+     "class": "within",
+     "why": "A defect found in the crate under repair (a test writing two false escapes to the live guard log each run, measured) fixed in this task, matching the 451 T94/T207 constraint that a test's guard log is never the live one; the land, plan and task crates' quiet_census is the existing pattern."
+    },
+    {
+     "id": "D5",
+     "summary": "Not changed: arbiter::cli([\"bogus\"]) and arbiter::cli([\"bundle\",\"--check-ask\",\"x\"]) keep running on the process's directory and environment.",
+     "class": "within",
+     "why": "Both answer before reading any file, so they read no machine state and the goal is met without change; leaving correct code as it is is not a narrowing."
+    },
+    {
+     "id": "D6",
+     "summary": "Exits and proof: builder-checks green and the crate's cover run clean on the live and on an empty HOME with the same 4,382 lines reached; the empty HOME holding nothing but its cache link afterwards.",
+     "class": "within",
+     "why": "A check whose only effect is to show the requested repeatability actually holds; it enforces the task, it adds no behavior."
+    },
+    {
+     "id": "D7a",
+     "summary": "Found and left: the 2,229 test-written 'nothing to close here' entries already in ~/.claude/guard-log are not removed here; filed as T143 (the open task the section says already names this test's writes), lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's NOT LEGITIMATE was for leaving them with no deferral; the item now carries FR-009's three parts - why not here (the entries stand in the live log outside this tree, and removing or filtering test-written rows is an existing task's subject), the filed id (T143) and the order (lands before T302). The purpose of the fix - the audit's escape counts not polluted by tests - is not gutted: the source of new entries is stopped in this task (D4), and the standing ones are ordered to be cleared before a later step rather than carried indefinitely. That T143 names this test is the section's statement; the bundle holds no tasks file to confirm it, and if T143 does not cover these rows the deferral would need its own filed task."
+    },
+    {
+     "id": "D7b",
+     "summary": "Found and left: sibling crates' tests that default to the machine's live transcripts or guard log (bundle crate's marks::reply_of and record/bundle/modal.rs, task crate's task_add/quick/tests.rs, process-wide GUARD_LOG_DIR in land, plan and task crates), found by grep and unmeasured; filed as T312, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's goal is the arbiter crate's tests and coverage; these are other crates whose effect is unmeasured, so whether each is a defect at all (a wrong outcome, not a difference) is not yet known and measuring first is this project's standing rule. The item carries FR-009's form - why not here, filed id T312, order lands before T302 - and does not reach back into the arbiter crate's own fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))",
+    "### T308 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "part-and-remainder",
+     "summary": "This landing builds only T308's ALSO on the plan review's later rounds; the two tiers built into tooling, the trial's measurement and the coverage run are T308's remainder, still open, and the task is not ticked from this landing.",
+     "class": "within",
+     "why": "Nothing of T308 is dropped: the remainder is named and stays on the task's open box. Splitting a task into parts that land in turn narrows nothing the GM asked for."
+    },
+    {
+     "id": "measurement-first",
+     "summary": "The 56 later rounds are classed (a)-(e) from the reviews' transcripts, and every candidate rule is replayed over the reviewed sections before it is built.",
+     "class": "within",
+     "why": "request.md's T308 section says the ALSO measures 'what each second round was owed for' before removing its mechanical causes. Measurement counts as performance work (FR-013, the GM 2026-11-20). The class sums check: 3+8+16+27+2=56 rounds, 169.1 minutes, (c)'s parts 9+2+3+1+1=16."
+    },
+    {
+     "id": "T308-D1",
+     "summary": "make decide refuses a task whose box line quotes the GM in words that request.md does not hold, naming the heading to append them under.",
+     "class": "within",
+     "why": "This removes a mechanical cause of class (b) at make decide, before dispatch, which is what the ALSO's wording asks for. Enforcement by refusal matches the GM's 2026-11-19 'real enforcement and not just instructions'. The section it refuses would come back NOT-REVIEWABLE anyway, so the refusal does not refuse good work."
+    },
+    {
+     "id": "T308-D1-knobs",
+     "summary": "MIN_WORDS = 4 and REACH = 80 characters are new GUESS knobs.",
+     "class": "within",
+     "why": "They are labeled GUESS and are not claims. They are tuning inside D1's mechanism and do not narrow its scope."
+    },
+    {
+     "id": "T308-D1-decide-only",
+     "summary": "D1 is judged at make decide only, not at make plan-delta.",
+     "class": "within",
+     "why": "The ALSO names make decide as the place the mechanical causes are removed ('removed at make decide before the review is dispatched'). A task section's review is dispatched through decide, so limiting D1 to decide is the request's own scope."
+    },
+    {
+     "id": "T308-D2",
+     "summary": "The figure lint reads a count with a k/K/M suffix and a rounded figure with a unit as figures that need a label.",
+     "class": "within",
+     "why": "It removes the two figure-only (b) causes. Replayed over the 124 reviewed sections, each form flags only its own sentence, so it refuses no good work (constitution XIV)."
+    },
+    {
+     "id": "T308-D3",
+     "summary": "On a section owed a review, make decide says which edits keep the verdict (sections::typo_only, unchanged) and which void it, and that an edit made while the review runs gets its record refused. It refuses nothing.",
+     "class": "within",
+     "why": "It addresses classes (c) and (e). The rules it describes are already enforced mechanically (the digest voids the verdict, and the record is refused). The notice tells the builder about enforcement that already exists rather than standing in for it, so 'real enforcement' holds. An edit after a CLEAR that changes a decision is owed its re-review, so a refusal there would refuse good work."
+    },
+    {
+     "id": "T308-D4",
+     "summary": "NOT built: a digest over the decisions rather than the whole section, which would keep a verdict across prose-only edits.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ALSO asks to remove the mechanical causes, and (c)'s no-decision rounds (at most 5, 6.1 minutes) are a candidate. Keeping a verdict across every edit outside author-marked decision lines would protect only what the author chose to label. A decision written in prose, or one the author did not see as a decision, could then change under a kept CLEAR. That defeats the plan gate's purpose (feature 243, the GM 2026-09-13: tasks are not ticked while a plan's decisions lack a recorded verdict). The ruling rests on that purpose and not on the section's census: 'none of the 132 sections holds a **D<n> - line' searched one spelling and would not match this section's own '**T308-D<n>, built:' labels. The census also counts 132 sections where D2 and D5 count 124 reviewed sections, a discrepancy that changes no ruling. What would reopen it is named."
+    },
+    {
+     "id": "T308-D5",
+     "summary": "NOT built: reading 'N of M' as a count that needs a label.",
+     "class": "within",
+     "why": "Replayed, it flags 47 unlabelled sentences in 26 sections, and the reviews objected to 1 of them. Building it would refuse good work (constitution XIV). No (b) round is left unaddressed by declining it, because D2 already covers both figure-only rounds. Declining a rule the replay shows is not a mechanical cause narrows nothing that was asked."
+    },
+    {
+     "id": "T308-D6",
+     "summary": "The T55 order notice tells a first-tier builder to run make builder-checks CRATE=... rather than make closing-checks. A builder-checks run since the last code edit silences it. The main session is told what it was told before. The notice stays a notice.",
+     "class": "within",
+     "why": "It serves the GM's T308 words directly: full rigor deferred to the session clone, not a builder in a worktree 'bending over backwards'. It fixes a wrong outcome, a notice that told a builder to start a run its brief forbids. The main-session case is not a carve-out: the main session builds in the session clone, where the GM put the full rigor. Enforcing the tiers is T308's remainder, which is still open, so keeping this a notice leaves no requested enforcement out."
+    },
+    {
+     "id": "order",
+     "summary": "Lands after T289 and before T308's remainder and T302.",
+     "class": "within",
+     "why": "This is [perf] work under FR-013. The order narrows nothing."
+    },
+    {
+     "id": "found-and-left-T333",
+     "summary": "Three of the six GM's-words rounds cited the GM by reference, which D1 cannot see. Not fixed here; filed as T333, which lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a check passing what its next step refuses (the section's own item 12), so it is a defect left in this part. The section's reason, 'a design of its own', is a cost argument and would not carry the ruling by itself. The ruling rests on sequencing, not exclusion: T308 is not ticked from this part, its remainder stays open, and the deferral carries FR-009's form (why, a filed id, an order before T302). The fix is therefore still made before the next step. T333's existence as a filed task is taken on make decide's own FR-009 check; this review cannot see tasks.md."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))",
+    "### T308 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T308-part",
+     "summary": "This section is one part of T308 (the plan review's later rounds). The two tiers, the batch gate, the trial's measurement and the coverage run stay open on the task's box, which is not ticked from this landing.",
+     "class": "within",
+     "why": "Nothing of T308 is dropped: the remainder is named and stays open on the task. Splitting a task's landings is scheduling. It does not narrow the GM's two-tier words (2026-11-26) or the approved improvement 4, 'Fewer plan re-rounds' (2026-11-19 approval)."
+    },
+    {
+     "id": "T308-measure",
+     "summary": "Every later round is classed (a)-(e) from the round before it, before any rule is written. The record is kept under dev/measurements/2026-11-26/plan-review-rounds/.",
+     "class": "within",
+     "why": "This serves the request directly. The GM asked for actual numbers before process changes ('I'd like to see some actual numbers', 2026-11-19) and wants everything measured (2026-11-22). The class counts sum to the heading's 56 rounds and to its 169 minutes (169.1, rounded). T285's move from (d) to (a) is carried through the table and the 'root of 8' sentence (4+2+2)."
+    },
+    {
+     "id": "T308-D1",
+     "summary": "make decide refuses a task whose box line quotes words after 'the GM' that request.md does not hold, and names the heading to append them under. MIN_WORDS=4 and REACH=80 are GUESS knobs. It runs at make decide only, not at plan-delta.",
+     "class": "within",
+     "why": "It removes a measured mechanical cause of later rounds (class b, the GM's words missing) at decide, before dispatch. That is what improvement 4 and T308's line ask. Running it at decide only is design: the rule is per task line, and plan-delta reads blocks. The rule was replayed over the reviewed sections before it was kept, which is constraint 2."
+    },
+    {
+     "id": "T308-D1-false-refusals",
+     "summary": "Replayed over 77 tasks, the rule refuses 11. 6 are true, 3 are the replay's artifact, and 2 (T241, T235) are refusals that no review raised. The 2 are accepted, cured by one edit each.",
+     "class": "within",
+     "why": "These 2 are not refusals of good work. Each line attributes quoted words to the GM that his recorded request does not hold. The GM's T233 section (2026-11-24) says a ruling attributed to him names his recorded words: 'I never made a ruling that ... That was never at any point something that I said'. Its audit counted 74 of 180 such attributions as the defect. A quote with no record behind it is that defect, whether or not a review happened to raise it. So refusing it enforces the GM's own standing rule, and the cure is to record the words or correct the line. This is not a check refusing correct work under constitution XIV, so it needs no ruling."
+    },
+    {
+     "id": "T308-D2",
+     "summary": "The figure lint reads a k/K/M-suffixed numeral and a rounded figure with a unit ('20-odd minutes') as figures. A threshold's suffixed numeral ('past 300k tokens') stays a limit.",
+     "class": "within",
+     "why": "It removes a measured cause of NOT-REVIEWABLE rounds (class b). The threshold reading keeps the lint from refusing correct work, since a stated limit is not a count. It is not an exception to anything the GM asked. In the replay, each form flags one sentence over the 124 sections."
+    },
+    {
+     "id": "T308-D3",
+     "summary": "decide's notice states the verdict-voiding rule as the code has it. For an uncommitted reviewed section, any edit voids the verdict. For a committed one, typo-scale edits are kept. An edit during review gets its record refused. The notice refuses nothing.",
+     "class": "within",
+     "why": "It serves the section's goal that 'a builder knows before it dispatches which edits will cost it another round'. A test found the earlier wording false, and it was made true. It describes a rule the plan gate already enforces, so there is no enforcement to add (the GM's 'real enforcement and not just instructions', 2026-11-19, is not engaged)."
+    },
+    {
+     "id": "T308-D3-left (T337)",
+     "summary": "A CLEAR is voided by a typo-scale edit of a section not yet committed. That tolerance is not built here. It is filed as T337 and lands before T302.",
+     "class": "within",
+     "why": "This is a found defect: a needless round in a builder's tree. It pre-existed this part and was found by this part's own test, not introduced by it. Nothing the GM asked for leaves the feature. It is filed in this feature in FR-009's own deferral form, with why, the T337 id and 'lands before T302'. The GM endorsed filing found defects and bundling them ('not bother cutting back on new tasks filed', 2026-11-22). The convergence rules (2026-11-23), that only a claim-changing edit triggers review, govern page and pop-up cascades. The plan gate already applies that idea to committed sections, and T337 extends it on schedule. The 'fix all known bugs in each step' rule (2026-11-18) is about port steps, and the order 'before T302' honors it anyway. So this is not a narrowing that needs a ruling."
+    },
+    {
+     "id": "T308-D4",
+     "summary": "NOT built: a digest over decisions rather than the section. None of the 132 sections marks a decision line. At most 5 of the 16 (c) rounds (6.1 min) changed no decision. A prose-tolerant digest could keep a verdict across a changed decision.",
+     "class": "within",
+     "why": "The GM never asked for a decision digest. It was a candidate in the coordinating session's build. It is declined on measurement: no machine-readable decision line exists. It is also declined because building it would break feature 375's standing promise that a decision cannot change under a kept verdict. The decision not to build is recorded with its reopening condition, which honors the GM's 'record decisions about what NOT to implement' (2026-11-25, T259)."
+    },
+    {
+     "id": "T308-D5",
+     "summary": "NOT built: reading 'N of M' as a count. In the replay it flags 47 sentences in 26 of the 124 sections, and reviews objected to 1.",
+     "class": "within",
+     "why": "A rule that refuses 46 sentences the reviews accepted would refuse good work, so dropping it after the replay is within the request. The GM did not ask for this pattern, and the decline is recorded in the plan with its measurement."
+    },
+    {
+     "id": "T308-D6",
+     "summary": "The T55 order notice tells a builder (agent_id present) to run make builder-checks first and names the closing run as the other tier's. A builder-checks run since the last edit silences it. The main session is told what it was told before. It stays a notice, and the hook suite gains cases that render it.",
+     "class": "within",
+     "why": "It serves the GM's two-tier words: 'the correct place for that level of rigor is checking whether something in the session clone can land back in the main checkout'. Until now the notice told a first-tier builder to start the run its brief forbids. The closing run's rigor is enforced at the session clone's gates, so the notice adds no refusal that the 'real enforcement' words would require. The new hook-suite cases only make the new wording visible to guard-messages, which is enforcement of what was asked, not new behavior."
+    },
+    {
+     "id": "T308-left (T333)",
+     "summary": "Three of the six GM's-words rounds cited him by reference, which D1 cannot see. It is left, filed as T333, and lands before T302.",
+     "class": "within",
+     "why": "It is a different class from D1's quoted span on the line: a reference to a record the bundle does not carry. So one argument is not stretched over two unlike things. It stays inside the feature, filed in FR-009's form (why, id, order), and the GM endorsed filing found work (2026-11-22). Nothing the GM asked leaves the feature."
+    },
+    {
+     "id": "T308-order-exits",
+     "summary": "After T289, before T308's remainder and T302. One landing. Green: the new tests green and red with the rules off, plus builder-checks on both crates. Red: recorded and set down, with a claim that it cannot be done sent to the arbiter.",
+     "class": "within",
+     "why": "This is scheduling and exits, and nothing of the request is narrowed. The red-first counts and the items not seen red are stated. Those are test quality, not fidelity."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T308 (the plan review's later rounds, one part of the task: of feature 451's 135 plan review rounds from 2026-11-24 to 26, 56 were not the first for their task, 169 minutes of the 373 (observed 2026-11-26, method: `dev/measurements/2026-11-26/plan-review-rounds/t308-class.py` over the reviews' transcripts))",
+    "### T308 Approach (checklist part A)",
+    "### T308 part 2 (the remainder: after a day of the two-tier trial, parts of the tooling still spoke the one-tier language - the closing half's brief block, the builder brief's rules file, the order notice in the session clone and the plan template's performance prompt - each of which cost a round or a correction on 2026-11-26/27; and the trial's own record, so the task's box can close)",
+    "### T308 part 2 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T308 part 1 (measurement, D1-D6, Found and left)",
+     "summary": "The plan-review part: the later rounds classed, D1 (GM words on the task line in request.md or decide refuses), D2 (two figure forms), D3 (decide's notice of what voids a verdict), D4/D5 not built, D6 (order notice names the first tier to a builder), T333/T337 filed.",
+     "class": "within",
+     "why": "Byte-identical to the text in earlier.md that was judged CLEAR (diffed); serves the coordinating session's ALSO on T308's line and the GM's two-tier words; not re-ruled."
+    },
+    {
+     "id": "T308 part 2 retirement: coverage run beside the review",
+     "summary": "Part 1's remainder named 'the changed crate's coverage run tried beside the review'; part 2 does not build it, citing the GM's ruling that a builder runs no coverage.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It drops an item of T308's remainder, which was the coordinating session's build, not the GM's words (request.md says so of T308's line). The GM's own words of 2026-11-26 ('Why is a builder's closing step also running coverage? ... Our goal is to maximize task throughput.') forbid exactly this run, so the retirement is implied by his words; building it would contradict them."
+    },
+    {
+     "id": "T308-D7",
+     "summary": "make builder-brief KIND=closing-half drops the coverage STOP POINT and crate-checks CHECKS line; every source-changing kind prints one CHECKS line: builder-checks and a changed guard's own suite, no closing-checks/static/hooks-test/coverage; the refusal's hint says the owed tests; block bound kept under 2,000 characters.",
+     "class": "within",
+     "why": "Directly implements the GM's 2026-11-26 ruling that a builder's closing step runs no coverage, and his two-tier words (full rigor deferred to the session clone's gates). The bound is a test that enforces an existing limit, not new scope."
+    },
+    {
+     "id": "T308-D7 exception: a coverage-repair brief runs make crate-checks",
+     "summary": "One exception to 'a builder runs no coverage': a brief whose JOB is the coverage repair of a red batch gate runs make crate-checks on the crates it names.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words imply it: 'a few coverage failures that we have to fix later'. The repair IS that later fix, and a coverage repair that cannot run coverage could check its work only with another full batch gate. That would defeat his stated purpose ('maximize task throughput'), since a crate-scoped run is cheaper than a second red gate. The seam holds: it covers only a fresh agent whose job is that repair, on the crates named; the session's own repair in its clone is checked by the batch gate (D8), and no ordinary builder's closing step gains coverage."
+    },
+    {
+     "id": "T308-D8",
+     "summary": "scripts/container/builder-brief.md: THE FOUR KINDS no longer tells the closing half to run coverage; TWO TIERS states that a builder runs no coverage, why, the one exception, and that in the session clone the check of a repair is the batch gate.",
+     "class": "within",
+     "why": "The same ruling written into the rules file the builders read; the grep census of the file names its search space."
+    },
+    {
+     "id": "T308-D9",
+     "summary": "The T55 order notice, for the main session: silent while a landing it started is running; names make land (run_in_background) when a make carry has staged work since the last landing that went out; otherwise unchanged. Two known quiet-side misses are stated; message-check PASS recorded.",
+     "class": "within",
+     "why": "Implements the GM's 2026-11-26 words: the session clone is where tested things are staged and the full rigor is the session clone's own gate, so telling the session to run closing-checks a second time contradicted him. The two misses fall on the silent side of a notice that refuses nothing, and the session's next step (land) is the same either way, so neither is a wrong outcome (XIV v2.36.0)."
+    },
+    {
+     "id": "T308-D10 (T410)",
+     "summary": "The plan template's [perf] prompt names FR-013's measurement clause; lint/perf_line.rs refuses at decide a Performance line whose answer opens 'no' and holds 'measurement', with the sentence to write; old stub forms kept so 151 filed stubs are not orphaned; replay refuses none of 193 lines.",
+     "class": "within",
+     "why": "Enforces the GM's 2026-11-20 words, that a measurement task is 'counted as a performance task for the purpose of scheduling and coming first' (FR-013's second sentence), at the place the misclassification arises. It refuses only that one misstatement, so it passes the 'exact thing asked enforced' test. Its admitted false refusal (a real non-perf no that uses the word) has the shape of D1's two accepted false refusals, with a one-edit way out, and the replay over the committed plans found none. FR-012's recorded-reason escape is owed by 'every refusal of ... FR-013', and on the plain reading that is make task-start's refusal, not a decide lint; non-blocking."
+    },
+    {
+     "id": "T308-D11",
+     "summary": "The trial's record from existing readings: tasks through, builder minutes a task (stated as not like for like), batch gates red and their causes, what a red batch cost, and five things the trial has NOT shown.",
+     "class": "within",
+     "why": "Records the measurement T308's line asks for and states its limits rather than overclaiming. Item (iv) reads the GM's ruling as saying what would reopen a builder's coverage run. His recorded words state no such condition. It is an inference from 'Our goal is to maximize task throughput' and should be worded as that, but his words are in request.md, so it is not an unrecorded ruling. Non-blocking."
+    },
+    {
+     "id": "T308-D12",
+     "summary": "A RECOMMENDATION for the GM to confirm at the talk: T308's box closes with the two tiers adopted as the trial stands; the arrangement's verdict stays with feature 458 and T401; if he does not confirm, the box stays open.",
+     "class": "within",
+     "why": "Puts the closure to the GM rather than deciding it. Ruled on D12's own reading, that the box stays open unless he confirms; the Approach's 'can be ticked' is read as permission once he does. The trial's like-for-like measurement against round one was the coordinating session's build, not his words, so leaving (iii)-(v) unshown narrows nothing he asked. They are unmeasured, not defects."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T309 (2026-11-26: the landing gate of 451 T295 went red on `rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs` line 221, \"no test reaches\", and green on the re-run minutes later; the same red was listed apart at T272's closing checks that morning)",
+    "### T309 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 the cause",
+     "summary": "The cause is put down to the clock: three fixture transcripts are written in one coarse tick, so the sort ties some of the time. The task line had guessed the live transcripts.",
+     "class": "within",
+     "why": "The diagnosis is measured (probe 41 of 41, ties in 300 of 300 rounds, red every run once the times are set apart). Fixing the flaky gate verdict the task names is exactly the defect at hand."
+    },
+    {
+     "id": "D2 the tie test",
+     "summary": "aged() sets the fixture times to 100/200/300. A new spec_rounds_of_one_time_keep_their_paths_order reaches line 221 and pins its order. The redundant tie-break is kept, not removed.",
+     "class": "within",
+     "why": "This makes the gate's coverage verdict repeatable, which is the task. Keeping the tie-break or cutting it is a design choice, not a fidelity question. The test claims no more than it shows."
+    },
+    {
+     "id": "D3 transcripts in test builds",
+     "summary": "In a test build, transcripts_base and marks::reply_in read the fixture's TRANSCRIPTS or the empty path, never ~/.claude/projects. The binary is unchanged.",
+     "class": "within",
+     "why": "This closes the crate's tests to machine state, the same class of nondeterminism as the red. No behavior of the shipped binary changes."
+    },
+    {
+     "id": "D4 the checks door's test",
+     "summary": "close_in(root, args) carries the work. The test runs it on a scratch tree, with GUARD_LOG_DIR set to the test binary's own directory.",
+     "class": "within",
+     "why": "It fixes a found defect: a test reading the live tree's check state and writing CHECK_CLOSED escapes to the live guard log. That breaks the standing rule that a test's guard log is never the live one (451 T94/T207)."
+    },
+    {
+     "id": "D5 not changed: two cli wrapper calls",
+     "summary": "arbiter::cli(['bogus']) and cli(['bundle','--check-ask','x']) still run on the process's directory and environment.",
+     "class": "within",
+     "why": "Both answer before reading a file. The empty-HOME run shows nothing read or written, so no wrong outcome is left."
+    },
+    {
+     "id": "D6 exits, budget, performance",
+     "summary": "Green is builder-checks plus a clean cover run on the live HOME and an empty one. Red is set down and ruled through arbiter-ask. Budget is one landing. Not performance work.",
+     "class": "within",
+     "why": "These are the task's own exits and classification. Nothing narrows what was asked."
+    },
+    {
+     "id": "D7 the 2,229 test-written guard-log entries left",
+     "summary": "The section heads 'Found and left?' with 'none', then leaves the 2,229 CHECK_CLOSED 'nothing to close here' entries the test already wrote to ~/.claude/guard-log, because 'nothing here deletes from the live log'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This rests on the plan's own step 12, which says make audit and make guard-log GUARD=checks count these entries as escapes. By the plan's own words, then, those tools report about 2,229 escapes that no session made. That is a tool answering wrongly, a defect, not a mere difference. The figures SC-005/SC-006 read off the escape log depend on those counts. Fixing it is not physically impossible. Nothing in request.md or the spec carves out the guard log. Fixing it would not defeat the task's purpose. 'Nothing here deletes from the live log' describes the task's reach; it is not a reason. FR-009 lets a deferred defect stand only with the reason it is not fixed here, a filed task id and its order ('lands before ...'), and the section gives none of the three. It also labels the item 'none', which hides it from that check. The section must either remedy the 2,229 entries' effect on those counts in this task, or record it as a found-and-left defect with all three of FR-009's parts."
+    }
+   ],
+   "tasks": [
+    "T309"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T309 (2026-11-26: the landing gate of 451 T295 went red on `rust/gate/crates/arbiter/src/arbiter/bundle/reviews.rs` line 221, \"no test reaches\", and green on the re-run minutes later; the same red was listed apart at T272's closing checks that morning)",
+    "### T309 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The cause is the fixture transcripts' clock-given modified times (measured by probe, empty-HOME cover run and a 300-round tie count), not the live transcripts the task line supposed; the fix sets the old fixture's times to 100/200/300 and adds spec_rounds_of_one_time_keep_their_paths_order, which pins the stable sort's path order and reaches line 221.",
+     "class": "within",
+     "why": "Fixing the red-then-green landing gate on line 221 is the task line itself; correcting the task line's supposed cause by measurement and pinning the line by a deterministic fixture does what was asked and claims no more than the test proves."
+    },
+    {
+     "id": "D2",
+     "summary": "reviews.rs transcripts_base in a test build returns the test's TRANSCRIPTS directory or the empty path, never the machine's ~/.claude/projects; the binary's build unchanged.",
+     "class": "within",
+     "why": "Serves the stated goal that the crate's tests give one answer whatever the home directory holds; touches test builds only, so the binary's behavior (a stated constraint) is kept."
+    },
+    {
+     "id": "D3",
+     "summary": "bundle.rs's two reads of a round's reply take the same base (marks::reply_in) instead of marks::reply_of reading the machine's transcripts for any dispatch with an aid.",
+     "class": "within",
+     "why": "The same closure of the arbiter crate's tests to machine state, applied to the second read path in the same crate; binary behavior unchanged."
+    },
+    {
+     "id": "D4",
+     "summary": "close_in(root, args) carries close_cli's work; close_answers_its_usage_and_its_verdict runs it on a scratch tree, and the process's GUARD_LOG_DIR is the test binary's own directory, so the test no longer reads the live tree's check state or writes CHECK_CLOSED escapes to ~/.claude/guard-log.",
+     "class": "within",
+     "why": "A defect found in the crate under repair (a test writing two false escapes to the live guard log each run, measured) fixed in this task, matching the 451 T94/T207 constraint that a test's guard log is never the live one; the land, plan and task crates' quiet_census is the existing pattern."
+    },
+    {
+     "id": "D5",
+     "summary": "Not changed: arbiter::cli([\"bogus\"]) and arbiter::cli([\"bundle\",\"--check-ask\",\"x\"]) keep running on the process's directory and environment.",
+     "class": "within",
+     "why": "Both answer before reading any file, so they read no machine state and the goal is met without change; leaving correct code as it is is not a narrowing."
+    },
+    {
+     "id": "D6",
+     "summary": "Exits and proof: builder-checks green and the crate's cover run clean on the live and on an empty HOME with the same 4,382 lines reached; the empty HOME holding nothing but its cache link afterwards.",
+     "class": "within",
+     "why": "A check whose only effect is to show the requested repeatability actually holds; it enforces the task, it adds no behavior."
+    },
+    {
+     "id": "D7a",
+     "summary": "Found and left: the 2,229 test-written 'nothing to close here' entries already in ~/.claude/guard-log are not removed here; filed as T143 (the open task the section says already names this test's writes), lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's NOT LEGITIMATE was for leaving them with no deferral; the item now carries FR-009's three parts - why not here (the entries stand in the live log outside this tree, and removing or filtering test-written rows is an existing task's subject), the filed id (T143) and the order (lands before T302). The purpose of the fix - the audit's escape counts not polluted by tests - is not gutted: the source of new entries is stopped in this task (D4), and the standing ones are ordered to be cleared before a later step rather than carried indefinitely. That T143 names this test is the section's statement; the bundle holds no tasks file to confirm it, and if T143 does not cover these rows the deferral would need its own filed task."
+    },
+    {
+     "id": "D7b",
+     "summary": "Found and left: sibling crates' tests that default to the machine's live transcripts or guard log (bundle crate's marks::reply_of and record/bundle/modal.rs, task crate's task_add/quick/tests.rs, process-wide GUARD_LOG_DIR in land, plan and task crates), found by grep and unmeasured; filed as T312, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's goal is the arbiter crate's tests and coverage; these are other crates whose effect is unmeasured, so whether each is a defect at all (a wrong outcome, not a difference) is not yet known and measuring first is this project's standing rule. The item carries FR-009's form - why not here, filed id T312, order lands before T302 - and does not reach back into the arbiter crate's own fix."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T308 to T309, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

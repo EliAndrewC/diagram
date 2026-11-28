@@ -1,0 +1,595 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T87": {
+   "section_sha256": "ac61de23c12f779dbcab1516674f526dd7bfa0453d1f50092e13feb51caac9f8",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T87-scratch",
+     "summary": "A path whose real path (existing part's links resolved) lies under /tmp or $TMPDIR and in no project tree (TREES: /diagram with its clones, /host-l7r-repo; CLONE_MAIN for tests) is no guard file; a $TMPDIR of /, home or a place holding it counts for none.",
+     "class": "within",
+     "why": "The task is a check refusing good work (110 make-only and 11 guard-file refusals of scratch fixtures, measured 2026-11-21), a defect under XIV; freeing scratch by real path, so a link into a clone is the clone's, fixes it without opening any project tree's guard file (both replays: no verdict changed outside scratch)."
+    },
+    {
+     "id": "T87-held-by-name-elsewhere",
+     "summary": "Every place outside scratch keeps HEAD's reading by name, not only project trees: /Makefile (what the walk makes of $UNSET/Makefile and $CLAUDE_PROJECT_DIR/Makefile) and ~/.claude/settings.json stay held.",
+     "class": "within",
+     "why": "The task frees scratch fixtures; nothing asked frees places outside scratch. The brief's third rule keeps HEAD's reading for a path the walk cannot place, and HEAD's binary refuses echo x > $CLAUDE_PROJECT_DIR/Makefile which the walk reads as /Makefile (measured 2026-11-21, shapes1.txt), so a list of project roots alone would let that write through; ~/.claude/settings.json is a real guard file registering the GM's hooks on 8 events (measured, the file read). Holding these keeps the enforcement real."
+    },
+    {
+     "id": "T87-hit-by-hit",
+     "summary": "make-only lets a write the walk placed in scratch overrule the text patterns hit by hit (statement paired with walk segment by its words); a write the walk cannot place or see beside it stays refused as at HEAD.",
+     "class": "within",
+     "why": "Mechanism of the same fix; narrower than a command-wide clear, and pinned against the let-through a command-wide clear produced (shapes3/4)."
+    },
+    {
+     "id": "T87-python",
+     "summary": "The Python patterns no longer read a program the walk judged whose guard files' names all land in scratch; a program that chdirs is read from / and never freed.",
+     "class": "within",
+     "why": "The same over-refusal on the Python route (the 2026-11-20 scratch-mirror row), with the chdir let-through closed and pinned both ways."
+    },
+    {
+     "id": "T87-cdpath",
+     "summary": "A command naming CDPATH keeps HEAD's by-name reading throughout (no hit cleared, no program freed).",
+     "class": "within",
+     "why": "Closes a let-through the fix would otherwise open (a clone write placed in scratch by a walk that does not read CDPATH, measured 2026-11-21, shapes7.txt); CDPATH stands in none of the 9,646 corpus rows or 925 refusals, so it keeps no good work refused."
+    },
+    {
+     "id": "T87-worktree-add-in-command",
+     "summary": "A command holding a worktree add keeps HEAD's by-name reading throughout; 17 logged rows of the 110 stay refused this way.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A worktree add makes a project repository's worktree in scratch before any .git pointer shows it, so at the guard's reading the place cannot be told from scratch: applying the scratch rule there is not possible without the pointer. The rows it keeps refused are writes into a project's worktree, whose commits reach the repository - not the scratch fixtures the task is for - so holding them serves the task's purpose and the GM's 'real enforcement' rather than gutting it."
+    },
+    {
+     "id": "T87-project-worktree",
+     "summary": "A git worktree in scratch of a project repository is a project tree (nearest .git read, gitdir/commondir followed, held where its real path lies in a project tree); 18 logged rows into standing worktrees and 4 corpus rows stay refused that the first fix freed.",
+     "class": "narrowing",
+     "why": "It keeps refusals that a literal 'nothing under /tmp is held' would free, so it is ruled, not waved through. Purpose-level: the task's purpose is that scratch fixtures, which reach no project, are not refused; a project repository's worktree under /tmp is not scratch in that sense, since its commits reach the repository (pointers read, measured 2026-11-21, worktrees.py), and freeing its guard files would let a project's guard files be changed from the shell and committed - the opposite of the GM's 'make sure all of the enforcement is real enforcement'. The session ruled it on a review note, but the ruling rests on that purpose and is pinned red first.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T87-tests-and-T116",
+     "summary": "Tests' worlds name themselves a project tree through CLONE_MAIN; T116's permit lines untouched, its premise noted (a scratch copy needs no permit).",
+     "class": "within",
+     "why": "Test scaffolding and a recorded consequence for a sibling task; no behavior asked for is dropped."
+    },
+    {
+     "id": "T87-left-T130",
+     "summary": "The shell walk's own reading of CDPATH (shared::tree) is not fixed here; filed as T130, lands before T22. The let-through it caused in make-only is closed in T87.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The wrong outcome T87 met (a clone write let through) is closed in this task and pinned red first; what is left is shared::tree's reading, the files T83's and T110's builders are working in now, which concurrent edits make a real constraint rather than convenience. CDPATH stands in none of 9,646 corpus rows or 925 refusals (measured). The deferral states why, its task id and its order, as FR-009 requires, and is fixed before T22, not abandoned."
+    },
+    {
+     "id": "T87-left-T128",
+     "summary": "make-only's pre-existing by-name clear still overrules the text patterns command-wide (cp a /tmp/q/settings.json; ls | xargs sed -i ... .claude/settings.json passes on HEAD and the fix); filed as T128, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a check passing bad work), but not T87's: it is older than T87, unchanged by it (rc=0 on both binaries, measured), and fixing it changes verdicts for every command the by-name clear frees today, owing its own replay. It is filed with a reason, an id and an order before T22, the FR-009 form; leaving it to its own task does not gut T87's purpose (stopping refusals of scratch fixtures without opening project guard files) since T87 neither causes nor widens it. The stated reason 'not good work refused' is not by itself a reason (a let-through is a defect too); the scope-and-replay reason is what carries it."
+    },
+    {
+     "id": "T87-left-T131",
+     "summary": "make-only's Python patterns read a program's string literals as code (a stdin program writing plan.md refused for quoting the chdir probe); filed as T131, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (good work refused: a string literal in a stdin program read as a write), but older than T87 and unchanged by it, in a project tree rather than scratch, and of a different mechanism (literal versus code in the Python route) whose fix moves Python-route verdicts across every tree and owes its own replay. T87's purpose (scratch fixtures let through) is met without it; filed as T131 and fixed before T22, in the same step, with the reason, id and order FR-009 asks."
+    },
+    {
+     "id": "T87-left-T126",
+     "summary": "guard-file's Read reminder still tells a scratch copy it is a guard file (read_context reads the name alone); filed as T126, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T87 makes this reminder stale (at HEAD a scratch copy was held, so it was accurate), so it is judged on its outcome, not on the plan's location-based reason. The outcome: an advisory line on Read, never a refusal; the Edit it warns about now passes with no permit, and make guard-edit still grants one by name, so the worst a builder meets is one needless guard-edit call - no work refused, no guard file opened. That is a minor wrong answer, not one that defeats T87's purpose, and it is filed as T126 and fixed before T22, inside the same step, so it is not carried past the step."
+    },
+    {
+     "id": "T87-not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A guard defect fix, not a performance improvement or a measurement task under the GM's 2026-11-20 rulings; the label decides scheduling only and narrows nothing T87 delivers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T88": {
+   "section_sha256": "428d03b276155e54e3123e05c8966781c473c2eba161419e3bae4282a08361f3",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-landing-worktree",
+     "summary": "With other work uncommitted in the clone, make land runs whole in a persistent landing worktree <clone>-land at the clone's HEAD, under a lock, seeded with the clone's kept results; the clone then takes the landed tip (update-ref, merge-tree/commit-tree, three-way merge-file, conflict moves nothing, exit 4).",
+     "class": "within",
+     "why": "A design for a [perf] task under FR-013 (the landings). It narrows nothing the GM asked: the gate still judges the tree pushed, the push's dirty-tree refusal and the stamp's disk key are unchanged, and the two other ways are measured and rejected on their costs."
+    },
+    {
+     "id": "a-own-edits-refusal",
+     "summary": "The landing refuses the landing tasks' own edits still uncommitted (PostToolUse edit lines under the task naming a dirty file newer than its last commit), naming the git commit command; dirty files no task's edit names stay in the clone, not landed.",
+     "class": "within",
+     "why": "Keeps the landed tree the task's own work; no requested behavior is narrowed. Red-first pair recorded (78/3 then 81)."
+    },
+    {
+     "id": "b-rolling-dispatch",
+     "summary": "While something runs, the Stop hook refuses a stop when fewer than L7R_BUILDERS (GUESS 3) builders run and next_independent names an open task never started, after no open task, touching no running task's named files; escape is make set-down F= WHY=.",
+     "class": "within",
+     "why": "Adds a refusal in service of the builders' loop; it carries a reasoned, recorded escape and a named compliant command, and red-first is recorded (350/2 then 352). Narrows nothing asked."
+    },
+    {
+     "id": "b-order-perf-first",
+     "summary": "next_independent takes performance work first across every active feature, then the rest, feature-first then each active feature by its last task-start.",
+     "class": "within",
+     "why": "This is FR-013's own clause: the Stop hook's start-the-next names an open performance task before any other, across active features. The plan corrected an earlier feature-first ordering that broke it (r1 red, r2 green)."
+    },
+    {
+     "id": "b-perf-later-ok-named",
+     "summary": "Where the task the Stop hook names is not performance work, its named make task-start carries PERF_LATER_OK - which happens only when every open performance task is started, waits on an open task, or overlaps a running task's files.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows how far FR-013's task-start refusal reaches in practice, so it is ruled. It uses FR-013's own escape, of a reason, recorded, for the case that escape names: a performance task that cannot start now because it waits on another task's landing (or is already running). The hook names a non-perf task only after no performance task can be started. Leaving slots empty in that case would not get performance work done any sooner, and would undo the GM's purpose ('doing those first makes everything after them faster'), which is ordering, not idling. Each start still needs the escape typed in and logged."
+    },
+    {
+     "id": "b-busy-files-rule",
+     "summary": "Overlap is read from a task line's named files or *_hooks modules against running tasks' edit lines, with specs/, .git/ and the ledger excluded and common basenames matched only with a path; a line naming nothing fails toward a start.",
+     "class": "within",
+     "why": "A design detail of the dispatch rule; its stated cost (two builders in one crate) is judged by T86's closing checks. Narrows nothing asked."
+    },
+    {
+     "id": "knob-L7R_BUILDERS",
+     "summary": "L7R_BUILDERS is a new knob, GUESS 3, labeled at its point of change (set_down_hooks.rs BUILDERS); D14's knob table row is T22's.",
+     "class": "within",
+     "why": "D14 asks for a GUESS label at the point of change, and T88 gives one. The knob table is a task the spec assigns elsewhere, so this sets no new rule. T22 has to list this knob when it builds the table."
+    },
+    {
+     "id": "444-set-down-vs-449-T244",
+     "summary": "449 T244's stop before the parked homestead stages is not built here; 444 is set down, so free_slot names no 444 stage task now, and a stop there passes by make set-down naming the GM's ruling.",
+     "class": "within",
+     "why": "The rolling-dispatch refusal does not force work the GM ruled to stop before: 444 is set down (measured from set-downs.jsonl and task-starts.jsonl), and the escape the refusal names takes his ruling as its WHY. T244 belongs to 449."
+    },
+    {
+     "id": "costs-disk",
+     "summary": "The landing worktree's own target (13 GB measured) is not pruned whole; only the sweep's per-crate variant rule trims it, and a hand-deleted clone leaves its -land until the directory goes.",
+     "class": "within",
+     "why": "A stated cost, not a wrong outcome; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "left-T98-occupancy-after",
+     "summary": "The after-occupancy measurement is filed as T98, lands before T22, because it needs a night of rolling dispatch first.",
+     "class": "within",
+     "why": "It cannot be measured before a night runs on the change. It is filed with an order, as FR-009 requires, and the before-figure uses the replay's method, so before and after are measured one way."
+    },
+    {
+     "id": "left-T99-idle-tests-flake",
+     "summary": "test-idle-tests-hooks.sh's wall-clock case refused good work under load (red at load 16.5, green on rerun); filed as T99, lands before T22, as another guard's suite outside T88's files.",
+     "class": "within",
+     "why": "A defect, but T88 is not the one carrying it forward. It is filed with its reason, its id and its order, which is what FR-009 asks of a deferral. FIX AS WE GO's rule about steps applies to 449's port, and this defect is still put ahead of T22. The GM did not ask T88 to fix this suite."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))",
+    "### T87 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T87-scratch-rule",
+     "summary": "held becomes named-and-not-scratch: a path whose real path (links resolved by shared::tree::realpath) lies under /tmp or $TMPDIR and in no project tree (TREES: /diagram with its clones, /host-l7r-repo; CLONE_MAIN adds a test's world) is no guard file; every other place keeps HEAD's reading by name.",
+     "class": "within",
+     "why": "Fixes a check that refuses good work (constitution XIV's defect class: 110 make-only and 11 guard-file refusals of scratch copies, none resolving into a project tree), the task as filed from T79's found-and-left. It narrows nothing the GM asked: the request and spec do not concern guard-file protection, and protection of every project tree's guard file is kept, read by real path so a scratch link into a clone is still held."
+    },
+    {
+     "id": "T87-tmpdir-bounds",
+     "summary": "A $TMPDIR of /, the home directory or a place holding it counts as no scratch; /Makefile (where $UNSET/Makefile and $CLAUDE_PROJECT_DIR/Makefile land), ~/.claude/settings.json and the home directory's worktree copy stay held.",
+     "class": "within",
+     "why": "Keeps refusals HEAD makes; nothing freed beyond scratch. ~/.claude/settings.json is measured to register the GM's hooks, so it is a real guard file; a path the walk cannot place keeps HEAD's reading."
+    },
+    {
+     "id": "T87-hit-by-hit",
+     "summary": "make-only's walked_write lets a write the walk placed in scratch overrule the text patterns hit by hit, pairing each hit's statement with a walk segment by its words (pair_words, holds); an unplaced or unseen write beside it stays refused.",
+     "class": "within",
+     "why": "The mechanism of the same fix, chosen so the freeing reaches only scratch writes; measured against HEAD in both directions and on two replays (no verdict changed outside scratch)."
+    },
+    {
+     "id": "T87-python-scratch",
+     "summary": "The Python patterns no longer read a program the walk judged whose guard files' names all land in scratch (interp::program_names_scratch); a relative open('Makefile','w') from a clone stays refused.",
+     "class": "within",
+     "why": "The same defect on the program route, found by the replay and fixed in the task rather than deferred; pinned in both directions."
+    },
+    {
+     "id": "T87-test-worlds",
+     "summary": "The test worlds (both modules' world, guard-file suite section 8) name themselves a project tree through CLONE_MAIN.",
+     "class": "within",
+     "why": "Test fixtures standing in for a project tree; CLONE_MAIN only adds a held tree, it frees nothing."
+    },
+    {
+     "id": "T87-T116-premise",
+     "summary": "T116's permit lines untouched; a scratch copy no longer needs a permit, make guard-edit still grants one by name.",
+     "class": "within",
+     "why": "Consequence of the fix, recorded; no behavior of T116's removed."
+    },
+    {
+     "id": "T87-left-T128",
+     "summary": "make-only's by-name clear (HEAD's) still overrules the text patterns over the whole command, letting cp a /tmp/q/settings.json; ls | xargs sed -i ... .claude/settings.json through; filed as T128, lands before T22.",
+     "class": "within",
+     "why": "A let-through older than T87 and outside the task as filed (scratch writes refused), measured on HEAD's binary as well as the fix's; deferred in the form FR-009 of the accepted spec prescribes (why not here, the filed id, its order), and ordered to land before the next step, so no known defect is carried past it."
+    },
+    {
+     "id": "T87-left-T126",
+     "summary": "guard-file's Read reminder (read_context, by name alone) still tells a scratch copy it is a guard file; filed as T126, lands before T22.",
+     "class": "within",
+     "why": "Outside held and no refusal; deferred with reason, filed id and order per FR-009, before the next step."
+    },
+    {
+     "id": "T87-not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A labeling the plan makes for scheduling under FR-013; the task proceeds now either way, and the label narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))",
+    "### T87 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 scratch is no guard file",
+     "summary": "held becomes named and not scratch: a path whose real path (existing part's links resolved) lies under /tmp or $TMPDIR and in no project tree (TREES: /diagram with its clones, /host-l7r-repo; CLONE_MAIN for tests) is no guard file",
+     "class": "within",
+     "why": "The task as filed is a guard refusing correct work (110 make-only and 11 guard-file refusals of scratch fixtures, each dated with its method). Fixing a check that refuses good work is fixing a defect, not loosening the enforcement the GM asked to be real: the realpath reading keeps a scratch link into a clone held, and item 4 measured that no logged /tmp guard-file write resolves into a project tree."
+    },
+    {
+     "id": "D2 $TMPDIR guard",
+     "summary": "a $TMPDIR of /, the home directory or a place holding it counts as no scratch root",
+     "class": "within",
+     "why": "This tightens D1. It stops $TMPDIR from freeing the whole filesystem or the home directory."
+    },
+    {
+     "id": "D3 every other place held by name (departure from the brief's 'held only inside a project tree')",
+     "summary": "outside scratch the by-name reading stays: /Makefile (what the walk makes of $UNSET/Makefile and $CLAUDE_PROJECT_DIR/Makefile), ~/.claude/settings.json and the home directory's one render-worktree row stay refused",
+     "class": "within",
+     "why": "It departs from the brief's first rule (the session's filing, not the GM's words), and the departure leans toward holding. Item 4 gives a measured reason: a positive list of project roots would let a write the walk cannot place, such as $CLAUDE_PROJECT_DIR/Makefile, through. ~/.claude/settings.json is a real guard file that registers the GM's hooks. The one home-directory row (~/.claude/jobs/<id>/tmp/rs-wt/Makefile, a render worktree's copy) staying refused is a single row held as at HEAD. Nothing in request.md is narrowed."
+    },
+    {
+     "id": "D4 hit-by-hit overrule in make-only",
+     "summary": "scratch_hits_placed: a text-pattern hit is cleared only when its own statement pairs (pair_words, holds) with walk segments whose writes all landed on no guard file; an unplaced or unseen write beside it stays refused as at HEAD",
+     "class": "within",
+     "why": "This is the mechanism that applies D1 to make-only's text patterns. It is scoped so that writes the walk cannot place or see keep HEAD's verdict. Item 7 records the command-wide clear it replaced, and the probes that caught the let-through."
+    },
+    {
+     "id": "D5 Python programs in scratch",
+     "summary": "PY_WRITES no longer reads a program whose guard files' names all land in scratch (program_names_scratch); a program that chdirs is read from / and never freed (interp::moves)",
+     "class": "within",
+     "why": "This extends D1 to the Python route, where the logged refusal of 2026-11-20 sits. The chdir rule tightens it, pinned against the probe HEAD refuses."
+    },
+    {
+     "id": "D6 CDPATH and worktree add keep HEAD's reading",
+     "summary": "a command naming CDPATH or worktree add keeps the reading by name throughout (kept): no hit cleared and no program freed",
+     "class": "within",
+     "why": "This tightens D1 and closes the let-through MODE 4 round 2 found. It is pinned red first."
+    },
+    {
+     "id": "D7 a scratch git worktree of a project repository is a project tree",
+     "summary": "project_worktree: the nearest .git up to the scratch root is read; a gitdir file leading to a common dir in a project tree makes the place a project tree; a .git directory is scratch's own repository",
+     "class": "within",
+     "why": "This tightens D1, because such a worktree's commits reach the project repository. A scratch tree with its own .git directory stays free, since its commits reach no project repository directly. The trees freed only because they are gone before the replay (the 8 rows into /tmp/t78/t78wt, corpus 6759) are an artifact of replaying after the fact: in live use the tree exists at write time, and one made in the same command is kept by D6."
+    },
+    {
+     "id": "D8 test worlds name themselves a project tree",
+     "summary": "both modules' world and the guard-file suite's section 8 fixture declare themselves a project tree through CLONE_MAIN",
+     "class": "within",
+     "why": "The fixtures stand in for a project tree, and this keeps them testing what they tested. It is test scaffolding for the requested behavior."
+    },
+    {
+     "id": "D9 T116 untouched, premise moved",
+     "summary": "T116's permit store and reader are not changed; a scratch copy no longer needs a permit while make guard-edit still grants one by name",
+     "class": "within",
+     "why": "It leaves another task's lines alone and records the consequence. Nothing that was asked is dropped."
+    },
+    {
+     "id": "F1 walk's CDPATH reading deferred (T130, lands before T22)",
+     "summary": "shared::tree's walk does not read CDPATH; not fixed here, filed as T130",
+     "class": "within",
+     "why": "The wrong outcome this caused in T87's guard (a clone write let through) is closed here by D6, so T87 carries no let-through forward. What remains is the walk's own reading, in files T83 and T110 hold. The item gives FR-009's why, task id and order."
+    },
+    {
+     "id": "F2 make-only by-name clear command-wide (T128, lands before T22)",
+     "summary": "HEAD's by-name clear still overrules text patterns over the whole command, letting cp a /tmp/q/settings.json; ls | xargs sed -i ... .claude/settings.json through",
+     "class": "within",
+     "why": "This is a defect (a check passing bad work), and it is older than T87: HEAD's binary lets it through too, and T87 neither introduces nor widens it. Its being older is not what makes the deferral acceptable. What does is that the accepted spec's FR-009, which carries the GM's approved improvement 4 ('briefs that default to fixing in the task'), provides for deferring a defect with a why, a filed task id and an order, and this item has all three: judging it hit by hit reaches every command the by-name clear frees and is owed its own replay, T128, lands before T22. The defect is filed and ordered, not left unrecorded or carried into the next step unscheduled. None of the GM's words in request.md requires it to be fixed inside T87."
+    },
+    {
+     "id": "F3 Python scratch refusal fixed here",
+     "summary": "the 2026-11-20 scratch-mirror Python write is fixed in this task (program_names_scratch), pinned both ways",
+     "class": "within",
+     "why": "A found defect fixed in the task. This is the default FR-009 asks for."
+    },
+    {
+     "id": "F4 Python patterns read string literals as code (T131, lands before T22)",
+     "summary": "make-only refused a project-tree plan.md write whose stdin program quoted the chdir probe; not fixed here, filed as T131",
+     "class": "within",
+     "why": "This is a defect (good work refused) in a project tree, outside the scratch rule T87 changes, and T87 does not alter it. The item gives FR-009's why, task id (T131) and order (before T22)."
+    },
+    {
+     "id": "F5 Read reminder names a scratch copy a guard file (T126, lands before T22)",
+     "summary": "read_context reads the name alone, so its reminder calls a scratch copy a guard file; not fixed here, filed as T126",
+     "class": "within",
+     "why": "It is a reminder, not a refusal, and it sits outside held. It is filed with an id and an order under FR-009."
+    },
+    {
+     "id": "P1 Performance work? no",
+     "summary": "T87 is classed not performance work",
+     "class": "within",
+     "why": "In the bundle the GM's words make performance improvements and measurement tasks performance work (2026-11-20). T87 is neither: it is a guard false-refusal fix, whose time saving is incidental. FR-013's own definition is cut in spec-index.md, so this rests on the GM's words alone. T87 is built and lands next, after T79 and before T116, so the class changes no schedule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))",
+    "### T87 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 scratch is no guard file",
+     "summary": "held becomes named-and-not-scratch: a path whose real path (links resolved) lies under /tmp or $TMPDIR and in no project tree (TREES: /diagram with its clones, /host-l7r-repo; CLONE_MAIN for tests) is no guard file; every other place, /Makefile and ~/.claude/settings.json included, keeps the reading by name; a $TMPDIR of /, home or a place holding it counts for none",
+     "class": "within",
+     "why": "This is the task as filed: a check refusing good work (scratch fixtures) is a defect, and the fix frees exactly scratch while keeping the brief's rule that a path the walk cannot place keeps HEAD's reading. Real path resolution keeps a scratch link into a clone held."
+    },
+    {
+     "id": "D2 hit-by-hit overrule in make-only",
+     "summary": "scratch_hits_placed: a text-pattern hit is cleared only when its own statement pairs (by words, quotes dropped, same head) with walk segments whose writes all landed on no guard file; an unplaced or unseen write beside it stays refused as at HEAD",
+     "class": "within",
+     "why": "The mechanism that carries D1 into make-only without freeing the unplaced writes the brief's third rule keeps; it narrows nothing the task asks to free."
+    },
+    {
+     "id": "D3 Python programs in scratch",
+     "summary": "PY_WRITES no longer reads a program the walk judged whose guard names all land in scratch (program_names_scratch); a program that chdirs is read from / and never freed",
+     "class": "within",
+     "why": "Frees the Python-written scratch fixture the task names (point 1 lists 'a Python program standing there'); the chdir hold is the brief's rule that a place the walk cannot know keeps HEAD's reading, measured as a real let-through otherwise (shapes6)."
+    },
+    {
+     "id": "D4 CDPATH keeps the reading by name",
+     "summary": "A command naming CDPATH keeps HEAD's reading throughout (no hit cleared, no program freed)",
+     "class": "within",
+     "why": "The walk does not read CDPATH, so such a cd can carry a write out of scratch into a clone (measured let-through, shapes7); the brief's third rule (a path the walk cannot place keeps HEAD's reading) already covers it, and CDPATH appears in none of the 9,646 corpus rows or 925 logged refusals, so it frees no observed good work less."
+    },
+    {
+     "id": "D5 in-command worktree add keeps the reading by name",
+     "summary": "A command containing `worktree add` keeps HEAD's reading throughout, since no .git pointer shows the new worktree yet",
+     "class": "within",
+     "why": "Adjudicated apart from D6: here the walk cannot know at judgment time that the place is a project worktree, so it is the brief's third rule (an unplaceable place keeps HEAD's reading), not an exception to the scratch rule."
+    },
+    {
+     "id": "D6 a scratch git worktree of a project repository is a project tree",
+     "summary": "project_worktree: the nearest .git at or under the scratch root is read; a gitdir/commondir whose real path lies in a project tree makes the place a project tree, so writes there stay held (35 of the 110 logged /tmp rows held again)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the measured count the task was filed on (110 logged /tmp rows) to 75, but applying the scratch rule literally there would defeat the guard's own purpose and the brief's first rule: a worktree of this repository is a project tree whose commits reach the repository, so a Makefile or settings.json written there is the very write make-only exists to route through make. The rule held only outside project trees; this decides correctly that a project worktree is one. Distinct from D5 (known by pointer vs unknowable in-command), each passes on its own ground."
+    },
+    {
+     "id": "D7 T116 permit premise",
+     "summary": "T116's permit lines untouched; a scratch copy needs no permit now, make guard-edit still grants by name",
+     "class": "within",
+     "why": "A consequence of D1 stated, not a change to T116's scope."
+    },
+    {
+     "id": "L1 walk's own CDPATH reading left (T130)",
+     "summary": "shared::tree not taught CDPATH; filed T130, lands before T22",
+     "class": "within",
+     "why": "No wrong outcome is left by T87: the let-through is closed here by D4, and CDPATH appears in no logged or corpus row; what remains is another task's file (T83/T110), filed with id, reason and order per FR-009."
+    },
+    {
+     "id": "L2 make-only's whole-command by-name clear left (T128)",
+     "summary": "HEAD's by-name clear still overrules the text patterns over the whole command, letting `cp a /tmp/q/settings.json; ls | xargs sed -i ... .claude/settings.json` through; filed T128, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a check passing bad work) left, so ruled. Not on its age or its reach: it passes because T87 neither introduces nor widens it (rc=0 on HEAD's binary and the fix's, measured), it lies outside the task as filed (good scratch work refused), fixing it changes verdicts on project-tree commands outside the scratch rule, and it is not dropped but filed in FR-009's form (why, T128, lands before T22). Nothing in the GM's request requires it inside T87; 'default to fixing in the task' is a default."
+    },
+    {
+     "id": "L3 Python string literals read as code (T131)",
+     "summary": "make-only reads a program's string literals as code, refusing a project-tree program that only mentions a guard file; filed T131, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (good work refused) left, but in a project tree, outside the scratch rule T87 changes and not introduced by it; filed with id, reason and order per FR-009."
+    },
+    {
+     "id": "L4 guard-file Read reminder on scratch copies (T126)",
+     "summary": "read_context still tells a scratch copy it is a guard file; filed T126, lands before T22",
+     "class": "within",
+     "why": "A reminder, not a refusal, outside held; filed with id, reason and order. No refusal or let-through is left."
+    },
+    {
+     "id": "P1 Performance work? no",
+     "summary": "T87 labeled not performance work (FR-013)",
+     "class": "within",
+     "why": "T87 is a guard false-positive fix, not a performance improvement nor a measurement task in the GM's 2026-11-20 sense; the label does not contradict the GM's three statements. The block should name FR-013 when answering it (the bundle carries only its cut first sentence)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))",
+    "### T87 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T87-scratch",
+     "summary": "A path whose real path (existing part's links resolved) lies under /tmp or $TMPDIR and in no project tree (TREES: /diagram with its clones, /host-l7r-repo; CLONE_MAIN for tests) is no guard file; a $TMPDIR of /, home or a place holding it counts for none.",
+     "class": "within",
+     "why": "The task is a check refusing good work (110 make-only and 11 guard-file refusals of scratch fixtures, measured 2026-11-21), a defect under XIV; freeing scratch by real path, so a link into a clone is the clone's, fixes it without opening any project tree's guard file (both replays: no verdict changed outside scratch)."
+    },
+    {
+     "id": "T87-held-by-name-elsewhere",
+     "summary": "Every place outside scratch keeps HEAD's reading by name, not only project trees: /Makefile (what the walk makes of $UNSET/Makefile and $CLAUDE_PROJECT_DIR/Makefile) and ~/.claude/settings.json stay held.",
+     "class": "within",
+     "why": "The task frees scratch fixtures; nothing asked frees places outside scratch. The brief's third rule keeps HEAD's reading for a path the walk cannot place, and HEAD's binary refuses echo x > $CLAUDE_PROJECT_DIR/Makefile which the walk reads as /Makefile (measured 2026-11-21, shapes1.txt), so a list of project roots alone would let that write through; ~/.claude/settings.json is a real guard file registering the GM's hooks on 8 events (measured, the file read). Holding these keeps the enforcement real."
+    },
+    {
+     "id": "T87-hit-by-hit",
+     "summary": "make-only lets a write the walk placed in scratch overrule the text patterns hit by hit (statement paired with walk segment by its words); a write the walk cannot place or see beside it stays refused as at HEAD.",
+     "class": "within",
+     "why": "Mechanism of the same fix; narrower than a command-wide clear, and pinned against the let-through a command-wide clear produced (shapes3/4)."
+    },
+    {
+     "id": "T87-python",
+     "summary": "The Python patterns no longer read a program the walk judged whose guard files' names all land in scratch; a program that chdirs is read from / and never freed.",
+     "class": "within",
+     "why": "The same over-refusal on the Python route (the 2026-11-20 scratch-mirror row), with the chdir let-through closed and pinned both ways."
+    },
+    {
+     "id": "T87-cdpath",
+     "summary": "A command naming CDPATH keeps HEAD's by-name reading throughout (no hit cleared, no program freed).",
+     "class": "within",
+     "why": "Closes a let-through the fix would otherwise open (a clone write placed in scratch by a walk that does not read CDPATH, measured 2026-11-21, shapes7.txt); CDPATH stands in none of the 9,646 corpus rows or 925 refusals, so it keeps no good work refused."
+    },
+    {
+     "id": "T87-worktree-add-in-command",
+     "summary": "A command holding a worktree add keeps HEAD's by-name reading throughout; 17 logged rows of the 110 stay refused this way.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A worktree add makes a project repository's worktree in scratch before any .git pointer shows it, so at the guard's reading the place cannot be told from scratch: applying the scratch rule there is not possible without the pointer. The rows it keeps refused are writes into a project's worktree, whose commits reach the repository - not the scratch fixtures the task is for - so holding them serves the task's purpose and the GM's 'real enforcement' rather than gutting it."
+    },
+    {
+     "id": "T87-project-worktree",
+     "summary": "A git worktree in scratch of a project repository is a project tree (nearest .git read, gitdir/commondir followed, held where its real path lies in a project tree); 18 logged rows into standing worktrees and 4 corpus rows stay refused that the first fix freed.",
+     "class": "narrowing",
+     "why": "It keeps refusals that a literal 'nothing under /tmp is held' would free, so it is ruled, not waved through. Purpose-level: the task's purpose is that scratch fixtures, which reach no project, are not refused; a project repository's worktree under /tmp is not scratch in that sense, since its commits reach the repository (pointers read, measured 2026-11-21, worktrees.py), and freeing its guard files would let a project's guard files be changed from the shell and committed - the opposite of the GM's 'make sure all of the enforcement is real enforcement'. The session ruled it on a review note, but the ruling rests on that purpose and is pinned red first.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T87-tests-and-T116",
+     "summary": "Tests' worlds name themselves a project tree through CLONE_MAIN; T116's permit lines untouched, its premise noted (a scratch copy needs no permit).",
+     "class": "within",
+     "why": "Test scaffolding and a recorded consequence for a sibling task; no behavior asked for is dropped."
+    },
+    {
+     "id": "T87-left-T130",
+     "summary": "The shell walk's own reading of CDPATH (shared::tree) is not fixed here; filed as T130, lands before T22. The let-through it caused in make-only is closed in T87.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The wrong outcome T87 met (a clone write let through) is closed in this task and pinned red first; what is left is shared::tree's reading, the files T83's and T110's builders are working in now, which concurrent edits make a real constraint rather than convenience. CDPATH stands in none of 9,646 corpus rows or 925 refusals (measured). The deferral states why, its task id and its order, as FR-009 requires, and is fixed before T22, not abandoned."
+    },
+    {
+     "id": "T87-left-T128",
+     "summary": "make-only's pre-existing by-name clear still overrules the text patterns command-wide (cp a /tmp/q/settings.json; ls | xargs sed -i ... .claude/settings.json passes on HEAD and the fix); filed as T128, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a check passing bad work), but not T87's: it is older than T87, unchanged by it (rc=0 on both binaries, measured), and fixing it changes verdicts for every command the by-name clear frees today, owing its own replay. It is filed with a reason, an id and an order before T22, the FR-009 form; leaving it to its own task does not gut T87's purpose (stopping refusals of scratch fixtures without opening project guard files) since T87 neither causes nor widens it. The stated reason 'not good work refused' is not by itself a reason (a let-through is a defect too); the scope-and-replay reason is what carries it."
+    },
+    {
+     "id": "T87-left-T131",
+     "summary": "make-only's Python patterns read a program's string literals as code (a stdin program writing plan.md refused for quoting the chdir probe); filed as T131, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (good work refused: a string literal in a stdin program read as a write), but older than T87 and unchanged by it, in a project tree rather than scratch, and of a different mechanism (literal versus code in the Python route) whose fix moves Python-route verdicts across every tree and owes its own replay. T87's purpose (scratch fixtures let through) is met without it; filed as T131 and fixed before T22, in the same step, with the reason, id and order FR-009 asks."
+    },
+    {
+     "id": "T87-left-T126",
+     "summary": "guard-file's Read reminder still tells a scratch copy it is a guard file (read_context reads the name alone); filed as T126, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T87 makes this reminder stale (at HEAD a scratch copy was held, so it was accurate), so it is judged on its outcome, not on the plan's location-based reason. The outcome: an advisory line on Read, never a refusal; the Edit it warns about now passes with no permit, and make guard-edit still grants one by name, so the worst a builder meets is one needless guard-edit call - no work refused, no guard file opened. That is a minor wrong answer, not one that defeats T87's purpose, and it is filed as T126 and fixed before T22, inside the same step, so it is not carried past the step."
+    },
+    {
+     "id": "T87-not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A guard defect fix, not a performance improvement or a measurement task under the GM's 2026-11-20 rulings; the label decides scheduling only and narrows nothing T87 delivers."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T88 (builders ran three at once only 26% of the night's 580 minutes, a mean of 1.65, measured 2026-11-21 (each agent's span, T88's line): a landing refused any uncommitted file, so tasks landed in batches, and the Stop hook was silent whenever anything ran, so a freed builder slot sat empty)",
+    "### T88 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-landing-worktree",
+     "summary": "With other work uncommitted in the clone, make land runs whole in a persistent landing worktree <clone>-land at the clone's HEAD, under a lock, seeded with the clone's kept results; the clone then takes the landed tip (update-ref, merge-tree/commit-tree, three-way merge-file, conflict moves nothing, exit 4).",
+     "class": "within",
+     "why": "A design for a [perf] task under FR-013 (the landings). It narrows nothing the GM asked: the gate still judges the tree pushed, the push's dirty-tree refusal and the stamp's disk key are unchanged, and the two other ways are measured and rejected on their costs."
+    },
+    {
+     "id": "a-own-edits-refusal",
+     "summary": "The landing refuses the landing tasks' own edits still uncommitted (PostToolUse edit lines under the task naming a dirty file newer than its last commit), naming the git commit command; dirty files no task's edit names stay in the clone, not landed.",
+     "class": "within",
+     "why": "Keeps the landed tree the task's own work; no requested behavior is narrowed. Red-first pair recorded (78/3 then 81)."
+    },
+    {
+     "id": "b-rolling-dispatch",
+     "summary": "While something runs, the Stop hook refuses a stop when fewer than L7R_BUILDERS (GUESS 3) builders run and next_independent names an open task never started, after no open task, touching no running task's named files; escape is make set-down F= WHY=.",
+     "class": "within",
+     "why": "Adds a refusal in service of the builders' loop; it carries a reasoned, recorded escape and a named compliant command, and red-first is recorded (350/2 then 352). Narrows nothing asked."
+    },
+    {
+     "id": "b-order-perf-first",
+     "summary": "next_independent takes performance work first across every active feature, then the rest, feature-first then each active feature by its last task-start.",
+     "class": "within",
+     "why": "This is FR-013's own clause: the Stop hook's start-the-next names an open performance task before any other, across active features. The plan corrected an earlier feature-first ordering that broke it (r1 red, r2 green)."
+    },
+    {
+     "id": "b-perf-later-ok-named",
+     "summary": "Where the task the Stop hook names is not performance work, its named make task-start carries PERF_LATER_OK - which happens only when every open performance task is started, waits on an open task, or overlaps a running task's files.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows how far FR-013's task-start refusal reaches in practice, so it is ruled. It uses FR-013's own escape, of a reason, recorded, for the case that escape names: a performance task that cannot start now because it waits on another task's landing (or is already running). The hook names a non-perf task only after no performance task can be started. Leaving slots empty in that case would not get performance work done any sooner, and would undo the GM's purpose ('doing those first makes everything after them faster'), which is ordering, not idling. Each start still needs the escape typed in and logged."
+    },
+    {
+     "id": "b-busy-files-rule",
+     "summary": "Overlap is read from a task line's named files or *_hooks modules against running tasks' edit lines, with specs/, .git/ and the ledger excluded and common basenames matched only with a path; a line naming nothing fails toward a start.",
+     "class": "within",
+     "why": "A design detail of the dispatch rule; its stated cost (two builders in one crate) is judged by T86's closing checks. Narrows nothing asked."
+    },
+    {
+     "id": "knob-L7R_BUILDERS",
+     "summary": "L7R_BUILDERS is a new knob, GUESS 3, labeled at its point of change (set_down_hooks.rs BUILDERS); D14's knob table row is T22's.",
+     "class": "within",
+     "why": "D14 asks for a GUESS label at the point of change, and T88 gives one. The knob table is a task the spec assigns elsewhere, so this sets no new rule. T22 has to list this knob when it builds the table."
+    },
+    {
+     "id": "444-set-down-vs-449-T244",
+     "summary": "449 T244's stop before the parked homestead stages is not built here; 444 is set down, so free_slot names no 444 stage task now, and a stop there passes by make set-down naming the GM's ruling.",
+     "class": "within",
+     "why": "The rolling-dispatch refusal does not force work the GM ruled to stop before: 444 is set down (measured from set-downs.jsonl and task-starts.jsonl), and the escape the refusal names takes his ruling as its WHY. T244 belongs to 449."
+    },
+    {
+     "id": "costs-disk",
+     "summary": "The landing worktree's own target (13 GB measured) is not pruned whole; only the sweep's per-crate variant rule trims it, and a hand-deleted clone leaves its -land until the directory goes.",
+     "class": "within",
+     "why": "A stated cost, not a wrong outcome; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "left-T98-occupancy-after",
+     "summary": "The after-occupancy measurement is filed as T98, lands before T22, because it needs a night of rolling dispatch first.",
+     "class": "within",
+     "why": "It cannot be measured before a night runs on the change. It is filed with an order, as FR-009 requires, and the before-figure uses the replay's method, so before and after are measured one way."
+    },
+    {
+     "id": "left-T99-idle-tests-flake",
+     "summary": "test-idle-tests-hooks.sh's wall-clock case refused good work under load (red at load 16.5, green on rerun); filed as T99, lands before T22, as another guard's suite outside T88's files.",
+     "class": "within",
+     "why": "A defect, but T88 is not the one carrying it forward. It is filed with its reason, its id and its order, which is what FR-009 asks of a deferral. FIX AS WE GO's rule about steps applies to 449's port, and this defect is still put ahead of T22. The GM did not ask T88 to fix this suite."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T87 to T88, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

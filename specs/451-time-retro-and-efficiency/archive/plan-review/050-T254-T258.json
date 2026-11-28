@@ -1,0 +1,772 @@
+{
+ "blocks": {
+  "### T254 (the parallel trials of 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 1: one `active-task` mark in the shared .git, a second worktree's start overwrote the first's, and a push of one task was refused while the other was started)": {
+   "sha256": "626d289235717bf13a52ff6763b707c694b2f95b137d2f7b8de55369a91bf477",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
+  },
+  "### T254 Approach (checklist part A)": {
+   "sha256": "4cd9c639d69f02248aec9c11be9b9569948de0bfa2c39047dc2fa02a2c76c7e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
+  },
+  "### T255 (the parallel trials of 2026-11-25: builders in two worktrees each ran `make task-add` and filed T247, then T248, twice; renumbered by hand)": {
+   "sha256": "aee7d3202d204b7cdbda4908a1e1e16bb00b1f46f48c43c0696ce27a46c0cfc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T255 Approach (checklist part A)": {
+   "sha256": "c1212903d0b71d8ba76f890c3f5ca2bc4d52a494df641084fa6602f57a7352dd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T256 (the parallel trials, 2026-11-25: every carry-over of a worktree's task into the session clone conflicted on specs/451-time-retro-and-efficiency/plan-review.json and was merged by hand as JSON, both sides' entries kept)": {
+   "sha256": "1512db7cbf87c541a15fe8469c1af3ae822370934585a641b1acb590509c4d76",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T256 Approach (checklist part A)": {
+   "sha256": "e99b85d726166cfa6528b4e52a89f4981be2df00b25735b6a65aa53c6f7e9a78",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T257 (the parallel trials, 2026-11-25: spec-fidelity ran make plan-verdict from the session clone, where a worktree task's section is still the template, and was refused on a section-hash mismatch in five tasks)": {
+   "sha256": "c3ca214f32d184f0c0af45eb51d27f0c4f0c3b638dd842057bea7facfd101bc6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T257 Approach (checklist part A)": {
+   "sha256": "317d48d0a97f2fd9e748aa1c3f99943e941fbfcf23b0025ab576660e52175da0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T258 (the GM 2026-11-25: \"I created https://github.com/EliAndrewC/diagram-tooling-state for the tooling state\" - a clone's check answers and event logs live only in its .git, so a lost container loses them)": {
+   "sha256": "de0cf6626a0170d2d73bd5e25670187c8be0df1aa5b69a0113f3c97182a13b7a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T258 Approach (checklist part A)": {
+   "sha256": "d8d6b4fcff6af7a110c8a74d921d9a58962eea98b5054e195784876a34516b4a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T254": {
+   "section_sha256": "f65baee55550e0aa9c734346b53c7116c91781e54ea868d60175823272dbe4a4",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T254@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T254's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "9e3d3f8b3bb8fa35f4a83dd9ba65e65064b549a5cca390c3537fe8bc9311ebae",
+    "reviewed": "2026-11-26",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "marks-per-task",
+      "summary": "make task-start writes <common git dir>/task-marks/<feature>/<task>.json (feature, task, bundle tasks, tree, time); no start overwrites another task's mark",
+      "class": "within",
+      "why": "This is the fix the GM approved by name: 'a started-task mark per task' (request.md, 2026-11-25, 'sounds good, please start with that'), answering trial 1's overwritten mark."
+     },
+     {
+      "id": "of-tree",
+      "summary": "a tree's own task is the newest mark that tree wrote (marks::of_tree)",
+      "class": "within",
+      "why": "The per-task mark needs a rule for which mark is a tree's own. Before, the one mark was the clone's, so reading it per tree keeps what it meant with one builder per tree."
+     },
+     {
+      "id": "legacy-mark",
+      "summary": "the main worktree reads the old active-task file as its oldest mark; that tree's next start removes it",
+      "class": "within",
+      "why": "A migration that keeps a start made before the change counting. It narrows nothing asked."
+     },
+     {
+      "id": "mark-removal",
+      "summary": "a mark goes when its task lands (the landed sweep, by task ids as given) or when its feature is set down in its own tree (marks::clear); other trees' marks stay; a ticked task's stale mark holds nothing",
+      "class": "narrowing",
+      "why": "This narrows 451 T29: a set-down used to clear its feature's mark, and now clears only the marks this tree wrote. The ground is the request's purpose. With per-task marks, a set-down that cleared other trees' marks would wipe a parallel builder's started task, and that brings back the very failure the request fixes (trial 1, one start removing another tree's mark). When there was one mark, it was always the clone's own, so T29's scope in effect is unchanged. A ticked task's leftover mark holding nothing follows from every reader asking for an open box.",
+      "ruling": "LEGITIMATE"
+     },
+     {
+      "id": "starts-name-tree",
+      "summary": "each task-starts.jsonl row names its tree",
+      "class": "within",
+      "why": "The data the per-tree readers need. It adds no behavior beyond the fix."
+     },
+     {
+      "id": "hold-other-trees",
+      "summary": "another tree's started task (its box open, not ticked by this landing) holds this push, make land or CI merge only when the push's delta carries one of its edits (T101's rule in speckit/touch.rs, read against every tree's prefix); L7R_LAND_READY still not held; a mark that is not an object fails closed",
+      "class": "narrowing",
+      "ruling": "LEGITIMATE",
+      "why": "This narrows feature 405 D4 ('the active task holds, nothing else'). The plan turns D4 into every started task of any tree holding the push, so taken literally a push from any of the three worktrees would be refused while another builder's task was started. That is the exact refusal the trials recorded (port-talk-agenda item 1: 'a push of one task was refused while the other was started'). It would defeat the purpose of the GM's 2026-11-25 approval, which is three parallel builders, so the rule applied literally defeats the request. A push that carries another tree's edits is still refused, which is broader than D4 ever was, so the hold's purpose of keeping an unfinished task's work out of main is kept across trees."
+     },
+     {
+      "id": "hold-own-tree",
+      "summary": "the pushing tree's OWN started task (a mark this tree wrote, box open, not ticked by this landing) no longer holds a push whose delta carries none of its edits; before T254 it held the push whatever the push carried (the section's own constraints item 2; feature 405 D4)",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "The section justifies the narrowing as 'the fix the trials asked for - a push of one builder's task refused while another builder's was started'. That covers another tree's task only: the trials' refusal came from a different worktree's start. The GM's words in request.md ('a started-task mark per task' ... 'sounds good, please start with that') approve per-task marks so three builders can work side by side. Nothing in those words, and nothing in that purpose, needs a tree's OWN open started task to stop holding its own push. Keeping D4's hold for the tree's own task is possible, the GM's words do not contradict it, and it does not defeat three parallel builders: each builder's tree lands its own task(s), and that landing ticks them, so they do not hold it. The rest of the plan's case comes from text outside the request. One is consistency with 451 T101's landing rule, which is cited by paraphrase only and is not in spec-cited.md. The other is that a push without the task's edits carries none of its work. Neither is a ground under this review: they show the exception does no harm, not that the request needs it. One justification is stretched over two unlike cases, and only one of them is needed. Cure: keep D4's hold for the started tasks this tree wrote, so one of them holds this tree's push while its box is open and the landing does not tick it, whatever the delta carries. Apply the carried-edits rule only to other trees' marks. Restate goal item 1 and constraints item 2 to match, and add a test that a tree's own open started task still refuses a push that does not carry its edits. Or bring the GM's words approving the own-tree case."
+     },
+     {
+      "id": "prefix-fault",
+      "summary": "edit lines read against every tree (git's worktrees, the trees marks and starts name, the clone), longest first, a nested worktree read as its own",
+      "class": "within",
+      "why": "Fixes a known defect: T101's rule skipped every edit a worktree builder made. Fixing it in this task is what the GM's fix-as-we-go rule asks for."
+     },
+     {
+      "id": "readers-own-mark",
+      "summary": "speckit::active_task, the plan crate's task::active_task and their callers (declared placement, decide's refusal, approach tripwire, plan door active-task) read this tree's mark",
+      "class": "within",
+      "why": "What a one-mark reader meant (this builder's task), carried over to per-task marks."
+     },
+     {
+      "id": "readers-own-starts",
+      "summary": "event-log booking (filed.rs::starts), context cap fallback, and land-tooling's log line read their own tree's starts; a row with no tree read as before",
+      "class": "within",
+      "why": "The same per-tree reading. land_tooling was round 1's note and is now per tree, fixed with a red-first test."
+     },
+     {
+      "id": "readers-every-mark",
+      "summary": "stall check and the hold read every mark",
+      "class": "within",
+      "why": "The stall check serves the coordinator over all trees. The hold is ruled above."
+     },
+     {
+      "id": "readers-clone-wide",
+      "summary": "Stop hook started/idle, events-refile, measure reports (task_time, where_time, feature_report) stay clone-wide on purpose",
+      "class": "within",
+      "why": "These serve the coordinating session and the GM's task time breakdown across every task. Leaving them clone-wide is no defect and narrows nothing asked."
+     },
+     {
+      "id": "readers-unchanged",
+      "summary": "readers that already take the task from an argument or per-task row (ready.rs started_tasks, builder_stop, static_runs, closing-checks, wording, the Makefile sweep, check_bundle own, approach in_flight, whose.rs) unchanged",
+      "class": "within",
+      "why": "They were never tied to the one mark. Unchanged is within the request."
+     },
+     {
+      "id": "lettered-sweep",
+      "summary": "the landed sweep removes marks by task ids as given, so lettered ids (T07b) are removed",
+      "class": "within",
+      "why": "Fixes a known defect found while building. Fixed here, not deferred."
+     },
+     {
+      "id": "order-and-exits",
+      "summary": "lands with T255 before the first three-builder batch; green by closing-checks, red set down and ruled through arbiter-ask",
+      "class": "within",
+      "why": "This is the order the GM approved: the fixes before three builders."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
+  },
+  "T255": {
+   "section_sha256": "668b5fc41e333a5dc5b85ca245d21dc22126a8c7ae03591920b6e2a3bf2167f5",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T255-next-id-sources",
+     "summary": "next_id becomes one past the highest id across this tree's tasks.md/tasks-done.md/plan.md/plan-done.md, the same files on main and on origin/main as last fetched (no fetch under the lock), and a reservation file in the git common directory",
+     "class": "within",
+     "why": "Fixes a wrong outcome of make task-add (the FR-011 tool): two worktrees filing the same id, measured in the 2026-11-25 trials. Each added source only widens what counts as taken; nothing that was refused before is now allowed and nothing asked is dropped. Not fetching under the lock is an implementation choice; the stated goal (two worktrees of one repository) is fully met by the shared reservation file."
+    },
+    {
+     "id": "T255-reserve-before-box",
+     "summary": "the id is written to the reservation file under the existing 451 T84 filing lock before the task box is written",
+     "class": "within",
+     "why": "The mechanism of the fix; keeps T84's one-filing-at-a-time constraint and adds nothing beyond it."
+    },
+    {
+     "id": "T255-withdraw-returns-id",
+     "summary": "a filing that make quick withdraws (FR-011) gives its id back, so the next filing takes it, as before",
+     "class": "within",
+     "why": "Preserves FR-011's withdraw behavior as it stood; an id never written to any tasks file is not a taken id, so returning it cannot recreate the collision."
+    },
+    {
+     "id": "T255-non-git-tree",
+     "summary": "a tree git does not know has no other worktree and keeps no reservation",
+     "class": "within",
+     "why": "Not a carve-out from the goal: with no git common directory there is no second worktree to collide with, so the case the task fixes cannot arise there."
+    },
+    {
+     "id": "T255-tests-commit-first",
+     "summary": "two earlier task-crate tests now commit their files first, because main's ids count",
+     "class": "within",
+     "why": "Follows from the change; the tests still check what they did. A new red-first test (two_worktrees_never_take_one_id, red on HEAD's numbering: the second tree filed T10) proves the fix."
+    },
+    {
+     "id": "T255-order",
+     "summary": "lands with T254, before the first port batch at three builders",
+     "class": "within",
+     "why": "Ordering only; nothing is deferred or left (Found and left: none)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T256": {
+   "section_sha256": "a83a39ece814cf47634bc7a8d0f6b8c9c644b4de32a66c99acda9556493ee08c",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T256-D1",
+     "summary": "The route is a git merge driver for specs/*/plan-review.json (l7r-gate plan merge-record), not per-task verdict files; no reader changes.",
+     "class": "within",
+     "why": "The task line offers exactly these two routes ('each task's verdicts in their own file, or the record merged by a git merge driver') and requires make plan-verdict and every reader unchanged in what they read; choosing the driver is a choice between the offered routes, and it is the one that leaves the readers untouched. The cost comparison is labeled measured 2026-11-25 with its method."
+    },
+    {
+     "id": "T256-D2",
+     "summary": "Three-way, key-by-key merge of the top level and the blocks and tasks maps; an entry is taken whole, never field by field; a both-changed key goes to the later 'reviewed' day, a tie to the incoming side.",
+     "class": "within",
+     "why": "This is how the requested driver keeps both sides' entries. Taking an entry whole means no verdict ends up paired with a digest nobody cleared. The tie-break covers only the case where both sides changed the same key, which the goal (two builders each adding their own task's verdict) does not produce. Even a wrong pick only leaves a block owed a review again, because the gate re-compares the digest. Nothing asked for is dropped."
+    },
+    {
+     "id": "T256-D3",
+     "summary": "block_reviews is merged as an append-only log: ours, then the incoming rows not in base and not already in ours, order kept.",
+     "class": "within",
+     "why": "Keeps both sides' rows (measured 303 to 305) and keeps each side's order, which the review-round guard's trailing count reads. That serves 'both verdicts with no hand merge' and 'every reader unchanged'."
+    },
+    {
+     "id": "T256-D4",
+     "summary": "Registration via sync-with-main.sh ensure_git_config at every sync-in, idempotent; the driver runs with L7R_GATE_STALE_OK=1; if it is unregistered or the binary is older than the verb, git falls back to its text merge.",
+     "class": "within",
+     "why": "A merge driver's command lives only in local git config, so registering it is how the task line's route works at all. It is registered on the session clone that the goal names, and its worktrees share that config. The fallback is the state from before the task, not an exception to it. Item 5 orders sync-in before the first carry-over it serves."
+    },
+    {
+     "id": "T256-D5",
+     "summary": "A side that does not parse as JSON fails the merge with our side untouched, and the message says to merge it by hand as JSON, both sides' entries kept.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case the driver leaves to a hand merge. It is legitimate on the physically-impossible ground: a structured JSON merge cannot run on a side that is not JSON. It also does not gut the purpose. A record written by make plan-verdict through the recorder's own pretty writer parses, so the two-builder carry-over the task exists for is always handled by the driver. Only a corrupt or hand-broken file falls out, and it gets today's hand merge with a message naming it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T257": {
+   "section_sha256": "0f851af1764b4c367fc28442f6e6fadfeef5df04ee646283363627c32c1db80e",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T257-D1",
+     "summary": "The MANIFEST names the tree the bundle was built from (the spec directory's tree, made absolute) and gives the recording command as make -C <tree> plan-verdict ..., on both the task and the blocks form.",
+     "class": "within",
+     "why": "This is the task line's own constraint (the MANIFEST names the tree and the exact recording command with its root); make -C is the means, chosen because a reviewer's shell starts wherever its session's did. Serves the request's purpose of removing measured rework (refused recordings and re-dispatches)."
+    },
+    {
+     "id": "T257-D2",
+     "summary": "On a section-digest refusal, make plan-verdict searches the trees git worktree list names (the clone and its worktrees) for the one whose plan gives the reviewed digest and names it with the command to run there; with none, today's message; the search runs only on a refusal.",
+     "class": "within",
+     "why": "The task line asks that a refusal from a tree whose section differs name the right one; searching the clone's worktrees is how the right one is found, and keeping the old message where no tree holds the text drops nothing asked for. The worktree count is labeled as observed 2026-11-25 with its method."
+    },
+    {
+     "id": "T257-D3",
+     "summary": "Both section checks are fixed (the task route, record_task, and the blocks route, record_blocks' check_named); the whole-plan route keeps its message.",
+     "class": "within",
+     "why": "The task line names a section mismatch and a bundle MANIFEST; the whole-plan route records a plan digest, has no section and no bundle MANIFEST naming a tree, so leaving its message alone narrows nothing the task asked for. Covering both bundle routes is the fault's full reach, not added scope."
+    },
+    {
+     "id": "T257-found-and-left-1",
+     "summary": "Fixed in this task: plan/bundle.rs drops a task's own decision label T<n>-D<n> before decision ids are read (in expand_ranges, which every id reading of a block passes through, and in answered), ranges D<n>-D<n> untouched; pinned by a_task_s_own_decision_label_is_not_the_spec_s_decision.",
+     "class": "within",
+     "why": "A defect found in the review tooling (a bundle's spec-cited.md carried spec decisions the section never cited, so a reviewer read uncited text as cited), fixed in the task that found it rather than deferred, which the project's fix-as-we-go rule asks. It names a class of id forms and carries how every instance was found (the census of hyphen-prefixed decision ids in specs/*/plan.md and plan-done.md: T<n>-D<n> 14 times, D<n>-D<n> 107 times, no other form), labeled observed 2026-11-25 with its method, as FR-009 requires. It leaves no defect: the range form the fix leaves alone is the legitimate citation form. Not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T258": {
+   "section_sha256": "5eef0745804b76f95c9fc2e4e8fc5581f3bad38be9d8ad2164fc86283e1a7592",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T258-D1",
+     "summary": "A bare git mirror at <common .git>/tooling-state.git, committed from where the files lie, not tar snapshots",
+     "class": "within",
+     "why": "The mechanism that carries 'the tooling state' to the GM's repository; chosen by measurement (item 9, dated, methods named). Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T258-D2",
+     "summary": "Logs committed as whole-line segments (split -C, SEGMENT a GUESS knob), the mirror repacked each run",
+     "class": "within",
+     "why": "A storage layout that keeps every log line in the repository and keeps pushes clear of GitHub's per-file limit, which would otherwise end every push. Nothing is dropped."
+    },
+    {
+     "id": "T258-D3a",
+     "summary": "The landing's push runs detached (push --detach); make land / land-tooling exit with their own code",
+     "class": "within",
+     "why": "Implements the task line's 'never refusing it'. The GM's words set no timing for the push."
+    },
+    {
+     "id": "T258-D3b",
+     "summary": "A detached push's failure is logged and said in one line at the NEXT landing; make state-push is the foreground form",
+     "class": "within",
+     "why": "The cost of D3a, named and priced against a foreground push. A failure is still reported, so the state does not silently stop reaching the repository."
+    },
+    {
+     "id": "T258-D3c",
+     "summary": "A push that meets a running push (flock held) is skipped; the next landing's push carries its state",
+     "class": "within",
+     "why": "'At each landing' is in the section's quotation of the task line, not in request.md or the spec. On the block's own text, state written after the running push's commit is unsaved until the next landing, and so is all state written between any two landings. The skip widens that gap by one landing and does not lose state. The cost is named here rather than ruled as a narrowing."
+    },
+    {
+     "id": "T258-D4",
+     "summary": "One branch per clone, named for the clone the common .git belongs to; a replacement container's clone of that name takes it",
+     "class": "within",
+     "why": "A layout inside the GM's repository. Every clone's state still reaches the repository."
+    },
+    {
+     "id": "T258-D5",
+     "summary": "Never a force push; a fresh mirror fetches and merges the branch before its first commit; a refused push is fetched, merged and pushed on top",
+     "class": "within",
+     "why": "Keeps state already in the repository from being overwritten. Serves the purpose and drops nothing."
+    },
+    {
+     "id": "T258-D6",
+     "summary": "Restore merges and never overwrites: answers by l7r-gate record merge-answers (newer utc kept), logs by appending missing lines; .tmp files not pushed",
+     "class": "within",
+     "why": "Restoring the state into a fresh clone is the point of the repository. A .tmp file is a half-written answer or log line, not finished tooling state."
+    },
+    {
+     "id": "T258-D7",
+     "summary": "Session-clone setup is sync-with-main.sh sync-in, running restore --if-fresh (mirror made and restored in the background); a clone that already has a mirror does nothing; make state-restore by hand",
+     "class": "within",
+     "why": "A clone that has a mirror is not the fresh or replacement clone the restore exists for, and the by-hand door stays open. The background restore delays nothing."
+    },
+    {
+     "id": "T258-D8",
+     "summary": "A clone whose origin is not GitHub main's does nothing unless STATE_REMOTE names a remote",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled class by class. (1) Other suites' fixture clones, which run sync-with-main.sh with local origins and made-up answers and logs: pushing them would put fake data into the GM's private repository and have tests reach the real remote. Excluding them is implied by the purpose ('for the tooling state', the real record-check answers and event logs), so this class is legitimate. (2) A real working clone whose origin is something other than GitHub main: the stated justification does not cover it, because its state is real tooling state. The bundle shows one real push, from diagram-backlog. It does not say whether make state-push goes through this origin check, or what any other clone's origin is. D7 says clones are made by a bare git clone, presumably of GitHub, and the block names no real clone the check leaves out. So no defect is shown here. If such a clone exists, STATE_REMOTE is its door, and leaving it silently unbacked would be a defect for its owner to fix."
+    },
+    {
+     "id": "T258-D9",
+     "summary": "Token via l7r-gate github-token into GITHUB_TOKEN with the askpass script; credential.helper emptied; remote passed by URL per call, never stored in the mirror's config",
+     "class": "within",
+     "why": "Implements the task line's 'never printed, never on a command line, never in a config' for the GM's private repository."
+    },
+    {
+     "id": "T258-D10",
+     "summary": "A shell script beside sync-with-main.sh and land-tooling.sh, not a gate crate; the answers' merge reused from the gate",
+     "class": "within",
+     "why": "A choice of implementation form. Not a fidelity matter."
+    },
+    {
+     "id": "T258-D11",
+     "summary": "Only record-checks and l7r-events are added to the mirror's index; handoffs and caches stay out",
+     "class": "within",
+     "why": "Matches the GM's 'for the record-check answers and event logs' and the task line's exclusion."
+    },
+    {
+     "id": "T258-FL1",
+     "summary": "Found and left, not a defect: a grown log's last segment is sent whole (no thin-pack delta base), about 125 KB for a 7 KB diff",
+     "class": "within",
+     "why": "A size cost, measured with its method. There is no wrong outcome: the push is detached and every line still arrives."
+    },
+    {
+     "id": "T258-FL2",
+     "summary": "Found and left, not a defect: check audit-register's detectors do not see a script newly called from a landing recipe; the entry is written by hand, and a task title is handed to the coordinating session",
+     "class": "within",
+     "why": "The GM's own T259 words expect misses and say how they are handled: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. This entry is that backfill, so no mechanism goes unregistered. The detector's reach is left as it was, and the title is passed on so the miss can be filed."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T254 (the parallel trials of 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 1: one `active-task` mark in the shared .git, a second worktree's start overwrote the first's, and a push of one task was refused while the other was started)",
+    "### T254 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "marks-per-task",
+     "summary": "make task-start writes <common git dir>/task-marks/<feature>/<task>.json (feature, task, bundle tasks, tree, time); no start overwrites another task's mark",
+     "class": "within",
+     "why": "This is the fix the GM approved by name: 'a started-task mark per task' (request.md, 2026-11-25, 'sounds good, please start with that'), answering trial 1's overwritten mark."
+    },
+    {
+     "id": "of-tree",
+     "summary": "a tree's own task is the newest mark that tree wrote (marks::of_tree)",
+     "class": "within",
+     "why": "The per-task mark needs a rule for which mark is a tree's own. Before, the one mark was the clone's, so reading it per tree keeps what it meant with one builder per tree."
+    },
+    {
+     "id": "legacy-mark",
+     "summary": "the main worktree reads the old active-task file as its oldest mark; that tree's next start removes it",
+     "class": "within",
+     "why": "A migration that keeps a start made before the change counting. It narrows nothing asked."
+    },
+    {
+     "id": "mark-removal",
+     "summary": "a mark goes when its task lands (the landed sweep, by task ids as given) or when its feature is set down in its own tree (marks::clear); other trees' marks stay; a ticked task's stale mark holds nothing",
+     "class": "narrowing",
+     "why": "This narrows 451 T29: a set-down used to clear its feature's mark, and now clears only the marks this tree wrote. The ground is the request's purpose. With per-task marks, a set-down that cleared other trees' marks would wipe a parallel builder's started task, and that brings back the very failure the request fixes (trial 1, one start removing another tree's mark). When there was one mark, it was always the clone's own, so T29's scope in effect is unchanged. A ticked task's leftover mark holding nothing follows from every reader asking for an open box.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "starts-name-tree",
+     "summary": "each task-starts.jsonl row names its tree",
+     "class": "within",
+     "why": "The data the per-tree readers need. It adds no behavior beyond the fix."
+    },
+    {
+     "id": "hold-other-trees",
+     "summary": "another tree's started task (its box open, not ticked by this landing) holds this push, make land or CI merge only when the push's delta carries one of its edits (T101's rule in speckit/touch.rs, read against every tree's prefix); L7R_LAND_READY still not held; a mark that is not an object fails closed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows feature 405 D4 ('the active task holds, nothing else'). The plan turns D4 into every started task of any tree holding the push, so taken literally a push from any of the three worktrees would be refused while another builder's task was started. That is the exact refusal the trials recorded (port-talk-agenda item 1: 'a push of one task was refused while the other was started'). It would defeat the purpose of the GM's 2026-11-25 approval, which is three parallel builders, so the rule applied literally defeats the request. A push that carries another tree's edits is still refused, which is broader than D4 ever was, so the hold's purpose of keeping an unfinished task's work out of main is kept across trees."
+    },
+    {
+     "id": "hold-own-tree",
+     "summary": "the pushing tree's OWN started task (a mark this tree wrote, box open, not ticked by this landing) no longer holds a push whose delta carries none of its edits; before T254 it held the push whatever the push carried (the section's own constraints item 2; feature 405 D4)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The section justifies the narrowing as 'the fix the trials asked for - a push of one builder's task refused while another builder's was started'. That covers another tree's task only: the trials' refusal came from a different worktree's start. The GM's words in request.md ('a started-task mark per task' ... 'sounds good, please start with that') approve per-task marks so three builders can work side by side. Nothing in those words, and nothing in that purpose, needs a tree's OWN open started task to stop holding its own push. Keeping D4's hold for the tree's own task is possible, the GM's words do not contradict it, and it does not defeat three parallel builders: each builder's tree lands its own task(s), and that landing ticks them, so they do not hold it. The rest of the plan's case comes from text outside the request. One is consistency with 451 T101's landing rule, which is cited by paraphrase only and is not in spec-cited.md. The other is that a push without the task's edits carries none of its work. Neither is a ground under this review: they show the exception does no harm, not that the request needs it. One justification is stretched over two unlike cases, and only one of them is needed. Cure: keep D4's hold for the started tasks this tree wrote, so one of them holds this tree's push while its box is open and the landing does not tick it, whatever the delta carries. Apply the carried-edits rule only to other trees' marks. Restate goal item 1 and constraints item 2 to match, and add a test that a tree's own open started task still refuses a push that does not carry its edits. Or bring the GM's words approving the own-tree case."
+    },
+    {
+     "id": "prefix-fault",
+     "summary": "edit lines read against every tree (git's worktrees, the trees marks and starts name, the clone), longest first, a nested worktree read as its own",
+     "class": "within",
+     "why": "Fixes a known defect: T101's rule skipped every edit a worktree builder made. Fixing it in this task is what the GM's fix-as-we-go rule asks for."
+    },
+    {
+     "id": "readers-own-mark",
+     "summary": "speckit::active_task, the plan crate's task::active_task and their callers (declared placement, decide's refusal, approach tripwire, plan door active-task) read this tree's mark",
+     "class": "within",
+     "why": "What a one-mark reader meant (this builder's task), carried over to per-task marks."
+    },
+    {
+     "id": "readers-own-starts",
+     "summary": "event-log booking (filed.rs::starts), context cap fallback, and land-tooling's log line read their own tree's starts; a row with no tree read as before",
+     "class": "within",
+     "why": "The same per-tree reading. land_tooling was round 1's note and is now per tree, fixed with a red-first test."
+    },
+    {
+     "id": "readers-every-mark",
+     "summary": "stall check and the hold read every mark",
+     "class": "within",
+     "why": "The stall check serves the coordinator over all trees. The hold is ruled above."
+    },
+    {
+     "id": "readers-clone-wide",
+     "summary": "Stop hook started/idle, events-refile, measure reports (task_time, where_time, feature_report) stay clone-wide on purpose",
+     "class": "within",
+     "why": "These serve the coordinating session and the GM's task time breakdown across every task. Leaving them clone-wide is no defect and narrows nothing asked."
+    },
+    {
+     "id": "readers-unchanged",
+     "summary": "readers that already take the task from an argument or per-task row (ready.rs started_tasks, builder_stop, static_runs, closing-checks, wording, the Makefile sweep, check_bundle own, approach in_flight, whose.rs) unchanged",
+     "class": "within",
+     "why": "They were never tied to the one mark. Unchanged is within the request."
+    },
+    {
+     "id": "lettered-sweep",
+     "summary": "the landed sweep removes marks by task ids as given, so lettered ids (T07b) are removed",
+     "class": "within",
+     "why": "Fixes a known defect found while building. Fixed here, not deferred."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "lands with T255 before the first three-builder batch; green by closing-checks, red set down and ruled through arbiter-ask",
+     "class": "within",
+     "why": "This is the order the GM approved: the fixes before three builders."
+    }
+   ],
+   "tasks": [
+    "T254"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T254 (the parallel trials of 2026-11-25, `specs/449-rust-codebase/port-talk-agenda.md` item 1: one `active-task` mark in the shared .git, a second worktree's start overwrote the first's, and a push of one task was refused while the other was started)",
+    "### T254 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T254@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T254's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T254"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T255 (the parallel trials of 2026-11-25: builders in two worktrees each ran `make task-add` and filed T247, then T248, twice; renumbered by hand)",
+    "### T255 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T255-next-id-sources",
+     "summary": "next_id becomes one past the highest id across this tree's tasks.md/tasks-done.md/plan.md/plan-done.md, the same files on main and on origin/main as last fetched (no fetch under the lock), and a reservation file in the git common directory",
+     "class": "within",
+     "why": "Fixes a wrong outcome of make task-add (the FR-011 tool): two worktrees filing the same id, measured in the 2026-11-25 trials. Each added source only widens what counts as taken; nothing that was refused before is now allowed and nothing asked is dropped. Not fetching under the lock is an implementation choice; the stated goal (two worktrees of one repository) is fully met by the shared reservation file."
+    },
+    {
+     "id": "T255-reserve-before-box",
+     "summary": "the id is written to the reservation file under the existing 451 T84 filing lock before the task box is written",
+     "class": "within",
+     "why": "The mechanism of the fix; keeps T84's one-filing-at-a-time constraint and adds nothing beyond it."
+    },
+    {
+     "id": "T255-withdraw-returns-id",
+     "summary": "a filing that make quick withdraws (FR-011) gives its id back, so the next filing takes it, as before",
+     "class": "within",
+     "why": "Preserves FR-011's withdraw behavior as it stood; an id never written to any tasks file is not a taken id, so returning it cannot recreate the collision."
+    },
+    {
+     "id": "T255-non-git-tree",
+     "summary": "a tree git does not know has no other worktree and keeps no reservation",
+     "class": "within",
+     "why": "Not a carve-out from the goal: with no git common directory there is no second worktree to collide with, so the case the task fixes cannot arise there."
+    },
+    {
+     "id": "T255-tests-commit-first",
+     "summary": "two earlier task-crate tests now commit their files first, because main's ids count",
+     "class": "within",
+     "why": "Follows from the change; the tests still check what they did. A new red-first test (two_worktrees_never_take_one_id, red on HEAD's numbering: the second tree filed T10) proves the fix."
+    },
+    {
+     "id": "T255-order",
+     "summary": "lands with T254, before the first port batch at three builders",
+     "class": "within",
+     "why": "Ordering only; nothing is deferred or left (Found and left: none)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T256 (the parallel trials, 2026-11-25: every carry-over of a worktree's task into the session clone conflicted on specs/451-time-retro-and-efficiency/plan-review.json and was merged by hand as JSON, both sides' entries kept)",
+    "### T256 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T256-D1",
+     "summary": "The route is a git merge driver for specs/*/plan-review.json (l7r-gate plan merge-record), not per-task verdict files; no reader changes.",
+     "class": "within",
+     "why": "The task line offers exactly these two routes ('each task's verdicts in their own file, or the record merged by a git merge driver') and requires make plan-verdict and every reader unchanged in what they read; choosing the driver is a choice between the offered routes, and it is the one that leaves the readers untouched. The cost comparison is labeled measured 2026-11-25 with its method."
+    },
+    {
+     "id": "T256-D2",
+     "summary": "Three-way, key-by-key merge of the top level and the blocks and tasks maps; an entry is taken whole, never field by field; a both-changed key goes to the later 'reviewed' day, a tie to the incoming side.",
+     "class": "within",
+     "why": "This is how the requested driver keeps both sides' entries. Taking an entry whole means no verdict ends up paired with a digest nobody cleared. The tie-break covers only the case where both sides changed the same key, which the goal (two builders each adding their own task's verdict) does not produce. Even a wrong pick only leaves a block owed a review again, because the gate re-compares the digest. Nothing asked for is dropped."
+    },
+    {
+     "id": "T256-D3",
+     "summary": "block_reviews is merged as an append-only log: ours, then the incoming rows not in base and not already in ours, order kept.",
+     "class": "within",
+     "why": "Keeps both sides' rows (measured 303 to 305) and keeps each side's order, which the review-round guard's trailing count reads. That serves 'both verdicts with no hand merge' and 'every reader unchanged'."
+    },
+    {
+     "id": "T256-D4",
+     "summary": "Registration via sync-with-main.sh ensure_git_config at every sync-in, idempotent; the driver runs with L7R_GATE_STALE_OK=1; if it is unregistered or the binary is older than the verb, git falls back to its text merge.",
+     "class": "within",
+     "why": "A merge driver's command lives only in local git config, so registering it is how the task line's route works at all. It is registered on the session clone that the goal names, and its worktrees share that config. The fallback is the state from before the task, not an exception to it. Item 5 orders sync-in before the first carry-over it serves."
+    },
+    {
+     "id": "T256-D5",
+     "summary": "A side that does not parse as JSON fails the merge with our side untouched, and the message says to merge it by hand as JSON, both sides' entries kept.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case the driver leaves to a hand merge. It is legitimate on the physically-impossible ground: a structured JSON merge cannot run on a side that is not JSON. It also does not gut the purpose. A record written by make plan-verdict through the recorder's own pretty writer parses, so the two-builder carry-over the task exists for is always handled by the driver. Only a corrupt or hand-broken file falls out, and it gets today's hand merge with a message naming it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T257 (the parallel trials, 2026-11-25: spec-fidelity ran make plan-verdict from the session clone, where a worktree task's section is still the template, and was refused on a section-hash mismatch in five tasks)",
+    "### T257 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T257-D1",
+     "summary": "The bundle's MANIFEST names the tree the bundle was built from (<tree>/specs/<feature>/, made absolute) and gives the recording command as `make -C <tree> plan-verdict F= TASK=|BLOCKS=1 FILE= AS=spec-fidelity`, in both bundle forms; spec-fidelity.md's 'run from the clone's root' becomes 'from the tree the MANIFEST names'.",
+     "class": "within",
+     "why": "This is the task line's first constraint word for word ('the review bundle's MANIFEST names the tree and the exact recording command with its root'). `make -C` is a means of giving the root, not a change of what is asked, and the agent-file wording only points the reviewer at what the MANIFEST now states. Nothing is excepted."
+    },
+    {
+     "id": "T257-D2",
+     "summary": "On a section-digest mismatch, make plan-verdict searches the trees `git -C <tree> worktree list --porcelain` names (the session clone and every worktree of it) for one whose plan gives the reviewed digest for the task's section or the refused block, and names it with the command to run there; with none, the refusal keeps today's message; the search runs only on a refusal.",
+     "class": "within",
+     "why": "Carries the task line's second constraint ('refuses a tree whose section differs naming the right one'). The worktree set is where a worktree task's section can live relative to the clone it was made from, and it contains the observed failure (a reviewer recording from the session clone while the worktree held the text). The 'none found' fallback is the case where no tree holds the reviewed text, so there is no right one to name; it removes no case the task asks to cover. Running the search only on a refusal changes cost, not behavior."
+    },
+    {
+     "id": "T257-D3",
+     "summary": "Both section checks are fixed - the task route (make decide's bundle, record_task) and the blocks route (make plan-delta's bundle, record_blocks/check_named); the whole-plan route, which is not a bundle's, keeps its message.",
+     "class": "within",
+     "why": "The task line is about the review BUNDLE's MANIFEST and a SECTION that differs. Both bundle routes are covered, which is the full reach of that wording. The whole-plan route records against plan_sha256 with no bundle and no section, so the constraint as written does not reach it; leaving it alone keeps the task to what was asked rather than carving a case out of it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T257 (the parallel trials, 2026-11-25: spec-fidelity ran make plan-verdict from the session clone, where a worktree task's section is still the template, and was refused on a section-hash mismatch in five tasks)",
+    "### T257 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T257-D1",
+     "summary": "The MANIFEST names the tree the bundle was built from (the spec directory's tree, made absolute) and gives the recording command as make -C <tree> plan-verdict ..., on both the task and the blocks form.",
+     "class": "within",
+     "why": "This is the task line's own constraint (the MANIFEST names the tree and the exact recording command with its root); make -C is the means, chosen because a reviewer's shell starts wherever its session's did. Serves the request's purpose of removing measured rework (refused recordings and re-dispatches)."
+    },
+    {
+     "id": "T257-D2",
+     "summary": "On a section-digest refusal, make plan-verdict searches the trees git worktree list names (the clone and its worktrees) for the one whose plan gives the reviewed digest and names it with the command to run there; with none, today's message; the search runs only on a refusal.",
+     "class": "within",
+     "why": "The task line asks that a refusal from a tree whose section differs name the right one; searching the clone's worktrees is how the right one is found, and keeping the old message where no tree holds the text drops nothing asked for. The worktree count is labeled as observed 2026-11-25 with its method."
+    },
+    {
+     "id": "T257-D3",
+     "summary": "Both section checks are fixed (the task route, record_task, and the blocks route, record_blocks' check_named); the whole-plan route keeps its message.",
+     "class": "within",
+     "why": "The task line names a section mismatch and a bundle MANIFEST; the whole-plan route records a plan digest, has no section and no bundle MANIFEST naming a tree, so leaving its message alone narrows nothing the task asked for. Covering both bundle routes is the fault's full reach, not added scope."
+    },
+    {
+     "id": "T257-found-and-left-1",
+     "summary": "Fixed in this task: plan/bundle.rs drops a task's own decision label T<n>-D<n> before decision ids are read (in expand_ranges, which every id reading of a block passes through, and in answered), ranges D<n>-D<n> untouched; pinned by a_task_s_own_decision_label_is_not_the_spec_s_decision.",
+     "class": "within",
+     "why": "A defect found in the review tooling (a bundle's spec-cited.md carried spec decisions the section never cited, so a reviewer read uncited text as cited), fixed in the task that found it rather than deferred, which the project's fix-as-we-go rule asks. It names a class of id forms and carries how every instance was found (the census of hyphen-prefixed decision ids in specs/*/plan.md and plan-done.md: T<n>-D<n> 14 times, D<n>-D<n> 107 times, no other form), labeled observed 2026-11-25 with its method, as FR-009 requires. It leaves no defect: the range form the fix leaves alone is the legitimate citation form. Not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T258 (the GM 2026-11-25: \"I created https://github.com/EliAndrewC/diagram-tooling-state for the tooling state\" - a clone's check answers and event logs live only in its .git, so a lost container loses them)",
+    "### T258 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T258-D1",
+     "summary": "A bare git mirror at <common .git>/tooling-state.git, committed from where the files lie, not tar snapshots",
+     "class": "within",
+     "why": "The mechanism that carries 'the tooling state' to the GM's repository; chosen by measurement (item 9, dated, methods named). Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T258-D2",
+     "summary": "Logs committed as whole-line segments (split -C, SEGMENT a GUESS knob), the mirror repacked each run",
+     "class": "within",
+     "why": "A storage layout that keeps every log line in the repository and keeps pushes clear of GitHub's per-file limit, which would otherwise end every push. Nothing is dropped."
+    },
+    {
+     "id": "T258-D3a",
+     "summary": "The landing's push runs detached (push --detach); make land / land-tooling exit with their own code",
+     "class": "within",
+     "why": "Implements the task line's 'never refusing it'. The GM's words set no timing for the push."
+    },
+    {
+     "id": "T258-D3b",
+     "summary": "A detached push's failure is logged and said in one line at the NEXT landing; make state-push is the foreground form",
+     "class": "within",
+     "why": "The cost of D3a, named and priced against a foreground push. A failure is still reported, so the state does not silently stop reaching the repository."
+    },
+    {
+     "id": "T258-D3c",
+     "summary": "A push that meets a running push (flock held) is skipped; the next landing's push carries its state",
+     "class": "within",
+     "why": "'At each landing' is in the section's quotation of the task line, not in request.md or the spec. On the block's own text, state written after the running push's commit is unsaved until the next landing, and so is all state written between any two landings. The skip widens that gap by one landing and does not lose state. The cost is named here rather than ruled as a narrowing."
+    },
+    {
+     "id": "T258-D4",
+     "summary": "One branch per clone, named for the clone the common .git belongs to; a replacement container's clone of that name takes it",
+     "class": "within",
+     "why": "A layout inside the GM's repository. Every clone's state still reaches the repository."
+    },
+    {
+     "id": "T258-D5",
+     "summary": "Never a force push; a fresh mirror fetches and merges the branch before its first commit; a refused push is fetched, merged and pushed on top",
+     "class": "within",
+     "why": "Keeps state already in the repository from being overwritten. Serves the purpose and drops nothing."
+    },
+    {
+     "id": "T258-D6",
+     "summary": "Restore merges and never overwrites: answers by l7r-gate record merge-answers (newer utc kept), logs by appending missing lines; .tmp files not pushed",
+     "class": "within",
+     "why": "Restoring the state into a fresh clone is the point of the repository. A .tmp file is a half-written answer or log line, not finished tooling state."
+    },
+    {
+     "id": "T258-D7",
+     "summary": "Session-clone setup is sync-with-main.sh sync-in, running restore --if-fresh (mirror made and restored in the background); a clone that already has a mirror does nothing; make state-restore by hand",
+     "class": "within",
+     "why": "A clone that has a mirror is not the fresh or replacement clone the restore exists for, and the by-hand door stays open. The background restore delays nothing."
+    },
+    {
+     "id": "T258-D8",
+     "summary": "A clone whose origin is not GitHub main's does nothing unless STATE_REMOTE names a remote",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled class by class. (1) Other suites' fixture clones, which run sync-with-main.sh with local origins and made-up answers and logs: pushing them would put fake data into the GM's private repository and have tests reach the real remote. Excluding them is implied by the purpose ('for the tooling state', the real record-check answers and event logs), so this class is legitimate. (2) A real working clone whose origin is something other than GitHub main: the stated justification does not cover it, because its state is real tooling state. The bundle shows one real push, from diagram-backlog. It does not say whether make state-push goes through this origin check, or what any other clone's origin is. D7 says clones are made by a bare git clone, presumably of GitHub, and the block names no real clone the check leaves out. So no defect is shown here. If such a clone exists, STATE_REMOTE is its door, and leaving it silently unbacked would be a defect for its owner to fix."
+    },
+    {
+     "id": "T258-D9",
+     "summary": "Token via l7r-gate github-token into GITHUB_TOKEN with the askpass script; credential.helper emptied; remote passed by URL per call, never stored in the mirror's config",
+     "class": "within",
+     "why": "Implements the task line's 'never printed, never on a command line, never in a config' for the GM's private repository."
+    },
+    {
+     "id": "T258-D10",
+     "summary": "A shell script beside sync-with-main.sh and land-tooling.sh, not a gate crate; the answers' merge reused from the gate",
+     "class": "within",
+     "why": "A choice of implementation form. Not a fidelity matter."
+    },
+    {
+     "id": "T258-D11",
+     "summary": "Only record-checks and l7r-events are added to the mirror's index; handoffs and caches stay out",
+     "class": "within",
+     "why": "Matches the GM's 'for the record-check answers and event logs' and the task line's exclusion."
+    },
+    {
+     "id": "T258-FL1",
+     "summary": "Found and left, not a defect: a grown log's last segment is sent whole (no thin-pack delta base), about 125 KB for a 7 KB diff",
+     "class": "within",
+     "why": "A size cost, measured with its method. There is no wrong outcome: the push is detached and every line still arrives."
+    },
+    {
+     "id": "T258-FL2",
+     "summary": "Found and left, not a defect: check audit-register's detectors do not see a script newly called from a landing recipe; the entry is written by hand, and a task title is handed to the coordinating session",
+     "class": "within",
+     "why": "The GM's own T259 words expect misses and say how they are handled: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. This entry is that backfill, so no mechanism goes unregistered. The detector's reach is left as it was, and the title is passed on so the miss can be filed."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T254 to T258, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

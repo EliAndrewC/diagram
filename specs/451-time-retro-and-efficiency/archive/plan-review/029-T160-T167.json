@@ -1,0 +1,792 @@
+{
+ "blocks": {
+  "### T163 (<why: the finding or measurement that files it>)": {
+   "sha256": "eb6abbbb9ba33a28224de8de9bd074ecfa59c163eb0b7af2723cdbff2f73cc97",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T163 Approach (checklist part A)": {
+   "sha256": "2b23efb7f5d0cf1a832631f7c428cfff2a3e1fa3a0a26df2cb3a37d3e63953df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T164 (observed 2026-11-22: with three builders in one clone, the 449 T312 bundle's verify gate went red or \"tree moved\" four times on other builders' half-done edits, and seven of its ten finished review verdicts were rewritten NOT-REVIEWABLE because a page session and a test-file edit wrote into the clone while they ran; the T289 bundle's reviews earlier waited hours on a stale engine another bundle's edit caused, which also dropped its new-element units without a word)": {
+   "sha256": "ebaaf197028686f0a35c28315da6085bbdac019697a0630b130621fb11f82989",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T164 Approach (checklist part A)": {
+   "sha256": "b6c5006cdc38a35657f2d9099ff4e6d5d804fe1522de4ef130292d8e52fd2045",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "1f3ab3b44044e3f4cd022d0ba68b57f12ec5bb3ec7453c66f0f6427a5dc0f5ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T165, T166, T172 (bundle)": {
+   "sha256": "afdc8e2cbeabf4df1129e0f56e5adfd44f1555e3839d921ef89dba74a2811a73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T165, T166, T172 Approach (checklist part A)": {
+   "sha256": "1026424ea99cff3f9971cfff65f783c8f1087d5ee23cb5166f7c3cce950403bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T167 (observed 2026-11-23: 449 T330's page sessions' event-log lines were booked to the clone's mark, T312 and then T328, and a 451 landing of T160 and T161 was refused \"review passes with no ledger row\" on a T330 page-session pass that 451 T157's `whose.rs` should have left to T330)": {
+   "sha256": "7577ecef875a26bd9e1f9f625f28f6197ecafd4d687a07bcff81d0f87a4ea2ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T167 Approach (checklist part A)": {
+   "sha256": "813ded397fc525435c2ecf487b13a869618878477f7c284fa530b63fc04e0942",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T160": {
+   "section_sha256": "8f987ca84ec20dd6441c940120eebcf3597776af05fe1c6cab63f252ce184151",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T160-install",
+     "summary": "T160: every test that writes an executable in process and then runs it writes it by install (l7r_gate_core::write_executable, the guard's crate::guards::write_executable)",
+     "class": "within",
+     "why": "The fix of the filed defect (ETXTBSY under load), by the mechanism 449 already used in the other crates' tests; tests only, no map changes."
+    },
+    {
+     "id": "T160-census",
+     "summary": "T160: the class 'tests that write and run an executable' found by two greps of rust/ (set_permissions/from_mode(0o7/set_mode(/chmod +x, then OpenOptionsExt/.mode(0o..)/fs::copy(/chmod in any mode word/Command::new(\"chmod\")), each hit read; seven files fixed",
+     "class": "within",
+     "why": "Fixes every instance found, with the search space and method stated as FR-009 asks of a class-wide fix; nothing in the class is narrowed out."
+    },
+    {
+     "id": "T160-pool-devdep",
+     "summary": "T160: pool takes core's testkit as a dev-dependency",
+     "class": "within",
+     "why": "Implementation detail of the fix; reaches no production build."
+    },
+    {
+     "id": "T160-not-run-left",
+     "summary": "T160: pages' research_claims/tests.rs and the guard's finished_run_hooks/runs/tests.rs left, since neither runs the file it writes",
+     "class": "within",
+     "why": "Outside the class: no exec, so no ETXTBSY, so no defect is left."
+    },
+    {
+     "id": "T160-cover-rs-left",
+     "summary": "T160: rustc/cover.rs's coverage wrapper (production, written in process and run by cargo) left as not the race",
+     "class": "within",
+     "why": "Production code in a single-threaded run, which is outside the filed class (tests in a multi-threaded test binary). The plan states it was read; the caveat is in the report."
+    },
+    {
+     "id": "T160-red-by-reading",
+     "summary": "T160: the red not reproduced (426 runs), so the race is shown by reading std::fs::write's open descriptor against a concurrent fork and execve's ETXTBSY",
+     "class": "within",
+     "why": "No requirement asks for a red-first test of a test-only race fix (FR-012 covers the refusals of FR-006 to FR-013); the attempt and its failure are measured and recorded."
+    },
+    {
+     "id": "T160-T162-folded",
+     "summary": "reviews' prereq/tests.rs:472, the same race, filed first as T162 while the sheet bundle held the file, now fixed in this bundle and landed with it (T=T160,T161,T162)",
+     "class": "within",
+     "why": "Widens the fix to one more instance of the same class, which the GM's bundling ruling (T141) allows; nothing is narrowed."
+    },
+    {
+     "id": "T161-D2-amended",
+     "summary": "T161: D2's last rung (the feature's task-start mark) now applies only to the main session's own lines; an agent's or page session's line that names no task carries no task",
+     "class": "within",
+     "why": "The accepted spec already carries this amendment (D2 AMENDED by T161). Measured against the request, it serves the purpose of a per-task breakdown: with several builders in one clone the mark booked one builder's edits to another task and refused a CLEAR landing, and a line left unbooked is honest where a wrong booking corrupts both the breakdown and land-alone's split. Two new rungs (the builder reading and the page-session brief) keep correct bookings coming in, so the request's per-task attribution is not narrowed."
+    },
+    {
+     "id": "T161-chain-rungs",
+     "summary": "T161: filed.rs's chain gains the agent's builder reading (description head, else prompt first line, else parentAgentId's builder) and the page session's brief; page_session_brief moved to set_down_hooks so own.rs calls one reader",
+     "class": "within",
+     "why": "The mechanism of the amended D2; one reader instead of two is a refactor inside the fix."
+    },
+    {
+     "id": "T161-consumers",
+     "summary": "T161: land-alone's and closing checks' splits leave a taskless agent line's files unnamed; context_cap_hooks names the handoff <agent>.md; renumbered's briefed reads the builder reading; land-alone's split unchanged but its comment",
+     "class": "within",
+     "why": "The consequences of the amended D2 for the existing consumers; no new behavior beyond it."
+    },
+    {
+     "id": "T161-red-tests",
+     "summary": "T161: tests/booked.rs and alone/tests/booked.rs red on HEAD, green after",
+     "class": "within",
+     "why": "Enforcement of the fix itself."
+    },
+    {
+     "id": "T161-history-left-T163",
+     "summary": "T161: the four T317 lines already in 449's log stay booked to T317 (events-refile moves lines between features, never re-tasks within a log); re-tasking history filed as T163, lands before T159",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves the history of the incident T161 was filed on unfixed, so it is a narrowing. It is legitimate because it is a deferral that meets FR-009 (reason, filed task id, order), not a drop. It needs a different mechanism (a re-tasking tool) from this bundle's writer fix. The symptom that refused the landing has also gone: the sheet bundle committed those files at 82e6b38326, as the plan's own T162 note records. The plan's clause 'until those files are committed by the sheet bundle' is stale on that point, which is a wording note and not a ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T161": {
+   "section_sha256": "8f987ca84ec20dd6441c940120eebcf3597776af05fe1c6cab63f252ce184151",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T160-install",
+     "summary": "T160: every test that writes an executable in process and then runs it writes it by install (l7r_gate_core::write_executable, the guard's crate::guards::write_executable)",
+     "class": "within",
+     "why": "The fix of the filed defect (ETXTBSY under load), by the mechanism 449 already used in the other crates' tests; tests only, no map changes."
+    },
+    {
+     "id": "T160-census",
+     "summary": "T160: the class 'tests that write and run an executable' found by two greps of rust/ (set_permissions/from_mode(0o7/set_mode(/chmod +x, then OpenOptionsExt/.mode(0o..)/fs::copy(/chmod in any mode word/Command::new(\"chmod\")), each hit read; seven files fixed",
+     "class": "within",
+     "why": "Fixes every instance found, with the search space and method stated as FR-009 asks of a class-wide fix; nothing in the class is narrowed out."
+    },
+    {
+     "id": "T160-pool-devdep",
+     "summary": "T160: pool takes core's testkit as a dev-dependency",
+     "class": "within",
+     "why": "Implementation detail of the fix; reaches no production build."
+    },
+    {
+     "id": "T160-not-run-left",
+     "summary": "T160: pages' research_claims/tests.rs and the guard's finished_run_hooks/runs/tests.rs left, since neither runs the file it writes",
+     "class": "within",
+     "why": "Outside the class: no exec, so no ETXTBSY, so no defect is left."
+    },
+    {
+     "id": "T160-cover-rs-left",
+     "summary": "T160: rustc/cover.rs's coverage wrapper (production, written in process and run by cargo) left as not the race",
+     "class": "within",
+     "why": "Production code in a single-threaded run, which is outside the filed class (tests in a multi-threaded test binary). The plan states it was read; the caveat is in the report."
+    },
+    {
+     "id": "T160-red-by-reading",
+     "summary": "T160: the red not reproduced (426 runs), so the race is shown by reading std::fs::write's open descriptor against a concurrent fork and execve's ETXTBSY",
+     "class": "within",
+     "why": "No requirement asks for a red-first test of a test-only race fix (FR-012 covers the refusals of FR-006 to FR-013); the attempt and its failure are measured and recorded."
+    },
+    {
+     "id": "T160-T162-folded",
+     "summary": "reviews' prereq/tests.rs:472, the same race, filed first as T162 while the sheet bundle held the file, now fixed in this bundle and landed with it (T=T160,T161,T162)",
+     "class": "within",
+     "why": "Widens the fix to one more instance of the same class, which the GM's bundling ruling (T141) allows; nothing is narrowed."
+    },
+    {
+     "id": "T161-D2-amended",
+     "summary": "T161: D2's last rung (the feature's task-start mark) now applies only to the main session's own lines; an agent's or page session's line that names no task carries no task",
+     "class": "within",
+     "why": "The accepted spec already carries this amendment (D2 AMENDED by T161). Measured against the request, it serves the purpose of a per-task breakdown: with several builders in one clone the mark booked one builder's edits to another task and refused a CLEAR landing, and a line left unbooked is honest where a wrong booking corrupts both the breakdown and land-alone's split. Two new rungs (the builder reading and the page-session brief) keep correct bookings coming in, so the request's per-task attribution is not narrowed."
+    },
+    {
+     "id": "T161-chain-rungs",
+     "summary": "T161: filed.rs's chain gains the agent's builder reading (description head, else prompt first line, else parentAgentId's builder) and the page session's brief; page_session_brief moved to set_down_hooks so own.rs calls one reader",
+     "class": "within",
+     "why": "The mechanism of the amended D2; one reader instead of two is a refactor inside the fix."
+    },
+    {
+     "id": "T161-consumers",
+     "summary": "T161: land-alone's and closing checks' splits leave a taskless agent line's files unnamed; context_cap_hooks names the handoff <agent>.md; renumbered's briefed reads the builder reading; land-alone's split unchanged but its comment",
+     "class": "within",
+     "why": "The consequences of the amended D2 for the existing consumers; no new behavior beyond it."
+    },
+    {
+     "id": "T161-red-tests",
+     "summary": "T161: tests/booked.rs and alone/tests/booked.rs red on HEAD, green after",
+     "class": "within",
+     "why": "Enforcement of the fix itself."
+    },
+    {
+     "id": "T161-history-left-T163",
+     "summary": "T161: the four T317 lines already in 449's log stay booked to T317 (events-refile moves lines between features, never re-tasks within a log); re-tasking history filed as T163, lands before T159",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves the history of the incident T161 was filed on unfixed, so it is a narrowing. It is legitimate because it is a deferral that meets FR-009 (reason, filed task id, order), not a drop. It needs a different mechanism (a re-tasking tool) from this bundle's writer fix. The symptom that refused the landing has also gone: the sheet bundle committed those files at 82e6b38326, as the plan's own T162 note records. The plan's clause 'until those files are committed by the sheet bundle' is stale on that point, which is a wording note and not a ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T164": {
+   "section_sha256": "409d5507b71d9eb03972c9f5182b0569ebc5dec975b4a993465852d52154d3e9",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T164-scope",
+     "summary": "make verify T= runs the bundle's own files in a separate review tree so other builders' edits in the clone cannot turn its gate red, void its verdicts or hide a stale engine; classed performance work",
+     "class": "within",
+     "why": "FR-013 counts work making the builders' loop or the gate faster as performance work; the observed T312/T289 incidents (gate reruns, seven voided reviews, hours waiting on a stale engine) are time lost in the loop of the bundled work the GM asked for (2026-11-22, T141). All four harms in the header (red/tree-moved gate, voided verdicts, stale-engine wait, silently dropped units) are each answered by the Approach."
+    },
+    {
+     "id": "attribution-one-copy",
+     "summary": "the bundle's files are taken by land-alone's split, read from scripts/land-alone.sh, not re-implemented",
+     "class": "within",
+     "why": "an implementation choice inside the task; narrows nothing the GM asked."
+    },
+    {
+     "id": "scratch-index-commit",
+     "summary": "temporary commit on HEAD through a scratch index; clone HEAD and index untouched",
+     "class": "within",
+     "why": "mechanism of the task; serves the goal that the review stands on the bundle's own work."
+    },
+    {
+     "id": "one-review-tree-own-target-kept",
+     "summary": "one review tree per clone (<clone>-review) with its own cargo target and its own .gencache, added once then reset each run and kept, never piled up (9.3 GB, 64-67 GB free throughout, measured 2026-11-22)",
+     "class": "within",
+     "why": "the GM's 2026-11-22 purpose is that disk is not eaten 'without us realizing it'; the tree is bounded to one per clone, reused rather than multiplied, its size measured and stated, and T158's floor and cleanup named as a constraint. Keeping it is what makes the warm gate about a minute rather than a cold build, so keeping is the reuse the GM endorsed, not a departure."
+    },
+    {
+     "id": "shared-target-rejected",
+     "summary": "the review tree does not share the landing target",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "it stands against the GM's 2026-11-22 'your points about reusing the same build cache and whatnot are well taken' (the session's points themselves are not quoted in the bundle). Ground: measured on a scratch copy, cargo judged l7r_guard Fresh across worktrees whose pair_hooks/review.rs and state.rs differ, so a shared target makes the gate judge other code - applying reuse here would defeat the gate's own purpose and the GM's 2026-11-22 cleanup aim is still met by bounding the tree to one. Reuse is kept where it is sound: the content-keyed rust-checks and hooks-test results are seeded from the clone."
+    },
+    {
+     "id": "gencache-seeding-dropped",
+     "summary": "the clone's 6.2 GB .gencache is no longer seeded into the review tree; the tree keeps its own across resets",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "also against 'reusing the same build cache' (the session's points not quoted in the bundle). Ground: impossibility, observed - entries are keyed by the engine binary's build id, which embeds the tree's source path, so ids never match across trees; of 31,067 seeded entries none served a map. Removing it removes 19.2 s and 6.2 GB of work that reused nothing, which serves both the cleanup and performance requests."
+    },
+    {
+     "id": "prereq-pair-guard-snapshot",
+     "summary": "reviews prereq and the pair guard judge a snapshotted unit by the review tree's record (gate at its key), every other unit by the clone's stamp as before; agent files read review-paired-gate UNIT=",
+     "class": "within",
+     "why": "keeps the review paired with the gate (feature 151) while judging the bundle's own tree; the agent-file fix closes the path by which the incident would recur. Note: the search for bare review-paired-gate callers is stated as grep -rn over .claude/agents, rust/, scripts/ - the Makefile, docs/, tests/, CLAUDE.md and the rest of .claude/ are not shown as searched; a reach gap in the enumeration, not a narrowing."
+    },
+    {
+     "id": "owed-hidden-stale-engine",
+     "summary": "reviews owed names a map not current with its stale engine and the units it hides (owed/hidden.rs)",
+     "class": "within",
+     "why": "answers the T289 harm (a stale engine waited on and new-element units dropped without a word)."
+    },
+    {
+     "id": "bare-verify-refused",
+     "summary": "bare make verify refused, naming T=; REVIEW_TREE_OK= escape",
+     "class": "within",
+     "why": "a refusal naming the compliant command with a reason escape per the project's guard rules; T= kept working for the 449 sheet bundle."
+    },
+    {
+     "id": "order",
+     "summary": "after T160/T161, before the 449 sheet bundle's make verify T=",
+     "class": "within",
+     "why": "dependency order; narrows nothing."
+    },
+    {
+     "id": "freeze-deferred-T165",
+     "summary": "engine_freeze_hooks still holds engine edits during a snapshotted review; not changed here, filed T165, lands before T154",
+     "class": "within",
+     "why": "T164 does not make the freeze worse: the freeze's existing hold becomes unnecessary for snapshotted reviews only, a cost and not a wrong verdict, and changing a guard's rule needs its own measurement (a review beside an engine edit keeping its verdict). FR-009's three parts are present: why not here, filed id T165, and its order 'lands before T154'. Deferral to a filed, ordered performance task narrows nothing the GM asked."
+    },
+    {
+     "id": "shared-stamps-claim-restated",
+     "summary": "the review tree's make done writes the shared gate-green stamps; left as is and the claim restated",
+     "class": "within",
+     "why": "each stamp is a content key compared with HEAD's key at push, so an overwritten stamp is a missed reuse at most, never a wrong pass - a difference, not a defect (constitution XIV), and restating the claim is the prescribed handling."
+    },
+    {
+     "id": "tool-record",
+     "summary": "review-tree.sh gains # TOOL_RECORD: naming its record file and the event log",
+     "class": "within",
+     "why": "the GM 2026-11-22: 'we want everything measured so we know where our time goes'."
+    },
+    {
+     "id": "red-first-in-warm-tree",
+     "summary": "red-first run in the review tree at HEAD with only test files over it, reusing its warm target rather than a third cold build",
+     "class": "within",
+     "why": "a method choice for the red-first evidence; the red results are recorded."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T165": {
+   "section_sha256": "1656c4a408e950d182d38a0a20133f2e50748cf3ca492dbd4cb4891cb8a11c94",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T165-withdraw",
+     "summary": "T165 withdrawn as done by T175: a review naming a review tree holds only edits inside it, one naming none and the rolls hold the clone; nothing built.",
+     "class": "within",
+     "why": "T165's ask, as the block quotes it, is to narrow the engine freeze to reviews with no review-tree snapshot (and the rolls). The block shows the snapshot and the prompt line T175 keys on are written under one condition (a non-empty --commit), so T175's rule is that ask; it is backed by a measured live case (449 T383's two reviews kept PASS at the tree's key while five rust/ files were edited, no engine-freeze firing since T175 landed against 20 before it, 2026-11-23) and the engine-freeze suite green. Withdrawing a task whose ask is already met drops nothing that was asked."
+    },
+    {
+     "id": "T166-carry-bundle",
+     "summary": "review-tree.sh carries its bundle to reviews owed --check-declared by L7R_VERIFY_STARTED, read in place of the clone's shared active-task mark; a gate built before reads the mark as before; no feature dir or no task falls back to the mark's rule.",
+     "class": "within",
+     "why": "The measurement restates T166's cause (the shared mark moved by another session's set-down or task-start, not a worktree lacking the mark) and the fix targets that cause, so verify judges the bundle it verifies. The environment-variable route and the fallbacks preserve existing behavior for old gates and undeclared cases; nothing the task asked for is dropped. Pinned red-first by a crate test and a suite case."
+    },
+    {
+     "id": "T166-first-task",
+     "summary": "Of the carried bundle, only the FIRST task counts as the started one (a CONVENTION); a declared line naming only the bundle's second task is refused.",
+     "class": "within",
+     "why": "The first-task rule already exists: make task-start marks a bundle by its first task, 449 T238 round 2 answers a line naming the started task, and the landing's holding box reads the same. T166 changes WHERE the started task is read from (the carried bundle, not the shared mark), not WHICH task counts; neither request.md nor FR-013 says which of a bundle's tasks answers. The block's 'algorithmically easier' remark is not the ground for this class - the ground is that verify and the landing keep one rule, so verify does not pass what the landing then refuses."
+    },
+    {
+     "id": "T166-found-and-left-owed-listing",
+     "summary": "reviews owed's listing in the review tree reads the active features without the carried bundle; left unfixed.",
+     "class": "within",
+     "why": "No wrong outcome is measured: the three review commits observed (36fa41f4cc, 48103d14e6, d80ff6a0dd, git show --stat, 2026-11-23) each carry their feature's tasks.md, and the pointer names one feature for all builders. A hypothetical gap with no wrong outcome is not a defect (constitution XIV v2.36.0), so leaving it is not a narrowing and FR-009's defect-deferral form does not reach it."
+    },
+    {
+     "id": "T172-calibrated-bound",
+     "summary": "test-l7r-guard.sh's locked case times the no-binary path three times and bounds the locked call at three times the slowest, never under the old 1 s (a CONVENTION from CLAUDE.md's calibration loop); the live wrapper untouched.",
+     "class": "within",
+     "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T166": {
+   "section_sha256": "1656c4a408e950d182d38a0a20133f2e50748cf3ca492dbd4cb4891cb8a11c94",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T165-withdraw",
+     "summary": "T165 withdrawn as done by T175: a review naming a review tree holds only edits inside it, one naming none and the rolls hold the clone; nothing built.",
+     "class": "within",
+     "why": "T165's ask, as the block quotes it, is to narrow the engine freeze to reviews with no review-tree snapshot (and the rolls). The block shows the snapshot and the prompt line T175 keys on are written under one condition (a non-empty --commit), so T175's rule is that ask; it is backed by a measured live case (449 T383's two reviews kept PASS at the tree's key while five rust/ files were edited, no engine-freeze firing since T175 landed against 20 before it, 2026-11-23) and the engine-freeze suite green. Withdrawing a task whose ask is already met drops nothing that was asked."
+    },
+    {
+     "id": "T166-carry-bundle",
+     "summary": "review-tree.sh carries its bundle to reviews owed --check-declared by L7R_VERIFY_STARTED, read in place of the clone's shared active-task mark; a gate built before reads the mark as before; no feature dir or no task falls back to the mark's rule.",
+     "class": "within",
+     "why": "The measurement restates T166's cause (the shared mark moved by another session's set-down or task-start, not a worktree lacking the mark) and the fix targets that cause, so verify judges the bundle it verifies. The environment-variable route and the fallbacks preserve existing behavior for old gates and undeclared cases; nothing the task asked for is dropped. Pinned red-first by a crate test and a suite case."
+    },
+    {
+     "id": "T166-first-task",
+     "summary": "Of the carried bundle, only the FIRST task counts as the started one (a CONVENTION); a declared line naming only the bundle's second task is refused.",
+     "class": "within",
+     "why": "The first-task rule already exists: make task-start marks a bundle by its first task, 449 T238 round 2 answers a line naming the started task, and the landing's holding box reads the same. T166 changes WHERE the started task is read from (the carried bundle, not the shared mark), not WHICH task counts; neither request.md nor FR-013 says which of a bundle's tasks answers. The block's 'algorithmically easier' remark is not the ground for this class - the ground is that verify and the landing keep one rule, so verify does not pass what the landing then refuses."
+    },
+    {
+     "id": "T166-found-and-left-owed-listing",
+     "summary": "reviews owed's listing in the review tree reads the active features without the carried bundle; left unfixed.",
+     "class": "within",
+     "why": "No wrong outcome is measured: the three review commits observed (36fa41f4cc, 48103d14e6, d80ff6a0dd, git show --stat, 2026-11-23) each carry their feature's tasks.md, and the pointer names one feature for all builders. A hypothetical gap with no wrong outcome is not a defect (constitution XIV v2.36.0), so leaving it is not a narrowing and FR-009's defect-deferral form does not reach it."
+    },
+    {
+     "id": "T172-calibrated-bound",
+     "summary": "test-l7r-guard.sh's locked case times the no-binary path three times and bounds the locked call at three times the slowest, never under the old 1 s (a CONVENTION from CLAUDE.md's calibration loop); the live wrapper untouched.",
+     "class": "within",
+     "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T167": {
+   "section_sha256": "a684faf3013c417e668273dc5523907f42af8db599247cc9567f13773d7b6619",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T167-A1",
+     "summary": "Event log: a line is a page session's when its env names L7R_PAGE_SESSION or the clone's page-sessions/index.txt lists its session_id; it is booked to its brief's task, a listed session whose brief names no task carries no task and never the mark's.",
+     "class": "within",
+     "why": "Corrects a wrong outcome in the per-task time breakdown the GM asked for (2026-11-19 retrospective: 'for each task ... a breakdown of where our time went'; FR-001/FR-005 readers): minutes of T330's page sessions were credited to T312/T328. Keeps 451 T161's rule that the mark is only for the main session's own lines."
+    },
+    {
+     "id": "T167-A2",
+     "summary": "The new check set_down_hooks::page_session_listed is split out of the shared page_session_brief reader so the writer and make events-refile keep one copy (451 T56).",
+     "class": "within",
+     "why": "Implementation structure inside the fix; narrows nothing asked."
+    },
+    {
+     "id": "T167-A3",
+     "summary": "The index is read only for a line no earlier link has booked, and at most once per line.",
+     "class": "within",
+     "why": "Cost bound on the new link; changes no outcome the request or spec settles."
+    },
+    {
+     "id": "T167-B1",
+     "summary": "Ledger left reading (whose.rs): a source that names a task never started in its feature gives way to the next source (subject, meta description, builder, page session brief) instead of the first naming source winning; a pass naming nothing, a ticked task, a never-started task with no other source, or the landing's own task still refuses.",
+     "class": "within",
+     "why": "Fixes a check that refused good work (a landing owing nothing refused because a bundle suffix '-t330a' was read as task T330a). The refusal is not weakened: a pass is still left only to a started, open task the landing does not land, per 451 T157, so the GM's 'real enforcement' (2026-11-19 approval) holds."
+    },
+    {
+     "id": "T167-L1",
+     "summary": "Found and left: the 449 log's lines already booked to T312/T328 for T330's sessions stay as filed; make where-time credits those minutes to T312/T328 until T168 (a [perf] task, filed) re-tasks them, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect left (where-time answers wrongly for those minutes), so it narrows T167. It is legitimate: the lines sit in 449's own log, which 449's two bundles are landing from now, so rewriting it in this task would change a file an in-flight landing reads; and the re-tasking needs a rule make events-refile does not have (it moves lines across features only). The defect is not dropped from the feature: it is filed as T168 with its order stated (lands before T22) and classed [perf] so it is scheduled first under the GM's 2026-11-20 measurement rule, meeting FR-009's deferral form. The request's purpose, accurate per-task time, is still carried."
+    },
+    {
+     "id": "T167-P1",
+     "summary": "The event-log half is [perf] for scheduling under the GM's 2026-11-20 measurement rule; the whose.rs half is not performance work; no before-and-after timing is owed because neither half makes a step faster.",
+     "class": "within",
+     "why": "Applies the GM's words verbatim ('this kind of measurement task to be counted as a performance task for the purpose of scheduling ... even if the task itself doesn't improve performance') and FR-013; owes no timing since neither half claims a speed-up."
+    },
+    {
+     "id": "T167-X1",
+     "summary": "Order after T161 and T157; exits (two red-first tests, crate suites, coverage, lint, format, hook suites, MODE 4 CLEAR); fixtures copying this clone's shapes (t05a-checks.md naming T05 under mark T09; -t2a/-t2b bundles naming T2 and T4).",
+     "class": "within",
+     "why": "Sequencing and verification of the fix itself; tests that fail only when the requested booking is absent are enforcement of the request, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T160, T161 (bundle)",
+    "### T160, T161 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T160-install",
+     "summary": "T160: every test that writes an executable in process and then runs it writes it by install (l7r_gate_core::write_executable / the guard's write_executable); pool takes core's testkit as a dev-dependency",
+     "class": "within",
+     "why": "The fix of T160's own defect (ETXTBSY under load, a wrong outcome: a crate's tests fail at random) by the mechanism 449 already used in the other crates; tests only, no map or behavior change; the dev-dependency is an implementation choice with its no-cycle reasoning stated."
+    },
+    {
+     "id": "T160-census",
+     "summary": "T160: the class 'every test that writes an executable it runs' enumerated by a stated search space - set_permissions/from_mode(0o7/set_mode(/chmod +x, widened to OpenOptionsExt/.mode(0o..), fs::copy(, chmod in every mode word and Command::new(\"chmod\") with its arguments apart, each hit read - finding seven files, the rest classed as creating no executable",
+     "class": "within",
+     "why": "The earlier round's census finding is answered: the enumeration now names its commands and covers the forms a file becomes executable in process (permission set, created with a mode, copied with its bits, chmod by a child), labeled as an observation with its date and method (FR-009). Its reach is the class the fix names; no instance found is dropped without a reason."
+    },
+    {
+     "id": "T160-not-run",
+     "summary": "T160: pages' research_claims/tests.rs and the guard's finished_run_hooks/runs/tests.rs left, their executables never executed",
+     "class": "within",
+     "why": "The race needs an execve of the written file; a file only tested for its execute bit, or named by a fake /proc entry, is outside the class. Not a defect."
+    },
+    {
+     "id": "T160-red-by-reading",
+     "summary": "T160: the failure not reproduced in 426 runs, so the race is proved by reading (a write descriptor inherited by a forked sibling until its exec; execve of a file open for writing fails ETXTBSY)",
+     "class": "within",
+     "why": "The observed failure is recorded with its commit, load and method; the measurements of the failed reproductions are labeled; the fix is the one whose mechanism removes the cause. Settles how the defect is shown, narrows nothing."
+    },
+    {
+     "id": "T160-prereq-left",
+     "summary": "T160: reviews' prereq/tests.rs:472, an instance of the same race, left to T162 (lands before T159) because the file is the 449 sheet bundle's, mid-edit",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the plan's own class by one instance, but editing a file another builder holds mid-edit in the same shared clone is the very collision T161 exists to stop (one builder's landing claiming or refusing another's files); the defect is not dropped but filed with its id, its reason and its order ahead of T159 (FR-009). No GM words ask for this instance to land in this task, and the request's purpose (bundled small fixes that land without tripping each other, T141) is served, not gutted, by the deferral."
+    },
+    {
+     "id": "T161-builder-reading",
+     "summary": "T161: filed.rs' task chain gains, after the brief's own words, the agent's builder reading (builder_brief: description head, else the prompt's first line, a bundle's every member, else the parentAgentId builder), then a page session's brief (page_session_brief moved to set_down_hooks, one reader); renumbered's briefed reads the builder reading too",
+     "class": "within",
+     "why": "Extends where a line's task is found so each agent's line is booked to the task its own dispatch names - FR-004's 'its task where its dispatch names one' and the per-task breakdown the GM asked for (2026-11-19). The move to one reader is a refactor."
+    },
+    {
+     "id": "T161-D2-amended",
+     "summary": "T161: D2's last rung (a line naming no task takes the feature's task-start in force) read for the main session's own lines alone; an agent's or page session's line naming no task carries none (land-alone's and closing checks' splits leave it unnamed, context_cap_hooks names the handoff <agent>.md)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the accepted spec's D2, which gives every line the clone's task-start in force. Applied literally D2 defeats the request's own purpose, concretely: the GM asked for 'for each task ... a breakdown of where our time went on that task', and D2's last rung booked a sheet-bundle builder's four edits to T317, another builder's task, and so refused a CLEAR, committed bundle at its landing (measured 2026-11-22 from the real log line and meta file). The spec's own FR-004 already limits an agent's line to 'its task where its dispatch names one'; a line with no task is honest where D2's would be wrong. The main session keeps the rung, where the mark is its own."
+    },
+    {
+     "id": "T161-T317-history-left",
+     "summary": "T161: the four lines already booked to T317 in 449's log are not re-tasked; filed as T163, lands before T159",
+     "class": "narrowing",
+     "why": "It leaves a wrong booking already written (four T317 lines that are another builder's), so it narrows the fix to the writer. Legitimate: re-tasking past lines within a log is outside what events-refile does by its recorded rule and needs a tool of its own; the defect is filed as T163 with its reason and its order ahead of T159 (FR-009), not dropped; and it ends of itself when the sheet bundle commits those files. The GM's request is served by right booking going forward (SC-002: 'for work done after this feature lands'), which this bundle delivers.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T161-cover-rs",
+     "summary": "cover.rs's in-process coverage wrapper left: production code in a single-threaded run, not the race",
+     "class": "within",
+     "why": "With no other thread forking while its descriptor is open the ETXTBSY race cannot occur; not a defect, so nothing is left unfixed."
+    },
+    {
+     "id": "T160-T161-exits",
+     "summary": "Order (T160 tests, T161 red tests, the chain), exits (crate tests, lint, format, cover, hook suites, closing-checks), done measured by two booked tests red on HEAD and green after",
+     "class": "within",
+     "why": "Procedure and verification of the two fixes themselves; enforcement of what is fixed, no new behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T160, T161 (bundle)",
+    "### T160, T161 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T160-install",
+     "summary": "T160: every test that writes an executable in process and then runs it writes it by install (l7r_gate_core::write_executable, the guard's crate::guards::write_executable)",
+     "class": "within",
+     "why": "The fix of the filed defect (ETXTBSY under load), by the mechanism 449 already used in the other crates' tests; tests only, no map changes."
+    },
+    {
+     "id": "T160-census",
+     "summary": "T160: the class 'tests that write and run an executable' found by two greps of rust/ (set_permissions/from_mode(0o7/set_mode(/chmod +x, then OpenOptionsExt/.mode(0o..)/fs::copy(/chmod in any mode word/Command::new(\"chmod\")), each hit read; seven files fixed",
+     "class": "within",
+     "why": "Fixes every instance found, with the search space and method stated as FR-009 asks of a class-wide fix; nothing in the class is narrowed out."
+    },
+    {
+     "id": "T160-pool-devdep",
+     "summary": "T160: pool takes core's testkit as a dev-dependency",
+     "class": "within",
+     "why": "Implementation detail of the fix; reaches no production build."
+    },
+    {
+     "id": "T160-not-run-left",
+     "summary": "T160: pages' research_claims/tests.rs and the guard's finished_run_hooks/runs/tests.rs left, since neither runs the file it writes",
+     "class": "within",
+     "why": "Outside the class: no exec, so no ETXTBSY, so no defect is left."
+    },
+    {
+     "id": "T160-cover-rs-left",
+     "summary": "T160: rustc/cover.rs's coverage wrapper (production, written in process and run by cargo) left as not the race",
+     "class": "within",
+     "why": "Production code in a single-threaded run, which is outside the filed class (tests in a multi-threaded test binary). The plan states it was read; the caveat is in the report."
+    },
+    {
+     "id": "T160-red-by-reading",
+     "summary": "T160: the red not reproduced (426 runs), so the race is shown by reading std::fs::write's open descriptor against a concurrent fork and execve's ETXTBSY",
+     "class": "within",
+     "why": "No requirement asks for a red-first test of a test-only race fix (FR-012 covers the refusals of FR-006 to FR-013); the attempt and its failure are measured and recorded."
+    },
+    {
+     "id": "T160-T162-folded",
+     "summary": "reviews' prereq/tests.rs:472, the same race, filed first as T162 while the sheet bundle held the file, now fixed in this bundle and landed with it (T=T160,T161,T162)",
+     "class": "within",
+     "why": "Widens the fix to one more instance of the same class, which the GM's bundling ruling (T141) allows; nothing is narrowed."
+    },
+    {
+     "id": "T161-D2-amended",
+     "summary": "T161: D2's last rung (the feature's task-start mark) now applies only to the main session's own lines; an agent's or page session's line that names no task carries no task",
+     "class": "within",
+     "why": "The accepted spec already carries this amendment (D2 AMENDED by T161). Measured against the request, it serves the purpose of a per-task breakdown: with several builders in one clone the mark booked one builder's edits to another task and refused a CLEAR landing, and a line left unbooked is honest where a wrong booking corrupts both the breakdown and land-alone's split. Two new rungs (the builder reading and the page-session brief) keep correct bookings coming in, so the request's per-task attribution is not narrowed."
+    },
+    {
+     "id": "T161-chain-rungs",
+     "summary": "T161: filed.rs's chain gains the agent's builder reading (description head, else prompt first line, else parentAgentId's builder) and the page session's brief; page_session_brief moved to set_down_hooks so own.rs calls one reader",
+     "class": "within",
+     "why": "The mechanism of the amended D2; one reader instead of two is a refactor inside the fix."
+    },
+    {
+     "id": "T161-consumers",
+     "summary": "T161: land-alone's and closing checks' splits leave a taskless agent line's files unnamed; context_cap_hooks names the handoff <agent>.md; renumbered's briefed reads the builder reading; land-alone's split unchanged but its comment",
+     "class": "within",
+     "why": "The consequences of the amended D2 for the existing consumers; no new behavior beyond it."
+    },
+    {
+     "id": "T161-red-tests",
+     "summary": "T161: tests/booked.rs and alone/tests/booked.rs red on HEAD, green after",
+     "class": "within",
+     "why": "Enforcement of the fix itself."
+    },
+    {
+     "id": "T161-history-left-T163",
+     "summary": "T161: the four T317 lines already in 449's log stay booked to T317 (events-refile moves lines between features, never re-tasks within a log); re-tasking history filed as T163, lands before T159",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves the history of the incident T161 was filed on unfixed, so it is a narrowing. It is legitimate because it is a deferral that meets FR-009 (reason, filed task id, order), not a drop. It needs a different mechanism (a re-tasking tool) from this bundle's writer fix. The symptom that refused the landing has also gone: the sheet bundle committed those files at 82e6b38326, as the plan's own T162 note records. The plan's clause 'until those files are committed by the sheet bundle' is stale on that point, which is a wording note and not a ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T164 (observed 2026-11-22: with three builders in one clone, the 449 T312 bundle's verify gate went red or \"tree moved\" four times on other builders' half-done edits, and seven of its ten finished review verdicts were rewritten NOT-REVIEWABLE because a page session and a test-file edit wrote into the clone while they ran; the T289 bundle's reviews earlier waited hours on a stale engine another bundle's edit caused, which also dropped its new-element units without a word)",
+    "### T164 Approach (checklist part A)",
+    "### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T164-scope",
+     "summary": "make verify T= runs the bundle's own files in a separate review tree so other builders' edits in the clone cannot turn its gate red, void its verdicts or hide a stale engine; classed performance work",
+     "class": "within",
+     "why": "FR-013 counts work making the builders' loop or the gate faster as performance work; the observed T312/T289 incidents (gate reruns, seven voided reviews, hours waiting on a stale engine) are time lost in the loop of the bundled work the GM asked for (2026-11-22, T141). All four harms in the header (red/tree-moved gate, voided verdicts, stale-engine wait, silently dropped units) are each answered by the Approach."
+    },
+    {
+     "id": "attribution-one-copy",
+     "summary": "the bundle's files are taken by land-alone's split, read from scripts/land-alone.sh, not re-implemented",
+     "class": "within",
+     "why": "an implementation choice inside the task; narrows nothing the GM asked."
+    },
+    {
+     "id": "scratch-index-commit",
+     "summary": "temporary commit on HEAD through a scratch index; clone HEAD and index untouched",
+     "class": "within",
+     "why": "mechanism of the task; serves the goal that the review stands on the bundle's own work."
+    },
+    {
+     "id": "one-review-tree-own-target-kept",
+     "summary": "one review tree per clone (<clone>-review) with its own cargo target and its own .gencache, added once then reset each run and kept, never piled up (9.3 GB, 64-67 GB free throughout, measured 2026-11-22)",
+     "class": "within",
+     "why": "the GM's 2026-11-22 purpose is that disk is not eaten 'without us realizing it'; the tree is bounded to one per clone, reused rather than multiplied, its size measured and stated, and T158's floor and cleanup named as a constraint. Keeping it is what makes the warm gate about a minute rather than a cold build, so keeping is the reuse the GM endorsed, not a departure."
+    },
+    {
+     "id": "shared-target-rejected",
+     "summary": "the review tree does not share the landing target",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "it stands against the GM's 2026-11-22 'your points about reusing the same build cache and whatnot are well taken' (the session's points themselves are not quoted in the bundle). Ground: measured on a scratch copy, cargo judged l7r_guard Fresh across worktrees whose pair_hooks/review.rs and state.rs differ, so a shared target makes the gate judge other code - applying reuse here would defeat the gate's own purpose and the GM's 2026-11-22 cleanup aim is still met by bounding the tree to one. Reuse is kept where it is sound: the content-keyed rust-checks and hooks-test results are seeded from the clone."
+    },
+    {
+     "id": "gencache-seeding-dropped",
+     "summary": "the clone's 6.2 GB .gencache is no longer seeded into the review tree; the tree keeps its own across resets",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "also against 'reusing the same build cache' (the session's points not quoted in the bundle). Ground: impossibility, observed - entries are keyed by the engine binary's build id, which embeds the tree's source path, so ids never match across trees; of 31,067 seeded entries none served a map. Removing it removes 19.2 s and 6.2 GB of work that reused nothing, which serves both the cleanup and performance requests."
+    },
+    {
+     "id": "prereq-pair-guard-snapshot",
+     "summary": "reviews prereq and the pair guard judge a snapshotted unit by the review tree's record (gate at its key), every other unit by the clone's stamp as before; agent files read review-paired-gate UNIT=",
+     "class": "within",
+     "why": "keeps the review paired with the gate (feature 151) while judging the bundle's own tree; the agent-file fix closes the path by which the incident would recur. Note: the search for bare review-paired-gate callers is stated as grep -rn over .claude/agents, rust/, scripts/ - the Makefile, docs/, tests/, CLAUDE.md and the rest of .claude/ are not shown as searched; a reach gap in the enumeration, not a narrowing."
+    },
+    {
+     "id": "owed-hidden-stale-engine",
+     "summary": "reviews owed names a map not current with its stale engine and the units it hides (owed/hidden.rs)",
+     "class": "within",
+     "why": "answers the T289 harm (a stale engine waited on and new-element units dropped without a word)."
+    },
+    {
+     "id": "bare-verify-refused",
+     "summary": "bare make verify refused, naming T=; REVIEW_TREE_OK= escape",
+     "class": "within",
+     "why": "a refusal naming the compliant command with a reason escape per the project's guard rules; T= kept working for the 449 sheet bundle."
+    },
+    {
+     "id": "order",
+     "summary": "after T160/T161, before the 449 sheet bundle's make verify T=",
+     "class": "within",
+     "why": "dependency order; narrows nothing."
+    },
+    {
+     "id": "freeze-deferred-T165",
+     "summary": "engine_freeze_hooks still holds engine edits during a snapshotted review; not changed here, filed T165, lands before T154",
+     "class": "within",
+     "why": "T164 does not make the freeze worse: the freeze's existing hold becomes unnecessary for snapshotted reviews only, a cost and not a wrong verdict, and changing a guard's rule needs its own measurement (a review beside an engine edit keeping its verdict). FR-009's three parts are present: why not here, filed id T165, and its order 'lands before T154'. Deferral to a filed, ordered performance task narrows nothing the GM asked."
+    },
+    {
+     "id": "shared-stamps-claim-restated",
+     "summary": "the review tree's make done writes the shared gate-green stamps; left as is and the claim restated",
+     "class": "within",
+     "why": "each stamp is a content key compared with HEAD's key at push, so an overwritten stamp is a missed reuse at most, never a wrong pass - a difference, not a defect (constitution XIV), and restating the claim is the prescribed handling."
+    },
+    {
+     "id": "tool-record",
+     "summary": "review-tree.sh gains # TOOL_RECORD: naming its record file and the event log",
+     "class": "within",
+     "why": "the GM 2026-11-22: 'we want everything measured so we know where our time goes'."
+    },
+    {
+     "id": "red-first-in-warm-tree",
+     "summary": "red-first run in the review tree at HEAD with only test files over it, reusing its warm target rather than a third cold build",
+     "class": "within",
+     "why": "a method choice for the red-first evidence; the red results are recorded."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T165, T166, T172 (bundle)",
+    "### T165, T166, T172 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T165-withdraw",
+     "summary": "T165 withdrawn as done by T175: a review naming a review tree holds only edits inside it, one naming none and the rolls hold the clone; nothing built.",
+     "class": "within",
+     "why": "T165's ask, as the block quotes it, is to narrow the engine freeze to reviews with no review-tree snapshot (and the rolls). The block shows the snapshot and the prompt line T175 keys on are written under one condition (a non-empty --commit), so T175's rule is that ask; it is backed by a measured live case (449 T383's two reviews kept PASS at the tree's key while five rust/ files were edited, no engine-freeze firing since T175 landed against 20 before it, 2026-11-23) and the engine-freeze suite green. Withdrawing a task whose ask is already met drops nothing that was asked."
+    },
+    {
+     "id": "T166-carry-bundle",
+     "summary": "review-tree.sh carries its bundle to reviews owed --check-declared by L7R_VERIFY_STARTED, read in place of the clone's shared active-task mark; a gate built before reads the mark as before; no feature dir or no task falls back to the mark's rule.",
+     "class": "within",
+     "why": "The measurement restates T166's cause (the shared mark moved by another session's set-down or task-start, not a worktree lacking the mark) and the fix targets that cause, so verify judges the bundle it verifies. The environment-variable route and the fallbacks preserve existing behavior for old gates and undeclared cases; nothing the task asked for is dropped. Pinned red-first by a crate test and a suite case."
+    },
+    {
+     "id": "T166-first-task",
+     "summary": "Of the carried bundle, only the FIRST task counts as the started one (a CONVENTION); a declared line naming only the bundle's second task is refused.",
+     "class": "within",
+     "why": "The first-task rule already exists: make task-start marks a bundle by its first task, 449 T238 round 2 answers a line naming the started task, and the landing's holding box reads the same. T166 changes WHERE the started task is read from (the carried bundle, not the shared mark), not WHICH task counts; neither request.md nor FR-013 says which of a bundle's tasks answers. The block's 'algorithmically easier' remark is not the ground for this class - the ground is that verify and the landing keep one rule, so verify does not pass what the landing then refuses."
+    },
+    {
+     "id": "T166-found-and-left-owed-listing",
+     "summary": "reviews owed's listing in the review tree reads the active features without the carried bundle; left unfixed.",
+     "class": "within",
+     "why": "No wrong outcome is measured: the three review commits observed (36fa41f4cc, 48103d14e6, d80ff6a0dd, git show --stat, 2026-11-23) each carry their feature's tasks.md, and the pointer names one feature for all builders. A hypothetical gap with no wrong outcome is not a defect (constitution XIV v2.36.0), so leaving it is not a narrowing and FR-009's defect-deferral form does not reach it."
+    },
+    {
+     "id": "T172-calibrated-bound",
+     "summary": "test-l7r-guard.sh's locked case times the no-binary path three times and bounds the locked call at three times the slowest, never under the old 1 s (a CONVENTION from CLAUDE.md's calibration loop); the live wrapper untouched.",
+     "class": "within",
+     "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T167 (observed 2026-11-23: 449 T330's page sessions' event-log lines were booked to the clone's mark, T312 and then T328, and a 451 landing of T160 and T161 was refused \"review passes with no ledger row\" on a T330 page-session pass that 451 T157's `whose.rs` should have left to T330)",
+    "### T167 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T167-A1",
+     "summary": "Event log: a line is a page session's when its env names L7R_PAGE_SESSION or the clone's page-sessions/index.txt lists its session_id; it is booked to its brief's task, a listed session whose brief names no task carries no task and never the mark's.",
+     "class": "within",
+     "why": "Corrects a wrong outcome in the per-task time breakdown the GM asked for (2026-11-19 retrospective: 'for each task ... a breakdown of where our time went'; FR-001/FR-005 readers): minutes of T330's page sessions were credited to T312/T328. Keeps 451 T161's rule that the mark is only for the main session's own lines."
+    },
+    {
+     "id": "T167-A2",
+     "summary": "The new check set_down_hooks::page_session_listed is split out of the shared page_session_brief reader so the writer and make events-refile keep one copy (451 T56).",
+     "class": "within",
+     "why": "Implementation structure inside the fix; narrows nothing asked."
+    },
+    {
+     "id": "T167-A3",
+     "summary": "The index is read only for a line no earlier link has booked, and at most once per line.",
+     "class": "within",
+     "why": "Cost bound on the new link; changes no outcome the request or spec settles."
+    },
+    {
+     "id": "T167-B1",
+     "summary": "Ledger left reading (whose.rs): a source that names a task never started in its feature gives way to the next source (subject, meta description, builder, page session brief) instead of the first naming source winning; a pass naming nothing, a ticked task, a never-started task with no other source, or the landing's own task still refuses.",
+     "class": "within",
+     "why": "Fixes a check that refused good work (a landing owing nothing refused because a bundle suffix '-t330a' was read as task T330a). The refusal is not weakened: a pass is still left only to a started, open task the landing does not land, per 451 T157, so the GM's 'real enforcement' (2026-11-19 approval) holds."
+    },
+    {
+     "id": "T167-L1",
+     "summary": "Found and left: the 449 log's lines already booked to T312/T328 for T330's sessions stay as filed; make where-time credits those minutes to T312/T328 until T168 (a [perf] task, filed) re-tasks them, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect left (where-time answers wrongly for those minutes), so it narrows T167. It is legitimate: the lines sit in 449's own log, which 449's two bundles are landing from now, so rewriting it in this task would change a file an in-flight landing reads; and the re-tasking needs a rule make events-refile does not have (it moves lines across features only). The defect is not dropped from the feature: it is filed as T168 with its order stated (lands before T22) and classed [perf] so it is scheduled first under the GM's 2026-11-20 measurement rule, meeting FR-009's deferral form. The request's purpose, accurate per-task time, is still carried."
+    },
+    {
+     "id": "T167-P1",
+     "summary": "The event-log half is [perf] for scheduling under the GM's 2026-11-20 measurement rule; the whose.rs half is not performance work; no before-and-after timing is owed because neither half makes a step faster.",
+     "class": "within",
+     "why": "Applies the GM's words verbatim ('this kind of measurement task to be counted as a performance task for the purpose of scheduling ... even if the task itself doesn't improve performance') and FR-013; owes no timing since neither half claims a speed-up."
+    },
+    {
+     "id": "T167-X1",
+     "summary": "Order after T161 and T157; exits (two red-first tests, crate suites, coverage, lint, format, hook suites, MODE 4 CLEAR); fixtures copying this clone's shapes (t05a-checks.md naming T05 under mark T09; -t2a/-t2b bundles naming T2 and T4).",
+     "class": "within",
+     "why": "Sequencing and verification of the fix itself; tests that fail only when the requested booking is absent are enforcement of the request, not added scope."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T160 to T167, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

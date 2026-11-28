@@ -196,6 +196,8 @@ fn skipped(name: &str) -> bool {
     let path = Path::new(name);
     let last = path.file_name().unwrap_or_default().to_string_lossy();
     SKIP_NAMES.contains(&last.as_ref())
+        // plan-review.json's closed entries in parts since the split (462 T545), skipped as the whole file is
+        || name.contains("archive/plan-review/")
         || path
             .parent()
             .is_some_and(|p| p.iter().any(|c| c == SKIP_DIR))

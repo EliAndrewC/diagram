@@ -321,6 +321,13 @@ fn the_command_line_prints_writes_and_refuses() {
         .stdout
         .ends_with("\nfeature-report: written to specs/901-s/report.md\n"));
     assert!(d.join("specs/901-s/report.md").is_file());
+    // a split feature's report under the bound is written whole (462 T555)
+    std::fs::create_dir_all(d.join("specs/901-s/archive")).unwrap();
+    assert_eq!(
+        cli(&args(&["--root", &root, "901", "--write"]), &e, none).code,
+        0
+    );
+    assert!(!d.join("specs/901-s/report").exists());
     std::fs::write(d.join("specs/904-file.md"), "").unwrap();
     let failed = cli(&args(&["--root", &root, "904", "--write"]), &e, none);
     assert_eq!(failed.code, 1);

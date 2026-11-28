@@ -289,3 +289,18 @@ fn the_driver_given_the_plan_merges_by_it() {
 fn a_map_with_no_digest_is_held_by_no_plan() {
     assert!(super::Held::of("").at("passes", "x").is_none());
 }
+
+/// 462 T545: a pre-split tree's record carried onto a split clone (and the reverse) brings back no entry the split moved to the archive's
+/// parts, its side unchanged from the base - only its own new verdict.
+#[test]
+fn a_pre_split_side_resurrects_no_archived_entry() {
+    let pre = base();
+    let mut split = base();
+    split["tasks"] = json!({});
+    split["block_reviews"] = json!([]);
+    let theirs = adding("T300");
+    for m in [merged(&pre, &split, &theirs), merged(&pre, &theirs, &split)] {
+        assert!(m["tasks"].get("T01").is_none() && m["tasks"].get("T300").is_some());
+        assert_eq!(m["block_reviews"], json!([row("### T300 x")]));
+    }
+}

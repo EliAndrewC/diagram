@@ -1,0 +1,567 @@
+{
+ "blocks": {
+  "### T281 (the store of rendered guard messages lay in the git common directory, one for every worktree of a clone: on 2026-11-26 a builder's `make guard-messages BUNDLE=1` said \"nothing owed\" for wordings its own red hooks-test had just named, and 451 T292's last hooks-test went red on the wordings of a guard only T285's tree held)": {
+   "sha256": "3612528c3fa8366f1c39ad8946c556fa000152baa6dc2fdce4d8d8da6dd4813d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T281 Approach (checklist part A)": {
+   "sha256": "8c918d2ca29e542b733862b335849125e20ad222b0fe8510ca3a24ead2c35a73",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T283 (<why: the finding or measurement that files it>)": {
+   "sha256": "640eee4c880b0cfc7c8f8eb3187c6a9e6ccc0d1ea3f5c7e3473235ebb3ecaea2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T284 (2026-11-26: nothing kept two trees' compiles apart, so the builder count was capped by the chance that they coincide - three builders' anonymous memory peaked at 6.4 GiB of the container's 10 and load at 94 on 22 cores, measured 2026-11-26, `docs/process-decisions.md`, \"Two code builders at once\")": {
+   "sha256": "bfe47b0a036ee5c00f91a8d4162b92f13532566f32bea62fbe3babd399df582d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T284 Approach (checklist part A)": {
+   "sha256": "d81f82197a4fe74cecb5896ea6e531f944db6a0721225751a0f2da19a50d6e94",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T281": {
+   "section_sha256": "1589c31963661c2e40ca483c9f2130a653b13d8ff1a99083e34963e0251c0c64",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "store-per-tree",
+     "summary": "Rendered guard messages are kept in each tree's own git dir (hooks-test/messages/), found by one resolver (l7r-guard messages store, git rev-parse --absolute-git-dir) that both the hooks-test and guard-messages recipes use.",
+     "class": "within",
+     "why": "This is the task line's own fix (reproduce with two worktrees, then key the store by tree), and it corrects a defect: a check reading another tree's renderings tells a builder nothing is owed when wordings are owed, or turns red on a guard the tree does not hold."
+    },
+    {
+     "id": "reviewed-record-shared",
+     "summary": "dev/guard-messages.tsv, the reviewed record, stays one tracked file.",
+     "class": "within",
+     "why": "The reviewed record is tracked content, not run state. Keeping it as one file leaves 451 T170's rule (every rendered wording reviewed or baselined) as it was, and narrows nothing."
+    },
+    {
+     "id": "roster-bound-reader",
+     "summary": "The tree's store is made to match this run's roster: a file of no suite on the run's list is removed, so a rendering from a guard the tree no longer holds is not judged.",
+     "class": "within",
+     "why": "This fixes the second fault the plan found (messages::corpus read every .jsonl in the directory, not the run's roster), which is a check passing or refusing on the wrong input. It is red first in test-parts.3.sh."
+    },
+    {
+     "id": "stamps-stay-shared-with-keyed-renderings",
+     "summary": "Suite freshness stamps stay shared across worktrees (stamps per tree was priced and not taken). A green job also writes <common dir>/hooks-test/rendered/<job>@<key>.jsonl, and a suite is skipped only where a rendering at its stamp's key exists. A gather step fills a skipped suite's files from that keyed rendering.",
+     "class": "within",
+     "why": "This keeps the existing measured saving (commit d7456c4c8d, 5 of 46 suites rerun, 83 s against 151 s) and stops it from defeating the per-tree store. Declining per-tree stamps leaves existing behavior that works as it is. It carves nothing out of the fix, because each tree is still judged on its own content's renderings."
+    },
+    {
+     "id": "gone-rendering-fails-by-name",
+     "summary": "If a skipped suite's keyed rendering was replaced by another tree's run between the skip and the gather, the run fails by name and names the fix (make hooks-test again, which reruns that suite).",
+     "class": "within",
+     "why": "This is a loud, self-healing failure in a narrow race, not a wrong outcome. The run never judges stale or foreign renderings, so the defect the task fixes is not carried forward. Rerunning the suite automatically instead is a design choice, not a fidelity question."
+    },
+    {
+     "id": "one-time-full-rerun",
+     "summary": "Each clone's first make hooks-test after landing reruns every suite once (about 160 s, measured 2026-11-26), plus one extra launcher call per run.",
+     "class": "within",
+     "why": "This is a one-off cost of the fix, not a narrowing. The plan measured and labeled it."
+    },
+    {
+     "id": "seed-copies-drop-hooks-test",
+     "summary": "scripts/land-alone.sh and scripts/gates/review-tree.sh stop copying the common hooks-test/ into their tree's git dir.",
+     "class": "within",
+     "why": "Under the new layout that copy would fill the tree's store with the clone's renderings before the tree's own run, which is the same defect again, so removing it is part of the fix. Note: the search that showed nothing else read the copy (grep -rn hooks-test rust scripts tests) does not cover the Makefile. The plan covers the Makefile's recipe by a separate statement (it reads the stamps from the common directory since d7456c4c8d). Even if a missed reader existed, dropping the copy could only cost reruns, never a wrong verdict."
+    },
+    {
+     "id": "found-and-left-none-and-not-performance",
+     "summary": "Nothing is found and left. The task is classed as not performance work.",
+     "class": "within",
+     "why": "No known defect is deferred. The shared-stamp saving is kept rather than added to, so calling it a correctness fix is accurate."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T282": {
+   "section_sha256": "4c7720d536f12d056884982b95c33857517f3eb98a22817caa6a38bd46e6ba32",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T282 rule (a) DESCRIBED",
+     "summary": "A quoted or backticked phrase that is the subject of 'does/did ask you' is blanked with its verb before spans are blanked; the session's own 'I do ask you' still fires.",
+     "class": "within",
+     "why": "T282: a report describing an ask's wording was read as an ask. Removing a statement the detector misread serves the GM's 2026-11-26 words ('I would prefer not to see these messages about false positives') and FR-002's narrow detector. The rule is bounded by the span, and the true-ask twin is pinned. Nothing FR-002 or amendment 1 owes the filter is exempted."
+    },
+    {
+     "id": "T299 rule (b) REPORTED",
+     "summary": "The '?' rule skips a last sentence running from 'asks:'/'asks whether'/'asks if' to its '?' with no you/your and no other '?' on the line.",
+     "class": "within",
+     "why": "It removes the check-described-by-its-question false firing from the corpus. Four twins that put something to him still fire and are pinned, including a reported question addressed to 'you' and a second question on the line. Only statements leave the detector's reach."
+    },
+    {
+     "id": "T299 rule (c) CHECKLIST",
+     "summary": "The '?' rule skips items of a 2+ item all-'?' list under a lead-in naming a checklist, or naming what something has/asks/holds/lists/poses/carries/answers, when the lead-in names neither the GM nor the session.",
+     "class": "within",
+     "why": "It removes the listed-checklist false firing. Lists put to him all still fire and are pinned: 'Two questions for you:', 'Open questions:', 'I have two questions...', a mixed list, a single item, no lead-in, and question-word items with suite case 9 kept. This is precision on statements and does not narrow FR-002's asks."
+    },
+    {
+     "id": "T299 rule (d) FIGURE",
+     "summary": "'waiting (on|for) you' is a measurement when a time count or share is the past-tense subject of was/were and the clause ends or goes on to another figure.",
+     "class": "within",
+     "why": "It removes the two time-breakdown figure firings. Work put to him ('Two hours of review are waiting on you', 'waiting on your budget answer', present tense, count of things) still fires and is pinned in the Rust test. It is bounded on both sides."
+    },
+    {
+     "id": "T299 rule (e) SET APART",
+     "summary": "'with waiting on you kept/counted/... separate/apart/...' names a breakdown category.",
+     "class": "within",
+     "why": "It removes the 'Blocking minutes, with waiting on you kept separate:' firing. The twins 'Two tasks are waiting on you, kept separate below.' and 'with waiting on you: the budget's words.' still fire. It reaches statements only."
+    },
+    {
+     "id": "T299 needs-your-word fix",
+     "summary": "STATED's 'needs your words' becomes 'words?' so 'What needs your word: ...' is caught; pinned in both suites.",
+     "class": "within",
+     "why": "This is a widening: a true ask HEAD's guard passed (a check passing bad work, a defect). Fixing it enforces FR-002 and narrows nothing. It was measured on both corpora: no T235 firing changes, and one already-firing message's quoted line moves."
+    },
+    {
+     "id": "T299 refusal sentence",
+     "summary": "Both refusals gain 'If the line puts nothing to him (offers him nothing), go on and say nothing of this to him.'; reviewed by message-check.",
+     "class": "within",
+     "why": "This sentence directly carries 'I just don't want to see the explanation of the false positives reach me'. FR-002's obligation attaches only to a message that asks or puts a decision to him, and amendment 1 adds offers. A line that puts nothing to him owed the filter nothing, so 'go on' restates FR-002's scope and is no carve-out from it. The GM's words take as given that sessions recognize false firings; what he struck is their explanation reaching him. Goal item 1 keeps every true ask refused until filtered. The new wording went to message-check (T170)."
+    },
+    {
+     "id": "T299 kept offer not built (T335)",
+     "summary": "The restated morning offer still fires; recognizing an ad-hoc escalation-check's kept verdict needs a new record and is filed as T335, landing before T302.",
+     "class": "within",
+     "why": "Under FR-002 the firing is arguably not false. The GM wrote after the 08:10Z ad-hoc check, so 'no escalation-check dispatched since his last message' holds. The restatement is an offer (amendment 1) in new words, and no gm-review.jsonl row records it as kept. Read most harshly as a residual false firing, it is one of 13, which 'I am okay with some number of false positives' covers. It is filed with an id, an order and the reason it is not fixed here (FR-009)."
+    },
+    {
+     "id": "T299 acceptable-range answer",
+     "summary": "The GM's question is answered with the measured rate, 33% before and 8% after on the 28 firings with no T lost, against 'under about one false firing in five'.",
+     "class": "within",
+     "why": "It answers 'it probably is worth asking whether the number of false positives is within ... an acceptable range' with numbers he can judge. The one-in-five threshold comes from the coordinating session's brief, not from the GM. The plan names it as 'the brief's aim' and does not attribute it to him, so the range stays his to accept. The plan also states that a firings-only corpus cannot show a newly dropped ask, and points to the pinned bounds instead."
+    },
+    {
+     "id": "T282 key mask",
+     "summary": "suite_tools::messages masks the quoted second line after a 'QUESTION UNFILTERED:'/'OFFER UNFILTERED:' head, so each refused suite case is not a new guard message.",
+     "class": "within",
+     "why": "T282's defect: each refused suite case created a new message key to review. The mask covers only the quoted user text under the two heads. The refusals' own wording is still keyed, so a change to it is still reviewed (451 T170), and no other message's key moves. A red-with-the-mask-off test pins it."
+    },
+    {
+     "id": "T299/T282 T336 found and left",
+     "summary": "A rust-lld link failure after the pool tree's pre-warm is filed as T336, landing before T302, to be reproduced first.",
+     "class": "within",
+     "why": "This build-tooling defect lies outside this section's request (T316's pre-warm). It is filed with an id, an order and the reason it is not fixed here, so nothing asked of T299 or T282 is left undone."
+    },
+    {
+     "id": "T299 no-ask-lost evidence",
+     "summary": "The plan shows no ask is lost with two firings-only corpora (the 28 of 2026-11-25/26 and T235's labeled 112) through the fixed guard, plus pinned true-ask twins for every rule, and does not run a fresh recall sample.",
+     "class": "within",
+     "why": "FR-002 (429) asks for a detector measured for hit rate, a sample of hits, and recall on an independently labeled sample. Rules (a)-(e) only remove firings; the needs-your-word change only adds them. So any ask the new rules drop would have fired on HEAD, and the two corpora cover HEAD's firings in their windows. All 12 T of the two-day corpus and all 74 T and 8 B of T235's independently labeled corpus still fire. Asks outside those windows are covered by the bounded twins pinned in both suites, and the block states that limit itself. On the two-day corpus the builder's labels are not independent. I relabeled the five F lines the block quotes from the line alone and agree each is a statement (a report of a hook's reading, a check described by its question, a checklist item listed, two time figures). The whole messages are not in the bundle. This keeps FR-002's measured-detector standard and does not narrow it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T284": {
+   "section_sha256": "52c13d15e3704b8c6419243e919ac62f3692cdac30d58f720edd4ca6220531bb",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "slot-mechanism",
+     "summary": "Synchronize the checks' compiling cargo calls through a counted set of machine-wide flock slots under ~/.cache/l7r-build-slots/, freed when the holder dies, no daemon; the builder count itself is not capped",
+     "class": "within",
+     "why": "This is the GM's request as written (2026-11-26): 'address that with some synchronization rather than pre-emptively limiting builders just in case'. A counted lock on the coinciding compiles is that synchronization, and builders past the count queue only for the compile."
+    },
+    {
+     "id": "what-takes-a-slot",
+     "summary": "Every cargo call through cargo_in except cargo fmt, plus cover.rs's coverage build, takes a slot; fmt, llvm-cov show-env/report, cargo --version and direct test-binary runs do not",
+     "class": "within",
+     "why": "'That' in the GM's words is the compiles coinciding. Leaving out the calls that do not compile drops nothing the request reaches, and the measurement puts the peaks in coinciding cover-builds."
+    },
+    {
+     "id": "count-default-2",
+     "summary": "L7R_BUILD_SLOTS defaults to 2 (labeled GUESS) and caps compiling calls at once, not builders; 0 means no slot",
+     "class": "within",
+     "why": "A semaphore has to have a count. The default comes from the measured peak (three compiles at once, about 15 rustc each on 22 cores) rather than from a builder cap, and the 0 escape and the knob keep it a tunable piece of synchronization, not a pre-emptive limit on builders."
+    },
+    {
+     "id": "fail-open-unavailable",
+     "summary": "If the slot directory cannot be made, a slot file cannot be opened or flock cannot start, the call runs without a slot and says so on stderr",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible case: when the lock primitive is missing there is nothing to synchronize on. The alternatives are refusing, which is a red gate for a throughput control (nothing in request.md asks for that), or hanging. The stderr notice keeps it visible."
+    },
+    {
+     "id": "fail-open-ceiling",
+     "summary": "A wait past L7R_BUILD_SLOT_CEILING (900 s, GUESS) runs the call without a slot, written as a slot-wait line of code 1 with an audit reopen on one such line in a week",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Purpose ground: the request is for synchronization that lets more builders work, and an endless wait would let one hung cargo stop every tree's checks for good, which defeats that purpose concretely. The plan states the cost, prices the alternatives and names a falsifier. Aside, non-blocking: 'a pass is then one more compile at once, three' holds for a single pass only. Several starved waiters passing at once under four or five builders are not bounded by it; the slot-wait code-1 lines and the audit's reopen are what would show that."
+    },
+    {
+     "id": "nested-no-slot",
+     "summary": "Cargo started by a holder carries L7R_BUILD_SLOT_HELD, and a gate run under it takes no slot; a call holds one slot and never waits for a second; the run lock is taken first and the slot inside it",
+     "class": "within",
+     "why": "This is deadlock avoidance inside the mechanism. The nested run is already counted under its parent's slot, so no compile goes unsynchronized and the request's reach is not narrowed."
+    },
+    {
+     "id": "uncovered-wrapper-tool-build",
+     "summary": "The wrapper's own tool build (scripts/gates/l7r-gate.sh build) takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The bootstrap argument does not hold, because the slot is a flock program call that shell can make. 'Shell, no Phase line' is implementation cost and is no ground either. The one ground that survives is the measurement: where no check's phase ran, the samples top out at 2.6 GiB and 13 rustc, against 5.9-6.4 GiB where coverage builds coincide (measured 2026-11-26). So leaving this build unslotted does not bring back the coincidence the request is about. The limits are real. The figure is joint with the guard build and comes from one three-builder run, and this is a compile whose coincidence still grows with the builder count. The ruling stands on that measurement and falls with it: the plan's own reopen condition (the re-measurement showing one at a peak) is the right trigger, and the candidate it names should be filed if that happens."
+    },
+    {
+     "id": "uncovered-guard-build",
+     "summary": "The hook suites' guard build takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled on its own, on the same and only surviving ground: the measured ceiling of the no-phase samples (2.6 GiB and 13 rustc, measured 2026-11-26) bounds this build too, well below the coinciding-cover-build peaks. Shell-only is cost, not a ground. This ruling also falls with that measurement, and the three- and four-builder re-measurement is what tests it."
+    },
+    {
+     "id": "remeasurement-deferred",
+     "summary": "T284's line's re-measurement of three and four code builders with the slot is not done in this task; the coordinating session runs it once the slot has landed, and docs/process-decisions.md records it as owed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physical ground: measuring several builders 'with it' needs the slot in every builder's tree, which only a landing gives, so the task cannot do it before it lands. FR-009's filed-task-id rule covers deferred defects, and this is not one. But the payoff of the GM's request (builders no longer pre-emptively limited) arrives only with this re-measurement. Landing T284 alone leaves the builder cap of two in place until it is run and recorded."
+    },
+    {
+     "id": "wait-booked",
+     "summary": "A wait writes one Phase line, step slot-wait, read as its own category ('waiting on a build slot', first of PHASE_COLUMNS) in make task-time and make where-time, with a notice each minute naming the holders; a lint, test build or test run's phase spans its wait and the readers subtract it, while a coverage build's slot is taken before its clock starts",
+     "class": "within",
+     "why": "This serves the GM's standing 2026-11-22 words: 'we want everything measured so we know where our time goes, especially for compiling'. A new wait that went unbooked would go against that. Where the clock boundary falls is design, and the readers take the wait out."
+    },
+    {
+     "id": "test-world-and-landing",
+     "summary": "Tests run with Slots::off() and the slot's own tests use a scratch directory; a landing's gate takes the same slot as a builder's",
+     "class": "within",
+     "why": "The landing's gate is part of what the cap was protecting ('their compiles and a landing's gate would not coincide'), so covering it keeps the request whole. Tests keeping off ~/.cache is hygiene and narrows nothing."
+    },
+    {
+     "id": "record-no-target-no-guard",
+     "summary": "Recorded in dev/audits/build-slot.md (measurement, falsifier, cost, alternatives), docs/process-decisions.md and rust/gate/CLAUDE.md; no make target and no guard added",
+     "class": "within",
+     "why": "The audit entry with a falsifier answers the GM's 2026-11-25 register words ('what we would look at that would falsify the notion that this is a good idea'). Adding no target or guard adds nothing the request did not ask for."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T281 (the store of rendered guard messages lay in the git common directory, one for every worktree of a clone: on 2026-11-26 a builder's `make guard-messages BUNDLE=1` said \"nothing owed\" for wordings its own red hooks-test had just named, and 451 T292's last hooks-test went red on the wordings of a guard only T285's tree held)",
+    "### T281 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T281-store",
+     "summary": "renderings kept per tree under the tree's own git dir (git rev-parse --absolute-git-dir), one resolver `l7r-guard messages store` asked by both the hooks-test and guard-messages recipes; dev/guard-messages.tsv stays one tracked file",
+     "class": "within",
+     "why": "the fix the task names (key the store by tree), serving the GM's 2026-11-23 hook-wording review (T170) so each tree's check reads its own wordings; fix-as-we-go of a check that passed bad work"
+    },
+    {
+     "id": "T281-stamps-shared",
+     "summary": "the suites' freshness stamps stay shared between worktrees; stamps per tree priced and declined",
+     "class": "within",
+     "why": "keeps an existing measured saving (83 s vs 151 s, d7456c4c8d) the request never asked to give up; declining per-tree stamps narrows nothing asked, since the per-tree store still delivers each tree its own wordings"
+    },
+    {
+     "id": "T281-keyed-rendering",
+     "summary": "a green job also leaves <common>/hooks-test/rendered/<job>@<key>.jsonl, written before the stamp and moved in whole; a suite is skipped only where a rendering at its stamp's key exists",
+     "class": "within",
+     "why": "the mechanism that lets shared stamps and a per-tree store coexist without a tree judging a stale or another tree's rendering; the key is the suite's inputs, so the filled rendering is what this tree's own run would render"
+    },
+    {
+     "id": "T281-gather",
+     "summary": "after the fan-out, `messages gather` makes the tree's store this run's: skipped suites filled from their key, ran suites keep their own output, files of no suite on the run's roster removed",
+     "class": "within",
+     "why": "fixes the second fault (corpus read every .jsonl, never the roster) and the left-behind rendering reproduced red; directly the task's correction"
+    },
+    {
+     "id": "T281-race-fail",
+     "summary": "a skipped suite whose keyed rendering was replaced by another tree in between fails the run by name, naming `make hooks-test` again as the fix",
+     "class": "within",
+     "why": "never judges a wrong wording; it refuses and names a retry that reruns the suite, so the goal (each tree sees its own wordings whatever the other ran in between) holds. An inline rerun would be a design choice, not a fidelity matter"
+    },
+    {
+     "id": "T281-first-run-cost",
+     "summary": "each clone's first hooks-test after landing reruns every suite once (160 s measured 2026-11-26), one more launcher call a run",
+     "class": "within",
+     "why": "a one-time transition cost of the fix, narrowing nothing asked"
+    },
+    {
+     "id": "T281-copy-left",
+     "summary": "scripts/land-alone.sh and scripts/gates/review-tree.sh still copy the common hooks-test/ into the tree's own git dir, seeding that tree's store with the main worktree's renderings; declared not a defect because the next run's gather replaces them so nothing reads a seeded file after a run",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "the no-defect ground is a premise nobody measured and covers only reads AFTER a run. A read of the store in a land or review tree BEFORE that tree's first gather (a guard-messages check, BUNDLE=1 or KEY= there) would see another tree's renderings, which is effect (a)/(b) itself, the exact outcome T281 exists to end. No table row pins it and the bundle holds no dated observation of the order. Cure, narrowly: record as an observation with its method that in both scripts every read of the store follows that tree's own hooks-test gather, or pin it with a case; either makes this within. Not asking for the copy to be removed - no wrong outcome is shown, only unshown."
+    }
+   ],
+   "tasks": [
+    "T281"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T281 (the store of rendered guard messages lay in the git common directory, one for every worktree of a clone: on 2026-11-26 a builder's `make guard-messages BUNDLE=1` said \"nothing owed\" for wordings its own red hooks-test had just named, and 451 T292's last hooks-test went red on the wordings of a guard only T285's tree held)",
+    "### T281 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "store-per-tree",
+     "summary": "Rendered guard messages are kept in each tree's own git dir (hooks-test/messages/), found by one resolver (l7r-guard messages store, git rev-parse --absolute-git-dir) that both the hooks-test and guard-messages recipes use.",
+     "class": "within",
+     "why": "This is the task line's own fix (reproduce with two worktrees, then key the store by tree), and it corrects a defect: a check reading another tree's renderings tells a builder nothing is owed when wordings are owed, or turns red on a guard the tree does not hold."
+    },
+    {
+     "id": "reviewed-record-shared",
+     "summary": "dev/guard-messages.tsv, the reviewed record, stays one tracked file.",
+     "class": "within",
+     "why": "The reviewed record is tracked content, not run state. Keeping it as one file leaves 451 T170's rule (every rendered wording reviewed or baselined) as it was, and narrows nothing."
+    },
+    {
+     "id": "roster-bound-reader",
+     "summary": "The tree's store is made to match this run's roster: a file of no suite on the run's list is removed, so a rendering from a guard the tree no longer holds is not judged.",
+     "class": "within",
+     "why": "This fixes the second fault the plan found (messages::corpus read every .jsonl in the directory, not the run's roster), which is a check passing or refusing on the wrong input. It is red first in test-parts.3.sh."
+    },
+    {
+     "id": "stamps-stay-shared-with-keyed-renderings",
+     "summary": "Suite freshness stamps stay shared across worktrees (stamps per tree was priced and not taken). A green job also writes <common dir>/hooks-test/rendered/<job>@<key>.jsonl, and a suite is skipped only where a rendering at its stamp's key exists. A gather step fills a skipped suite's files from that keyed rendering.",
+     "class": "within",
+     "why": "This keeps the existing measured saving (commit d7456c4c8d, 5 of 46 suites rerun, 83 s against 151 s) and stops it from defeating the per-tree store. Declining per-tree stamps leaves existing behavior that works as it is. It carves nothing out of the fix, because each tree is still judged on its own content's renderings."
+    },
+    {
+     "id": "gone-rendering-fails-by-name",
+     "summary": "If a skipped suite's keyed rendering was replaced by another tree's run between the skip and the gather, the run fails by name and names the fix (make hooks-test again, which reruns that suite).",
+     "class": "within",
+     "why": "This is a loud, self-healing failure in a narrow race, not a wrong outcome. The run never judges stale or foreign renderings, so the defect the task fixes is not carried forward. Rerunning the suite automatically instead is a design choice, not a fidelity question."
+    },
+    {
+     "id": "one-time-full-rerun",
+     "summary": "Each clone's first make hooks-test after landing reruns every suite once (about 160 s, measured 2026-11-26), plus one extra launcher call per run.",
+     "class": "within",
+     "why": "This is a one-off cost of the fix, not a narrowing. The plan measured and labeled it."
+    },
+    {
+     "id": "seed-copies-drop-hooks-test",
+     "summary": "scripts/land-alone.sh and scripts/gates/review-tree.sh stop copying the common hooks-test/ into their tree's git dir.",
+     "class": "within",
+     "why": "Under the new layout that copy would fill the tree's store with the clone's renderings before the tree's own run, which is the same defect again, so removing it is part of the fix. Note: the search that showed nothing else read the copy (grep -rn hooks-test rust scripts tests) does not cover the Makefile. The plan covers the Makefile's recipe by a separate statement (it reads the stamps from the common directory since d7456c4c8d). Even if a missed reader existed, dropping the copy could only cost reruns, never a wrong verdict."
+    },
+    {
+     "id": "found-and-left-none-and-not-performance",
+     "summary": "Nothing is found and left. The task is classed as not performance work.",
+     "class": "within",
+     "why": "No known defect is deferred. The shared-stamp saving is kept rather than added to, so calling it a correctness fix is accurate."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T284 (2026-11-26: nothing kept two trees' compiles apart, so the builder count was capped by the chance that they coincide - three builders' anonymous memory peaked at 6.4 GiB of the container's 10 and load at 94 on 22 cores, measured 2026-11-26, `docs/process-decisions.md`, \"Two code builders at once\")",
+    "### T284 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T284-what-takes-a-slot",
+     "summary": "Every compiling cargo call of the checks takes a slot (clippy, test builds, cargo test, test --doc, test-times' build, hamlet's cargo run, the coverage build); cargo fmt, llvm-cov show-env/report, cargo --version and direct test-binary runs take none",
+     "class": "within",
+     "why": "Which calls the synchronization covers is a mechanism choice inside the GM's 'some synchronization'; the calls left out do not compile, so nothing the request is about is excluded."
+    },
+    {
+     "id": "T284-flock-slot",
+     "summary": "A slot is the flock of a file slot-<i> under ~/.cache/l7r-build-slots/, signed with its holder, freed when the holder dies; no daemon",
+     "class": "within",
+     "why": "This is the synchronization the GM asked for in place of a builder cap."
+    },
+    {
+     "id": "T284-count-default-2",
+     "summary": "L7R_BUILD_SLOTS, default 2, labeled GUESS; it caps compiling cargo calls at once, not builders; 0 means no slot",
+     "class": "within",
+     "why": "It caps coinciding compiles, not builders. Extra builders edit, test and run coverage freely and queue only where their compile would coincide, which is the opposite of 'pre-emptively limiting builders'. The 0 switch only turns the mechanism off."
+    },
+    {
+     "id": "T284-poll-and-notice",
+     "summary": "Poll every 0.5 s (GUESS); a waiter says it waits each minute, naming the holders",
+     "class": "within",
+     "why": "These are mechanism parameters, and the waiter's notice makes a wait visible."
+    },
+    {
+     "id": "T284-nested-no-slot",
+     "summary": "A cargo started by a holder carries L7R_BUILD_SLOT_HELD and a gate run under it takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Holding a slot for a nested run is physically impossible without deadlock: the inner run would wait on the slot its own parent cargo test holds. Its compiles already sit inside the parent's slot, so nothing goes unsynchronized."
+    },
+    {
+     "id": "T284-fail-open",
+     "summary": "A slot directory that cannot be made, a slot file that cannot be opened or a flock that cannot start lets the call run without a slot, said on stderr",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Synchronization is physically impossible when the lock cannot be had at all. Refusing would turn a throughput control into a red gate, and waiting would hang every tree. A caveat: the block writes the code-1 slot-wait line for a wait that ended without a slot, so a call that fell open with no wait may show only on stderr. Writing that line here too would let the audit's one-a-week reopening see it."
+    },
+    {
+     "id": "T284-ceiling-900s",
+     "summary": "A waiter past L7R_BUILD_SLOT_CEILING (900 s, GUESS) runs without a slot, said on stderr and written as a slot-wait line of code 1; dev/audits/build-slot.md reopens the count on one such line in a week",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In the hung-holder case the block names, holding the rule literally defeats the request's purpose: one hung cargo would stop every tree's checks for good, which is worse than the builder cap the slot replaces. Rejected alternatives were priced: wait without end, or refuse as the run lock does. The block's sentence 'a waiter passes it only when both slots stay held for 900 s on end, which is two holders each longer than the longest compile measured' overclaims, and the claim is unmeasured. Waiters are not served in arrival order. Each 0.5 s poller races the others, and a tree that releases a slot and starts its next compiling cargo call at once tries again immediately. So under sustained contention (four or more builders, cold trees) a turning-over queue can keep one waiter out for 900 s with no holder hung. This is not ruled a defect: such a pass yields one extra compile, three at once, the measured peak level, with no wrong outcome; it is recorded as code 1 and reopens the count. The sentence should be restated to say so. Counting the ceiling only while the slots' holder signatures stay unchanged would confine the pass to a hung holder; that is offered as an option, not required."
+    },
+    {
+     "id": "T284-wrapper-tool-build-unslotted",
+     "summary": "The wrapper's own tool build (scripts/gates/l7r-gate.sh build) takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'Shell, writes no Phase line' is a cost argument and is not credited. The ground credited is measured: where no check's phase ran, the samples top out at 2.6 GiB and 13 rustc, against 5.9-6.4 GiB where three coverage builds coincided. So this build is not the coincidence the request addresses, and no wrong outcome has been shown. The falsifier is stated: the owed re-measurement showing one at a peak. A caveat: that 2.6 GiB is one joint figure for both unslotted builds, taken at three builders only, so the four-builder re-measurement is what confirms it."
+    },
+    {
+     "id": "T284-guard-build-unslotted",
+     "summary": "The hook suites' guard build takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled separately from the wrapper build, on the same measured ground: the joint 2.6 GiB / 13 rustc ceiling where no check's phase ran, against 5.9-6.4 GiB at the coinciding coverage builds. No wrong outcome has been shown, and the re-measurement at three and four builders, owed by T284's own line, is the named falsifier. Unlike the wrapper build, nothing physically prevents a shell flock here, so this ruling rests on the measurement alone and should be revisited if the re-measurement shows one at a peak."
+    },
+    {
+     "id": "T284-remeasure-deferred",
+     "summary": "The re-measurement at three and four builders, the rest of T284's line, is not done in this landing; the coordinating session runs it with the slot landed and records the count in docs/process-decisions.md",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A re-measurement 'with it' physically cannot run until the slot is live in every tree, which means after this landing, and dispatching three or four builders is the coordinating session's work. Recording it as owed in process-decisions.md keeps it alive. An aside: the block says no other task carries it, and the builder cap stays at two until someone runs it, so filing it as its own line would keep it from being lost when T284 is ticked."
+    },
+    {
+     "id": "T284-wait-booked",
+     "summary": "A call that waited writes one Phase line (step slot-wait, code 1 where it ran without a slot); columns::category books it as 'waiting on a build slot' first of PHASE_COLUMNS; a lint's or test build's phase span includes its wait and the readers subtract it",
+     "class": "within",
+     "why": "Booking the wait as its own category keeps the feature's 'everything measured' purpose. Leaving the wait inside lint's and test build's clocks, with the readers subtracting it, is a mechanism choice whose cost the block states."
+    },
+    {
+     "id": "T284-coverage-releases-before-retry",
+     "summary": "The coverage build lets its slot go before a failed group is asked again a crate at a time",
+     "class": "within",
+     "why": "This avoids holding one slot while waiting for a second, part of the no-deadlock mechanism."
+    },
+    {
+     "id": "T284-test-world-no-slots",
+     "summary": "A test's world has no slots (Slots::off()); the slot's own tests name a scratch directory",
+     "class": "within",
+     "why": "This isolates the tests from the shared ~/.cache; the mechanism itself is still tested."
+    },
+    {
+     "id": "T284-landing-same-slot",
+     "summary": "A landing's gate takes the same slot as a builder's, the directory being under the home outside every tree",
+     "class": "within",
+     "why": "The request names a landing's gate coinciding with builders' compiles, and this covers it."
+    },
+    {
+     "id": "T284-record-no-target-no-guard",
+     "summary": "Recorded in dev/audits/build-slot.md, a paragraph in docs/process-decisions.md and the rustc row of rust/gate/CLAUDE.md; no make target, no guard",
+     "class": "within",
+     "why": "The slot enforces itself mechanically, so nothing it does is a refusal needing FR-012's escape or a guard. The audit entry carries its measurement and falsifier."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T284 (2026-11-26: nothing kept two trees' compiles apart, so the builder count was capped by the chance that they coincide - three builders' anonymous memory peaked at 6.4 GiB of the container's 10 and load at 94 on 22 cores, measured 2026-11-26, `docs/process-decisions.md`, \"Two code builders at once\")",
+    "### T284 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "slot-mechanism",
+     "summary": "Synchronize the checks' compiling cargo calls through a counted set of machine-wide flock slots under ~/.cache/l7r-build-slots/, freed when the holder dies, no daemon; the builder count itself is not capped",
+     "class": "within",
+     "why": "This is the GM's request as written (2026-11-26): 'address that with some synchronization rather than pre-emptively limiting builders just in case'. A counted lock on the coinciding compiles is that synchronization, and builders past the count queue only for the compile."
+    },
+    {
+     "id": "what-takes-a-slot",
+     "summary": "Every cargo call through cargo_in except cargo fmt, plus cover.rs's coverage build, takes a slot; fmt, llvm-cov show-env/report, cargo --version and direct test-binary runs do not",
+     "class": "within",
+     "why": "'That' in the GM's words is the compiles coinciding. Leaving out the calls that do not compile drops nothing the request reaches, and the measurement puts the peaks in coinciding cover-builds."
+    },
+    {
+     "id": "count-default-2",
+     "summary": "L7R_BUILD_SLOTS defaults to 2 (labeled GUESS) and caps compiling calls at once, not builders; 0 means no slot",
+     "class": "within",
+     "why": "A semaphore has to have a count. The default comes from the measured peak (three compiles at once, about 15 rustc each on 22 cores) rather than from a builder cap, and the 0 escape and the knob keep it a tunable piece of synchronization, not a pre-emptive limit on builders."
+    },
+    {
+     "id": "fail-open-unavailable",
+     "summary": "If the slot directory cannot be made, a slot file cannot be opened or flock cannot start, the call runs without a slot and says so on stderr",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible case: when the lock primitive is missing there is nothing to synchronize on. The alternatives are refusing, which is a red gate for a throughput control (nothing in request.md asks for that), or hanging. The stderr notice keeps it visible."
+    },
+    {
+     "id": "fail-open-ceiling",
+     "summary": "A wait past L7R_BUILD_SLOT_CEILING (900 s, GUESS) runs the call without a slot, written as a slot-wait line of code 1 with an audit reopen on one such line in a week",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Purpose ground: the request is for synchronization that lets more builders work, and an endless wait would let one hung cargo stop every tree's checks for good, which defeats that purpose concretely. The plan states the cost, prices the alternatives and names a falsifier. Aside, non-blocking: 'a pass is then one more compile at once, three' holds for a single pass only. Several starved waiters passing at once under four or five builders are not bounded by it; the slot-wait code-1 lines and the audit's reopen are what would show that."
+    },
+    {
+     "id": "nested-no-slot",
+     "summary": "Cargo started by a holder carries L7R_BUILD_SLOT_HELD, and a gate run under it takes no slot; a call holds one slot and never waits for a second; the run lock is taken first and the slot inside it",
+     "class": "within",
+     "why": "This is deadlock avoidance inside the mechanism. The nested run is already counted under its parent's slot, so no compile goes unsynchronized and the request's reach is not narrowed."
+    },
+    {
+     "id": "uncovered-wrapper-tool-build",
+     "summary": "The wrapper's own tool build (scripts/gates/l7r-gate.sh build) takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The bootstrap argument does not hold, because the slot is a flock program call that shell can make. 'Shell, no Phase line' is implementation cost and is no ground either. The one ground that survives is the measurement: where no check's phase ran, the samples top out at 2.6 GiB and 13 rustc, against 5.9-6.4 GiB where coverage builds coincide (measured 2026-11-26). So leaving this build unslotted does not bring back the coincidence the request is about. The limits are real. The figure is joint with the guard build and comes from one three-builder run, and this is a compile whose coincidence still grows with the builder count. The ruling stands on that measurement and falls with it: the plan's own reopen condition (the re-measurement showing one at a peak) is the right trigger, and the candidate it names should be filed if that happens."
+    },
+    {
+     "id": "uncovered-guard-build",
+     "summary": "The hook suites' guard build takes no slot",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled on its own, on the same and only surviving ground: the measured ceiling of the no-phase samples (2.6 GiB and 13 rustc, measured 2026-11-26) bounds this build too, well below the coinciding-cover-build peaks. Shell-only is cost, not a ground. This ruling also falls with that measurement, and the three- and four-builder re-measurement is what tests it."
+    },
+    {
+     "id": "remeasurement-deferred",
+     "summary": "T284's line's re-measurement of three and four code builders with the slot is not done in this task; the coordinating session runs it once the slot has landed, and docs/process-decisions.md records it as owed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physical ground: measuring several builders 'with it' needs the slot in every builder's tree, which only a landing gives, so the task cannot do it before it lands. FR-009's filed-task-id rule covers deferred defects, and this is not one. But the payoff of the GM's request (builders no longer pre-emptively limited) arrives only with this re-measurement. Landing T284 alone leaves the builder cap of two in place until it is run and recorded."
+    },
+    {
+     "id": "wait-booked",
+     "summary": "A wait writes one Phase line, step slot-wait, read as its own category ('waiting on a build slot', first of PHASE_COLUMNS) in make task-time and make where-time, with a notice each minute naming the holders; a lint, test build or test run's phase spans its wait and the readers subtract it, while a coverage build's slot is taken before its clock starts",
+     "class": "within",
+     "why": "This serves the GM's standing 2026-11-22 words: 'we want everything measured so we know where our time goes, especially for compiling'. A new wait that went unbooked would go against that. Where the clock boundary falls is design, and the readers take the wait out."
+    },
+    {
+     "id": "test-world-and-landing",
+     "summary": "Tests run with Slots::off() and the slot's own tests use a scratch directory; a landing's gate takes the same slot as a builder's",
+     "class": "within",
+     "why": "The landing's gate is part of what the cap was protecting ('their compiles and a landing's gate would not coincide'), so covering it keeps the request whole. Tests keeping off ~/.cache is hygiene and narrows nothing."
+    },
+    {
+     "id": "record-no-target-no-guard",
+     "summary": "Recorded in dev/audits/build-slot.md (measurement, falsifier, cost, alternatives), docs/process-decisions.md and rust/gate/CLAUDE.md; no make target and no guard added",
+     "class": "within",
+     "why": "The audit entry with a falsifier answers the GM's 2026-11-25 register words ('what we would look at that would falsify the notion that this is a good idea'). Adding no target or guard adds nothing the request did not ask for."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T281 to T284, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

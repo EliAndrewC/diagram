@@ -1,0 +1,776 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T72": {
+   "section_sha256": "d939ae2ad9d7702a5d7ce9e1e4636eca193f3d7b31214dd9adb4e186cb39c619",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T72-run-dir",
+     "summary": "Each closing-checks run writes its three logs and .exit files under <git dir>/closing-checks/<UTC time>-<pid>/, made with a plain mkdir (a reused id fails rather than shares); the table, red tails and stop line read that directory alone; the start's rm -f of exit files dropped.",
+     "class": "within",
+     "why": "This is the fix the task was filed for (the GM 2026-11-21, 'yes please file that as a performance task'): two runs in one clone read each other's verdicts; one directory per run, read alone, makes each run's combined result its own. Dropping the rm -f is a consequence (a new directory has no stale files)."
+    },
+    {
+     "id": "T72-latest",
+     "summary": "A relative 'latest' symlink to the run started last, swapped in by ln -sfn to a temp name then mv -T, so it is never missing; the header says to cite the path the table prints since 'latest' may name a parallel run.",
+     "class": "within",
+     "why": "Keeps one stable place to find the last run's logs, which the old single-directory layout gave; it does not reintroduce sharing, since no verdict is read through it, and the header note keeps a builder citing its own run. Serves the request without narrowing it."
+    },
+    {
+     "id": "T72-prune",
+     "summary": "At a run's start, other runs' directories and the old layout's top-level <check>.log/.exit files untouched for CLOSING_CHECKS_KEEP_MIN (360 min, GUESS knob) are removed; own run and latest's target never removed; other names left. Age chosen over count or live-pid.",
+     "class": "within",
+     "why": "Housekeeping the per-run layout makes necessary (directories would otherwise pile up), set so no live run is pruned (360 min against a measured longest run of 601 s, labeled with method); holding the old files to the same keep avoids a false RED on a still-running old-script run. A new GUESS knob is labeled as such. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T72-old-readers",
+     "summary": "No code reads the old paths (grep -rn 'closing-checks' and 'closing-checks/' over the clone, .git and target excluded, measured 2026-11-21); only the script's header and printout are edited; builders' citations in plan-done.md are history and keep their words.",
+     "class": "within",
+     "why": "The enumeration states its search space, and the space is the string itself across every file type in the clone (Makefile, scripts, Rust, docs, .claude), not a language-filtered sample, so a reader holding the path as a string would have been found. Leaving historical citations is not a narrowing: they are records, not readers."
+    },
+    {
+     "id": "T72-atomic-install",
+     "summary": "The installed script written to a temp file and moved into place so a run already reading the old one keeps its copy.",
+     "class": "within",
+     "why": "An implementation safety detail of the same fix; decides nothing the request or spec constrains."
+    },
+    {
+     "id": "T72-red-first",
+     "summary": "tests/hooks/test-closing-checks.sh case 4 reproduces two overlapping runs whose verdicts differ, ordered by release files not sleeps (red against the unfixed script: A's red quick read GREEN, B's green hooks-test read RED); case 5 the prune; cases 1-2 read the run directory.",
+     "class": "within",
+     "why": "A test whose only effect is to make the requested fix happen and keep happening; it enforces the request and is not unrequested scope. Its red reproduces the observed wrong outcome exactly."
+    },
+    {
+     "id": "T72-static-red-left",
+     "summary": "The fixed script's own run in the clone had static RED on rust lint doc_markdown in T60's builder's uncommitted context_cap_hooks files; left to T60, 'Found and left: none'.",
+     "class": "within",
+     "why": "Those files are another task's in-progress work outside T72's file list, not a defect T72 found in shipped code; the closing-checks verdict itself was correct (it reported a real red). Nothing of what was asked is left unfixed."
+    },
+    {
+     "id": "T72-perf-tag",
+     "summary": "Filed as a [perf] task under FR-013: the builders' loop, a closing check read right the first time rather than re-run.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'yes please file that as a performance task'. FR-013 counts work that speeds the builders' loop as performance work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T73": {
+   "section_sha256": "e5bc1e0bc79b9a6036f7926d1a5ea2f267953bc31bd15f9937636f096e084ec7",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "THE RULE (touched)",
+     "summary": "An old line's word is an old value only where the change touched it: the replaced passage is diffed word by word, and a word kept in an equal run with both neighbors is no value.",
+     "class": "within",
+     "why": "This is what T73's line asks: drop the re-wrap candidates and keep refusals.md:12's kind of catch. Both of 451's real catches (refusals.md:12, plan.md:329) and every other right fire on T54's list still stand on the final code, by the section's labeled replay. It serves FR-013 (fewer redispatches in the builders' loop). It fixes a check that refused correct text, a defect under XIV, so its verdicts change as fixed."
+    },
+    {
+     "id": "Whole-passage variant kept out",
+     "summary": "Reading the values from the whole rewritten passage, which leaves 451 at 6, is rejected because it drops both real catches.",
+     "class": "within",
+     "why": "T73's own constraint (only where it keeps refusals.md:12's kind of catch) requires rejecting it."
+    },
+    {
+     "id": "Neighbor convention",
+     "summary": "A word is a run of non-space characters, its neighbors are the next word either side, and the passage's two ends count as kept. Labeled CONVENTION at `touched`.",
+     "class": "within",
+     "why": "This is the mechanism of the rule above. It is labeled, and it decides nothing the request or spec settles."
+    },
+    {
+     "id": "Loss of 261's refusal of 04:13 (spec.md:273, m:mizuguchi-r17-copse)",
+     "summary": "The touched rule no longer names the copse row, so 261's one right refusal of 04:13 goes. Accepted, with its cost recorded at `touched` and in docs/guards.md.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Keeping it defeats the purpose of the task. The rule is not impossible to apply here: the priced alternative keeps the catch. I re-ran /tmp/t73/why.py on 261's trees myself: touched-gone is empty, and the NEW passage still ends with the sentence. The old line's 'values' (band, convention, depth, drawing, map) come from 'The band and depth are a map drawing convention', a sentence the change kept whole after an inserted sentence about the reach. The row was stale because it omitted the new 0-60 ft leeward reach, not because it carried any of those words. So the old check named a right line for wrong reasons, through the same mechanism T73 exists to remove: kept, re-wrapped words read as old values. That mechanism produced 12 of 451's 28 candidates. This catch is not refusals.md:12's kind (a touched old value). It is an omission, which a search for old values cannot see except by coincidence, so T73's line does not protect it. The only way to keep it is the 'two or more re-wrapped words' threshold. That threshold is drawn from this one case and brings back 15 wrong fires and 285's refusal on correct text. Keeping a coincidental catch by reinstating the defect being fixed defeats the fix. Constitution XIII does not make this a regression: a check fixed on purpose changes as fixed, and a check is judged on catching what it is meant to catch (old values), which it still does in every case T54 listed. The GM's 'real enforcement' clause concerns the six approved fixes' guards and does not reach this check. Omissions remain the reviewer rounds' job, as docs/guards.md's row already says."
+    },
+    {
+     "id": "Loss of 316's plan.md:65 naming",
+     "summary": "316's line (CONVENTION, value 'none') is no longer named. 316's refusal still fires (10 candidates to 9).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I ruled on this apart from 261's case. Here no refusal is lost: the session is still stopped and still reads the passage. The line's value 'none' comes from '`NONE` (no physical decision)', text the change kept. It was stale because it omitted the inserted CANON (why.py on 316's trees: touched-gone empty, 'none' kept in the NEW passage), which is again an omission caught by a kept word, so the same purpose-level reasoning applies. The fix came 15 s after the refusal, which also suggests it was already in hand."
+    },
+    {
+     "id": "Threshold alternative rejected",
+     "summary": "Keeping a line with two or more re-wrapped words as a candidate is priced and rejected: 16 of the 54 drops come back, 15 of them wrong fires, plus 285's refusal on correct text.",
+     "class": "within",
+     "why": "This is a design choice between two implementations of T73's line. Rejecting an overfit threshold that brings back refusals of correct work is a judgment of design, not fidelity, and it fits the request's purpose (fewer wasted rounds)."
+    },
+    {
+     "id": "451's 14 remaining wrong fires left as the search's reach",
+     "summary": "Of 451's 16 left, 8 are on `code` used consistently and 6 on a removed common word in another sense. They are left because the value side reads words, not senses.",
+     "class": "within",
+     "why": "This is not a narrowing of anything asked. T73 was filed for the re-wrap class, and that class is fully removed. The rest is the check's existing lexical reach, which this plan neither introduces nor worsens: telling a word's sense apart is beyond a word check, and the escape covers it. No request clause or FR asks this check for zero wrong fires. The section names the reach openly in its search smell rather than hiding it."
+    },
+    {
+     "id": "closing-checks red in T71's files",
+     "summary": "Exit 6 lists make closing-checks. It was red on one case of no-poll-hooks.sh, which belongs to T71's in-flight writer-alive.sh and finished_run_hooks work and which T73 does not touch, and it is left to T71.",
+     "class": "within",
+     "why": "The failure is in another task's open work, outside this builder's list, and is recorded with its log. Nothing the GM asked for is narrowed. The landing gate still decides it."
+    },
+    {
+     "id": "T54's 374 right-fire count left unrestated",
+     "summary": "T54's section counts 374's request.md as a right fire. It was not one (the line stood unedited, and its value is a re-wrapped word), and the restatement is left to T54's section.",
+     "class": "within",
+     "why": "It is a figure in a record that no check reads and is no wrong outcome, so it is not a defect under XIV. The correction is stated here and is outside this builder's file list."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T74": {
+   "section_sha256": "e424e2eda94b837fbe39ec531ade3a387a1a18d2fc1215ac215a12efae942362",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T74-tree",
+     "summary": "event_log_hooks' tree_of files a line in the session's clone (the claim map's clone, where it is a work tree, canonicalized), else the cwd's tree; the cwd still gates, so a call outside any tree writes nothing",
+     "class": "within",
+     "why": "Serves FR-005 and SC-002 (where-time books the work from the event log) and is measurement work under FR-013; the fallback is today's answer, so nothing the request asked for is lost. Unchanged since the last round."
+    },
+    {
+     "id": "T74-claim-map-alone",
+     "summary": "Deviation from T60's resolve: the session's clone is read from its claim map alone; transcript /rename and sessions json are blanked, so a session with no claim map whose name names a clone keeps the cwd's tree",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since the last round, which ruled it LEGITIMATE on the defect test: it narrows the task line's 'as T60 does', not the request or the spec, which fix no resolve mechanism; the excluded class keeps pre-T74 behavior, measured at 17 of the mirror's 5,296 _unassigned lines and 0 of the clone's 82,580 hook lines, with at most one able to move any where-time figure. No wrong outcome a reader would see."
+    },
+    {
+     "id": "T74-consumers",
+     "summary": "The guard's shared Session is not asked in decide; static_runs_hooks and order.rs follow through filed_at unedited; context_cap_hooks passes a payload already moved to seat's tree",
+     "class": "within",
+     "why": "Consumers of the log read the same lines where-time reads; FR-007's count becomes more complete, not changed in kind. Unchanged."
+    },
+    {
+     "id": "T74-merge-means",
+     "summary": "One-off merge.py (dry, run, verify, backups, carried-over live bytes) instead of extending the refile",
+     "class": "within",
+     "why": "A choice of means for the merge the task line names. Unchanged."
+    },
+    {
+     "id": "T74-unassigned-2",
+     "summary": "The 2 T13 SubagentStarts from the mirror's _unassigned that the refile's rules file to 451 merged too",
+     "class": "within",
+     "why": "Same class and purpose as the 364; a data fix serving FR-005. Unchanged."
+    },
+    {
+     "id": "T74-removal",
+     "summary": "The mirror's 451 log, cmp-identical to the merged copy, moved to T74-scripts/backup/ under MAIN_TREE_OK",
+     "class": "within",
+     "why": "The task line asks for removal once the merge is checked; the move keeps a backup. Unchanged."
+    },
+    {
+     "id": "T74-T76-deferral",
+     "summary": "The 13 _unassigned lines the refile files to 405, 430 and 449 left, filed as T76, landing before T22",
+     "class": "within",
+     "why": "Outside T74's brief (this feature's lines); the found-and-left item states why, the filed id and the order, as FR-009 asks. Unchanged."
+    },
+    {
+     "id": "T74-window-to-landing",
+     "summary": "Between the removal and T74's landing plus the mirror's sync, hooks run the mirror's guard, so calls from /diagram can again write 451 lines into the mirror; the re-merge after landing is now bound to T76 (lands before T22) in the section's Found and left",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Last round's BLOCKED asked for (a) a named step or (b) a filed task id for the re-merge ordered 'lands before T22'. The section now carries (b): a Found-and-left item stating the gap, its visible effect (a builder's stop booked open), why it is not fixed here (the gap closes only when the landing does, so the re-merge must follow it), the filed id T76 and the order 'lands before T22', which is FR-009's form. The window is physically unavoidable for T74 itself, and the defect it can reopen is now bound to be closed before T22, the retro that reads these figures, so the request's purpose (where-time books all of 451's work) is not gutted. T76's tasks.md line, said by the dispatch to carry merge.py --dry, run, --verify with 0 missing, the move to backup and the result recorded, is outside this bundle and was not read; the ruling rests on the section's binding, which is what was required."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T75": {
+   "section_sha256": "57b8cab6416a756a827679e085a3b448bd4a546ec2bf20fbb0675f325ebbced5",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T75-close",
+     "summary": "T75 is closed as carried by T67's L1: T67's builder fixed the README guard's one-line-string refusal inside T67, and T75 changes nothing of its own.",
+     "class": "within",
+     "why": "The defect (a check refusing a correct Python program, a wrong outcome under constitution XIV) is fixed, not deferred or narrowed; the fix lives in the task whose code it touches, as T67's plan review allowed, with red-first evidence recorded (11 failed before, green after, 86 passed 0 failed at T67's close, dated and with method). Nothing the GM asked for is dropped: fix-as-we-go is satisfied and no known defect is carried forward."
+    },
+    {
+     "id": "T75-fix-shape",
+     "summary": "The guard's Python reading treats a one-line string that holds a quoted string as text, so a program holding another write_text call as text passes, while a string holding no quoted string (an f-string path, a real write) is still refused.",
+     "class": "within",
+     "why": "It removes a false refusal and keeps the guard's job (a real write of the GM's README still refused, step 12); a check fixed on purpose to stop refusing good work is the rule, not an exception. No reach beyond the defect is added."
+    },
+    {
+     "id": "T75-red-first",
+     "summary": "The refusal change is pinned red first in T67's readme suite case, per FR-012.",
+     "class": "within",
+     "why": "Enforcement of the guard rules FR-012 already carries; a test that only fails when the fixed behavior is absent serves the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T76": {
+   "section_sha256": "e28687645cafa131d1ec7856b698a395e775f3ea0ffff6c594ddb9f3ae98a24f",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 refile --from",
+     "summary": "The refile gains --from <events dir> as the source; moved lines appended to --dir's logs; merge.py not extended",
+     "class": "within",
+     "why": "Choice of mechanism for putting the mirror's misfiled lines home; neither request.md nor FR-013 constrains how. It serves FR-013's measurement clause (where-time books the lines where it reads them)."
+    },
+    {
+     "id": "D2 only cross-feature lines move",
+     "summary": "--from moves only lines the rules send to a feature other than the source log's name; a mirror's own-feature log is left to merge.py",
+     "class": "within",
+     "why": "Scope of the tool's reach; the one case it does not cover (the mirror's 451 log) is measured absent after T74 (ls of the mirror), so nothing asked for is left unmoved."
+    },
+    {
+     "id": "D3 appended, not inserted in time order",
+     "summary": "Moved lines are appended to their target logs rather than inserted in time order as T76's task line said",
+     "class": "within",
+     "why": "Line order is not in the GM's request or in FR-013; T76's line is the session's own task text. It is a difference that still works, not a defect: the logs were already out of time order before the run (449 had 290 out-of-order adjacent pairs, 405 had 1, measured 2026-11-21 verify.py), and after the run make where-time F=430 books the T08 agent whose lines were moved (where-after.log), which is the task's purpose working on the one log that went from 0 to 1 pairs. Under the 2026-11-19 defect rule a difference that still works stays within and needs no ruling."
+    },
+    {
+     "id": "D4 Makefile left",
+     "summary": "make events-refile not changed; the run used scripts/gates/l7r-gate.sh with every path explicit",
+     "class": "within",
+     "why": "No clause of the request or FR-013 asks for a make wrapper for this; the one-off run is done either way."
+    },
+    {
+     "id": "D5 this clone only",
+     "summary": "Every line went to this clone's logs; 405's log in diagram-backlog-pages (another session's clone) not written",
+     "class": "within",
+     "why": "Matches the brief's constraint; the 405 line's session claims this clone (claim map), and where-time reads every clone under /diagram/.clones, so the line is booked."
+    },
+    {
+     "id": "D6 f16cf709 line to this clone",
+     "summary": "One 430 line from a session whose claimed clone no longer exists is placed in this clone's 430 log",
+     "class": "within",
+     "why": "430's log exists only in this clone (ls of the clones); placing it where the only 430 log is serves the booking FR-013's measurement clause is for."
+    },
+    {
+     "id": "D7 re-merge a no-op",
+     "summary": "The re-merge of 451 lines written in the mirror in the gap moved nothing",
+     "class": "within",
+     "why": "Measured: the mirror held only _unassigned.jsonl, last written before T74 landed, at T74's line count (ls, stat, wc -l). Nothing narrowed."
+    },
+    {
+     "id": "D8 no before where-time run",
+     "summary": "A grep count of the agent id over every read log stands in for a before report",
+     "class": "within",
+     "why": "A measurement method, not a narrowing; the before state (0 of the agent's 9 lines in any read log) is measured, with its method."
+    },
+    {
+     "id": "D9 closing-checks red on others' files",
+     "summary": "make closing-checks red in 2 of 3 legs (format on T77's planhold.rs, idle-tests-hooks.sh 3 of 34), left; Found and left: none",
+     "class": "within",
+     "why": "Not a narrowing of the request or spec, and nothing in the bundle shows a defect this task carries forward: the format leg is another task's uncommitted in-flight file, and the hooks-test leg passed the run before with this task's code in; its cause is unattributed. Whether the landing may proceed is the gate's to decide, not a fidelity ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T77": {
+   "section_sha256": "8b7432f054bce858c39e59766ad3c21b8e41051da3ccde3a5fe1dc5ca6390192",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "1-overlap-bound",
+     "summary": "edit_hits judges overlap with held text, both ends exclusive (a < start+len && start < a+old.len()), replacing start <= a <= start+len; replace_all clause kept",
+     "class": "within",
+     "why": "Fixes a check refusing good work (an Edit at the next section's heading refused; 3 such refusals in the guard log, measured with method) - a defect under constitution XIV, which the task line asks fixed. Keeping edits inside held text refused preserves what the hold is for."
+    },
+    {
+     "id": "2-edit-ending-inside-refused",
+     "summary": "an Edit starting before the held section and ending inside it is now refused before it runs",
+     "class": "within",
+     "why": "The task line said such an edit was 'still refused'; on HEAD it was not (red fixture case). Making the stated behavior true is the hold's own purpose (held text unchanged during review), and the brief names it."
+    },
+    {
+     "id": "3-red-first-test",
+     "summary": "six-case fixture test written first, red 2 of 6 on HEAD, green 323 of 323",
+     "class": "within",
+     "why": "FR-012 (a refusal fixed red first). Enforces the requested behavior; not unrequested scope."
+    },
+    {
+     "id": "4-fail-closed-kept",
+     "summary": "for a pending hold or a backgrounded Bash write, the pre-call refusal on shared template text stays as the guard failing closed",
+     "class": "within",
+     "why": "For those two cases the pre-call refusal is the only guard (no write-back), so refusing is the guard doing its job rather than a wrong outcome; the plan changes nothing about them and the defect it does find (live hold, foreground) is handled separately."
+    },
+    {
+     "id": "5-bash-live-foreground-left-to-T78",
+     "summary": "a live hold's pre-call refusal of a foreground Bash write to another section on shared template text (7 of 18 replayed refusals) is left, filed as T78, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a defect (a check refusing good work) and the default is to fix in the task, but the narrowing is safe only once the write-back runs after a failed call (PostToolUseFailure), which checks_hooks.rs does not do today (read 2026-11-21); building the narrowing in planhold.rs alone would let a foreground command that writes held text and exits non-zero void a review verdict unseen - doing it here would defeat the hold's purpose. The item carries FR-009's form: why not here, filed id T78, order 'lands before T22', with the dependency ordered inside T78 (write-back first, then the narrowing). This answers round 1's BLOCKED, which was for leaving it unfiled."
+    },
+    {
+     "id": "6-posttoolusefailure-gap-left-to-T78",
+     "summary": "no write-back after a foreground Bash call that changes held text and exits non-zero (checks_hooks events lack PostToolUseFailure) is left, filed as T78, lands before T22; whether a call moved to the background at 180 s gets PostToolUse at the move or end is unmeasured and T78 measures it first",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix lives in checks_hooks.rs, a different guard than the one T77 corrects, and today the pre-call refusal (unchanged by T77) still covers the case, so T77 opens no new hole. Filed in FR-009's form with its id and order; the unmeasured premise is stated as unmeasured and assigned to be measured before it decides anything."
+    },
+    {
+     "id": "7-no-other-copy",
+     "summary": "edit_hits is the one reader of an Edit's place; the Python twin hm_planhold.py is gone",
+     "class": "within",
+     "why": "A census with its search space named (scripts/hooks/lib/ checked 2026-11-21); no copy carries the defect forward."
+    },
+    {
+     "id": "8-closing-checks-measured-in-worktree",
+     "summary": "make closing-checks red on static only from another builder's half-edited tree.rs (T50); the crate re-measured on HEAD with T77's two files alone in a detached worktree, all clean",
+     "class": "within",
+     "why": "A measurement route, not a change to what was asked; T50's files untouched per the order step."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T72 (two `make closing-checks` runs in one clone shared `.git/closing-checks/` and read each other's verdicts: T69's builder's run of 09:38:33Z beside another's of 09:38:06Z, the first reading the second's `quick` verdict and its `static.log` holding both runs' lines, observed 2026-11-21 (T69's section in plan-done.md, Found and left); reproduced against the unfixed script, run A's red `quick` read GREEN and run B's green `hooks-test` read RED, measured 2026-11-21 (`tests/hooks/test-closing-checks.sh`, `/tmp/t72/red.log`))",
+    "### T72 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T72-run-dir",
+     "summary": "Each closing-checks run writes its three logs and .exit files under <git dir>/closing-checks/<UTC time>-<pid>/, made with a plain mkdir (a reused id fails rather than shares); the table, red tails and stop line read that directory alone; the start's rm -f of exit files dropped.",
+     "class": "within",
+     "why": "This is the fix the task was filed for (the GM 2026-11-21, 'yes please file that as a performance task'): two runs in one clone read each other's verdicts; one directory per run, read alone, makes each run's combined result its own. Dropping the rm -f is a consequence (a new directory has no stale files)."
+    },
+    {
+     "id": "T72-latest",
+     "summary": "A relative 'latest' symlink to the run started last, swapped in by ln -sfn to a temp name then mv -T, so it is never missing; the header says to cite the path the table prints since 'latest' may name a parallel run.",
+     "class": "within",
+     "why": "Keeps one stable place to find the last run's logs, which the old single-directory layout gave; it does not reintroduce sharing, since no verdict is read through it, and the header note keeps a builder citing its own run. Serves the request without narrowing it."
+    },
+    {
+     "id": "T72-prune",
+     "summary": "At a run's start, other runs' directories and the old layout's top-level <check>.log/.exit files untouched for CLOSING_CHECKS_KEEP_MIN (360 min, GUESS knob) are removed; own run and latest's target never removed; other names left. Age chosen over count or live-pid.",
+     "class": "within",
+     "why": "Housekeeping the per-run layout makes necessary (directories would otherwise pile up), set so no live run is pruned (360 min against a measured longest run of 601 s, labeled with method); holding the old files to the same keep avoids a false RED on a still-running old-script run. A new GUESS knob is labeled as such. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T72-old-readers",
+     "summary": "No code reads the old paths (grep -rn 'closing-checks' and 'closing-checks/' over the clone, .git and target excluded, measured 2026-11-21); only the script's header and printout are edited; builders' citations in plan-done.md are history and keep their words.",
+     "class": "within",
+     "why": "The enumeration states its search space, and the space is the string itself across every file type in the clone (Makefile, scripts, Rust, docs, .claude), not a language-filtered sample, so a reader holding the path as a string would have been found. Leaving historical citations is not a narrowing: they are records, not readers."
+    },
+    {
+     "id": "T72-atomic-install",
+     "summary": "The installed script written to a temp file and moved into place so a run already reading the old one keeps its copy.",
+     "class": "within",
+     "why": "An implementation safety detail of the same fix; decides nothing the request or spec constrains."
+    },
+    {
+     "id": "T72-red-first",
+     "summary": "tests/hooks/test-closing-checks.sh case 4 reproduces two overlapping runs whose verdicts differ, ordered by release files not sleeps (red against the unfixed script: A's red quick read GREEN, B's green hooks-test read RED); case 5 the prune; cases 1-2 read the run directory.",
+     "class": "within",
+     "why": "A test whose only effect is to make the requested fix happen and keep happening; it enforces the request and is not unrequested scope. Its red reproduces the observed wrong outcome exactly."
+    },
+    {
+     "id": "T72-static-red-left",
+     "summary": "The fixed script's own run in the clone had static RED on rust lint doc_markdown in T60's builder's uncommitted context_cap_hooks files; left to T60, 'Found and left: none'.",
+     "class": "within",
+     "why": "Those files are another task's in-progress work outside T72's file list, not a defect T72 found in shipped code; the closing-checks verdict itself was correct (it reported a real red). Nothing of what was asked is left unfixed."
+    },
+    {
+     "id": "T72-perf-tag",
+     "summary": "Filed as a [perf] task under FR-013: the builders' loop, a closing check read right the first time rather than re-run.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'yes please file that as a performance task'. FR-013 counts work that speeds the builders' loop as performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T73 (after T54's fix 28 of 451's 67 reconstructed candidates still refused - the task line's 27 is one short - most a word re-wrapped onto the next line, read as an old value because the old values are read line by line, measured 2026-11-21 (`/tmp/t73/rustrecon.py before`, T54's replay on the code before this change, `/tmp/t73/rust-before.json`, equal row for row to T54's `rust-after3.json`))",
+    "### T73 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE RULE (touched)",
+     "summary": "An old line's word is an old value only where the change touched it: the replaced passage is diffed word by word, and a word kept in an equal run with both neighbors is no value.",
+     "class": "within",
+     "why": "This is what T73's line asks: drop the re-wrap candidates and keep refusals.md:12's kind of catch. Both of 451's real catches (refusals.md:12, plan.md:329) and every other right fire on T54's list still stand on the final code, by the section's labeled replay. It serves FR-013 (fewer redispatches in the builders' loop). It fixes a check that refused correct text, a defect under XIV, so its verdicts change as fixed."
+    },
+    {
+     "id": "Whole-passage variant kept out",
+     "summary": "Reading the values from the whole rewritten passage, which leaves 451 at 6, is rejected because it drops both real catches.",
+     "class": "within",
+     "why": "T73's own constraint (only where it keeps refusals.md:12's kind of catch) requires rejecting it."
+    },
+    {
+     "id": "Neighbor convention",
+     "summary": "A word is a run of non-space characters, its neighbors are the next word either side, and the passage's two ends count as kept. Labeled CONVENTION at `touched`.",
+     "class": "within",
+     "why": "This is the mechanism of the rule above. It is labeled, and it decides nothing the request or spec settles."
+    },
+    {
+     "id": "Loss of 261's refusal of 04:13 (spec.md:273, m:mizuguchi-r17-copse)",
+     "summary": "The touched rule no longer names the copse row, so 261's one right refusal of 04:13 goes. Accepted, with its cost recorded at `touched` and in docs/guards.md.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Keeping it defeats the purpose of the task. The rule is not impossible to apply here: the priced alternative keeps the catch. I read audit.json's row myself. The old line's 'values' (band, convention, depth, drawing, map) come from 'The band and depth are a map drawing convention', a sentence the change kept whole after an inserted sentence about the reach. The row was stale because it omitted the new 0-60 ft leeward reach, not because it carried any of those words. So the old check named a right line for wrong reasons, through the same mechanism T73 exists to remove: kept, re-wrapped words read as old values. That mechanism produced 12 of 451's 28 candidates. This catch is not refusals.md:12's kind (a touched old value). It is an omission, which a search for old values cannot see except by coincidence, so T73's line does not protect it. The only way to keep it is the 'two or more re-wrapped words' threshold. That threshold is drawn from this one case and brings back 15 wrong fires and 285's refusal on correct text. Keeping a coincidental catch by reinstating the defect being fixed defeats the fix. Constitution XIII does not make this a regression: a check fixed on purpose changes as fixed, and a check is judged on catching what it is meant to catch (old values), which it still does in every case T54 listed. The GM's 'real enforcement' clause concerns the six approved fixes' guards and does not reach this check. Omissions remain the reviewer rounds' job, as docs/guards.md's row already says."
+    },
+    {
+     "id": "Loss of 316's plan.md:65 naming",
+     "summary": "316's line (CONVENTION, value 'none') is no longer named. 316's refusal still fires (10 candidates to 9).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I ruled on this apart from 261's case. Here no refusal is lost: the session is still stopped and still reads the passage. The line's value 'none' comes from '`NONE` (no physical decision)', text the change kept. It was stale because it omitted the inserted UNRESEARCHED, which is again an omission caught by a kept word, so the same purpose-level reasoning applies. The fix came 15 s after the refusal, which also suggests it was already in hand."
+    },
+    {
+     "id": "Threshold alternative rejected",
+     "summary": "Keeping a line with two or more re-wrapped words as a candidate is priced and rejected: 16 of the 54 drops come back, 15 of them wrong fires, plus 285's refusal on correct text.",
+     "class": "within",
+     "why": "This is a design choice between two implementations of T73's line. Rejecting an overfit threshold that brings back refusals of correct work is a judgment of design, not fidelity, and it fits the request's purpose (fewer wasted rounds)."
+    },
+    {
+     "id": "451's 14 remaining wrong fires left as the search's reach",
+     "summary": "Of 451's 16 left, 8 are on `code` used consistently and 6 on a removed common word in another sense. They are left because the value side reads words, not senses.",
+     "class": "within",
+     "why": "This is not a narrowing of anything asked. T73 was filed for the re-wrap class, and that class is fully removed. The rest is the check's existing lexical reach, which this plan neither introduces nor worsens: telling a word's sense apart is beyond a word check, and the escape covers it. No request clause or FR asks this check for zero wrong fires. The section names the reach openly in its search smell rather than hiding it."
+    },
+    {
+     "id": "closing-checks red in T71's files",
+     "summary": "Exit 6 lists make closing-checks. It was red on one case of no-poll-hooks.sh, which belongs to T71's in-flight writer-alive.sh and finished_run_hooks work and which T73 does not touch, and it is left to T71.",
+     "class": "within",
+     "why": "The failure is in another task's open work, outside this builder's list, and is recorded with its log. Nothing the GM asked for is narrowed. The landing gate still decides it."
+    },
+    {
+     "id": "T54's 374 right-fire count left unrestated",
+     "summary": "T54's section counts 374's request.md as a right fire. It was not one (the line stood unedited, and its value is a re-wrapped word), and the restatement is left to T54's section.",
+     "class": "within",
+     "why": "It is a figure in a record that no check reads and is no wrong outcome, so it is not a defect under XIV. The correction is stated here and is outside this builder's file list."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T73 (after T54's fix 28 of 451's 67 reconstructed candidates still refused - the task line's 27 is one short - most a word re-wrapped onto the next line, read as an old value because the old values are read line by line, measured 2026-11-21 (`/tmp/t73/rustrecon.py before`, T54's replay on the code before this change, `/tmp/t73/rust-before.json`, equal row for row to T54's `rust-after3.json`))",
+    "### T73 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE RULE (touched)",
+     "summary": "An old line's word is an old value only where the change touched it: the replaced passage is diffed word by word, and a word kept in an equal run with both neighbors is no value.",
+     "class": "within",
+     "why": "This is what T73's line asks: drop the re-wrap candidates and keep refusals.md:12's kind of catch. Both of 451's real catches (refusals.md:12, plan.md:329) and every other right fire on T54's list still stand on the final code, by the section's labeled replay. It serves FR-013 (fewer redispatches in the builders' loop). It fixes a check that refused correct text, a defect under XIV, so its verdicts change as fixed."
+    },
+    {
+     "id": "Whole-passage variant kept out",
+     "summary": "Reading the values from the whole rewritten passage, which leaves 451 at 6, is rejected because it drops both real catches.",
+     "class": "within",
+     "why": "T73's own constraint (only where it keeps refusals.md:12's kind of catch) requires rejecting it."
+    },
+    {
+     "id": "Neighbor convention",
+     "summary": "A word is a run of non-space characters, its neighbors are the next word either side, and the passage's two ends count as kept. Labeled CONVENTION at `touched`.",
+     "class": "within",
+     "why": "This is the mechanism of the rule above. It is labeled, and it decides nothing the request or spec settles."
+    },
+    {
+     "id": "Loss of 261's refusal of 04:13 (spec.md:273, m:mizuguchi-r17-copse)",
+     "summary": "The touched rule no longer names the copse row, so 261's one right refusal of 04:13 goes. Accepted, with its cost recorded at `touched` and in docs/guards.md.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Keeping it defeats the purpose of the task. The rule is not impossible to apply here: the priced alternative keeps the catch. I re-ran /tmp/t73/why.py on 261's trees myself: touched-gone is empty, and the NEW passage still ends with the sentence. The old line's 'values' (band, convention, depth, drawing, map) come from 'The band and depth are a map drawing convention', a sentence the change kept whole after an inserted sentence about the reach. The row was stale because it omitted the new 0-60 ft leeward reach, not because it carried any of those words. So the old check named a right line for wrong reasons, through the same mechanism T73 exists to remove: kept, re-wrapped words read as old values. That mechanism produced 12 of 451's 28 candidates. This catch is not refusals.md:12's kind (a touched old value). It is an omission, which a search for old values cannot see except by coincidence, so T73's line does not protect it. The only way to keep it is the 'two or more re-wrapped words' threshold. That threshold is drawn from this one case and brings back 15 wrong fires and 285's refusal on correct text. Keeping a coincidental catch by reinstating the defect being fixed defeats the fix. Constitution XIII does not make this a regression: a check fixed on purpose changes as fixed, and a check is judged on catching what it is meant to catch (old values), which it still does in every case T54 listed. The GM's 'real enforcement' clause concerns the six approved fixes' guards and does not reach this check. Omissions remain the reviewer rounds' job, as docs/guards.md's row already says."
+    },
+    {
+     "id": "Loss of 316's plan.md:65 naming",
+     "summary": "316's line (CONVENTION, value 'none') is no longer named. 316's refusal still fires (10 candidates to 9).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "I ruled on this apart from 261's case. Here no refusal is lost: the session is still stopped and still reads the passage. The line's value 'none' comes from '`NONE` (no physical decision)', text the change kept. It was stale because it omitted the inserted CANON (why.py on 316's trees: touched-gone empty, 'none' kept in the NEW passage), which is again an omission caught by a kept word, so the same purpose-level reasoning applies. The fix came 15 s after the refusal, which also suggests it was already in hand."
+    },
+    {
+     "id": "Threshold alternative rejected",
+     "summary": "Keeping a line with two or more re-wrapped words as a candidate is priced and rejected: 16 of the 54 drops come back, 15 of them wrong fires, plus 285's refusal on correct text.",
+     "class": "within",
+     "why": "This is a design choice between two implementations of T73's line. Rejecting an overfit threshold that brings back refusals of correct work is a judgment of design, not fidelity, and it fits the request's purpose (fewer wasted rounds)."
+    },
+    {
+     "id": "451's 14 remaining wrong fires left as the search's reach",
+     "summary": "Of 451's 16 left, 8 are on `code` used consistently and 6 on a removed common word in another sense. They are left because the value side reads words, not senses.",
+     "class": "within",
+     "why": "This is not a narrowing of anything asked. T73 was filed for the re-wrap class, and that class is fully removed. The rest is the check's existing lexical reach, which this plan neither introduces nor worsens: telling a word's sense apart is beyond a word check, and the escape covers it. No request clause or FR asks this check for zero wrong fires. The section names the reach openly in its search smell rather than hiding it."
+    },
+    {
+     "id": "closing-checks red in T71's files",
+     "summary": "Exit 6 lists make closing-checks. It was red on one case of no-poll-hooks.sh, which belongs to T71's in-flight writer-alive.sh and finished_run_hooks work and which T73 does not touch, and it is left to T71.",
+     "class": "within",
+     "why": "The failure is in another task's open work, outside this builder's list, and is recorded with its log. Nothing the GM asked for is narrowed. The landing gate still decides it."
+    },
+    {
+     "id": "T54's 374 right-fire count left unrestated",
+     "summary": "T54's section counts 374's request.md as a right fire. It was not one (the line stood unedited, and its value is a re-wrapped word), and the restatement is left to T54's section.",
+     "class": "within",
+     "why": "It is a figure in a record that no check reads and is no wrong outcome, so it is not a defect under XIV. The correction is stated here and is outside this builder's file list."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T74 (the event log filed a call under its cwd's tree: the mirror's `.git/l7r-events/451-time-retro-and-efficiency.jsonl` held 364 lines, all session `c6fd72d1-...`'s (whose claim map names this clone), 361 a builder's (`by` or `aid`) and 3 the main session's, tasks T13 176, T55 158, T10 28, T21 1 and none 1, from 2026-11-20T16:02:50Z to 2026-11-21T04:56:07Z, 0 of them in the clone's 451 log, measured 2026-11-21 (a Python count of both logs by session, key and exact line))",
+    "### T74 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T74-tree",
+     "summary": "event_log_hooks' tree_of files a line in the session's clone (the claim map's clone, where it is a work tree, canonicalized), else the cwd's tree; the cwd still gates, so a call outside any tree writes nothing",
+     "class": "within",
+     "why": "Serves FR-005 and SC-002 (where-time books the work from the event log) and is measurement work under FR-013; the fallback is today's answer, so nothing the request asked for is lost. Unchanged since the last round."
+    },
+    {
+     "id": "T74-claim-map-alone",
+     "summary": "Deviation from T60's resolve: the session's clone is read from its claim map alone; transcript /rename and sessions json are blanked, so a session with no claim map whose name names a clone keeps the cwd's tree",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since the last round, which ruled it LEGITIMATE on the defect test: it narrows the task line's 'as T60 does', not the request or the spec, which fix no resolve mechanism; the excluded class keeps pre-T74 behavior, measured at 17 of the mirror's 5,296 _unassigned lines and 0 of the clone's 82,580 hook lines, with at most one able to move any where-time figure. No wrong outcome a reader would see."
+    },
+    {
+     "id": "T74-consumers",
+     "summary": "The guard's shared Session is not asked in decide; static_runs_hooks and order.rs follow through filed_at unedited; context_cap_hooks passes a payload already moved to seat's tree",
+     "class": "within",
+     "why": "Consumers of the log read the same lines where-time reads; FR-007's count becomes more complete, not changed in kind. Unchanged."
+    },
+    {
+     "id": "T74-merge-means",
+     "summary": "One-off merge.py (dry, run, verify, backups, carried-over live bytes) instead of extending the refile",
+     "class": "within",
+     "why": "A choice of means for the merge the task line names. Unchanged."
+    },
+    {
+     "id": "T74-unassigned-2",
+     "summary": "The 2 T13 SubagentStarts from the mirror's _unassigned that the refile's rules file to 451 merged too",
+     "class": "within",
+     "why": "Same class and purpose as the 364; a data fix serving FR-005. Unchanged."
+    },
+    {
+     "id": "T74-removal",
+     "summary": "The mirror's 451 log, cmp-identical to the merged copy, moved to T74-scripts/backup/ under MAIN_TREE_OK",
+     "class": "within",
+     "why": "The task line asks for removal once the merge is checked; the move keeps a backup. Unchanged."
+    },
+    {
+     "id": "T74-T76-deferral",
+     "summary": "The 13 _unassigned lines the refile files to 405, 430 and 449 left, filed as T76, landing before T22",
+     "class": "within",
+     "why": "Outside T74's brief (this feature's lines); the found-and-left item states why, the filed id and the order, as FR-009 asks. Unchanged."
+    },
+    {
+     "id": "T74-window-to-landing",
+     "summary": "Between the removal and T74's landing plus the mirror's sync, hooks run the mirror's guard, so calls from /diagram can again write 451 lines into the mirror; the re-merge after landing is now bound to T76 (lands before T22) in the section's Found and left",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Last round's BLOCKED asked for (a) a named step or (b) a filed task id for the re-merge ordered 'lands before T22'. The section now carries (b): a Found-and-left item stating the gap, its visible effect (a builder's stop booked open), why it is not fixed here (the gap closes only when the landing does, so the re-merge must follow it), the filed id T76 and the order 'lands before T22', which is FR-009's form. The window is physically unavoidable for T74 itself, and the defect it can reopen is now bound to be closed before T22, the retro that reads these figures, so the request's purpose (where-time books all of 451's work) is not gutted. T76's tasks.md line, said by the dispatch to carry merge.py --dry, run, --verify with 0 missing, the move to backup and the result recorded, is outside this bundle and was not read; the ruling rests on the section's binding, which is what was required."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T75 (the README guard refused a README path held as the text of a one-line Python string, found by T67's first plan review, 2026-11-21)",
+    "### T75 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T75-close",
+     "summary": "T75 is closed as carried by T67's L1: T67's builder fixed the README guard's one-line-string refusal inside T67, and T75 changes nothing of its own.",
+     "class": "within",
+     "why": "The defect (a check refusing a correct Python program, a wrong outcome under constitution XIV) is fixed, not deferred or narrowed; the fix lives in the task whose code it touches, as T67's plan review allowed, with red-first evidence recorded (11 failed before, green after, 86 passed 0 failed at T67's close, dated and with method). Nothing the GM asked for is dropped: fix-as-we-go is satisfied and no known defect is carried forward."
+    },
+    {
+     "id": "T75-fix-shape",
+     "summary": "The guard's Python reading treats a one-line string that holds a quoted string as text, so a program holding another write_text call as text passes, while a string holding no quoted string (an f-string path, a real write) is still refused.",
+     "class": "within",
+     "why": "It removes a false refusal and keeps the guard's job (a real write of the GM's README still refused, step 12); a check fixed on purpose to stop refusing good work is the rule, not an exception. No reach beyond the defect is added."
+    },
+    {
+     "id": "T75-red-first",
+     "summary": "The refusal change is pinned red first in T67's readme suite case, per FR-012.",
+     "class": "within",
+     "why": "Enforcement of the guard rules FR-012 already carries; a test that only fails when the fixed behavior is absent serves the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T76 (the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before T74 filed a call under its session's clone, held 15 lines the refile's rules place: 1 to 405, 11 to 430 and 1 to 449, none of them in this clone's logs, and 2 to 451 that T74's merge had already put in the clone's 451 log in their re-filed form, measured 2026-11-21 (the refile run without `--from` on a scratch copy, `/tmp/t76/scratch-refile.log`, and an exact-line count of each moved line in each clone's log); and, once T74 landed, no 451 log in the mirror to re-merge, measured 2026-11-21 (`ls` of the mirror's `.git/l7r-events/`))",
+    "### T76 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 refile --from",
+     "summary": "The refile gains --from <events dir> as the source; moved lines appended to --dir's logs; merge.py not extended",
+     "class": "within",
+     "why": "Choice of mechanism for putting the mirror's misfiled lines home; neither request.md nor FR-013 constrains how. It serves FR-013's measurement clause (where-time books the lines where it reads them)."
+    },
+    {
+     "id": "D2 only cross-feature lines move",
+     "summary": "--from moves only lines the rules send to a feature other than the source log's name; a mirror's own-feature log is left to merge.py",
+     "class": "within",
+     "why": "Scope of the tool's reach; the one case it does not cover (the mirror's 451 log) is measured absent after T74 (ls of the mirror), so nothing asked for is left unmoved."
+    },
+    {
+     "id": "D3 appended, not inserted in time order",
+     "summary": "Moved lines are appended to their target logs rather than inserted in time order as T76's task line said",
+     "class": "within",
+     "why": "Line order is not in the GM's request or in FR-013; T76's line is the session's own task text. It is a difference that still works, not a defect: the logs were already out of time order before the run (449 had 290 out-of-order adjacent pairs, 405 had 1, measured 2026-11-21 verify.py), and after the run make where-time F=430 books the T08 agent whose lines were moved (where-after.log), which is the task's purpose working on the one log that went from 0 to 1 pairs. Under the 2026-11-19 defect rule a difference that still works stays within and needs no ruling."
+    },
+    {
+     "id": "D4 Makefile left",
+     "summary": "make events-refile not changed; the run used scripts/gates/l7r-gate.sh with every path explicit",
+     "class": "within",
+     "why": "No clause of the request or FR-013 asks for a make wrapper for this; the one-off run is done either way."
+    },
+    {
+     "id": "D5 this clone only",
+     "summary": "Every line went to this clone's logs; 405's log in diagram-backlog-pages (another session's clone) not written",
+     "class": "within",
+     "why": "Matches the brief's constraint; the 405 line's session claims this clone (claim map), and where-time reads every clone under /diagram/.clones, so the line is booked."
+    },
+    {
+     "id": "D6 f16cf709 line to this clone",
+     "summary": "One 430 line from a session whose claimed clone no longer exists is placed in this clone's 430 log",
+     "class": "within",
+     "why": "430's log exists only in this clone (ls of the clones); placing it where the only 430 log is serves the booking FR-013's measurement clause is for."
+    },
+    {
+     "id": "D7 re-merge a no-op",
+     "summary": "The re-merge of 451 lines written in the mirror in the gap moved nothing",
+     "class": "within",
+     "why": "Measured: the mirror held only _unassigned.jsonl, last written before T74 landed, at T74's line count (ls, stat, wc -l). Nothing narrowed."
+    },
+    {
+     "id": "D8 no before where-time run",
+     "summary": "A grep count of the agent id over every read log stands in for a before report",
+     "class": "within",
+     "why": "A measurement method, not a narrowing; the before state (0 of the agent's 9 lines in any read log) is measured, with its method."
+    },
+    {
+     "id": "D9 closing-checks red on others' files",
+     "summary": "make closing-checks red in 2 of 3 legs (format on T77's planhold.rs, idle-tests-hooks.sh 3 of 34), left; Found and left: none",
+     "class": "within",
+     "why": "Not a narrowing of the request or spec, and nothing in the bundle shows a defect this task carries forward: the format leg is another task's uncommitted in-flight file, and the hooks-test leg passed the run before with this task's code in; its cause is unattributed. Whether the landing may proceed is the gate's to decide, not a fidelity ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T76 (the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before T74 filed a call under its session's clone, held 15 lines the refile's rules place: 1 to 405, 11 to 430 and 1 to 449, none of them in this clone's logs, and 2 to 451 that T74's merge had already put in the clone's 451 log in their re-filed form, measured 2026-11-21 (the refile run without `--from` on a scratch copy, `/tmp/t76/scratch-refile.log`, and an exact-line count of each moved line in each clone's log); and, once T74 landed, no 451 log in the mirror to re-merge, measured 2026-11-21 (`ls` of the mirror's `.git/l7r-events/`))",
+    "### T77 (the plan hold refused an Edit of the heading after a held section, found by T73's builder on 2026-11-21: `edit_hits` in `rust/guard/shared/src/checks/planhold.rs` read `a <= start + t.len()`; the guard log holds 3 refusals of that shape, measured 2026-11-21, method below)",
+    "### T79 (shared::tree's walk split a `\\`-continued line, a `${VAR}`'s braces and a `$(...)` inside a word into segments of their own, and read a `$(mktemp)` directory toward the mirror, found by T50 on 2026-11-21; and it settled a place it could not resolve two ways - a cp's toward where the shell was last known, one of T50's git forms not placed at all (T50's D-d and D-e) - found by T50's plan review, 2026-11-21)",
+    "### T79 Approach (checklist part A)",
+    "### T80 (<why: the finding or measurement that files it>)",
+    "### T80 Approach (checklist part A)",
+    "### T81 (<why: the finding or measurement that files it>)",
+    "### T81 Approach (checklist part A)",
+    "### T82 (<why: the finding or measurement that files it>)",
+    "### T82 Approach (checklist part A)",
+    "### T83 (<why: the finding or measurement that files it>)",
+    "### T83 Approach (checklist part A)",
+    "### T84 (<why: the finding or measurement that files it>)",
+    "### T84 Approach (checklist part A)",
+    "### T85 (<why: the finding or measurement that files it>)",
+    "### T85 Approach (checklist part A)",
+    "### T86 (<why: the finding or measurement that files it>)",
+    "### T86 Approach (checklist part A)",
+    "### T87 (<why: the finding or measurement that files it>)",
+    "### T87 Approach (checklist part A)",
+    "### T88 (<why: the finding or measurement that files it>)",
+    "### T88 Approach (checklist part A)",
+    "### T89 (<why: the finding or measurement that files it>)",
+    "### T89 Approach (checklist part A)",
+    "### T90 (<why: the finding or measurement that files it>)",
+    "### T90 Approach (checklist part A)",
+    "### T91 (<why: the finding or measurement that files it>)",
+    "### T91 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T79-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T77 (the plan hold refused an Edit of the heading after a held section, found by T73's builder on 2026-11-21: `edit_hits` in `rust/guard/shared/src/checks/planhold.rs` read `a <= start + t.len()`; the guard log holds 3 refusals of that shape, measured 2026-11-21, method below)",
+    "### T77 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "1-overlap-bound",
+     "summary": "edit_hits judges overlap with held text, both ends exclusive (a < start+len && start < a+old.len()), replacing start <= a <= start+len; replace_all clause kept",
+     "class": "within",
+     "why": "Fixes a check refusing good work (an Edit at the next section's heading refused; 3 such refusals in the guard log, measured with method) - a defect under constitution XIV, which the task line asks fixed. Keeping edits inside held text refused preserves what the hold is for."
+    },
+    {
+     "id": "2-edit-ending-inside-refused",
+     "summary": "an Edit starting before the held section and ending inside it is now refused before it runs",
+     "class": "within",
+     "why": "The task line said such an edit was 'still refused'; on HEAD it was not (red fixture case). Making the stated behavior true is the hold's own purpose (held text unchanged during review), and the brief names it."
+    },
+    {
+     "id": "3-red-first-test",
+     "summary": "six-case fixture test written first, red 2 of 6 on HEAD, green 323 of 323",
+     "class": "within",
+     "why": "FR-012 (a refusal fixed red first). Enforces the requested behavior; not unrequested scope."
+    },
+    {
+     "id": "4-fail-closed-kept",
+     "summary": "for a pending hold or a backgrounded Bash write, the pre-call refusal on shared template text stays as the guard failing closed",
+     "class": "within",
+     "why": "For those two cases the pre-call refusal is the only guard (no write-back), so refusing is the guard doing its job rather than a wrong outcome; the plan changes nothing about them and the defect it does find (live hold, foreground) is handled separately."
+    },
+    {
+     "id": "5-bash-live-foreground-left-to-T78",
+     "summary": "a live hold's pre-call refusal of a foreground Bash write to another section on shared template text (7 of 18 replayed refusals) is left, filed as T78, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a defect (a check refusing good work) and the default is to fix in the task, but the narrowing is safe only once the write-back runs after a failed call (PostToolUseFailure), which checks_hooks.rs does not do today (read 2026-11-21); building the narrowing in planhold.rs alone would let a foreground command that writes held text and exits non-zero void a review verdict unseen - doing it here would defeat the hold's purpose. The item carries FR-009's form: why not here, filed id T78, order 'lands before T22', with the dependency ordered inside T78 (write-back first, then the narrowing). This answers round 1's BLOCKED, which was for leaving it unfiled."
+    },
+    {
+     "id": "6-posttoolusefailure-gap-left-to-T78",
+     "summary": "no write-back after a foreground Bash call that changes held text and exits non-zero (checks_hooks events lack PostToolUseFailure) is left, filed as T78, lands before T22; whether a call moved to the background at 180 s gets PostToolUse at the move or end is unmeasured and T78 measures it first",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix lives in checks_hooks.rs, a different guard than the one T77 corrects, and today the pre-call refusal (unchanged by T77) still covers the case, so T77 opens no new hole. Filed in FR-009's form with its id and order; the unmeasured premise is stated as unmeasured and assigned to be measured before it decides anything."
+    },
+    {
+     "id": "7-no-other-copy",
+     "summary": "edit_hits is the one reader of an Edit's place; the Python twin hm_planhold.py is gone",
+     "class": "within",
+     "why": "A census with its search space named (scripts/hooks/lib/ checked 2026-11-21); no copy carries the defect forward."
+    },
+    {
+     "id": "8-closing-checks-measured-in-worktree",
+     "summary": "make closing-checks red on static only from another builder's half-edited tree.rs (T50); the crate re-measured on HEAD with T77's two files alone in a detached worktree, all clean",
+     "class": "within",
+     "why": "A measurement route, not a change to what was asked; T50's files untouched per the order step."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T72 to T77, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

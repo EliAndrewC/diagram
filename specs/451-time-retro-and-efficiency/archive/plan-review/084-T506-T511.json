@@ -1,0 +1,536 @@
+{
+ "blocks": {
+  "### T506 (451 T490: the check state's partial read scans its skipped rows exactly, and serde's `IgnoredAny` scan was priced at about 5 to 8 ms a hook cheaper, measured 2026-11-27 (T490's `t490-pricing2.txt`))": {
+   "sha256": "06ed5b6bec0b2353bd5c60eac5a37925537b0eea2469f7f803a829e536cabd5d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T506 Approach (checklist part A)": {
+   "sha256": "e86325e3da92baef6e3082e14b25ef9596ff4362a0b733fc93acaeba7e47707f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T507 (451 T506: after T490's partial read a Bash call under a plan hold still cost 17.0 to 18.6 ms of CPU in its PreToolUse against 10.9 for a state with no `dispatches`, and the exact scan was about 1 ms of it, measured 2026-11-27 (`t490-time.py`, 20 runs))": {
+   "sha256": "b367b67128af673d82fafd3dacd3b6dd9f9780c4d1126d503ed7059d23455d09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T507 Approach (checklist part A)": {
+   "sha256": "6ea858312a7185b8cd297e0539aca7c9c8f3a8ea351112833c1d296c745f6226",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T508 (451 T507, `dev/measurements/2026-11-27/t507-part-cost/results.md`: the Bash hooks' prefilters read the whole 2.6 MB check state to find one key on every Bash call, 4.83 ms of a no-hold `PreToolUse`'s 7.11 and 2.75 of a `PostToolUse`'s 4.72, measured 2026-11-27 (`t507-time.py`, 20 runs))": {
+   "sha256": "7b210ec1f3492048142f69ecd797bbc7b1817ef390baf26915b8c58d63573b50",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T508 Approach (checklist part A)": {
+   "sha256": "6afecd84f87e140caebe357063058f2211e49daa2704892162a7f27bbc7df767",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T509 (<why: the finding or measurement that files it>)": {
+   "sha256": "6049f8bb0568e5a3a6484af3db690fe5e75f69cd9f368c2d4d465625e8cd6386",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T510 (the GM 2026-11-27, request.md: the window table put the second tier at 568.3 of 680.0 working blocking minutes, 83.6%, every row's percentage of that one total, while the pool trees were busy 93%, 98% and 83% of 2026-11-27T02:00Z to 14:29Z, measured 2026-11-27 (`make task-time` and `tree-idle.py`, as T510's line records))": {
+   "sha256": "a815ad1c66cb4d22169d5946c821aed148988187e438b56bd04ade7a46bc6d13",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T510 Approach (checklist part A)": {
+   "sha256": "83e7bb94d7626355d0694a1f71b904678bdad523d2ef8dd49908b51c3a1a4045",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T511 (<why: the finding or measurement that files it>)": {
+   "sha256": "c21b6ae560cb3bf2ace360a502400aa26db710e42f93e9b9b9d47de605438d1e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T506": {
+   "section_sha256": "891576e295f9bbab9cbdb8966f8af2a4bd59bc4d7bbe0a338ac26569389e387e",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T506-D1",
+     "summary": "IgnoredAny priced in place of the exact Skip scan for the partial read's skipped rows, found to save about 1 ms a hook (-2.1 to 1.2 ms, inside the noise) rather than 5 to 8, and not built; the exact scan stays and its doc comment records the measurement.",
+     "class": "within",
+     "why": "The task's brief made building conditional on the saving T490 priced; the measurement says the condition is not met, and the brief's own else branch (record why not) is taken. Nothing the GM asked is narrowed: his performance-first rule (FR-013) is served by measuring, and leaving a change that saves nothing measurable while keeping exact parsing is not leaving a defect (no wrong outcome: every answer reads as the whole parse reads it). Figures carry dated method labels."
+    },
+    {
+     "id": "T506-no-red-test",
+     "summary": "No red test, since no code but a doc comment moved.",
+     "class": "within",
+     "why": "FR-012's red-first tests are owed by refusals of FR-006 to FR-009, FR-011 and FR-013; this task builds no refusal and changes no behavior."
+    },
+    {
+     "id": "T506-order",
+     "summary": "Runs after T490 and T505 (the build it was timed against), before T302; one landing.",
+     "class": "within",
+     "why": "Ordering and budget the spec leaves open; consistent with FR-013's performance-first ordering."
+    },
+    {
+     "id": "T506-found-and-left",
+     "summary": "The partial read's remaining 5 to 8 ms of CPU a hot hook over the no-dispatches arm is left to T507 (a profile to find its cause), landing before T302.",
+     "class": "within",
+     "why": "A hook's CPU cost is not a wrong outcome under constitution XIV's definition of a defect, and its cause is outside this task's brief (the scan, which was priced). It is not dropped: filed as T507 with its reason and its order ('lands before T302'), as FR-009 requires of a deferral, and as measurement-of-where-time-goes work it counts as performance work under FR-013 and so is scheduled first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T507": {
+   "section_sha256": "d20d6d3f00521e1dad6cdf8487f06a8297694a34863c42b633eb062fdd477875",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T507-D1",
+     "summary": "The split is measured by in-process stamps (wall, process CPU, faults) in a scratch build of HEAD outside the tree, because perf/gdb/strace are refused in the container; the stamps' own cost stated (under 0.8 ms a call).",
+     "class": "within",
+     "why": "A choice of instrument for a measurement task; it narrows nothing the GM asked. The GM asked that time be measured so we know where it goes (2026-11-22) and that measurement work count as performance work (2026-11-20); the method measures, with its overhead and load stated, on copies of the state only."
+    },
+    {
+     "id": "T507-D2",
+     "summary": "The gap over the no-dispatches state split by part: prefilter 54% (its read, split_once, drop), Part::read 22-23%, partial parse 30%, hook's own work negative; page faults about 1.4 ms of each 2.6 MB read.",
+     "class": "within",
+     "why": "The task's measured result, not a narrowing; each figure carries a dated method label. Percentages are consistent with the stated parts (4.09/7.54 = 54%, 1.64/7.54 = 22%, 2.26/7.54 = 30%)."
+    },
+    {
+     "id": "T507-D3",
+     "summary": "The same prefilters run on every Bash call outside a hold (4.83 ms of PreToolUse's 7.11, 2.75 of PostToolUse's 4.72), about 47 s CPU/day over 6,141 calls.",
+     "class": "within",
+     "why": "A further measured finding widening what is known of the cost; it serves the GM's 'we want everything measured so we know where our time goes' and narrows nothing."
+    },
+    {
+     "id": "T507-D4",
+     "summary": "File the prefilter lever as T508 (one part is most of the gap, 54%); file nothing for Part::read's faults or the dispatches parse (each under a third).",
+     "class": "within",
+     "why": "The lever is filed, as a performance task ordered first per FR-013 and the GM's 'priotitize performance improvements' (2026-11-20). Leaving the smaller parts unfiled leaves no defect: a CPU cost that gives no wrong outcome is not a defect under the 2026-11-19 definition, and the GM asked that performance work come first, not that every measured part become a task. The filing criterion is the brief's, applied as stated."
+    },
+    {
+     "id": "T507-found-and-left",
+     "summary": "The prefilter's full-state read on every Bash call is not fixed here; filed as T508, lands before T302, because a measurement task builds nothing and choosing among the three priced routes is a build.",
+     "class": "within",
+     "why": "The task is a measurement task by its line; the fix is filed with its figures, a reason and an order, as FR-009 asks, and as a performance task it goes ahead of other work under FR-013. No wrong outcome is carried into the next step."
+    },
+    {
+     "id": "T507-no-red-test",
+     "summary": "No red test, nothing built; the tree's sources unchanged.",
+     "class": "within",
+     "why": "FR-012's red-first tests are for refusals; this task adds none and changes no source."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T506 (451 T490: the check state's partial read scans its skipped rows exactly, and serde's `IgnoredAny` scan was priced at about 5 to 8 ms a hook cheaper, measured 2026-11-27 (T490's `t490-pricing2.txt`))",
+    "### T506 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T506-D1",
+     "summary": "IgnoredAny for the partial read's skipped rows was built, timed against T505's build on a copy of the clone's state, and reverted: it saves about 1 ms a hook, inside the noise, not the 5 to 8 ms the task line priced; the exact scan (Skip) stays",
+     "class": "within",
+     "why": "The brief makes building conditional on the saving T490 measured; the measurement shows the 5 to 8 ms was the gap to the no-dispatches arm, not the scan's cost, so taking the else branch carries out the task as written. Nothing the GM asked for is narrowed: his request is to put performance first (2026-11-20), and a change that buys no measurable time while giving up exact reads of a skipped number past f64 or a lone surrogate is not a performance improvement. No wrong outcome is left in place. Note, not a ruling: the stated range '-0.3 to 1.2 ms' does not match the block's own rows. agent-post run 1 went 27.2 -> 29.3, which is -2.1, so across five cases and two runs the range is -2.1 to 1.2. That only strengthens the conclusion, but items 'D1' and '9. Done, measured' should state it as measured."
+    },
+    {
+     "id": "T506-doc",
+     "summary": "No code moves except Skip's doc comment, which records that IgnoredAny was measured and left; no red test because nothing was built",
+     "class": "within",
+     "why": "FR-012's red-first tests cover the refusals of FR-006 to FR-009, FR-011 and FR-013. This task adds no refusal and no behavior, so no test is owed. A doc comment recording the measured outcome is the brief's 'else record why not'."
+    },
+    {
+     "id": "T506-left",
+     "summary": "The partial read's remaining 5 to 8 ms of CPU a hot hook (bash-pre 17.0 to 18.6 against 10.9) is left with its cause unpriced, and profiling it is filed as T507 to land before T302",
+     "class": "within",
+     "why": "Slowness that still gives correct answers is not a defect (constitution XIV: a defect is a wrong outcome), so 'fix all known bugs' does not reach it. The time is not dropped: it is filed as its own measurement task with an order, and the item gives the why, the id and the order that FR-009 asks of a found-and-left item. Under FR-013 and the GM's 2026-11-20 words, measuring where time goes counts as performance work and is scheduled first, so T507 should carry [perf] on its line. This bundle does not show that line, so the tag could not be checked here."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T506 (451 T490: the check state's partial read scans its skipped rows exactly, and serde's `IgnoredAny` scan was priced at about 5 to 8 ms a hook cheaper, measured 2026-11-27 (T490's `t490-pricing2.txt`))",
+    "### T506 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T506-D1",
+     "summary": "IgnoredAny priced in place of the exact Skip scan for the partial read's skipped rows, found to save about 1 ms a hook (-2.1 to 1.2 ms, inside the noise) rather than 5 to 8, and not built; the exact scan stays and its doc comment records the measurement.",
+     "class": "within",
+     "why": "The task's brief made building conditional on the saving T490 priced; the measurement says the condition is not met, and the brief's own else branch (record why not) is taken. Nothing the GM asked is narrowed: his performance-first rule (FR-013) is served by measuring, and leaving a change that saves nothing measurable while keeping exact parsing is not leaving a defect (no wrong outcome: every answer reads as the whole parse reads it). Figures carry dated method labels."
+    },
+    {
+     "id": "T506-no-red-test",
+     "summary": "No red test, since no code but a doc comment moved.",
+     "class": "within",
+     "why": "FR-012's red-first tests are owed by refusals of FR-006 to FR-009, FR-011 and FR-013; this task builds no refusal and changes no behavior."
+    },
+    {
+     "id": "T506-order",
+     "summary": "Runs after T490 and T505 (the build it was timed against), before T302; one landing.",
+     "class": "within",
+     "why": "Ordering and budget the spec leaves open; consistent with FR-013's performance-first ordering."
+    },
+    {
+     "id": "T506-found-and-left",
+     "summary": "The partial read's remaining 5 to 8 ms of CPU a hot hook over the no-dispatches arm is left to T507 (a profile to find its cause), landing before T302.",
+     "class": "within",
+     "why": "A hook's CPU cost is not a wrong outcome under constitution XIV's definition of a defect, and its cause is outside this task's brief (the scan, which was priced). It is not dropped: filed as T507 with its reason and its order ('lands before T302'), as FR-009 requires of a deferral, and as measurement-of-where-time-goes work it counts as performance work under FR-013 and so is scheduled first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T507 (451 T506: after T490's partial read a Bash call under a plan hold still cost 17.0 to 18.6 ms of CPU in its PreToolUse against 10.9 for a state with no `dispatches`, and the exact scan was about 1 ms of it, measured 2026-11-27 (`t490-time.py`, 20 runs))",
+    "### T507 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T507-D1",
+     "summary": "The split is measured by in-process stamps (wall, process CPU, faults) in a scratch build of HEAD outside the tree, because perf/gdb/strace are refused in the container; the stamps' own cost stated (under 0.8 ms a call).",
+     "class": "within",
+     "why": "A choice of instrument for a measurement task; it narrows nothing the GM asked. The GM asked that time be measured so we know where it goes (2026-11-22) and that measurement work count as performance work (2026-11-20); the method measures, with its overhead and load stated, on copies of the state only."
+    },
+    {
+     "id": "T507-D2",
+     "summary": "The gap over the no-dispatches state split by part: prefilter 54% (its read, split_once, drop), Part::read 22-23%, partial parse 30%, hook's own work negative; page faults about 1.4 ms of each 2.6 MB read.",
+     "class": "within",
+     "why": "The task's measured result, not a narrowing; each figure carries a dated method label. Percentages are consistent with the stated parts (4.09/7.54 = 54%, 1.64/7.54 = 22%, 2.26/7.54 = 30%)."
+    },
+    {
+     "id": "T507-D3",
+     "summary": "The same prefilters run on every Bash call outside a hold (4.83 ms of PreToolUse's 7.11, 2.75 of PostToolUse's 4.72), about 47 s CPU/day over 6,141 calls.",
+     "class": "within",
+     "why": "A further measured finding widening what is known of the cost; it serves the GM's 'we want everything measured so we know where our time goes' and narrows nothing."
+    },
+    {
+     "id": "T507-D4",
+     "summary": "File the prefilter lever as T508 (one part is most of the gap, 54%); file nothing for Part::read's faults or the dispatches parse (each under a third).",
+     "class": "within",
+     "why": "The lever is filed, as a performance task ordered first per FR-013 and the GM's 'priotitize performance improvements' (2026-11-20). Leaving the smaller parts unfiled leaves no defect: a CPU cost that gives no wrong outcome is not a defect under the 2026-11-19 definition, and the GM asked that performance work come first, not that every measured part become a task. The filing criterion is the brief's, applied as stated."
+    },
+    {
+     "id": "T507-found-and-left",
+     "summary": "The prefilter's full-state read on every Bash call is not fixed here; filed as T508, lands before T302, because a measurement task builds nothing and choosing among the three priced routes is a build.",
+     "class": "within",
+     "why": "The task is a measurement task by its line; the fix is filed with its figures, a reason and an order, as FR-009 asks, and as a performance task it goes ahead of other work under FR-013. No wrong outcome is carried into the next step."
+    },
+    {
+     "id": "T507-no-red-test",
+     "summary": "No red test, nothing built; the tree's sources unchanged.",
+     "class": "within",
+     "why": "FR-012's red-first tests are for refusals; this task adds none and changes no source."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T508 (451 T507, `dev/measurements/2026-11-27/t507-part-cost/results.md`: the Bash hooks' prefilters read the whole 2.6 MB check state to find one key on every Bash call, 4.83 ms of a no-hold `PreToolUse`'s 7.11 and 2.75 of a `PostToolUse`'s 4.72, measured 2026-11-27 (`t507-time.py`, 20 runs))",
+    "### T508 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T508-D1",
+     "summary": "Stream the state in 64 KiB chunks (CHUNK, a GUESS knob) with memmem, carrying needle.len()-1 bytes across chunk edges; after \"plan_holds\": apply the old trim/{/not-} test on the decoded prefix. The read no longer stops at the first match (a yes reads on to check UTF-8).",
+     "class": "within",
+     "why": "Implements the task's own goal (a Bash call's hooks stop reading the whole state for one key), which is performance work FR-013 puts first; the GUESS knob is declared as the project's rules require. No verdict or message changes."
+    },
+    {
+     "id": "T508-D2",
+     "summary": "UTF-8 is checked over every byte as read_to_string did, so a file with a bad byte anywhere stays a no to both prefilters; a yes reads to the end. Measured that leaving the check out let checks-hooks' PostToolUse overwrite a non-UTF-8 state where HEAD left it alone.",
+     "class": "within",
+     "why": "Keeps every verdict as the brief requires and removes a wrong outcome the earlier draft would have introduced (the earlier block's claim that the hook answers the same was contradicted by measurement). Fixing a found defect within its own step is what the GM's fix-as-we-go rule asks; this narrows nothing."
+    },
+    {
+     "id": "T508-D3",
+     "summary": "Route B (stream) chosen over A (whole-string memmem) and C (A plus handing the string to handle under a hold), priced on the same arms in runs 3 and 4 with the UTF-8 check built; C's under-a-hold saving can be had beside B and is filed as T509.",
+     "class": "within",
+     "why": "The brief is to price T507's three routes and build the one that saves most; B saves most in every case but bash-pre under a hold, and the remaining saving is not dropped but filed as further performance work, consistent with FR-013 and the GM's 2026-11-20 priority."
+    },
+    {
+     "id": "T508-D4",
+     "summary": "No prefix read: the key is searched in the whole file because sorted keys put plan_holds/plan_snaps after the bulk (byte 1,999,829 of 2,618,222).",
+     "class": "within",
+     "why": "A correctness choice that keeps every verdict; unchanged from the block's earlier CLEAR text."
+    },
+    {
+     "id": "T508-D5",
+     "summary": "Every verdict unchanged: differential over five state copies at 71 to 95 chunk sizes, 0 differing; crate test on 27 fixtures (6 non-UTF-8) at every chunk size; timing runs show one distinct output per case.",
+     "class": "within",
+     "why": "Verification that enforces the brief's keep-every-verdict constraint; serves the request."
+    },
+    {
+     "id": "T508-other-readers",
+     "summary": "A grep of the guards for checks-open.json, state_path and calls into checks:: finds no other hot-path reader that reads the whole state for one key; search space stated.",
+     "class": "within",
+     "why": "A census with its search space and method named; it decides nothing beyond scope of this task and leaves nothing a defect."
+    },
+    {
+     "id": "T508-order-and-found-left",
+     "summary": "Order: after T507, before T509 and T302. Under a hold the stream reads the whole file and handle reads it again (0.45 to 0.83 ms against C); not fixed here, filed as T509, lands before T302.",
+     "class": "within",
+     "why": "The double read is time, not a wrong outcome, so it is not a defect deferral; it is filed as performance work ordered ahead of the next task, which is what the GM's performance-first rule asks. The earlier text left it unfiled; filing it widens, not narrows, what is done."
+    },
+    {
+     "id": "T508-approach-checklist",
+     "summary": "Checklist part A: goal, constraints, sources, exits (green: differential 0 and CPU down; red: recorded and ruled via arbiter-ask), one landing, done measured (PreToolUse 7.29/6.98 to 3.32/3.46 ms, PostToolUse 5.72/5.90 to 3.42/3.43), CHUNK a GUESS knob, not a defect.",
+     "class": "within",
+     "why": "Restates the task's brief and measured outcome; no clause of the request is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T509 (<why: the finding or measurement that files it>)",
+    "### T509 Approach (checklist part A)",
+    "### T511 (<why: the finding or measurement that files it>)",
+    "### T511 Approach (checklist part A)",
+    "### T521 (the GM 2026-11-27, request.md: no percentage beside a count, and the same day, of the line classes, shares only of time and tokens)",
+    "### T521 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T509/T511 blocks",
+     "summary": "T509 and T511 sections and Approach checklists are the unfilled task-add template (placeholders only).",
+     "class": "within",
+     "why": "A placeholder decides nothing the spec leaves open; there is nothing to rule. Once filled, each block changes and is owed review again."
+    },
+    {
+     "id": "T521-D1",
+     "summary": "Size table's test-run and compile counts print raw with their own category's minutes per run ('2, 1.3 min each'), the count alone at zero; make runs and turn columns print the count alone; Turns::calls (read only by the turn share) removed.",
+     "class": "within",
+     "why": "The GM 2026-11-27, 'I don't know that it's useful to see percentages for counts the way that it is to see percentages for time', removes the count shares. The minutes-per-run figure is the plan's own addition (its checklist item 3 credits the task line, not the GM). It sits beside the count, which his T512 words ask to see 'next to the amount of time we spent recompiling', and it removes nothing he asked for, so it is no narrowing. Turns::calls was read only by the share being removed, so dropping it is internal."
+    },
+    {
+     "id": "T521-D2",
+     "summary": "Target table's '% of runs' column becomes 'minutes per run' (row minutes over runs, '-' with no run), one helper for both tables.",
+     "class": "within",
+     "why": "'% of runs' is a percentage of a count, which the GM's 2026-11-27 words withdraw; its replacement pairs the count with its time as his T512 words ask."
+    },
+    {
+     "id": "T521-D3",
+     "summary": "Test, non-test and prose line classes print '+add -del' with no share.",
+     "class": "within",
+     "why": "Lines are counts in the GM's own words: T512 asks for 'the total number of lines added / deleted / modified' in the same breath as 'the number of times that the tests were run' and 'the number of turns'. His recorded 2026-11-27 words on counts therefore reach them. The block cites a second GM message of 2026-11-27 that the bundle's request.md does not hold. It was not weighed, and this decision does not need it."
+    },
+    {
+     "id": "T521-D4",
+     "summary": "All time percentages kept (category, target, grouped, own-path tables; minutes and blocking); token shares kept (each kind's share of the task's tokens, each actor's share); heading, footnote and module doc say 'a share only of time and of tokens'.",
+     "class": "within",
+     "why": "Keeping these shares keeps what the GM asked for on this report: T243, 'make sure to include percentages ... so that I don't have to do the percentage math in my head', and T512, 'includes percentages as well'. His recorded 2026-11-27 words withdraw only percentages of counts. His example was a share of runs, '15 (55.6%)' test runs of test runs and compiles together, and time is kept in so many words. Tokens are not a count of events in his words but a resource spent, like time: 'efficient use of tokens is a huge project goal' and 'the real limit on throughput is often tokens'. Nothing recorded withdraws the token shares, so keeping them is the request, not a carve-out from it. The block's relayed second message of 2026-11-27 ('shares only for time and tokens') is not in the bundle's request.md and was not weighed. It must reach request.md, as the block says it will."
+    },
+    {
+     "id": "T521-D5",
+     "summary": "Done measured on the overnight window: no share beside a count or line class in the size table, task lines or target table.",
+     "class": "within",
+     "why": "The GM asked to see the report over the overnight window (T512 words); this measures exactly the requested change there."
+    },
+    {
+     "id": "T521 checklist",
+     "summary": "Order after T512 and before the process review; T512's figures and their sources unchanged, only their printing; item 12 'not a defect: the GM's change'; Found and left: none.",
+     "class": "within",
+     "why": "The block orders the change after the work it amends and changes only what the GM's words change. A requested presentation change is not a defect fix. None of these leaves anything asked for undone."
+    },
+    {
+     "id": "T521 perf",
+     "summary": "Filed as performance work.",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 count measuring where time goes as performance work for ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T509 (<why: the finding or measurement that files it>)",
+    "### T509 Approach (checklist part A)",
+    "### T511 (<why: the finding or measurement that files it>)",
+    "### T511 Approach (checklist part A)",
+    "### T520 (the GM 2026-11-27 on what T515's prune leaves: \"that is more than what I would have expected\"; the cache's working set one full build per tree, six trees over, observed 2026-11-27, method: `make cache-clean DRY=1` and `du` per tree)",
+    "### T520 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T509/T511 stubs",
+     "summary": "T509's and T511's blocks are the unfilled section template (placeholders only)",
+     "class": "within",
+     "why": "A placeholder decides nothing; there is no decision to rule on until the sections are written."
+    },
+    {
+     "id": "T520 measurement-only",
+     "summary": "T520 is a measurement: no source changed, nothing built in the sweep, nothing deleted from the real cache; it prices four levers in GB freed against rebuild minutes, with the disk before and after",
+     "class": "within",
+     "why": "Answers the GM's 2026-11-27 words on what T515 leaves ('that is more than what I would have expected') under his 2026-11-26 principle ('we definitely don't want to clean things up if it is going to cost us time later'): pricing each lever's disk against its minutes, for him to choose, is what that principle requires before any cleanup that could cost time."
+    },
+    {
+     "id": "T520 (a)",
+     "summary": "Pool trees' idle cover-* profiles (23.2 GB) priced with their cold-rebuild cost and left as a candidate for the GM, not built",
+     "class": "within",
+     "why": "The GM's 2026-11-26 words address exactly this case ('If things rarely use that one coverage, but then it saves us a ton of time when they do, then we probably don't want to clean it just because it's been idle'); leaving the eviction to him with its price follows that rule."
+    },
+    {
+     "id": "T520 (b)",
+     "summary": "Holding b1 cold (about 15 GiB) priced as a knob for the GM, not built",
+     "class": "within",
+     "why": "Priced in rebuild seconds at 3 and 4 builders; a lever that can cost time is put to the GM rather than built, per his time-over-disk principle."
+    },
+    {
+     "id": "T520 (c)",
+     "summary": "A shared third-party build cache (at most 10.6 GB freed) declined: sccache measured 0 hits twice, a shared target directory serializes builds on cargo's lock",
+     "class": "within",
+     "why": "The GM asked for no shared cache; the option is priced and reported, and declining it on measured grounds that it would cost build time is his own 2026-11-26 rule, not a narrowing of anything requested."
+    },
+    {
+     "id": "T520 (d) / T525",
+     "summary": "The landing tree's 39 GiB (about 10 after the prune) goes when land-alone retires and its -land worktree is removed; filed as T525, lands before T302",
+     "class": "within",
+     "why": "A cache that is live only while land-alone exists is taken by the existing dead-tree rule once the worktree goes; filing that step against T302's retirement, in D15's form, keeps it in the feature and ordered."
+    },
+    {
+     "id": "T520 folds T518",
+     "summary": "T518 (pool trees' idle cover-* priced with eviction cost, decision the GM's) is folded into T520 as option (a)",
+     "class": "within",
+     "why": "Same work and same outcome as T518's line; folding it changes no scope."
+    },
+    {
+     "id": "T520 found-and-left T523",
+     "summary": "The model trial's arms sharing one target directory (skewing m14's timings) and the sweep leaving 4.1 MB of 2026-10-30 root files are deferred to T523, lands before T517",
+     "class": "within",
+     "why": "A wrong outcome (a skewed measurement; a cleanup hole of the kind the GM's 2026-11-27 T515 words name) filed in D15's form to an ordered task inside the same feature, before the next disk task; a measurement task carrying no source change is a stated reason. Not a defect carried past the step."
+    },
+    {
+     "id": "T520 perf classification",
+     "summary": "T520 tagged [perf] as a measurement under FR-013; not an engine-speed task, so the performance checklist does not apply",
+     "class": "within",
+     "why": "FR-013 counts measurement of where the time goes as performance work for ordering; T520 measures the builders' rebuild minutes against each lever. Scheduling classification, not a narrowing."
+    },
+    {
+     "id": "T520 constants unchanged",
+     "summary": "L7R_CACHE_BUDGET_GB (100) and L7R_BUILDERS (3) unchanged; the levers that would move them are the GM's",
+     "class": "within",
+     "why": "Moves nothing the GM has not approved."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T510 (the GM 2026-11-27, request.md: the window table put the second tier at 568.3 of 680.0 working blocking minutes, 83.6%, every row's percentage of that one total, while the pool trees were busy 93%, 98% and 83% of 2026-11-27T02:00Z to 14:29Z, measured 2026-11-27 (`make task-time` and `tree-idle.py`, as T510's line records))",
+    "### T510 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T510-D1",
+     "summary": "Two sides, each its own denominator: the landings' side is every batch-keyed cell plus every `carry into the clone` cell; the tasks' side everything else but the GM's wait; two tables each ending in its own 100% row; the landings' side shows its categories.",
+     "class": "within",
+     "why": "The GM 2026-11-27: 'the landing should just be in its own separate category where its percentages should not really factor into the time that our tasks spend blocking ... the denominators should just be totally separate'. A carry into the clone is part of landing (T298: a task's own table ends at its carry), so putting it with the landings is the request's own reading. Showing the landings' categories serves 'its own separate category'."
+    },
+    {
+     "id": "T510-D2",
+     "summary": "Every other percentage follows its side: carry rows and the second tier's table of the landings' working time, the rest of the tasks'; the GM's rows and the all row stay of the whole; The biggest blocking and The whole window become the tasks' side's.",
+     "class": "within",
+     "why": "This is the request applied to every percentage. Keeping the GM's rows of the whole is amendment (i) of 2026-11-25 left as it was. Aside, not a ruling: D2 calls The whole window 'every non-batch key', while D1 puts carry-category cells on the landings' side by category. The wording should agree with D1, so that a carry booked to a task's key does not stay in the tasks' whole (0.8 min on the real window)."
+    },
+    {
+     "id": "T510-D3",
+     "summary": "Carries go on the landings' side through a render-side predicate (`landing_side`). The booking that gives a hand carry to its task (T298, T346) is left as it is.",
+     "class": "within",
+     "why": "This is an implementation choice that changes no outcome the GM asked about. Every carry still lands on the landings' side, and leaving the booking alone keeps T298's 'a task's own table ends at its carry'."
+    },
+    {
+     "id": "T510-D4-row",
+     "summary": "One cross-blocking row on the tasks' side, inside its blocking total, counting a task's wait on a landing: idle pool trees while a landing ran, and handouts refused while a done commit was not carried. Each second is counted once.",
+     "class": "within",
+     "why": "This is the request's 'except to the degree that things in one category actually are blocking things in the other category', for the direction the GM's message is about ('the implementation of our tasks in the builders was not blocked on this to the degree indicated'). The reverse direction needs no row. D1 puts every batch-keyed cell on the landings' side, so a landing's own waits are already in its denominator. The new row exists only because an idle tree is booked nowhere, and nothing in the bundle names a landing's wait on a task that falls on neither side."
+    },
+    {
+     "id": "T510-D4-source1-limits",
+     "summary": "The idle-tree source counts only from a release to a LATER handout of that tree, only while fewer than L7R_BUILDERS (default 3) trees are held, and never counts a tree that is not handed out again. It is stated as an upper bound.",
+     "class": "within",
+     "why": "Each limit measures 'actually blocking': idle time with no later demand, or beyond the pool's cap, is not a task waiting. Overcounting where the queue state is unknown is stated on the line, not hidden."
+    },
+    {
+     "id": "T510-D4-unrecorded-queue",
+     "summary": "Whether the queue held a READY entry while a tree stood free is not in the records. A later handout is taken to mean that work waited, and the line says it is an upper bound.",
+     "class": "within",
+     "why": "This inference overcounts, which errs toward showing blocking rather than hiding it, and it is said on the report's line. That matches amendment (l): 'it doesn't have to be 100% exact'."
+    },
+    {
+     "id": "T510-D4-refusal-reason",
+     "summary": "A refusal's reason is not read, because it lives only in tool results. A refusal is counted when its task has a done row and no carry since.",
+     "class": "within",
+     "why": "This is an inference from records the report does read, so the source is kept, not dropped. Amendment (l) accepts approximate attribution."
+    },
+    {
+     "id": "T510-D4-build-slot",
+     "summary": "A builder's wait on a build slot that a gate held is not counted again in the cross row, because it is already booked on the tasks' side as `waiting on a build slot`.",
+     "class": "within",
+     "why": "That time already sits in the tasks' denominator, which is what the GM's exception asks for. Counting it again in the cross row would double it. It is named on the report's line."
+    },
+    {
+     "id": "T510-D4-resume-held",
+     "summary": "A builder's resume held by a gate is not counted, because no record ties a message's delivery to a landing. The report's line says so.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the one real task-on-landing wait the row leaves out, an undercount of the GM's 'to the degree that things ... actually are blocking'. 'No record' alone would only make it awkward to count. It is legitimate on the GM's own words in amendment (l) of 2026-11-25: 'it doesn't have to be 100% exact ... what we're looking for here is just a broad understanding of where our time goes'. D4 also commits to naming the omission on the report's line, so the reader is not misled the way the GM objected to. Approximation here does not defeat the request's purpose: the 83.6% misreading the GM complained of is fixed whether or not this source is counted."
+    },
+    {
+     "id": "T510-D5",
+     "summary": "Done is measured on the real window 2026-11-27T02:00Z to 14:29Z: the tasks' side 137.1 blocking minutes with a cross row of 26.3, the landings' side 569.1, the GM 41.8, reconciled to the old report within 0.1 minute.",
+     "class": "within",
+     "why": "This measures the outcome the GM asked for, on the window he read. The figures carry D5's dated command label. D3's 0.8, 12.5 and 13.3 rest on 'over the real window', which D5 of the same block dates and commands, and that is accepted here as their route back to the run. 26.3/137.1 = 19.2% and 749 min x 0.26 is about 194 tree-minutes, both checked by hand."
+    },
+    {
+     "id": "T510-A-constraints",
+     "summary": "Part A items 2, 3 and 10: the second tier's booking (T298, T346, T403) is unchanged, the GM's row is as before, the transcript is not read, and L7R_BUILDERS is read at its default and not moved.",
+     "class": "within",
+     "why": "The request asks to change the denominators, not the booking. Keeping T298's booking and amendment (i)'s GM row is what earlier amendments asked. Reading the pool's own knob without moving it changes nothing the GM ruled on."
+    },
+    {
+     "id": "T510-found-and-left-T511",
+     "summary": "The misattribution of a hand carry to the next task's table since T394's dispatch-first order (and COMMIT= carries found as no carry) is left, filed as T511, and lands before T319.",
+     "class": "within",
+     "why": "This is outside this request: it concerns which task a carry is booked to, not the sides' denominators. Its deferral meets FR-009 (why, the filed id, 'lands before T319'), and part A item 5 orders T510 before T511. The claim that the sides are unaffected holds for both forms, because D1 decides the side by the cell's category, not by which task `tiers::carries` names."
+    },
+    {
+     "id": "T510-performance",
+     "summary": "Counted as performance work.",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'I would also like for this kind of measurement task to be counted as a performance task'. T510 corrects a measurement tool."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T506 to T511, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

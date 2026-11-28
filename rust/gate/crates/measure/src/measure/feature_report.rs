@@ -500,8 +500,9 @@ pub fn cli(args: &[String], env: &Env, clones: &Path) -> Reply {
     if !p.on("--write") {
         return reply(text, String::new(), 0);
     }
-    match std::fs::write(d.join("report.md"), &text) {
-        Ok(()) => reply(
+    // a split feature's report is cut into parts past the bound, as `make archive-split` cuts it (462 T555)
+    match l7r_shared::speckit::archive::report::write(&d, &text, d.join("archive").is_dir()) {
+        Ok(_) => reply(
             format!(
                 "{text}\nfeature-report: written to {}/report.md\n",
                 under(&root, &d)
@@ -509,10 +510,7 @@ pub fn cli(args: &[String], env: &Env, clones: &Path) -> Reply {
             String::new(),
             0,
         ),
-        Err(e) => raised(
-            text,
-            &format!("OSError: {}: {e}", d.join("report.md").display()),
-        ),
+        Err(e) => raised(text, &format!("OSError: {e}")),
     }
 }
 

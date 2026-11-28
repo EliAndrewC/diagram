@@ -1,0 +1,609 @@
+{
+ "blocks": {
+  "### T228 (page session P7's cascade, 2026-11-24: `make apply-edits` refused a modal-form reply whole over three lines reading `EDIT: none - <why>`, the line the agent's contract gives; the session applied it from a hand-altered copy)": {
+   "sha256": "4f3dcb18933c843eb1c9dee6a653e39d8ce7bdf5e35a1c13345a93ba6114a45a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T228 Approach (checklist part A)": {
+   "sha256": "857f392d7cec84e3e222422a6c3a2774382c783df8166de475f7ac3755052e8d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T229 (page session P7's cascade, 2026-11-24: impl-drift's `NOTED, NOT FILED` line and modal-research's OUTSIDE THE CHANGE note filed nothing, as T219 meant, but neither recording command echoed them, so \"listed\" meant only in the saved reply)": {
+   "sha256": "558b8e5581d1a61f8c0aa98f9b1ca8e60576fda6560ecf79cf60ca02ddb235a7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T229 Approach (checklist part A)": {
+   "sha256": "e79203646e08b47129895b33fc9df93d51b393896f2ebd821b7f09951e15257a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed \"BLOCKED: every error static printed is in another task's files - ()\" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)": {
+   "sha256": "90b5f5a779ddb1c7fd3d3e082e5e4facb4ec1428b5361a7a7323f403e1af8927",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T230 Approach (checklist part A)": {
+   "sha256": "18fd5ae0dae1c2c4945c8843874b83967d4282b2ec49c6633bf154a2b7400bc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T231 (449 T418's and T422's plan-review rows were written by hand to land on 2026-11-24 while `make ledger-owed WRITE=` refused them as the landing's own; on 2026-11-25 nearly every push and commit of the coordinating session printed `ledger-owed: N check pass(es) have no row` naming MODE 4 plan reviews of tasks not yet landed, and spec-only pushes carried those rows forward)": {
+   "sha256": "74d3b593a5e4935b5d9507168e006a9df48f81ea624f3f21ac71b0bb11025ec4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T231 Approach (checklist part A)": {
+   "sha256": "b3a15a0dee2a58da65e80667bdbbe1cb3db7927d365b3c0b99be9791ddd01cc1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T228": {
+   "section_sha256": "e1cf495b23451ceef7b5d1a282e01b17fb30bd9f0eb5ac1208ba51e820daa1f0",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T228-1 parser unchanged",
+     "summary": "The parser half (unread_edits reading 'EDIT: none - <why>' as no block) is already on HEAD in 926e10e593; P7 ran on a tree without it; the task does not change the parser.",
+     "class": "within",
+     "why": "The wrong outcome (a correct reply refused whole) is already fixed on HEAD, measured 2026-11-25 by make apply-edits DRY=1 on P7's saved reply. Not changing an already-fixed parser drops nothing the task asked for."
+    },
+    {
+     "id": "T228-2 NO_EDIT constant",
+     "summary": "One NO_EDIT constant beside EDIT_FORM; the parser comment names it instead of a list of four agents.",
+     "class": "within",
+     "why": "Names the one form the contracts and parser share; serves the agreement the task pins and removes a stale list. No behavior beyond the task."
+    },
+    {
+     "id": "T228-3 real-reply fixture",
+     "summary": "P7's reply byte for byte as a fixture; a test asserts it reads whole with its 3 blocks.",
+     "class": "within",
+     "why": "A test that fails only when the requested fix is absent: enforcement of the fix, not unrequested scope."
+    },
+    {
+     "id": "T228-4 agent files vs parser test",
+     "summary": "A test reads .claude/agents/*.md: every no-edit line must hold NO_EDIT, the ten checks must still name it, and the parser must read NO_EDIT (plain, bulleted, indented, bold) as no block.",
+     "class": "within",
+     "why": "Verification only; it refuses no work, it goes red when contracts and parser drift apart, which is the failure that produced the incident. Its search space is the whole agents directory, so it is not a sample."
+    },
+    {
+     "id": "T228-5 reads line",
+     "summary": "rust/guard/shared/Cargo.toml reads gains .claude/agents/ and .claude/settings.json.",
+     "class": "within",
+     "why": "Without it the kept-green result skips the new test after an agent-file edit (measured), so it is needed for the test to enforce anything. Adding settings.json fixes a found defect in the same line (a kept green over a settings edit the crate's test reads), found by a stated grep: fix-as-we-go, not deferred."
+    },
+    {
+     "id": "T228-6 no further variants",
+     "summary": "No other no-edit form (e.g. a categorized 'EDIT (X): none') is added to the parser, because a grep over every -diagram transcript found none in real replies and all found read as no block on HEAD.",
+     "class": "within",
+     "why": "Measured with method and date; nothing that real replies write is refused, so no wrong outcome is left. Not adding unseen forms leaves no defect."
+    },
+    {
+     "id": "T228-7 order and exits",
+     "summary": "After 926e10e593, no dependency on T234; one landing; closing checks green or recorded red with a claim of impossibility ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and exits only; narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T229": {
+   "section_sha256": "34fd059bb087f72e84c5e320060a164d18b568c45609a8cc92c003cfa9aae799",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T229-D1 the reader's sections",
+     "summary": "Outside::said walks the reply's lines; an OUTSIDE THE CHANGE or NOTED, NOT FILED heading (with or without #, bold or colon) opens a section, ended by any other # heading, a --- rule, or prose after a blank line.",
+     "class": "within",
+     "why": "Widens the reader to the two forms P7's cascade actually used, so the notes the task line says were dropped are read; serves the GM's 2026-11-24 instruction to watch what cascades do, and narrows nothing."
+    },
+    {
+     "id": "T229-D2 OUTSIDE rows",
+     "summary": "In an OUTSIDE section a row naming its effect is filed as before; a row naming none, any other bullet, and the section's first-paragraph prose are listed.",
+     "class": "within",
+     "why": "Keeps T219's rule (filed only with its effect) and the convergence talk's 'only factual findings cascade'; adds listing, files nothing more."
+    },
+    {
+     "id": "T229-D3 an empty-section line (new since the first CLEAR)",
+     "summary": "A line saying the section is empty (None., none (every block ... listed)), never 'None of the pages ...', is no note and still ends its paragraph.",
+     "class": "within",
+     "why": "A line saying there is no note is not a note; echoing it would be a false listing. 'None of the pages ...' is kept as a note, so a real note is not swallowed by the form. Its frequency figure (13 of 23) carries a dated method label. Nothing the request or the task asks for is narrowed."
+    },
+    {
+     "id": "T229-D4 NOTED rows",
+     "summary": "In a NOTED, NOT FILED section every line is listed and none filed, whatever it names.",
+     "class": "within",
+     "why": "The check chose not to file; filing it would add the cascade the GM's convergence talk asked to stop. Every line is still echoed."
+    },
+    {
+     "id": "T229-D5 the echo line and its unit",
+     "summary": "Each listed note prints '<cmd>: listed, not filed - <file> | <block> | <note>', a note naming no file and block taking the reply's units (claim keys / answered units).",
+     "class": "within",
+     "why": "Is the echo the task asks for, with a unit so the session can place it."
+    },
+    {
+     "id": "T229-D6 where notes are kept",
+     "summary": "Kept in specs/<feature>/noted.jsonl (one row a note, deduplicated on check, file, block), named by the closing echo line and by make found-list; not found.jsonl; the task line's 'the round's report keeps them' read as this record, since no command keeps a round's report.",
+     "class": "within",
+     "why": "Keeps the notes where a later session meets them, which is what the task line's keeping is for; keeping them out of found.jsonl is T219's rule (a listed note is not open work), not a carve-out. The reading is stated with the measured reason (claims-index and answer stores hold no notes)."
+    },
+    {
+     "id": "T229-D7 preflight record",
+     "summary": "noted.jsonl is added to preflight.rs's feature records beside found.jsonl.",
+     "class": "within",
+     "why": "Treats the new record as a record the round writes; mechanical consequence of D6."
+    },
+    {
+     "id": "T229-D8 alternatives priced",
+     "summary": "The gitignored .git and the /tmp bundle directory priced and not taken.",
+     "class": "within",
+     "why": "Both would lose the note for a later session; the taken route keeps more, narrows nothing."
+    },
+    {
+     "id": "T229-D9 done, measured (new since the first CLEAR)",
+     "summary": "Item 9 records crate-checks green on owed, claims, record, measure and the new test red with HEAD's reader, green with the new one.",
+     "class": "within",
+     "why": "A record of the exits item 6 set, not a new decision; nothing deferred (found and left: none)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T230": {
+   "section_sha256": "5669e1a14261ba3e2e3195478cb2871e7c7b0041b41db010cadf8ca779d10254",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "theirs-by-filename",
+     "summary": "theirs tells another task's file list apart by FILENAME == o and skips an empty line; blocked returns on an empty attribution, never BLOCKED",
+     "class": "within",
+     "why": "Fixes the reported wrong outcome (BLOCKED on the caller's own errors, 449 T224/T433, T239) in the closing checks the GM asked filed as a performance task (2026-11-21); keeps T86's rule that a miss costs a saving, never a wrong verdict. No case of the fault is left unfixed."
+    },
+    {
+     "id": "arrow-opens-line",
+     "summary": "a path is read only from a line opening with ^ *--> or Diff in, so a quoted source line holding an arrow is not read as a path",
+     "class": "within",
+     "why": "Fixes a second wrong outcome found here (a red on another task's file quoting such a line went untagged); fixed in this task, nothing deferred."
+    },
+    {
+     "id": "panic-line-read",
+     "summary": "a failing test's 'thread ... panicked at <path>:<line>:<col>:' is read as an error's path",
+     "class": "within",
+     "why": "Closes the same vacuous BLOCKED one level up (another task's file named while the caller's own test failed); completes the attribution over every form static prints, which the block enumerates with a labeled observation and method (Makefile static recipe and rustc.rs writeln!/Ran), meeting FR-009's class-of-defect line."
+    },
+    {
+     "id": "unattributed-note-static-only",
+     "summary": "a static red whose lines name no file says none could be attributed and all are counted as the caller's, listing the first 8 failure lines of the counted red, an APART crate's lines left out; hooks-test and quick, counted whole under T86, carry no note",
+     "class": "within",
+     "why": "Not a narrowing: hooks-test and quick do no attribution (T86 counts them whole), so there is nothing unattributed to report there and no wrong outcome is left; leaving an APART crate's lines out follows T86's rule that another task's red is reported apart. The red stays red (counted as the caller's), so no verdict is weakened."
+    },
+    {
+     "id": "blocked-line-unchanged",
+     "summary": "the BLOCKED line's wording is left as it is, since it already names each file and its task once the attribution is read",
+     "class": "within",
+     "why": "A difference left as it is that is not a defect once the attribution is fixed; BLOCKED stays red as constraint 2 requires."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T231": {
+   "section_sha256": "072af231621ce48ff8e39d0c67a1e14e5b5f1ee44f303e71f4fc380faa2bb1ab",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "premise-corrected",
+     "summary": "The task line's premise (the hand write of 449 T418/T422's rows was needed because the landing disagreed with WRITE=) is corrected by replay: the landing wrote both rows and was refused on P7's passes; the listing, not the landing's check, disagreed. The fix is built on the corrected diagnosis.",
+     "class": "within",
+     "why": "Every symptom the task line names is still removed: the hand write against a refusing WRITE= (the listing no longer offers WRITE= for these rows), the 'N check pass(es) have no row' notice on unrelated pushes and commits (the listing and --brief leave an open task's review), and spec-only pushes carrying rows forward (the push's write leaves it). The correction changes the route, not the outcome; the replay is labeled with its date and method."
+    },
+    {
+     "id": "ownership-rule",
+     "summary": "A MODE 4 plan review whose task has an open line belongs to its task's landing (make land's write now passes --landing <feature> --tasks <its tasks>); the push's write with no landing, the push's and landing's checks, the listing and the commit notice all leave it and name it in the existing left note.",
+     "class": "within",
+     "why": "The task line's own goal ('one of the two writes them') and the constraints the block names (371/385 FR-019: every pass owes its row; 451 T105: no row written twice). Case walk: open and landed - the landing writes it; no open line - the next push writes it; open and not yet landed - left until its landing, which the push's and landing's checks already did (451 T147), so no row loses its writer. FR-019's refusal still names WRITE= for rows that are actually owed by hand; these are not."
+    },
+    {
+     "id": "next-push-listing",
+     "summary": "A recorded plan review whose task has no open line (ticked, withdrawn, absent, or a block review naming no task) is written by the next push, whichever it is, and the listing names it 'N recorded plan review row(s) the next push writes', never as WRITE='s.",
+     "class": "within",
+     "why": "Removes a tool answering wrongly (the notice told the session to run a command that refuses these rows) while keeping 385 T72's push-route write for every row that no landing owns."
+    },
+    {
+     "id": "open-means-open-line",
+     "summary": "left.rs's open test becomes an open '- [ ] T<n>' line in tasks.md instead of 'ticked in neither file', so a withdrawn or renumbered task is no longer open for ever.",
+     "class": "within",
+     "why": "Needed for the ownership rule not to leave a row unwritten for ever once the push's write also leaves open tasks' reviews; it widens who writes, narrows nothing. Pinned by the first test's T7 (no line) written by the push."
+    },
+    {
+     "id": "write-refusal-kept",
+     "summary": "make ledger-owed WRITE='s refusal of recorded plan reviews (451 T105) stays; its message names both owners (the task's landing, or the next push).",
+     "class": "within",
+     "why": "T105's constraint (a hand write must not write a row a landing writes again) is kept; the defect was the listing offering WRITE=, which the plan fixes; the refusal's message changes to name the real owner."
+    },
+    {
+     "id": "whose-rs-unchanged",
+     "summary": "whose.rs (451 T157, other checks' passes of a STARTED task) keeps its own ticked test.",
+     "class": "within",
+     "why": "A different class of pass whose rows the started task's session writes itself; nothing in this task changes who writes them, so the 'open for ever' consequence that motivates the left.rs change (a row nobody writes) is not created there. Not a defect left by this task."
+    },
+    {
+     "id": "readers-census",
+     "summary": "The fix's reach, 'every reader and writer of the rows', rests on the census of four readers (push check, landing check, push write, WRITE=, listing/--brief notice), measured 2026-11-25 by reading the code and replaying the real pass log and ledger.",
+     "class": "within",
+     "why": "Not a narrowing: the plan routes every named reader through left.rs's one split, the shared waist, so a caller through it inherits the fix. Limitation noted: the census's method is stated as 'the code', with no search command, so its reach could not be checked from the bundle (the reviewer read nothing in the repository, as the manifest directs)."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T228 (page session P7's cascade, 2026-11-24: `make apply-edits` refused a modal-form reply whole over three lines reading `EDIT: none - <why>`, the line the agent's contract gives; the session applied it from a hand-altered copy)",
+    "### T228 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T228-D1 parser unchanged",
+     "summary": "The parser is not changed: commit 926e10e593 already taught unread_edits that 'EDIT: none - <why>' opens no block; P7 ran on a tree without it; on HEAD make apply-edits DRY=1 reads P7's saved reply whole (measured 2026-11-25).",
+     "class": "within",
+     "why": "The wrong outcome (a correct check reply refused whole) is already fixed on HEAD, and that is measured, not assumed; not re-changing working code is no narrowing of anything asked."
+    },
+    {
+     "id": "T228-D2 NO_EDIT constant",
+     "summary": "NO_EDIT ('EDIT: none - <why>') becomes a constant beside EDIT_FORM, and the parser comment names it instead of a list of four agents.",
+     "class": "within",
+     "why": "Names the one form the agent contracts give and the parser reads; serves the fix of a guard firing on correct work (root CLAUDE.md) and adds no behavior."
+    },
+    {
+     "id": "T228-D3 P7 reply fixture",
+     "summary": "P7's real reply kept byte for byte as reply_p7_modal_form.txt; the_p7_modal_form_reply_is_read_whole asserts no unread line and 3 blocks.",
+     "class": "within",
+     "why": "A test whose only effect is to keep the fixed behavior fixed; red with the exemption off (measured). Enforcement of the fix, not unrequested scope."
+    },
+    {
+     "id": "T228-D4 agent files vs parser test",
+     "summary": "every_check_agent_names_the_no_edit_line_the_parser_reads: every no-edit line in .claude/agents/*.md must hold NO_EDIT; the ten checks that write it must still name it; the parser reads NO_EDIT plain, bulleted, indented or bold as no block.",
+     "class": "within",
+     "why": "A test that only fails when the contract and the parser disagree, i.e. when the refusal of correct work could recur; it refuses no work and blocks nothing. Enforcement of the fix."
+    },
+    {
+     "id": "T228-D5 reads line",
+     "summary": "rust/guard/shared/Cargo.toml reads gains .claude/agents/ and .claude/settings.json so an edit there reruns the crate's tests instead of keeping a stale green.",
+     "class": "within",
+     "why": "Without it D4's test is skipped on the very drift it exists to catch (measured 2026-11-25). The settings.json half fixes a found defect (an undeclared read letting a kept green stand), fixed in this task per fix-as-we-go, with how the instances were found stated (grep CARGO_MANIFEST_DIR, 3 hits)."
+    },
+    {
+     "id": "T228-D6 variant coverage",
+     "summary": "Only the NO_EDIT form (plain, bulleted, indented, bold) is read as no block; no categorized 'EDIT (X): none' or other variant is added, because a grep over every -diagram transcript found none and all real no-block lines read on HEAD.",
+     "class": "within",
+     "why": "Scope decided by a measured premise (transcript grep, 2026-11-25), not an assumption; no wrong outcome is left - every real reply reads. Not a narrowing."
+    },
+    {
+     "id": "T228-D7 fail-closed kept",
+     "summary": "451 T195's fail-closed rule stays: a header-shaped line in no block is still refused.",
+     "class": "within",
+     "why": "Preserves an earlier accepted rule; the fix exempts only the contract's own no-edit line, which is the correct work that was refused, and leaves the refusal of malformed replies intact."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T228 (page session P7's cascade, 2026-11-24: `make apply-edits` refused a modal-form reply whole over three lines reading `EDIT: none - <why>`, the line the agent's contract gives; the session applied it from a hand-altered copy)",
+    "### T228 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T228-1 parser unchanged",
+     "summary": "The parser half (unread_edits reading 'EDIT: none - <why>' as no block) is already on HEAD in 926e10e593; P7 ran on a tree without it; the task does not change the parser.",
+     "class": "within",
+     "why": "The wrong outcome (a correct reply refused whole) is already fixed on HEAD, measured 2026-11-25 by make apply-edits DRY=1 on P7's saved reply. Not changing an already-fixed parser drops nothing the task asked for."
+    },
+    {
+     "id": "T228-2 NO_EDIT constant",
+     "summary": "One NO_EDIT constant beside EDIT_FORM; the parser comment names it instead of a list of four agents.",
+     "class": "within",
+     "why": "Names the one form the contracts and parser share; serves the agreement the task pins and removes a stale list. No behavior beyond the task."
+    },
+    {
+     "id": "T228-3 real-reply fixture",
+     "summary": "P7's reply byte for byte as a fixture; a test asserts it reads whole with its 3 blocks.",
+     "class": "within",
+     "why": "A test that fails only when the requested fix is absent: enforcement of the fix, not unrequested scope."
+    },
+    {
+     "id": "T228-4 agent files vs parser test",
+     "summary": "A test reads .claude/agents/*.md: every no-edit line must hold NO_EDIT, the ten checks must still name it, and the parser must read NO_EDIT (plain, bulleted, indented, bold) as no block.",
+     "class": "within",
+     "why": "Verification only; it refuses no work, it goes red when contracts and parser drift apart, which is the failure that produced the incident. Its search space is the whole agents directory, so it is not a sample."
+    },
+    {
+     "id": "T228-5 reads line",
+     "summary": "rust/guard/shared/Cargo.toml reads gains .claude/agents/ and .claude/settings.json.",
+     "class": "within",
+     "why": "Without it the kept-green result skips the new test after an agent-file edit (measured), so it is needed for the test to enforce anything. Adding settings.json fixes a found defect in the same line (a kept green over a settings edit the crate's test reads), found by a stated grep: fix-as-we-go, not deferred."
+    },
+    {
+     "id": "T228-6 no further variants",
+     "summary": "No other no-edit form (e.g. a categorized 'EDIT (X): none') is added to the parser, because a grep over every -diagram transcript found none in real replies and all found read as no block on HEAD.",
+     "class": "within",
+     "why": "Measured with method and date; nothing that real replies write is refused, so no wrong outcome is left. Not adding unseen forms leaves no defect."
+    },
+    {
+     "id": "T228-7 order and exits",
+     "summary": "After 926e10e593, no dependency on T234; one landing; closing checks green or recorded red with a claim of impossibility ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and exits only; narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T229 (page session P7's cascade, 2026-11-24: impl-drift's `NOTED, NOT FILED` line and modal-research's OUTSIDE THE CHANGE note filed nothing, as T219 meant, but neither recording command echoed them, so \"listed\" meant only in the saved reply)",
+    "### T229 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 reader forms",
+     "summary": "The reply reader opens a section at OUTSIDE THE CHANGE or NOTED, NOT FILED (with or without #, bold or colon), so both forms P7's cascade actually produced - a bare NOTED heading and a pipe-less prose line under OUTSIDE - are read.",
+     "class": "within",
+     "why": "The task is that these notes were given to the recording command and dropped; reading both real forms is the fix itself, and it widens rather than narrows what is echoed."
+    },
+    {
+     "id": "D2 section end",
+     "summary": "A section ends at another # heading, a --- rule, or a prose line after a blank line (a closing paragraph); in OUTSIDE, rows naming no effect, other bullets and the first paragraph's prose are listed.",
+     "class": "within",
+     "why": "A parsing boundary that keeps a reply's closing paragraph from being echoed as a note; it excludes no form the saved replies or the agent files give a note, and the red-first test runs on the two P7 replies verbatim."
+    },
+    {
+     "id": "D3 filed vs listed",
+     "summary": "An OUTSIDE row naming its effect is filed as before; every line under NOTED, NOT FILED is listed and none filed, whatever it names.",
+     "class": "within",
+     "why": "Carries T219's rule unchanged (a note is filed only with its effect; the check chose not to file a NOTED line); nothing more is filed than T219 files, which serves the GM's convergence-talk aim that cascades not make changes that fix no real flaw."
+    },
+    {
+     "id": "D4 echo with unit",
+     "summary": "Each listed note prints '<cmd>: listed, not filed - <file> | <block> | <note>', or with the reply's units (claim keys / answered units) where it names no file and block.",
+     "class": "within",
+     "why": "The echo the task asks for, made to say which unit the note was read with so the session can act on it; adds no behavior beyond the echo."
+    },
+    {
+     "id": "D5 kept in noted.jsonl",
+     "summary": "Notes are kept, once per check/file/block, in the tracked specs/<feature>/noted.jsonl, house-styled; the echo names the file; make found-list ends with the count and path; preflight.rs lists it as a feature record. The task line's 'the round's report keeps them' is read as this record, since no command keeps a round's report.",
+     "class": "within",
+     "why": "Implements the task line's keeping of the notes where a later session (the one the GM's 2026-11-24 'make sure to take a look at what cascades happen' asks to watch cascades) meets them; tracked rather than .git or /tmp so another clone finds them. Not a narrowing: it keeps more, not less, and the reading of 'the round's report' is stated with its measured reason (the two existing round records hold no notes)."
+    },
+    {
+     "id": "D6 not found.jsonl",
+     "summary": "Notes are not written to found.jsonl and do not grow make found-list's open-row count.",
+     "class": "within",
+     "why": "Required by T219's rule that a listed note is not open work; preserves rather than narrows, and the GM's cascade concern is precisely that unfiled observations not become work."
+    },
+    {
+     "id": "D7 silent.rs untouched; order",
+     "summary": "After T219 and T218, independent of T227; T218's silent.rs reading of OUTSIDE lines is left as is.",
+     "class": "within",
+     "why": "Sequencing and a boundary with another task's code; no defect is named in silent.rs, and the section's found-and-left is 'none'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T229 (page session P7's cascade, 2026-11-24: impl-drift's `NOTED, NOT FILED` line and modal-research's OUTSIDE THE CHANGE note filed nothing, as T219 meant, but neither recording command echoed them, so \"listed\" meant only in the saved reply)",
+    "### T229 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T229-D1 the reader's sections",
+     "summary": "Outside::said walks the reply's lines; an OUTSIDE THE CHANGE or NOTED, NOT FILED heading (with or without #, bold or colon) opens a section, ended by any other # heading, a --- rule, or prose after a blank line.",
+     "class": "within",
+     "why": "Widens the reader to the two forms P7's cascade actually used, so the notes the task line says were dropped are read; serves the GM's 2026-11-24 instruction to watch what cascades do, and narrows nothing."
+    },
+    {
+     "id": "T229-D2 OUTSIDE rows",
+     "summary": "In an OUTSIDE section a row naming its effect is filed as before; a row naming none, any other bullet, and the section's first-paragraph prose are listed.",
+     "class": "within",
+     "why": "Keeps T219's rule (filed only with its effect) and the convergence talk's 'only factual findings cascade'; adds listing, files nothing more."
+    },
+    {
+     "id": "T229-D3 an empty-section line (new since the first CLEAR)",
+     "summary": "A line saying the section is empty (None., none (every block ... listed)), never 'None of the pages ...', is no note and still ends its paragraph.",
+     "class": "within",
+     "why": "A line saying there is no note is not a note; echoing it would be a false listing. 'None of the pages ...' is kept as a note, so a real note is not swallowed by the form. Its frequency figure (13 of 23) carries a dated method label. Nothing the request or the task asks for is narrowed."
+    },
+    {
+     "id": "T229-D4 NOTED rows",
+     "summary": "In a NOTED, NOT FILED section every line is listed and none filed, whatever it names.",
+     "class": "within",
+     "why": "The check chose not to file; filing it would add the cascade the GM's convergence talk asked to stop. Every line is still echoed."
+    },
+    {
+     "id": "T229-D5 the echo line and its unit",
+     "summary": "Each listed note prints '<cmd>: listed, not filed - <file> | <block> | <note>', a note naming no file and block taking the reply's units (claim keys / answered units).",
+     "class": "within",
+     "why": "Is the echo the task asks for, with a unit so the session can place it."
+    },
+    {
+     "id": "T229-D6 where notes are kept",
+     "summary": "Kept in specs/<feature>/noted.jsonl (one row a note, deduplicated on check, file, block), named by the closing echo line and by make found-list; not found.jsonl; the task line's 'the round's report keeps them' read as this record, since no command keeps a round's report.",
+     "class": "within",
+     "why": "Keeps the notes where a later session meets them, which is what the task line's keeping is for; keeping them out of found.jsonl is T219's rule (a listed note is not open work), not a carve-out. The reading is stated with the measured reason (claims-index and answer stores hold no notes)."
+    },
+    {
+     "id": "T229-D7 preflight record",
+     "summary": "noted.jsonl is added to preflight.rs's feature records beside found.jsonl.",
+     "class": "within",
+     "why": "Treats the new record as a record the round writes; mechanical consequence of D6."
+    },
+    {
+     "id": "T229-D8 alternatives priced",
+     "summary": "The gitignored .git and the /tmp bundle directory priced and not taken.",
+     "class": "within",
+     "why": "Both would lose the note for a later session; the taken route keeps more, narrows nothing."
+    },
+    {
+     "id": "T229-D9 done, measured (new since the first CLEAR)",
+     "summary": "Item 9 records crate-checks green on owed, claims, record, measure and the new test red with HEAD's reader, green with the new one.",
+     "class": "within",
+     "why": "A record of the exits item 6 set, not a new decision; nothing deferred (found and left: none)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed \"BLOCKED: every error static printed is in another task's files - ()\" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)",
+    "### T230 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T230-cause-theirs",
+     "summary": "The fault is located in the attribution awk (`theirs`, NR==FNR over an empty `others` file), not in parsing the error lines; `theirs` tells the list apart by FILENAME and skips an empty line.",
+     "class": "within",
+     "why": "Fixes a wrong outcome in this feature's own closing-checks tool (a gate telling a builder its own red is another task's), the 2026-11-21 closing-checks task; repairing the tool so it does what was filed is inside the request."
+    },
+    {
+     "id": "T230-blocked-empty",
+     "summary": "`blocked` returns on an empty attribution and never prints BLOCKED; BLOCKED only when every named file is another task's, naming the files.",
+     "class": "within",
+     "why": "Restores the verdict T86 already promised (a miss costs a saving, never a wrong verdict); the red stays red, nothing is relaxed."
+    },
+    {
+     "id": "T230-unattributed-message",
+     "summary": "A red whose lines name no file says none could be attributed, counts all as the caller's, and prints its first 8 error lines.",
+     "class": "within",
+     "why": "Follows T86's stated rule that a file no line names is the caller's; it turns a silent pass-over into a stated red. No refusal is widened or narrowed; the line count is message content, not scope."
+    },
+    {
+     "id": "T230-arrow-anchor",
+     "summary": "A path is read only from a line that opens with `-->` (after spaces) or `Diff in`, so a quoted source line containing an arrow is no longer read as a path.",
+     "class": "within",
+     "why": "A second wrong outcome found in the same code and fixed in the task (fix as we go); the two forms the anchor keeps are the two the plan observed in all 24 static logs (one-shot label, 2026-11-25, grep over .git/closing-checks/*/static.log), so no real error line is dropped."
+    },
+    {
+     "id": "T230-lands-with-T239",
+     "summary": "T239, the same fault filed twice, ticks in T230's landing.",
+     "class": "within",
+     "why": "Bookkeeping of a duplicate; no scope change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T230 (449 T224's builder, 2026-11-24, and 449 T433's, 2026-11-25: `make closing-checks T=<task>` printed \"BLOCKED: every error static printed is in another task's files - ()\" on errors in the task's own files; T239 is the same fault filed again and ticks with this task)",
+    "### T230 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "theirs-by-filename",
+     "summary": "theirs tells another task's file list apart by FILENAME == o and skips an empty line; blocked returns on an empty attribution, never BLOCKED",
+     "class": "within",
+     "why": "Fixes the reported wrong outcome (BLOCKED on the caller's own errors, 449 T224/T433, T239) in the closing checks the GM asked filed as a performance task (2026-11-21); keeps T86's rule that a miss costs a saving, never a wrong verdict. No case of the fault is left unfixed."
+    },
+    {
+     "id": "arrow-opens-line",
+     "summary": "a path is read only from a line opening with ^ *--> or Diff in, so a quoted source line holding an arrow is not read as a path",
+     "class": "within",
+     "why": "Fixes a second wrong outcome found here (a red on another task's file quoting such a line went untagged); fixed in this task, nothing deferred."
+    },
+    {
+     "id": "panic-line-read",
+     "summary": "a failing test's 'thread ... panicked at <path>:<line>:<col>:' is read as an error's path",
+     "class": "within",
+     "why": "Closes the same vacuous BLOCKED one level up (another task's file named while the caller's own test failed); completes the attribution over every form static prints, which the block enumerates with a labeled observation and method (Makefile static recipe and rustc.rs writeln!/Ran), meeting FR-009's class-of-defect line."
+    },
+    {
+     "id": "unattributed-note-static-only",
+     "summary": "a static red whose lines name no file says none could be attributed and all are counted as the caller's, listing the first 8 failure lines of the counted red, an APART crate's lines left out; hooks-test and quick, counted whole under T86, carry no note",
+     "class": "within",
+     "why": "Not a narrowing: hooks-test and quick do no attribution (T86 counts them whole), so there is nothing unattributed to report there and no wrong outcome is left; leaving an APART crate's lines out follows T86's rule that another task's red is reported apart. The red stays red (counted as the caller's), so no verdict is weakened."
+    },
+    {
+     "id": "blocked-line-unchanged",
+     "summary": "the BLOCKED line's wording is left as it is, since it already names each file and its task once the attribution is read",
+     "class": "within",
+     "why": "A difference left as it is that is not a defect once the attribution is fixed; BLOCKED stays red as constraint 2 requires."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T231 (449 T418's and T422's plan-review rows were written by hand to land on 2026-11-24 while `make ledger-owed WRITE=` refused them as the landing's own; on 2026-11-25 nearly every push and commit of the coordinating session printed `ledger-owed: N check pass(es) have no row` naming MODE 4 plan reviews of tasks not yet landed, and spec-only pushes carried those rows forward)",
+    "### T231 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "premise-corrected",
+     "summary": "The task line's premise (the hand write of 449 T418/T422's rows was needed because the landing disagreed with WRITE=) is corrected by replay: the landing wrote both rows and was refused on P7's passes; the listing, not the landing's check, disagreed. The fix is built on the corrected diagnosis.",
+     "class": "within",
+     "why": "Every symptom the task line names is still removed: the hand write against a refusing WRITE= (the listing no longer offers WRITE= for these rows), the 'N check pass(es) have no row' notice on unrelated pushes and commits (the listing and --brief leave an open task's review), and spec-only pushes carrying rows forward (the push's write leaves it). The correction changes the route, not the outcome; the replay is labeled with its date and method."
+    },
+    {
+     "id": "ownership-rule",
+     "summary": "A MODE 4 plan review whose task has an open line belongs to its task's landing (make land's write now passes --landing <feature> --tasks <its tasks>); the push's write with no landing, the push's and landing's checks, the listing and the commit notice all leave it and name it in the existing left note.",
+     "class": "within",
+     "why": "The task line's own goal ('one of the two writes them') and the constraints the block names (371/385 FR-019: every pass owes its row; 451 T105: no row written twice). Case walk: open and landed - the landing writes it; no open line - the next push writes it; open and not yet landed - left until its landing, which the push's and landing's checks already did (451 T147), so no row loses its writer. FR-019's refusal still names WRITE= for rows that are actually owed by hand; these are not."
+    },
+    {
+     "id": "next-push-listing",
+     "summary": "A recorded plan review whose task has no open line (ticked, withdrawn, absent, or a block review naming no task) is written by the next push, whichever it is, and the listing names it 'N recorded plan review row(s) the next push writes', never as WRITE='s.",
+     "class": "within",
+     "why": "Removes a tool answering wrongly (the notice told the session to run a command that refuses these rows) while keeping 385 T72's push-route write for every row that no landing owns."
+    },
+    {
+     "id": "open-means-open-line",
+     "summary": "left.rs's open test becomes an open '- [ ] T<n>' line in tasks.md instead of 'ticked in neither file', so a withdrawn or renumbered task is no longer open for ever.",
+     "class": "within",
+     "why": "Needed for the ownership rule not to leave a row unwritten for ever once the push's write also leaves open tasks' reviews; it widens who writes, narrows nothing. Pinned by the first test's T7 (no line) written by the push."
+    },
+    {
+     "id": "write-refusal-kept",
+     "summary": "make ledger-owed WRITE='s refusal of recorded plan reviews (451 T105) stays; its message names both owners (the task's landing, or the next push).",
+     "class": "within",
+     "why": "T105's constraint (a hand write must not write a row a landing writes again) is kept; the defect was the listing offering WRITE=, which the plan fixes; the refusal's message changes to name the real owner."
+    },
+    {
+     "id": "whose-rs-unchanged",
+     "summary": "whose.rs (451 T157, other checks' passes of a STARTED task) keeps its own ticked test.",
+     "class": "within",
+     "why": "A different class of pass whose rows the started task's session writes itself; nothing in this task changes who writes them, so the 'open for ever' consequence that motivates the left.rs change (a row nobody writes) is not created there. Not a defect left by this task."
+    },
+    {
+     "id": "readers-census",
+     "summary": "The fix's reach, 'every reader and writer of the rows', rests on the census of four readers (push check, landing check, push write, WRITE=, listing/--brief notice), measured 2026-11-25 by reading the code and replaying the real pass log and ledger.",
+     "class": "within",
+     "why": "Not a narrowing: the plan routes every named reader through left.rs's one split, the shared waist, so a caller through it inherits the fix. Limitation noted: the census's method is stated as 'the code', with no search command, so its reach could not be checked from the bundle (the reviewer read nothing in the repository, as the manifest directs)."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T228 to T231, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

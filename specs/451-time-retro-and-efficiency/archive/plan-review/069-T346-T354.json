@@ -1,0 +1,911 @@
+{
+ "blocks": {
+  "### T346, T382 (bundle) (a carry booked to the task that took the tree in its last second, and a builder's lines outside every span in no span: on 2026-11-26 the carry from diagram-backlog-t271 that ended 19:40:54Z read as T308's where T301 held the tree, and 60 agents' 4,149 own lines in the logs since 2026-11-21 were in no span, measured 2026-11-26 (Python passes over the pool log and every log's start, stop and by lines))": {
+   "sha256": "6b51e2b3710b926df889e4302a440bb0a6a86cf2936b7d8cb675ae2dc4962fbc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T346, T382 Approach (checklist part A)": {
+   "sha256": "f59a59c2cfc6d27dc7e868959c2e4cb5adbb2eaee2df346bf02fae6d8e8dd4a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T347 (2026-11-26, found by 451 T315's measurement: a builder's test build of one crate after a body edit waited 57.3, 18.2, 2.5 and 34.9 s for one of the machine's two build slots for compiles of 2.3 to 4.0 s, measured 2026-11-26, `dev/measurements/2026-11-26/test-run-split/body-edit.sh` and the `slot-wait` lines beside it)": {
+   "sha256": "66eb325a658d84477f95507fe3d73bde5d97e96b9fb7e0ecaa999d8a9444a51b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T347 Approach (checklist part A)": {
+   "sha256": "ba768c2c3fda71f9b75252578a6688887379a56e3d2fd26a64d505a371adc9f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T347 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "4746f434bffd8f0ded23d2fa049ababe7fc697cd1e042bf7dd990a9d67d11687",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T348 (<why: the finding or measurement that files it>)": {
+   "sha256": "bde7dadad84665b54d9f7328ab0d1a2ab38db0a3d34eccca56a387c08a5eaea8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T348 Approach (checklist part A)": {
+   "sha256": "adc743c4b37d5a6b93670943bd3ecdbc8b11a90c9e30094d14202d92a78180f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T349 (<why: the finding or measurement that files it>)": {
+   "sha256": "3178cf926a4154d08fba21fc27b408b23ea6cc07a94e6295abb1f331d54e9f5c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T349 Approach (checklist part A)": {
+   "sha256": "67ab8be9e0799bc75a19e258d002be4b522b79e611fb0a959474c6ad401ebdab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T350 (<why: the finding or measurement that files it>)": {
+   "sha256": "44d2bbafd1b4406df0b074282f2f516d87d1bb6b048a9873adc0569c84a97892",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T351 (<why: the finding or measurement that files it>)": {
+   "sha256": "f41c9e8ce324604b7170249ff4c88073bd74af3ad48878be22d04c91d5049c3f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T351 Approach (checklist part A)": {
+   "sha256": "2b2beaa2a651e7918aefedd6063dee7c36f2e62511db939db48d492593fb2b9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T353 Approach (checklist part A)": {
+   "sha256": "9fa8632c44b630cb3e906f3374408fa4a8ff7fca98561fdd484b008aa4e05a2d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)": {
+   "sha256": "75c6fd22e79dc3d5e78533a4934d97e338563fe1853a69334cba64de57eca87d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T354 (<why: the finding or measurement that files it>)": {
+   "sha256": "55d92bd0aedd84fcdfb25d94e399a68ab9194dc9c53f1871b9a98fc7103a2ddb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T354 Approach (checklist part A)": {
+   "sha256": "ae78f8bb719c0070004d9485a0c34c887c876dcb18263e2ab9554abaf0913853",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T346": {
+   "section_sha256": "61db892283fd715515ff73bd8d59e50dc8680d1b4e2c7501d05a961b06f6e3c3",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T346: holder read at the run's start",
+     "summary": "tiers::carries books a carry to the last pool-log take of the tree at or before the carry run's START, not its end",
+     "class": "within",
+     "why": "Fixes a wrong outcome in the task time breakdown the GM asked for (2026-11-25, T243): the 2026-11-26 carry of T301's work was booked to T308. Naming the right task is what the breakdown is for."
+    },
+    {
+     "id": "T346: a tree nobody held at the start is no task's carry",
+     "summary": "an unheld tree at run start books to no task, as a tree with no take already did",
+     "class": "within",
+     "why": "Keeps the existing rule for an unheld tree. The section's 27-carry pass over the pinned window found one carry re-booked and none lost, so nothing the breakdown counted is dropped."
+    },
+    {
+     "id": "T346: the carry's time stays its run's end",
+     "summary": "only the holder changes; batches still compares the run's end with the landing's",
+     "class": "within",
+     "why": "Changes nothing the task line asks to change."
+    },
+    {
+     "id": "T346: the live view follows",
+     "summary": "make task-progress reads the same function, so its staged list and carried lines name the start holder",
+     "class": "within",
+     "why": "Serves the GM's live view (2026-11-26, T293). The section measured a one-line diff in the old and new outputs, the expected one."
+    },
+    {
+     "id": "T382: own lines outside every span open a span",
+     "summary": "an agent's own line outside its spans opens a span to its next stop, else to span_end's end",
+     "class": "within",
+     "why": "Fixes a wrong outcome: 557.5 builder-minutes over 2026-11-21 to 11-24 were left out of the builder column while their turns were booked. The GM asked for everything measured (2026-11-22) and every minute named (amendment (c)). The section measured that no new span crosses a stopped stretch."
+    },
+    {
+     "id": "T382: span starts at the first own line, not the stop",
+     "summary": "the stop to the next own line stays T345's 'builders: stopped' time",
+     "class": "within",
+     "why": "Avoids counting the same minutes twice, which would itself distort the breakdown."
+    },
+    {
+     "id": "T382: lone line and kind-from-first-stop-else-?",
+     "summary": "a single own line with no later line or stop opens no span; an agent with no start line takes its kind from its first stop that names one, else ?",
+     "class": "within",
+     "why": "A lone line has no duration to book. Taking the kind from a stop keeps review agents out of the builder column, as the GM's split of reviewing from code work asks (2026-11-25). This is detail inside the requested fix and narrows nothing."
+    },
+    {
+     "id": "T382: new spans are in flight for waits",
+     "summary": "Flight::book treats a new span like a started one, so blocking rises 3539.9 to 3550.8 in the 2026-11-22 window",
+     "class": "within",
+     "why": "Under the GM's definition (l), a wait booked to a builder that was working is a wait on that builder. A session waiting on a builder inside a span that the lines show it working is blocking on that work."
+    },
+    {
+     "id": "T346, T382: two pinned tests restated",
+     "summary": "a_resumed_builder_is_booked_in_every_span_and_stopped_between_them and the_columns_book_make_runs_compile_and_until restated to the new readings",
+     "class": "within",
+     "why": "The tests pinned the wrong readings. Under fix-as-we-go (GM 2026-11-18), checks change as the defect they pinned is fixed. New red-first tests carry each rule."
+    },
+    {
+     "id": "T346, T382: performance work yes",
+     "summary": "counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "T346 (found and left): a bundle's carry is no task's, filed as T393",
+     "summary": "tiers::batches splits a bundle's pool detail '451 T324,T345' on whitespace only, so a bundle's carry is booked to no task; not fixed here, filed T393, lands before T380",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect left. It is a different one from either task line: how a bundle's pool detail is parsed, not when the holder is read. Fixing it needs a new rule for which bundled task a carry run books to. The GM's own words cover filing it: 2026-11-22, 'not bother cutting back on new tasks filed ... we can file new tasks just as fast as we are now if we bundle them together when fixing them'. It is filed and ordered, not dropped. The purpose test holds: T346's own measured mis-booking (T301/T308) and every other non-bundle carry are fixed by this section, so the deferral does not gut what T346 asked. T332 and T344 are pre-existing open tasks the section reports, not decisions it makes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T347": {
+   "section_sha256": "d3a865d3c27891ba498c4bdf9c761c1440a300b269c98f8227faecb9df993244",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "measure-first",
+     "summary": "The memory of a one-crate test build measured before the lane was built (0.19-0.64 GiB after a body edit, at most 1.42 GiB where the crate recompiles whole), against the wide builds the slot is for.",
+     "class": "within",
+     "why": "T347's line asks exactly this order: measure the memory of a one-crate test build first."
+    },
+    {
+     "id": "T347-D1",
+     "summary": "A lane of its own kind, one wide, knob L7R_BUILD_SLOTS_SMALL (GUESS), rather than no slot; its width argued from the 7 GiB margin's 1.6 GiB of room.",
+     "class": "within",
+     "why": "The line offers 'no slot or a slot of its own kind'; choosing the second, with the budget arithmetic shown and a knob, is a choice inside the offer and keeps T284's memory purpose."
+    },
+    {
+     "id": "T347-D2",
+     "summary": "A build is told alone by a kept content key of everything but the crate's own sources AND every keyed file being older than the key file.",
+     "class": "within",
+     "why": "How the class is recognized; the file-times half is measured (git checkout recompiled a dependency at an unchanged key). Mechanism, not scope."
+    },
+    {
+     "id": "T347-D3",
+     "summary": "Times read conservatively: a tie counts as newer, an unaskable time is not alone, anything unknown takes a wide slot.",
+     "class": "within",
+     "why": "Errs toward the behavior before the lane, which keeps T284's memory purpose; not a narrowing of the class, which is defined by what can be shown to compile one crate alone."
+    },
+    {
+     "id": "T347-D4",
+     "summary": "One telling per crate per run, shared by the binary-key build and a red build's second asking; runs that ask no binary key are wide.",
+     "class": "within",
+     "why": "Consistency of one answer within a run; the excluded runs (FRESH=1, outside a repository, test-no-counters) are not one-crate incremental builds."
+    },
+    {
+     "id": "T347-D5",
+     "summary": "The build after a healed link takes a wide slot; only the first build runs in the lane it was told.",
+     "class": "within",
+     "why": "After the heal drops fingerprints and incremental sessions the build is no longer of the class the lane is for; sending it wide is applying the rule, not excepting from it."
+    },
+    {
+     "id": "T347-D6",
+     "summary": "No lane where L7R_BUILD_SLOTS=0 or under a holder; with the lane at 0 nothing is told and the build is wide as before.",
+     "class": "within",
+     "why": "Preserves the existing off switch the measuring scripts rely on and gives the new knob an off position; neither narrows the lane where slots exist."
+    },
+    {
+     "id": "T347-D7",
+     "summary": "A lane that cannot be taken (no flock, the shared 900 s ceiling passed) runs the build without one and writes slot-small code 1; it never falls back to a wide slot.",
+     "class": "within",
+     "why": "Mirrors T284's own convention for the wide slot; refusing the wide fallback is what keeps the wait the task removes from returning."
+    },
+    {
+     "id": "T347-D8",
+     "summary": "Event lines slot-tell and slot-small; a lane wait written as slot-wait so where_time books it as waiting on a build slot; measure crate unchanged.",
+     "class": "within",
+     "why": "Serves the line's ask to say the waiting-on-a-build-slot minutes before and after, by keeping lane waits in that same category."
+    },
+    {
+     "id": "Deviation 1, 2, 4, 5",
+     "summary": "Module at rustc/kept/alone.rs (reads kept.rs privates), knob named L7R_BUILD_SLOTS_SMALL per the coordinating brief, the key also holds dependencies' compiled-in files and binary_args whole, the key file named by the crate's full path from the root.",
+     "class": "within",
+     "why": "Departures from a builder's handoff, not from the request or spec; placement and naming, or a key that is more complete (an edited include_str! target recompiles its crate), which keeps the telling correct."
+    },
+    {
+     "id": "Deviation 3",
+     "summary": "A build told alone never touches its key, pass or fail; a wide build writes <key>.new, renames it on a pass, removes it on a failure.",
+     "class": "within",
+     "why": "A behavior choice inside the lane's design: a red build of the crate alone moved no dependency, so its key still stands; removing it would send every run after a red build back to a wide slot, the wait the line asks removed. It narrows nothing asked and the key file is in the build's own target directory (no new disk residue outside it, T245/T246)."
+    },
+    {
+     "id": "include-fix",
+     "summary": "A compiled-in path stops at a line's end (kept.rs INCLUDE); the defect made the first two runs after each tool rebuild tell wide.",
+     "class": "within",
+     "why": "A wrong outcome (a kept key differing from the same key read fresh) found in the step and fixed in it, as FIX AS WE GO requires."
+    },
+    {
+     "id": "still-wide-by-design",
+     "summary": "First build in a target directory, after a dependency edit or checkout, FRESH=1, test-no-counters, pre-warm builds, lint, cargo test --doc, make test-times, a heal's second build stay on wide slots.",
+     "class": "within",
+     "why": "Each is outside the class the line names (a one-crate incremental test build, whose memory was what was measured) or cannot be told to be in it; kept as before the lane, not excluded from a rule that covered them. The pre-warm's first-build gap is ruled separately as T367."
+    },
+    {
+     "id": "after-minutes-deferred",
+     "summary": "make task-time's waiting-on-a-build-slot minutes AFTER the change are not given; the mechanism's wait (60 s to 1-2 ms with both wide slots held) stands in, and the day's figure is the coordinating session's to read after 24 h live, into dev/audits/build-slot.md.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible inside the task: a day of builders' slot waits under the lane exists only after the lane has landed. The before figure is given, the same command is named for the after, and the controlled before/after on the mechanism carries the line's purpose (showing the wait removed) in the meantime."
+    },
+    {
+     "id": "run-lock-not-filed",
+     "summary": "Two runs of one tree take turns on the run lock even with two target directories; not filed.",
+     "class": "within",
+     "why": "T23's existing rule, no wrong outcome; the lane is for builds of two trees, so nothing asked is narrowed."
+    },
+    {
+     "id": "concurrent-memory-not-measured",
+     "summary": "Two compiling small builds of two trees queued on the lane, and the lane beside two compiling wide holders, not measured; the memory falsifier is the sampler's report.",
+     "class": "within",
+     "why": "The line asks for the one-crate build's memory measured first, which was; the combined figure follows from measured parts and the audit names a falsifier. No requested measurement is dropped."
+    },
+    {
+     "id": "T367-prewarm-key",
+     "summary": "The pre-warm keeps no key, so a builder's first test build of each crate after a handout, sync or dependency edit is told wide though it may compile one crate alone; filed T367 (a performance task), lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the lane's reach inside the class T347's line names. It is not a defect under the standing definition (no wrong outcome: the build waits as it did before the lane, nothing refuses or answers wrongly), and of what a plan leaves unfixed only a defect is NOT LEGITIMATE; it is left by the conservative telling of D3 (no key, no proof), not carved out by choice, and it is carried by a filed performance task that lands before the next step, with its size (first builds a day) to be measured first as the line's own order asks. The coordinating brief's bar on prewarm.rs is context, not the ground."
+    },
+    {
+     "id": "T355-lint",
+     "summary": "A builder's lint (clippy) takes a wide slot whatever it compiles; filed T355, lands before T302.",
+     "class": "within",
+     "why": "Lint is not a test build, the class the line names, and its memory was not measured; the line's measure-first order keeps it wide."
+    },
+    {
+     "id": "T356-measure-cover",
+     "summary": "The coverage pass of rust/gate/crates/measure red on five lines in a pool tree where the landing's was green; filed T356, lands before T302.",
+     "class": "within",
+     "why": "A defect (a check refusing good work in one tree), but another crate's, found in passing and outside what T347 asks; FR-009's why, filed id and order are all stated, and it lands before T302, so it is not carried into the next step."
+    },
+    {
+     "id": "T357-leftover-process",
+     "summary": "An l7r_shared test process alive 66 minutes after its run; filed T357, lands before T302.",
+     "class": "within",
+     "why": "Another crate's test, found in passing, outside T347; why, id and order stated, lands before the next step."
+    },
+    {
+     "id": "T368-single-line-include",
+     "summary": "A string naming include_str! on one line is read as a compiled-in path with an empty id; filed T368, lands before T302.",
+     "class": "within",
+     "why": "No wrong outcome today (an empty id never moves the key); the residue of the in-task include fix, needing a token-level reader; why, id and order stated."
+    },
+    {
+     "id": "slot-test-either-order",
+     "summary": "A build-half test that asserted which wide slot each of two holders took now compares the two holders' names in either order.",
+     "class": "within",
+     "why": "It still requires both named holders, one in each slot, so it still pins two distinct slots taken; only the assignment order, which a just-released slot makes racy, is dropped."
+    },
+    {
+     "id": "per-test-time-none-split",
+     "summary": "No test of the new module split: slowest 0.57 s, none near a second; all over a 'tenth of a second' attributed to FR-008.",
+     "class": "within",
+     "why": "Inside the crate's existing practice. The citation is wrong: this feature's FR-008 is the background-run and poll-interval guard and says nothing of a tenth of a second; the plan should name the rule it means. A citation error, not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T352": {
+   "section_sha256": "4604f671aeac3443876d5f125b6f34e33aa7d26704232cfb9df39992163f6b2f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T352-exit",
+     "summary": "The cap's exit also takes any .md file under l7r-handoffs/ that the builder's own brief names; the refusal names the brief's first such file; the <agent_id>.md rule is kept for a brief naming none.",
+     "class": "within",
+     "why": "FR-006 lets a builder past the threshold write 'its handoff file, naming the file'. An exit that refuses the file its brief named is a tool refusing valid input, a defect against FR-006; taking the briefed name and keeping the old rule beside it repairs it without widening the exit past handoff files."
+    },
+    {
+     "id": "T352-brief-not-task-id",
+     "summary": "Match the briefed name rather than any name holding the task id.",
+     "class": "within",
+     "why": "A mechanism choice for the same FR-006 exit; it settles nothing the request or spec decides."
+    },
+    {
+     "id": "T352-resume",
+     "summary": "A resume's refusal names a written briefed file first, then <agent>.md, then the brief's first, then the cap's own name, and its 'not written yet' line follows the file named.",
+     "class": "within",
+     "why": "FR-006's resume refusal names the handoff; naming the one actually written fixes a wrong message (a build half told its handoff is unwritten)."
+    },
+    {
+     "id": "T352-landing",
+     "summary": "open_handoffs counts a build half's <task>-build.md (and a bundle's) as finished, so it is no longer named beside foreign changes as their likely writer; open stays T<n>-<agent id>.md.",
+     "class": "within",
+     "why": "open_handoffs refuses nothing by itself; it names a likely writer in writer_refusal's message. Naming a builder that ended as briefed as an open writer is a wrong answer; reconciling the landing's reading with the briefed names narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T417-band",
+     "summary": "A wrap-up band from the 300,000 cap to a 340,000 ceiling (a GUESS knob, falsifier in the audit) in which a builder may finish its stop point's steps; past the ceiling the guard is as before.",
+     "class": "within",
+     "why": "The GM's 2026-11-27 question challenges the abrupt cutoff because it stops builders 'even finishing their handoff', while conceding 'I understand wanting to hand off to a new builder'. A band that lets the stop point finish answers the question; a ceiling keeps the handoff he accepted and FR-006's threshold, and the 2026-11-26 words on closing builders out ('wary of needing to keep them around') support bounding it. The 340k figure is a coordinator's GUESS, not his words, and is labeled one."
+    },
+    {
+     "id": "T417-allowed-set-and-shapes",
+     "summary": "In the band: Read/Grep, a MODE 4 spec-fidelity dispatch, and Bash whose every simple command is allowed (cd, export, VAR=value, git status/diff, head/tail/grep, make decide/plan-delta/plan-verdict/claims-triage/claims-owed/task-add/task-withdraw/builder-checks), matched by invocation through shared::tree::commands; redirects not judged.",
+     "class": "within",
+     "why": "These are the stop point's mechanical steps the motivating builders were refused (heading: T315 and T325 'refused only the mechanical end of their stop points'); matching invocations not mentions follows the project's guard rule. The set is a strict loosening of the old guard."
+    },
+    {
+     "id": "T417-plan-delta",
+     "summary": "make plan-delta allowed though the task line's list omits it.",
+     "class": "within",
+     "why": "A widening of the coordinator's list toward the GM's purpose, not a narrowing of what he asked: it is the plan review's own command in every stop point and T325's refused step. Without it the band would refuse the case the request answers."
+    },
+    {
+     "id": "T417-second-round",
+     "summary": "A later plan-review round is admitted, judged as the original spec-fidelity MODE 4 call before review_round_hooks reroutes it.",
+     "class": "within",
+     "why": "T315's motivating case was a second round; admitting it serves the request directly."
+    },
+    {
+     "id": "T417-still-refused",
+     "summary": "In the band: Edit/Write of any file but the handoff, any other dispatch (claims-triage/impl-drift dispatches included), any other target or program, and SendMessage; the main session's resume of a builder past the cap stays refused.",
+     "class": "within",
+     "why": "The GM's question asks that a builder be let finish its handoff, and concedes the handoff itself; it does not ask that a capped builder keep writing code. The motivating cases were refused only the mechanical end of their stop points, and the goal sends code still owed to a fresh builder 'as before'. A plan review that returns findings in the band ends in a handoff, which is the behavior he accepted, not a narrowing of the loosening he asked for. The claims dispatch is split off by the GM's 2026-11-25 ruling, so refusing it in the band keeps that rule. Keeping the resume refused follows his 2026-11-26 words on closing builders out and FR-006."
+    },
+    {
+     "id": "T417-past-ceiling-unchanged",
+     "summary": "Past the ceiling the old refusal and its render are unchanged ('byte for byte its old render').",
+     "class": "within",
+     "why": "This describes unchanged behavior the plan chose to keep (the request's 'hand off' past a limit), with existing message-store rows left valid; it is not a port held to exactness against a replacement, so the struck exactness standard does not apply."
+    },
+    {
+     "id": "T417-other-readers",
+     "summary": "builder_stop_hooks, set_down_hooks::stalls and make task-progress unchanged; only the guard reads the ceiling.",
+     "class": "within",
+     "why": "Nothing in the request asks those readers to change; a band builder may still stop, and a stall is still marked."
+    },
+    {
+     "id": "T417-refusal-and-message",
+     "summary": "The band's refusal (wrap-up-refused) is recorded, red-first tested (suite 49 of 96 failing with the branch off), escapable by the existing CONTEXT_OK judged before the band, one message-checked wording naming what is still allowed and the handoff.",
+     "class": "within",
+     "why": "FR-012's three owed parts for a refusal of FR-006's guard: a red-first test, an escape of a reason, a message naming the compliant command; all three are present."
+    },
+    {
+     "id": "T417-T352-perf-and-order",
+     "summary": "Tagged [perf] under FR-013 (faster builders' loop), measured by wrap-up passes per builder against the re-read saved; T352 first, then the band.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order is a dependency the spec leaves open."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T346, T382 (bundle) (a carry booked to the task that took the tree in its last second, and a builder's lines outside every span in no span: on 2026-11-26 the carry from diagram-backlog-t271 that ended 19:40:54Z read as T308's where T301 held the tree, and 60 agents' 4,149 own lines in the logs since 2026-11-21 were in no span, measured 2026-11-26 (Python passes over the pool log and every log's start, stop and by lines))",
+    "### T346, T382 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T346: holder read at the run's start",
+     "summary": "tiers::carries books a carry to the last pool-log take of the tree at or before the carry run's START, not its end",
+     "class": "within",
+     "why": "Fixes a wrong outcome in the task time breakdown the GM asked for (2026-11-25, T243): the 2026-11-26 carry of T301's work was booked to T308. Naming the right task is what the breakdown is for."
+    },
+    {
+     "id": "T346: a tree nobody held at the start is no task's carry",
+     "summary": "an unheld tree at run start books to no task, as a tree with no take already did",
+     "class": "within",
+     "why": "Keeps the existing rule for an unheld tree. The section's 27-carry pass over the pinned window found one carry re-booked and none lost, so nothing the breakdown counted is dropped."
+    },
+    {
+     "id": "T346: the carry's time stays its run's end",
+     "summary": "only the holder changes; batches still compares the run's end with the landing's",
+     "class": "within",
+     "why": "Changes nothing the task line asks to change."
+    },
+    {
+     "id": "T346: the live view follows",
+     "summary": "make task-progress reads the same function, so its staged list and carried lines name the start holder",
+     "class": "within",
+     "why": "Serves the GM's live view (2026-11-26, T293). The section measured a one-line diff in the old and new outputs, the expected one."
+    },
+    {
+     "id": "T382: own lines outside every span open a span",
+     "summary": "an agent's own line outside its spans opens a span to its next stop, else to span_end's end",
+     "class": "within",
+     "why": "Fixes a wrong outcome: 557.5 builder-minutes over 2026-11-21 to 11-24 were left out of the builder column while their turns were booked. The GM asked for everything measured (2026-11-22) and every minute named (amendment (c)). The section measured that no new span crosses a stopped stretch."
+    },
+    {
+     "id": "T382: span starts at the first own line, not the stop",
+     "summary": "the stop to the next own line stays T345's 'builders: stopped' time",
+     "class": "within",
+     "why": "Avoids counting the same minutes twice, which would itself distort the breakdown."
+    },
+    {
+     "id": "T382: lone line and kind-from-first-stop-else-?",
+     "summary": "a single own line with no later line or stop opens no span; an agent with no start line takes its kind from its first stop that names one, else ?",
+     "class": "within",
+     "why": "A lone line has no duration to book. Taking the kind from a stop keeps review agents out of the builder column, as the GM's split of reviewing from code work asks (2026-11-25). This is detail inside the requested fix and narrows nothing."
+    },
+    {
+     "id": "T382: new spans are in flight for waits",
+     "summary": "Flight::book treats a new span like a started one, so blocking rises 3539.9 to 3550.8 in the 2026-11-22 window",
+     "class": "within",
+     "why": "Under the GM's definition (l), a wait booked to a builder that was working is a wait on that builder. A session waiting on a builder inside a span that the lines show it working is blocking on that work."
+    },
+    {
+     "id": "T346, T382: two pinned tests restated",
+     "summary": "a_resumed_builder_is_booked_in_every_span_and_stopped_between_them and the_columns_book_make_runs_compile_and_until restated to the new readings",
+     "class": "within",
+     "why": "The tests pinned the wrong readings. Under fix-as-we-go (GM 2026-11-18), checks change as the defect they pinned is fixed. New red-first tests carry each rule."
+    },
+    {
+     "id": "T346, T382: performance work yes",
+     "summary": "counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "T346 (found and left): a bundle's carry is no task's, filed as T393",
+     "summary": "tiers::batches splits a bundle's pool detail '451 T324,T345' on whitespace only, so a bundle's carry is booked to no task; not fixed here, filed T393, lands before T380",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real defect left. It is a different one from either task line: how a bundle's pool detail is parsed, not when the holder is read. Fixing it needs a new rule for which bundled task a carry run books to. The GM's own words cover filing it: 2026-11-22, 'not bother cutting back on new tasks filed ... we can file new tasks just as fast as we are now if we bundle them together when fixing them'. It is filed and ordered, not dropped. The purpose test holds: T346's own measured mis-booking (T301/T308) and every other non-bundle carry are fixed by this section, so the deferral does not gut what T346 asked. T332 and T344 are pre-existing open tasks the section reports, not decisions it makes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T347 (2026-11-26, found by 451 T315's measurement: a builder's test build of one crate after a body edit waited 57.3, 18.2, 2.5 and 34.9 s for one of the machine's two build slots for compiles of 2.3 to 4.0 s, measured 2026-11-26, `dev/measurements/2026-11-26/test-run-split/body-edit.sh` and the `slot-wait` lines beside it)",
+    "### T347 Approach (checklist part A)",
+    "### T347 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "measure-first",
+     "summary": "The memory of a one-crate test build measured before the lane was built (0.19-0.64 GiB after a body edit, at most 1.42 GiB where the crate recompiles whole), against the wide builds the slot is for.",
+     "class": "within",
+     "why": "T347's line asks exactly this order: measure the memory of a one-crate test build first."
+    },
+    {
+     "id": "T347-D1",
+     "summary": "A lane of its own kind, one wide, knob L7R_BUILD_SLOTS_SMALL (GUESS), rather than no slot; its width argued from the 7 GiB margin's 1.6 GiB of room.",
+     "class": "within",
+     "why": "The line offers 'no slot or a slot of its own kind'; choosing the second, with the budget arithmetic shown and a knob, is a choice inside the offer and keeps T284's memory purpose."
+    },
+    {
+     "id": "T347-D2",
+     "summary": "A build is told alone by a kept content key of everything but the crate's own sources AND every keyed file being older than the key file.",
+     "class": "within",
+     "why": "How the class is recognized; the file-times half is measured (git checkout recompiled a dependency at an unchanged key). Mechanism, not scope."
+    },
+    {
+     "id": "T347-D3",
+     "summary": "Times read conservatively: a tie counts as newer, an unaskable time is not alone, anything unknown takes a wide slot.",
+     "class": "within",
+     "why": "Errs toward the behavior before the lane, which keeps T284's memory purpose; not a narrowing of the class, which is defined by what can be shown to compile one crate alone."
+    },
+    {
+     "id": "T347-D4",
+     "summary": "One telling per crate per run, shared by the binary-key build and a red build's second asking; runs that ask no binary key are wide.",
+     "class": "within",
+     "why": "Consistency of one answer within a run; the excluded runs (FRESH=1, outside a repository, test-no-counters) are not one-crate incremental builds."
+    },
+    {
+     "id": "T347-D5",
+     "summary": "The build after a healed link takes a wide slot; only the first build runs in the lane it was told.",
+     "class": "within",
+     "why": "After the heal drops fingerprints and incremental sessions the build is no longer of the class the lane is for; sending it wide is applying the rule, not excepting from it."
+    },
+    {
+     "id": "T347-D6",
+     "summary": "No lane where L7R_BUILD_SLOTS=0 or under a holder; with the lane at 0 nothing is told and the build is wide as before.",
+     "class": "within",
+     "why": "Preserves the existing off switch the measuring scripts rely on and gives the new knob an off position; neither narrows the lane where slots exist."
+    },
+    {
+     "id": "T347-D7",
+     "summary": "A lane that cannot be taken (no flock, the shared 900 s ceiling passed) runs the build without one and writes slot-small code 1; it never falls back to a wide slot.",
+     "class": "within",
+     "why": "Mirrors T284's own convention for the wide slot; refusing the wide fallback is what keeps the wait the task removes from returning."
+    },
+    {
+     "id": "T347-D8",
+     "summary": "Event lines slot-tell and slot-small; a lane wait written as slot-wait so where_time books it as waiting on a build slot; measure crate unchanged.",
+     "class": "within",
+     "why": "Serves the line's ask to say the waiting-on-a-build-slot minutes before and after, by keeping lane waits in that same category."
+    },
+    {
+     "id": "Deviation 1, 2, 4, 5",
+     "summary": "Module at rustc/kept/alone.rs (reads kept.rs privates), knob named L7R_BUILD_SLOTS_SMALL per the coordinating brief, the key also holds dependencies' compiled-in files and binary_args whole, the key file named by the crate's full path from the root.",
+     "class": "within",
+     "why": "Departures from a builder's handoff, not from the request or spec; placement and naming, or a key that is more complete (an edited include_str! target recompiles its crate), which keeps the telling correct."
+    },
+    {
+     "id": "Deviation 3",
+     "summary": "A build told alone never touches its key, pass or fail; a wide build writes <key>.new, renames it on a pass, removes it on a failure.",
+     "class": "within",
+     "why": "A behavior choice inside the lane's design: a red build of the crate alone moved no dependency, so its key still stands; removing it would send every run after a red build back to a wide slot, the wait the line asks removed. It narrows nothing asked and the key file is in the build's own target directory (no new disk residue outside it, T245/T246)."
+    },
+    {
+     "id": "include-fix",
+     "summary": "A compiled-in path stops at a line's end (kept.rs INCLUDE); the defect made the first two runs after each tool rebuild tell wide.",
+     "class": "within",
+     "why": "A wrong outcome (a kept key differing from the same key read fresh) found in the step and fixed in it, as FIX AS WE GO requires."
+    },
+    {
+     "id": "still-wide-by-design",
+     "summary": "First build in a target directory, after a dependency edit or checkout, FRESH=1, test-no-counters, pre-warm builds, lint, cargo test --doc, make test-times, a heal's second build stay on wide slots.",
+     "class": "within",
+     "why": "Each is outside the class the line names (a one-crate incremental test build, whose memory was what was measured) or cannot be told to be in it; kept as before the lane, not excluded from a rule that covered them. The pre-warm's first-build gap is ruled separately as T367."
+    },
+    {
+     "id": "after-minutes-deferred",
+     "summary": "make task-time's waiting-on-a-build-slot minutes AFTER the change are not given; the mechanism's wait (60 s to 1-2 ms with both wide slots held) stands in, and the day's figure is the coordinating session's to read after 24 h live, into dev/audits/build-slot.md.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible inside the task: a day of builders' slot waits under the lane exists only after the lane has landed. The before figure is given, the same command is named for the after, and the controlled before/after on the mechanism carries the line's purpose (showing the wait removed) in the meantime."
+    },
+    {
+     "id": "run-lock-not-filed",
+     "summary": "Two runs of one tree take turns on the run lock even with two target directories; not filed.",
+     "class": "within",
+     "why": "T23's existing rule, no wrong outcome; the lane is for builds of two trees, so nothing asked is narrowed."
+    },
+    {
+     "id": "concurrent-memory-not-measured",
+     "summary": "Two compiling small builds of two trees queued on the lane, and the lane beside two compiling wide holders, not measured; the memory falsifier is the sampler's report.",
+     "class": "within",
+     "why": "The line asks for the one-crate build's memory measured first, which was; the combined figure follows from measured parts and the audit names a falsifier. No requested measurement is dropped."
+    },
+    {
+     "id": "T367-prewarm-key",
+     "summary": "The pre-warm keeps no key, so a builder's first test build of each crate after a handout, sync or dependency edit is told wide though it may compile one crate alone; filed T367 (a performance task), lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the lane's reach inside the class T347's line names. It is not a defect under the standing definition (no wrong outcome: the build waits as it did before the lane, nothing refuses or answers wrongly), and of what a plan leaves unfixed only a defect is NOT LEGITIMATE; it is left by the conservative telling of D3 (no key, no proof), not carved out by choice, and it is carried by a filed performance task that lands before the next step, with its size (first builds a day) to be measured first as the line's own order asks. The coordinating brief's bar on prewarm.rs is context, not the ground."
+    },
+    {
+     "id": "T355-lint",
+     "summary": "A builder's lint (clippy) takes a wide slot whatever it compiles; filed T355, lands before T302.",
+     "class": "within",
+     "why": "Lint is not a test build, the class the line names, and its memory was not measured; the line's measure-first order keeps it wide."
+    },
+    {
+     "id": "T356-measure-cover",
+     "summary": "The coverage pass of rust/gate/crates/measure red on five lines in a pool tree where the landing's was green; filed T356, lands before T302.",
+     "class": "within",
+     "why": "A defect (a check refusing good work in one tree), but another crate's, found in passing and outside what T347 asks; FR-009's why, filed id and order are all stated, and it lands before T302, so it is not carried into the next step."
+    },
+    {
+     "id": "T357-leftover-process",
+     "summary": "An l7r_shared test process alive 66 minutes after its run; filed T357, lands before T302.",
+     "class": "within",
+     "why": "Another crate's test, found in passing, outside T347; why, id and order stated, lands before the next step."
+    },
+    {
+     "id": "T368-single-line-include",
+     "summary": "A string naming include_str! on one line is read as a compiled-in path with an empty id; filed T368, lands before T302.",
+     "class": "within",
+     "why": "No wrong outcome today (an empty id never moves the key); the residue of the in-task include fix, needing a token-level reader; why, id and order stated."
+    },
+    {
+     "id": "slot-test-either-order",
+     "summary": "A build-half test that asserted which wide slot each of two holders took now compares the two holders' names in either order.",
+     "class": "within",
+     "why": "It still requires both named holders, one in each slot, so it still pins two distinct slots taken; only the assignment order, which a just-released slot makes racy, is dropped."
+    },
+    {
+     "id": "per-test-time-none-split",
+     "summary": "No test of the new module split: slowest 0.57 s, none near a second; all over a 'tenth of a second' attributed to FR-008.",
+     "class": "within",
+     "why": "Inside the crate's existing practice. The citation is wrong: this feature's FR-008 is the background-run and poll-interval guard and says nothing of a tenth of a second; the plan should name the rule it means. A citation error, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)",
+    "### T353 Approach (checklist part A)",
+    "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)",
+    "### T360 Approach (checklist part A)",
+    "(removed) ### T353 (<why: the finding or measurement that files it>)",
+    "(removed) ### T360 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T353-D1a",
+     "summary": "The clone's builder is recognized at dispatch by the block's STOP POINT line, not by reading 'orders an edit' from prose (the task line's wording).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrower than the task line's 'names the clone and orders an edit' (the line is the coordinating session's; request.md holds no T353 section and spec-cited.md is empty, so the task line is known only from the block's own quotation). Legitimate as the dispatch-time recognizer: a rule that read an edit order from prose would refuse readers, a check that refuses good work, which constitution XIV counts as a defect and which teaches bypass, so the literal reading defeats the enforcement the GM asked for (2026-11-19: 'real enforcement and not just instructions'; T285: tooling 'without the opportunity for this kind of mistake'). The bundle records the STOP line on 0 of the week's 107 non-writing dispatches. This ruling covers the recognizer only; what it leaves uncaught is ruled under T353-D1b."
+    },
+    {
+     "id": "T353-D1b",
+     "summary": "The residual: a hand brief with no STOP POINT line and no pool tree still passes into the session clone, and the Found-and-left item leaves it 'not filed'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a check that passes bad work, a defect by constitution XIV's definition, and it is the incident T334 was filed for ('broke the sizing rules ... in its own briefs with nothing refusing'). It has observed instances: the block's own measurement finds 3 builders after the line existed that wrote source without it, at least 2 of them in the clone (P15 cascade, the barracks Guesses tab), plus the whole pre-line population. The item's ground, 'Not a defect seen since the block existed', contradicts those 3. Its fallback, the five post-pool dispatches, is a window the measurement paragraph itself says does 'not show the hole unused, only unused so far'. Approach item 12 names the wrong outcome as 'went out unsized', which is a visible effect, so under the found-and-left rule (FR-009, FIX AS WE GO) the item is fixed here or deferred with 'Not fixed here: <why>. Filed as T<n>; lands before T<m>.'. A defect is never left unfiled. Leaving it relies on the session remembering to use the tooling, which is what the GM's T285 and 2026-11-19 words rule out. Remedy: fix it in this task, or file it with an id and an order. This finding does not require a prose rule; T353-D1a stands. The figures should also be corrected: 357 wrote source and 23 were caught, so 334 = 357 - 23 is every uncaught writer, not 334 'all before the line' plus 3 after. By the block's own numbers 331 were before the line, and one of the 3 (T250 batch 3) was in a hand worktree, not the clone. D1's '23 of 23 builders' sits beside 26 post-line builders."
+    },
+    {
+     "id": "T353-D2",
+     "summary": "The rule does not require the prompt to name the clone; the STOP line with no marker and no pool tree is enough.",
+     "class": "within",
+     "why": "This widens the hold rather than narrowing it: a brief naming no tree works in the session clone, so it is the same case the line asks to hold. Readers are unaffected, since they carry no STOP line."
+    },
+    {
+     "id": "T353-D3",
+     "summary": "The pool-tree no-marker rule and a borne-out marker are decided first.",
+     "class": "within",
+     "why": "An ordering between T334's rules and the new one. Every builder the line names is still held by one rule or the other."
+    },
+    {
+     "id": "T353-restate",
+     "summary": "T250 batches 5, 7 and 8 and agenda items 6 and 12, named on the task line as clone editors, are restated as hand-worktree writers and handed to T285's hand-worktree guard.",
+     "class": "within",
+     "why": "This corrects a factual premise of the task line from the transcripts, as constitution XIV has a claim the record does not bear out restated. The cases are not dropped: they are placed with the guard the GM asked for in T285 ('tooling ... without the opportunity for this kind of mistake'). Not verifiable from this bundle: whether T285's guard does close a hand `git worktree add` (spec-cited.md is empty). That is worth confirming, but it is not a narrowing of this block."
+    },
+    {
+     "id": "T353-prefilter",
+     "summary": "decide's prefilter reads no registry unless the prompt holds `.clones/`, the marker or `STOP POINT`.",
+     "class": "within",
+     "why": "A cost measure keyed on exactly the triggers the rules act on, so no case the rules hold is skipped."
+    },
+    {
+     "id": "T353-reader",
+     "summary": "The STOP line's test moves to one shared reader, `l7r_shared::builder_brief::stop_point`, which `split::is_code` now calls.",
+     "class": "within",
+     "why": "Implementation structure, with one reader of one convention. Nothing the GM asked for changes."
+    },
+    {
+     "id": "T360-D1",
+     "summary": "The brief rule runs after the Workflow model rule, on what that rule passes; it adds refusals and never lifts one.",
+     "class": "within",
+     "why": "The model rule (T216/T217) is unchanged, and the requested hold is added to it."
+    },
+    {
+     "id": "T360-D2",
+     "summary": "Only a literal prompt (string literals, or literals joined by +) is read; a variable or computed prompt, and `${...}` interpolations, pass unseen.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ground is impossibility. The block's premise is that a Workflow's agent() call meets no Agent hook, so the script's text is the only interception point, and a static hook cannot know a runtime-built string without evaluating the script. The gap is stated in the guard's header and asserted in a test. Its reach is unmeasured, which the block says plainly, since no builder has yet been sent from a workflow. So it is a hypothetical limit, not a known defect, and 'Found and left? none' is consistent with it, unlike T353's residual, which has observed instances."
+    },
+    {
+     "id": "T360-D3",
+     "summary": "The pool registry is read from the session's mirror (`session.main()`), not from the Workflow's own tree.",
+     "class": "within",
+     "why": "This matches how builder-brief-hooks reads the pool, so a workflow run from a pool tree sees every clone's registry. It reaches more cases, not fewer."
+    },
+    {
+     "id": "T360-scope",
+     "summary": "A defined agent type stays the GUARDED rule's, check-wave units are left to the Agent hooks they already meet, and the run is refused on the first refusal with an escape logged under builder-brief.",
+     "class": "within",
+     "why": "FR-006 defines a builder as 'not a defined review agent', so defined types are outside the brief rule by the spec's own wording. Check-wave units are said already to meet this guard. Refusing the whole run and logging the escape follow T334-D5 and the existing workflow guard's form."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "The two template placeholder headings for T353 and T360 are removed, replaced by the filled blocks.",
+     "class": "within",
+     "why": "Template scaffolding replaced by its content. Nothing that was asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)",
+    "### T353 Approach (checklist part A)",
+    "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)",
+    "### T360 Approach (checklist part A)",
+    "(removed) ### T353 (<why: the finding or measurement that files it>)",
+    "(removed) ### T360 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T353-D1",
+     "summary": "A hand-briefed builder into the clone is known only by its block's STOP POINT line, never by prose; briefs with no STOP line (334 of the week's 357 writers) are not caught here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block states that reading 'orders an edit' from prose would refuse readers (T334-D3/D10), and a guard that fires on correct work defeats its purpose. The measurement bears this out: 0 of the 107 readers carried the STOP line. The narrowing is stated in the guard's header. The residual is no longer left unfiled: per the block it is filed as T484, with why it is not fixed here and its order (lands before T302). That answers the GM's 'real enforcement and not just instructions' (request line 13) and fixes the earlier round's block, which left a measured defect unfiled. The counts are now consistent: 331+26=357, 357-23=334=331+3."
+    },
+    {
+     "id": "T353-D1-residual (Found and left, T484)",
+     "summary": "STOP-line-less hand briefs into the clone deferred to T484, a behavior-based hold, landing before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect deferred with a reason (the brief's text cannot tell such a builder from a reader without false refusals, so the hold has to come from what the agent does), a filed task id and a stated order, as FR-009 asks. No such dispatch has gone out since the pool landed (5 of 5 since 2026-11-26 15:28Z were readers)."
+    },
+    {
+     "id": "T353-D2",
+     "summary": "The STOP-line rule does not also require that the prompt name the clone",
+     "class": "within",
+     "why": "Widens the task line's 'names the clone' to briefs naming no tree, which would also work in the clone. It serves the purpose and refuses no reader."
+    },
+    {
+     "id": "T353-D3",
+     "summary": "The pool-tree no-marker rule and a borne-out marker take precedence over the STOP-line rule",
+     "class": "within",
+     "why": "Sets the order of rules inside T334's guard. A properly briefed builder passes."
+    },
+    {
+     "id": "T353-one-reader",
+     "summary": "STOP-line test moved to l7r_shared::builder_brief::stop_point, called by split::is_code; registry not read unless .clones/, marker or STOP POINT present",
+     "class": "within",
+     "why": "Implementation detail and a cheap prefilter. Behavior is unchanged."
+    },
+    {
+     "id": "T353-restatement",
+     "summary": "The task line's examples (T250 batches 5/7/8, agenda items 6 and 12) restated: they wrote from Bash in hand worktrees, not the clone",
+     "class": "within",
+     "why": "Restates a claim the record does not bear out, per XIV's defect rule. Nothing is narrowed: those cases are T285's guard's."
+    },
+    {
+     "id": "T360-D1",
+     "summary": "In a Workflow agent() call, the brief rule runs after the model rule and only adds refusals",
+     "class": "within",
+     "why": "Leaves the model rule (T216/T217) unchanged and holds workflow builders to the same marker rule as Agent dispatches, which is the task's goal."
+    },
+    {
+     "id": "T360-D2",
+     "summary": "Only literal prompts (string literals, literals joined by +, unescaped) are read; prompts in variables, built by calls, or with an interpolated tree or marker pass unseen",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Reading every prompt would mean evaluating the script, which a static pre-run hook cannot do. The narrowing is declared in the guard's header and pinned by a test. No builder has ever been sent from a workflow (T334's replay), so no known defect is left. This is an unmeasured reach, stated as such, not a known wrong outcome carried forward."
+    },
+    {
+     "id": "T360-D3",
+     "summary": "The pool registry is read from the session's mirror, not the Workflow's own tree",
+     "class": "within",
+     "why": "Matches builder-brief-hooks, so a workflow run from a pool tree sees every clone's registry. It serves the task."
+    },
+    {
+     "id": "T360-message-and-prefilter",
+     "summary": "Refusal reuses the reviewed builder-brief text plus the call named; escape logged under builder-brief; no registry read without .clones/, marker or STOP POINT",
+     "class": "within",
+     "why": "Reuses T334's verdict and escape (D4/D5), as FR-012's guard rules ask."
+    },
+    {
+     "id": "removed template blocks T353/T360",
+     "summary": "The empty task-add template blocks removed, replaced by the filled sections",
+     "class": "within",
+     "why": "The placeholder text is replaced. No decision is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T353 (451 T334's replay, 2026-11-26: 17 of the day's 110 Agent dispatches were ad-hoc agents naming no pool tree, some of them builders that edited in the session clone, and `builder-brief-hooks` passed them with no marker and no sizing)",
+    "### T353 Approach (checklist part A)",
+    "### T360 (451 T334, 2026-11-26: `builder-brief-hooks` matches the Agent tool alone, and `workflow_hooks.rs` holds a Workflow's ad-hoc `agent()` call to the model rule only, so a builder sent into a pool tree from a workflow carries no marker and no sizing)",
+    "### T360 Approach (checklist part A)",
+    "(removed) ### T353 (<why: the finding or measurement that files it>)",
+    "(removed) ### T360 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T353-D1",
+     "summary": "A hand-briefed builder into the clone is known only by its block's STOP POINT line, never by prose; briefs with no STOP line (334 of the week's 357 writers) are not caught here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block states that reading 'orders an edit' from prose would refuse readers (T334-D3/D10), and a guard that fires on correct work defeats its purpose. The measurement bears this out: 0 of the 107 readers carried the STOP line. The narrowing is stated in the guard's header. The residual is no longer left unfiled: per the block it is filed as T484, with why it is not fixed here and its order (lands before T302). That answers the GM's 'real enforcement and not just instructions' (request line 13) and fixes the earlier round's block, which left a measured defect unfiled. The counts are now consistent: 331+26=357, 357-23=334=331+3."
+    },
+    {
+     "id": "T353-D1-residual (Found and left, T484)",
+     "summary": "STOP-line-less hand briefs into the clone deferred to T484, a behavior-based hold, landing before T302",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known defect deferred with a reason (the brief's text cannot tell such a builder from a reader without false refusals, so the hold has to come from what the agent does), a filed task id and a stated order, as FR-009 asks. No such dispatch has gone out since the pool landed (5 of 5 since 2026-11-26 15:28Z were readers)."
+    },
+    {
+     "id": "T353-D2",
+     "summary": "The STOP-line rule does not also require that the prompt name the clone",
+     "class": "within",
+     "why": "Widens the task line's 'names the clone' to briefs naming no tree, which would also work in the clone. It serves the purpose and refuses no reader."
+    },
+    {
+     "id": "T353-D3",
+     "summary": "The pool-tree no-marker rule and a borne-out marker take precedence over the STOP-line rule",
+     "class": "within",
+     "why": "Sets the order of rules inside T334's guard. A properly briefed builder passes."
+    },
+    {
+     "id": "T353-one-reader",
+     "summary": "STOP-line test moved to l7r_shared::builder_brief::stop_point, called by split::is_code; registry not read unless .clones/, marker or STOP POINT present",
+     "class": "within",
+     "why": "Implementation detail and a cheap prefilter. Behavior is unchanged."
+    },
+    {
+     "id": "T353-restatement",
+     "summary": "The task line's examples (T250 batches 5/7/8, agenda items 6 and 12) restated: they wrote from Bash in hand worktrees, not the clone",
+     "class": "within",
+     "why": "Restates a claim the record does not bear out, per XIV's defect rule. Nothing is narrowed: those cases are T285's guard's."
+    },
+    {
+     "id": "T360-D1",
+     "summary": "In a Workflow agent() call, the brief rule runs after the model rule and only adds refusals",
+     "class": "within",
+     "why": "Leaves the model rule (T216/T217) unchanged and holds workflow builders to the same marker rule as Agent dispatches, which is the task's goal."
+    },
+    {
+     "id": "T360-D2a (prompt built by a call)",
+     "summary": "Only literal prompts are read (T360-D2). A prompt returned by a function call passes unseen.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A hook that reads the script before it runs cannot know a call's return value without executing the script. Applying the general rule here is impossible, not just awkward. The block declares it in the guard's header and pins it as passing in a test."
+    },
+    {
+     "id": "T360-D2b (prompt held in a variable)",
+     "summary": "Only literal prompts are read (T360-D2). agent(p, ...) with p bound elsewhere passes unseen, including p bound to a literal.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the weakest of the three. A variable bound once to a literal could be resolved statically, so 'needs evaluation' holds only in general. It is legitimate on a different ground: the block states that no builder had been sent from a workflow by T334's replay (2026-11-26), so no wrong outcome is known. Under XIV's defect rule, NOT LEGITIMATE is only for a known defect left. T353 differs: its residual had 334 measured instances, which is why filing was owed there, and here there are none. If a real workflow builder ever arrives this way and passes, that is a known defect and must be filed."
+    },
+    {
+     "id": "T360-D2c (tree or marker interpolated as ${...})",
+     "summary": "Only literal prompts are read (T360-D2). A template's ${...} is left as written, so an interpolated tree or marker is not seen.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An interpolated value is unknown without evaluation. The purpose is not gutted: a template that carries the block's STOP POINT line literally, names no pool tree literally and has no literal marker still meets T353's stop-point rule through the shared verdict. That covers a hand-written workflow brief, and the uncovered rest is the class already filed as T484. The case missed entirely is a brief interpolated whole. No such case is known (zero workflow builders, per the block), and the block says the reach is unmeasured instead of claiming coverage."
+    },
+    {
+     "id": "T360-D3",
+     "summary": "The pool registry is read from the session's mirror, not the Workflow's own tree",
+     "class": "within",
+     "why": "Matches builder-brief-hooks, so a workflow run from a pool tree sees every clone's registry. It serves the task."
+    },
+    {
+     "id": "T360-message-and-prefilter",
+     "summary": "Refusal reuses the reviewed builder-brief text plus the call named; escape logged under builder-brief; no registry read without .clones/, marker or STOP POINT",
+     "class": "within",
+     "why": "Reuses T334's verdict and escape (D4/D5), as FR-012's guard rules ask."
+    },
+    {
+     "id": "removed template blocks T353/T360",
+     "summary": "The empty task-add template blocks removed, replaced by the filled sections",
+     "class": "within",
+     "why": "The placeholder text is replaced. No decision is lost."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T346 to T354, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

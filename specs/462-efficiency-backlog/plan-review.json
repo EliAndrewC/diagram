@@ -156,6 +156,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T545 (moved here from 462 FR-004's 451 T537 by the round arbiter's accept, ask:451-T537-plan-review-json, 2026-11-27: 451's plan-review.json stood at 5,074,158 bytes, its live entries a small part, and the tools read it whole every call; observed 2026-11-27, method: `ls -la` of the feature directory)": {
+   "sha256": "dae22c87075b15e3ad124e39934fadcd4c88ff28ee98bdf0af8edcd0e7374611",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T545 Approach (checklist part A)": {
+   "sha256": "0e4ac9d7c791f480bc27b91184cb4c0d9e183d5440899dc0d709e242126fecaa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T555 (observed 2026-11-27, method: `ls -la` of specs/451-time-retro-and-efficiency/ after 462 T548: report.md 1,496,878 bytes and plan.md 267,986 stood whole past the 64 KiB part the split keeps)": {
+   "sha256": "28fe0965a54e28edd6a28431b760362471a448e891f285fbe06b494f6c0d8b47",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T555 Approach (checklist part A)": {
+   "sha256": "626d6d42180053308dbe9ba984e865716c63fad90ce524248843b2bfe5f2d1d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -680,6 +704,108 @@
      "summary": "A kill at the bound can cut a rustc mid-write, leaving one stale link that stale.rs heals once; the help says build first.",
      "class": "within",
      "why": "This is the consequence of the bound the task asks for. The block says it is healed automatically, so it is not a wrong outcome."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T545 (moved here from 462 FR-004's 451 T537 by the round arbiter's accept, ask:451-T537-plan-review-json, 2026-11-27: 451's plan-review.json stood at 5,074,158 bytes, its live entries a small part, and the tools read it whole every call; observed 2026-11-27, method: `ls -la` of the feature directory)",
+    "### T545 Approach (checklist part A)",
+    "### T555 (observed 2026-11-27, method: `ls -la` of specs/451-time-retro-and-efficiency/ after 462 T548: report.md 1,496,878 bytes and plan.md 267,986 stood whole past the 64 KiB part the split keeps)",
+    "### T555 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T545-moved",
+     "summary": "The plan-review.json split is carried by 462 T545 after 451's close, not by 451 T537.",
+     "class": "within",
+     "why": "FR-004 put the split in 451 T537; the round arbiter's accept (ask:451-T537-plan-review-json) moved this file's split to 462 T545, set its order after T548, and asked the line to cite the ruling. The heading cites it and both approach item 5s order it after T548. The purpose (future sessions not reading the file whole) is served, not cut: the cut still happens, on 451's own record."
+    },
+    {
+     "id": "T545-flat-keeps-format",
+     "summary": "The flat plan-review.json keeps its format and only its LIVE entries; closed tasks' entries go to JSON parts under archive/plan-review/, named in archive/index.json and archive/INDEX.md.",
+     "class": "within",
+     "why": "This is the GM's 'mechanically split up the large files into smaller files' with notes. It uses T537's layout, and no reader loses its format."
+    },
+    {
+     "id": "T545-what-is-live",
+     "summary": "Live is defined as: every key except the three maps; blocks whose key plan.md holds; tasks with a plan.md section or an open box; rounds naming a live block or task.",
+     "class": "within",
+     "why": "This draws the line the split needs. 451 is closed, so 12 blocks, 0 tasks and 15 rounds stay live. Nothing is dropped: the closed entries are in parts, and the join is reported equal key for key and as a multiset."
+    },
+    {
+     "id": "T545-packing",
+     "summary": "Closed entries are grouped by task and packed in id order into parts of at most archive::BOUND (64 KiB). A group larger than the bound sits alone in its part (T243's, 70,116 bytes).",
+     "class": "within",
+     "why": "This is a mechanical cut. A single task's group is kept whole rather than split mid-task. One part is 4.6 KB over the bound, and a reader is still sent there by task through index.json. The GM set no size, so this narrows nothing he asked for."
+    },
+    {
+     "id": "T545-write-order",
+     "summary": "The parts are written before the flat file is rewritten, in the plan crate's pretty format. A failure in between leaves an entry in both places, never in neither.",
+     "class": "within",
+     "why": "An implementation safety choice inside the split. It loses nothing."
+    },
+    {
+     "id": "T545-readers",
+     "summary": "From a grep census of plan-review.json readers: most read live entries and stay on the flat file. Two closed-task readers (inside.rs built_inside, rows.rs in_the_record) are repointed to archive::review. feature_report's git-log reader is unaffected.",
+     "class": "within",
+     "why": "SC-002: no reader named there reads a record whole, and every tool still finds what it found before. The census states its search space (grep -rn plan-review.json over rust/, each hit read)."
+    },
+    {
+     "id": "T545-name-skips",
+     "summary": "The name-keyed exemptions research_pointers::exempt and stale_terms::skipped are extended to the new parts.",
+     "class": "within",
+     "why": "The parts hold the same content those checks already skipped in plan-review.json. Extending the skip keeps each check's reach where it was. It does not exempt anything new."
+    },
+    {
+     "id": "T545-merge-rows-fix",
+     "summary": "Merge driver fix: a base block_reviews row that the other side dropped is now dropped, like a map entry. Pinned red by a_pre_split_side_resurrects_no_archived_entry.",
+     "class": "within",
+     "why": "Without this, a carry from a pre-split tree would bring archived rounds back into the flat file and undo the split. This enforces what was asked. It is a wrong-outcome defect fixed as found."
+    },
+    {
+     "id": "T545-same-run",
+     "summary": "T545's review cut runs in the same make archive-split run as T555, after T555's plan.md move, so the live blocks are those of the closed plan.md.",
+     "class": "within",
+     "why": "Sequencing inside the split. It meets the ruling's 'after T548'."
+    },
+    {
+     "id": "T555-extends-split",
+     "summary": "The split is extended to report.md (1,496,878 bytes) and plan.md (267,986 bytes), which T548 left whole beyond the 64 KiB bound.",
+     "class": "within",
+     "why": "These are 'the large files' of the GM's split message. Leaving them whole would leave his concern in place: sessions blowing their context on these files."
+    },
+    {
+     "id": "T555-closed-move",
+     "summary": "For a closed feature (no open box), make archive-split alone moves every section whose tasks are all ticked to plan-done.md without a CLEAR verdict. The tick-time archive keeps its CLEAR rule.",
+     "class": "within",
+     "why": "This is an 'except when closed' to the archive's CLEAR rule. That rule is tooling, not in the GM's request or in 462's spec, so the decision narrows nothing he asked. Its limits: closed features only, archive-split only, and a feature's last tick still archives only CLEAR sections. It changes no review record and ticks nothing. It does move 18 never-reviewed part-B blocks to plan-done.md, which no review reads (see the aside)."
+    },
+    {
+     "id": "T555-heading-ids-fix",
+     "summary": "plan-archive now takes a heading's tasks from its leading ids (plan_text::leading_tasks). It uses every named id only when a heading opens with none. Found because T18's example ids kept its section in plan.md.",
+     "class": "within",
+     "why": "A wrong outcome (a finished section that could never archive) fixed as found, which is the GM's fix-as-we-go. It applies to every feature's plan-archive. The fallback keeps headings like 375's '### Wave 1 (T01)' working. Measured: with the fix alone, only T18 moved."
+    },
+    {
+     "id": "T555-report-cut",
+     "summary": "report.md is cut at its ## sections. Sections over INLINE (16 KiB, a new GUESS knob) go to report/NN-<slug>-K.md parts of at most BOUND, cut between table rows. Each part opens with the section heading and the table header. report.md becomes an index with a 'Load this file when:' note.",
+     "class": "within",
+     "why": "This is the GM's mechanical split into smaller files with notes cautioning future sessions. Every table row of the original is in a part, so nothing is lost."
+    },
+    {
+     "id": "T555-feature-report-writer",
+     "summary": "make feature-report WRITE=1 writes through report::write, splitting only where the feature has archive/. An unsplit feature's report is as before, and the closing check that report.md stands still holds.",
+     "class": "within",
+     "why": "This keeps a regenerated 451 report split rather than re-growing it whole. Other features are unchanged, and the GM asked for nothing about them."
+    },
+    {
+     "id": "T555-order",
+     "summary": "T555 runs after 462 T548, in one make archive-split run before T545's review cut.",
+     "class": "within",
+     "why": "Sequencing. Consistent with T545's order and the ruling's 'after T548'."
     }
    ]
   }

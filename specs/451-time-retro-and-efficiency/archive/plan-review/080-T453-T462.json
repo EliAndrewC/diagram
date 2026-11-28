@@ -1,0 +1,802 @@
+{
+ "blocks": {
+  "### T453 Approach (checklist part A)": {
+   "sha256": "e595d7bb09561ea5620c44b324ff6c520db1567ada3e516a88bd79c8de0829a6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T453 (left by 451 T306: the spellings of a program its builder measured unused and recorded as limits in `docs/guards.md`)": {
+   "sha256": "39a78dcbe7f03c9237f65342ac078851f9df43f1f3ae79d68e0772353b96921b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T454 Approach (checklist part A)": {
+   "sha256": "d035e3daf9ae382e2a6b05807c966bfa21c72245de601bcd96cfa6be98dcf785",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T454 (T445's record, `dev/measurements/2026-11-27/hung-test-runs/results.md` section 3: a red pre-warm test still holds the rustc suite for each `SLOW` build its run asks)": {
+   "sha256": "e13ebfe1254bbd7e1b356e265f45bd40de134436ff8d04f3f17a23f425d439db",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T455 Approach (checklist part A)": {
+   "sha256": "cdeb11a2c1e9586666ed111561e27481da1df79b90a53a250830c2cf24bc2eaf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T455 (found by 451 T445, dev/measurements/2026-11-27/hung-test-runs/results.md section 4: six green test phases of the `land` crate ran 61.0 to 101.8 s against a median of 4.04 s, 2026-11-26T01:11Z to 2026-11-27T06:16Z, observed 2026-11-27, method: `hangs.py` over every test phase of the event log - the line asks which tests take the time, before any change)": {
+   "sha256": "2021018fb936359cfa432c874ddcf98c9bf43024b3932638733f22100fa6ad83",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T456 Approach (checklist part A)": {
+   "sha256": "ae71f79ef6afe04d1c2f108c41fb7122cd62c70352a51e53a114e0f62df88b0f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T456 (found by 451 T439: the `env` hop of the wrapper's `#!/usr/bin/env bash` costs 3.1 ms of every hook call, 14.85 against 11.78 ms, 40 runs, load 22.9, measured 2026-11-27, `dev/measurements/2026-11-27/hook-floor/results.md`)": {
+   "sha256": "ae56b7a670370863ab9bbd8c79a7d13eb85facc4aa465906b4aedfe2852aaaee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T457 (a landing's first pass grew from about 40 s to 34 min over 2026-11-27 - its cheap Phase lines 43-119 s until 04:17Z, then 226, 379, 719, 1,399, 757 and 2,031 s, growing with the batch: 6, 6, 13, 22, 23, 23 and 35 tasks, observed 2026-11-27, method: the clone's event log, `step: cheap` and `step: end` lines - with the landing process at 86-91% CPU feeding `git cat-file --batch` over plan.md, 1,017,606 bytes with 477 versions)": {
+   "sha256": "58894ef3718d4c774db03d47d16e68969afd189ebd1882d0a790c6f213153eb2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T457 Approach (checklist part A)": {
+   "sha256": "7e38667c284eb294ff5fd19c1dca12328972bf87fde3ff85fd9265ad1cba90e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T458 (found by T443, its Found and left: the reversal index's rebuild, a new, refiled or rotated log's first Edit, was 101.6 / 180.4 ms of `event-log-hooks` against 20.5 / 30.5 warm, measured 2026-11-27 under load1 23 to 25 (`t443-cold.tsv`): the build parsed every line holding `\"Edit\"`)": {
+   "sha256": "9d1d7afa3a2064c0ab92975066a57c02be5b2517be5b36b4591c8de6edd670d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T458 Approach (checklist part A)": {
+   "sha256": "5a6a5ff40c7422024fad307d720d6881317da8b35c98a92b50ba68946d6246bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T459 (found by 451 T443's review, 2026-11-27, by reading: a hook killed between the reversal index's temporary write and its rename leaves a `.<feature>.idx.<pid>.<n>.tmp` in `<events dir>/reversal/` that nothing removes; none seen in T443's runs)": {
+   "sha256": "feb199f30ad1262e48deb90ac62bdb555eeb3bb8910bae41108e10de32e04e55",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T459 Approach (checklist part A)": {
+   "sha256": "5e5ab74d4835eb91d289da3b7772ce07984043588ee0b17b35c15d71a77a31c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T460 (found by T433 and T436, 2026-11-27: the wrap-up band's two whole-command refusals are stopgaps the walk no longer needs, and refuse writes under `/tmp` its redirect check passes)": {
+   "sha256": "5feadb8b6ea0a20a1363f37b5a601bcc4692db5b4340ad3e548eddc48fc03279",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T460 Approach (checklist part A)": {
+   "sha256": "64be77c0df8790fa17c95c8394473084fea5a7257a99cbc174282a8b6eafe322",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T462 (the round arbiter's process-fault on `round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3`, 2026-11-27T08:00Z: a blank task stub counted plan-review rounds)": {
+   "sha256": "3ad33d669245057002354c327e9062b91a293a9814d14204ca24df63a9b6fec1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T462 Approach (checklist part A)": {
+   "sha256": "72e2c63313049aabd1b5fa0c740350ece1092185792bb2782e658430c28563fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T454": {
+   "section_sha256": "a5cf1f1a23309e2776501542c7192eea7b471101d05ab7731df3bc318f68f578",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T454-D1",
+     "summary": "A test-only drop guard `Slow` lays the stand-in cargo's slow file inside each of the three thread::scope tests' closures and removes it on drop, so a failed assertion's unwind ends the stand-in before the scope joins the pre-warm run",
+     "class": "within",
+     "why": "It is the task line's fix shape and does the thing the task is for: a red pre-warm test no longer holds the rustc suite. The assertions, the stand-in and the never-cut build in flight (451 T336) are kept, so nothing the tests checked is dropped."
+    },
+    {
+     "id": "T454-D2",
+     "summary": "The two scoped runs' ceiling knobs(600_000) goes to knobs(60_000)",
+     "class": "within",
+     "why": "A test knob with no research claim, cut to bound how long a red run can hold the suite. It equals the 60 s bounds the tests already have (until_calls, the phase-line wait), and measured green runs are about 0.5 s, so it refuses no correct run that the existing bounds would pass. Nothing asked is narrowed."
+    },
+    {
+     "id": "T454-D3",
+     "summary": "The ceiling test keeps knobs(50) and the unscoped `again` run is left unchanged",
+     "class": "within",
+     "why": "These are outside the defect: knobs(50) is already short, and `again` asks the stand-in cargo nothing, so it cannot hold the suite on a SLOW build. Leaving them alone is not a narrowing, and no defect is left."
+    },
+    {
+     "id": "T454-D4",
+     "summary": "The task is tagged [perf] under 451 FR-013, and the engine performance checklist is ruled not to apply",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks faster as performance work, and a red run of the checks' rustc suite ending in seconds instead of about 70 s is exactly that. The engine checklist covers engine speed, which this change does not touch."
+    },
+    {
+     "id": "T454-D5",
+     "summary": "Found and left: none; no map changes",
+     "class": "within",
+     "why": "No defect is deferred. The grep census of \"slow\" and /slow over rust/gate/crates/rustc/src (its search space stated) finds no other test that lays the file."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T455": {
+   "section_sha256": "70c661d18d66f6699219ce1617776d180dc3e18a62f69fed703d3d53006a34d4",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 approach",
+     "summary": "T455 is a measurement only: no source changed, its record dev/measurements/2026-11-27/land-test-time/results.md",
+     "class": "within",
+     "why": "The task line asks which tests take the time before any change; FR-013 and the GM's 2026-11-20 words (request.md line 46) count such a measurement as the work itself."
+    },
+    {
+     "id": "D2 method",
+     "summary": "Event-log phases against same-time controls, 30 direct runs with libtest per-test times (RUSTC_BOOTSTRAP=1 for --report-time), each test alone with a git shim and pid counter, 40 runs through make rust-test, a passive /proc watcher; no load generator (feature 460)",
+     "class": "within",
+     "why": "Instrument choices for the measurement the line asks for; nothing changed in the source, and declining a load generator follows a standing rule rather than narrowing the question."
+    },
+    {
+     "id": "D3 finding",
+     "summary": "Load explains the 5 to 25 s tail by stretching every test alike; the 58 to 93 s excess is inside the binary and its test is unnamed; the 30 s wait in land::stop::tests is recorded as a lead, not shown",
+     "class": "within",
+     "why": "This is the answer the measurement produced, with the inference labeled INFERRED and the lead labeled unshown rather than presented as the cause."
+    },
+    {
+     "id": "D4 defer naming the excess",
+     "summary": "The test behind the 58 to 93 s excess is left unnamed in T455; catching a slow run alive is filed as T463, ordered to land before T435",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The line asks which tests take the time, and for the excess the section does not say. It was not reproduced on demand: 70 runs (40 through the slow runs' own make path) and the watcher caught no slow run, and each test alone, the lead's test among them, stayed under 1.2 s. Acting on the unshown lead with a code change would break the line's own rule, measure before any change. The deferral carries its reason, its filed task and its order (FR-009's shape), and T463 carries the same question forward, ordered before T435, rather than dropping it. No passage of request.md (the GM on measuring test time 2026-11-22, on T104, T315, T394) asks for this slow run's cause to be named or fixed in the same step."
+    },
+    {
+     "id": "D5 order",
+     "summary": "After T445, which found the slow runs; before T463 and T435",
+     "class": "within",
+     "why": "Sequencing that follows from the task's source and its filed follow-up; nothing asked for is moved later."
+    },
+    {
+     "id": "D6 performance work",
+     "summary": "Tagged performance work for scheduling, though it speeds nothing itself",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words: a measurement task counts as a performance task for scheduling."
+    },
+    {
+     "id": "D7 exits and budget",
+     "summary": "Green: record written and T463 filed; red: failure recorded and the task set down, an impossibility claim ruled through make arbiter-ask; budget one landing",
+     "class": "within",
+     "why": "Process bounds of the task; they do not narrow what is asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T458": {
+   "section_sha256": "f04e57850d3baab00a02d0697a2f46791256c8916f72fc7c5186f4337f6d7800",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T458 Approach: the second literal screen",
+     "summary": "indexed parses a line only if it also holds the text \"PreToolUse\" (memmem before UTF-8 decode), on top of T383's \"Edit\" screen",
+     "class": "within",
+     "why": "Performance work on a hook, which the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013). It keeps the rows the full parse keeps on every line any writer produces. The differential shows 0 of 1,937 lists differing cold, warm and grown, and it goes red on a wrong screen."
+    },
+    {
+     "id": "T458 Approach: indexed returns whether it parsed",
+     "summary": "a bool return so a test can count the build's parses",
+     "class": "within",
+     "why": "Its only use is to let a test prove the screen does what the task claims, so it enforces the task. No behavior changes."
+    },
+    {
+     "id": "T458 Approach: oracle and differential left unscreened",
+     "summary": "the test-only full parse and the differential keep parsing every line",
+     "class": "within",
+     "why": "This keeps the proof from being circular. It changes no behavior, and no guard message changes."
+    },
+    {
+     "id": "DECISION: the literal is the quoted value, not the field",
+     "summary": "screen on \"PreToolUse\", not \"ev\":\"PreToolUse\"",
+     "class": "within",
+     "why": "A rendering choice. The quoted value alone keeps every line the field spelling keeps, plus any line with whitespace around the colon, so it drops nothing more. It is pinned by a test that goes red on the field-spelling mutant."
+    },
+    {
+     "id": "DECISION: why the screen cannot meet another spelling",
+     "summary": "every writer serializes with serde_json compact or copies bytes, and serde_json never escapes a letter",
+     "class": "within",
+     "why": "This is a factual premise, labeled as an observation with its method (each writer's code read). It decides nothing beyond the screen. It is the ground for the limitation below and is weighed there."
+    },
+    {
+     "id": "DECISION: ACCEPTED LIMITATION, an ev spelled with a \\u escape",
+     "summary": "a line whose ev is written with a JSON \\u escape is kept by the full parse but dropped by the screen, so a reversal on it would be missed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case the general behavior ('keeps exactly the rows the full parse keeps') does not cover, so it is ruled as an exception and presumed wrong. The reversal tripwire is feature 375's requirement, and nothing in this request asks for it. Judged against the purpose anyway, the exception removes no protection. The tripwire watches Edits that the hooks log, and the block reads every writer it names as serde_json compact output or a byte-for-byte copy. serde_json escapes only a quote, a backslash or a control character, so 'PreToolUse' (printable ASCII) has one spelling from any writer that escapes no more than JSON requires, not only the three listed. The survey found the literal in all 9,176 of 9,176 kept lines across 485,165 lines of the 34 real logs, and the differential found 0 of 1,937 lists differing. So the excepted case is a line no writer produces. Leaving it is no wrong outcome on any real log, and by constitution XIV's definition of a defect it does not leave a defect. It is one case, so there is no bundling. The writer census is the block's observation, not mine (the bundle excludes the repository), and it says how each writer was read, not what search found the set. The ruling rests on the serializer argument and the survey, not on the list being complete. 'EDIT has carried the same limit since T383' and the go-ahead were not weighed either way."
+    },
+    {
+     "id": "T458 Approach: the task line's 101.6 ms not compared",
+     "summary": "before and after are measured as interleaved arms at load1 about 7, not against the task line's figure at load1 23 to 25",
+     "class": "within",
+     "why": "A measurement choice. Both arms ran under the same load, the comparison is fair, and it is stated openly."
+    },
+    {
+     "id": "T458 Approach: order, after T443 and before T302",
+     "summary": "the screen lands on T443's index",
+     "class": "within",
+     "why": "It depends on T443's index, and as performance work it goes ahead of non-performance work (FR-013)."
+    },
+    {
+     "id": "Performance work? yes",
+     "summary": "T458 is classed as performance work for scheduling",
+     "class": "within",
+     "why": "It speeds up a hook on the builders' loop, which is FR-013's meaning of performance work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T459": {
+   "section_sha256": "355055fa5d21edc6647c3c4b20de368cf19d4a53880dc08782af7ca07d3e5ffc",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T459-D1",
+     "summary": "The sweep of old temporary index files runs when an index is written (store), never on a read.",
+     "class": "within",
+     "why": "A defect fix (a killed hook's .tmp left in <events dir>/reversal/) under the feature's fix-as-we-go and the GM's 2026-11-22 'clean up after ourselves in terms of the file system'. Running it at the one writer is the mechanism, not a narrowing: a leftover of a few hundred KB lives at most until the next write in the directory, which reads no map, contradicts no finding and costs no time (the GM's 2026-11-26 principle: time saved over disk). No defect is left."
+    },
+    {
+     "id": "T459-D2",
+     "summary": "Every feature's temporary file in the directory is swept, by its exact name form (.<stem>.idx.<pid>.<n>.tmp, digits), older than SWEEP_AGE; other names and unreadable ages are left.",
+     "class": "within",
+     "why": "Widens the fix to cover a feature whose index is never written again, so it serves the defect's purpose; the exact-form match keeps the sweep from touching anything that is not a leftover of this writer. Nothing the request asks for is excluded."
+    },
+    {
+     "id": "T459-D3",
+     "summary": "SWEEP_AGE is one hour, a knob (GUESS, make tunables).",
+     "class": "within",
+     "why": "A tunable bound on a value no research or GM word settles; the GM's 2026-10-25 words allow a knob where nothing indicates a value. It is set far past a live writer's life (about 12 ms, one-shot label 2026-11-27 with its results file), so it keeps T443's invariant that no running writer's file is removed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T460": {
+   "section_sha256": "fb6b2b53d37505c8f104c06afe534a6ec4435154ce2a5ce11daa1b1bc22f491c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T460-D1",
+     "summary": "The wrap-up band drops its two whole-command stopgap refusals (any >& left after sanitize, T433; a cd or pushd carrying a redirect, T427), leaving both shapes to the existing place-based redirect rule: under /tmp or the handoff passes, anywhere else is refused with the message every refused redirect already has.",
+     "class": "within",
+     "why": "It serves FR-006 as the GM amended it on 2026-11-27 (T417: a builder at the cap may finish its stop point - 'if our builders are prevented from even finishing their handoff, then is that really the most efficient thing to do?'). The stopgaps refused correct work (make decide >& /tmp/log, a step the stop point owns), which is a defect per XIV; removing them narrows nothing the GM asked for, since a write to a source file by either shape is still refused by place (red-first cases >& /t/rust/a.rs, >&b.rs, cd /tmp > rust/a.rs, pushd /t >> /c/a.rs). Enforcement stays real enforcement (the 2026-11-19 approval). No new message, no new escape."
+    },
+    {
+     "id": "T460-D2",
+     "summary": "pushd moves into PLAIN beside cd so a pushd with no redirect still passes after the cd/pushd arm goes; popd stays refused, pinned by a test.",
+     "class": "within",
+     "why": "A consequence of D1 that keeps the band's prior verdicts unchanged: pushd without a redirect passed before and passes now; popd was refused before and is refused now. It widens and narrows nothing relative to FR-006 or T417."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T462": {
+   "section_sha256": "16dd47ac289c2ac77ebd2646c2b397d06604a03542b64d4f827b04a9df78e544",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T462-a",
+     "summary": "A task section is UNWRITTEN when every one of its own blocks is byte for byte a block of the make task-add template (plan::template::stub_block); writing one block makes the whole section written.",
+     "class": "within",
+     "why": "Neither the GM's request nor 451's spec says anything about stub sections or about how plan-review rounds are counted. This is the definition the fix depends on, and it errs toward review: one changed block makes the whole section owed. It narrows nothing that was asked."
+    },
+    {
+     "id": "T462-b",
+     "summary": "make plan-delta's keys drop an unwritten section's blocks, after the BLOCKED keys are merged in, so the stub leaves the bundle, its blocks-<tasks> name and the guard's round count.",
+     "class": "within",
+     "why": "The defect fixed is a check refusing good work: T448's empty stub held every 451 plan-delta dispatch behind its rounds. Fixing it serves 'Fewer plan re-rounds' (improvement 4) and FR-013's builders' loop. A stub has no plan text to review. Its review is still owed once it is written, because verdicts are keyed by digest."
+    },
+    {
+     "id": "T462-c",
+     "summary": "The feature-wide judgment (judge_held with no scope) also drops unwritten sections, so plan owed and plan-delta agree. A scoped judgment keeps its own tasks' stubs owed, so ticking a stub's own task still owes its review.",
+     "class": "within",
+     "why": "This keeps the two readers consistent and keeps enforcement where it matters: the stub's own tick is still refused. Nothing unreviewed can be ticked. Within."
+    },
+    {
+     "id": "T462-d",
+     "summary": "The guard's plan round counter (review_round_hooks::plan_rounds) stops at a review row that names the task's stub first heading, as it stops at a CLEAR. A section filled after riding in bundles counts its rounds from zero.",
+     "class": "within",
+     "why": "A round in which the section was the template judged none of its text, so counting it against the section's cap counted a round that never happened. That is the arbiter's process-fault and the T451 case the section measured. Removing the miscount narrows nothing the GM asked, and the cap on the section's real rounds is unchanged. Within."
+    },
+    {
+     "id": "T462-e",
+     "summary": "Accepted limitation: stub-era rows are recognized by the stub's first heading, not by block bytes. So a section whose heading still reads (<why: ...>) while its body is written counts no rounds until the heading changes. A row text digest was priced and not taken.",
+     "class": "within",
+     "why": "What goes uncounted: plan-review rounds of a section whose body is written but whose first heading is still the template's. For those rounds the five-round cap does not trip and arbiter escalation is delayed. Nothing passes unreviewed. Verdicts are keyed by the section's digest, so the filled text is still owed its review. The block also states that the approach gate's placeholder check refuses the tick while a <...> placeholder stands. I did not measure that state, and T448's rows show that placeholder text does ride in bundles. The cost is delayed escalation, never bad work passing or good work refused, so it is no defect under XIV v2.36.0. Neither the request nor the spec reaches round-counter granularity. So it is within, not a narrowing of anything asked. This is a second stub test (the heading) beside the one stub_block test that items 2 and 7 name; that is a note, not a finding."
+    },
+    {
+     "id": "T462-f",
+     "summary": "An arbiter accept or process-fault on a plan round records no verdict for a named task whose section is unwritten (record::split_unwritten). make arbiter-ruled reports no verdict recorded and says the section owes its first review once written.",
+     "class": "within",
+     "why": "This carves an exception into 451 T92 / 385 T16, which make an accept or process-fault stand as the named task's verdict. Those are earlier tasks' rules; the GM's request and 451's spec say nothing about them, so this is within what was asked. On substance, a verdict on template text would approve no plan, and D1 explains why an unwritten section needs no count reset. No outcome the GM asked for is narrowed."
+    },
+    {
+     "id": "T462-D1",
+     "summary": "A process-fault on a WRITTEN section still records its verdict, because that CLEAR row is what restarts a written section's round count. Without it the section re-trips the cap at the same round.",
+     "class": "within",
+     "why": "The plan declines to widen T462-f to every process-fault, which keeps the existing rule. A filled section still owes its own first review by digest. Within."
+    },
+    {
+     "id": "T462-h",
+     "summary": "Found and left: T448's stub CLEAR verdicts already in plan-review.json stay as they are.",
+     "class": "within",
+     "why": "They change no outcome: the filled text is owed by digest, and an unfilled tick is refused by the approach gate. By XIV's definition a record that changes no outcome is no defect, so leaving it is within."
+    },
+    {
+     "id": "T462-i",
+     "summary": "T462 is filed as performance work ([perf], 451 FR-013), because a held plan-delta dispatch is builders waiting.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the builders' loop faster as performance work. Unblocking every held plan-delta dispatch is that. Within."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T453 (left by 451 T306: the spellings of a program its builder measured unused and recorded as limits in `docs/guards.md`)",
+    "### T453 Approach (checklist part A)",
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T453 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T453-D1",
+     "summary": "history guard keeps a quoted no-space string naming git (spelled::names) unquoted, so \"git\" push --force is refused; echo \"git\" push, FOO=\"git\" push, a -m message naming git stay unrefused (pinned)",
+     "class": "within",
+     "why": "ends a check passing bad work (red first on the old code); the pinned non-refusals hold the standing rule that a guard matches invocations, not mentions (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D2",
+     "summary": "claims-file's git exemption by spelled::program_of, the GIT pattern removed",
+     "class": "within",
+     "why": "ends a check refusing good work (\\git mv and command git rm of a sheet refused where git mv is not) (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D3",
+     "summary": "parked stages' git mv read by its spelling (WRAPPER_WORDS, before(\"git\"))",
+     "class": "within",
+     "why": "ends the parked hold passing a \\git mv / command / env -i / nice of a parked stage into the phases (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D4",
+     "summary": "phase-source's readers read by their names past wrappers, a \\ and a path at command position; xargs kept as command word; command -v a lookup; a path is a program only at a command position (ls rust/cat <held> stays a mention, pinned)",
+     "class": "within",
+     "why": "ends held code read unrefused by \\cat, /usr/bin/grep, nice cat, /usr/bin/git show, xargs command cat; command -v and the path-in-argument case are mentions/lookups, not reads, per invocations-not-mentions (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D5",
+     "summary": "house-style's held git search by its spelling, WRAPPER_WORDS inside $(...)",
+     "class": "within",
+     "why": "ends the guard rewriting a \\git grep search pattern, a tool answering wrongly (the search finds something else) (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-D6",
+     "summary": "shell-check's is_git_commit by spelled, past git 2.43's valued options (-C, -c, --git-dir, --work-tree, --namespace, --config-env), so git -C <dir> commit -m is judged and its multi-line -m rewritten to -F - (456 of 105,078 calls, observed 2026-11-27 with its method)",
+     "class": "within",
+     "why": "the existing rule applied to the form it missed: a stranger's co-author or a newline message passed unjudged, a check passing bad work; it adds no new rule, only reach for the rule already in force over git commit, so it is enforcement of an existing check, not new behavior; no refusal text changes (constitution XIV, fix as we go: a guard that passes bad work or refuses good work is a defect fixed in the step; the request (all of it read) has no GM words on these guards, so no narrowing of what was asked)"
+    },
+    {
+     "id": "T453-kept-c-limit",
+     "summary": "a shell's -c string (and eval, su -c, ssh) is not walked; kept a limit in docs/guards.md with its count, not filed",
+     "class": "within",
+     "why": "not a defect under constitution XIV's definition (a WRONG OUTCOME): the block gives 1 use in T306's 71,565 calls, a /tmp probe, and no bad work passed or good work refused - the count is T306's as cited, not re-measured over this block's 105,078-call window, which does not change the reading. The seam with D1-D5, also near-zero-use forms the block calls wrong outcomes: those were fixed at a few lines' cost as discretion, and fixing a cheap unused form is not an admission that every unused form is a defect; the ground here is the measured outcome, not the cost. A recorded limit with its count leaves no known defect, so it is within and needs no ruling. Should a -c call ever pass bad work, it becomes a defect and is fixed in its step."
+    },
+    {
+     "id": "T453-message-check",
+     "summary": "no refusal text changed, so no message-check owed",
+     "class": "within",
+     "why": "follows from the brief's no-message-change constraint; the 2026-11-23 hook-output-length words are not touched"
+    },
+    {
+     "id": "T453-order",
+     "summary": "after T306, before T302, one landing; red-first and green exits as measured",
+     "class": "within",
+     "why": "the order T306 filed; nothing in the request or spec orders otherwise"
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "four removed blocks (T437, T440, T453, T464) were unfilled templates",
+     "class": "within",
+     "why": "a template stub holds no decision; removing it narrows nothing (T453's is replaced by the filled sections above)"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T454 (T445's record, `dev/measurements/2026-11-27/hung-test-runs/results.md` section 3: a red pre-warm test still holds the rustc suite for each `SLOW` build its run asks)",
+    "### T454 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T454-D1",
+     "summary": "A test-only drop guard `Slow` lays the stand-in cargo's slow file inside each of the three thread::scope tests' closures and removes it on drop, so a failed assertion's unwind ends the stand-in before the scope joins the pre-warm run",
+     "class": "within",
+     "why": "It is the task line's fix shape and does the thing the task is for: a red pre-warm test no longer holds the rustc suite. The assertions, the stand-in and the never-cut build in flight (451 T336) are kept, so nothing the tests checked is dropped."
+    },
+    {
+     "id": "T454-D2",
+     "summary": "The two scoped runs' ceiling knobs(600_000) goes to knobs(60_000)",
+     "class": "within",
+     "why": "A test knob with no research claim, cut to bound how long a red run can hold the suite. It equals the 60 s bounds the tests already have (until_calls, the phase-line wait), and measured green runs are about 0.5 s, so it refuses no correct run that the existing bounds would pass. Nothing asked is narrowed."
+    },
+    {
+     "id": "T454-D3",
+     "summary": "The ceiling test keeps knobs(50) and the unscoped `again` run is left unchanged",
+     "class": "within",
+     "why": "These are outside the defect: knobs(50) is already short, and `again` asks the stand-in cargo nothing, so it cannot hold the suite on a SLOW build. Leaving them alone is not a narrowing, and no defect is left."
+    },
+    {
+     "id": "T454-D4",
+     "summary": "The task is tagged [perf] under 451 FR-013, and the engine performance checklist is ruled not to apply",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks faster as performance work, and a red run of the checks' rustc suite ending in seconds instead of about 70 s is exactly that. The engine checklist covers engine speed, which this change does not touch."
+    },
+    {
+     "id": "T454-D5",
+     "summary": "Found and left: none; no map changes",
+     "class": "within",
+     "why": "No defect is deferred. The grep census of \"slow\" and /slow over rust/gate/crates/rustc/src (its search space stated) finds no other test that lays the file."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T455 (found by 451 T445, dev/measurements/2026-11-27/hung-test-runs/results.md section 4: six green test phases of the `land` crate ran 61.0 to 101.8 s against a median of 4.04 s, 2026-11-26T01:11Z to 2026-11-27T06:16Z, observed 2026-11-27, method: `hangs.py` over every test phase of the event log - the line asks which tests take the time, before any change)",
+    "### T455 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 approach",
+     "summary": "T455 is a measurement only: no source changed, its record dev/measurements/2026-11-27/land-test-time/results.md",
+     "class": "within",
+     "why": "The task line asks which tests take the time before any change; FR-013 and the GM's 2026-11-20 words (request.md line 46) count such a measurement as the work itself."
+    },
+    {
+     "id": "D2 method",
+     "summary": "Event-log phases against same-time controls, 30 direct runs with libtest per-test times (RUSTC_BOOTSTRAP=1 for --report-time), each test alone with a git shim and pid counter, 40 runs through make rust-test, a passive /proc watcher; no load generator (feature 460)",
+     "class": "within",
+     "why": "Instrument choices for the measurement the line asks for; nothing changed in the source, and declining a load generator follows a standing rule rather than narrowing the question."
+    },
+    {
+     "id": "D3 finding",
+     "summary": "Load explains the 5 to 25 s tail by stretching every test alike; the 58 to 93 s excess is inside the binary and its test is unnamed; the 30 s wait in land::stop::tests is recorded as a lead, not shown",
+     "class": "within",
+     "why": "This is the answer the measurement produced, with the inference labeled INFERRED and the lead labeled unshown rather than presented as the cause."
+    },
+    {
+     "id": "D4 defer naming the excess",
+     "summary": "The test behind the 58 to 93 s excess is left unnamed in T455; catching a slow run alive is filed as T463, ordered to land before T435",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The line asks which tests take the time, and for the excess the section does not say. It was not reproduced on demand: 70 runs (40 through the slow runs' own make path) and the watcher caught no slow run, and each test alone, the lead's test among them, stayed under 1.2 s. Acting on the unshown lead with a code change would break the line's own rule, measure before any change. The deferral carries its reason, its filed task and its order (FR-009's shape), and T463 carries the same question forward, ordered before T435, rather than dropping it. No passage of request.md (the GM on measuring test time 2026-11-22, on T104, T315, T394) asks for this slow run's cause to be named or fixed in the same step."
+    },
+    {
+     "id": "D5 order",
+     "summary": "After T445, which found the slow runs; before T463 and T435",
+     "class": "within",
+     "why": "Sequencing that follows from the task's source and its filed follow-up; nothing asked for is moved later."
+    },
+    {
+     "id": "D6 performance work",
+     "summary": "Tagged performance work for scheduling, though it speeds nothing itself",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words: a measurement task counts as a performance task for scheduling."
+    },
+    {
+     "id": "D7 exits and budget",
+     "summary": "Green: record written and T463 filed; red: failure recorded and the task set down, an impossibility claim ruled through make arbiter-ask; budget one landing",
+     "class": "within",
+     "why": "Process bounds of the task; they do not narrow what is asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T456 (found by 451 T439: the `env` hop of the wrapper's `#!/usr/bin/env bash` costs 3.1 ms of every hook call, 14.85 against 11.78 ms, 40 runs, load 22.9, measured 2026-11-27, `dev/measurements/2026-11-27/hook-floor/results.md`)",
+    "### T456 Approach (checklist part A)",
+    "### T469 (found by 451 T463's lead read: `a_running_landing_is_sent_term` green at 30.02 s against 0.03 s when started with TERM ignored, measured 2026-11-27)",
+    "### T469 Approach (checklist part A)",
+    "(removed) ### T456 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T469-bounded-wait",
+     "summary": "The stop test's unbounded child.wait() on the TERMed sleep becomes a 25 ms try_wait poll capped at 5 s (GUESS), then kill and reap, and the test asserts the sleep ended by signal 15.",
+     "class": "within",
+     "why": "Fixes a defect in the constitution XIV sense - a test that passes when its subject (TERM delivery) failed, and held the suite 30 s doing it; the GM's fix-as-we-go and his 2026-11-20 priority on performance work both reach it. Red first under an ignored TERM (5.06 s red against 30.07 s green), plain still green. The GM's 2026-11-26 words on T104 (fix the test that fails under load) bear on a new wall-clock bound in a test; this one waits for a signal the test itself sends, ended in about 0.06 s, measured 2026-11-27 at load 13 to 29, so the 5 s cap leaves about eighty times that margin and does not make a load-flaky case."
+    },
+    {
+     "id": "T469-scope-one-test",
+     "summary": "No other test or code changes; found and left: none.",
+     "class": "within",
+     "why": "The task is filed for this one test's silent green; nothing the request asks is withheld, and no defect is named and left."
+    },
+    {
+     "id": "T469-perf-tag",
+     "summary": "Filed as a [perf] task under FR-013, not engine speed, so the performance checklist does not apply.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the checks or the gate faster as performance work (the GM 2026-11-20); the test is bounded at 5 s where it could hold a run 30 s. The tag only orders the work earlier; it narrows nothing asked."
+    },
+    {
+     "id": "T469-cap-knob",
+     "summary": "The 5 s cap (200 polls of 25 ms) is a new GUESS knob, its why beside it in the test.",
+     "class": "within",
+     "why": "A constant the spec does not settle, chosen inside the task; it bounds only how long a missed TERM takes to show red and narrows nothing asked."
+    },
+    {
+     "id": "T469-tiers-coverage",
+     "summary": "First-tier checks only (make builder-checks on the land crate); every new line runs on the passing path, so none is left for the batch gate's coverage.",
+     "class": "within",
+     "why": "The GM's two tiers (2026-11-26, T308) and his words that a builder runs no coverage (2026-11-26)."
+    },
+    {
+     "id": "T469-order",
+     "summary": "Lands after T463 (its alive record committed first); T435, which T463 named it to precede, is already ticked.",
+     "class": "within",
+     "why": "Ordering inside the feature's own task graph; no request clause is touched."
+    },
+    {
+     "id": "T456-bash-exec",
+     "summary": "The hook launcher scripts/hooks/l7r-hook execs `bash \"$h\" \"$@\"` (and `--idle-check`) instead of exec'ing the wrapper by its `#!/usr/bin/env bash` shebang, removing the env process; bash found by PATH, no fixed path assumed; edited under make guard-edit.",
+     "class": "within",
+     "why": "Performance work on the builders' loop, which the GM asked to come first (2026-11-20, FR-013): about 3 ms off every hook call, measured 2026-11-27 two ways. Behavior kept: the exec-bit mirror-or-tree choice, stdin, exit code and stderr."
+    },
+    {
+     "id": "T456-others-unchanged",
+     "summary": "The other `#!/usr/bin/env bash` entries (sourced lib/*.sh, hand-run stall/finished-run hook scripts, scripts/gates/l7r-gate.sh run on particular commands or beside seconds of work) are checked and left unchanged.",
+     "class": "within",
+     "why": "Each is off the every-call hot path, found by a stated search (settings.json, scripts/hooks/, the guards' Command calls of l7r-gate.sh), observed 2026-11-27. A path slower than it could be by milliseconds beside seconds of work is not a defect (wrong outcome), and the task is filed for the hook call's hop; nothing asked is withheld."
+    },
+    {
+     "id": "T456-red-first-cases",
+     "summary": "Two new launcher cases in tests/hooks/test-l7r-guard.sh, the mirror's dispatcher stub given a shebang naming no interpreter: red on the old launcher (117 passed, 2 failed), green on the new (119 of 119).",
+     "class": "within",
+     "why": "A test whose only effect is to pin the requested change (the launcher runs the dispatcher through bash, not its shebang); enforcement of the task, not added scope."
+    },
+    {
+     "id": "T456-tiers",
+     "summary": "First-tier checks and the changed guard's suite only.",
+     "class": "within",
+     "why": "The GM's two tiers of checking (2026-11-26, T308): full rigor at the session clone's landing, not in the builder."
+    },
+    {
+     "id": "T456-placeholder-removed",
+     "summary": "The template heading `### T456 (<why: the finding or measurement that files it>)` is removed, replaced by the filled-in T456 heading carrying its finding; the Approach template likewise filled in.",
+     "class": "within",
+     "why": "A placeholder giving way to the task's own text; no decision of substance is withdrawn."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T458 (found by T443, its Found and left: the reversal index's rebuild, a new, refiled or rotated log's first Edit, was 101.6 / 180.4 ms of `event-log-hooks` against 20.5 / 30.5 warm, measured 2026-11-27 under load1 23 to 25 (`t443-cold.tsv`): the build parsed every line holding `\"Edit\"`)",
+    "### T458 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T458 Approach: the second literal screen",
+     "summary": "indexed parses a line only if it also holds the text \"PreToolUse\" (memmem before UTF-8 decode), on top of T383's \"Edit\" screen",
+     "class": "within",
+     "why": "Performance work on a hook, which the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013). It keeps the rows the full parse keeps on every line any writer produces. The differential shows 0 of 1,937 lists differing cold, warm and grown, and it goes red on a wrong screen."
+    },
+    {
+     "id": "T458 Approach: indexed returns whether it parsed",
+     "summary": "a bool return so a test can count the build's parses",
+     "class": "within",
+     "why": "Its only use is to let a test prove the screen does what the task claims, so it enforces the task. No behavior changes."
+    },
+    {
+     "id": "T458 Approach: oracle and differential left unscreened",
+     "summary": "the test-only full parse and the differential keep parsing every line",
+     "class": "within",
+     "why": "This keeps the proof from being circular. It changes no behavior, and no guard message changes."
+    },
+    {
+     "id": "DECISION: the literal is the quoted value, not the field",
+     "summary": "screen on \"PreToolUse\", not \"ev\":\"PreToolUse\"",
+     "class": "within",
+     "why": "A rendering choice. The quoted value alone keeps every line the field spelling keeps, plus any line with whitespace around the colon, so it drops nothing more. It is pinned by a test that goes red on the field-spelling mutant."
+    },
+    {
+     "id": "DECISION: why the screen cannot meet another spelling",
+     "summary": "every writer serializes with serde_json compact or copies bytes, and serde_json never escapes a letter",
+     "class": "within",
+     "why": "This is a factual premise, labeled as an observation with its method (each writer's code read). It decides nothing beyond the screen. It is the ground for the limitation below and is weighed there."
+    },
+    {
+     "id": "DECISION: ACCEPTED LIMITATION, an ev spelled with a \\u escape",
+     "summary": "a line whose ev is written with a JSON \\u escape is kept by the full parse but dropped by the screen, so a reversal on it would be missed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a case the general behavior ('keeps exactly the rows the full parse keeps') does not cover, so it is ruled as an exception and presumed wrong. The reversal tripwire is feature 375's requirement, and nothing in this request asks for it. Judged against the purpose anyway, the exception removes no protection. The tripwire watches Edits that the hooks log, and the block reads every writer it names as serde_json compact output or a byte-for-byte copy. serde_json escapes only a quote, a backslash or a control character, so 'PreToolUse' (printable ASCII) has one spelling from any writer that escapes no more than JSON requires, not only the three listed. The survey found the literal in all 9,176 of 9,176 kept lines across 485,165 lines of the 34 real logs, and the differential found 0 of 1,937 lists differing. So the excepted case is a line no writer produces. Leaving it is no wrong outcome on any real log, and by constitution XIV's definition of a defect it does not leave a defect. It is one case, so there is no bundling. The writer census is the block's observation, not mine (the bundle excludes the repository), and it says how each writer was read, not what search found the set. The ruling rests on the serializer argument and the survey, not on the list being complete. 'EDIT has carried the same limit since T383' and the go-ahead were not weighed either way."
+    },
+    {
+     "id": "T458 Approach: the task line's 101.6 ms not compared",
+     "summary": "before and after are measured as interleaved arms at load1 about 7, not against the task line's figure at load1 23 to 25",
+     "class": "within",
+     "why": "A measurement choice. Both arms ran under the same load, the comparison is fair, and it is stated openly."
+    },
+    {
+     "id": "T458 Approach: order, after T443 and before T302",
+     "summary": "the screen lands on T443's index",
+     "class": "within",
+     "why": "It depends on T443's index, and as performance work it goes ahead of non-performance work (FR-013)."
+    },
+    {
+     "id": "Performance work? yes",
+     "summary": "T458 is classed as performance work for scheduling",
+     "class": "within",
+     "why": "It speeds up a hook on the builders' loop, which is FR-013's meaning of performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T459 (found by 451 T443's review, 2026-11-27, by reading: a hook killed between the reversal index's temporary write and its rename leaves a `.<feature>.idx.<pid>.<n>.tmp` in `<events dir>/reversal/` that nothing removes; none seen in T443's runs)",
+    "### T459 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T459-D1",
+     "summary": "The sweep of old temporary index files runs when an index is written (store), never on a read.",
+     "class": "within",
+     "why": "A defect fix (a killed hook's .tmp left in <events dir>/reversal/) under the feature's fix-as-we-go and the GM's 2026-11-22 'clean up after ourselves in terms of the file system'. Running it at the one writer is the mechanism, not a narrowing: a leftover of a few hundred KB lives at most until the next write in the directory, which reads no map, contradicts no finding and costs no time (the GM's 2026-11-26 principle: time saved over disk). No defect is left."
+    },
+    {
+     "id": "T459-D2",
+     "summary": "Every feature's temporary file in the directory is swept, by its exact name form (.<stem>.idx.<pid>.<n>.tmp, digits), older than SWEEP_AGE; other names and unreadable ages are left.",
+     "class": "within",
+     "why": "Widens the fix to cover a feature whose index is never written again, so it serves the defect's purpose; the exact-form match keeps the sweep from touching anything that is not a leftover of this writer. Nothing the request asks for is excluded."
+    },
+    {
+     "id": "T459-D3",
+     "summary": "SWEEP_AGE is one hour, a knob (GUESS, make tunables).",
+     "class": "within",
+     "why": "A tunable bound on a value no research or GM word settles; the GM's 2026-10-25 words allow a knob where nothing indicates a value. It is set far past a live writer's life (about 12 ms, one-shot label 2026-11-27 with its results file), so it keeps T443's invariant that no running writer's file is removed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T460 (found by T433 and T436, 2026-11-27: the wrap-up band's two whole-command refusals are stopgaps the walk no longer needs, and refuse writes under `/tmp` its redirect check passes)",
+    "### T460 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T460-D1",
+     "summary": "The wrap-up band drops its two whole-command stopgap refusals (any >& left after sanitize, T433; a cd or pushd carrying a redirect, T427), leaving both shapes to the existing place-based redirect rule: under /tmp or the handoff passes, anywhere else is refused with the message every refused redirect already has.",
+     "class": "within",
+     "why": "It serves FR-006 as the GM amended it on 2026-11-27 (T417: a builder at the cap may finish its stop point - 'if our builders are prevented from even finishing their handoff, then is that really the most efficient thing to do?'). The stopgaps refused correct work (make decide >& /tmp/log, a step the stop point owns), which is a defect per XIV; removing them narrows nothing the GM asked for, since a write to a source file by either shape is still refused by place (red-first cases >& /t/rust/a.rs, >&b.rs, cd /tmp > rust/a.rs, pushd /t >> /c/a.rs). Enforcement stays real enforcement (the 2026-11-19 approval). No new message, no new escape."
+    },
+    {
+     "id": "T460-D2",
+     "summary": "pushd moves into PLAIN beside cd so a pushd with no redirect still passes after the cd/pushd arm goes; popd stays refused, pinned by a test.",
+     "class": "within",
+     "why": "A consequence of D1 that keeps the band's prior verdicts unchanged: pushd without a redirect passed before and passes now; popd was refused before and is refused now. It widens and narrows nothing relative to FR-006 or T417."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T462 (the round arbiter's process-fault on `round:spec-fidelity|plan:451-time-retro-and-efficiency#T448@3`, 2026-11-27T08:00Z: a blank task stub counted plan-review rounds)",
+    "### T462 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T462-a",
+     "summary": "A task section is UNWRITTEN when every one of its own blocks is byte for byte a block of the make task-add template (plan::template::stub_block); writing one block makes the whole section written.",
+     "class": "within",
+     "why": "Neither the GM's request nor 451's spec says anything about stub sections or about how plan-review rounds are counted. This is the definition the fix depends on, and it errs toward review: one changed block makes the whole section owed. It narrows nothing that was asked."
+    },
+    {
+     "id": "T462-b",
+     "summary": "make plan-delta's keys drop an unwritten section's blocks, after the BLOCKED keys are merged in, so the stub leaves the bundle, its blocks-<tasks> name and the guard's round count.",
+     "class": "within",
+     "why": "The defect fixed is a check refusing good work: T448's empty stub held every 451 plan-delta dispatch behind its rounds. Fixing it serves 'Fewer plan re-rounds' (improvement 4) and FR-013's builders' loop. A stub has no plan text to review. Its review is still owed once it is written, because verdicts are keyed by digest."
+    },
+    {
+     "id": "T462-c",
+     "summary": "The feature-wide judgment (judge_held with no scope) also drops unwritten sections, so plan owed and plan-delta agree. A scoped judgment keeps its own tasks' stubs owed, so ticking a stub's own task still owes its review.",
+     "class": "within",
+     "why": "This keeps the two readers consistent and keeps enforcement where it matters: the stub's own tick is still refused. Nothing unreviewed can be ticked. Within."
+    },
+    {
+     "id": "T462-d",
+     "summary": "The guard's plan round counter (review_round_hooks::plan_rounds) stops at a review row that names the task's stub first heading, as it stops at a CLEAR. A section filled after riding in bundles counts its rounds from zero.",
+     "class": "within",
+     "why": "A round in which the section was the template judged none of its text, so counting it against the section's cap counted a round that never happened. That is the arbiter's process-fault and the T451 case the section measured. Removing the miscount narrows nothing the GM asked, and the cap on the section's real rounds is unchanged. Within."
+    },
+    {
+     "id": "T462-e",
+     "summary": "Accepted limitation: stub-era rows are recognized by the stub's first heading, not by block bytes. So a section whose heading still reads (<why: ...>) while its body is written counts no rounds until the heading changes. A row text digest was priced and not taken.",
+     "class": "within",
+     "why": "What goes uncounted: plan-review rounds of a section whose body is written but whose first heading is still the template's. For those rounds the five-round cap does not trip and arbiter escalation is delayed. Nothing passes unreviewed. Verdicts are keyed by the section's digest, so the filled text is still owed its review. The block also states that the approach gate's placeholder check refuses the tick while a <...> placeholder stands. I did not measure that state, and T448's rows show that placeholder text does ride in bundles. The cost is delayed escalation, never bad work passing or good work refused, so it is no defect under XIV v2.36.0. Neither the request nor the spec reaches round-counter granularity. So it is within, not a narrowing of anything asked. This is a second stub test (the heading) beside the one stub_block test that items 2 and 7 name; that is a note, not a finding."
+    },
+    {
+     "id": "T462-f",
+     "summary": "An arbiter accept or process-fault on a plan round records no verdict for a named task whose section is unwritten (record::split_unwritten). make arbiter-ruled reports no verdict recorded and says the section owes its first review once written.",
+     "class": "within",
+     "why": "This carves an exception into 451 T92 / 385 T16, which make an accept or process-fault stand as the named task's verdict. Those are earlier tasks' rules; the GM's request and 451's spec say nothing about them, so this is within what was asked. On substance, a verdict on template text would approve no plan, and D1 explains why an unwritten section needs no count reset. No outcome the GM asked for is narrowed."
+    },
+    {
+     "id": "T462-D1",
+     "summary": "A process-fault on a WRITTEN section still records its verdict, because that CLEAR row is what restarts a written section's round count. Without it the section re-trips the cap at the same round.",
+     "class": "within",
+     "why": "The plan declines to widen T462-f to every process-fault, which keeps the existing rule. A filled section still owes its own first review by digest. Within."
+    },
+    {
+     "id": "T462-h",
+     "summary": "Found and left: T448's stub CLEAR verdicts already in plan-review.json stay as they are.",
+     "class": "within",
+     "why": "They change no outcome: the filled text is owed by digest, and an unfilled tick is refused by the approach gate. By XIV's definition a record that changes no outcome is no defect, so leaving it is within."
+    },
+    {
+     "id": "T462-i",
+     "summary": "T462 is filed as performance work ([perf], 451 FR-013), because a held plan-delta dispatch is builders waiting.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the builders' loop faster as performance work. Unblocking every held plan-delta dispatch is that. Within."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T453 to T462, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

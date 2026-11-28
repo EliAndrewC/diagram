@@ -1,0 +1,519 @@
+{
+ "blocks": {
+  "### T310 Approach (checklist part A)": {
+   "sha256": "8d7ae095a031e9c176551f32daebde89fa8923eeb3ce11e54e0769aad07807f0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T310 (451 T305, 2026-11-26: 73 of three days' 272 untied check dispatches were subagent-dispatched; re-read against what landed since, 2026-11-27: of its three halves one still holds, measured below)": {
+   "sha256": "65b92ecea25500b263838204c0312fcf9905af7504942f39d8fd025404d63fd6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T311 Approach (checklist part A)": {
+   "sha256": "fb9654daf3da467dbe2c631cfc54e035681d5f7e0fdc0f3afc0ec345e5ed6f47",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T311 (left from 451 T303 and T305, 2026-11-26: `scripts/gates/closing-checks.sh` still ran an embedded Python block though the repository holds no Python, and `whose.rs` left a check pass to a started task's landing while the task was \"not ticked\" rather than while its line was open)": {
+   "sha256": "4c32b3554affb8df78deaa9f0af4516be72a5c90978fd7686837504369e25f08",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T312 Approach (checklist part A)": {
+   "sha256": "6bd02257c12716a5fc568a31b0cf935298d9c485258211e17de7ece63447b941",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T312 (left by 451 T309, 2026-11-26, by grep and not run: the bundle crate's `marks::reply_of` and `record/bundle/modal.rs`'s `research_held` default to the live transcripts under `~/.claude/projects`; the task crate's `task_add/quick/tests.rs` reads `~/.claude/guard-log`; the land, plan and task crates set `GUARD_LOG_DIR` process-wide)": {
+   "sha256": "5755fad1c016adb8419eaf328ee7f56fb23ca898280c65cdbda6d46824bec377",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T310": {
+   "section_sha256": "aad611dcea1473a9c6b5fcbfb0155621a991d908f7b9fb4c12161b41e82a954a",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T310-D1",
+     "summary": "The builder reading takes the brief's BUILDER-BRIEF marker first, through l7r_shared::builder_brief::parse; a marker naming no T<n> falls through to the old description and first-line readings.",
+     "class": "within",
+     "why": "It fixes a reader that answered wrongly: it read every marker-briefed pool builder as no builder, so their checks' event lines went untied. That serves the request's task time breakdown, where every minute is named or the remainder explained (amendment (c)), and FR-004/FR-005's per-task booking. Keeping the fallback keeps the hand-briefed readings working. Nothing asked is narrowed."
+    },
+    {
+     "id": "T310-D2",
+     "summary": "The whole prompt goes to parse, not only its first line, matching the guard (builder_brief_hooks.rs), which accepts a marker on any line of its own; a marker merely mentioned in a sentence is no marker; a bundle brief's first-line reading is kept.",
+     "class": "within",
+     "why": "An implementation choice that makes the reader accept the same text the guard accepted. It leaves out nothing the request or the spec asks for."
+    },
+    {
+     "id": "T310-(c)-start-row",
+     "summary": "The task line's third half, a start row for a handed-out pool tree, is not built: since T332/T344 a line written in a pool tree is booked by the pool registry's pool_task, and with (a) a builder's check is booked by its parent's marker. A start nobody made would be misread by the start log's other readers.",
+     "class": "within",
+     "why": "The half's purpose, booking a pool builder's lines to its task, is reached by pool_task and by (a), so the booking the request asks for is complete. The side effect is that the stall check and the builder's own Stop stay quiet for a pool builder with no task-start. That keeps their existing behavior, and neither request.md nor any FR or SC asks for those checks to cover a pool builder (searched in request.md and spec-index.md for stall, task-start, start row, pool builder, mark). This is a difference from the session's own task line, not a wrong outcome left, so it carries no ruling."
+    },
+    {
+     "id": "T310-(c)-mark",
+     "summary": "The task line's mark for a handed-out tree is not built: marks are per tree since T254/T369, and since T437 a gone tree's mark is inert.",
+     "class": "within",
+     "why": "Already answered by landed work: a clone's mark no longer stands for a builder's tree. No outcome the request names is left wrong."
+    },
+    {
+     "id": "T310-callers",
+     "summary": "Every caller of the shared builder reading (filed.rs booking, stalls.rs, builder_stop_hooks.rs, check_bundle_hooks/own.rs, ledger_passes/left/whose.rs) now reads a pool builder as one. Each keeps its own further test, and no guard message changes.",
+     "class": "within",
+     "why": "This is the same defect fixed in the one reader every caller shares, not new behavior added. The stall check and the builder Stop still act only on a started task with an open box, so nothing refuses work it did not refuse before, beyond reading the pool builder correctly."
+    },
+    {
+     "id": "T310-residuals",
+     "summary": "Two items are left with Found and left: none. One of the 134 builder dispatch lines is untied (a spec-fidelity dispatch by T463's builder), and one dispatch left no agent meta and is not traced further. Six dispatches booked to a task outside the builder's marker are judged correct by the booking rule, which takes the call's own words first.",
+     "class": "within",
+     "why": "The untied dispatch line comes from a marker-briefed builder, so the (a) fix reaches it. The untraced dispatch has no agent and so carries no check minutes to book. Both are within the GM's stated tolerance for the breakdown (amendment (l): 'it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'). The six cross-task bookings follow the booking's stated rule and are not a defect (constitution XIV's meaning)."
+    },
+    {
+     "id": "T310-perf-class",
+     "summary": "Classed as performance work through its measurement clause: it books a pool builder's checks to its task. It is not an engine-speed task.",
+     "class": "within",
+     "why": "FR-013 and the GM's words of 2026-11-20 count measurement work as performance work for scheduling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T311": {
+   "section_sha256": "36ad67ad2393df48327e452167168502108ed217d3dfcc17605563d55b7117d4",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T311 (1)",
+     "summary": "closing-checks.sh's embedded python3 splitter ported to `l7r-gate closing-split`, called with the same seven arguments; the script's contract (split.txt, exit 0/3/other-fallback, the four files, the messages) unchanged",
+     "class": "within",
+     "why": "Removes the last Python from a script in a repository that holds none (feature 449), keeping the split's rules (451 T86, T93, T303) as they were; a known defect fixed as we go, nothing the GM asked for narrowed."
+    },
+    {
+     "id": "T311-D1",
+     "summary": "three differences from the Python on cases no run met: an unparseable edit time claims nothing (the Python crashed into the fallback), a non-string task claims nothing, marks read through marks::all (also the pre-T254 one-mark file); tie keeps the first",
+     "class": "within",
+     "why": "Differences in a port where everything works are the rule, not an exception (no exactness standard, GM 2026-11-18); none is a wrong outcome, and (a) and (c) remove a crash-to-fallback and a missed mark."
+    },
+    {
+     "id": "T311 (2)",
+     "summary": "whose.rs leaves a check pass to a task's landing only while left.rs's `open` finds a `- [ ] T<n>` line, not while `ticked` finds no `- [x]` line; ticked/ticked_in deleted; T231's sentence reversed, its section left as written",
+     "class": "within",
+     "why": "Is the task line's own fix (a pass left only while the line is open); the defect is a pass never asked for, a check owed and lost."
+    },
+    {
+     "id": "T311 premise / 'owes no row'",
+     "summary": "the task line's premise corrected by measurement (Withdrawn and built-inside boxes were already ticked; the lost pass was a lineless started task's), and the brief's 'owes no row' read as T231's rule: not left to a landing, owed wherever a landing or push asks, never dropped",
+     "class": "within",
+     "why": "The brief is a session's, not the GM's; the reading keeps 385's rule that every pass owes its row rather than inventing a drop, so it narrows nothing in request.md or the spec. The premise correction is measured (left: (1, [true, true, false, false]) on HEAD, 2026-11-27)."
+    },
+    {
+     "id": "T311 fixture",
+     "summary": "the suite's own python3 -c timestamp replaced by date -u -d; a new case puts a failing python3 first on PATH and asserts none starts",
+     "class": "within",
+     "why": "Enforces the no-Python outcome the task exists for; enforcement of what was asked, not scope."
+    },
+    {
+     "id": "T311 exits",
+     "summary": "green is the builder's first tier and the suite; the full gate and coverage are the batch landing's",
+     "class": "within",
+     "why": "The GM's 2026-11-26 words (T308): a builder runs no coverage."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T310 (451 T305, 2026-11-26: 73 of three days' 272 untied check dispatches were subagent-dispatched; re-read against what landed since, 2026-11-27: of its three halves one still holds, measured below)",
+    "### T310 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T310-D1",
+     "summary": "The builder reading takes the brief's marker (via l7r_shared::builder_brief::parse) first, its task word's T<n> ids; a marker naming no task falls to the old description and first-line readings.",
+     "class": "within",
+     "why": "Repairs a wrong outcome: since T334 changed the brief's opening, the old description reading (^\\s*(\\d{3})) refused every pool builder (103 of 103 marker-briefed builders described '<Kind>: 451 T<n>', observed 2026-11-27 with method), so their checks went unbooked. Serves the 2026-11-19 request for a per-task breakdown of where time went, FR-004 (an agent's stop line carries its task), and the T243 amendment that every minute is named rather than a silent 'other'. Keeping the fallback preserves the hand-briefed readings; nothing the GM asked is dropped."
+    },
+    {
+     "id": "T310-D2",
+     "summary": "The whole prompt goes to parse, matching what the dispatch guard accepts (a marker on a line of its own anywhere); a marker mentioned inside a sentence is no marker; the bundle brief's first-line reading is kept.",
+     "class": "within",
+     "why": "An implementation choice for reading the marker the same way the guard that checks it does (T334, 'a builder is dispatched through the tooling'). It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T310-(b)",
+     "summary": "A check whose own description names no task is booked to its parent builder's marker task and feature (filed's theirs); its ms are tool time, so the section claims no minutes.",
+     "class": "within",
+     "why": "This is the booking the task exists for: 140 of 1,408 lines from 15 builder-launched checks were untied, observed 2026-11-27 with method. It serves the T243 breakdown's 'every minute named' and the 2026-11-22 'we want everything measured so we know where our time goes'. With a bundle marker (T<n>,T<m>) the line is booked to the marker's task list, and the GM set no other attribution rule for bundles (T141). Claiming no minutes is a statement about what the figure is, not a narrowing."
+    },
+    {
+     "id": "T310-(c)",
+     "summary": "The task line's third half (a start row and mark for a handed-out tree) is not built, because T332/T344's registry booking (pool_task) already books a pool tree's own lines, per-tree marks since T254/T369 and T437 make the clone mark moot, and with (a) a builder's check needs no start row.",
+     "class": "within",
+     "why": "The third half came from the task line, which is the session's text, not the GM's. Its purpose was booking a handed-out tree's lines to their task. The section shows that purpose is already met: the registry books the tree's lines, (a) books the checks, and 133 of 134 builder dispatch lines already carry a task (observed 2026-11-27). Writing a start nobody made would make the other readers of the start log (the landing, the stall check, the undo) read wrongly. No line the GM asked to have booked is left unbooked."
+    },
+    {
+     "id": "T310-callers",
+     "summary": "Every caller of the builder reading (event-log booking, the set-down stall check, the builder's own Stop, check_bundle own.rs, the ledger's whose.rs) now reads a pool builder as a builder; each keeps its own further test (stall and Stop act only on a task with a start row and an open box); no guard message changes.",
+     "class": "within",
+     "why": "FR-006 defines a builder as an agent dispatched with a task's brief, and a marker-briefed pool builder is one, so these guards' stated reach already covered pool builders. T334's format change broke that reach, and this restores it rather than extending it. Nothing in the request (the 2026-11-23 Stop-hook section is about the main session's Stop blocks) asks to exempt pool builders. No new refusal and no new message are added."
+    },
+    {
+     "id": "T310-found-left",
+     "summary": "Six builder dispatch lines booked to a task outside the builder's marker (each named in the section) are left as they are: the dispatch's own description names a related or absorbed task, and the booking's rule takes the call's own words first.",
+     "class": "within",
+     "why": "Each line is booked to a task its own call names, so no time goes unbooked or is booked wrongly. This is a difference from the marker, not a defect (constitution XIV v2.36.0), and leaving it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T310 (451 T305, 2026-11-26: 73 of three days' 272 untied check dispatches were subagent-dispatched; re-read against what landed since, 2026-11-27: of its three halves one still holds, measured below)",
+    "### T310 Approach (checklist part A)",
+    "### T475 (<why: the finding or measurement that files it>)",
+    "### T475 Approach (checklist part A)",
+    "### T480 (<why: the finding or measurement that files it>)",
+    "### T480 Approach (checklist part A)",
+    "(removed) ### T310 (<why: the finding or measurement that files it>)",
+    "(removed) ### T463 (<why: the finding or measurement that files it>)",
+    "(removed) ### T463 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T310-D1",
+     "summary": "The builder reading takes the brief's BUILDER-BRIEF marker first (through l7r_shared::builder_brief::parse) and falls to the old description reading only where no marker names a task.",
+     "class": "within",
+     "why": "Makes a pool builder's checks bookable to its task, serving FR-004 (an agent's line carries its task) and amendment (c) of the task time breakdown (every minute named, never a silent remainder); the fallback keeps the earlier readings unchanged. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T310-D2",
+     "summary": "The whole prompt is passed to parse, matching the guard's acceptance of a marker on any line of its own; a marker mentioned in a sentence is no marker.",
+     "class": "within",
+     "why": "An implementation choice made so the reader and the guard agree. No requested behavior is narrowed."
+    },
+    {
+     "id": "T310-c",
+     "summary": "Half (c) of T310's line (a start row and mark for a handed-out tree) is not built, because T332/T344's pool-registry booking and T254/T369/T437's per-tree marks already answer it, and (a) books a builder's checks by its parent's marker.",
+     "class": "within",
+     "why": "The request holds no GM words asking for a start row or a mark of a handed-out tree (grep of request.md: none). Half (c) was the session's own proposed mechanism, and the outcome it served, booking those lines, is delivered by another route. Dropping a mechanism whose job is done narrows nothing."
+    },
+    {
+     "id": "T310-callers",
+     "summary": "The stall check, the builder's own Stop, own.rs and whose.rs now read a pool builder as a builder; each keeps its own further test (a start in task-starts.jsonl and an open box). No guard message changes.",
+     "class": "within",
+     "why": "These readers already existed to act on builders (T84, T268) and missed pool builders only because of the defective reading. Applying them as they were meant fixes a wrong outcome and adds no new behavior. Nothing in the GM's T308 words on closing builders out is touched: a builder with no start stays quiet."
+    },
+    {
+     "id": "T310-found-left",
+     "summary": "Found and left: none. The 6 builder dispatch lines booked to a task outside the builder's marker name that task in the dispatch's own description (a review of a related or absorbed task), so they are called no defect.",
+     "class": "within",
+     "why": "Booking by the call's own words first is the booking's existing rule. A review of a related task booked to the task it reviews is not a wrong outcome under constitution XIV, so leaving it as it is narrows nothing."
+    },
+    {
+     "id": "T310-perf",
+     "summary": "The checklist answers 'Performance work? no - booking'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM, 2026-11-20 (request.md): 'I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first.' FR-013 names 'the event log's data' and 'make where-time's ... readers' as measurement work that counts as performance work for the ordering, and the block's own template line says 'or measures where time goes: a measurement task counts'. T310's stated goal (item 1) is that make task-time books a pool builder's checks to its task, which is a correction of the event log's data. Calling it 'no - booking' takes a measurement task out of the class the GM put it in. The work being already built is none of the three grounds for an exception. The fix: answer 'yes - measurement work (FR-013: the event log's data; the GM 2026-11-20)' and tag the task [perf] on its tasks.md line if it is not tagged."
+    },
+    {
+     "id": "T475/T480-templates",
+     "summary": "The T475 and T480 sections are unfilled templates.",
+     "class": "within",
+     "why": "A template makes no decision."
+    },
+    {
+     "id": "removed-T310-template",
+     "summary": "T310's empty template block is removed and replaced by the filled section under a new heading.",
+     "class": "within",
+     "why": "The earlier text was a placeholder with no decisions (verdict CLEAR as a template), so removing it drops nothing."
+    },
+    {
+     "id": "removed-T463",
+     "summary": "T463's two empty template blocks are removed.",
+     "class": "within",
+     "why": "Both earlier texts were unfilled placeholders, so their removal drops no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T310 (451 T305, 2026-11-26: 73 of three days' 272 untied check dispatches were subagent-dispatched; re-read against what landed since, 2026-11-27: of its three halves one still holds, measured below)",
+    "### T310 Approach (checklist part A)",
+    "### T475 (<why: the finding or measurement that files it>)",
+    "### T475 Approach (checklist part A)",
+    "### T480 (<why: the finding or measurement that files it>)",
+    "### T480 Approach (checklist part A)",
+    "(removed) ### T310 (<why: the finding or measurement that files it>)",
+    "(removed) ### T463 (<why: the finding or measurement that files it>)",
+    "(removed) ### T463 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T310 (a)",
+     "summary": "The builder reading (set_down_hooks/builders.rs) reads a pool builder's BUILDER-BRIEF marker first through l7r_shared::builder_brief::parse, falling to the old description reading only where no marker names a task.",
+     "class": "within",
+     "why": "Serves the GM's task time breakdown (2026-11-19 retrospective and tooling question; amendment (c), every minute named) and FR-004/FR-005: a pool builder's checks were booked to no task because the old reading wanted a description opening with the feature number, which none of the 103 marker-briefed builders had. Fixing the reader so the breakdown books those lines is the request itself."
+    },
+    {
+     "id": "T310 (b)",
+     "summary": "The booking of a builder's checks' own lines (140 of 1,408 untied) is fixed by (a): such a line is booked to the parent's marker task and feature.",
+     "class": "within",
+     "why": "Same purpose as (a): minutes that were booked to no task become booked to the task they served. No minutes claimed from tool-time ms, which keeps the figure honest rather than narrowing anything."
+    },
+    {
+     "id": "T310 (c)",
+     "summary": "The task line's third half (a start row and mark for a handed-out tree) is not built: already answered by T332/T344's pool registry booking (pool_task), marks per tree since T254/T369, a gone tree's mark inert since T437, and a builder's check now booked by its parent's marker.",
+     "class": "within",
+     "why": "The start row was the coordinating session's proposed mechanism on the task line, not something the GM's request or the accepted spec asks for (no FR requires it, spec-index read). Its purpose - a pool tree's lines booked to the task holding it - is met by landed work, and the block gives a concrete reason a handout start would harm other readers (a start nobody made read as one). No defect is left: what (c) existed to book is booked."
+    },
+    {
+     "id": "T310 callers",
+     "summary": "Every caller of the builder reading (event-log booking, stall check, builder Stop, check_bundle own.rs, ledger whose.rs) now reads a pool builder as one, each keeping its own further test; no guard message changes.",
+     "class": "within",
+     "why": "The direct consequence of fixing one shared reader; it makes existing guards behave as designed (T84, T268) for pool builders rather than adding new behavior. Stall check and builder Stop still act only on a task with a start and an open box."
+    },
+    {
+     "id": "T310 cost",
+     "summary": "The prompt's first record is read for every depth-1 agent asked about: one line of one file per call.",
+     "class": "within",
+     "why": "An implementation cost statement, not a scope decision."
+    },
+    {
+     "id": "T310-D1",
+     "summary": "Marker read first, its task word's ids; a marker naming no T<n> falls through to the 449-era description and first-line readings.",
+     "class": "within",
+     "why": "A design choice inside the fix; keeps prior readings intact for prompts without a usable marker. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T310-D2",
+     "summary": "The whole prompt is passed to parse (matching the guard, which accepts a marker on any own line); a marker only mentioned in a sentence is no marker; bundle brief first-line reading kept.",
+     "class": "within",
+     "why": "Aligns the reader with the guard that already accepts the marker; a design choice inside the fix."
+    },
+    {
+     "id": "T310 found-and-left",
+     "summary": "Six builder dispatch lines booked to a task outside the builder's marker (T410 twice, T405, T423, T435, and T399 in the 449 log) are left as the booking's rule (the call's own words first), observed 2026-11-27 with method.",
+     "class": "within",
+     "why": "Each names its task in the dispatch's own description (a review of a related or absorbed task), so it is booked correctly to what it served - a difference from the builder's marker, not a wrong outcome. The count now matches the six listed and carries its observation and method (D15)."
+    },
+    {
+     "id": "T310 performance",
+     "summary": "Classed as performance work: measurement work under FR-013 (the event log's data read by make task-time and make where-time); not engine-speed, no checklist answers owed.",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 count measurement-of-where-time-goes as performance work for scheduling; this task corrects what the breakdown books."
+    },
+    {
+     "id": "T475 / T480 sections",
+     "summary": "Unfilled template sections; no decision made.",
+     "class": "within",
+     "why": "A placeholder decides nothing the spec left open."
+    },
+    {
+     "id": "removed T310 template",
+     "summary": "The empty T310 template replaced by the filled T310 section.",
+     "class": "within",
+     "why": "Removing a placeholder removes no decision; its content is now the filled block judged above."
+    },
+    {
+     "id": "removed T463 sections",
+     "summary": "T463's empty template sections (heading and checklist part A) deleted by hand.",
+     "class": "within",
+     "why": "Judged from their earlier text: both were unfilled placeholders carrying no decision, CLEAR when last judged, so their removal narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T310 (451 T305, 2026-11-26: 73 of three days' 272 untied check dispatches were subagent-dispatched; re-read against what landed since, 2026-11-27: of its three halves one still holds, measured below)",
+    "### T310 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T310-D1",
+     "summary": "The builder reading takes the brief's BUILDER-BRIEF marker first, through l7r_shared::builder_brief::parse; a marker naming no T<n> falls through to the old description and first-line readings.",
+     "class": "within",
+     "why": "It fixes a reader that answered wrongly: it read every marker-briefed pool builder as no builder, so their checks' event lines went untied. That serves the request's task time breakdown, where every minute is named or the remainder explained (amendment (c)), and FR-004/FR-005's per-task booking. Keeping the fallback keeps the hand-briefed readings working. Nothing asked is narrowed."
+    },
+    {
+     "id": "T310-D2",
+     "summary": "The whole prompt goes to parse, not only its first line, matching the guard (builder_brief_hooks.rs), which accepts a marker on any line of its own; a marker merely mentioned in a sentence is no marker; a bundle brief's first-line reading is kept.",
+     "class": "within",
+     "why": "An implementation choice that makes the reader accept the same text the guard accepted. It leaves out nothing the request or the spec asks for."
+    },
+    {
+     "id": "T310-(c)-start-row",
+     "summary": "The task line's third half, a start row for a handed-out pool tree, is not built: since T332/T344 a line written in a pool tree is booked by the pool registry's pool_task, and with (a) a builder's check is booked by its parent's marker. A start nobody made would be misread by the start log's other readers.",
+     "class": "within",
+     "why": "The half's purpose, booking a pool builder's lines to its task, is reached by pool_task and by (a), so the booking the request asks for is complete. The side effect is that the stall check and the builder's own Stop stay quiet for a pool builder with no task-start. That keeps their existing behavior, and neither request.md nor any FR or SC asks for those checks to cover a pool builder (searched in request.md and spec-index.md for stall, task-start, start row, pool builder, mark). This is a difference from the session's own task line, not a wrong outcome left, so it carries no ruling."
+    },
+    {
+     "id": "T310-(c)-mark",
+     "summary": "The task line's mark for a handed-out tree is not built: marks are per tree since T254/T369, and since T437 a gone tree's mark is inert.",
+     "class": "within",
+     "why": "Already answered by landed work: a clone's mark no longer stands for a builder's tree. No outcome the request names is left wrong."
+    },
+    {
+     "id": "T310-callers",
+     "summary": "Every caller of the shared builder reading (filed.rs booking, stalls.rs, builder_stop_hooks.rs, check_bundle_hooks/own.rs, ledger_passes/left/whose.rs) now reads a pool builder as one. Each keeps its own further test, and no guard message changes.",
+     "class": "within",
+     "why": "This is the same defect fixed in the one reader every caller shares, not new behavior added. The stall check and the builder Stop still act only on a started task with an open box, so nothing refuses work it did not refuse before, beyond reading the pool builder correctly."
+    },
+    {
+     "id": "T310-residuals",
+     "summary": "Two items are left with Found and left: none. One of the 134 builder dispatch lines is untied (a spec-fidelity dispatch by T463's builder), and one dispatch left no agent meta and is not traced further. Six dispatches booked to a task outside the builder's marker are judged correct by the booking rule, which takes the call's own words first.",
+     "class": "within",
+     "why": "The untied dispatch line comes from a marker-briefed builder, so the (a) fix reaches it. The untraced dispatch has no agent and so carries no check minutes to book. Both are within the GM's stated tolerance for the breakdown (amendment (l): 'it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'). The six cross-task bookings follow the booking's stated rule and are not a defect (constitution XIV's meaning)."
+    },
+    {
+     "id": "T310-perf-class",
+     "summary": "Classed as performance work through its measurement clause: it books a pool builder's checks to its task. It is not an engine-speed task.",
+     "class": "within",
+     "why": "FR-013 and the GM's words of 2026-11-20 count measurement work as performance work for scheduling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T311 (left from 451 T303 and T305, 2026-11-26: `scripts/gates/closing-checks.sh` still ran an embedded Python block though the repository holds no Python, and `whose.rs` left a check pass to a started task's landing while the task was \"not ticked\" rather than while its line was open)",
+    "### T311 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T311 (1)",
+     "summary": "closing-checks.sh's embedded python3 splitter ported to `l7r-gate closing-split`, called with the same seven arguments; the script's contract (split.txt, exit 0/3/other-fallback, the four files, the messages) unchanged",
+     "class": "within",
+     "why": "Removes the last Python from a script in a repository that holds none (feature 449), keeping the split's rules (451 T86, T93, T303) as they were; a known defect fixed as we go, nothing the GM asked for narrowed."
+    },
+    {
+     "id": "T311-D1",
+     "summary": "three differences from the Python on cases no run met: an unparseable edit time claims nothing (the Python crashed into the fallback), a non-string task claims nothing, marks read through marks::all (also the pre-T254 one-mark file); tie keeps the first",
+     "class": "within",
+     "why": "Differences in a port where everything works are the rule, not an exception (no exactness standard, GM 2026-11-18); none is a wrong outcome, and (a) and (c) remove a crash-to-fallback and a missed mark."
+    },
+    {
+     "id": "T311 (2)",
+     "summary": "whose.rs leaves a check pass to a task's landing only while left.rs's `open` finds a `- [ ] T<n>` line, not while `ticked` finds no `- [x]` line; ticked/ticked_in deleted; T231's sentence reversed, its section left as written",
+     "class": "within",
+     "why": "Is the task line's own fix (a pass left only while the line is open); the defect is a pass never asked for, a check owed and lost."
+    },
+    {
+     "id": "T311 premise / 'owes no row'",
+     "summary": "the task line's premise corrected by measurement (Withdrawn and built-inside boxes were already ticked; the lost pass was a lineless started task's), and the brief's 'owes no row' read as T231's rule: not left to a landing, owed wherever a landing or push asks, never dropped",
+     "class": "within",
+     "why": "The brief is a session's, not the GM's; the reading keeps 385's rule that every pass owes its row rather than inventing a drop, so it narrows nothing in request.md or the spec. The premise correction is measured (left: (1, [true, true, false, false]) on HEAD, 2026-11-27)."
+    },
+    {
+     "id": "T311 fixture",
+     "summary": "the suite's own python3 -c timestamp replaced by date -u -d; a new case puts a failing python3 first on PATH and asserts none starts",
+     "class": "within",
+     "why": "Enforces the no-Python outcome the task exists for; enforcement of what was asked, not scope."
+    },
+    {
+     "id": "T311 exits",
+     "summary": "green is the builder's first tier and the suite; the full gate and coverage are the batch landing's",
+     "class": "within",
+     "why": "The GM's 2026-11-26 words (T308): a builder runs no coverage."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T312 (left by 451 T309, 2026-11-26, by grep and not run: the bundle crate's `marks::reply_of` and `record/bundle/modal.rs`'s `research_held` default to the live transcripts under `~/.claude/projects`; the task crate's `task_add/quick/tests.rs` reads `~/.claude/guard-log`; the land, plan and task crates set `GUARD_LOG_DIR` process-wide)",
+    "### T312 Approach (checklist part A)",
+    "### T435 (<why: the finding or measurement that files it>)",
+    "### T435 Approach (checklist part A)",
+    "### T438 (<why: the finding or measurement that files it>)",
+    "### T438 Approach (checklist part A)",
+    "### T440 (<why: the finding or measurement that files it>)",
+    "### T440 Approach (checklist part A)",
+    "(removed) ### T312 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 Approach (checklist part A)",
+    "(removed) ### T428 (<why: the finding or measurement that files it>)",
+    "(removed) ### T428 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T312-transcripts-base",
+     "summary": "marks::transcripts_base() returns the empty path in the bundle crate's test build, else transcripts(); reply_of and research_held read it with signatures kept; tests wanting transcripts name a base to reply_in / research_held_in",
+     "class": "within",
+     "why": "Fixes the dependence the task line names (bundle tests reading live ~/.claude/projects), measured real (replies_files_and_edits red under a planted HOME), on 451 T309's model; the binary's behavior unchanged. Exactly the task."
+    },
+    {
+     "id": "T312-fixture-git-identity",
+     "summary": "land/alone/tests.rs's world fixture writes user.name and user.email into the clone's own config",
+     "class": "within",
+     "why": "A machine dependence of the same class the task exists to remove, measured (three land tests red under an empty HOME). Fixed in the task by default (request item 4: briefs default to fixing in the task); widens nothing the GM limited."
+    },
+    {
+     "id": "T312-quick-test-no-live-log",
+     "summary": "task_add/quick/tests.rs no longer reads $HOME/.claude/guard-log; it pins that write's log is the census and the escape is found there",
+     "class": "within",
+     "why": "Removes the live guard-log read the task line names; the test still checks the escape is recorded, so its job is kept."
+    },
+    {
+     "id": "T312-guard-log-dir-once",
+     "summary": "GUARD_LOG_DIR stays set once a process (OnceLock) in the land, plan and task crates' tests rather than passed in as a value; the claim restated as 'set once, one value, before any fixture'",
+     "class": "within",
+     "why": "The plan labels it a deviation from the coordinating session's brief, but that brief is not the GM's words: request.md holds nothing from the GM on how GUARD_LOG_DIR is set. The task line filed it by grep and not run; the empty-HOME run measured no write escaping, and child scripts read the log location from the environment, so passing it into the Rust calls alone would not cover them. No wrong outcome was found, so by constitution XIV (the GM 2026-11-19) it is a difference and not a defect, and restating the claim is the required treatment. Leaving it as it is narrows nothing the GM asked."
+    },
+    {
+     "id": "T312-empty-home-cache",
+     "summary": "Nothing built for the empty-HOME cache question: with RUSTUP_HOME, CARGO_HOME, CARGO_TARGET_DIR and L7R_BUILD_SLOT_DIR kept, an empty HOME reuses the warm cache",
+     "class": "within",
+     "why": "Answers the task line's clause by measurement (dated, method stated); a scratch HOME needs nothing new in order to work."
+    },
+    {
+     "id": "T312-lock-leak-deferred-T440",
+     "summary": "The Rust checks' run lock and kept results land under $HOME/.cache even with CARGO_TARGET_DIR set; not fixed here, filed as T440, lands before T302",
+     "class": "within",
+     "why": "Found while measuring, in the rustc crate, which is outside the four crates the task names. Deferred in FR-009/D15's form: a reason, a filed open task (T440's block is present) and an order. That form is a deferral the spec provides for, not a carve-out from the request. The defect reaches only runs made under a substitute HOME, and it is filed before the next work, so no known defect is carried silently."
+    },
+    {
+     "id": "T312-perf",
+     "summary": "Performance work? no - test isolation",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster or measures where time goes; test isolation does neither, so leaving it unmarked is correct."
+    },
+    {
+     "id": "T435-T438-T440-templates",
+     "summary": "Unfilled template blocks for T435, T438 and T440",
+     "class": "within",
+     "why": "Placeholders only; they decide nothing."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "Removed blocks: T312's unfilled template (replaced by its filled, renamed header), and the unfilled T427 and T428 template blocks",
+     "class": "within",
+     "why": "The earlier text of each was an empty template that decided nothing, so removing it removes no decision."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T310 to T312, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

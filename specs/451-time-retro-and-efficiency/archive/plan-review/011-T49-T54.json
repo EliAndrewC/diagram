@@ -1,0 +1,860 @@
+{
+ "blocks": {
+  "### T49 Approach (checklist part A)": {
+   "sha256": "66d8db47d83d849a8037eb682ecb5f511d2498f9a76ede78d71b0350f6c69f11",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(<the built page of research/contents.json#trades-and-services>, ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))": {
+   "sha256": "27ae24c8f1008b5c0b799333a863cb96b8c834713490302a17a721ccfafba2b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T52 (<why: the finding or measurement that files it>)": {
+   "sha256": "df95be3814ff1741275ac56ee0167c93ff13734eac1bc7502b146bd95a712d32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T52 Approach (checklist part A)": {
+   "sha256": "445154db240b8dd725bd158515e01f839059b5b6398bd6b683341e6d1aa0790d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T49": {
+   "section_sha256": "d296efe401528ff65f901a48ed58e8e07497594f8f3161c54c8b5b4330252334",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 order",
+     "summary": "The fix waits on T96, then T110; T49 lands on its own as gate-write's half of T110's reading.",
+     "class": "within",
+     "why": "This sets the order and narrows nothing: the defect is still fixed in full, after the two tasks it depends on."
+    },
+    {
+     "id": "D2 one reader",
+     "summary": "The parameter-binding and root-joining reading lives only in shared::tree::program (T110), and gate-write builds no second copy.",
+     "class": "within",
+     "why": "This decides where the code lives. The outcome named in Approach item 1 is unchanged."
+    },
+    {
+     "id": "D3 binding",
+     "summary": "A literal binds, by position or keyword, to a parameter of a function defined once. A *args parameter or a second def binds nothing.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open: with a second def it is not statically known which body runs. For *args the binding is knowable, so leaving it out is a gap. The reviewer measured on 2026-11-21 with /tmp/fid-t49/star.py (heredocs and python -c; a def with a starred parameter, called anywhere with a string literal, whose body holds a write or copy/replace sink): 0 in T93's corpus and 0 in T33's fixtures. This is a gap with no occurrence, not a known defect left."
+    },
+    {
+     "id": "D4 sinks",
+     "summary": "Only open(N, w/a/x), N.write_text/write_bytes and Path(N).write_text count as writes. shutil.copy and os.replace are read as no write, recorded as a limit.",
+     "class": "within",
+     "why": "The instrument could have seen the other sinks: /tmp/t49/scripts/measure.py's sinks() searches os.replace/os.rename/shutil.copy*/move (form 4) and os.remove/unlink (form 5). The reviewer re-ran it on 2026-11-21 on both corpora and got forms {0:36, 1:9} on T93's corpus and {0:9, 1:78, 3:7} on the fixtures, so 0 of forms 4 and 5 in either. That makes this a gap with no occurrence, not a known defect left (constitution XIV v2.36.0). The three forms hold every observed hit."
+    },
+    {
+     "id": "D5 roots",
+     "summary": "A literal is joined onto a root by ROOT / P, os.path.join(ROOT, P) or ROOT + P, where ROOT is a top-level name bound once to a literal.",
+     "class": "within",
+     "why": "This carries T49's line (#170's shape, R = pathlib.Path(...)) and T110's '+' form."
+    },
+    {
+     "id": "D6a fail-open f-string",
+     "summary": "An f-string root (window#72) stays let through.",
+     "class": "within",
+     "why": "T49's own line, as quoted in item 2, says 'a base the program computes fails open, so window#72 stays let through'."
+    },
+    {
+     "id": "D6b fail-open computed/twice-bound root",
+     "summary": "A root the program computes or binds twice fails open.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open, and T49's line on a computed base."
+    },
+    {
+     "id": "D6c fail-open rebound parameter",
+     "summary": "A parameter rebound to anything other than Path(P)/P fails open.",
+     "class": "within",
+     "why": "Measured 0 of 17 hit functions in T93's corpus and 0 of 23 in the fixtures, and it avoids window#72's class of false refusal. It is an unresolvable path under the gate's rule."
+    },
+    {
+     "id": "D6d fail-open hand-on",
+     "summary": "A function that hands P on to another function fails open.",
+     "class": "within",
+     "why": "T49's line places the literal by reading the function's body, so a write in another function is outside the mechanism the task names. The block gives no count. The reviewer measured one on 2026-11-21 with /tmp/fid-t49/star.py (heredocs and python -c; an own function called anywhere with a literal, at any position, whose body passes one of its parameters to another own function that writes): 0 in T93's corpus and 0 in T33's fixtures. This is a gap with no occurrence, not a known defect."
+    },
+    {
+     "id": "D7 own_args API",
+     "summary": "Whether own_args stays for unbound literals or retires into the reader's placed reading is left to T110's API.",
+     "class": "within",
+     "why": "This is an API choice. Item 1 fixes the behavior: other literals are blanked as now, and placed literals count."
+    },
+    {
+     "id": "D8 red first and exits",
+     "summary": "window#172's pinned let-through case moves to refused, beside #170's shape; #72 and a read-only parameter stay let through; the replay moves exactly #170 and #172; red means the task is set down and an inability claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "This enforces T49's line ('red first on #170's and #172's shapes; the replay's moves accounted'). 'Every other verdict unchanged' asks that a check still does its job. It is not an exactness standard on outputs."
+    },
+    {
+     "id": "D9 docs row",
+     "summary": "docs/guards.md's missing gate-write row is written in this task before landing, not now, because of T96's uncommitted hunk in the same file.",
+     "class": "within",
+     "why": "The defect is fixed in this task, not deferred. Only its timing inside the task is set."
+    },
+    {
+     "id": "D10 not performance work",
+     "summary": "'Performance work? no.'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance improvements and measurement tasks first. FR-013 is cut in spec-index and the block does not cite it. On a plain reading this is a guard-correctness fix, and the block measures that the hole had no victim in the corpus (none of the 11 in-tree writes ran under a gate). It saves no measured time and is not a measurement task, so the classification narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T50": {
+   "section_sha256": "175d4b44aa9dd4e875e5b391d293dee336e62ab8b0a33b29e5c377c386071fd6",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "move-to-tree-git-rs",
+     "summary": "The git reading moves out of tree.rs into tree/git.rs, a move with no change of behavior, because the reading put tree.rs at 1,026 lines, past constitution X's 1,000-line bar.",
+     "class": "within",
+     "why": "A file-scale constraint of the constitution met by a pure move; it narrows nothing asked."
+    },
+    {
+     "id": "keep-existing-cases",
+     "summary": "GIT_WRITES (commit, push, tag among them), a writing branch and T33's output options read as at HEAD; the .git-alone rule applies only to the twelve.",
+     "class": "within",
+     "why": "Leaves existing behavior untouched outside the task's twelve subcommands; no requested behavior is withheld."
+    },
+    {
+     "id": "fetch-notes-update-ref-symbolic-ref-no-write",
+     "summary": "fetch, notes, update-ref and symbolic-ref stay no-writes, reaching git_output as at HEAD.",
+     "class": "within",
+     "why": "Measured in the 62 scratch-repository forms: every measured form of these four writes .git alone or nothing (fetch --dry-run and -n included), so reading them as no write is the measured result, not a carve-out."
+    },
+    {
+     "id": "D-a",
+     "summary": "Read every form's real write as measured, not only forms where a corpus row's move is a correction.",
+     "class": "within",
+     "why": "Broadens rather than narrows: it fixes a check that passes bad work (tree-writing forms let through in the mirror, shown by the probes) for every form, red first, with the replay holding that no row moves falsely."
+    },
+    {
+     "id": "D-b",
+     "summary": "config --global and --system write ~/.gitconfig and /etc/gitconfig (elsewhere); .git/config writes (local, --worktree) are none.",
+     "class": "within",
+     "why": "Follows the measured writes and corrects one of the review's four misreadings; no case is excluded."
+    },
+    {
+     "id": "D-c",
+     "summary": "init <dir> is read as a write at <dir> without reading the disk; init, init . and init in place write .git alone, none.",
+     "class": "within",
+     "why": "Conservative reading consistent with the measurement (a new directory is written; an existing one gets only .git, which the walk cannot tell) - it errs toward seeing the write, not toward missing it."
+    },
+    {
+     "id": "D-d (named place: clone destination, worktree path, init <dir>, config --file)",
+     "summary": "Where the place a form names cannot be resolved (e.g. $T/clone with T=$(mktemp -d)), it is not placed and the form fails open, rather than D6's toward-the-mirror reading.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured: placing the unresolved place toward the mirror refused tx#63, a real corpus row's scratch clone - a check refusing good work, which is a defect by the GM's definition. The walk cannot resolve $T statically; resolving it, and D6's misplacing of scratch writes for every tool, is the filed walk defect T79 (why, id and order - lands before T22 - stated). The same scratch-$T pattern governs config -f and worktree paths, so the ground carries to them. Note the asymmetry: an unresolved cp target is still read toward the mirror while an unresolved git place is now not placed; T79 must settle both."
+    },
+    {
+     "id": "D-d (place is where git runs: switch, bisect, sparse-checkout, submodule, init --bare)",
+     "summary": "Where git's own working place cannot be resolved (e.g. after cd $T), the tree-changing form is not placed and fails open.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not grounded on HEAD's reading: an unresolved working place is the same D6 scratch-$T case as tx#63 (cd $T; git init -q --bare would be refused toward the mirror), and the walk-wide fix of D6's placing is filed as T79, lands before T22. No form here has a resolvable place left unread."
+    },
+    {
+     "id": "D-e (named place cut: a clone destination, worktree path, init <dir>, config --file operand ending at a trailing backslash or a ${)",
+     "summary": "A cut word ends the operands read and the form fails open, rather than reading the place as where the shell stands.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured: reading it where the shell stood reproduced T33's two false refusals (main-tree#10 and #11, a ${PAT} clone), refusing good work. The walk hands the git reading a segment without the operand, so the true place cannot be read until the walk's segment splitting is fixed - the walk-wide defect filed as T79 (for every tool; cp /tmp/a \\ is let through the same way), lands before T22."
+    },
+    {
+     "id": "D-e (place is where git runs, operand cut: e.g. git switch \\ / other)",
+     "summary": "A cut operand of switch, bisect, sparse-checkout or submodule ends the operands read, so the form is judged on the operands before the cut.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The place (where git runs) is unaffected by the cut; only which form it is (switch <branch> writes the tree, switch -c nb writes .git alone) is unknowable, so failing either way misreads some form. The miss is an instance of the walk's backslash/${ segmenting defect, which the found-and-left names for every tool and files as T79 before T22; no corpus row runs these four at all. Grounded on the filed walk defect, not on HEAD's reading."
+    },
+    {
+     "id": "D-f",
+     "summary": "submodule foreach is a write where git runs (its command unread); bisect good, bad, skip and next are writes.",
+     "class": "within",
+     "why": "Errs toward seeing a write, matching the measurement (bisect steps checked out on 8 commits) and the existing rule that an unread program is a write where the shell stands."
+    },
+    {
+     "id": "found-and-left-T79",
+     "summary": "The walk's splitting of a backslash-continued line and ${VAR} into their own segments, and D6's toward-mirror reading of a mktemp scratch write, are left unfixed for every tool and filed as T79, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (main-tree lets a continued-line cp into the mirror through, and refuses a scratch write), but pre-existing at HEAD, not worsened by T50, and a different mechanism (the walk's segmenting and placing for every tool) from this task's git reading. The deferral carries what FR-009 requires - why it is not fixed here, its filed id T79 and its order (lands before T22) - and is observed with its method; it is not carried past the next step unfiled."
+    },
+    {
+     "id": "bisect-term-valued",
+     "summary": "bisect's --term-* are read as taking the next word although its -h shows only the = form.",
+     "class": "within",
+     "why": "Measured (git bisect start --term-new fixed HEAD HEAD~5 named its term fixed); following git's real behavior over its usage line."
+    },
+    {
+     "id": "no-cwd-rows-in-mirror",
+     "summary": "The replay stands the 251 corpus rows with no recorded cwd in the mirror, labeling a move on one 'mirror assumed'.",
+     "class": "within",
+     "why": "A verification method choice, stricter rather than looser, and labeled as an assumption rather than an observation."
+    },
+    {
+     "id": "not-performance-work",
+     "summary": "T50 is declared not performance work.",
+     "class": "within",
+     "why": "A guard-reading fix; it neither improves performance nor measures it, so FR-013's ordering does not apply to it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T51": {
+   "section_sha256": "50772510f113a8dd65d71eb82aabedffc105227c7c83ebcb6371d8ca95525a5c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T51-a set down on T118",
+     "summary": "T51 is measured, not built, and is set down until T118 teaches shared::tree::program's reader the join read and the run argv list and counts gate-write's own file test; then T51 replays and lands gate-write's script route.",
+     "class": "within",
+     "why": "Sequencing only. The call-site route measured now refuses correct work (16 make-only and 68 gate-write false rows), which would be a defect introduced; the blocking work is filed as T118 with its order ('lands before T51'), as FR-009 asks of a deferral. Nothing the task's line asks for is dropped by waiting."
+    },
+    {
+     "id": "T51-b text at the call",
+     "summary": "The script's text is the command's own heredoc for that path, else the file at the call (a regular file, at most 1 MB, a CONVENTION), handed to program_names in gate-write's shell_write behind a regular-file test.",
+     "class": "within",
+     "why": "This is the task's own line (the script file's text read at the call), with the 38-of-48 same-command pairs measured as the reason the heredoc is read first. The 1 MB cap sits above every script either corpus read (largest 37,480 bytes) and drops no measured case."
+    },
+    {
+     "id": "T51-c computed or absent path fails open",
+     "summary": "A script whose path is computed ($S/walk.py) or absent at the call fails open, as HEAD does.",
+     "class": "within",
+     "why": "Parity with HEAD, which is the brief's constraint. A path held in a shell variable cannot be read from the command text at PreToolUse. It moves no verdict HEAD gives today, so it leaves the guards exactly as they are on that shape rather than narrowing a fix."
+    },
+    {
+     "id": "T51-d1 make-only call-site route not landed now",
+     "summary": "Make-only's verdicts do not move in this round: reading scripts at its call site gives 16 moves, 0 corrections, all false.",
+     "class": "within",
+     "why": "Landing the route now would make make-only refuse correct work 16 times for no correction, which is a defect introduced (XIV: a check that refuses good work). Not landing it now is sequencing behind T118, the same as T51-a."
+    },
+    {
+     "id": "T51-d2 make-only's unread route an accepted limitation",
+     "summary": "Make-only gains the script route only if the post-T118 replay shows a correction (none in either corpus; 17 of 17 guard-file script writes carried GUARD_EDIT_OK), so its unread route is an accepted limitation; the cost named is that an unescaped script write of a guard file would pass unrecorded.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block's own cost sentence describes a check that passes bad work: a script that writes a guard file with no escape gets past make-only's guard-write. That is a wrong outcome by XIV's definition, and it can be reproduced on demand from one constructed fixture. Corpus silence does not change that. The block is inconsistent here: item 12 treats gate-write's 'would-be and not observed' hole as worth fixing and make-only's identical hole as acceptable. The argument against landing now (16 false refusals) runs out at T118: by the block's own breakdown, 12 of the 16 are t67's run argv lists and 3 are joined reads (window#305, #306, #309), both shapes T118 teaches. That leaves 1 (t58's path-prefix filter). The condition 'only if the replay shows a correction' is set against the same corpora that showed none, so as written it settles the question rather than asking it again after T118. Leaving a known defect needs a filed id and an order (FR-009); this one has neither. What it should say instead: at T51's post-T118 replay, make-only also gains the script route. Its correction is shown red-first by a fixture, a script that writes a guard file with no escape, which make-only must refuse. Any false refusals that remain (the path-prefix shape) are fixed in T51's files or filed with 'lands before T51', under item 7's own rule that a shape is never landed as a limit. Or, if make-only's route really is outside T51, file it as its own task with an id and an order, and remove 'accepted limitation'."
+    },
+    {
+     "id": "T51-e let-through baseline and the sixth-shape rule",
+     "summary": "Window#302, #305, #306 and #309 must be let through in both guards; a sixth false shape found at the replay is fixed in T51's files or filed 'lands before T51', and never landed as a limit.",
+     "class": "within",
+     "why": "This is T33's baseline that the task's line names, and the rule leaves no defect behind. It does not narrow anything."
+    },
+    {
+     "id": "T51-f T33's seven gate-seen pairs owe no reader shape",
+     "summary": "None of the seven gate-seen pairs' writes moved: five write into another clone under the mirror's ignored .clones/, main-tree#99 never runs its script, and window#80 runs a computed path.",
+     "class": "within",
+     "why": "The five other-clone writes are outside this tree's gate, so they are no wrong outcome here, and #99 has no run. Window#80 is a different kind of case from the other six: it belongs with T51-c (computed path, fails open as HEAD does), and it does not show the hole is harmless. The block does not say whether window#80's script rewrote a tracked file under a running gate. If it did, that is an observed wrong outcome, which contradicts item 12's 'would-be and not observed'. The revision this verdict asks for should say what window#80 wrote, or class it under T51-c. It is not ruled a narrowing on this bundle, because the block's figures do not show a tracked-file write."
+    },
+    {
+     "id": "T51-g unread runs owed to the resumed replay",
+     "summary": "83 of T33's literal runs (43 the repository's own files read only from the overlay, 21 /tmp scratch, 19 elsewhere) and 10 unread literal pairs are owed to the resumed replay; every figure is over the 455 scripts read.",
+     "class": "within",
+     "why": "Nothing is dropped: they are carried into the replay that item 9's 'every other moved row accounted' closes. The figures are stated over their own denominator and the sums reconcile (455 = 430 + 25, 83 = 43 + 21 + 19, 38 = 8 + 10 + 20)."
+    },
+    {
+     "id": "T51-h found and left: T118 and T119",
+     "summary": "HEAD's false refusals of stdin and -c programs are filed as T118, lands before T51; make guard-edit's stray permits file and a permit that did not take are filed as T119, lands before T22.",
+     "class": "within",
+     "why": "Each states why it is outside T51's files, gives its filed id and gives its order, as FR-009 requires of a deferred defect. Neither is carried past a step without an order."
+    },
+    {
+     "id": "T51-i not performance work",
+     "summary": "The section answers 'Performance work? no'.",
+     "class": "within",
+     "why": "T51 fixes whether a guard is correct. The one time cost item 12 names (a gate paid again) is a consequence of that, not the task's purpose. Nothing in the GM's 2026-11-20 or 2026-11-21 words reaches a guard-reading task, so the label leaves nothing the GM asked to have go first."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T53": {
+   "section_sha256": "03f374fb227c4d91e8ab3bbe34dc1b02ae2acefa4661dacfbbb9c3cac0929e6c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T53-1 first-start by dispatch",
+     "summary": "A first SubagentStart with no meta file is filed by the Agent call that dispatched it (per-session side file <events dir>-dispatches/<sid>.jsonl), else by the session's unreturned calls of its type within WINDOW_S (300 s, GUESS), only where every candidate's brief agrees; a disagreement stays feature.json's, marked.",
+     "class": "within",
+     "why": "Booking each agent's time to the feature and task it served is the per-task breakdown the GM asked for (2026-11-19) and measurement work FR-013 counts as performance work; an agreed-only rule leaves the undecidable case marked rather than wrong. FIFO dropped on measured inversions is design, not scope."
+    },
+    {
+     "id": "T53-2 brief over bare F=",
+     "summary": "A command's F= with no T= of its own no longer overrides the brief's task; the brief wins unless the command carries its own T=, matching the re-file's BY BRIEF rule; a decision against T26's stated order.",
+     "class": "within",
+     "why": "T26's order was a plan decision, not the GM's words; reversing it so a builder's time is booked to the task its brief served implements the request's per-task breakdown more faithfully. Nothing asked is dropped."
+    },
+    {
+     "id": "T53-3 heredoc stripping",
+     "summary": "filed.rs and fields.rs read F= and T= from strip_heredocs of the command, never from text quoted inside a heredoc; a quoted F=\"451\" stays the command's own.",
+     "class": "within",
+     "why": "Fixes a measured wrong filing (lines booked to 385 from quoted test code); serves the per-task breakdown."
+    },
+    {
+     "id": "T53-4 stale start STALE_START_S",
+     "summary": "A task-only brief is not matched to a task start more than 72 h (GUESS) before the line; such a line falls to feature.json's feature, marked fallback.",
+     "class": "within",
+     "why": "Fixes the measured 23-line misfiling into 385's log; a marked fallback is kept apart by readers, so the outcome moves from wrong to unattributed. Knob labeled GUESS with its distribution measured."
+    },
+    {
+     "id": "T53-5 measure crate untouched",
+     "summary": "rust/gate/crates/measure (T09's) is not edited; the writer converges on the re-file's rule instead.",
+     "class": "within",
+     "why": "Coordination between two tasks of the same feature; no part of the request is narrowed by it."
+    },
+    {
+     "id": "T53-6 the 23 written lines deferred to T56",
+     "summary": "The 23 lines already written into 385's log are not moved here; filed as T56 (the re-file sharing the writer's stale-start rule), lands before T22, because the re-file lives in the crate T09 is editing.",
+     "class": "within",
+     "why": "The defect is not dropped from the feature: it is filed with an id, a reason and an order (FR-009's three parts), and the writer's fix that stops new such lines lands here. Sequencing a fix within the same feature to a filed task is not a narrowing of what the GM asked. Note: T56 must actually move them, since they are misbooked time."
+    },
+    {
+     "id": "T53-7 older past-72h briefs in closed features",
+     "summary": "444's T42 (313 h) and 417's T46 (618 h) task-only lines left as they are; not shown to be wrong; the re-file does not reach those closed features.",
+     "class": "within",
+     "why": "Not a shown wrong outcome in closed features, and the request's reproducibility target (SC-002) is for work after landing; leaving an unshown difference is within per the 2026-11-19 defect rule."
+    },
+    {
+     "id": "T53-8 nested task-only brief now fallback",
+     "summary": "A nested subagent whose brief names only a task and whose clone holds no fresh start of it is filed under feature.json's feature marked fallback, rather than by a stale start.",
+     "class": "within",
+     "why": "Moves such lines from booked-wrong to marked-and-kept-apart; nothing is booked wrong, and the common case (a fresh start, p90 1.8 h) still resolves to its task. An unattributed gap is not a wrong outcome under the defect rule."
+    },
+    {
+     "id": "T53-9 done measures and landing owe",
+     "summary": "Red-first tests per shape, 702 passing; the dry run still moves 21 until the landing's live binary updates; one real events-refile owed at landing at the coordinator's timing, then a dry run showing 0 to move but the 23.",
+     "class": "within",
+     "why": "Verification of the requested data's correctness; enforcement of what was asked."
+    },
+    {
+     "id": "T53-10 hook cost budget",
+     "summary": "One appended side-file line per Agent call half (about 150 bytes) and at most one 64 KiB tail read (TAIL, GUESS) at a meta-less first start; the hook never refuses or prints.",
+     "class": "within",
+     "why": "Design cost, not fidelity; keeps T26's constraints."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T54": {
+   "section_sha256": "bda4101b38dccfb2fa074e7a65833c8f427d50dc5d048df41198a72542d89c43",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T54-fix-plain-word",
+     "summary": "A one-word plain subject (letters only, capitalized at most at its start) is named only as its code span",
+     "class": "within",
+     "why": "This is how T54's filed line is carried out (the subject read in the sense the change moved it in, not as a bare common word), and it is a [perf] task under FR-013 (it makes the builders' loop faster). The red-first case uses 451's own lines and the replay shows every real catch kept."
+    },
+    {
+     "id": "T54-fix-other-terms",
+     "summary": "Any other term (phrase, path, number, identifier, capitalized label) is named bare or in a span, but never inside a longer word",
+     "class": "within",
+     "why": "The fix keeps the two bare-text catches the log shows (283's `780 sq ft`, 285's `GUESS`). It is the measured reason spans alone cannot be the rule, and it is pinned red-first. The check keeps every catch the log shows, so nothing it was asked to catch is narrowed."
+    },
+    {
+     "id": "T54-fix-span-pairing",
+     "summary": "Code spans are paired in order by a split on backticks; an empty span is no subject",
+     "class": "within",
+     "why": "This fixes a mis-pairing defect in how subjects are read, which is part of the same fix."
+    },
+    {
+     "id": "T54-fix-literal-span",
+     "summary": "A plain word's span is matched as the literal backticked word, not by in-order pairing, so a line that opens inside a wrapped span still matches",
+     "class": "within",
+     "why": "It keeps a real naming (451 plan.md:107) that the paired reading would lose. That keeps catches rather than narrowing them, and it is pinned red-first (case four)."
+    },
+    {
+     "id": "T54-keep-442-containment",
+     "summary": "442's rewritten-from check keeps its plain containment; reading the old block by names was tried and not taken",
+     "class": "within",
+     "why": "This leaves an existing rule as it is. The variant that was tried added one wrong fire (274) and no real catch, so keeping the rule leaves no defect. Feature 253's search and 442's rule are kept, as the task's constraints say."
+    },
+    {
+     "id": "T54-value-side-left-T73",
+     "summary": "The value side is unchanged: a word re-wrapped onto the next line stays an old value (most of 451's remaining 28). It is filed as T73 and lands before T22",
+     "class": "within",
+     "why": "It is outside T54's filed scope (the subject read). Nothing in request.md or the spec asks for it in this task. The one fix that was priced (block values) would drop a real catch (contracts/refusals.md:12), which would make the check pass bad work. The deferral carries FR-009's three parts: why it is not fixed here (no measured rule yet keeps a catch of that shape), the filed id (T73) and the order (lands before T22). It is a defect, but it is filed and ordered inside this feature rather than carried past a step, and the GM's request says nothing that requires every defect in this check to land in one task."
+    },
+    {
+     "id": "T54-contract-restated",
+     "summary": "contracts/refusals.md:12's landing definition ('end line of code 0') is restated to match plan.md and the code (landed true)",
+     "class": "within",
+     "why": "Under constitution XIV, a claim the code does not match, where the behavior is right, is fixed by restating the claim. It matches D5 and FR-007 as the plan defines them, and the guard's reading was measured (static_runs_hooks.rs:247)."
+    },
+    {
+     "id": "T54-conventions",
+     "summary": "Which characters continue a word (letters, digits, _, -) and what a plain word is are labeled CONVENTIONs; the span bounds (2 to 60) are unchanged",
+     "class": "within",
+     "why": "Implementation conventions, labeled, inside the fix. No constant moves."
+    },
+    {
+     "id": "T54-exits-and-files",
+     "summary": "Exits: crate checks, the review-round suite (case 10 `gizmo` still refused), closing-checks and the replay. A claim that it cannot be done goes to make arbiter-ask. The file list is limited to stale_terms.rs, its tests, the docs/guards.md row and this section",
+     "class": "within",
+     "why": "These enforce the fix and keep its reach to the check it changes. They add no unrequested behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(\"research/urban-features.html\", ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))",
+    "### T49 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 order",
+     "summary": "The fix waits on T96, then T110; T49 lands on its own as gate-write's half of T110's reading.",
+     "class": "within",
+     "why": "This sets the order and narrows nothing: the defect is still fixed in full, after the two tasks it depends on."
+    },
+    {
+     "id": "D2 one reader",
+     "summary": "The parameter-binding and root-joining reading lives only in shared::tree::program (T110), and gate-write builds no second copy.",
+     "class": "within",
+     "why": "This decides where the code lives. The outcome named in Approach item 1 is unchanged."
+    },
+    {
+     "id": "D3 binding",
+     "summary": "A literal binds, by position or keyword, to a parameter of a function defined once. A *args parameter or a second def binds nothing.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open (item 2's constraints). With two defs or *args, which body runs or which parameter is bound is not statically known."
+    },
+    {
+     "id": "D4 sinks",
+     "summary": "Only open(N, w/a/x), N.write_text/write_bytes and Path(N).write_text count as writes. shutil.copy and os.replace are read as no write, recorded as a limit.",
+     "class": "within",
+     "why": "The instrument could have seen the other sinks: /tmp/t49/scripts/measure.py's sinks() searches os.replace/os.rename/shutil.copy*/move and os.remove/unlink as forms 4 and 5, and found 0 of them in both corpora (t93.txt, fx.txt FORMS). That makes this a gap with no occurrence, not a known defect left (constitution XIV v2.36.0). The three forms hold every observed hit."
+    },
+    {
+     "id": "D5 roots",
+     "summary": "A literal is joined onto a root by ROOT / P, os.path.join(ROOT, P) or ROOT + P, where ROOT is a top-level name bound once to a literal.",
+     "class": "within",
+     "why": "This carries T49's line (#170's shape, R = pathlib.Path(...)) and T110's '+' form."
+    },
+    {
+     "id": "D6a fail-open f-string",
+     "summary": "An f-string root (window#72) stays let through.",
+     "class": "within",
+     "why": "T49's own line, as quoted in item 2, says 'a base the program computes fails open, so window#72 stays let through'."
+    },
+    {
+     "id": "D6b fail-open computed/twice-bound root",
+     "summary": "A root the program computes or binds twice fails open.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open, and T49's line on a computed base."
+    },
+    {
+     "id": "D6c fail-open rebound parameter",
+     "summary": "A parameter rebound to anything other than Path(P)/P fails open.",
+     "class": "within",
+     "why": "Measured 0 of 17 hit functions in T93's corpus and 0 of 23 in the fixtures, and it avoids window#72's class of false refusal. It is an unresolvable path under the gate's rule."
+    },
+    {
+     "id": "D6d fail-open hand-on",
+     "summary": "A function that hands P on to another function fails open.",
+     "class": "within",
+     "why": "T49's line places the literal by reading the function's body, so a write in another function is outside the mechanism the task names. The block gives no count. The reviewer measured one on 2026-11-21 with /tmp/fid-t49/handon.py (an own function called with a literal whose body passes its parameter to another own function that writes): 0 in T93's corpus (11 programs with 2+ defs) and 0 in T33's fixtures (58). This is a gap with no occurrence, not a known defect."
+    },
+    {
+     "id": "D7 own_args API",
+     "summary": "Whether own_args stays for unbound literals or retires into the reader's placed reading is left to T110's API.",
+     "class": "within",
+     "why": "This is an API choice. Item 1 fixes the behavior: other literals are blanked as now, and placed literals count."
+    },
+    {
+     "id": "D8 red first and exits",
+     "summary": "window#172's pinned let-through case moves to refused, beside #170's shape; #72 and a read-only parameter stay let through; the replay moves exactly #170 and #172; red means the task is set down and an inability claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "This enforces T49's line ('red first on #170's and #172's shapes; the replay's moves accounted'). 'Every other verdict unchanged' asks that a check still does its job. It is not an exactness standard on outputs."
+    },
+    {
+     "id": "D9 docs row",
+     "summary": "docs/guards.md's missing gate-write row is written in this task before landing, not now, because of T96's uncommitted hunk in the same file.",
+     "class": "within",
+     "why": "The defect is fixed in this task, not deferred. Only its timing inside the task is set."
+    },
+    {
+     "id": "D10 not performance work",
+     "summary": "'Performance work? no.'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance improvements and measurement tasks first. FR-013 is cut in spec-index and the block does not cite it. On a plain reading this is a guard-correctness fix, and the block measures that the hole had no victim in the corpus (none of the 11 in-tree writes ran under a gate). It saves no measured time and is not a measurement task, so the classification narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(\"research/urban-features.html\", ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))",
+    "### T49 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 order",
+     "summary": "The fix waits on T96, then T110; T49 lands on its own as gate-write's half of T110's reading.",
+     "class": "within",
+     "why": "This sets the order and narrows nothing: the defect is still fixed in full, after the two tasks it depends on."
+    },
+    {
+     "id": "D2 one reader",
+     "summary": "The parameter-binding and root-joining reading lives only in shared::tree::program (T110), and gate-write builds no second copy.",
+     "class": "within",
+     "why": "This decides where the code lives. The outcome named in Approach item 1 is unchanged."
+    },
+    {
+     "id": "D3 binding",
+     "summary": "A literal binds, by position or keyword, to a parameter of a function defined once. A *args parameter or a second def binds nothing.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open: with a second def it is not statically known which body runs. For *args the binding is knowable, so leaving it out is a gap. The reviewer measured on 2026-11-21 with /tmp/fid-t49/star.py (heredocs and python -c; a def with a starred parameter, called anywhere with a string literal, whose body holds a write or copy/replace sink): 0 in T93's corpus and 0 in T33's fixtures. This is a gap with no occurrence, not a known defect left."
+    },
+    {
+     "id": "D4 sinks",
+     "summary": "Only open(N, w/a/x), N.write_text/write_bytes and Path(N).write_text count as writes. shutil.copy and os.replace are read as no write, recorded as a limit.",
+     "class": "within",
+     "why": "The instrument could have seen the other sinks: /tmp/t49/scripts/measure.py's sinks() searches os.replace/os.rename/shutil.copy*/move (form 4) and os.remove/unlink (form 5). The reviewer re-ran it on 2026-11-21 on both corpora and got forms {0:36, 1:9} on T93's corpus and {0:9, 1:78, 3:7} on the fixtures, so 0 of forms 4 and 5 in either. That makes this a gap with no occurrence, not a known defect left (constitution XIV v2.36.0). The three forms hold every observed hit."
+    },
+    {
+     "id": "D5 roots",
+     "summary": "A literal is joined onto a root by ROOT / P, os.path.join(ROOT, P) or ROOT + P, where ROOT is a top-level name bound once to a literal.",
+     "class": "within",
+     "why": "This carries T49's line (#170's shape, R = pathlib.Path(...)) and T110's '+' form."
+    },
+    {
+     "id": "D6a fail-open f-string",
+     "summary": "An f-string root (window#72) stays let through.",
+     "class": "within",
+     "why": "T49's own line, as quoted in item 2, says 'a base the program computes fails open, so window#72 stays let through'."
+    },
+    {
+     "id": "D6b fail-open computed/twice-bound root",
+     "summary": "A root the program computes or binds twice fails open.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open, and T49's line on a computed base."
+    },
+    {
+     "id": "D6c fail-open rebound parameter",
+     "summary": "A parameter rebound to anything other than Path(P)/P fails open.",
+     "class": "within",
+     "why": "Measured 0 of 17 hit functions in T93's corpus and 0 of 23 in the fixtures, and it avoids window#72's class of false refusal. It is an unresolvable path under the gate's rule."
+    },
+    {
+     "id": "D6d fail-open hand-on",
+     "summary": "A function that hands P on to another function fails open.",
+     "class": "within",
+     "why": "T49's line places the literal by reading the function's body, so a write in another function is outside the mechanism the task names. The block gives no count. The reviewer measured one on 2026-11-21 with /tmp/fid-t49/star.py (heredocs and python -c; an own function called anywhere with a literal, at any position, whose body passes one of its parameters to another own function that writes): 0 in T93's corpus and 0 in T33's fixtures. This is a gap with no occurrence, not a known defect."
+    },
+    {
+     "id": "D7 own_args API",
+     "summary": "Whether own_args stays for unbound literals or retires into the reader's placed reading is left to T110's API.",
+     "class": "within",
+     "why": "This is an API choice. Item 1 fixes the behavior: other literals are blanked as now, and placed literals count."
+    },
+    {
+     "id": "D8 red first and exits",
+     "summary": "window#172's pinned let-through case moves to refused, beside #170's shape; #72 and a read-only parameter stay let through; the replay moves exactly #170 and #172; red means the task is set down and an inability claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "This enforces T49's line ('red first on #170's and #172's shapes; the replay's moves accounted'). 'Every other verdict unchanged' asks that a check still does its job. It is not an exactness standard on outputs."
+    },
+    {
+     "id": "D9 docs row",
+     "summary": "docs/guards.md's missing gate-write row is written in this task before landing, not now, because of T96's uncommitted hunk in the same file.",
+     "class": "within",
+     "why": "The defect is fixed in this task, not deferred. Only its timing inside the task is set."
+    },
+    {
+     "id": "D10 not performance work",
+     "summary": "'Performance work? no.'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance improvements and measurement tasks first. FR-013 is cut in spec-index and the block does not cite it. On a plain reading this is a guard-correctness fix, and the block measures that the hole had no victim in the corpus (none of the 11 in-tree writes ran under a gate). It saves no measured time and is not a measurement task, so the classification narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T50 (twelve git subcommands outside `GIT_WRITES` read as no write - `worktree`, `clone`, `init`, `switch`, `bisect`, `sparse-checkout`, `submodule`, `config`, `fetch`, `notes`, `update-ref`, `symbolic-ref` - found by T33, observed 2026-11-20, method: T33's part 4; T33's addition that read them was dropped, a review finding four misreadings)",
+    "### T50 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "move-to-tree-git-rs",
+     "summary": "The git reading moves out of tree.rs into tree/git.rs, a move with no change of behavior, because the reading put tree.rs at 1,026 lines, past constitution X's 1,000-line bar.",
+     "class": "within",
+     "why": "A file-scale constraint of the constitution met by a pure move; it narrows nothing asked."
+    },
+    {
+     "id": "keep-existing-cases",
+     "summary": "GIT_WRITES (commit, push, tag among them), a writing branch and T33's output options read as at HEAD; the .git-alone rule applies only to the twelve.",
+     "class": "within",
+     "why": "Leaves existing behavior untouched outside the task's twelve subcommands; no requested behavior is withheld."
+    },
+    {
+     "id": "fetch-notes-update-ref-symbolic-ref-no-write",
+     "summary": "fetch, notes, update-ref and symbolic-ref stay no-writes, reaching git_output as at HEAD.",
+     "class": "within",
+     "why": "Measured in the 62 scratch-repository forms: every measured form of these four writes .git alone or nothing (fetch --dry-run and -n included), so reading them as no write is the measured result, not a carve-out."
+    },
+    {
+     "id": "D-a",
+     "summary": "Read every form's real write as measured, not only forms where a corpus row's move is a correction.",
+     "class": "within",
+     "why": "Broadens rather than narrows: it fixes a check that passes bad work (tree-writing forms let through in the mirror, shown by the probes) for every form, red first, with the replay holding that no row moves falsely."
+    },
+    {
+     "id": "D-b",
+     "summary": "config --global and --system write ~/.gitconfig and /etc/gitconfig (elsewhere); .git/config writes (local, --worktree) are none.",
+     "class": "within",
+     "why": "Follows the measured writes and corrects one of the review's four misreadings; no case is excluded."
+    },
+    {
+     "id": "D-c",
+     "summary": "init <dir> is read as a write at <dir> without reading the disk; init, init . and init in place write .git alone, none.",
+     "class": "within",
+     "why": "Conservative reading consistent with the measurement (a new directory is written; an existing one gets only .git, which the walk cannot tell) - it errs toward seeing the write, not toward missing it."
+    },
+    {
+     "id": "D-d (named place: clone destination, worktree path, init <dir>, config --file)",
+     "summary": "Where the place a form names cannot be resolved (e.g. $T/clone with T=$(mktemp -d)), it is not placed and the form fails open, rather than D6's toward-the-mirror reading.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured: placing the unresolved place toward the mirror refused tx#63, a real corpus row's scratch clone - a check refusing good work, which is a defect by the GM's definition. The walk cannot resolve $T statically; resolving it, and D6's misplacing of scratch writes for every tool, is the filed walk defect T79 (why, id and order - lands before T22 - stated). The same scratch-$T pattern governs config -f and worktree paths, so the ground carries to them. Note the asymmetry: an unresolved cp target is still read toward the mirror while an unresolved git place is now not placed; T79 must settle both."
+    },
+    {
+     "id": "D-d (place is where git runs: switch, bisect, sparse-checkout, submodule, init --bare)",
+     "summary": "Where git's own working place cannot be resolved (e.g. after cd $T), the tree-changing form is not placed and fails open.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not grounded on HEAD's reading: an unresolved working place is the same D6 scratch-$T case as tx#63 (cd $T; git init -q --bare would be refused toward the mirror), and the walk-wide fix of D6's placing is filed as T79, lands before T22. No form here has a resolvable place left unread."
+    },
+    {
+     "id": "D-e (named place cut: a clone destination, worktree path, init <dir>, config --file operand ending at a trailing backslash or a ${)",
+     "summary": "A cut word ends the operands read and the form fails open, rather than reading the place as where the shell stands.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured: reading it where the shell stood reproduced T33's two false refusals (main-tree#10 and #11, a ${PAT} clone), refusing good work. The walk hands the git reading a segment without the operand, so the true place cannot be read until the walk's segment splitting is fixed - the walk-wide defect filed as T79 (for every tool; cp /tmp/a \\ is let through the same way), lands before T22."
+    },
+    {
+     "id": "D-e (place is where git runs, operand cut: e.g. git switch \\ / other)",
+     "summary": "A cut operand of switch, bisect, sparse-checkout or submodule ends the operands read, so the form is judged on the operands before the cut.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The place (where git runs) is unaffected by the cut; only which form it is (switch <branch> writes the tree, switch -c nb writes .git alone) is unknowable, so failing either way misreads some form. The miss is an instance of the walk's backslash/${ segmenting defect, which the found-and-left names for every tool and files as T79 before T22; no corpus row runs these four at all. Grounded on the filed walk defect, not on HEAD's reading."
+    },
+    {
+     "id": "D-f",
+     "summary": "submodule foreach is a write where git runs (its command unread); bisect good, bad, skip and next are writes.",
+     "class": "within",
+     "why": "Errs toward seeing a write, matching the measurement (bisect steps checked out on 8 commits) and the existing rule that an unread program is a write where the shell stands."
+    },
+    {
+     "id": "found-and-left-T79",
+     "summary": "The walk's splitting of a backslash-continued line and ${VAR} into their own segments, and D6's toward-mirror reading of a mktemp scratch write, are left unfixed for every tool and filed as T79, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (main-tree lets a continued-line cp into the mirror through, and refuses a scratch write), but pre-existing at HEAD, not worsened by T50, and a different mechanism (the walk's segmenting and placing for every tool) from this task's git reading. The deferral carries what FR-009 requires - why it is not fixed here, its filed id T79 and its order (lands before T22) - and is observed with its method; it is not carried past the next step unfiled."
+    },
+    {
+     "id": "bisect-term-valued",
+     "summary": "bisect's --term-* are read as taking the next word although its -h shows only the = form.",
+     "class": "within",
+     "why": "Measured (git bisect start --term-new fixed HEAD HEAD~5 named its term fixed); following git's real behavior over its usage line."
+    },
+    {
+     "id": "no-cwd-rows-in-mirror",
+     "summary": "The replay stands the 251 corpus rows with no recorded cwd in the mirror, labeling a move on one 'mirror assumed'.",
+     "class": "within",
+     "why": "A verification method choice, stricter rather than looser, and labeled as an assumption rather than an observation."
+    },
+    {
+     "id": "not-performance-work",
+     "summary": "T50 is declared not performance work.",
+     "class": "within",
+     "why": "A guard-reading fix; it neither improves performance nor measures it, so FR-013's ordering does not apply to it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T51 Approach (checklist part A)",
+    "### T56 (T53's writer gives a start over 72 h old no feature, but `make events-refile` read its own copy of the start rule: 0 lines moved and 23 left in 385's log, measured 2026-11-21 (`make events-refile DRY=1` before the change, its last line))",
+    "### T67 (T58's builder's `cd /tmp/t58/wt && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep && ...` refused as a README write, 2026-11-21T06:30Z; replayed verbatim through the guard, what matched was the DESTINATION, `/tmp/t58/readme.keep` - a README by the guard's name rule, `README` with any extension - outside the tree, not the source's name, measured 2026-11-21, method: the guard log's entry, the command recovered from the builder's transcript and replayed through `tests/hooks/readme-hooks.sh`)",
+    "### T67 Approach (checklist part A)",
+    "### T71 (<why: the finding or measurement that files it>)",
+    "### T71 Approach (checklist part A)",
+    "### T73 (<why: the finding or measurement that files it>)",
+    "### T73 Approach (checklist part A)",
+    "### T74 (<why: the finding or measurement that files it>)",
+    "### T74 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T67-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T53 (T26's writer still filed lines by feature.json after it landed: 19 lines in 449's log and 2 in 385's to move, measured 2026-11-21 (`make events-refile DRY=1`), and 23 left in 385's log that no rule places, measured 2026-11-21 (the same dry run's last line))",
+    "### T53 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T53-1 first-start by dispatch",
+     "summary": "A first SubagentStart with no meta file is filed by the Agent call that dispatched it (per-session side file <events dir>-dispatches/<sid>.jsonl), else by the session's unreturned calls of its type within WINDOW_S (300 s, GUESS), only where every candidate's brief agrees; a disagreement stays feature.json's, marked.",
+     "class": "within",
+     "why": "Booking each agent's time to the feature and task it served is the per-task breakdown the GM asked for (2026-11-19) and measurement work FR-013 counts as performance work; an agreed-only rule leaves the undecidable case marked rather than wrong. FIFO dropped on measured inversions is design, not scope."
+    },
+    {
+     "id": "T53-2 brief over bare F=",
+     "summary": "A command's F= with no T= of its own no longer overrides the brief's task; the brief wins unless the command carries its own T=, matching the re-file's BY BRIEF rule; a decision against T26's stated order.",
+     "class": "within",
+     "why": "T26's order was a plan decision, not the GM's words; reversing it so a builder's time is booked to the task its brief served implements the request's per-task breakdown more faithfully. Nothing asked is dropped."
+    },
+    {
+     "id": "T53-3 heredoc stripping",
+     "summary": "filed.rs and fields.rs read F= and T= from strip_heredocs of the command, never from text quoted inside a heredoc; a quoted F=\"451\" stays the command's own.",
+     "class": "within",
+     "why": "Fixes a measured wrong filing (lines booked to 385 from quoted test code); serves the per-task breakdown."
+    },
+    {
+     "id": "T53-4 stale start STALE_START_S",
+     "summary": "A task-only brief is not matched to a task start more than 72 h (GUESS) before the line; such a line falls to feature.json's feature, marked fallback.",
+     "class": "within",
+     "why": "Fixes the measured 23-line misfiling into 385's log; a marked fallback is kept apart by readers, so the outcome moves from wrong to unattributed. Knob labeled GUESS with its distribution measured."
+    },
+    {
+     "id": "T53-5 measure crate untouched",
+     "summary": "rust/gate/crates/measure (T09's) is not edited; the writer converges on the re-file's rule instead.",
+     "class": "within",
+     "why": "Coordination between two tasks of the same feature; no part of the request is narrowed by it."
+    },
+    {
+     "id": "T53-6 the 23 written lines deferred to T56",
+     "summary": "The 23 lines already written into 385's log are not moved here; filed as T56 (the re-file sharing the writer's stale-start rule), lands before T22, because the re-file lives in the crate T09 is editing.",
+     "class": "within",
+     "why": "The defect is not dropped from the feature: it is filed with an id, a reason and an order (FR-009's three parts), and the writer's fix that stops new such lines lands here. Sequencing a fix within the same feature to a filed task is not a narrowing of what the GM asked. Note: T56 must actually move them, since they are misbooked time."
+    },
+    {
+     "id": "T53-7 older past-72h briefs in closed features",
+     "summary": "444's T42 (313 h) and 417's T46 (618 h) task-only lines left as they are; not shown to be wrong; the re-file does not reach those closed features.",
+     "class": "within",
+     "why": "Not a shown wrong outcome in closed features, and the request's reproducibility target (SC-002) is for work after landing; leaving an unshown difference is within per the 2026-11-19 defect rule."
+    },
+    {
+     "id": "T53-8 nested task-only brief now fallback",
+     "summary": "A nested subagent whose brief names only a task and whose clone holds no fresh start of it is filed under feature.json's feature marked fallback, rather than by a stale start.",
+     "class": "within",
+     "why": "Moves such lines from booked-wrong to marked-and-kept-apart; nothing is booked wrong, and the common case (a fresh start, p90 1.8 h) still resolves to its task. An unattributed gap is not a wrong outcome under the defect rule."
+    },
+    {
+     "id": "T53-9 done measures and landing owe",
+     "summary": "Red-first tests per shape, 702 passing; the dry run still moves 21 until the landing's live binary updates; one real events-refile owed at landing at the coordinator's timing, then a dry run showing 0 to move but the 23.",
+     "class": "within",
+     "why": "Verification of the requested data's correctness; enforcement of what was asked."
+    },
+    {
+     "id": "T53-10 hook cost budget",
+     "summary": "One appended side-file line per Agent call half (about 150 bytes) and at most one 64 KiB tail read (TAIL, GUESS) at a meta-less first start; the hook never refuses or prints.",
+     "class": "within",
+     "why": "Design cost, not fidelity; keeps T26's constraints."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T54 (the stale-terms search refused the FR-013 amendment's spec review with 66 candidates on the backticked `end` read as an ordinary word, escaped with `STALE_TERMS_OK`, measured 2026-11-21 (the guard log's `blocked/stale-terms` row of 2026-11-21T02:55:57Z and the refusal's text in the session transcript))",
+    "### T54 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T54-fix-plain-word",
+     "summary": "A one-word plain subject (letters only, capitalized at most at its start) is named only as its code span",
+     "class": "within",
+     "why": "This is how T54's filed line is carried out (the subject read in the sense the change moved it in, not as a bare common word), and it is a [perf] task under FR-013 (it makes the builders' loop faster). The red-first case uses 451's own lines and the replay shows every real catch kept."
+    },
+    {
+     "id": "T54-fix-other-terms",
+     "summary": "Any other term (phrase, path, number, identifier, capitalized label) is named bare or in a span, but never inside a longer word",
+     "class": "within",
+     "why": "The fix keeps the two bare-text catches the log shows (283's `780 sq ft`, 285's `GUESS`). It is the measured reason spans alone cannot be the rule, and it is pinned red-first. The check keeps every catch the log shows, so nothing it was asked to catch is narrowed."
+    },
+    {
+     "id": "T54-fix-span-pairing",
+     "summary": "Code spans are paired in order by a split on backticks; an empty span is no subject",
+     "class": "within",
+     "why": "This fixes a mis-pairing defect in how subjects are read, which is part of the same fix."
+    },
+    {
+     "id": "T54-fix-literal-span",
+     "summary": "A plain word's span is matched as the literal backticked word, not by in-order pairing, so a line that opens inside a wrapped span still matches",
+     "class": "within",
+     "why": "It keeps a real naming (451 plan.md:107) that the paired reading would lose. That keeps catches rather than narrowing them, and it is pinned red-first (case four)."
+    },
+    {
+     "id": "T54-keep-442-containment",
+     "summary": "442's rewritten-from check keeps its plain containment; reading the old block by names was tried and not taken",
+     "class": "within",
+     "why": "This leaves an existing rule as it is. The variant that was tried added one wrong fire (274) and no real catch, so keeping the rule leaves no defect. Feature 253's search and 442's rule are kept, as the task's constraints say."
+    },
+    {
+     "id": "T54-value-side-left-T73",
+     "summary": "The value side is unchanged: a word re-wrapped onto the next line stays an old value (most of 451's remaining 28). It is filed as T73 and lands before T22",
+     "class": "within",
+     "why": "It is outside T54's filed scope (the subject read). Nothing in request.md or the spec asks for it in this task. The one fix that was priced (block values) would drop a real catch (contracts/refusals.md:12), which would make the check pass bad work. The deferral carries FR-009's three parts: why it is not fixed here (no measured rule yet keeps a catch of that shape), the filed id (T73) and the order (lands before T22). It is a defect, but it is filed and ordered inside this feature rather than carried past a step, and the GM's request says nothing that requires every defect in this check to land in one task."
+    },
+    {
+     "id": "T54-contract-restated",
+     "summary": "contracts/refusals.md:12's landing definition ('end line of code 0') is restated to match plan.md and the code (landed true)",
+     "class": "within",
+     "why": "Under constitution XIV, a claim the code does not match, where the behavior is right, is fixed by restating the claim. It matches D5 and FR-007 as the plan defines them, and the guard's reading was measured (static_runs_hooks.rs:247)."
+    },
+    {
+     "id": "T54-conventions",
+     "summary": "Which characters continue a word (letters, digits, _, -) and what a plain word is are labeled CONVENTIONs; the span bounds (2 to 60) are unchanged",
+     "class": "within",
+     "why": "Implementation conventions, labeled, inside the fix. No constant moves."
+    },
+    {
+     "id": "T54-exits-and-files",
+     "summary": "Exits: crate checks, the review-round suite (case 10 `gizmo` still refused), closing-checks and the replay. A claim that it cannot be done goes to make arbiter-ask. The file list is limited to stale_terms.rs, its tests, the docs/guards.md row and this section",
+     "class": "within",
+     "why": "These enforce the fix and keep its reach to the check it changes. They add no unrequested behavior."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T49 to T54, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

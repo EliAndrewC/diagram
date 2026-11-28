@@ -75,7 +75,11 @@ fn quotations_source_blocks_and_exempt_files_are_not_read() {
     std::fs::write(dir.join("binary.bin"), [0xff, 0xfe]).unwrap();
     commit(&dir);
     assert_eq!(run(&dir).stderr, "");
-    assert!(exempt("a/b/plan-review.json") && exempt("x.png"));
+    assert!(
+        exempt("a/b/plan-review.json")
+            && exempt("x.png")
+            && exempt("specs/451-x/archive/plan-review/001-T1-T2.json")
+    );
 }
 
 #[test]

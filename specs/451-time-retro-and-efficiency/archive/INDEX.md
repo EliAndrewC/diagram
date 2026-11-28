@@ -19,8 +19,9 @@ spent its context on it (the GM 2026-11-27; 451 T536, T537). `make archive-split
 - Read every part, `cat archive/*`, or Read a part when one task's section is all you need (`make plan-section`).
 - Grep this directory or the feature directory broadly: a common word matches thousands of lines. Grep with `-l` or `-c` first,
   then read the one part it names.
-- Read the feature's plan-review.json whole: it is not cut here (451's stood at 5.0 MB; 462 T545 splits it). `make plan-section`
-  and `make plan-delta` read it for you.
+- Read the feature's plan-review.json whole, or its parts here: `make archive-split` keeps its live entries flat (451's stood at
+  5.0 MB) and moves a closed task's verdicts and rounds to `plan-review/` parts, `index.json` naming each task's (462 T545).
+  `make plan-section` and `make plan-delta` read it for you.
 
 ## The parts
 
@@ -89,6 +90,11 @@ spent its context on it (the GM 2026-11-27; 451 T536, T537). `make archive-split
 | plan-done.md | `plan-done/061-T325-T525.md` | 61852 |
 | plan-done.md | `plan-done/062-T513-T537.md` | 65281 |
 | plan-done.md | `plan-done/063-T536-T536.md` | 6792 |
+| plan-done.md | `plan-done/064-T18-T420.md` | 33395 |
+| plan-done.md | `plan-done/065-T313-T373.md` | 62006 |
+| plan-done.md | `plan-done/066-T369-T413.md` | 58138 |
+| plan-done.md | `plan-done/067-T404-T428.md` | 65119 |
+| plan-done.md | `plan-done/068-T341-T364.md` | 21703 |
 | tasks-done.md | `tasks-done/001-T01-T88.md` | 65255 |
 | tasks-done.md | `tasks-done/002-T89-T160.md` | 65221 |
 | tasks-done.md | `tasks-done/003-T161-T240.md` | 65156 |
@@ -99,3 +105,91 @@ spent its context on it (the GM 2026-11-27; 451 T536, T537). `make archive-split
 | tasks-done.md | `tasks-done/008-T434-T466.md` | 65165 |
 | tasks-done.md | `tasks-done/009-T467-T517.md` | 65226 |
 | tasks-done.md | `tasks-done/010-T518-T539.md` | 23130 |
+| plan-review.json | `plan-review/001-T03-T07.json` | 53594 |
+| plan-review.json | `plan-review/002-T08-T10.json` | 55743 |
+| plan-review.json | `plan-review/003-T11-T13.json` | 57803 |
+| plan-review.json | `plan-review/004-T14-T16.json` | 55367 |
+| plan-review.json | `plan-review/005-T17-T21.json` | 56599 |
+| plan-review.json | `plan-review/006-T23-T28.json` | 60812 |
+| plan-review.json | `plan-review/007-T29-T34.json` | 60749 |
+| plan-review.json | `plan-review/008-T35-T40.json` | 64097 |
+| plan-review.json | `plan-review/009-T41-T44.json` | 63808 |
+| plan-review.json | `plan-review/010-T45-T48.json` | 55983 |
+| plan-review.json | `plan-review/011-T49-T54.json` | 64254 |
+| plan-review.json | `plan-review/012-T55-T59.json` | 60736 |
+| plan-review.json | `plan-review/013-T60-T65.json` | 58021 |
+| plan-review.json | `plan-review/014-T66-T71.json` | 61520 |
+| plan-review.json | `plan-review/015-T72-T77.json` | 63717 |
+| plan-review.json | `plan-review/016-T78-T82.json` | 55246 |
+| plan-review.json | `plan-review/017-T83-T86.json` | 52449 |
+| plan-review.json | `plan-review/018-T87-T88.json` | 52280 |
+| plan-review.json | `plan-review/019-T89-T93.json` | 62987 |
+| plan-review.json | `plan-review/020-T94-T98.json` | 50706 |
+| plan-review.json | `plan-review/021-T99-T101.json` | 48293 |
+| plan-review.json | `plan-review/022-T102-T105.json` | 63614 |
+| plan-review.json | `plan-review/023-T106-T110.json` | 56677 |
+| plan-review.json | `plan-review/024-T111-T116.json` | 65217 |
+| plan-review.json | `plan-review/025-T117-T140.json` | 45940 |
+| plan-review.json | `plan-review/026-T141-T150.json` | 57363 |
+| plan-review.json | `plan-review/027-T151-T156.json` | 60127 |
+| plan-review.json | `plan-review/028-T157-T159.json` | 48372 |
+| plan-review.json | `plan-review/029-T160-T167.json` | 60794 |
+| plan-review.json | `plan-review/030-T168-T170.json` | 50490 |
+| plan-review.json | `plan-review/031-T171-T175.json` | 64590 |
+| plan-review.json | `plan-review/032-T176-T182.json` | 60846 |
+| plan-review.json | `plan-review/033-T183-T185.json` | 48822 |
+| plan-review.json | `plan-review/034-T186-T189.json` | 64593 |
+| plan-review.json | `plan-review/035-T190-T193.json` | 62896 |
+| plan-review.json | `plan-review/036-T194-T197.json` | 43659 |
+| plan-review.json | `plan-review/037-T198-T201.json` | 61590 |
+| plan-review.json | `plan-review/038-T202-T211.json` | 57226 |
+| plan-review.json | `plan-review/039-T212-T216.json` | 58232 |
+| plan-review.json | `plan-review/040-T217-T223.json` | 61936 |
+| plan-review.json | `plan-review/041-T224-T227.json` | 55486 |
+| plan-review.json | `plan-review/042-T228-T231.json` | 42607 |
+| plan-review.json | `plan-review/043-T232-T235.json` | 64274 |
+| plan-review.json | `plan-review/044-T236-T240.json` | 59517 |
+| plan-review.json | `plan-review/045-T241-T242.json` | 17173 |
+| plan-review.json | `plan-review/046-T243-T243.json` | 70116 |
+| plan-review.json | `plan-review/047-T244-T247.json` | 61647 |
+| plan-review.json | `plan-review/048-T248-T250.json` | 49551 |
+| plan-review.json | `plan-review/049-T251-T253.json` | 55831 |
+| plan-review.json | `plan-review/050-T254-T258.json` | 55986 |
+| plan-review.json | `plan-review/051-T259-T262.json` | 59865 |
+| plan-review.json | `plan-review/052-T263-T264.json` | 50855 |
+| plan-review.json | `plan-review/053-T265-T270.json` | 62537 |
+| plan-review.json | `plan-review/054-T271-T280.json` | 59225 |
+| plan-review.json | `plan-review/055-T281-T284.json` | 47669 |
+| plan-review.json | `plan-review/056-T285-T285.json` | 47385 |
+| plan-review.json | `plan-review/057-T286-T291.json` | 45098 |
+| plan-review.json | `plan-review/058-T292-T294.json` | 57063 |
+| plan-review.json | `plan-review/059-T295-T298.json` | 51956 |
+| plan-review.json | `plan-review/060-T299-T303.json` | 58621 |
+| plan-review.json | `plan-review/061-T304-T307.json` | 59318 |
+| plan-review.json | `plan-review/062-T308-T309.json` | 47430 |
+| plan-review.json | `plan-review/063-T310-T312.json` | 39122 |
+| plan-review.json | `plan-review/064-T313-T314.json` | 54686 |
+| plan-review.json | `plan-review/065-T315-T321.json` | 52094 |
+| plan-review.json | `plan-review/066-T324-T331.json` | 47348 |
+| plan-review.json | `plan-review/067-T332-T335.json` | 60059 |
+| plan-review.json | `plan-review/068-T336-T345.json` | 57142 |
+| plan-review.json | `plan-review/069-T346-T354.json` | 64513 |
+| plan-review.json | `plan-review/070-T355-T363.json` | 60268 |
+| plan-review.json | `plan-review/071-T364-T369.json` | 59989 |
+| plan-review.json | `plan-review/072-T370-T387.json` | 64349 |
+| plan-review.json | `plan-review/073-T388-T396.json` | 65054 |
+| plan-review.json | `plan-review/074-T397-T412.json` | 52247 |
+| plan-review.json | `plan-review/075-T413-T424.json` | 58052 |
+| plan-review.json | `plan-review/076-T425-T435.json` | 64543 |
+| plan-review.json | `plan-review/077-T436-T442.json` | 64935 |
+| plan-review.json | `plan-review/078-T443-T445.json` | 60258 |
+| plan-review.json | `plan-review/079-T446-T452.json` | 63830 |
+| plan-review.json | `plan-review/080-T453-T462.json` | 58476 |
+| plan-review.json | `plan-review/081-T463-T472.json` | 64970 |
+| plan-review.json | `plan-review/082-T473-T489.json` | 50475 |
+| plan-review.json | `plan-review/083-T490-T505.json` | 63557 |
+| plan-review.json | `plan-review/084-T506-T511.json` | 39839 |
+| plan-review.json | `plan-review/085-T512-T515.json` | 58668 |
+| plan-review.json | `plan-review/086-T517-T529.json` | 64051 |
+| plan-review.json | `plan-review/087-T530-T537.json` | 63062 |
+| plan-review.json | `plan-review/088-other-other.json` | 26240 |

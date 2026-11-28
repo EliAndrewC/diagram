@@ -109,7 +109,7 @@ fn a_split_moves_every_task_whole_and_a_reader_of_one_task_opens_only_its_part()
     assert!(
         note.contains("make plan-section F=999 T=T<n>")
             && note.contains("| plan-done.md | `plan-done/001-T2-")
-            && note.contains("Read the feature's plan-review.json whole: it is not cut here")
+            && note.contains("Read the feature's plan-review.json whole, or its parts here")
             && note.contains("WHY: these records grew to megabytes")
     );
     assert!(plan_done_is(&d, &before));
@@ -201,4 +201,48 @@ fn a_part_that_cannot_be_written_is_named_and_the_flat_file_kept() {
     let why = fold(&d, false).unwrap_err();
     assert!(why.contains("archive/plan-done"), "{why}");
     assert!(d.join(PLAN_DONE).is_file());
+}
+
+/// 462 T545: a closed task's review entries added as JSON parts are read back for that task beside the flat (live) record, the flat
+/// entry over a part's; the index, the note and the paths name them; a part that does not parse is passed over.
+#[test]
+fn a_review_part_is_read_for_its_task_beside_the_live_record() {
+    let (_t, d) = scratch("review");
+    fold(&d, true).unwrap();
+    let part = json!({"part": "999 - plan-review.json", "blocks": {"### T2 x": {"verdict": "CLEAR"}}, "tasks": {"T2": {"verdict": "CLEAR"}, "T3": {"verdict": "OLD"}}, "block_reviews": [{"blocks": ["### T2 x"], "tasks": ["T2"]}]});
+    let cut = vec![(
+        "T2".to_owned(),
+        "T3".to_owned(),
+        vec!["T2".to_owned(), "T3".to_owned()],
+        part.to_string(),
+    )];
+    assert_eq!(
+        add_review(&d, cut).unwrap(),
+        ["archive/plan-review/001-T2-T3.json"]
+    );
+    std::fs::write(d.join(REVIEW), json!({"feature": "999-scratch", "blocks": {}, "tasks": {"T3": {"verdict": "CLEAR"}}, "block_reviews": [{"blocks": ["## Summary"]}]}).to_string()).unwrap();
+    let read = files(&d);
+    let r = review(&read, "T3");
+    assert_eq!(r["tasks"]["T3"]["verdict"], "CLEAR");
+    assert_eq!(r["tasks"]["T2"]["verdict"], "CLEAR");
+    assert_eq!(r["feature"], "999-scratch");
+    assert!(r.get("part").is_none());
+    assert_eq!(r["block_reviews"].as_array().unwrap().len(), 2);
+    // a task no part holds reads the flat record alone
+    assert!(review(&read, "T9")["tasks"].get("T2").is_none());
+    assert!(paths(&read).contains(&"archive/plan-review/001-T2-T3.json".to_owned()));
+    let note = std::fs::read_to_string(d.join(NOTE)).unwrap();
+    assert!(note.contains("| plan-review.json | `plan-review/001-T2-T3.json` |"));
+    std::fs::write(d.join(DIR).join("plan-review/001-T2-T3.json"), "not json").unwrap();
+    std::fs::write(d.join(REVIEW), "[]").unwrap();
+    assert_eq!(
+        review(&read, "T3"),
+        json!({"blocks": {}, "tasks": {}, "block_reviews": []})
+    );
+    // a part that cannot be written is named
+    std::fs::remove_dir_all(d.join(DIR).join("plan-review")).unwrap();
+    std::fs::write(d.join(DIR).join("plan-review"), "in the way").unwrap();
+    assert!(add_review(&d, Vec::new())
+        .unwrap_err()
+        .contains("archive/plan-review"));
 }

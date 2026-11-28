@@ -1,0 +1,838 @@
+{
+ "blocks": {
+  "### T265 (451 T251's and T250's \"Found and left\", 2026-11-26: `docs/building-programs.md`'s dedication knob named a ruling of the GM's that no record holds, in wording the gm-attributions check did not read, and it and 0222's drawing-page comment cited each other; and the check took four kinds of record where his verbatim words also stand in a fifth)": {
+   "sha256": "5733da50a17e740f1f891edc199e6ee19c86112e1ecb57951e5abe6065f07b60",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T265 Approach (checklist part A)": {
+   "sha256": "6438555f7fefa0398de337aabc704459a8a995cf09b928c68c483ee528933c5e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T266 (<why: the finding or measurement that files it>)": {
+   "sha256": "96ae884e63b12c1f1e1604867198529faf4b399697928a1ea917af044f0a1ce4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T267 (`make claims-checked` failed with \"File exists (os error 17)\" in a linked worktree whenever a reply line was held, observed 2026-11-26 in a builder's worktree)": {
+   "sha256": "4c92fe104fa871b163d28bb414cf8de9405f1bad8ac542924c39ef905babd28f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T267 Approach (checklist part A)": {
+   "sha256": "daf56396f690dca453b4648fb1a33c2ed0bcbf98455dd73906a343fe870a8961",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T268 (451 T263's forced red, 2026-11-26: a sync script that cannot START left the clone-sync notice ending `mirror refresh FAILED: ` with nothing after the colon)": {
+   "sha256": "6f42aa7eaa4673a63b10432af5c5f7ca268bcd02f2679da924941d2591c5e255",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T268 Approach (checklist part A)": {
+   "sha256": "91913c38c13ab8f77e826cbbea5008ad6e58a0413ec0f236870272dfa073b03d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T269 (451 T258, 2026-11-25: `scripts/state-sync.sh`, newly called from `make land`'s and `make land-tooling`'s recipes, landed with the audit register's check asking no entry - `dev/audits/tooling-state.md` says so in its own words)": {
+   "sha256": "dd25218907fa5ec8ad91321a14aa4ee7ca49a72b7f4828d3d7b8ed802259a332",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T269 Approach (checklist part A)": {
+   "sha256": "90f114bb2a8a1f193f7bddf722530ce604b520681ae7a0fa9d0bcab672aa0a1e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T270 (451 T261's builder, measured 2026-11-26 (12 escape records replayed at their commits, against the reading by reason in T261's line): escapes read by their reason gave a false finding, 60% counted as unstarted tasks' stubs and none of the 12 records replayed holding one, and 451 T262 gave the record a `held` list nothing yet counts)": {
+   "sha256": "895f2c3e58b519882d7230d647ed316666a7d40ce00dbe258d1d7be560c03ce5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T270 Approach (checklist part A)": {
+   "sha256": "c3a5866c18ea97d9328849f5fd637194585814aae7063dfe40a844b3d2d8d6a5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T265": {
+   "section_sha256": "16ff48f6c33832c1006da4f7b8a60eb16dd12da15dd9606e7e716599308bffe8",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "relabel-claim",
+     "summary": "docs/building-programs.md's dedication-knob claim CANON -> UNRESEARCHED (not GUESS), its account saying whose default it is",
+     "class": "within",
+     "why": "The 2026-11-24 amendment: an attribution to the GM names his recorded words, and he never ruled what a session told him. The search found no words of his, so the label says it is this project's default and unsearched. That is the request's purpose carried out."
+    },
+    {
+     "id": "relabel-knob3-prose",
+     "summary": "knob 3's prose drops '(GM 2026-09-20)' and 'on the GM's word', and says the default is this project's and the Bishamon credit is the notes file's",
+     "class": "within",
+     "why": "The same purpose applied to the prose beside the claim. No credit to him stands without recorded words."
+    },
+    {
+     "id": "relabel-0222-comment",
+     "summary": "0222's drawing-page comment says UNRESEARCHED and lists the search; the visible sentence is unchanged",
+     "class": "within",
+     "why": "It corrects the attribution in the comment. Leaving the visible sentence is declared as found-and-left and filed (T277), not hidden."
+    },
+    {
+     "id": "knob-default-kept",
+     "summary": "the knob still defaults to Inari; no map or sheet changes",
+     "class": "within",
+     "why": "The GM 2026-10-25: where research is silent, make it a knob or do what is algorithmically easier. The default staying in place is not a defect, only its label was wrong."
+    },
+    {
+     "id": "names-a-gm-ruling",
+     "summary": "the check's NAMES read 'a GM ruling|...' as they read 'the GM's ...'",
+     "class": "within",
+     "why": "It enforces the 2026-11-24 request on the wording that let this attribution slip through, and it is red-first. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "broader-form-not-taken",
+     "summary": "'GM ruling' bare and 'the GM rules' are not added to NAMES",
+     "class": "within",
+     "why": "The forms the request's build names are all still read. The measured broader forms caught only non-attributions (statements that he has not ruled), so leaving them out drops nothing the request covers."
+    },
+    {
+     "id": "dated-rulings-file-pointer",
+     "summary": "specs/<NNN>/rulings-YYYY-MM-DD.md is accepted as a record; only the dated name",
+     "class": "within",
+     "why": "The request is that an attribution names his RECORDED words. These two files hold his rulings verbatim as block quotations, in the form of a request.md, so accepting them serves that purpose. The undated name stays refused."
+    },
+    {
+     "id": "second-hand-files-refused",
+     "summary": "audit.md, tasks.md and commit messages are not records",
+     "class": "within",
+     "why": "Stricter, and on the request's purpose: those files are a session's sentences quoting him second-hand, which is exactly the 0006 failure. T251's brook claim is the measured instance."
+    },
+    {
+     "id": "t250-comments-counted-not-swept",
+     "summary": "8 comments that name a rulings file and 18 that name tasks/audit files are counted and left as worded",
+     "class": "within",
+     "why": "The request's build has fixing comments as page work waiting on the research switch, and the GM deferred queued research on 2026-11-25. They are left as plainly-worded mentions, not attributions, so the check is not weakened."
+    },
+    {
+     "id": "claims-round-elsewhere",
+     "summary": "the baseline stays zero bytes; impl-drift on the owed claims is dispatched by the coordinating session, not this builder",
+     "class": "within",
+     "why": "The claims round still runs, it is only routed to its owner, so nothing is narrowed."
+    },
+    {
+     "id": "found-left-0222-visible-sentence",
+     "summary": "0222's visible sentence with no label item is deferred: filed as T277, lands before T264",
+     "class": "within",
+     "why": "It now carries FR-009's form: why it is not fixed here (page work in fresh page sessions, and research deferred by the GM 2026-11-25), its filed id, and its order. It is ordered inside the feature, before the next dependent task, and the claim is on research-backlog."
+    },
+    {
+     "id": "found-left-22-prose-lines",
+     "summary": "22 prose lines in docs/buildings.md and docs/building-programs.md naming a GM ruling with no pointer are deferred: filed as T276, lands before T264",
+     "class": "within",
+     "why": "It carries FR-009's form (why, filed id, order), and the count gives its method, the check's own patterns over every non-claim line. It is filed and ordered, not dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T267": {
+   "section_sha256": "6260b58e3994aff5d8feda990f7ac38972f68fa10b759b9e16acae911c73181b",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T267-fix",
+     "summary": "silent::SEARCHED becomes a bare file name; silent::kept_at(root) places it in the gitdir a .git file names (a relative name read against the root), else root/.git; no git process; hold's signature unchanged",
+     "class": "within",
+     "why": "Removes the observed crash (make claims-checked exiting with os error 17 in a linked worktree) so a held line is told to its session as in a clone - the task's own outcome. The red-first test on a real linked worktree (201/1 red, 202/0 green, dated with method) shows the mechanism reaches the case it names."
+    },
+    {
+     "id": "T267-per-tree",
+     "summary": "the held searches are kept per worktree (its own gitdir), not in the clone's common directory",
+     "class": "within",
+     "why": "Chosen so T218's held-until-read rule holds: one shared file keyed by claim would let a second tree overwrite, answer or forget the first tree's search. Keeps a tree's state its own as T254 does for parallel builders (request: 'before three parallel builders'). Narrows nothing a clone already did."
+    },
+    {
+     "id": "T267-no-migration",
+     "summary": "a plain clone's file stays at root/.git/claims-searched.json; nothing is migrated",
+     "class": "within",
+     "why": "Where .git is a directory kept_at returns the old place, so no existing state moves and no clone's behavior changes."
+    },
+    {
+     "id": "T267-flight-unchanged",
+     "summary": "the in-flight marks (flight.rs) stay in the common directory, unchanged",
+     "class": "within",
+     "why": "They already ask git for the directory with root/.git only as the fallback, and each mark is named by its bundle's own path, so two trees never meet there; no defect is shown and leaving working code as it is narrows nothing."
+    },
+    {
+     "id": "T267-census-left",
+     "summary": "state paths of the same shape (joined straight onto .git) in other crates of rust/gate and rust/guard, and the .is_dir() probes that pass a worktree over, are listed from a stated grep census as candidates for the coordinating session to measure and file, not fixed here; 'Found and left: none measured'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops at the one path the task observed failing while naming a wider class. Legitimate on the GM's own words: a defect is a wrong outcome (constitution XIV v2.36.0, GM 2026-11-19, 'don't spend a lot of time fixing things which are not actually wrong'), and none of these candidates was run in a worktree or shown to do anything wrong, so none is a known defect that FIX AS WE GO would require fixed now. The census states its method and search space (FR-009's class clause), every hit was read and classed, and the list is routed to the session that files tasks, because this builder's brief files none. If the coordinating session measures any of them failing in a worktree, it is a known defect from then on and must be filed with an order (FR-009)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T268": {
+   "section_sha256": "150e62e70a5271e6f7ec4ccc5014dad70b39e32b81a98f9f14ce9a1d51be87d7",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "ask_started",
+     "summary": "A new ask_started in tool.rs returns the spawn's io::Error; ask becomes ask_started with an error mapped to -1 and no output, so ask's contract and its other callers are unchanged; Said gains no field.",
+     "class": "within",
+     "why": "This is how the fix carries the spawn's error to the notice, which is what T268 asks for. Leaving ask's other callers alone does not narrow anything: the task covers the clone-sync notice, and an extra err would add a line to layout_carry.sh's notice."
+    },
+    {
+     "id": "not-inferred",
+     "summary": "The notice says 'could not be started' only when the spawn itself failed, never inferred from -1 and empty output (a signal answers the same).",
+     "class": "within",
+     "why": "The brief requires telling an unstartable script from one that ran and failed. This makes that distinction true rather than guessed."
+    },
+    {
+     "id": "sync_script",
+     "summary": "One helper in clone_sync_hooks.rs runs the script for both call sites and returns the text after the colon: the output's last lines as before (two for the sync-in, one for the refresh), or 'scripts/sync-with-main.sh could not be started (<reason>)', naming the script.",
+     "class": "within",
+     "why": "It carries the system's reason into the notice, as asked. A failure that has output reads exactly as before, so existing behavior is kept wherever it worked."
+    },
+    {
+     "id": "silent-failure",
+     "summary": "A script that ran, failed and said nothing reports its exit code, or with no exit code says it gave none (a signal?), so no failure leaves the colon bare.",
+     "class": "within",
+     "why": "This is the same defect (an empty tail after FAILED:) reached another way, through the helper being written. Closing it serves the task's goal and widens nothing the GM asked for."
+    },
+    {
+     "id": "sync-in-too",
+     "summary": "The clean clone's sync-in notice is fixed as well as the mirror refresh the brief names.",
+     "class": "within",
+     "why": "It runs the same script through the same ask and has the same empty tail, so it is a known defect of the same kind, fixed where found (constitution XIV, fix as we go). It widens the brief rather than narrowing it."
+    },
+    {
+     "id": "scope-other-ask-callers",
+     "summary": "Only this guard's runs of the sync script change. Ask's other callers across the guards were not surveyed for an empty-tailed notice, and the plan says so.",
+     "class": "within",
+     "why": "Neither the task line nor any request text asks for ask's other callers. No defect in them is known, only unsurveyed, so no known defect is left unfixed. The plan states the limit openly instead of implying a survey. A fix naming a class of defect (FR-009) is not claimed."
+    },
+    {
+     "id": "tests-and-red",
+     "summary": "Red first, with the script made non-executable and then missing (no race), then exit 7, then kill -9; plus a tool.rs test of ask_started; green through make closing-checks T=T268.",
+     "class": "within",
+     "why": "These tests enforce the requested behavior and match the brief's red-first, race-free requirement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T269": {
+   "section_sha256": "e5d7b9f0cef75623ce1436a3bda24539f84495e0089a8d55c548ddb26bd1feb4",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T269-item-form",
+     "summary": "The delta check reads one more form of landing step, a script newly called from a landing recipe, named `landing script scripts/<path>` the way the other landing steps are named; the kinds stay five.",
+     "class": "within",
+     "why": "The GM's register (request.md, 2026-11-25, the audit register) asks that each optimization and process carry its logic, measurements and falsifier, and that what was missed be backfilled 'as we find things that we missed'. A landing step the check could not see (T258's state-sync.sh) is that kind of miss, and making it visible enforces the request without adding to it."
+    },
+    {
+     "id": "T269-what-is-read",
+     "summary": "Read the recipe lines of land, land-batch and land-tooling, the Makefile variables they expand (recursively), and the two push scripts whole. Do not read the whole gate chain's recipes, whose hook roster names scripts it does not call.",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec says how far the detector reaches. This covers the three things the task line and brief name (make land, make land-tooling, the push), and the roster lines it leaves out are not calls. Steps the gate chain runs are already items of their own: `$(MAKE)` edges through make_graph, and l7r-gate's gates as STEPS."
+    },
+    {
+     "id": "T269-script-names",
+     "summary": "A script's name is a `scripts/<path>` ending in a file extension, with a trailing full stop cut and `#` lines skipped. Globs, directories and variable paths name no script.",
+     "class": "within",
+     "why": "How names are parsed is a design choice inside the request. It follows T259-D1 as the block states it (read paths and names, never prose)."
+    },
+    {
+     "id": "T269-new-by-name",
+     "summary": "A script is new by name across all the read sources together, base against head. A moved call, or a script already called elsewhere, adds nothing.",
+     "class": "within",
+     "why": "A script the landing already ran is no new mechanism, so the register owes it no new entry. This is T259-D3's shape as the block states it."
+    },
+    {
+     "id": "T269-rule-refactor",
+     "summary": "Rule-line reading becomes one shared function `rule` used by make_graph and landing_recipes, so a target-specific variable line is not a rule. make_graph's behavior and tests are unchanged.",
+     "class": "within",
+     "why": "An internal refactor that changes no behavior. Nothing in the request touches it."
+    },
+    {
+     "id": "T269-tooling-state-entry-and-docs",
+     "summary": "dev/audits/tooling-state.md gains `covers: landing script scripts/state-sync.sh`, its prose drops the claim that the check cannot see the script, and guards.md, process-decisions.md and audit-register.md describe the new reading and its replay.",
+     "class": "within",
+     "why": "This records the register's own entry for the mechanism the fix covers, which is what the GM asked the register to hold."
+    },
+    {
+     "id": "T269-limit-nested-callees",
+     "summary": "Accepted miss: a script that a called script calls in turn is not followed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Test it against the purpose. T258's failure one level down would be a new script that state-sync.sh or l7r-gate.sh starts calling, and this limit would miss it. Even so, the limit is legitimate. The GM's own words expect a detector that does not see everything and is grown as misses are found: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. The block names no such nested case today (observed 2026-11-26, the replay over 40 landings found only state-sync.sh), so this leaves no known defect, only a possible future miss handled the way the GM prescribed. Following calls literally would ask entries for every script l7r-gate.sh and the guard launcher name, which is beyond the landing steps the task covers. The limit is written beside the rule in detect.rs, where a later miss would reopen it."
+    },
+    {
+     "id": "T269-limit-unprefixed-path",
+     "summary": "Accepted miss: a script reached by a path not written `scripts/...`. One exists today, sync-with-main.sh's dirname call of state-sync.sh at sync-in.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The one instance today is state-sync.sh, and this task gives that script a `covers:` line. Since a script is new by name across all the read sources, that instance owes nothing more, and nothing the register needs is missed. Reading `)/name.ext` would misread make land's `.../task-starts.jsonl` as a script, and the GM's backfill-as-we-go words cover any future case."
+    },
+    {
+     "id": "T269-limit-l7r-gate-land",
+     "summary": "Not read: what `l7r-gate land` itself runs.",
+     "class": "within",
+     "why": "Those gates are already detected as STEPS (`landing gate <name>`), so nothing is left uncovered."
+    },
+    {
+     "id": "T269-possible-false-fire",
+     "summary": "Accepted: a message in the push scripts that newly names a script reads as a call. No shell reader is built. The escape is AUDIT_ENTRY_OK and the reopener is a false fire in the guard log.",
+     "class": "within",
+     "why": "This narrows nothing the GM asked for. It is a design trade-off in the check's precision, priced on a measured replay (0 such cases in 40 landings, 2026-11-26) and given a falsifier. It is a hypothetical, not a known defect left in place. None of the accepted limits has a case today, which is why 'Found and left? none' holds."
+    },
+    {
+     "id": "T269-backfill-to-T260",
+     "summary": "The six scripts the landing already calls with no entry go into T260's backfill (make audits' BACKFILL 254 -> 260) rather than being written here. T260's line keeps its dated 254.",
+     "class": "within",
+     "why": "The GM's request plans for an initial backfill, and T260 is that task, so routing the six there carries out the request rather than deferring a defect of T269. T269's fix makes the six visible, and item 5 asks for T269 to land before T260 writes its backfill. Keeping a dated figure as dated is fine."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T270": {
+   "section_sha256": "6f40a145fe403752e59f0a641f8eb1bb1f020d4979a0eff910bbdb0011678579",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "count-under-listing",
+     "summary": "make audit's Bypasses section gains a count of plan-gate escapes by each record's held list, printed after the existing 15-bypass listing, which is unchanged; prints nothing where there is none; in a new module audit/held.rs called from runs()",
+     "class": "within",
+     "why": "Serves the audit register the GM asked for (2026-11-25: document measurements and what would falsify an optimization, re-audit them); the plan-gate-escape entry needs a count of what escapes actually held. Placement and module are design. Neither request.md nor the spec says anything about held, escapes or bypass counts beyond FR-012's recorded escapes, so nothing asked is narrowed."
+    },
+    {
+     "id": "whole-log-scope",
+     "summary": "The count runs over every record in dev/bypass-log/ whose target is 'plan-gate push' or opens 'plan-gate tick ', not just the last 15 listed",
+     "class": "within",
+     "why": "Wider than the listing, not narrower; a census of the gate's escapes is what the audit entry's threshold needs."
+    },
+    {
+     "id": "five-classes-by-shape",
+     "summary": "Five classes read from the record's shape: held not recorded; nothing held; plan or review record missing with no block; blocks held at a push; blocks held at a tick",
+     "class": "within",
+     "why": "The class scheme is not settled by the request or the spec; it is read from the writer (bypass_record, held_row, tick_gate), so each class says what the record says. Labels that gloss classes 1, 4 and 5 (pre-T262, T84's scope) are wording, not a ruling."
+    },
+    {
+     "id": "by-place-not-by-owner",
+     "summary": "Blocks held are classed by where the gate judged (push or tick), not split into ticked tasks' blocks against the asked task's blocks; a count by owning task would need the tick record to carry the task id, left as a title in the builder's report and not built",
+     "class": "within",
+     "why": "Grepped request.md and spec-index.md for held, escape, bypass, ticked, asked, plan-gate and PLAN_REVIEW: nothing asks for a by-owner count, so declining one narrows nothing asked. The by-owner split appears only as the block's own framing of its task line, which the bundle does not carry and this review could not read. Leaving it unbuilt is not a defect: no wrong outcome follows, since each class states only what the record holds."
+    },
+    {
+     "id": "decide-defer-excluded",
+     "summary": "plan-gate decide-defer records (DEFER_FORM_OK, the decide lint's escape) are not counted although their target opens with plan-gate",
+     "class": "within",
+     "why": "A different escape (the decide lint's, not PLAN_REVIEW_OK), with no held list; counting it would permanently pad the 'held not recorded' class with records that can never say what was held."
+    },
+    {
+     "id": "no-reclass-by-reason",
+     "summary": "The 1281 existing records, none carrying held, are counted as 'held not recorded' and are neither replayed nor classed by their reason text",
+     "class": "within",
+     "why": "The task exists because reading escapes by reason gave a false finding (60% put in a class none of 12 replayed records held); counting what the record does not say as not saying is the request-serving reading, and a backfill was not asked."
+    },
+    {
+     "id": "fixture-proof",
+     "summary": "Classes 2 to 5 are shown on fixture records only, since the real log has no held record yet; red-first test in measure::audit::tests",
+     "class": "within",
+     "why": "The real log physically contains no record with held (measured 2026-11-26 by grep and jq); fixtures are the only way to prove those classes now. A test that enforces the requested count is enforcement, not scope."
+    },
+    {
+     "id": "register-entry-update",
+     "summary": "dev/audits/plan-gate-escape.md is updated to name this count and its classes instead of calling it a reader's query",
+     "class": "within",
+     "why": "Keeps the GM's audit register accurate about its own measurement."
+    },
+    {
+     "id": "order",
+     "summary": "After 451 T262 (the held field), before the audit of the plan-gate-escape entry",
+     "class": "within",
+     "why": "A dependency order; narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T265 (451 T251's and T250's \"Found and left\", 2026-11-26: `docs/building-programs.md`'s dedication knob named a ruling of the GM's that no record holds, in wording the gm-attributions check did not read, and it and 0222's drawing-page comment cited each other; and the check took four kinds of record where his verbatim words also stand in a fifth)",
+    "### T265 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 relabel the dedication knob CANON -> UNRESEARCHED",
+     "summary": "docs/building-programs.md's dedication-knob claim line goes from CANON to UNRESEARCHED (not GUESS), saying whose default it is, that no record of his words holds it, where the date came from, and that only the Fortune's name is from his notes; the knob still defaults to Inari",
+     "class": "within",
+     "why": "This applies the GM's T233 words ('I never made a ruling ... That is what a session told me') to one more such attribution: no recorded words back it, so it is not called his. UNRESEARCHED is the label the GM defined on 2026-11-25 ('unresearched would mean that we know we have not yet checked'), and the block shows that the question itself was never searched. Keeping Inari as a best guess pending the backlog is exactly what that rule says, and it also fits his 2026-10-25 words on choices the research does not settle. The research search is deferred by his words of 2026-11-25 and the research switch."
+    },
+    {
+     "id": "D2 knob 3 prose: the default is this project's, the Bishamon credit is the notes file's",
+     "summary": "knob 3's '(GM 2026-09-20)' tag and 'on the GM's word of the same day' are rewritten: the default is this project's and UNRESEARCHED, and the Bishamon choice is credited to the notes file. Otsuki's Obsidian Portal record (gm-assistant's) was not read",
+     "class": "within",
+     "why": "This is the GM's 'NOT a ruling' rule: say whose it is. The new wording claims only what the repository's records show, which is that the notes file makes the credit. It does not say he never said it, so it stays accurate whatever the unread Portal record holds. Nothing the GM asked for is narrowed: drawing Bishamon on Hoshigaoka is unchanged, and only the attribution moves."
+    },
+    {
+     "id": "D3 0222 drawing-page comment relabeled, visible sentence unchanged",
+     "summary": "the comment stops citing the doc as its record, says UNRESEARCHED and lists where his words were searched for; the visible sentence is not edited",
+     "class": "within",
+     "why": "The comment was the attribution that had no record behind it, and fixing it carries out T233's purpose. The visible sentence already says 'which this project takes as', which credits no one falsely. See D10 for leaving that sentence as it is."
+    },
+    {
+     "id": "D4 the check reads 'a GM ruling'; the broader form is not taken",
+     "summary": "gm_attributions NAMES gains 'a GM <noun>' for the nouns it took after 'the GM's'. Bare 'GM ruling' and 'the GM rules' are not taken: measured, they added four hits and none was an attribution",
+     "class": "within",
+     "why": "Reading the wording that let this attribution slip past enforces exactly what T233 asked for (a red-first test, and the real line refused). Not taking the broader form narrows nothing: the GM's words and T233's task line name no such form, and the four comments it would have read were not attributions. Refusing them would be a check refusing good work."
+    },
+    {
+     "id": "D5 a dated rulings file (specs/<NNN>/rulings-YYYY-MM-DD.md) is accepted as a record",
+     "summary": "POINTER takes specs/<NNN-slug>/rulings-YYYY-MM-DD.md as a fifth kind of record. There are two, 269's and 280's, both headed verbatim and holding his rulings as block quotations in request.md's form. Only the dated name is taken",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This widens what the guard lets pass, past the three kinds of record in T233's task line, which is the coordinating session's build and not the GM's words. Tested against the purpose of his words (a ruling credited to him must stand on what he actually said), the files qualify. These files hold his verbatim words as block quotations with the session's notes under their own headings, the same form as the request.md the check already takes (and this feature's request.md itself carries session notes in parentheses). Refusing a pointer at his verbatim words would be a check refusing correct work. The seam is the block's own reason for excluding tasks.md: the check never compares words, so file kind is the only safeguard. Taking only the dated name, which is the verbatim kind, keeps that safeguard, and second-hand files stay out (D6). Applied literally, the three-kind list would defeat the request's purpose, because it would refuse attributions that are properly backed."
+    },
+    {
+     "id": "D6 audit.md, tasks.md and commit messages are not records; no docs/gm-rulings.md entry is minted for them",
+     "summary": "second-hand files stay refused as pointers. A comment whose words stand only there names them in plain words and does not call them a ruling. No gm-rulings.md entry is created to turn such a quote into a pointer",
+     "class": "within",
+     "why": "This keeps the check as strict as T233 asked. T251's brook claim (marsh-edge words moved onto a brook) is the failure the GM's words describe. Creating a gm-rulings.md entry from a second-hand quote would be the same failure laundered into a record. Naming the file plainly, without calling its words a ruling, is the 'say whose it is' rule."
+    },
+    {
+     "id": "D7 T250's worded-around comments are counted, not swept",
+     "summary": "8 comments name a rulings file and 18 name a tasks.md or audit file; all stay as worded, and the 8 may now name their pointer plainly",
+     "class": "within",
+     "why": "None of them makes a false attribution: they already name the file that holds the words, so leaving them is a difference in wording, not a defect. T233's own design leaves unaudited comments in its baseline, to be fixed by page work as pages are edited."
+    },
+    {
+     "id": "D8 the baseline stays zero bytes; the check is silent on the tree after the relabel",
+     "summary": "dev/gm-attribution-baseline.jsonl stays 0 bytes, and the check returns rc 0 after the relabel",
+     "class": "within",
+     "why": "The baseline only shrinks, as T233 asked, and nothing is added to it to hide the new refusal: the line was fixed instead."
+    },
+    {
+     "id": "D9 the claims round is not run by this builder",
+     "summary": "claims-owed and claims-triage are run; impl-drift for the relabeled knob and the 2 claims sent to it are left to the coordinating session to dispatch",
+     "class": "within",
+     "why": "The GM said 2026-11-25 ('a builder's claims round split off ... sounds good please do that ASAP'). The round is owed and handed off, not skipped."
+    },
+    {
+     "id": "D10 found and left: 0222's visible sentence has no label item",
+     "summary": "the visible sentence 'which this project takes as the ordinary dedication of a country shrine' is left without a label item. The comment and the doc say UNRESEARCHED, the claim is on make research-backlog, and the item is to be filed by the coordinating session",
+     "class": "within",
+     "why": "The sentence is true: it credits the choice to this project, not to the GM, and the default is the project's best guess, which the 2026-11-25 backlog rule allows. A missing label item on a sentence that is already accurate is a gap no reader is misled by, not a wrong outcome. The search that would settle it is deferred by his 2026-11-25 words and the research switch, and the backlog tracks it."
+    },
+    {
+     "id": "D11 found and left: 22 procedure-doc prose lines with GM tags and no pointer",
+     "summary": "11 lines in docs/buildings.md and 11 in docs/building-programs.md name a GM ruling or carry '(GM <date>)' with no pointer on the line, and the check reads only claim lines. They are not searched here; the coordinating session is to file them",
+     "class": "within",
+     "why": "This is an unaudited group of lines, not known defects. The block shows none of the 22 to be false, and some are backed a line away. T233's design treats exactly such a group (the 'about 60 unaudited near-twins') as baseline, fixed as pages are edited and waiting for the research switch. T265 does not change the check's scope over prose, which T233 set. The item has to be filed (task numbers from one writer, so by the coordinating session), and filing it carries the GM's T233 purpose forward."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T265 (451 T251's and T250's \"Found and left\", 2026-11-26: `docs/building-programs.md`'s dedication knob named a ruling of the GM's that no record holds, in wording the gm-attributions check did not read, and it and 0222's drawing-page comment cited each other; and the check took four kinds of record where his verbatim words also stand in a fifth)",
+    "### T265 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "relabel-claim",
+     "summary": "docs/building-programs.md's dedication-knob claim CANON -> UNRESEARCHED (not GUESS), its account saying whose default it is",
+     "class": "within",
+     "why": "The 2026-11-24 amendment: an attribution to the GM names his recorded words, and he never ruled what a session told him. The search found no words of his, so the label says it is this project's default and unsearched. That is the request's purpose carried out."
+    },
+    {
+     "id": "relabel-knob3-prose",
+     "summary": "knob 3's prose drops '(GM 2026-09-20)' and 'on the GM's word', and says the default is this project's and the Bishamon credit is the notes file's",
+     "class": "within",
+     "why": "The same purpose applied to the prose beside the claim. No credit to him stands without recorded words."
+    },
+    {
+     "id": "relabel-0222-comment",
+     "summary": "0222's drawing-page comment says UNRESEARCHED and lists the search; the visible sentence is unchanged",
+     "class": "within",
+     "why": "It corrects the attribution in the comment. Leaving the visible sentence is declared as found-and-left and filed (T277), not hidden."
+    },
+    {
+     "id": "knob-default-kept",
+     "summary": "the knob still defaults to Inari; no map or sheet changes",
+     "class": "within",
+     "why": "The GM 2026-10-25: where research is silent, make it a knob or do what is algorithmically easier. The default staying in place is not a defect, only its label was wrong."
+    },
+    {
+     "id": "names-a-gm-ruling",
+     "summary": "the check's NAMES read 'a GM ruling|...' as they read 'the GM's ...'",
+     "class": "within",
+     "why": "It enforces the 2026-11-24 request on the wording that let this attribution slip through, and it is red-first. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "broader-form-not-taken",
+     "summary": "'GM ruling' bare and 'the GM rules' are not added to NAMES",
+     "class": "within",
+     "why": "The forms the request's build names are all still read. The measured broader forms caught only non-attributions (statements that he has not ruled), so leaving them out drops nothing the request covers."
+    },
+    {
+     "id": "dated-rulings-file-pointer",
+     "summary": "specs/<NNN>/rulings-YYYY-MM-DD.md is accepted as a record; only the dated name",
+     "class": "within",
+     "why": "The request is that an attribution names his RECORDED words. These two files hold his rulings verbatim as block quotations, in the form of a request.md, so accepting them serves that purpose. The undated name stays refused."
+    },
+    {
+     "id": "second-hand-files-refused",
+     "summary": "audit.md, tasks.md and commit messages are not records",
+     "class": "within",
+     "why": "Stricter, and on the request's purpose: those files are a session's sentences quoting him second-hand, which is exactly the 0006 failure. T251's brook claim is the measured instance."
+    },
+    {
+     "id": "t250-comments-counted-not-swept",
+     "summary": "8 comments that name a rulings file and 18 that name tasks/audit files are counted and left as worded",
+     "class": "within",
+     "why": "The request's build has fixing comments as page work waiting on the research switch, and the GM deferred queued research on 2026-11-25. They are left as plainly-worded mentions, not attributions, so the check is not weakened."
+    },
+    {
+     "id": "claims-round-elsewhere",
+     "summary": "the baseline stays zero bytes; impl-drift on the owed claims is dispatched by the coordinating session, not this builder",
+     "class": "within",
+     "why": "The claims round still runs, it is only routed to its owner, so nothing is narrowed."
+    },
+    {
+     "id": "found-left-0222-visible-sentence",
+     "summary": "0222's visible sentence with no label item is deferred: filed as T277, lands before T264",
+     "class": "within",
+     "why": "It now carries FR-009's form: why it is not fixed here (page work in fresh page sessions, and research deferred by the GM 2026-11-25), its filed id, and its order. It is ordered inside the feature, before the next dependent task, and the claim is on research-backlog."
+    },
+    {
+     "id": "found-left-22-prose-lines",
+     "summary": "22 prose lines in docs/buildings.md and docs/building-programs.md naming a GM ruling with no pointer are deferred: filed as T276, lands before T264",
+     "class": "within",
+     "why": "It carries FR-009's form (why, filed id, order), and the count gives its method, the check's own patterns over every non-claim line. It is filed and ordered, not dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T267 (`make claims-checked` failed with \"File exists (os error 17)\" in a linked worktree whenever a reply line was held, observed 2026-11-26 in a builder's worktree)",
+    "### T267 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T267-fix",
+     "summary": "silent::SEARCHED becomes a bare file name; silent::kept_at(root) places it in the gitdir a .git file names (a relative name read against the root), else root/.git; no git process; hold's signature unchanged",
+     "class": "within",
+     "why": "Removes the observed crash (make claims-checked exiting with os error 17 in a linked worktree) so a held line is told to its session as in a clone - the task's own outcome. The red-first test on a real linked worktree (201/1 red, 202/0 green, dated with method) shows the mechanism reaches the case it names."
+    },
+    {
+     "id": "T267-per-tree",
+     "summary": "the held searches are kept per worktree (its own gitdir), not in the clone's common directory",
+     "class": "within",
+     "why": "Chosen so T218's held-until-read rule holds: one shared file keyed by claim would let a second tree overwrite, answer or forget the first tree's search. Keeps a tree's state its own as T254 does for parallel builders (request: 'before three parallel builders'). Narrows nothing a clone already did."
+    },
+    {
+     "id": "T267-no-migration",
+     "summary": "a plain clone's file stays at root/.git/claims-searched.json; nothing is migrated",
+     "class": "within",
+     "why": "Where .git is a directory kept_at returns the old place, so no existing state moves and no clone's behavior changes."
+    },
+    {
+     "id": "T267-flight-unchanged",
+     "summary": "the in-flight marks (flight.rs) stay in the common directory, unchanged",
+     "class": "within",
+     "why": "They already ask git for the directory with root/.git only as the fallback, and each mark is named by its bundle's own path, so two trees never meet there; no defect is shown and leaving working code as it is narrows nothing."
+    },
+    {
+     "id": "T267-census-left",
+     "summary": "state paths of the same shape (joined straight onto .git) in other crates of rust/gate and rust/guard, and the .is_dir() probes that pass a worktree over, are listed from a stated grep census as candidates for the coordinating session to measure and file, not fixed here; 'Found and left: none measured'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops at the one path the task observed failing while naming a wider class. Legitimate on the GM's own words: a defect is a wrong outcome (constitution XIV v2.36.0, GM 2026-11-19, 'don't spend a lot of time fixing things which are not actually wrong'), and none of these candidates was run in a worktree or shown to do anything wrong, so none is a known defect that FIX AS WE GO would require fixed now. The census states its method and search space (FR-009's class clause), every hit was read and classed, and the list is routed to the session that files tasks, because this builder's brief files none. If the coordinating session measures any of them failing in a worktree, it is a known defect from then on and must be filed with an order (FR-009)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T268 (451 T263's forced red, 2026-11-26: a sync script that cannot START left the clone-sync notice ending `mirror refresh FAILED: ` with nothing after the colon)",
+    "### T268 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "ask_started",
+     "summary": "A new ask_started in tool.rs returns the spawn's io::Error; ask becomes ask_started with an error answered -1 and no output, so its contract and every other caller are unchanged.",
+     "class": "within",
+     "why": "This is how the error text reaches the notice, which is what T268's task line asks for (as the plan relays it; tasks.md is not in the bundle). It narrows nothing."
+    },
+    {
+     "id": "Said-no-field",
+     "summary": "Said gains no field, because layout_carry.sh's caller prints a non-empty err and would add a line to the sync notice.",
+     "class": "within",
+     "why": "This is an implementation choice that keeps the existing notices as they were. The fix still delivers everything it promised."
+    },
+    {
+     "id": "not-inferred",
+     "summary": "The notice says 'could not be started' only when the spawn itself failed, never inferred from -1 and no output.",
+     "class": "within",
+     "why": "It makes the new wording true by construction. That serves the brief, which asks that a script that cannot start be told apart from one that ran and failed."
+    },
+    {
+     "id": "sync_script-names-script",
+     "summary": "A new sync_script helper returns the output, or the words after the notice's colon: the output's last lines as before, or 'scripts/sync-with-main.sh could not be started (<reason>)'.",
+     "class": "within",
+     "why": "Naming the script is what makes the system's reason readable, which is the task's purpose (approach item 1)."
+    },
+    {
+     "id": "sync-in-fixed-too",
+     "summary": "The clean clone's sync-in notice is fixed along with the mirror refresh that the brief names.",
+     "class": "within",
+     "why": "The same defect at a second site of the same script through the same ask is fixed where found (fix as we go; constitution XIV). That widens the work and does not narrow it. The plan gives no search command for the count of two call sites; it is not judged here (bundle only), and this is an aside, not a ruling."
+    },
+    {
+     "id": "red-first-no-race",
+     "summary": "The red test makes the script not executable and then missing, with no race; ask_started has its own test in tool.rs.",
+     "class": "within",
+     "why": "The test enforces the requested behavior. The figures 521/1 and 522/0 carry their date and command."
+    },
+    {
+     "id": "other-ask-callers-unsurveyed",
+     "summary": "Only this guard's runs of the sync script change. Other callers of ask across the guards were not surveyed for a notice with an empty tail.",
+     "class": "within",
+     "why": "The task is the clone-sync notice, and the block states no wrong outcome at any other caller. An unsurveyed site with no known defect is not a defect left. The plan's Scope bullet says plainly what was not searched."
+    },
+    {
+     "id": "ran-failed-silent-left-empty",
+     "summary": "sync_script answers every failure that is not a spawn failure with 'the output's last lines as before'. So a script that ran, failed and printed nothing (an exit with no output, or the signal-killed case the block itself names as '-1 and no output') still prints 'FAILED: ' with nothing after the colon. 'Found and left?' says none.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The task's own goal (approach item 1) is that a session reading a FAILED notice can read WHY from it. Its item 12 names the defect as a notice that says FAILED with no reason to resolve it by. The block knows a second route to that same empty tail (its 'Not inferred from the code' bullet) and keeps it inside the helper it is rewriting. That leaves a known wrong outcome of exactly the task's class, and it is not recorded. Covering it is not impossible: for example, when the tail is empty, say the script ended with its exit code (or signal) and no output. To clear: cover the case in sync_script and pin it, or record it under 'Found and left?' with why it is not fixed here, its filed task id and its order, per FR-009."
+    }
+   ],
+   "tasks": [
+    "T268"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T268 (451 T263's forced red, 2026-11-26: a sync script that cannot START left the clone-sync notice ending `mirror refresh FAILED: ` with nothing after the colon)",
+    "### T268 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "ask_started",
+     "summary": "A new ask_started in tool.rs returns the spawn's io::Error; ask becomes ask_started with an error mapped to -1 and no output, so ask's contract and its other callers are unchanged; Said gains no field.",
+     "class": "within",
+     "why": "This is how the fix carries the spawn's error to the notice, which is what T268 asks for. Leaving ask's other callers alone does not narrow anything: the task covers the clone-sync notice, and an extra err would add a line to layout_carry.sh's notice."
+    },
+    {
+     "id": "not-inferred",
+     "summary": "The notice says 'could not be started' only when the spawn itself failed, never inferred from -1 and empty output (a signal answers the same).",
+     "class": "within",
+     "why": "The brief requires telling an unstartable script from one that ran and failed. This makes that distinction true rather than guessed."
+    },
+    {
+     "id": "sync_script",
+     "summary": "One helper in clone_sync_hooks.rs runs the script for both call sites and returns the text after the colon: the output's last lines as before (two for the sync-in, one for the refresh), or 'scripts/sync-with-main.sh could not be started (<reason>)', naming the script.",
+     "class": "within",
+     "why": "It carries the system's reason into the notice, as asked. A failure that has output reads exactly as before, so existing behavior is kept wherever it worked."
+    },
+    {
+     "id": "silent-failure",
+     "summary": "A script that ran, failed and said nothing reports its exit code, or with no exit code says it gave none (a signal?), so no failure leaves the colon bare.",
+     "class": "within",
+     "why": "This is the same defect (an empty tail after FAILED:) reached another way, through the helper being written. Closing it serves the task's goal and widens nothing the GM asked for."
+    },
+    {
+     "id": "sync-in-too",
+     "summary": "The clean clone's sync-in notice is fixed as well as the mirror refresh the brief names.",
+     "class": "within",
+     "why": "It runs the same script through the same ask and has the same empty tail, so it is a known defect of the same kind, fixed where found (constitution XIV, fix as we go). It widens the brief rather than narrowing it."
+    },
+    {
+     "id": "scope-other-ask-callers",
+     "summary": "Only this guard's runs of the sync script change. Ask's other callers across the guards were not surveyed for an empty-tailed notice, and the plan says so.",
+     "class": "within",
+     "why": "Neither the task line nor any request text asks for ask's other callers. No defect in them is known, only unsurveyed, so no known defect is left unfixed. The plan states the limit openly instead of implying a survey. A fix naming a class of defect (FR-009) is not claimed."
+    },
+    {
+     "id": "tests-and-red",
+     "summary": "Red first, with the script made non-executable and then missing (no race), then exit 7, then kill -9; plus a tool.rs test of ask_started; green through make closing-checks T=T268.",
+     "class": "within",
+     "why": "These tests enforce the requested behavior and match the brief's red-first, race-free requirement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T269 (451 T258, 2026-11-25: `scripts/state-sync.sh`, newly called from `make land`'s and `make land-tooling`'s recipes, landed with the audit register's check asking no entry - `dev/audits/tooling-state.md` says so in its own words)",
+    "### T269 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T269-item-form",
+     "summary": "The delta check reads one more form of landing step, a script newly called from a landing recipe, named `landing script scripts/<path>` the way the other landing steps are named; the kinds stay five.",
+     "class": "within",
+     "why": "The GM's register (request.md, 2026-11-25, the audit register) asks that each optimization and process carry its logic, measurements and falsifier, and that what was missed be backfilled 'as we find things that we missed'. A landing step the check could not see (T258's state-sync.sh) is that kind of miss, and making it visible enforces the request without adding to it."
+    },
+    {
+     "id": "T269-what-is-read",
+     "summary": "Read the recipe lines of land, land-batch and land-tooling, the Makefile variables they expand (recursively), and the two push scripts whole. Do not read the whole gate chain's recipes, whose hook roster names scripts it does not call.",
+     "class": "within",
+     "why": "Neither the GM's request nor the spec says how far the detector reaches. This covers the three things the task line and brief name (make land, make land-tooling, the push), and the roster lines it leaves out are not calls. Steps the gate chain runs are already items of their own: `$(MAKE)` edges through make_graph, and l7r-gate's gates as STEPS."
+    },
+    {
+     "id": "T269-script-names",
+     "summary": "A script's name is a `scripts/<path>` ending in a file extension, with a trailing full stop cut and `#` lines skipped. Globs, directories and variable paths name no script.",
+     "class": "within",
+     "why": "How names are parsed is a design choice inside the request. It follows T259-D1 as the block states it (read paths and names, never prose)."
+    },
+    {
+     "id": "T269-new-by-name",
+     "summary": "A script is new by name across all the read sources together, base against head. A moved call, or a script already called elsewhere, adds nothing.",
+     "class": "within",
+     "why": "A script the landing already ran is no new mechanism, so the register owes it no new entry. This is T259-D3's shape as the block states it."
+    },
+    {
+     "id": "T269-rule-refactor",
+     "summary": "Rule-line reading becomes one shared function `rule` used by make_graph and landing_recipes, so a target-specific variable line is not a rule. make_graph's behavior and tests are unchanged.",
+     "class": "within",
+     "why": "An internal refactor that changes no behavior. Nothing in the request touches it."
+    },
+    {
+     "id": "T269-tooling-state-entry-and-docs",
+     "summary": "dev/audits/tooling-state.md gains `covers: landing script scripts/state-sync.sh`, its prose drops the claim that the check cannot see the script, and guards.md, process-decisions.md and audit-register.md describe the new reading and its replay.",
+     "class": "within",
+     "why": "This records the register's own entry for the mechanism the fix covers, which is what the GM asked the register to hold."
+    },
+    {
+     "id": "T269-limit-nested-callees",
+     "summary": "Accepted miss: a script that a called script calls in turn is not followed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Test it against the purpose. T258's failure one level down would be a new script that state-sync.sh or l7r-gate.sh starts calling, and this limit would miss it. Even so, the limit is legitimate. The GM's own words expect a detector that does not see everything and is grown as misses are found: 'after the initial backfill, we can backfill as we go, as we find things that we missed'. The block names no such nested case today (observed 2026-11-26, the replay over 40 landings found only state-sync.sh), so this leaves no known defect, only a possible future miss handled the way the GM prescribed. Following calls literally would ask entries for every script l7r-gate.sh and the guard launcher name, which is beyond the landing steps the task covers. The limit is written beside the rule in detect.rs, where a later miss would reopen it."
+    },
+    {
+     "id": "T269-limit-unprefixed-path",
+     "summary": "Accepted miss: a script reached by a path not written `scripts/...`. One exists today, sync-with-main.sh's dirname call of state-sync.sh at sync-in.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The one instance today is state-sync.sh, and this task gives that script a `covers:` line. Since a script is new by name across all the read sources, that instance owes nothing more, and nothing the register needs is missed. Reading `)/name.ext` would misread make land's `.../task-starts.jsonl` as a script, and the GM's backfill-as-we-go words cover any future case."
+    },
+    {
+     "id": "T269-limit-l7r-gate-land",
+     "summary": "Not read: what `l7r-gate land` itself runs.",
+     "class": "within",
+     "why": "Those gates are already detected as STEPS (`landing gate <name>`), so nothing is left uncovered."
+    },
+    {
+     "id": "T269-possible-false-fire",
+     "summary": "Accepted: a message in the push scripts that newly names a script reads as a call. No shell reader is built. The escape is AUDIT_ENTRY_OK and the reopener is a false fire in the guard log.",
+     "class": "within",
+     "why": "This narrows nothing the GM asked for. It is a design trade-off in the check's precision, priced on a measured replay (0 such cases in 40 landings, 2026-11-26) and given a falsifier. It is a hypothetical, not a known defect left in place. None of the accepted limits has a case today, which is why 'Found and left? none' holds."
+    },
+    {
+     "id": "T269-backfill-to-T260",
+     "summary": "The six scripts the landing already calls with no entry go into T260's backfill (make audits' BACKFILL 254 -> 260) rather than being written here. T260's line keeps its dated 254.",
+     "class": "within",
+     "why": "The GM's request plans for an initial backfill, and T260 is that task, so routing the six there carries out the request rather than deferring a defect of T269. T269's fix makes the six visible, and item 5 asks for T269 to land before T260 writes its backfill. Keeping a dated figure as dated is fine."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T270 (451 T261's builder, measured 2026-11-26 (12 escape records replayed at their commits, against the reading by reason in T261's line): escapes read by their reason gave a false finding, 60% counted as unstarted tasks' stubs and none of the 12 records replayed holding one, and 451 T262 gave the record a `held` list nothing yet counts)",
+    "### T270 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "count-under-listing",
+     "summary": "make audit's Bypasses section gains a count of plan-gate escapes by each record's held list, printed after the existing 15-bypass listing, which is unchanged; prints nothing where there is none; in a new module audit/held.rs called from runs()",
+     "class": "within",
+     "why": "Serves the audit register the GM asked for (2026-11-25: document measurements and what would falsify an optimization, re-audit them); the plan-gate-escape entry needs a count of what escapes actually held. Placement and module are design. Neither request.md nor the spec says anything about held, escapes or bypass counts beyond FR-012's recorded escapes, so nothing asked is narrowed."
+    },
+    {
+     "id": "whole-log-scope",
+     "summary": "The count runs over every record in dev/bypass-log/ whose target is 'plan-gate push' or opens 'plan-gate tick ', not just the last 15 listed",
+     "class": "within",
+     "why": "Wider than the listing, not narrower; a census of the gate's escapes is what the audit entry's threshold needs."
+    },
+    {
+     "id": "five-classes-by-shape",
+     "summary": "Five classes read from the record's shape: held not recorded; nothing held; plan or review record missing with no block; blocks held at a push; blocks held at a tick",
+     "class": "within",
+     "why": "The class scheme is not settled by the request or the spec; it is read from the writer (bypass_record, held_row, tick_gate), so each class says what the record says. Labels that gloss classes 1, 4 and 5 (pre-T262, T84's scope) are wording, not a ruling."
+    },
+    {
+     "id": "by-place-not-by-owner",
+     "summary": "Blocks held are classed by where the gate judged (push or tick), not split into ticked tasks' blocks against the asked task's blocks; a count by owning task would need the tick record to carry the task id, left as a title in the builder's report and not built",
+     "class": "within",
+     "why": "Grepped request.md and spec-index.md for held, escape, bypass, ticked, asked, plan-gate and PLAN_REVIEW: nothing asks for a by-owner count, so declining one narrows nothing asked. The by-owner split appears only as the block's own framing of its task line, which the bundle does not carry and this review could not read. Leaving it unbuilt is not a defect: no wrong outcome follows, since each class states only what the record holds."
+    },
+    {
+     "id": "decide-defer-excluded",
+     "summary": "plan-gate decide-defer records (DEFER_FORM_OK, the decide lint's escape) are not counted although their target opens with plan-gate",
+     "class": "within",
+     "why": "A different escape (the decide lint's, not PLAN_REVIEW_OK), with no held list; counting it would permanently pad the 'held not recorded' class with records that can never say what was held."
+    },
+    {
+     "id": "no-reclass-by-reason",
+     "summary": "The 1281 existing records, none carrying held, are counted as 'held not recorded' and are neither replayed nor classed by their reason text",
+     "class": "within",
+     "why": "The task exists because reading escapes by reason gave a false finding (60% put in a class none of 12 replayed records held); counting what the record does not say as not saying is the request-serving reading, and a backfill was not asked."
+    },
+    {
+     "id": "fixture-proof",
+     "summary": "Classes 2 to 5 are shown on fixture records only, since the real log has no held record yet; red-first test in measure::audit::tests",
+     "class": "within",
+     "why": "The real log physically contains no record with held (measured 2026-11-26 by grep and jq); fixtures are the only way to prove those classes now. A test that enforces the requested count is enforcement, not scope."
+    },
+    {
+     "id": "register-entry-update",
+     "summary": "dev/audits/plan-gate-escape.md is updated to name this count and its classes instead of calling it a reader's query",
+     "class": "within",
+     "why": "Keeps the GM's audit register accurate about its own measurement."
+    },
+    {
+     "id": "order",
+     "summary": "After 451 T262 (the held field), before the audit of the plan-gate-escape entry",
+     "class": "within",
+     "why": "A dependency order; narrows nothing."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T265 to T270, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

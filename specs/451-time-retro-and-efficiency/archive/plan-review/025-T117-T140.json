@@ -1,0 +1,692 @@
+{
+ "blocks": {
+  "### T117 (<why: the finding or measurement that files it>)": {
+   "sha256": "d21c4524504091cc768433614fe93bf0f4373c4292131fdf22799963c2eb47e4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T117 Approach (checklist part A)": {
+   "sha256": "571d95b0b63ba8f31ed3172ca37123fc313254902054bdf2f7d8a85dcd7cecec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T118 (shared::tree::program read three Python shapes as writes and gate-write's file test took a directory literal as a file written, so make-only, gate-write and the event log refused or listed correct work on the stdin and `-c` routes, and would on T51's script route - a read through a `/` join, an argv list bound to a name and run, a literal a test reads, a directory only read (found by T51, measured 2026-11-21, `/tmp/t51/probe-stdin.jsonl`, HEAD b4ab4e5a79); at HEAD 9bd338e244, 45 gate-write and 20 make-only refusals of correct work over T93's 9,646 commands, T33's 1,134 fixtures, T51's 455 script stand-ins and 6 probes, measured 2026-11-21 (the paired replay, `/tmp/t118/scripts/paired.sh`))": {
+   "sha256": "5460e13acc2ab2266255c448cd1a9832f361dc05b8465ffb147f9007406f4cce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T118 Approach (checklist part A)": {
+   "sha256": "7f2379d073abbbc0a0e907d1dccbdbeb5b9372bb109173a4530b80fc4128750a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T120 (<why: the finding or measurement that files it>)": {
+   "sha256": "da2e3b448b9797c85d65ee03bd3a17319cf742036bc16c59a7e6bd5e175f5cb0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T120 Approach (checklist part A)": {
+   "sha256": "1868467b0daec89d94c50922933661771e9eab4cc9a449b173efd6e043becfd1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T121 (<why: the finding or measurement that files it>)": {
+   "sha256": "7794f43b448468fe6ad12b20d4e73c508b35c1e956e91168d7d1bc01d9e5eebc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T121 Approach (checklist part A)": {
+   "sha256": "8ab3fbd783d47b155db359f6cb495f63631d854e445294507c6ebbeca8412a01",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T122 (<why: the finding or measurement that files it>)": {
+   "sha256": "245a62ea49122e8870bdf887c8e86772b0d6f4d1c76be472c1bf9e3501143712",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T125 (<why: the finding or measurement that files it>)": {
+   "sha256": "9e99055e58a08a95d761d7ed7a695606d303b20f170b3218fd532a6c1eb16abb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T125 Approach (checklist part A)": {
+   "sha256": "8d1a2ef75a68e9a3559b606efcb9ac31343e1dc571f867abae8e3184bcd19348",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T126 (<why: the finding or measurement that files it>)": {
+   "sha256": "5ac15dde459986714126b0edf41c29f6014ab919eced7fb9d5c1a2c21603e162",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T126 Approach (checklist part A)": {
+   "sha256": "fc214a06a1a5e4d7f3a04b1387cc1a4395d8e2026bdfa652ad1cf182bbaec317",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T127 (<why: the finding or measurement that files it>)": {
+   "sha256": "9abd7d6b2f77ebf1d5587850ebad623c53fbe60f9be3f4356e334df9809d51d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T127 Approach (checklist part A)": {
+   "sha256": "a5e316e96e9e46067d9ea6f5b588005c60df1b97d40352ab942b06a2ceb08374",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T128 (<why: the finding or measurement that files it>)": {
+   "sha256": "f390fde5d660315f1af2752e2b9c7b7a6d9d1a02f0d3c8986f9136a3bfcff959",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T130 (<why: the finding or measurement that files it>)": {
+   "sha256": "0da2e4782eb7943a082d1f50717d56ac2657741be4fbee1a823da43e421f118f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T130 Approach (checklist part A)": {
+   "sha256": "34f2cd57d1d54d65b7dfb7528cdc7664470583f422a3efdbcaeafb5c65fd492c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T131 (<why: the finding or measurement that files it>)": {
+   "sha256": "8435d53523e0151526db65cb6797e32bb067d37fdd6aeb21ca61edf2a331a70a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T131 Approach (checklist part A)": {
+   "sha256": "95f7bf4564745478c0015f48a1aa65b8205412b255278f4bb2e0109032aa58b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T132 (<why: the finding or measurement that files it>)": {
+   "sha256": "afe6ef8e6b0b1f65dd7a8fbc1036ee622a4e71655337f5840b23c70763b6eb85",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T132 Approach (checklist part A)": {
+   "sha256": "16c29734fe8d28c4cfd5d381e07ac879760d382fe31d232283c9768f2bf4bbd8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T133 (<why: the finding or measurement that files it>)": {
+   "sha256": "1b6875c13dc01380f945f202b56bf1767601a5adce776277b4a901b0c2a11a78",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T133 Approach (checklist part A)": {
+   "sha256": "1f026fe8c5418bff5fefd0d0788be3820793e5cba89adfb565fe751a2eff08ba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T134 (<why: the finding or measurement that files it>)": {
+   "sha256": "e7cf95b8541eaa4635d49184da48536f67288a6f32f0f62fd7a3d8e6c9dd634a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T134 Approach (checklist part A)": {
+   "sha256": "cb410085b1e91742454908d4fa4137aa51815529fc5ba79d0d307915f732dae4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T135 (<why: the finding or measurement that files it>)": {
+   "sha256": "af1f6c26848f6161880c40bfeaba02311b040989975f057754c2bad18f7cc63c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T135 Approach (checklist part A)": {
+   "sha256": "20a999d6dcfc7ddad9e7342d2cef01986fabafeb5e0a43eda24fd3cb2772db0a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T136 (<why: the finding or measurement that files it>)": {
+   "sha256": "bf83e746bb86ab4b6d3dd1bebd3ba037ae51ef050724379f5235c05c7d1babad",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T136 Approach (checklist part A)": {
+   "sha256": "eefef34998eebc648761fc82e0c740db75fbf06afc7e2135c9f3cae1a8613247",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T137 (<why: the finding or measurement that files it>)": {
+   "sha256": "e50ce6087f3fbcd0c226e0f65689443b133b097138944b733b09edbdab37de8b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T137 Approach (checklist part A)": {
+   "sha256": "dd7d4387d994a082a73d2e8c538808fc6efc83f565c905965646686b8726e403",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T138 (<why: the finding or measurement that files it>)": {
+   "sha256": "557d015f05fb5263becaf4a857bd9174e95c4d2133140d54ba8ed7262eab4630",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T138 Approach (checklist part A)": {
+   "sha256": "6a78f88e52841b737422ae37fb466520e46a4cf02e49603c1e1ba00c7b48edf6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T139 Approach (checklist part A)": {
+   "sha256": "b07b0f02fb33c17f00acba1f2417bec85c1e7aaf15a884ead006a3f83216454b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T139 (`tests/hooks/test-no-poll-hooks.sh`'s case \"two waiters on one quiet file and no run: still gone\" failed good work under load - \"expected dead, rc=0\" at T118's closing run, observed 2026-11-22, and again in a batch gate, observed 2026-11-27 - and passes alone: the T71 case before it ended its call sleep first, and the shell that ran on forked a `tee` that wrote or held `fresh.log` after the case's touch)": {
+   "sha256": "62f9ad2ff7022a60f93bcc8b490c1bfaaf19b9a82a7ca903e6984381398bb90c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T140 (<why: the finding or measurement that files it>)": {
+   "sha256": "044b6e58fb6e5734627a641418bf7007cc3b021dd31d6a980f27eb135d0e2625",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T118": {
+   "section_sha256": "013db422a7cc1f46ec03e3670c7c4211956c9ea1f7a3e0b8bf50f3833bc08874",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the three readings",
+     "summary": "chain_read (a literal in a '/' join read whole by .read_text/.read_bytes is read), display_run (a literal of a list/tuple/set bound to a name whose every use is a subprocess argv, a run-only for, a test or none is run; an f-string placeholder fails closed), tested (a literal under in / not in / startswith / endswith is text) - so make-only, readme, gate-write and the event log stop refusing or listing correct work",
+     "class": "within",
+     "why": "This fixes the defect T118's line names: guards refusing correct work and the event log listing files as written when they are not. The constitution's fix-as-we-go rule asks for exactly that, and FR-001's event log has to be right for FR-005 and SC-002 to hold. The replay moved 45 gate-write and 20 make-only verdicts, all to a let-through, each read by hand; the per-corpus deltas add up to 45 and 20."
+    },
+    {
+     "id": "D2 make-only's tested literal fails closed beside a computed write",
+     "summary": "for make-only, a tested literal counts as text only in a program that writes no path it computes",
+     "class": "within",
+     "why": "This is a fail-closed design choice inside the fix. It keeps true writes refused, which is part of a guard doing its job (FR-012, 'real enforcement'). It was added after round one's finding on T58's commits.py, which now passes. It leaves no measured correct row refused beyond the found-and-left items ruled in D6 and D7."
+    },
+    {
+     "id": "D3 the directory rule: writes_computed",
+     "summary": "gate-write's file test takes a directory literal as a file written only beside a computed write (holds_name, a method write on a receiver it cannot read, an unread writer, a dotted open in a write mode), a GUESS knob fitted on window#170 and refusals#144",
+     "class": "within",
+     "why": "This narrows the plain directory rule only so that two true writes stay refused (window#170 and refusals#144, which the plain rule let through on the first replay). That keeps the enforcement real while fixing the 'directory only read' defect. Labeling the knob GUESS meets the measured-or-labeled rule."
+    },
+    {
+     "id": "D4 UNREAD_WRITERS and dotted open count as computed writes",
+     "summary": "shutil.copy, os.replace, extraction and dotted io.open(P,'w') are counted as computed writes, closing the gap the first plan round named",
+     "class": "within",
+     "why": "This fixes, in this task, the gap the review found. The first directory rule would have let a write HEAD refused go through. Its red-first test is a_write_of_a_computed_path_is_told_from_a_literal_one (FR-012)."
+    },
+    {
+     "id": "D5 the split of program.rs",
+     "summary": "program.rs goes from 1,276 to 438 lines, with parse.rs (601) and uses.rs (265) split off by line range to meet file-scale's 1,000-line bar",
+     "class": "within",
+     "why": "A mechanical move to meet the project's existing file-scale check, so the change can land. It changes no behavior and decides nothing the request left open."
+    },
+    {
+     "id": "D6 found and left: the directory shape (t79 probe's tests/hooks/fixtures, window#68/#69's scripts as a copytree source)",
+     "summary": "these correct programs stay refused by gate-write because the directory sits beside computed writes whose landing the reader does not follow; deferred to T138, which lands before T51",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T118's own line, which names 'a directory only read'. Two things make the deferral legitimate. First, the rule that tells these rows apart from window#170's true write is the rule that keeps real enforcement real, so letting them through with this reader would gut the GM's 'real enforcement' purpose. Second, the deferral meets every term FR-009 sets: why it is not fixed here, a filed task id (T138) and an order (lands before T51, the step whose script route reads through these readings). So no known defect is carried into the next step, as fix-as-we-go asks. Each row was also refused at HEAD, so this is not a regression."
+    },
+    {
+     "id": "D7 found and left: the keyword-argument and subprocess-wrapper shapes (t79's run. and .gitignore, the latter also an event-log write)",
+     "summary": "two shapes outside T118's three are left refused or listed, deferred to T138, which lands before T51",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from D6 because they are a different class: neither is a shape T118's line names, so this task never undertook them. They are known defects, including a wrong event-log write entry, so fix-as-we-go applies. The plan files them as T138 with a reason and an order ahead of T51, as FR-009 asks, so they are fixed before the step that depends on them. They were refused at HEAD too, and they appear in that probe alone across 11,241 rows."
+    },
+    {
+     "id": "D8 constraints: T129's tree.rs patterns and T89's py_c left alone",
+     "summary": "the task touches only T118's files",
+     "class": "within",
+     "why": "This keeps the task to its own scope. No defect is shown in those files, so leaving them alone leaves nothing owed."
+    },
+    {
+     "id": "D9 the performance classification",
+     "summary": "'Performance work? No - a correctness task'",
+     "class": "within",
+     "why": "The task fixes guard refusals of correct work. The event-log corrections are a side effect of a shared reader, not a measurement task in the sense of the GM's 2026-11-20 words. FR-013's scheduling is not narrowed, because the cost of the change is measured and under T96's bar."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T123": {
+   "section_sha256": "9a38f40326085148b912bafd3d74d2f7c86088219ca3268ce88671650b655953",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D-a (root)",
+     "summary": "planhold::hold records the tree the dispatch's call ran in (root); reaches asks whether a call's tree is that root; a hold with no root recorded, taken before T123, reaches every tree as today",
+     "class": "within",
+     "why": "Fixes a measured defect found at T80's landing (a hold written back and refused in trees it was never taken in, failing every landing while a review ran); fixing known defects as found is the standing rule, and keeping old holds' behavior narrows nothing the GM asked for."
+    },
+    {
+     "id": "D-a (snapshot and write-back)",
+     "summary": "snapshot keeps a live hold's text only for a call in its tree, restore writes back only there, closing both directions of the no-id overwrite",
+     "class": "within",
+     "why": "Removes the measured wrong outcome (one tree's text written over another's uncommitted section); the hold still protects the plan it was taken on."
+    },
+    {
+     "id": "D-a (refusal by the hold's tree)",
+     "summary": "a write is judged against the plan of the hold's tree wherever the call runs: an Edit of another tree's own plan passes, an Edit of the held plan by absolute path from any tree is refused",
+     "class": "within",
+     "why": "Stops refusing work on a plan nobody is reviewing (a check refusing good work is a defect) and widens protection of the held plan to the cross-tree Edit HEAD passed; serves the hold's purpose rather than narrowing it."
+    },
+    {
+     "id": "D-a (shell write gated to the hold's tree)",
+     "summary": "a shell write is judged only in the hold's tree; from another tree not at all, since by a relative path it writes that tree's own plan and no write-back runs there",
+     "class": "within",
+     "why": "Measured: judging it against the held tree's text refused a write of shared text to the landing worktree's own plan that HEAD passed (round 1); gating to the hold's tree removes that wrong refusal."
+    },
+    {
+     "id": "found-and-left 3 (absolute-path shell write from another tree)",
+     "summary": "a shell call in another tree that writes the held plan by its absolute path passes and is written back by nothing; accepted as not a defect",
+     "class": "within",
+     "why": "Not a defect under constitution XIV as the GM defined it 2026-11-19: no wrong outcome survives, since make plan-verdict refuses a verdict on a section changed while reviewed and the review runs again. HEAD caught it only by coincidence: /tmp/t123/abs.out shows HEAD refusing the heading write from the calling tree's own text and passing clone-only text, exactly as T123's binary does. The replay over real history (/tmp/t123/replay_shell.out) found no such write. The alternative and its cost are stated, and the section's deferral is reasoned rather than an unfiled defect."
+    },
+    {
+     "id": "D-b (no-cwd seam)",
+     "summary": "a call with no cwd reads handle::cwd_of: the process's working directory in production as before, the test thread's own PWD in a test build, so no test reaches a live clone's state; checks_hooks' state_holds_snaps reads the same",
+     "class": "within",
+     "why": "Fixes the measured defect (guard and shared tests reading and rewriting the live clone's hold, failing T80's landing) at the one place every no-cwd test passes through; production behavior unchanged."
+    },
+    {
+     "id": "order",
+     "summary": "lands with T80",
+     "class": "within",
+     "why": "Ordering of a defect fix with the task whose landing it unblocks; decides nothing the request or spec left to the GM."
+    },
+    {
+     "id": "performance classification",
+     "summary": "Performance work? no",
+     "class": "within",
+     "why": "A guard defect fix, not a performance or measurement task under FR-013; the classification narrows no requirement, and the fix goes ahead as known-defect work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T129": {
+   "section_sha256": "e56b001f7d1d54f300f12a4f100d71c609d00ba9afd22416ae2535cb663586d1",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 five patterns",
+     "summary": "The task's own words name ASSIGN's lookbehind; the section moves five of the walk's patterns (ASSIGN, CONTINUED, SOURCED, PRINTF_V, MKTEMP) into the regex crate, each one-character look read by hand.",
+     "class": "within",
+     "why": "Widens, never narrows: each is the same kind of guard-walk speed work FR-013 and the GM's 2026-11-20 'prioritize performance improvements going forward' put first; nothing the request or spec asks is dropped."
+    },
+    {
+     "id": "D2 premise restated",
+     "summary": "Dropping (?<!\\$) alone would move nothing, because fancy-regex 0.14 treats \\b as hard too; both looks are read by hand.",
+     "class": "within",
+     "why": "A correction of the task's premise from a read of fancy-regex's source, shown by the one-step pin; it serves the task's goal (the walk off the backtracking machine) rather than changing it."
+    },
+    {
+     "id": "D3 bindings one scan",
+     "summary": "bindings scanned ASSIGN twice and now once, through assignments.",
+     "class": "within",
+     "why": "Removes repeated work in the same walk; the outputs are pinned by the differentials and the corpus cmp."
+    },
+    {
+     "id": "D4 WORD gate",
+     "summary": "Each pattern keeps its T97 gate; the new ^\\w$ WORD pattern is built only when a character past ASCII stands before a look.",
+     "class": "within",
+     "why": "Keeps the existing build gates; a design detail the spec does not settle and the request does not reach."
+    },
+    {
+     "id": "D5 not taken",
+     "summary": "LOOP's in\\b (inside an optional group), HEREDOC and strip_heredocs (backreferences) stay on fancy-regex; py_c::reads' 11.74 G is left to T89, whose builder works in that module.",
+     "class": "within",
+     "why": "None of these is in the task's words, and none is a defect (a slower scan is not a wrong outcome); two cannot be held by the automaton without changing what they read, and the third is another open task's module. Nothing asked is narrowed."
+    },
+    {
+     "id": "D6 megabyte reading",
+     "summary": "One reading changes past the corpora: a text near a megabyte that fancy-regex's machine errored on (ending the scan via map_while) now has its later matches read.",
+     "class": "within",
+     "why": "A differing output where everything still works is the rule, not an exception (constitution XIII, GM 2026-11-18); it reads more of the command, which is the guard's job, and needs no ruling."
+    },
+    {
+     "id": "D7 pins and exits",
+     "summary": "Differentials of each scan against the fancy pattern over exhaustive small alphabets, a one-step backtracking pin, mutation checks, and a green exit of byte-identical walks over the probes and three corpora plus the ux walk under 56.63 G.",
+     "class": "within",
+     "why": "Checks that fail only when the hand-read looks misread what the patterns read, i.e. enforcement of the task's stated goal ('each reading the same words as before'), not new behavior. The equality is a means of showing the walk still works, not a struck exactness standard: the section itself accepts the one difference it knows of (D6). Measured, not assumed: the four corpus walks cmp equal (q 6, bx 59,116, ux 2,311, tx 995 rows), re-checked by this review 2026-11-21 (cmp of /tmp/t129/out/*.head.jsonl against *.fix4.jsonl)."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T83 (landed), before T132, T133, T134; tree.rs lands with T89, never ahead, because T89's py_c::argv_places hunk in tree.rs needs T89's uncommitted py_c.rs.",
+     "class": "within",
+     "why": "FR-013's perf-first ordering is kept, and the coupling to T89 (also open work) is a mechanical landing constraint, not a deferral of anything asked."
+    },
+    {
+     "id": "D9 found and left none",
+     "summary": "Found and left: none; a speed task, not a defect, outputs unchanged on 62,428 rows.",
+     "class": "within",
+     "why": "The NOT TAKEN items are not defects under constitution XIV's definition, so FR-009's deferral rule and 'fix all known bugs' do not reach them."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T139": {
+   "section_sha256": "9526208adf84f8226fd8242a554e2bd8ff7ca597d69e39df34ce1ac8e9fbfe30",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T139-D1",
+     "summary": "The T71 case of 6b ends its call shell first (pgrep the children, kill the shell, wait, kill the children read before), one line of test-no-poll-hooks.sh plus its comment and the later case's comment.",
+     "class": "within",
+     "why": "Mends a check that refuses good work (a red gate on good work, constitution XIV's defect; the GM 2026-11-26 under T104: 'I agree with prioritizing the test that fails under load being fixed'), without changing what either case asserts. The one interleaving that leaves a 'sleep 30' running leaves no writer of fresh.log, which is the cause the section names, and the cases above already end shell first. No guard, message or crate changes, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T139-D2",
+     "summary": "Not built: run the call in its own process group (setsid) and end the group with one signal.",
+     "class": "within",
+     "why": "A rejected alternative for the same mend. Turning it down leaves nothing asked for undone, and it would have changed how the T71 case's call starts, which is what that case proves."
+    },
+    {
+     "id": "T139-D3",
+     "summary": "Not built: move the later case onto a file of its own.",
+     "class": "within",
+     "why": "A rejected alternative. Turning it down keeps the leak's cause fixed rather than moved, so the requested outcome (no red on good work) is reached more fully, not less."
+    },
+    {
+     "id": "T139-D4",
+     "summary": "Not built: have the later case wait on a condition (no process names fresh.log).",
+     "class": "within",
+     "why": "A rejected alternative that the section shows cannot be certain. Turning it down narrows nothing."
+    },
+    {
+     "id": "T139-same-shape-left",
+     "summary": "The two reader cases (WA_R1, WA_R3 with WA_R4) that also end pkill -P then kill are left as they are.",
+     "class": "within",
+     "why": "Their shells go on to reads (grep, a file test, tail -1 of quiet.log), which the helper counts as no producer (451 T61), so they give no wrong outcome (labeled observation 2026-11-27 with its method). A difference that works is not a defect (constitution XIV v2.36.0), so leaving it is not a deferred defect and needs no ruling."
+    },
+    {
+     "id": "T139-exits",
+     "summary": "Red first by a deliberate delay (a slowed tee plus a 0.5 s gap, no load generator). Green is the fixed order 3 of 3 under the same delays and the whole suite 30 runs in a row.",
+     "class": "within",
+     "why": "Enforces the mend and proves it with a red fixture. It serves the request and adds no behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T118 (shared::tree::program read three Python shapes as writes and gate-write's file test took a directory literal as a file written, so make-only, gate-write and the event log refused or listed correct work on the stdin and `-c` routes, and would on T51's script route - a read through a `/` join, an argv list bound to a name and run, a literal a test reads, a directory only read (found by T51, measured 2026-11-21, `/tmp/t51/probe-stdin.jsonl`, HEAD b4ab4e5a79); at HEAD 9bd338e244, 45 gate-write and 20 make-only refusals of correct work over T93's 9,646 commands, T33's 1,134 fixtures, T51's 455 script stand-ins and 6 probes, measured 2026-11-21 (the paired replay, `/tmp/t118/scripts/paired.sh`))",
+    "### T118 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the three readings",
+     "summary": "chain_read (a literal in a '/' join read whole by .read_text/.read_bytes is read), display_run (a literal of a list/tuple/set bound to a name whose every use is a subprocess argv, a run-only for, a test or none is run; an f-string placeholder fails closed), tested (a literal under in / not in / startswith / endswith is text) - so make-only, readme, gate-write and the event log stop refusing or listing correct work",
+     "class": "within",
+     "why": "This fixes the defect T118's line names: guards refusing correct work and the event log listing files as written when they are not. The constitution's fix-as-we-go rule asks for exactly that, and FR-001's event log has to be right for FR-005 and SC-002 to hold. The replay moved 45 gate-write and 20 make-only verdicts, all to a let-through, each read by hand; the per-corpus deltas add up to 45 and 20."
+    },
+    {
+     "id": "D2 make-only's tested literal fails closed beside a computed write",
+     "summary": "for make-only, a tested literal counts as text only in a program that writes no path it computes",
+     "class": "within",
+     "why": "This is a fail-closed design choice inside the fix. It keeps true writes refused, which is part of a guard doing its job (FR-012, 'real enforcement'). It was added after round one's finding on T58's commits.py, which now passes. It leaves no measured correct row refused beyond the found-and-left items ruled in D6 and D7."
+    },
+    {
+     "id": "D3 the directory rule: writes_computed",
+     "summary": "gate-write's file test takes a directory literal as a file written only beside a computed write (holds_name, a method write on a receiver it cannot read, an unread writer, a dotted open in a write mode), a GUESS knob fitted on window#170 and refusals#144",
+     "class": "within",
+     "why": "This narrows the plain directory rule only so that two true writes stay refused (window#170 and refusals#144, which the plain rule let through on the first replay). That keeps the enforcement real while fixing the 'directory only read' defect. Labeling the knob GUESS meets the measured-or-labeled rule."
+    },
+    {
+     "id": "D4 UNREAD_WRITERS and dotted open count as computed writes",
+     "summary": "shutil.copy, os.replace, extraction and dotted io.open(P,'w') are counted as computed writes, closing the gap the first plan round named",
+     "class": "within",
+     "why": "This fixes, in this task, the gap the review found. The first directory rule would have let a write HEAD refused go through. Its red-first test is a_write_of_a_computed_path_is_told_from_a_literal_one (FR-012)."
+    },
+    {
+     "id": "D5 the split of program.rs",
+     "summary": "program.rs goes from 1,276 to 438 lines, with parse.rs (601) and uses.rs (265) split off by line range to meet file-scale's 1,000-line bar",
+     "class": "within",
+     "why": "A mechanical move to meet the project's existing file-scale check, so the change can land. It changes no behavior and decides nothing the request left open."
+    },
+    {
+     "id": "D6 found and left: the directory shape (t79 probe's tests/hooks/fixtures, window#68/#69's scripts as a copytree source)",
+     "summary": "these correct programs stay refused by gate-write because the directory sits beside computed writes whose landing the reader does not follow; deferred to T138, which lands before T51",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T118's own line, which names 'a directory only read'. Two things make the deferral legitimate. First, the rule that tells these rows apart from window#170's true write is the rule that keeps real enforcement real, so letting them through with this reader would gut the GM's 'real enforcement' purpose. Second, the deferral meets every term FR-009 sets: why it is not fixed here, a filed task id (T138) and an order (lands before T51, the step whose script route reads through these readings). So no known defect is carried into the next step, as fix-as-we-go asks. Each row was also refused at HEAD, so this is not a regression."
+    },
+    {
+     "id": "D7 found and left: the keyword-argument and subprocess-wrapper shapes (t79's run. and .gitignore, the latter also an event-log write)",
+     "summary": "two shapes outside T118's three are left refused or listed, deferred to T138, which lands before T51",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from D6 because they are a different class: neither is a shape T118's line names, so this task never undertook them. They are known defects, including a wrong event-log write entry, so fix-as-we-go applies. The plan files them as T138 with a reason and an order ahead of T51, as FR-009 asks, so they are fixed before the step that depends on them. They were refused at HEAD too, and they appear in that probe alone across 11,241 rows."
+    },
+    {
+     "id": "D8 constraints: T129's tree.rs patterns and T89's py_c left alone",
+     "summary": "the task touches only T118's files",
+     "class": "within",
+     "why": "This keeps the task to its own scope. No defect is shown in those files, so leaving them alone leaves nothing owed."
+    },
+    {
+     "id": "D9 the performance classification",
+     "summary": "'Performance work? No - a correctness task'",
+     "class": "within",
+     "why": "The task fixes guard refusals of correct work. The event-log corrections are a side effect of a shared reader, not a measurement task in the sense of the GM's 2026-11-20 words. FR-013's scheduling is not narrowed, because the cost of the change is measured and under T96's bar."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T123 (a plan hold reached a tree it was not taken in, and checks_hooks' test read the real one: at T80's landing, with T110's review holding T110's section, uncommitted in the clone alone, the landing worktree's guard tests ran `each_event_keeps_its_book`, whose `PostToolUse` of a Bash with no cwd resolved \".\" to the worktree, whose `.git` file leads to the clone's `checks-open.json`, and T80's write-back answered \"NOTHING of it is written back\" for a section that tree never had, found 2026-11-21 in `/home/agent/.claude/jobs/c6fd72d1/tmp/451-t80-land.log`)",
+    "### T123 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D-a (root)",
+     "summary": "planhold::hold records the tree the dispatch's call ran in (root); reaches asks whether a call's tree is that root; a hold with no root recorded, taken before T123, reaches every tree as today",
+     "class": "within",
+     "why": "Fixes a measured defect found at T80's landing (a hold written back and refused in trees it was never taken in, failing every landing while a review ran); fixing known defects as found is the standing rule, and keeping old holds' behavior narrows nothing the GM asked for."
+    },
+    {
+     "id": "D-a (snapshot and write-back)",
+     "summary": "snapshot keeps a live hold's text only for a call in its tree, restore writes back only there, closing both directions of the no-id overwrite",
+     "class": "within",
+     "why": "Removes the measured wrong outcome (one tree's text written over another's uncommitted section); the hold still protects the plan it was taken on."
+    },
+    {
+     "id": "D-a (refusal by the hold's tree)",
+     "summary": "a write is judged against the plan of the hold's tree wherever the call runs: an Edit of another tree's own plan passes, an Edit of the held plan by absolute path from any tree is refused",
+     "class": "within",
+     "why": "Stops refusing work on a plan nobody is reviewing (a check refusing good work is a defect) and widens protection of the held plan to the cross-tree Edit HEAD passed; serves the hold's purpose rather than narrowing it."
+    },
+    {
+     "id": "D-a (shell write gated to the hold's tree)",
+     "summary": "a shell write is judged only in the hold's tree; from another tree not at all, since by a relative path it writes that tree's own plan and no write-back runs there",
+     "class": "within",
+     "why": "Measured: judging it against the held tree's text refused a write of shared text to the landing worktree's own plan that HEAD passed (round 1); gating to the hold's tree removes that wrong refusal."
+    },
+    {
+     "id": "found-and-left 3 (absolute-path shell write from another tree)",
+     "summary": "a shell call in another tree that writes the held plan by its absolute path passes and is written back by nothing; accepted as not a defect",
+     "class": "within",
+     "why": "Not a defect under constitution XIV as the GM defined it 2026-11-19: no wrong outcome survives, since make plan-verdict refuses a verdict on a section changed while reviewed and the review runs again. HEAD caught it only by coincidence: /tmp/t123/abs.out shows HEAD refusing the heading write from the calling tree's own text and passing clone-only text, exactly as T123's binary does. The replay over real history (/tmp/t123/replay_shell.out) found no such write. The alternative and its cost are stated, and the section's deferral is reasoned rather than an unfiled defect."
+    },
+    {
+     "id": "D-b (no-cwd seam)",
+     "summary": "a call with no cwd reads handle::cwd_of: the process's working directory in production as before, the test thread's own PWD in a test build, so no test reaches a live clone's state; checks_hooks' state_holds_snaps reads the same",
+     "class": "within",
+     "why": "Fixes the measured defect (guard and shared tests reading and rewriting the live clone's hold, failing T80's landing) at the one place every no-cwd test passes through; production behavior unchanged."
+    },
+    {
+     "id": "order",
+     "summary": "lands with T80",
+     "class": "within",
+     "why": "Ordering of a defect fix with the task whose landing it unblocks; decides nothing the request or spec left to the GM."
+    },
+    {
+     "id": "performance classification",
+     "summary": "Performance work? no",
+     "class": "within",
+     "why": "A guard defect fix, not a performance or measurement task under FR-013; the classification narrows no requirement, and the fix goes ahead as known-defect work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T129 (shared::tree's ASSIGN pattern keeps its `(?<!\\$)\\{` lookbehind, so each of its scans runs on fancy-regex's backtracking machine at every position, found by T83 2026-11-21: over T79's ux corpus the walk is 59.31 G instructions with T83, env_from's ASSIGN scan 16.41 G of it (66,294 calls) and read_where_it_stands' 3.75 G (121,284 calls), 34% together, measured 2026-11-21 (callgrind, `/tmp/t83/out/cg.inl.ux.out`, env_from kept out of line in a throwaway copy))",
+    "### T129 Approach (checklist part A)",
+    "### T129 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 five patterns",
+     "summary": "The task's own words name ASSIGN's lookbehind; the section moves five of the walk's patterns (ASSIGN, CONTINUED, SOURCED, PRINTF_V, MKTEMP) into the regex crate, each one-character look read by hand.",
+     "class": "within",
+     "why": "Widens, never narrows: each is the same kind of guard-walk speed work FR-013 and the GM's 2026-11-20 'prioritize performance improvements going forward' put first; nothing the request or spec asks is dropped."
+    },
+    {
+     "id": "D2 premise restated",
+     "summary": "Dropping (?<!\\$) alone would move nothing, because fancy-regex 0.14 treats \\b as hard too; both looks are read by hand.",
+     "class": "within",
+     "why": "A correction of the task's premise from a read of fancy-regex's source, shown by the one-step pin; it serves the task's goal (the walk off the backtracking machine) rather than changing it."
+    },
+    {
+     "id": "D3 bindings one scan",
+     "summary": "bindings scanned ASSIGN twice and now once, through assignments.",
+     "class": "within",
+     "why": "Removes repeated work in the same walk; the outputs are pinned by the differentials and the corpus cmp."
+    },
+    {
+     "id": "D4 WORD gate",
+     "summary": "Each pattern keeps its T97 gate; the new ^\\w$ WORD pattern is built only when a character past ASCII stands before a look.",
+     "class": "within",
+     "why": "Keeps the existing build gates; a design detail the spec does not settle and the request does not reach."
+    },
+    {
+     "id": "D5 not taken",
+     "summary": "LOOP's in\\b (inside an optional group), HEREDOC and strip_heredocs (backreferences) stay on fancy-regex; py_c::reads' 11.74 G is left to T89, whose builder works in that module.",
+     "class": "within",
+     "why": "None of these is in the task's words, and none is a defect (a slower scan is not a wrong outcome); two cannot be held by the automaton without changing what they read, and the third is another open task's module. Nothing asked is narrowed."
+    },
+    {
+     "id": "D6 megabyte reading",
+     "summary": "One reading changes past the corpora: a text near a megabyte that fancy-regex's machine errored on (ending the scan via map_while) now has its later matches read.",
+     "class": "within",
+     "why": "A differing output where everything still works is the rule, not an exception (constitution XIII, GM 2026-11-18); it reads more of the command, which is the guard's job, and needs no ruling."
+    },
+    {
+     "id": "D7 pins and exits",
+     "summary": "Differentials of each scan against the fancy pattern over exhaustive small alphabets, a one-step backtracking pin, mutation checks, and a green exit of byte-identical walks over the probes and three corpora plus the ux walk under 56.63 G.",
+     "class": "within",
+     "why": "Checks that fail only when the hand-read looks misread what the patterns read, i.e. enforcement of the task's stated goal ('each reading the same words as before'), not new behavior. The equality is a means of showing the walk still works, not a struck exactness standard: the section itself accepts the one difference it knows of (D6). Measured, not assumed: the four corpus walks cmp equal (q 6, bx 59,116, ux 2,311, tx 995 rows), re-checked by this review 2026-11-21 (cmp of /tmp/t129/out/*.head.jsonl against *.fix4.jsonl)."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T83 (landed), before T132, T133, T134; tree.rs lands with T89, never ahead, because T89's py_c::argv_places hunk in tree.rs needs T89's uncommitted py_c.rs.",
+     "class": "within",
+     "why": "FR-013's perf-first ordering is kept, and the coupling to T89 (also open work) is a mechanical landing constraint, not a deferral of anything asked."
+    },
+    {
+     "id": "D9 found and left none",
+     "summary": "Found and left: none; a speed task, not a defect, outputs unchanged on 62,428 rows.",
+     "class": "within",
+     "why": "The NOT TAKEN items are not defects under constitution XIV's definition, so FR-009's deferral rule and 'fix all known bugs' do not reach them."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T139 (`tests/hooks/test-no-poll-hooks.sh`'s case \"two waiters on one quiet file and no run: still gone\" failed good work under load - \"expected dead, rc=0\" at T118's closing run, observed 2026-11-22, and again in a batch gate, observed 2026-11-27 - and passes alone: the T71 case before it ended its call sleep first, and the shell that ran on forked a `tee` that wrote or held `fresh.log` after the case's touch)",
+    "### T139 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T139-D1",
+     "summary": "The T71 case of 6b ends its call shell first (pgrep the children, kill the shell, wait, kill the children read before), one line of test-no-poll-hooks.sh plus its comment and the later case's comment.",
+     "class": "within",
+     "why": "Mends a check that refuses good work (a red gate on good work, constitution XIV's defect; the GM 2026-11-26 under T104: 'I agree with prioritizing the test that fails under load being fixed'), without changing what either case asserts. The one interleaving that leaves a 'sleep 30' running leaves no writer of fresh.log, which is the cause the section names, and the cases above already end shell first. No guard, message or crate changes, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T139-D2",
+     "summary": "Not built: run the call in its own process group (setsid) and end the group with one signal.",
+     "class": "within",
+     "why": "A rejected alternative for the same mend. Turning it down leaves nothing asked for undone, and it would have changed how the T71 case's call starts, which is what that case proves."
+    },
+    {
+     "id": "T139-D3",
+     "summary": "Not built: move the later case onto a file of its own.",
+     "class": "within",
+     "why": "A rejected alternative. Turning it down keeps the leak's cause fixed rather than moved, so the requested outcome (no red on good work) is reached more fully, not less."
+    },
+    {
+     "id": "T139-D4",
+     "summary": "Not built: have the later case wait on a condition (no process names fresh.log).",
+     "class": "within",
+     "why": "A rejected alternative that the section shows cannot be certain. Turning it down narrows nothing."
+    },
+    {
+     "id": "T139-same-shape-left",
+     "summary": "The two reader cases (WA_R1, WA_R3 with WA_R4) that also end pkill -P then kill are left as they are.",
+     "class": "within",
+     "why": "Their shells go on to reads (grep, a file test, tail -1 of quiet.log), which the helper counts as no producer (451 T61), so they give no wrong outcome (labeled observation 2026-11-27 with its method). A difference that works is not a defect (constitution XIV v2.36.0), so leaving it is not a deferred defect and needs no ruling."
+    },
+    {
+     "id": "T139-exits",
+     "summary": "Red first by a deliberate delay (a slowed tee plus a 0.5 s gap, no load generator). Green is the fixed order 3 of 3 under the same delays and the whole suite 30 runs in a row.",
+     "class": "within",
+     "why": "Enforces the mend and proves it with a red fixture. It serves the request and adds no behavior."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T117 to T140, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

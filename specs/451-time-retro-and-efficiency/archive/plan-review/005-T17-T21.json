@@ -1,0 +1,785 @@
+{
+ "blocks": {
+  "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)": {
+   "sha256": "8b559f1abb7e688d90b1197deb25311173694a04323478cf4a6aa0a6adbd4ea9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (checklist part A)": {
+   "sha256": "7787dfecc8fa2773fca2d23dd7a5907f058ca52ec5ecd37106e1052779d3e652",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T17": {
+   "section_sha256": "6bddf58a05761c00868351d071889eb26c2e86eedc52e2667c4d3f24cf0356a5",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "pass-fixed-in-task",
+     "summary": "A found-and-left item that says it is fixed in the task (fixed here, fixed in this task, before its tick, before T<own> lands) passes without a reason, filed id and order, unless it names an id it is filed as or lands before.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D15's visible sentence requires every non-none item to carry reason, id and order, so this narrows D15's text. But FR-009 refuses only an item that DEFERS a defect, and an item fixed in the task defers nothing; the GM approved 'briefs that default to fixing in the task', so requiring a filed task id of an item that is fixed would contradict the request. The guard that an item naming a filed/order id is judged as a deferral keeps the pass from being used to hide one."
+    },
+    {
+     "id": "pass-no-defect",
+     "summary": "An item that says it is not a defect (not a defect, no wrong outcome, constitution XIV) passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows D15's 'any non-none item' wording, but FR-009's own words reach only an item that 'defers a defect', and constitution XIV (the GM 2026-11-19) holds that a difference with no wrong outcome is not a defect and is not to be fixed. Demanding a filed fix task for a non-defect would apply a standard the GM struck. Same id-naming guard applies."
+    },
+    {
+     "id": "deferral-form",
+     "summary": "A deferral owes 'Not fixed here' plus two words of reason, filed as T<n> (or added to / folded into), lands before T<m> (lists read whole), order id not equal to filed id, each id a box of tasks.md or tasks-done.md; make decide adds that each id is an unticked box now.",
+     "class": "within",
+     "why": "This is FR-009's three parts (why, filed id, order) made checkable; added to / folded into still name a filed task id; the open test at make decide makes the order real enforcement as the GM asked."
+    },
+    {
+     "id": "class-trigger-words",
+     "summary": "A class fix is detected by every/all the before writer, reader, form, file, caller, instance, copy, site or guard, or 'each of the', and then owes an observed/measured line with its method.",
+     "class": "within",
+     "why": "FR-009's named forms (every writer, every form, every file of a kind) are all reached and the list is a superset of them; a mechanical trigger has to be a word test, and nothing FR-009 names falls outside it."
+    },
+    {
+     "id": "class-trigger-location",
+     "summary": "The class test reads the found-and-left items and checklist item 12 (Before any fix).",
+     "class": "within",
+     "why": "FR-009 asks about the section's FIX; in the plan template the fix is declared in item 12 and the found-and-left answer, so reading those is reading the fix."
+    },
+    {
+     "id": "plan-delta-timeless-half",
+     "summary": "make plan-delta runs the timeless half (form and ids filed in tasks.md or tasks-done.md) on a changed block; a section whose deferral's task has since landed is not refused.",
+     "class": "within",
+     "why": "FR-009 names make decide; running the same rule on a later edit only enforces it against a decided section being changed into an unformed one (the GM: 'real enforcement and not just instructions'). Not requiring the ids to be open after landing narrows nothing FR-009 asks, which is a check at decision time."
+    },
+    {
+     "id": "escape-carried-forward",
+     "summary": "A section decided under DEFER_FORM_OK passes make plan-delta after its block changes, the escape found in the guard log; the escape excuses only deferral findings.",
+     "class": "within",
+     "why": "It relaxes only the plan-delta check, which is enforcement beyond FR-009's make decide; at make decide, where FR-009 places the refusal, nothing is relaxed, and the escape was recorded with its reason as FR-012 requires."
+    },
+    {
+     "id": "escape-recording",
+     "summary": "The tool records DEFER_FORM_OK itself (guard log rule defer-form-ok and dev/bypass-log/) instead of D15's $(LOGESCAPE) line, and only on a run that passes (decide once decided, plan-delta only where it excused a finding); a thin reason is refused.",
+     "class": "within",
+     "why": "FR-012 asks for an escape of two words or more that is recorded; it is recorded, once, whenever it is used. A run that is refused or excuses nothing did not use the escape. Mechanism choice; D15's text is restated to match (found-and-left)."
+    },
+    {
+     "id": "plan-delta-log-read",
+     "summary": "make plan-delta reads the guard log only for a changed block with a deferral finding, once a run, parsing only files naming the rule.",
+     "class": "within",
+     "why": "A cost choice that changes no outcome."
+    },
+    {
+     "id": "archived-not-judged",
+     "summary": "plan-done.md is never read by make decide or plan-delta and the tick and landing call neither, so the 28 refused archived sections are not re-judged.",
+     "class": "within",
+     "why": "FR-009 is a refusal at make decide of a section being decided; archived sections were decided and ticked before the rule existed and no make decide runs on them. Nothing FR-009 asks is left out."
+    },
+    {
+     "id": "found-and-left-session-fixes",
+     "summary": "Makefile FREE_TEXT and help lines for DEFER_FORM_OK, D15 restated, docs/guards.md row and rust/gate/CLAUDE.md plan row are fixed by the session before T17 lands, outside the builder's brief.",
+     "class": "within",
+     "why": "Fixed before the task lands, not deferred; matches the GM-approved default of fixing in the task."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "T17 is tagged [perf] under FR-013.",
+     "class": "within",
+     "why": "It is improvement 4 of the six the GM ordered first on 2026-11-20 ('doing those first makes everything after them faster'), and it shortens the builders' loop, which FR-013 names."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T18": {
+   "section_sha256": "cb6156643f240a8082611059cce5a7a4488e3c42f3450a7c454b206ab805782e",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T18-scope",
+     "summary": "T18 carries only D16's first half (land.rs splits T= on commas and whitespace); task-add's quick check is left to another task",
+     "class": "within",
+     "why": "Splitting FR-011 between tasks narrows nothing about the feature. The request's improvement 6 ('Accept commas in T=') is carried whole here. The task-add half is not in this bundle, so whether it is planned elsewhere is for that task's own review."
+    },
+    {
+     "id": "T18-where",
+     "summary": "The change goes in rust/gate/crates/land/src/land.rs and make land's help text",
+     "class": "within",
+     "why": "Where the T= parser lives, plus documenting the accepted form. Both serve 'Accept commas in T='."
+    },
+    {
+     "id": "T18-cases",
+     "summary": "Red-first tests: T=\"T1,T2\" and T=\"T1, T2\" each land both tasks in the land tests' fake world",
+     "class": "within",
+     "why": "D16 splits on commas and whitespace, so both forms are what FR-011 asks for. A test that fails only when commas are not accepted is enforcement of the request ('real enforcement'), not unrequested scope."
+    },
+    {
+     "id": "T18-order",
+     "summary": "Ordered after T17",
+     "class": "within",
+     "why": "Sequencing among the approved improvement fixes, which the GM put first on 2026-11-20. Nothing is deferred behind non-improvement work."
+    },
+    {
+     "id": "T18-defect",
+     "summary": "Item 12 counts a comma list refused as one unknown task as a defect (valid input refused); found-and-left none; no map, no pool manifests",
+     "class": "within",
+     "why": "Matches the request's framing of the comma refusal as something to fix. Nothing is left unfixed."
+    },
+    {
+     "id": "T18-perf-label",
+     "summary": "'Performance work? no'",
+     "class": "within",
+     "why": "The label leaves nothing out and changes nothing in FR-011. The task is still placed among the six improvements the GM put first (order after T17). See the note on SC-006 in the reply."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T19": {
+   "section_sha256": "bcd247d2b7b24f0455c2b50501d254195e511af04dc87e0e0d602a1390432fb3",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T19-a",
+     "summary": "Run every line `make -n quick` lists (all seven checks) after the filing, setting aside only the green stamp and the closing printf; no skip list of checks deemed unable to read what task-add writes.",
+     "class": "within",
+     "why": "The request (improvement 6) says 'run make quick after task-add' and FR-011 says task-add runs make quick's checks. Every check runs. The stamp and the printf are not checks: the stamp records a green state for the tree, and the printf prints a message. Leaving both out catches nothing less. Dropping the skip list widens what is checked rather than narrowing it."
+    },
+    {
+     "id": "T19-b",
+     "summary": "The kept lines run side by side, each by sh -c to its own end, read from the make -n listing (backslash continuations joined) so the recipe stays the one list.",
+     "class": "within",
+     "why": "This is how the checks are run, not which checks run. Running each line to its own end shows every failure, including one that a sequential make quick would hide behind an earlier red. That serves FR-011's 'on any failure the new line introduces'."
+    },
+    {
+     "id": "T19-c",
+     "summary": "On a red, both files are restored to their pre-filing bytes, the checks are re-run, and failures (failed (exit N) plus each non-blank line, with only line/column numbers masked) are compared as multisets. A failure only in the with-line run keeps the line withdrawn and refuses (exit 2), naming it. Otherwise the line is restored and the red is reported as already there.",
+     "class": "within",
+     "why": "This is FR-011 (withdraw and refuse, naming the failure, on a failure the new line introduces). The masking cannot hide a new failure: an identical message at a shifted line is still counted twice in the multiset, and only line/column digits are masked, so ids such as FR-023 and FR-024 stay distinct. The pre-existing case keeps the line, as FR-011 limits refusal to failures the new line introduces."
+    },
+    {
+     "id": "T19-d",
+     "summary": "A make -n quick that cannot list (no Makefile) refuses before anything is written.",
+     "class": "within",
+     "why": "Fails closed. Without a listing the requested check cannot run, so filing anyway would skip the enforcement the GM asked to be real. It adds no reach beyond FR-011."
+    },
+    {
+     "id": "T19-e",
+     "summary": "The QUICK_OK escape is read from the environment and recorded by the task-add tool itself (escaped/quick-ok in the guard log), not through the Makefile's $(LOGESCAPE), following T28's PERF_LATER_OK precedent. The Makefile's FREE_TEXT entry and help line are done by the lead.",
+     "class": "within",
+     "why": "FR-012 asks for an escape of a reason that is recorded. It is recorded, once, and a real-tree probe confirmed the row (escaped/quick-ok). The choice changes where the recording happens, not what is enforced or what can be escaped, so it does not narrow the request or the spec."
+    },
+    {
+     "id": "T19-f",
+     "summary": "The escape reason must be two words and eight characters, else refused blocked/QUICK_OK-no-reason before anything is written.",
+     "class": "within",
+     "why": "FR-012 asks for 'a reason of two words or more'. Requiring eight characters as well makes the escape harder to use, which does not narrow the enforcement. The GM asked that enforcement be real (2026-11-19 approval)."
+    },
+    {
+     "id": "T19-g",
+     "summary": "Tests: the four red-first cases, the check-deleted run (five red), the every-line pin (the ruff line asserted run), and the guard-log isolation pin.",
+     "class": "within",
+     "why": "Enforcement of FR-011 and FR-012's red-first requirement. Each test only fails when the requested behavior is absent."
+    },
+    {
+     "id": "T19-h",
+     "summary": "Found and left: the two real-tree probe rows in ~/.claude/guard-log and the rust/gate/CLAUDE.md task row not naming task_add/quick.rs are judged not defects.",
+     "class": "within",
+     "why": "Neither is a wrong outcome. The log rows are the measurement's own records, in an untracked log. The index line misdirects no tool and blocks no work. The QUICK_OK help/FREE_TEXT gap is fixed in this task, not deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T20": {
+   "section_sha256": "24698bdbec7696c48a9504750d0a45840f7d949fc0283113f67b6d15ef3e7c2b",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T20-scope",
+     "summary": "T20 builds the shard form only, proved on test-parts.sh (split 6 + 7 cases plus 16 new pins); the three slow suites' splits, entry-gate.sh included, are T21's, landing before T22",
+     "class": "within",
+     "why": "D17 settles exactly this split of work: 'T20 builds the form, proved on test-parts.sh; T21 splits the three'. The found-and-left entry-gate deferral is that same assignment, not a defect left; every case of test-parts.sh still runs (13 before, 6 + 23 after)."
+    },
+    {
+     "id": "shard-form",
+     "summary": "A shard is tests/hooks/test-<name>.<k>.sh with k all digits, run in numeric order with gaps allowed; each shard is its own job <guard>.<k> with its own .rc/.log/.s/.reads and stamps nothing",
+     "class": "within",
+     "why": "D17's 'tests/hooks/test-<name>.<k>.sh ... treats each shard as a job keyed by the suite's stamp key'; the per-shard .s is the measure D17 and SC-004 name."
+    },
+    {
+     "id": "stamp-on-close",
+     "summary": "hookrun.sh --close stamps the suite (sha, trace from every shard's reads, shard list .jobs) only when every shard's job is ok; one red or missing shard leaves it unstamped",
+     "class": "within",
+     "why": "D17: 'stamps the suite green when every shard is'. One stamp per suite is the mechanism that delivers that without losing shards' reads."
+    },
+    {
+     "id": "key-and-rerun",
+     "summary": "Recipe keys each shard as its own name via deps --keys and hashes the guard's key with its shards' keys; an edited or added shard reruns the suite; no change to rust/guard",
+     "class": "within",
+     "why": "Implementation of D17's 'keyed by the suite's stamp key'; it keeps the skip-when-unchanged behavior correct for shards and narrows nothing."
+    },
+    {
+     "id": "companion-check",
+     "summary": "GUARD WITHOUT A TEST accepts a guard's suite or its shards (one hookrun.sh --jobs call); a suite beside its own shards fails as SUITE AND SHARDS BOTH; an orphan shard fails as SHARD WITHOUT ITS SUITE; a single-shard guard is accepted",
+     "class": "within",
+     "why": "D17: 'its companion check accepts shards for a guard's companion' and shards sit 'beside nothing else of that name'. The two refusals only fail when D17's form is broken, so they enforce what was asked."
+    },
+    {
+     "id": "case-2b-barrier",
+     "summary": "test-land-tooling.sh case 2b's wall-clock overlap bound (.checks < 1.8) is replaced by a barrier: each job marks its start and waits up to 20 s for the other's mark, and the case asserts both saw the other; timings stay recorded as numbers",
+     "class": "within",
+     "why": "A check that refused correct work under load (3 of 3 failed at load, recorded) is a defect, and fixing it is owed under fix-as-we-go. It still enforces the same property, that the two jobs overlap: run one after the other it went red 2 of 2. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "perf-expectation",
+     "summary": "T20 expects no wall saving (parts.sh was never on the critical path); the saving is T21's; before/after equal within noise",
+     "class": "within",
+     "why": "It follows from D17's T20/T21 division; FR-010's 20 s bar is met by T21's splits, and SHARD_BAR_S is never a gate per D17."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T21": {
+   "section_sha256": "1f52070df77667198dcf2f7f8167eaee857c5e08f9b377a90df5cb28524810b4",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T21-l7r-gate-split",
+     "summary": "Split tests/hooks/test-l7r-gate.sh into three shards (41 + 9 + 5 of its 55 checks), each making its own state",
+     "class": "within",
+     "why": "The split FR-010 / D17 / improvement 5 asks for, applied to one of the three named suites; every case still runs; shards 1.3/7.5/5.7 s alone, under the about-20 s bar; measured to save about 6 s of an incremental run and to cost nothing measurable in a full one."
+    },
+    {
+     "id": "T21-sync-with-main-put-back",
+     "summary": "test-sync-with-main.sh is left whole (its split was built, measured and reverted); its full-run 26.8-40.2 s past the 20 s bar is now stated in found-and-left",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Improvement 5's stated purpose (request.md) is that these suites 'set the floor on every make hooks-test', and the GM's 2026-11-20 words put the point as speed ('doing those first makes everything after them faster'). The block's measurements show the split defeats that purpose: full runs equal HEAD (mean 44.0 vs 43.9 s), the incremental run after a sync-with-main edit is slower with it split (12.7/12.1 s all-three vs 11.8/11.8 s l7r-gate alone), and its shards (8.7 + 7.7 + 4.0 s) cost more than the 5.0-7.7 s whole. It does not set the wall: re-read from the named logs /tmp/t21m/r1-4 and rm1-4-head-j8-c22.log, entry-gate finishes 10.1-14.8 s after it in every one of those eight runs, and its range 26.8-40.2 s matches them (40.2 is rm1, a run whose entry-gate took 51.5 s and which the entry-gate list drops as overlapped; without it 26.8-31.0 s - the stated range is the wider, not a hidden one). The earlier gap (SC-004's letter missed by a second suite, undisclosed) is closed: it is disclosed with figures and reasoning. Leaving a GUESS bar (D17) unmet with no wrong outcome is not a defect left (constitution XIV), so this is not deferral of a defect."
+    },
+    {
+     "id": "T21-entry-gate-put-back",
+     "summary": "test-entry-gate.sh is left whole, past the about-20 s bar in a full run (38.6-44.4 s); its case-4 chain of record gates is filed as its own performance task (T40, per the dispatch)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same purpose test against request.md improvement 5. Splitting by its two cases does not lower the floor: full runs equal, and after an edit of it the split is slower (23.1/23.3 s vs 22.4/22.8 s whole); the wall is its case-4 chain, which a case split cannot shorten, and more job slots did not help. The literal split would ship a measured slowdown under the name of a speedup. The ruling rests on the chain being pursued as its own task so the request's purpose (entry-gate no longer setting the floor) is not dropped; the dispatch states it is filed as T40, an open [perf] box, which under FR-013 / SC-006 goes first. The 20 s bar is a GUESS, never a gate (D17); the request names no figure."
+    },
+    {
+     "id": "T21-helpers-copied",
+     "summary": "Shard helpers copied into each shard rather than sourced from a lib file, so l7r-guard deps keys them",
+     "class": "within",
+     "why": "Implementation means of the split, following T20's shard form; changes no scope."
+    },
+    {
+     "id": "T21-pointers",
+     "summary": "Three pointers to test-l7r-gate.sh repointed to test-l7r-gate.3.sh; the seven to test-sync-with-main.sh left as the suite stays",
+     "class": "within",
+     "why": "Consequence of the kept split; the enumeration states its search (git grep of the three names)."
+    },
+    {
+     "id": "T21-parts-max-fixes",
+     "summary": "Fix test-parts.1.sh (unsets PARTS_MAX) and test-pair-hooks.sh (one part runs as its own process), both red in every PARTS_MAX=1 run",
+     "class": "within",
+     "why": "Suites failing on good work are defects found while doing this task (a wrong outcome, constitution XIV); fixing them as found is the standing rule, and they blocked measuring the job counts this task needed."
+    },
+    {
+     "id": "T21-hooks-jobs-8",
+     "summary": "HOOKS_JOBS stays 8 after measuring 6, 8, 12 and 16",
+     "class": "within",
+     "why": "No change made; the measurement shows higher counts add CPU-seconds and no wall."
+    },
+    {
+     "id": "T21-chain-task-filed",
+     "summary": "entry-gate's case-4 chain filed as its own performance task",
+     "class": "within",
+     "why": "Serves improvement 5's purpose (a faster hooks-test) and the GM's 2026-11-20 'prioritize performance improvements' (FR-013); adds no departure from requested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)",
+    "### T17 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "pass-fixed-in-task",
+     "summary": "A found-and-left item that says it is fixed in the task (fixed here, fixed in this task, before its tick, before T<own> lands) passes without a reason, filed id and order, unless it names an id it is filed as or lands before.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D15's visible sentence requires every non-none item to carry reason, id and order, so this narrows D15's text. But FR-009 refuses only an item that DEFERS a defect, and an item fixed in the task defers nothing; the GM approved 'briefs that default to fixing in the task', so requiring a filed task id of an item that is fixed would contradict the request. The guard that an item naming a filed/order id is judged as a deferral keeps the pass from being used to hide one."
+    },
+    {
+     "id": "pass-no-defect",
+     "summary": "An item that says it is not a defect (not a defect, no wrong outcome, constitution XIV) passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows D15's 'any non-none item' wording, but FR-009's own words reach only an item that 'defers a defect', and constitution XIV (the GM 2026-11-19) holds that a difference with no wrong outcome is not a defect and is not to be fixed. Demanding a filed fix task for a non-defect would apply a standard the GM struck. Same id-naming guard applies."
+    },
+    {
+     "id": "deferral-form",
+     "summary": "A deferral owes 'Not fixed here' plus two words of reason, filed as T<n> (or added to / folded into), lands before T<m> (lists read whole), order id not equal to filed id, each id a box of tasks.md or tasks-done.md; make decide adds that each id is an unticked box now.",
+     "class": "within",
+     "why": "This is FR-009's three parts (why, filed id, order) made checkable; added to / folded into still name a filed task id; the open test at make decide makes the order real enforcement as the GM asked."
+    },
+    {
+     "id": "class-trigger-words",
+     "summary": "A class fix is detected by every/all the before writer, reader, form, file, caller, instance, copy, site or guard, or 'each of the', and then owes an observed/measured line with its method.",
+     "class": "within",
+     "why": "FR-009's named forms (every writer, every form, every file of a kind) are all reached and the list is a superset of them; a mechanical trigger has to be a word test, and nothing FR-009 names falls outside it."
+    },
+    {
+     "id": "class-trigger-location",
+     "summary": "The class test reads the found-and-left items and checklist item 12 (Before any fix).",
+     "class": "within",
+     "why": "FR-009 asks about the section's FIX; in the plan template the fix is declared in item 12 and the found-and-left answer, so reading those is reading the fix."
+    },
+    {
+     "id": "plan-delta-timeless-half",
+     "summary": "make plan-delta runs the timeless half (form and ids filed in tasks.md or tasks-done.md) on a changed block; a section whose deferral's task has since landed is not refused.",
+     "class": "within",
+     "why": "FR-009 names make decide; running the same rule on a later edit only enforces it against a decided section being changed into an unformed one (the GM: 'real enforcement and not just instructions'). Not requiring the ids to be open after landing narrows nothing FR-009 asks, which is a check at decision time."
+    },
+    {
+     "id": "escape-carried-forward",
+     "summary": "A section decided under DEFER_FORM_OK passes make plan-delta after its block changes, the escape found in the guard log; the escape excuses only deferral findings.",
+     "class": "within",
+     "why": "It relaxes only the plan-delta check, which is enforcement beyond FR-009's make decide; at make decide, where FR-009 places the refusal, nothing is relaxed, and the escape was recorded with its reason as FR-012 requires."
+    },
+    {
+     "id": "escape-recording",
+     "summary": "The tool records DEFER_FORM_OK itself (guard log rule defer-form-ok and dev/bypass-log/) instead of D15's $(LOGESCAPE) line, and only on a run that passes (decide once decided, plan-delta only where it excused a finding); a thin reason is refused.",
+     "class": "within",
+     "why": "FR-012 asks for an escape of two words or more that is recorded; it is recorded, once, whenever it is used. A run that is refused or excuses nothing did not use the escape. Mechanism choice; D15's text is restated to match (found-and-left)."
+    },
+    {
+     "id": "plan-delta-log-read",
+     "summary": "make plan-delta reads the guard log only for a changed block with a deferral finding, once a run, parsing only files naming the rule.",
+     "class": "within",
+     "why": "A cost choice that changes no outcome."
+    },
+    {
+     "id": "archived-not-judged",
+     "summary": "plan-done.md is never read by make decide or plan-delta and the tick and landing call neither, so the 28 refused archived sections are not re-judged.",
+     "class": "within",
+     "why": "FR-009 is a refusal at make decide of a section being decided; archived sections were decided and ticked before the rule existed and no make decide runs on them. Nothing FR-009 asks is left out."
+    },
+    {
+     "id": "found-and-left-session-fixes",
+     "summary": "Makefile FREE_TEXT and help lines for DEFER_FORM_OK, D15 restated, docs/guards.md row and rust/gate/CLAUDE.md plan row are fixed by the session before T17 lands, outside the builder's brief.",
+     "class": "within",
+     "why": "Fixed before the task lands, not deferred; matches the GM-approved default of fixing in the task."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "T17 is tagged [perf] under FR-013.",
+     "class": "within",
+     "why": "It is improvement 4 of the six the GM ordered first on 2026-11-20 ('doing those first makes everything after them faster'), and it shortens the builders' loop, which FR-013 names."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)",
+    "### T18 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T18-scope",
+     "summary": "T18 carries only D16's first half (land.rs splits T= on commas and whitespace); task-add's quick check is left to another task",
+     "class": "within",
+     "why": "Splitting FR-011 between tasks narrows nothing about the feature. The request's improvement 6 ('Accept commas in T=') is carried whole here. The task-add half is not in this bundle, so whether it is planned elsewhere is for that task's own review."
+    },
+    {
+     "id": "T18-where",
+     "summary": "The change goes in rust/gate/crates/land/src/land.rs and make land's help text",
+     "class": "within",
+     "why": "Where the T= parser lives, plus documenting the accepted form. Both serve 'Accept commas in T='."
+    },
+    {
+     "id": "T18-cases",
+     "summary": "Red-first tests: T=\"T1,T2\" and T=\"T1, T2\" each land both tasks in the land tests' fake world",
+     "class": "within",
+     "why": "D16 splits on commas and whitespace, so both forms are what FR-011 asks for. A test that fails only when commas are not accepted is enforcement of the request ('real enforcement'), not unrequested scope."
+    },
+    {
+     "id": "T18-order",
+     "summary": "Ordered after T17",
+     "class": "within",
+     "why": "Sequencing among the approved improvement fixes, which the GM put first on 2026-11-20. Nothing is deferred behind non-improvement work."
+    },
+    {
+     "id": "T18-defect",
+     "summary": "Item 12 counts a comma list refused as one unknown task as a defect (valid input refused); found-and-left none; no map, no pool manifests",
+     "class": "within",
+     "why": "Matches the request's framing of the comma refusal as something to fix. Nothing is left unfixed."
+    },
+    {
+     "id": "T18-perf-label",
+     "summary": "'Performance work? no'",
+     "class": "within",
+     "why": "The label leaves nothing out and changes nothing in FR-011. The task is still placed among the six improvements the GM put first (order after T17). See the note on SC-006 in the reply."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)",
+    "### T19 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T19-list",
+     "summary": "The checks run are read from `make -n quick` (the recipe stays the one list), every line run, all seven checks, side by side; no hand-kept subset of checks that read specs/",
+     "class": "within",
+     "why": "FR-011 and the GM's 'run make quick after task-add': all of quick's checks run, and a check added to quick is run with nothing to update. Running them in parallel rather than one after another changes no verdict and is what makes the D16 comparison see a later check's failure behind an earlier red."
+    },
+    {
+     "id": "T19-setaside",
+     "summary": "Only the stamp (`state write green-local`) and the closing printf are set aside",
+     "class": "within",
+     "why": "Neither is a check: the stamp records that make quick passed, which task-add has not shown, and the printf checks nothing. No check of quick is dropped."
+    },
+    {
+     "id": "T19-compare",
+     "summary": "On a red, both files restored to their pre-filing bytes (a created plan.md removed), checks re-run, failures compared as a multiset of each check's exit line plus its non-blank lines with only line/column numbers masked; a failure only the with-line run has: files left restored, refused exit 2 naming those failures, recorded blocked/quick-red; none: the line put back and the red reported as already there",
+     "class": "within",
+     "why": "D16 and FR-011 as written: withdraw, re-run, compare, refuse naming the new failures, restore only where the failures are the same. Masking only line numbers is what lets the shifted-finding case match without merging distinct ids (FR-023/FR-024)."
+    },
+    {
+     "id": "T19-nomakefile",
+     "summary": "A `make -n quick` that cannot list refuses before anything is written",
+     "class": "within",
+     "why": "Fails closed: the alternative, filing unchecked, would let FR-011's check silently not run. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T19-escape",
+     "summary": "QUICK_OK=\"<reason>\" read from the environment and recorded by the tool (escaped/quick-ok), two words and eight characters or refused blocked/QUICK_OK-no-reason; not a Makefile $(LOGESCAPE) line, the Makefile help/FREE_TEXT half done by the lead",
+     "class": "within",
+     "why": "FR-012 requires a recorded escape of a reason of two words or more; the mechanism (tool-side recording, as PERF_LATER_OK) changes where it is recorded, not whether. The eight-character floor is the project's guard rule and only tightens the escape."
+    },
+    {
+     "id": "T19-tests",
+     "summary": "Red-first on four fixture cases (bare-id line refused with both files byte-identical; clean line stays; early ruff red plus the line's own lint failure refused naming the lint failure alone; shifted pre-existing finding keeps the line), the check deleted five red, a every-line-run assertion, and a guard-log isolation pin",
+     "class": "within",
+     "why": "Enforcement of FR-011 and FR-012's red-first requirement; the guard-log pin only keeps tests from writing the real log. Enforcement of what was asked, not scope."
+    },
+    {
+     "id": "T19-found-left",
+     "summary": "Two items left as not defects: the real-tree probe's two task-add rows in ~/.claude/guard-log, and rust/gate/CLAUDE.md's task row not naming task_add/quick.rs",
+     "class": "within",
+     "why": "Neither is a wrong outcome: the rows are the measurement's own records in an untracked log, and the index line still points a reader at task_add.rs beside its submodule. Each states why it is not a defect, as FR-009 asks; leaving a non-defect is within."
+    },
+    {
+     "id": "T19-perf",
+     "summary": "Filed [perf]; costs about +0.15 s per filing (0.32-0.57 s on a refused one) to save a failed landing",
+     "class": "within",
+     "why": "Unchanged from the earlier CLEAR block; FR-013's definition covers work that makes the landings faster, and the GM's improvement 6 asked for this check."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)",
+    "### T19 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T19-a",
+     "summary": "Run every line `make -n quick` lists (all seven checks) after the filing, setting aside only the green stamp and the closing printf; no skip list of checks deemed unable to read what task-add writes.",
+     "class": "within",
+     "why": "The request (improvement 6) says 'run make quick after task-add' and FR-011 says task-add runs make quick's checks. Every check runs. The stamp and the printf are not checks: the stamp records a green state for the tree, and the printf prints a message. Leaving both out catches nothing less. Dropping the skip list widens what is checked rather than narrowing it."
+    },
+    {
+     "id": "T19-b",
+     "summary": "The kept lines run side by side, each by sh -c to its own end, read from the make -n listing (backslash continuations joined) so the recipe stays the one list.",
+     "class": "within",
+     "why": "This is how the checks are run, not which checks run. Running each line to its own end shows every failure, including one that a sequential make quick would hide behind an earlier red. That serves FR-011's 'on any failure the new line introduces'."
+    },
+    {
+     "id": "T19-c",
+     "summary": "On a red, both files are restored to their pre-filing bytes, the checks are re-run, and failures (failed (exit N) plus each non-blank line, with only line/column numbers masked) are compared as multisets. A failure only in the with-line run keeps the line withdrawn and refuses (exit 2), naming it. Otherwise the line is restored and the red is reported as already there.",
+     "class": "within",
+     "why": "This is FR-011 (withdraw and refuse, naming the failure, on a failure the new line introduces). The masking cannot hide a new failure: an identical message at a shifted line is still counted twice in the multiset, and only line/column digits are masked, so ids such as FR-023 and FR-024 stay distinct. The pre-existing case keeps the line, as FR-011 limits refusal to failures the new line introduces."
+    },
+    {
+     "id": "T19-d",
+     "summary": "A make -n quick that cannot list (no Makefile) refuses before anything is written.",
+     "class": "within",
+     "why": "Fails closed. Without a listing the requested check cannot run, so filing anyway would skip the enforcement the GM asked to be real. It adds no reach beyond FR-011."
+    },
+    {
+     "id": "T19-e",
+     "summary": "The QUICK_OK escape is read from the environment and recorded by the task-add tool itself (escaped/quick-ok in the guard log), not through the Makefile's $(LOGESCAPE), following T28's PERF_LATER_OK precedent. The Makefile's FREE_TEXT entry and help line are done by the lead.",
+     "class": "within",
+     "why": "FR-012 asks for an escape of a reason that is recorded. It is recorded, once, and a real-tree probe confirmed the row (escaped/quick-ok). The choice changes where the recording happens, not what is enforced or what can be escaped, so it does not narrow the request or the spec."
+    },
+    {
+     "id": "T19-f",
+     "summary": "The escape reason must be two words and eight characters, else refused blocked/QUICK_OK-no-reason before anything is written.",
+     "class": "within",
+     "why": "FR-012 asks for 'a reason of two words or more'. Requiring eight characters as well makes the escape harder to use, which does not narrow the enforcement. The GM asked that enforcement be real (2026-11-19 approval)."
+    },
+    {
+     "id": "T19-g",
+     "summary": "Tests: the four red-first cases, the check-deleted run (five red), the every-line pin (the ruff line asserted run), and the guard-log isolation pin.",
+     "class": "within",
+     "why": "Enforcement of FR-011 and FR-012's red-first requirement. Each test only fails when the requested behavior is absent."
+    },
+    {
+     "id": "T19-h",
+     "summary": "Found and left: the two real-tree probe rows in ~/.claude/guard-log and the rust/gate/CLAUDE.md task row not naming task_add/quick.rs are judged not defects.",
+     "class": "within",
+     "why": "Neither is a wrong outcome. The log rows are the measurement's own records, in an untracked log. The index line misdirects no tool and blocks no work. The QUICK_OK help/FREE_TEXT gap is fixed in this task, not deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T20-scope",
+     "summary": "T20 builds and proves the shard form on test-parts.sh (split into test-parts.1.sh and test-parts.2.sh); the three slow suites, entry-gate.sh included, are split in T21, which lands before T22.",
+     "class": "within",
+     "why": "D17 in the accepted spec settles exactly this split of work: 'T20 builds the form, proved on test-parts.sh; T21 splits the three'. FR-010's three suites are all still split, by T21. The GM's 2026-11-20 order to do the improvements first is kept by T21 landing before T22. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T20-shard-form",
+     "summary": "A shard is tests/hooks/test-<name>.<k>.sh with k all digits, run in numeric order with gaps allowed. Each shard is its own job <guard>.<k> with its own .rc/.log/.s/.reads, and stamps nothing.",
+     "class": "within",
+     "why": "This is D17's 'treats each shard as a job', and the .s file is the place SC-004 measures. It is an implementation detail of FR-010 and narrows nothing."
+    },
+    {
+     "id": "T20-stamp",
+     "summary": "hookrun.sh --close stamps the suite once (its sha, its trace from every shard's reads, and its shard list .jobs), and only when every shard's job is ok. One red or missing shard leaves it unstamped.",
+     "class": "within",
+     "why": "This is D17's 'stamps the suite green when every shard is'."
+    },
+    {
+     "id": "T20-key",
+     "summary": "The recipe gives each shard its own key through deps --keys and hashes the guard's key with its shards' keys. A traced suite is skipped only while its shard list matches the kept .jobs, so an edited or added shard reruns the suite. No change to rust/guard.",
+     "class": "within",
+     "why": "This keeps D17's 'keyed by the suite's stamp key' and makes the skip correct for split suites. It is an implementation choice that narrows nothing."
+    },
+    {
+     "id": "T20-companion",
+     "summary": "The GUARD WITHOUT A TEST check reads hookrun.sh --jobs once and accepts a guard's suite or its shards, including a single shard. It fails the run on SUITE AND SHARDS BOTH (a suite beside its own shards) and on SHARD WITHOUT ITS SUITE (a shard no rostered guard owns, which nothing would ever run).",
+     "class": "within",
+     "why": "D17 says the companion check 'accepts shards' and that a shard stands 'beside nothing else of that name'. SUITE AND SHARDS BOTH enforces that clause. SHARD WITHOUT ITS SUITE keeps a split from silently dropping cases, which is the plan's own constraint that every case still runs. Both only refuse a broken split of the requested kind and reach nothing else, so they enforce FR-010 and add no unrequested behavior."
+    },
+    {
+     "id": "T20-red-first-and-measure",
+     "summary": "16 new pins in test-parts.2.sh are proved red against HEAD's hookrun.sh. Done is measured by HOOKS_ALL=1 before and after runs and the shards' .s files. The plan expects no wall-time saving in T20 itself; the saving is T21's.",
+     "class": "within",
+     "why": "The tests only enforce the requested shard form. The measurement follows SC-004 and the GM's performance-first ruling (FR-013). Having T20 save nothing on its own follows from D17's split of work between T20 and T21."
+    },
+    {
+     "id": "T20-left-land-tooling-2b",
+     "summary": "test-land-tooling.sh case 2b, a wall-clock assertion that failed once under load and passed on rerun, is left unfixed in T20 and handed to the launcher to file (DEFER_FORM_OK).",
+     "class": "within",
+     "why": "The GM never asked to fix this assertion and it is not part of FR-010, so leaving it narrows nothing he asked for. The section records it, says why it is not fixed here (outside T20's files), and routes it to be filed. Whether the deferral satisfies FR-009's form is make decide's mechanical check, not a fidelity question."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T20-scope",
+     "summary": "T20 builds the shard form only, proved on test-parts.sh (split 6 + 7 cases plus 16 new pins); the three slow suites' splits, entry-gate.sh included, are T21's, landing before T22",
+     "class": "within",
+     "why": "D17 settles exactly this split of work: 'T20 builds the form, proved on test-parts.sh; T21 splits the three'. The found-and-left entry-gate deferral is that same assignment, not a defect left; every case of test-parts.sh still runs (13 before, 6 + 23 after)."
+    },
+    {
+     "id": "shard-form",
+     "summary": "A shard is tests/hooks/test-<name>.<k>.sh with k all digits, run in numeric order with gaps allowed; each shard is its own job <guard>.<k> with its own .rc/.log/.s/.reads and stamps nothing",
+     "class": "within",
+     "why": "D17's 'tests/hooks/test-<name>.<k>.sh ... treats each shard as a job keyed by the suite's stamp key'; the per-shard .s is the measure D17 and SC-004 name."
+    },
+    {
+     "id": "stamp-on-close",
+     "summary": "hookrun.sh --close stamps the suite (sha, trace from every shard's reads, shard list .jobs) only when every shard's job is ok; one red or missing shard leaves it unstamped",
+     "class": "within",
+     "why": "D17: 'stamps the suite green when every shard is'. One stamp per suite is the mechanism that delivers that without losing shards' reads."
+    },
+    {
+     "id": "key-and-rerun",
+     "summary": "Recipe keys each shard as its own name via deps --keys and hashes the guard's key with its shards' keys; an edited or added shard reruns the suite; no change to rust/guard",
+     "class": "within",
+     "why": "Implementation of D17's 'keyed by the suite's stamp key'; it keeps the skip-when-unchanged behavior correct for shards and narrows nothing."
+    },
+    {
+     "id": "companion-check",
+     "summary": "GUARD WITHOUT A TEST accepts a guard's suite or its shards (one hookrun.sh --jobs call); a suite beside its own shards fails as SUITE AND SHARDS BOTH; an orphan shard fails as SHARD WITHOUT ITS SUITE; a single-shard guard is accepted",
+     "class": "within",
+     "why": "D17: 'its companion check accepts shards for a guard's companion' and shards sit 'beside nothing else of that name'. The two refusals only fail when D17's form is broken, so they enforce what was asked."
+    },
+    {
+     "id": "case-2b-barrier",
+     "summary": "test-land-tooling.sh case 2b's wall-clock overlap bound (.checks < 1.8) is replaced by a barrier: each job marks its start and waits up to 20 s for the other's mark, and the case asserts both saw the other; timings stay recorded as numbers",
+     "class": "within",
+     "why": "A check that refused correct work under load (3 of 3 failed at load, recorded) is a defect, and fixing it is owed under fix-as-we-go. It still enforces the same property, that the two jobs overlap: run one after the other it went red 2 of 2. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "perf-expectation",
+     "summary": "T20 expects no wall saving (parts.sh was never on the critical path); the saving is T21's; before/after equal within noise",
+     "class": "within",
+     "why": "It follows from D17's T20/T21 division; FR-010's 20 s bar is met by T21's splits, and SHARD_BAR_S is never a gate per D17."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T21 (FR-010: the other two of the three slowest suites)",
+    "### T21 Approach (checklist part A)",
+    "### T21 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T21-l7r-gate-split",
+     "summary": "Split tests/hooks/test-l7r-gate.sh into three shards (41 + 9 + 5 of its 55 checks), each making its own state",
+     "class": "within",
+     "why": "The split FR-010 / improvement 5 asks for, applied to one of the three named suites; every case still runs; shards 1.3/7.5/5.7 s alone, under the about-20 s bar; measured to save about 6 s of an incremental run."
+    },
+    {
+     "id": "T21-sync-with-main-put-back",
+     "summary": "test-sync-with-main.sh is left whole (its split was built, measured and reverted)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Improvement 5's own stated purpose (request.md) is that these suites 'set the floor on every make hooks-test', and the GM's 2026-11-20 words put the point as speed ('makes everything after them faster'; prioritize performance). The block's own measurements show this split defeats that purpose concretely: it does not set any wall (entry-gate sets the full run's), full runs with all three split equal HEAD (mean 44.0 vs 43.9 s), the incremental run is slightly SLOWER with it split (12.7/12.1 s all-three-split vs 11.8/11.8 s l7r-gate-alone), and its shards cost 8.7 + 7.7 + 4.0 s against 5.0-7.7 s whole - the template run three times, added CPU on a host measured CPU-bound (11.6-12.5 cores busy). Not a cost or convenience argument: the split was implemented and reverted on measurement. Gap noted, not decisive: the found-and-left names only entry-gate past the 20 s bar and never states sync-with-main's full-run seconds whole (the next suite is about 10 s behind entry-gate's ~40 s), so a second miss of SC-004's letter may be undisclosed; it should be stated there."
+    },
+    {
+     "id": "T21-entry-gate-put-back",
+     "summary": "test-entry-gate.sh is left whole, past the about-20 s bar in a full run (38.6-44.4 s); its case-4 chain of record gates is filed as its own performance task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same purpose test against request.md (improvement 5: 'sets the floor on every make hooks-test'). Splitting by its two cases does not lower the floor: full runs equal, and after an edit of it the split is slower (23.1/23.3 s vs 22.4/22.8 s whole); the wall is its case-4 chain, which a case split cannot shorten, and more job slots did not help either. Doing the literal split would ship a measured slowdown under the name of a speedup. This ruling rests on the chain being filed as its own task (the block: 'the chain itself is the lever, filed as its own task'), so the request's purpose - entry-gate no longer setting the floor - is still pursued rather than dropped; were that task not filed, the ruling would not hold. The 20 s bar is itself recorded as a GUESS, never a gate (D17), and the request names no figure."
+    },
+    {
+     "id": "T21-helpers-copied",
+     "summary": "Shard helpers copied into each shard rather than sourced from a lib file, so l7r-guard deps keys them",
+     "class": "within",
+     "why": "Implementation means of the split, following T20's shard form; changes no scope."
+    },
+    {
+     "id": "T21-pointers",
+     "summary": "Three pointers to test-l7r-gate.sh repointed to test-l7r-gate.3.sh; the seven to test-sync-with-main.sh left as the suite stays",
+     "class": "within",
+     "why": "Consequence of the kept split; stated with its search (git grep of the three names)."
+    },
+    {
+     "id": "T21-parts-max-fixes",
+     "summary": "Fix test-parts.1.sh (unsets PARTS_MAX) and test-pair-hooks.sh (one part runs as its own process), both red in every PARTS_MAX=1 run",
+     "class": "within",
+     "why": "Suites failing on good work are defects found while doing this task (a wrong outcome, constitution XIV); fixing them as found is the standing rule, and they block measuring the job counts the task needed to measure."
+    },
+    {
+     "id": "T21-hooks-jobs-8",
+     "summary": "HOOKS_JOBS stays 8 after measuring 6, 8, 12 and 16",
+     "class": "within",
+     "why": "No change made; the measurement shows higher counts add CPU-seconds and no wall."
+    },
+    {
+     "id": "T21-chain-task-filed",
+     "summary": "entry-gate's case-4 chain filed as its own performance task",
+     "class": "within",
+     "why": "Serves improvement 5's purpose (a faster hooks-test) and the GM's 2026-11-20 'prioritize performance improvements'; adds no requested-scope departure."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T21 (FR-010: the other two of the three slowest suites)",
+    "### T21 Approach (checklist part A)",
+    "### T21 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T21-l7r-gate-split",
+     "summary": "Split tests/hooks/test-l7r-gate.sh into three shards (41 + 9 + 5 of its 55 checks), each making its own state",
+     "class": "within",
+     "why": "The split FR-010 / D17 / improvement 5 asks for, applied to one of the three named suites; every case still runs; shards 1.3/7.5/5.7 s alone, under the about-20 s bar; measured to save about 6 s of an incremental run and to cost nothing measurable in a full one."
+    },
+    {
+     "id": "T21-sync-with-main-put-back",
+     "summary": "test-sync-with-main.sh is left whole (its split was built, measured and reverted); its full-run 26.8-40.2 s past the 20 s bar is now stated in found-and-left",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Improvement 5's stated purpose (request.md) is that these suites 'set the floor on every make hooks-test', and the GM's 2026-11-20 words put the point as speed ('doing those first makes everything after them faster'). The block's measurements show the split defeats that purpose: full runs equal HEAD (mean 44.0 vs 43.9 s), the incremental run after a sync-with-main edit is slower with it split (12.7/12.1 s all-three vs 11.8/11.8 s l7r-gate alone), and its shards (8.7 + 7.7 + 4.0 s) cost more than the 5.0-7.7 s whole. It does not set the wall: re-read from the named logs /tmp/t21m/r1-4 and rm1-4-head-j8-c22.log, entry-gate finishes 10.1-14.8 s after it in every one of those eight runs, and its range 26.8-40.2 s matches them (40.2 is rm1, a run whose entry-gate took 51.5 s and which the entry-gate list drops as overlapped; without it 26.8-31.0 s - the stated range is the wider, not a hidden one). The earlier gap (SC-004's letter missed by a second suite, undisclosed) is closed: it is disclosed with figures and reasoning. Leaving a GUESS bar (D17) unmet with no wrong outcome is not a defect left (constitution XIV), so this is not deferral of a defect."
+    },
+    {
+     "id": "T21-entry-gate-put-back",
+     "summary": "test-entry-gate.sh is left whole, past the about-20 s bar in a full run (38.6-44.4 s); its case-4 chain of record gates is filed as its own performance task (T40, per the dispatch)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same purpose test against request.md improvement 5. Splitting by its two cases does not lower the floor: full runs equal, and after an edit of it the split is slower (23.1/23.3 s vs 22.4/22.8 s whole); the wall is its case-4 chain, which a case split cannot shorten, and more job slots did not help. The literal split would ship a measured slowdown under the name of a speedup. The ruling rests on the chain being pursued as its own task so the request's purpose (entry-gate no longer setting the floor) is not dropped; the dispatch states it is filed as T40, an open [perf] box, which under FR-013 / SC-006 goes first. The 20 s bar is a GUESS, never a gate (D17); the request names no figure."
+    },
+    {
+     "id": "T21-helpers-copied",
+     "summary": "Shard helpers copied into each shard rather than sourced from a lib file, so l7r-guard deps keys them",
+     "class": "within",
+     "why": "Implementation means of the split, following T20's shard form; changes no scope."
+    },
+    {
+     "id": "T21-pointers",
+     "summary": "Three pointers to test-l7r-gate.sh repointed to test-l7r-gate.3.sh; the seven to test-sync-with-main.sh left as the suite stays",
+     "class": "within",
+     "why": "Consequence of the kept split; the enumeration states its search (git grep of the three names)."
+    },
+    {
+     "id": "T21-parts-max-fixes",
+     "summary": "Fix test-parts.1.sh (unsets PARTS_MAX) and test-pair-hooks.sh (one part runs as its own process), both red in every PARTS_MAX=1 run",
+     "class": "within",
+     "why": "Suites failing on good work are defects found while doing this task (a wrong outcome, constitution XIV); fixing them as found is the standing rule, and they blocked measuring the job counts this task needed."
+    },
+    {
+     "id": "T21-hooks-jobs-8",
+     "summary": "HOOKS_JOBS stays 8 after measuring 6, 8, 12 and 16",
+     "class": "within",
+     "why": "No change made; the measurement shows higher counts add CPU-seconds and no wall."
+    },
+    {
+     "id": "T21-chain-task-filed",
+     "summary": "entry-gate's case-4 chain filed as its own performance task",
+     "class": "within",
+     "why": "Serves improvement 5's purpose (a faster hooks-test) and the GM's 2026-11-20 'prioritize performance improvements' (FR-013); adds no departure from requested scope."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T17 to T21, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

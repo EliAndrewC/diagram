@@ -1,0 +1,889 @@
+{
+ "blocks": {
+  "### T436 Approach (checklist part A)": {
+   "sha256": "184583767a655d4abdf2626c980c70664e584c6e7358a5de41ec8a85336a7eff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T436 (found by T427, 2026-11-27: `cd /t > /diagram/x.rs` truncated a file no walk reader saw)": {
+   "sha256": "5d007e7e73fe3a473ab7a1d5bded0268bbc52157dc36f01b721d5d269bedf45b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T437 Approach (checklist part A)": {
+   "sha256": "cb2108e1052b659ae3d8cea2360b44f7499a14996b61e23235bef3784c31098d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T437 (found by 451 T369 by reading, 2026-11-27, no case observed: a start mark whose tree no longer exists - a pool tree dropped, a worktree removed - stays until its task lands, and before this every reader took it as a live start)": {
+   "sha256": "94def712fc26ee5608983ead0a1d3064d8923455d7568bb159590fd0d71d78f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T438 Approach (checklist part A)": {
+   "sha256": "9bd9eb693296ebc3ffba22c8fda2c27c00c70340713f56f9c1bb940ebf0ef4d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T438 (found by the round-2 plan reviewer of 451 T369, 2026-11-27: `make plan-delta`'s `spec-cited.md` for T369 carried the spec's D1 and D3, where the section's \"(D1)\" and \"(D3)\" meant its own T369-D1 and T369-D3)": {
+   "sha256": "c0c02dc751e2e655c5243d44083cf5e904e5ff7460662451c78a99e4bc8cc6ef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T439 Approach (checklist part A)": {
+   "sha256": "20ac7c5c0cc706feb349bb6a14956d4817d5bd3af824a831579a0834c30efc14",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T439 (found by T373: every hook call spent 15 to 17 ms outside the guard binary, 34.7 against 17.5 ms for a Bash PreToolUse, measured 2026-11-26 (20 runs, `dev/measurements/2026-11-26/edit-hook/t373-results.md`, \"The floor\"))": {
+   "sha256": "6d73564f9042746b9b481bdd6e08124b73b3d4dea7fc2d708dd16c22adeed524",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T440 Approach (checklist part A)": {
+   "sha256": "cab6ab0de942423af5d489ed36d9e5335105d553ed4f9aaf7e601e6c177e8fb8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T440 (observed 2026-11-27 by 451 T312's empty-HOME proof: `rust-checks-run.lock` and `rust-checks-run.json` found under the scratch HOME's `.cache/l7r-cargo-target/<tree>/` though `CARGO_TARGET_DIR` named a scratch target)": {
+   "sha256": "e2d5f1fbb2fe3472c5d3d8615e441f413660a965653ecd6d88dd97206054dfba",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T441 Approach (checklist part A)": {
+   "sha256": "4bae56129ee9d438bbd172c353f33756dc99e54311273002317c7c41abfab586",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T441 (T275's census: the guard's state joined onto `<clone>/.git`, the clone found from the session's cwd, is lost in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t269)": {
+   "sha256": "81e0e90235bcbca4414df077b1ed9354e019329d5320270c462d565426ccc332",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T442 Approach (checklist part A)": {
+   "sha256": "144d1c2891f3c91fe955ef74909815fd41d79bb4a4325d273d49e96460ef6962",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T442 (T275's census: the review-verdicts readers, and the gate's other `<root>/.git` joins, take a tree's OWN git dir where the review writes the clone's COMMON one; measured 2026-11-27 in the pool tree diagram-backlog-t271)": {
+   "sha256": "54fd06c9845e8b06af455aefec6a62f57f111f345350c722053cf3f9c5272d00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T436": {
+   "section_sha256": "0829ef463c0c0acdafb22f349ee39b60d66edd8c3cbab3fa7833ce73e0ee6ee9",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T436-D1",
+     "summary": "At a cd, pushd or popd, each redirect of the segment is a write resolved by path_write against the directory and $PWD before cd_to/popd moves them, classed from the hint where the shell was last known, marked redirect.",
+     "class": "within",
+     "why": "Closes a guard gap (a cd's redirect was no target to main-tree, house style or gm-tree), so the enforcement the GM asked to be real (2026-11-19 approval: 'real enforcement and not just instructions') sees the write. The mechanism follows bash's measured order (bash 5.3.9 probe, 2026-11-27: a builtin's redirects and $PWD are expanded before it moves) and the red-first test covers relative, $PWD, absolute, pushd, popd, &> and >&, and the elsewhere class, so it does what it says on the case it names."
+    },
+    {
+     "id": "place",
+     "summary": "The loop that turns a segment's writes into targets is factored into place, shared by the cd branch and every other segment.",
+     "class": "within",
+     "why": "An implementation shape of D1 (keeps walk_text within clippy's limit); it decides nothing the request or spec left open about behavior."
+    },
+    {
+     "id": "band-unmoved",
+     "summary": "The band's whole-command refusal of a cd/pushd carrying a redirect is kept and runs before its redirect check, so its verdicts and messages are unmoved but for one shape newly refused whole: cd /v &> /tmp/l, as cd /v > /tmp/l already was.",
+     "class": "within",
+     "why": "The newly refused shape is the same stopgap already applied to the > form, reached only because T433-D4 keeps &> in the cd's segment; it is consistent behavior, not a new rule, and use is measured at 0 such invocations in 73,482 Bash calls (2026-11-27). Its over-reach is the defect filed as T460 below, not left unowned."
+    },
+    {
+     "id": "found-and-left T460",
+     "summary": "The band's whole-command refusal refuses a landing under /tmp its redirect check would pass, now that the walk places it; not fixed here, filed as T460, lands before T420.",
+     "class": "within",
+     "why": "A check refusing good work is a defect, and this one is deferred in the form the accepted spec's FR-009 sets (why it is not fixed in this task, its filed id, its order 'lands before T420'), fixed inside this feature before the work that follows (T420), and on a shape with 0 measured uses; it is not carried past the next step, so it does not narrow what was asked."
+    },
+    {
+     "id": "order",
+     "summary": "After T433 (its &> case reads T433-D4), before T420 as T427 filed it, before T460; one landing.",
+     "class": "within",
+     "why": "Scheduling inside the feature's tooling tasks; nothing in the request or spec orders these otherwise, and none is performance work displaced."
+    },
+    {
+     "id": "constraints",
+     "summary": "No guard message changes (the brief); 100% line coverage of new Rust; red-first unit test.",
+     "class": "within",
+     "why": "The red-first test enforces the fix (enforcement of what was asked, not scope); the coverage figure is a property of the code, not a builder coverage run against the GM's 2026-11-26 two-tier ruling; the unchanged-message constraint keeps the task to its fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T437": {
+   "section_sha256": "2918375a6d7fe623a9560c0c2606ba328f4b9d6dd6f496bae1bfb524cce24a7a",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T437 gone-on-positive-finding",
+     "summary": "A tree is gone only when its path is no directory or git rev-parse there fails or names another top/common dir; a mark naming no tree and a main-worktree mark are never gone (fails closed).",
+     "class": "within",
+     "why": "The predicate that carries the task's goal (a gone tree's mark holds nothing). Failing closed keeps 405 D4's reading of a tree-less mark as this tree's, which the session can still unstart from here; no wrong outcome is left and nothing the GM asked (T285: tooling that does the right thing with worktrees, 2026-11-27 go-ahead) is narrowed."
+    },
+    {
+     "id": "T437 the hold",
+     "summary": "A gone tree's mark joins neither started nor own in speckit::holding_with; marks::all still feeds touch::prefixes so a removed worktree's edit lines still resolve.",
+     "class": "within",
+     "why": "Directly the fix: a dropped tree's task no longer holds any push; keeping the path prefixes is needed for edit lines to resolve and holds nothing."
+    },
+    {
+     "id": "T437 the withdrawal",
+     "summary": "task_withdraw reads marks less the gone, so a gone tree's mark gives no 'started' refusal; its other refusals (carried code, review, pool registry) stand.",
+     "class": "within",
+     "why": "Removes only the false refusal the defect produced; the other refusals are untouched behavior, not part of the defect."
+    },
+    {
+     "id": "T437 the unstart",
+     "summary": "task-unstart takes this tree's mark, else a gone tree's (removable from any tree, both mark layouts, its unstart row naming that tree so live_starts drops it), else refuses a live other tree's with its message unchanged.",
+     "class": "within",
+     "why": "Fixes the printed make -C into a removed tree that could not run; T369's rule (a live other tree's mark is that tree's to remove) is kept for live trees only, which is what the rule is for."
+    },
+    {
+     "id": "T437 not changed on purpose",
+     "summary": "land/ready.rs started_tasks, others_in_delta and set_down_hooks/stalls.rs are left as they are.",
+     "class": "within",
+     "why": "None of them holds a push or refuses a withdrawal or unstart: readiness of the landing's own tasks, open (not started) tasks, and a stall report, where a task whose tree vanished is plausibly a stall worth reporting. No wrong outcome is shown left, so nothing here is a deferred defect."
+    },
+    {
+     "id": "T437 fixtures moved to real worktrees",
+     "summary": "Two tests that named never-made trees as live are moved to real worktrees, each still reaching its branch.",
+     "class": "within",
+     "why": "Under the new predicate a never-made path is gone, so the fixtures had to make the live case real; enforcement and tests of the requested behavior, not new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T438": {
+   "section_sha256": "1bd1d480250e61cb66d979ec257d432ed42231a44fd84bd3d1b03a08491cda00",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T438-D1",
+     "summary": "In a labeled task section a bare D<n> is the section's own and is not carried into spec-cited.md; spec/plan-prefixed runs, feature-qualified ids, possessive-named ids and every FR-/SC- are still carried.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (the bundle carried the spec's D1/D3 to a reviewer for ids that meant the section's own T369-D1/T369-D3). 'Left out' rather than 'resolved' is one of the two outcomes the task line itself names, and the section's own text is already in blocks.md, which the reviewer reads whole. Nothing the GM asked or the spec settles is narrowed."
+    },
+    {
+     "id": "T438-D2",
+     "summary": "Only a section that writes its own T<n>-D<k> labels (in the block or that task's plan.md section) counts as labeled; unlabeled task sections are read as before, not the brief's wider every-task-section rule.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the brief, not the GM's request or the spec (no GM words name this task; the GM's standing ask is that known defects be fixed). The narrowing is measured and labeled (observed 2026-11-27, every specs/*/plan.md split by heading, each bare id classed): 429 bare ids in unlabeled sections cite the plan's own decisions, defined bare there, so carrying them is correct and leaves no defect; all 44 in labeled sections are the section's own or another section's and are fixed. The wider rule would drop those 429 correct citations, refusing good work, which would undo what the fix is for. Purpose-level test passes: every mis-carried id found is removed, and no defect is left."
+    },
+    {
+     "id": "T438-D3",
+     "summary": "The section's own possessives (the section's/the task's/the block's D4, and the owner's T369's D1) are taken out too, where the possessive rule would read them as the spec's.",
+     "class": "within",
+     "why": "The same defect in another written form: these name the section's own decisions, so carrying the spec's same-numbered text is the wrong outcome D1 fixes. It completes the fix and widens nothing beyond it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T439": {
+   "section_sha256": "0799f055f4d49fc08192aa2b7cc873453944676165a6e54c013a98d36b04c1a3",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T439-D1",
+     "summary": "`newer` in scripts/hooks/l7r-guard.sh asks one `find <existing sources> -newer <stamp> -print -quit` in place of the globstar walk with an -nt per path; a find that fails (missing, killed, error) falls back to the walk, never to fresh.",
+     "class": "within",
+     "why": "A speed change to every hook call, the builders' loop: performance work the GM asked to come first (2026-11-20 'can we in general priotitize performance improvements going forward?'; FR-013). It keeps 449 D7 whole - the binary is still rebuilt when its sources are newer, and a failed find falls to the old walk rather than to 'fresh', so no stale guard runs. Nothing asked is narrowed."
+    },
+    {
+     "id": "T439-D2",
+     "summary": "A kept stamp (on directory times, or kept by the Edit hook or git's index) is priced at most 8.8 ms and declined: it misses an edit through Bash, a mirror fast-forward or another session, so it would run a stale guard.",
+     "class": "within",
+     "why": "Declining a lever nobody asked for, because it would break 449 D7 (build when the sources are newer), narrows nothing; the GM asked for performance work, not for this lever, and asked that decisions not to build be recorded (2026-11-25), which this does."
+    },
+    {
+     "id": "T439-D3",
+     "summary": "The walk's comment ('find -newer was a fork on every call') is rewritten with the measured figure that reverses it.",
+     "class": "within",
+     "why": "Keeps the code's own stated reason true after the change; adds no behavior."
+    },
+    {
+     "id": "T439-D4",
+     "summary": "The about 3 ms per call spent starting /usr/bin/env on the wrapper's shebang is found and left, filed as T456, lands before T302.",
+     "class": "within",
+     "why": "A further speed lever, not a defect (no wrong outcome: the hook works and runs a current guard), so leaving it is no narrowing; it is filed as performance work with its order, so FR-013's ordering still puts it ahead of non-performance work."
+    },
+    {
+     "id": "T439-D5",
+     "summary": "Order: before T302; T449 edits other blocks of the same file (the build block and print-fresh line), not `newer`.",
+     "class": "within",
+     "why": "Scheduling inside the feature, consistent with FR-013 (performance first) and the GM's queue order; decides nothing the request settles otherwise."
+    },
+    {
+     "id": "T439-D6",
+     "summary": "Tagged [perf] under FR-013: it makes every hook call faster (14.85 to 10.77 ms with a stub binary).",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; a hook-wrapper speedup on every tool call is that."
+    },
+    {
+     "id": "T439-D7",
+     "summary": "Suite case 6e pins that a fresh call asks find once and it succeeds (red on the old code, green after); safety pins (nested edit with directory time unmoved, file added, file removed, find failing) held on both versions.",
+     "class": "within",
+     "why": "Verification that the requested change happens and that D7's no-stale-guard behavior is kept; enforcement of what was asked, not unrequested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T440": {
+   "section_sha256": "0ab106f4b003697017ff0bcf5c7215a7b9c2b663ee7d0bc1c669d9c023642add",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T440 Approach: the run's target from CARGO_TARGET_DIR",
+     "summary": "world_here resolves the run's target by target_of(home, tree, CARGO_TARGET_DIR): the given directory where set and non-empty, else $HOME/.cache/l7r-cargo-target/<tree> as before.",
+     "class": "within",
+     "why": "The task as filed: a wrong outcome the feature's own proof (T312's empty-HOME run) observed - a run given a scratch target wrote its lock and record into the HOME cache, a directory its cargo never built in - fixed as found (constitution XIV, fix as we go, the GM 2026-11-18). It narrows nothing in the request or the spec: where CARGO_TARGET_DIR is unset the run keeps the shared HOME build cache, which the GM endorsed reusing (request.md 2026-11-22, T155/T158), and no request passage or FR asks for the home cache location or per-tree serialization."
+    },
+    {
+     "id": "The claim restated",
+     "summary": "The task line's 'shares the build cache but not the live run's lock' is restated from the code: the override's directory was already locked; the defect is the extra HOME-derived world.target also locked and written. The task line's 'measure whether the lock should follow CARGO_TARGET_DIR' is answered yes.",
+     "class": "within",
+     "why": "Restating a task line's reading to match what the code was observed to do (constitution XIV) narrows nothing; the task's own open question is answered in the direction that removes the observed wrong outcome, not in a direction that keeps it."
+    },
+    {
+     "id": "DECISION: the target itself follows, not only the lock's list",
+     "summary": "Rather than dropping world.target from runlock::dirs_of alone, target is resolved once so the coverage directory, the pre-warm's prewarm.lock, the run record and every target_override.unwrap_or(target) reader name one directory.",
+     "class": "within",
+     "why": "The narrower alternative (lock list only) would have left cover_dir's builds and prewarm.lock under the HOME cache unlocked, a new collision; choosing the whole fix over a partial one widens nothing beyond the defect - every write moved is a write the defect put in the wrong directory - and stays inside the task."
+    },
+    {
+     "id": "What it stops serializing",
+     "summary": "Runs in one tree with different targets no longer wait on each other through the HOME directory; they share only .git/rust-checks/ kept results (keep_line's read-modify-write), where a lost or torn line is a key matching nothing, so the next run re-runs that check. Real callers leave CARGO_TARGET_DIR unset or set to the home path.",
+     "class": "within",
+     "why": "Not a narrowing of anything the GM or the spec asked: no request passage or FR requires runs with different targets in one tree to serialize (T23 appears in neither request.md nor the spec index; it is the plan's own constraint), and the serialization dropped was incidental to the defect - a lock on a directory such runs never build in. The plan's premise that a lost or torn kept line only causes a re-run (a cost, not a wrong green) is taken as stated; the bundle rule keeps kept.rs out of this review. Where the variable is unset or set to the home path, behavior is unchanged."
+    },
+    {
+     "id": "Constraints and exits",
+     "summary": "No guard message changes; 449 T93's kept-results location unchanged; red-first test a_target_directory_given_is_the_run_s_target pinned, green with make builder-checks on the rustc crate; a claim it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "A test whose only effect is to make the fix hold is enforcement of the fix, not added scope; the exits follow the project's standing procedure."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T441": {
+   "section_sha256": "2f54ebaefb9683b516f19955754252df355fc48560dbfe2961dde6123f6fdfa3",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 two resolvers",
+     "summary": "State paths resolved through common_git_dir (existing) for session/clone state and a new own_git_dir for tree state; no git process; plain clone paths unchanged; no guard message changed.",
+     "class": "within",
+     "why": "The defect is guard state lost because a linked worktree's .git is a file; resolving each path to a real git dir is the fix itself. A second resolver only serves state that is the tree's; it narrows nothing the GM asked (request.md 291: worktree tooling should perform the correct behavior; 415/427: fix what was found and do the worktree tasks)."
+    },
+    {
+     "id": "D2 COMMON set",
+     "summary": "escalation-state.json, review-round/<feature>, pairing-state.json, review-rounds.json, review-snapshot/ and the dispatch.md snapshot are kept in the clone's common git dir.",
+     "class": "within",
+     "why": "Each is the session's or the feature's state; the readers T275 already moved to the common dir read them, so writers in the common dir are what keeps a returned review's filter and a feature's round count from being lost in a pool tree. No outcome is narrowed."
+    },
+    {
+     "id": "D3 finished-run.seen and live-run.told per tree",
+     "summary": "Both marks kept in the tree's own git dir.",
+     "class": "within",
+     "why": "Each names something of the tree (its dev/run-log, runs found by the tree's path); kept per tree they work in a pool tree (told once, refused once), and a shared file would let one tree's Stop clear the other's mark - a wrong outcome. Kept, not dropped: nothing asked is narrowed."
+    },
+    {
+     "id": "D4 pairing-key per tree",
+     "summary": "The engine key's cache is kept in the tree's own git dir.",
+     "class": "within",
+     "why": "It caches the tree's own engine key, invalidated by the tree's files; the clone's key answering for a pool tree would be a wrong outcome. Per tree is the correct behavior, not a carve-out."
+    },
+    {
+     "id": "D5 verification-state.json per tree",
+     "summary": "Read where its writer (tree::state state_file) puts it, the tree's own git dir.",
+     "class": "within",
+     "why": "Reader is made to agree with its existing writer, which is per tree by design; the alternative would read a record that is never written. Fixes the loss, narrows nothing."
+    },
+    {
+     "id": "D6 idle tests mapped to the clone",
+     "summary": "locate maps a tree whose .git is a file to its clone, so arming, run, disarm and seen mark are the clone's under the clone's session name; a worktree of a repository outside .clones/ is located nowhere; arming still off by the GM's DEF_ARM switch.",
+     "class": "within",
+     "why": "Nothing in request.md speaks to idle tests in a worktree. Per tree is impossible as stated (the gate reads <make's top>/.git/idle-tests.running, which a .git file cannot hold), skipping would leave the clone unarmed while the session stood in a pool tree, and the session-name change fixes a found wrong outcome (a pool tree's name taken as the session's). A repository outside .clones/ is no session clone, so locating it nowhere matches the module's existing scope; the GM's switch is untouched."
+    },
+    {
+     "id": "D7 clone_sync probes left",
+     "summary": "clone_sync_hooks.rs' three .join(\".git\").is_dir() probes left as they are, with comments.",
+     "class": "within",
+     "why": "A pool tree is no session clone to claim or sync, so the probe answering false there is the right outcome; leaving a non-defect as it is is not a narrowing (WHAT A DEFECT IS, 2026-11-19)."
+    },
+    {
+     "id": "D8 page-sessions left",
+     "summary": "stall_watchdog_hooks/pass.rs page-sessions left as is.",
+     "class": "within",
+     "why": "Its clone comes from the claim map, always a session clone, never a linked worktree; as stated it cannot lose state in a pool tree, so no defect is left."
+    },
+    {
+     "id": "D9 gate sites to T442",
+     "summary": "The gate crates' remaining .git sites are left to T442, filed beside this task.",
+     "class": "within",
+     "why": "T441's scope is the guard's sites from T275's census; the gate's sites are a separately filed task of the same feature, ordered beside it, so no known defect is carried past the step. A task boundary, not a narrowing of what the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T442": {
+   "section_sha256": "ea7fbfa8a93f0c7a75a5a90c83e1402277874868ea00164b5da85c7fcbd06c17",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T442-common",
+     "summary": "Every listed site (reviews::gitdir and its callers, review-gate.sh:278, stale_terms.rs:508, bundle helpers.rs:234, plan approach.rs and task set_down.rs git_dir) resolves the clone's COMMON git dir; a plain clone's paths unchanged.",
+     "class": "within",
+     "why": "A defect fix. The block names the wrong outcomes measured red-first on the old code: a push from a linked worktree refused a reviewed map, a checkpoint or tick in a pool tree held a reviewed unit as owed, quote-verbatim crashed with Not a directory, and stale-terms said no round was dispatched. The 2026-11-27 go-ahead approved the worktree and parallel-building work, and fix-as-we-go makes these defects the task's to fix. Line 254's 'a review recording in its own tree' (T257) is the plan-review record in the plan's tree. T442 does not move that record (the MANIFEST still records it per tree), and T275, already landed, put the review verdicts in the common dir. T442 only makes the readers follow those writers."
+    },
+    {
+     "id": "T442-resolvers",
+     "summary": "No new resolver: rev-parse --git-common-dir where a site already shelled out and its None matters (reviews::gitdir, set_down::git_dir), event_log_hooks::common_git_dir for the bare <root>/.git joins, and the plan crate's codeid::common_git_dir.",
+     "class": "within",
+     "why": "This is how the fix is built and it narrows nothing. It follows T275's 'no second resolver'."
+    },
+    {
+     "id": "T442-land-alone-copies",
+     "summary": "land-alone.sh stops copying review-verdicts/ and approach-owed.json into the landing worktree's own git dir.",
+     "class": "within",
+     "why": "The copies only stood in for the per-tree reads this task removes. Once no reader looks there, dropping them changes no outcome."
+    },
+    {
+     "id": "T442-rust-checks-kept",
+     "summary": "land-alone.sh still copies rust-checks/, because its reader is outside this task's census.",
+     "class": "within",
+     "why": "Nothing is fixed less: the copy is left working as it is, and the block names no wrong outcome for it. Under 'WHAT A DEFECT IS', leaving a working mechanism alone is not a narrowing."
+    },
+    {
+     "id": "T442-approach-owed-common",
+     "summary": "DECISION: approach-owed.json is common, not per tree, and all three of its parties (decide/tick, set-down, land-alone) move together.",
+     "class": "within",
+     "why": "An owed block belongs to the TASK, and a task moves between trees. Kept per tree, an owed part B written in a builder's tree was dropped at the carry, which is a wrong outcome. No request text puts this state per tree."
+    },
+    {
+     "id": "T442-since-start",
+     "summary": "set_down.rs since_start now reads task-starts.jsonl from the common dir where make task-start writes it; fixed by the same git_dir change and recorded under Found and left.",
+     "class": "within",
+     "why": "A defect found while doing the task and fixed in it, as fix-as-we-go requires. It is not deferred."
+    },
+    {
+     "id": "T442-landing-worktree-hold",
+     "summary": "In land-alone's landing worktree the tick's checkpoint hold and the glyph hour now read the clone's clock and event log, so the landing holds where the same landing would in the clone.",
+     "class": "within",
+     "why": "An existing check, already approved, now reaches the tree it previously missed. Before the fix it held nothing there, which is a check passing work it should hold: a defect under 'WHAT A DEFECT IS'. No new refusal and no new message."
+    },
+    {
+     "id": "T442-per-tree-kept",
+     "summary": "sync-with-main.sh:439 (runs from the session clone, where its own dir is the common one) and the eight sites T442's line rules 'not defects, by reading' (speckit_todo/report.rs:179, owed/answers.rs:422, ci/switches.rs:312, model_trial/case.rs, archive/store.rs:161, land-tooling.sh, verify_wait.sh, review-tree.sh) are left unchanged.",
+     "class": "within",
+     "why": "Leaving a non-defect alone is within the request. This class rests on the block's own statement of the task line's ruling: the bundle does not carry the task line, so that reading was not re-checked here. If any of those sites turns out to give a wrong outcome from a linked worktree, it is a defect left and would need fixing."
+    },
+    {
+     "id": "T442-no-guard-edit",
+     "summary": "Constraint: no guard file edited and no guard message changed.",
+     "class": "within",
+     "why": "A limit on the work that narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T436 (found by T427, 2026-11-27: `cd /t > /diagram/x.rs` truncated a file no walk reader saw)",
+    "### T436 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T436-D1",
+     "summary": "At a cd, pushd or popd, each redirect of the segment is a write resolved by path_write against the directory and $PWD before cd_to/popd moves them, classed from the hint where the shell was last known, marked redirect.",
+     "class": "within",
+     "why": "Closes a guard gap (a cd's redirect was no target to main-tree, house style or gm-tree), so the enforcement the GM asked to be real (2026-11-19 approval: 'real enforcement and not just instructions') sees the write. The mechanism follows bash's measured order (bash 5.3.9 probe, 2026-11-27: a builtin's redirects and $PWD are expanded before it moves) and the red-first test covers relative, $PWD, absolute, pushd, popd, &> and >&, and the elsewhere class, so it does what it says on the case it names."
+    },
+    {
+     "id": "place",
+     "summary": "The loop that turns a segment's writes into targets is factored into place, shared by the cd branch and every other segment.",
+     "class": "within",
+     "why": "An implementation shape of D1 (keeps walk_text within clippy's limit); it decides nothing the request or spec left open about behavior."
+    },
+    {
+     "id": "band-unmoved",
+     "summary": "The band's whole-command refusal of a cd/pushd carrying a redirect is kept and runs before its redirect check, so its verdicts and messages are unmoved but for one shape newly refused whole: cd /v &> /tmp/l, as cd /v > /tmp/l already was.",
+     "class": "within",
+     "why": "The newly refused shape is the same stopgap already applied to the > form, reached only because T433-D4 keeps &> in the cd's segment; it is consistent behavior, not a new rule, and use is measured at 0 such invocations in 73,482 Bash calls (2026-11-27). Its over-reach is the defect filed as T460 below, not left unowned."
+    },
+    {
+     "id": "found-and-left T460",
+     "summary": "The band's whole-command refusal refuses a landing under /tmp its redirect check would pass, now that the walk places it; not fixed here, filed as T460, lands before T420.",
+     "class": "within",
+     "why": "A check refusing good work is a defect, and this one is deferred in the form the accepted spec's FR-009 sets (why it is not fixed in this task, its filed id, its order 'lands before T420'), fixed inside this feature before the work that follows (T420), and on a shape with 0 measured uses; it is not carried past the next step, so it does not narrow what was asked."
+    },
+    {
+     "id": "order",
+     "summary": "After T433 (its &> case reads T433-D4), before T420 as T427 filed it, before T460; one landing.",
+     "class": "within",
+     "why": "Scheduling inside the feature's tooling tasks; nothing in the request or spec orders these otherwise, and none is performance work displaced."
+    },
+    {
+     "id": "constraints",
+     "summary": "No guard message changes (the brief); 100% line coverage of new Rust; red-first unit test.",
+     "class": "within",
+     "why": "The red-first test enforces the fix (enforcement of what was asked, not scope); the coverage figure is a property of the code, not a builder coverage run against the GM's 2026-11-26 two-tier ruling; the unchanged-message constraint keeps the task to its fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T437 (found by 451 T369 by reading, 2026-11-27, no case observed: a start mark whose tree no longer exists - a pool tree dropped, a worktree removed - stays until its task lands, and before this every reader took it as a live start)",
+    "### T437 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T437 gone-on-positive-finding",
+     "summary": "A tree is gone only when its path is no directory or git rev-parse there fails or names another top/common dir; a mark naming no tree and a main-worktree mark are never gone (fails closed).",
+     "class": "within",
+     "why": "The predicate that carries the task's goal (a gone tree's mark holds nothing). Failing closed keeps 405 D4's reading of a tree-less mark as this tree's, which the session can still unstart from here; no wrong outcome is left and nothing the GM asked (T285: tooling that does the right thing with worktrees, 2026-11-27 go-ahead) is narrowed."
+    },
+    {
+     "id": "T437 the hold",
+     "summary": "A gone tree's mark joins neither started nor own in speckit::holding_with; marks::all still feeds touch::prefixes so a removed worktree's edit lines still resolve.",
+     "class": "within",
+     "why": "Directly the fix: a dropped tree's task no longer holds any push; keeping the path prefixes is needed for edit lines to resolve and holds nothing."
+    },
+    {
+     "id": "T437 the withdrawal",
+     "summary": "task_withdraw reads marks less the gone, so a gone tree's mark gives no 'started' refusal; its other refusals (carried code, review, pool registry) stand.",
+     "class": "within",
+     "why": "Removes only the false refusal the defect produced; the other refusals are untouched behavior, not part of the defect."
+    },
+    {
+     "id": "T437 the unstart",
+     "summary": "task-unstart takes this tree's mark, else a gone tree's (removable from any tree, both mark layouts, its unstart row naming that tree so live_starts drops it), else refuses a live other tree's with its message unchanged.",
+     "class": "within",
+     "why": "Fixes the printed make -C into a removed tree that could not run; T369's rule (a live other tree's mark is that tree's to remove) is kept for live trees only, which is what the rule is for."
+    },
+    {
+     "id": "T437 not changed on purpose",
+     "summary": "land/ready.rs started_tasks, others_in_delta and set_down_hooks/stalls.rs are left as they are.",
+     "class": "within",
+     "why": "None of them holds a push or refuses a withdrawal or unstart: readiness of the landing's own tasks, open (not started) tasks, and a stall report, where a task whose tree vanished is plausibly a stall worth reporting. No wrong outcome is shown left, so nothing here is a deferred defect."
+    },
+    {
+     "id": "T437 fixtures moved to real worktrees",
+     "summary": "Two tests that named never-made trees as live are moved to real worktrees, each still reaching its branch.",
+     "class": "within",
+     "why": "Under the new predicate a never-made path is gone, so the fixtures had to make the live case real; enforcement and tests of the requested behavior, not new scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T438 (found by the round-2 plan reviewer of 451 T369, 2026-11-27: `make plan-delta`'s `spec-cited.md` for T369 carried the spec's D1 and D3, where the section's \"(D1)\" and \"(D3)\" meant its own T369-D1 and T369-D3)",
+    "### T438 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T438-D1",
+     "summary": "In a labeled task section a bare D<n> is the section's own and is not carried into spec-cited.md; spec/plan-prefixed runs, feature-qualified ids, possessive-named ids and every FR-/SC- are still carried.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (the bundle carried the spec's D1/D3 to a reviewer for ids that meant the section's own T369-D1/T369-D3). 'Left out' rather than 'resolved' is one of the two outcomes the task line itself names, and the section's own text is already in blocks.md, which the reviewer reads whole. Nothing the GM asked or the spec settles is narrowed."
+    },
+    {
+     "id": "T438-D2",
+     "summary": "Only a section that writes its own T<n>-D<k> labels (in the block or that task's plan.md section) counts as labeled; unlabeled task sections are read as before, not the brief's wider every-task-section rule.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the brief, not the GM's request or the spec (no GM words name this task; the GM's standing ask is that known defects be fixed). The narrowing is measured and labeled (observed 2026-11-27, every specs/*/plan.md split by heading, each bare id classed): 429 bare ids in unlabeled sections cite the plan's own decisions, defined bare there, so carrying them is correct and leaves no defect; all 44 in labeled sections are the section's own or another section's and are fixed. The wider rule would drop those 429 correct citations, refusing good work, which would undo what the fix is for. Purpose-level test passes: every mis-carried id found is removed, and no defect is left."
+    },
+    {
+     "id": "T438-D3",
+     "summary": "The section's own possessives (the section's/the task's/the block's D4, and the owner's T369's D1) are taken out too, where the possessive rule would read them as the spec's.",
+     "class": "within",
+     "why": "The same defect in another written form: these name the section's own decisions, so carrying the spec's same-numbered text is the wrong outcome D1 fixes. It completes the fix and widens nothing beyond it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T438 (found by the round-2 plan reviewer of 451 T369, 2026-11-27: `make plan-delta`'s `spec-cited.md` for T369 carried the spec's D1 and D3, where the section's \"(D1)\" and \"(D3)\" meant its own T369-D1 and T369-D3)",
+    "### T438 Approach (checklist part A)",
+    "### T459 (found by 451 T443's review, 2026-11-27, by reading: a hook killed between the reversal index's temporary write and its rename leaves a `.<feature>.idx.<pid>.<n>.tmp` in `<events dir>/reversal/` that nothing removes; none seen in T443's runs)",
+    "### T459 Approach (checklist part A)",
+    "(removed) ### T438 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T438-D1",
+     "summary": "In a labeled task section a bare D<n> is the section's own and its spec text is not carried; spec-named (spec/plan/plan.md), feature-qualified and possessive-named ids, and every FR-/SC-, are still carried.",
+     "class": "within",
+     "why": "Fixes the defect the task names: the bundle handed a reviewer spec decisions the section never cited. Leaving the id out instead of resolving it is one of the two options the task's line gives, and the section's own decision is already in blocks.md. Nothing the GM's request or FR-043's bundle form asks for is dropped."
+    },
+    {
+     "id": "T438-D2",
+     "summary": "Only a section that writes its own T<n>-D<k> labels (in the block or that task's section of plan.md) counts as labeled; an unlabeled section's bare ids are read as before.",
+     "class": "within",
+     "why": "This does not narrow the GM's request or the spec. The wider rule (every task section) came from the coordinating brief, not the GM. The dated measurement shows it would drop 429 correct citations of plan decisions in older features' unlabeled sections, which would create a defect instead of fixing one. All 44 bare ids in labeled sections, the class the defect belongs to, are covered."
+    },
+    {
+     "id": "T438-D3",
+     "summary": "The section's own possessives (the section's/task's/block's D4, the owner's T369's D1) are taken out, though the possessive rule would otherwise read them as the spec's.",
+     "class": "within",
+     "why": "The same defect in its possessive form: these phrases name the section's decisions, so carrying the spec's same-numbered decision is the wrong outcome the task fixes."
+    },
+    {
+     "id": "T459-D1",
+     "summary": "The sweep of leftover temporary index files runs when an index is written (store), never on a read.",
+     "class": "within",
+     "why": "The defect is a leftover nothing removes. After this change it is removed at the next index write in the directory, and the block says the task's line names the rebuild. Using the scratch sweep instead was weighed and turned down on cost. That is a design choice inside the fix, not a carve-out from it."
+    },
+    {
+     "id": "T459-D2",
+     "summary": "Every feature's temporary file in reversal/ is swept, by its exact name form (digits for pid and sequence); files of any other name, or whose age cannot be read, are left.",
+     "class": "within",
+     "why": "It covers the whole class of leftover, including a feature whose index is never written again. The exact-form and unreadable-age exclusions keep files the defect does not cover. The directory holds only the indexes."
+    },
+    {
+     "id": "T459-D3",
+     "summary": "SWEEP_AGE is one hour, a GUESS knob listed in make tunables.",
+     "class": "within",
+     "why": "A tunable bound, labeled as a GUESS, with a dated measurement (about 12 ms for a rebuild of a 44.4 MB log) showing that an hour is far past any writer still alive. It keeps T443's invariant that no running writer's file is removed. The block says the task's line names the hour."
+    },
+    {
+     "id": "(removed) T438 placeholder",
+     "summary": "The template stub heading '### T438 (<why: ...>)' is removed, replaced by the filled T438 section above.",
+     "class": "within",
+     "why": "Its earlier text is only the task-add template's placeholders, with no decision in it. Removing it decides nothing, because the filled section carries the task."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T439 (found by T373: every hook call spent 15 to 17 ms outside the guard binary, 34.7 against 17.5 ms for a Bash PreToolUse, measured 2026-11-26 (20 runs, `dev/measurements/2026-11-26/edit-hook/t373-results.md`, \"The floor\"))",
+    "### T439 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T439-D1",
+     "summary": "`newer` in scripts/hooks/l7r-guard.sh asks one `find <existing sources> -newer <stamp> -print -quit` in place of the globstar walk with an -nt per path; a find that fails (missing, killed, error) falls back to the walk, never to fresh.",
+     "class": "within",
+     "why": "A speed change to every hook call, the builders' loop: performance work the GM asked to come first (2026-11-20 'can we in general priotitize performance improvements going forward?'; FR-013). It keeps 449 D7 whole - the binary is still rebuilt when its sources are newer, and a failed find falls to the old walk rather than to 'fresh', so no stale guard runs. Nothing asked is narrowed."
+    },
+    {
+     "id": "T439-D2",
+     "summary": "A kept stamp (on directory times, or kept by the Edit hook or git's index) is priced at most 8.8 ms and declined: it misses an edit through Bash, a mirror fast-forward or another session, so it would run a stale guard.",
+     "class": "within",
+     "why": "Declining a lever nobody asked for, because it would break 449 D7 (build when the sources are newer), narrows nothing; the GM asked for performance work, not for this lever, and asked that decisions not to build be recorded (2026-11-25), which this does."
+    },
+    {
+     "id": "T439-D3",
+     "summary": "The walk's comment ('find -newer was a fork on every call') is rewritten with the measured figure that reverses it.",
+     "class": "within",
+     "why": "Keeps the code's own stated reason true after the change; adds no behavior."
+    },
+    {
+     "id": "T439-D4",
+     "summary": "The about 3 ms per call spent starting /usr/bin/env on the wrapper's shebang is found and left, filed as T456, lands before T302.",
+     "class": "within",
+     "why": "A further speed lever, not a defect (no wrong outcome: the hook works and runs a current guard), so leaving it is no narrowing; it is filed as performance work with its order, so FR-013's ordering still puts it ahead of non-performance work."
+    },
+    {
+     "id": "T439-D5",
+     "summary": "Order: before T302; T449 edits other blocks of the same file (the build block and print-fresh line), not `newer`.",
+     "class": "within",
+     "why": "Scheduling inside the feature, consistent with FR-013 (performance first) and the GM's queue order; decides nothing the request settles otherwise."
+    },
+    {
+     "id": "T439-D6",
+     "summary": "Tagged [perf] under FR-013: it makes every hook call faster (14.85 to 10.77 ms with a stub binary).",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; a hook-wrapper speedup on every tool call is that."
+    },
+    {
+     "id": "T439-D7",
+     "summary": "Suite case 6e pins that a fresh call asks find once and it succeeds (red on the old code, green after); safety pins (nested edit with directory time unmoved, file added, file removed, find failing) held on both versions.",
+     "class": "within",
+     "why": "Verification that the requested change happens and that D7's no-stale-guard behavior is kept; enforcement of what was asked, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T439 (found by T373: every hook call spent 15 to 17 ms outside the guard binary, 34.7 against 17.5 ms for a Bash PreToolUse, measured 2026-11-26 (20 runs, `dev/measurements/2026-11-26/edit-hook/t373-results.md`, \"The floor\"))",
+    "### T439 Approach (checklist part A)",
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "### T456 (<why: the finding or measurement that files it>)",
+    "### T456 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)",
+    "(removed) ### T439 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T439-a find-newer",
+     "summary": "newer in scripts/hooks/l7r-guard.sh asks one find <sources> -newer <stamp> -print -quit in place of bash's globstar walk with an -nt per path",
+     "class": "within",
+     "why": "A performance task (FR-013; the GM 2026-11-20 'can we in general priotitize performance improvements going forward?'): same freshness question, about 4.1 ms less per hook call, measured. Keeps 449 D7's rule (a build only when the sources are newer)."
+    },
+    {
+     "id": "T439-b fallback",
+     "summary": "a find that fails (missing, killed, an error) falls back to the walk, never to 'fresh'",
+     "class": "within",
+     "why": "Keeps 449 D7 whole: a failure of the faster lever can never run a guard older than its sources."
+    },
+    {
+     "id": "T439-c no kept stamp",
+     "summary": "a kept stamp (directory times, the Edit hook, or git's index) is priced and not built",
+     "class": "within",
+     "why": "A rejected alternative the GM never asked for; it is turned down because it would miss an edit through Bash, a mirror fast-forward or another session and run a stale guard, which would break D7. Building nothing extra leaves nothing that was asked undone."
+    },
+    {
+     "id": "T439-d comment",
+     "summary": "the walk's comment ('find -newer was a fork on every call') is rewritten with the measured figure that reverses it",
+     "class": "within",
+     "why": "Documentation of the change itself."
+    },
+    {
+     "id": "T439-e pins",
+     "summary": "the suite's case 6e (a fresh call asks find once and it succeeds), plus safety pins: a nested edit with its directory time unmoved, a file added, a file removed, find failing, on both versions",
+     "class": "within",
+     "why": "Tests that check the requested speedup really happens and that D7's freshness rule still holds. Checking what was asked is not unrequested scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T439-f env shebang deferred",
+     "summary": "about 3 ms per call starting /usr/bin/env on the #!/usr/bin/env bash shebang is not fixed here; filed as T456, lands before T302",
+     "class": "within",
+     "why": "A further speed lever, not a defect (no wrong outcome: the hook answers correctly). It is filed as its own task and ordered before T302 rather than dropped, which matches FR-013's performance-first order and D15's deferral form; whether the T456/T302 ids are open is checked by make decide."
+    },
+    {
+     "id": "T439-g order",
+     "summary": "before T302; T449 (the link heal) edits the build block and print-fresh line of the same file, not newer",
+     "class": "within",
+     "why": "Scheduling inside the feature; does not narrow anything that was asked."
+    },
+    {
+     "id": "T443/T449/T456 templates",
+     "summary": "new task sections holding only the template placeholders",
+     "class": "within",
+     "why": "Placeholders only; they decide nothing."
+    },
+    {
+     "id": "removed T311, T392, T439 placeholders",
+     "summary": "three blocks that held only template placeholders are removed (T439's replaced by its filled section)",
+     "class": "within",
+     "why": "Each removed block held only the unfilled template (earlier.md), so removing it takes away no decision. T439's content now sits under its filled heading."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T440 (observed 2026-11-27 by 451 T312's empty-HOME proof: `rust-checks-run.lock` and `rust-checks-run.json` found under the scratch HOME's `.cache/l7r-cargo-target/<tree>/` though `CARGO_TARGET_DIR` named a scratch target)",
+    "### T440 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T440 Approach: the run's target from CARGO_TARGET_DIR",
+     "summary": "world_here resolves the run's target by target_of(home, tree, CARGO_TARGET_DIR): the given directory where set and non-empty, else $HOME/.cache/l7r-cargo-target/<tree> as before.",
+     "class": "within",
+     "why": "The task as filed: a wrong outcome the feature's own proof (T312's empty-HOME run) observed - a run given a scratch target wrote its lock and record into the HOME cache, a directory its cargo never built in - fixed as found (constitution XIV, fix as we go, the GM 2026-11-18). It narrows nothing in the request or the spec: where CARGO_TARGET_DIR is unset the run keeps the shared HOME build cache, which the GM endorsed reusing (request.md 2026-11-22, T155/T158), and no request passage or FR asks for the home cache location or per-tree serialization."
+    },
+    {
+     "id": "The claim restated",
+     "summary": "The task line's 'shares the build cache but not the live run's lock' is restated from the code: the override's directory was already locked; the defect is the extra HOME-derived world.target also locked and written. The task line's 'measure whether the lock should follow CARGO_TARGET_DIR' is answered yes.",
+     "class": "within",
+     "why": "Restating a task line's reading to match what the code was observed to do (constitution XIV) narrows nothing; the task's own open question is answered in the direction that removes the observed wrong outcome, not in a direction that keeps it."
+    },
+    {
+     "id": "DECISION: the target itself follows, not only the lock's list",
+     "summary": "Rather than dropping world.target from runlock::dirs_of alone, target is resolved once so the coverage directory, the pre-warm's prewarm.lock, the run record and every target_override.unwrap_or(target) reader name one directory.",
+     "class": "within",
+     "why": "The narrower alternative (lock list only) would have left cover_dir's builds and prewarm.lock under the HOME cache unlocked, a new collision; choosing the whole fix over a partial one widens nothing beyond the defect - every write moved is a write the defect put in the wrong directory - and stays inside the task."
+    },
+    {
+     "id": "What it stops serializing",
+     "summary": "Runs in one tree with different targets no longer wait on each other through the HOME directory; they share only .git/rust-checks/ kept results (keep_line's read-modify-write), where a lost or torn line is a key matching nothing, so the next run re-runs that check. Real callers leave CARGO_TARGET_DIR unset or set to the home path.",
+     "class": "within",
+     "why": "Not a narrowing of anything the GM or the spec asked: no request passage or FR requires runs with different targets in one tree to serialize (T23 appears in neither request.md nor the spec index; it is the plan's own constraint), and the serialization dropped was incidental to the defect - a lock on a directory such runs never build in. The plan's premise that a lost or torn kept line only causes a re-run (a cost, not a wrong green) is taken as stated; the bundle rule keeps kept.rs out of this review. Where the variable is unset or set to the home path, behavior is unchanged."
+    },
+    {
+     "id": "Constraints and exits",
+     "summary": "No guard message changes; 449 T93's kept-results location unchanged; red-first test a_target_directory_given_is_the_run_s_target pinned, green with make builder-checks on the rustc crate; a claim it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "A test whose only effect is to make the fix hold is enforcement of the fix, not added scope; the exits follow the project's standing procedure."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T441 (T275's census: the guard's state joined onto `<clone>/.git`, the clone found from the session's cwd, is lost in a linked worktree; measured 2026-11-27 in the pool tree diagram-backlog-t269)",
+    "### T441 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 two resolvers",
+     "summary": "State paths resolved through common_git_dir (existing) for session/clone state and a new own_git_dir for tree state; no git process; plain clone paths unchanged; no guard message changed.",
+     "class": "within",
+     "why": "The defect is guard state lost because a linked worktree's .git is a file; resolving each path to a real git dir is the fix itself. A second resolver only serves state that is the tree's; it narrows nothing the GM asked (request.md 291: worktree tooling should perform the correct behavior; 415/427: fix what was found and do the worktree tasks)."
+    },
+    {
+     "id": "D2 COMMON set",
+     "summary": "escalation-state.json, review-round/<feature>, pairing-state.json, review-rounds.json, review-snapshot/ and the dispatch.md snapshot are kept in the clone's common git dir.",
+     "class": "within",
+     "why": "Each is the session's or the feature's state; the readers T275 already moved to the common dir read them, so writers in the common dir are what keeps a returned review's filter and a feature's round count from being lost in a pool tree. No outcome is narrowed."
+    },
+    {
+     "id": "D3 finished-run.seen and live-run.told per tree",
+     "summary": "Both marks kept in the tree's own git dir.",
+     "class": "within",
+     "why": "Each names something of the tree (its dev/run-log, runs found by the tree's path); kept per tree they work in a pool tree (told once, refused once), and a shared file would let one tree's Stop clear the other's mark - a wrong outcome. Kept, not dropped: nothing asked is narrowed."
+    },
+    {
+     "id": "D4 pairing-key per tree",
+     "summary": "The engine key's cache is kept in the tree's own git dir.",
+     "class": "within",
+     "why": "It caches the tree's own engine key, invalidated by the tree's files; the clone's key answering for a pool tree would be a wrong outcome. Per tree is the correct behavior, not a carve-out."
+    },
+    {
+     "id": "D5 verification-state.json per tree",
+     "summary": "Read where its writer (tree::state state_file) puts it, the tree's own git dir.",
+     "class": "within",
+     "why": "Reader is made to agree with its existing writer, which is per tree by design; the alternative would read a record that is never written. Fixes the loss, narrows nothing."
+    },
+    {
+     "id": "D6 idle tests mapped to the clone",
+     "summary": "locate maps a tree whose .git is a file to its clone, so arming, run, disarm and seen mark are the clone's under the clone's session name; a worktree of a repository outside .clones/ is located nowhere; arming still off by the GM's DEF_ARM switch.",
+     "class": "within",
+     "why": "Nothing in request.md speaks to idle tests in a worktree. Per tree is impossible as stated (the gate reads <make's top>/.git/idle-tests.running, which a .git file cannot hold), skipping would leave the clone unarmed while the session stood in a pool tree, and the session-name change fixes a found wrong outcome (a pool tree's name taken as the session's). A repository outside .clones/ is no session clone, so locating it nowhere matches the module's existing scope; the GM's switch is untouched."
+    },
+    {
+     "id": "D7 clone_sync probes left",
+     "summary": "clone_sync_hooks.rs' three .join(\".git\").is_dir() probes left as they are, with comments.",
+     "class": "within",
+     "why": "A pool tree is no session clone to claim or sync, so the probe answering false there is the right outcome; leaving a non-defect as it is is not a narrowing (WHAT A DEFECT IS, 2026-11-19)."
+    },
+    {
+     "id": "D8 page-sessions left",
+     "summary": "stall_watchdog_hooks/pass.rs page-sessions left as is.",
+     "class": "within",
+     "why": "Its clone comes from the claim map, always a session clone, never a linked worktree; as stated it cannot lose state in a pool tree, so no defect is left."
+    },
+    {
+     "id": "D9 gate sites to T442",
+     "summary": "The gate crates' remaining .git sites are left to T442, filed beside this task.",
+     "class": "within",
+     "why": "T441's scope is the guard's sites from T275's census; the gate's sites are a separately filed task of the same feature, ordered beside it, so no known defect is carried past the step. A task boundary, not a narrowing of what the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T442 (T275's census: the review-verdicts readers, and the gate's other `<root>/.git` joins, take a tree's OWN git dir where the review writes the clone's COMMON one; measured 2026-11-27 in the pool tree diagram-backlog-t271)",
+    "### T442 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T442-common",
+     "summary": "Every listed site (reviews::gitdir and its callers, review-gate.sh:278, stale_terms.rs:508, bundle helpers.rs:234, plan approach.rs and task set_down.rs git_dir) resolves the clone's COMMON git dir; a plain clone's paths unchanged.",
+     "class": "within",
+     "why": "A defect fix. The block names the wrong outcomes measured red-first on the old code: a push from a linked worktree refused a reviewed map, a checkpoint or tick in a pool tree held a reviewed unit as owed, quote-verbatim crashed with Not a directory, and stale-terms said no round was dispatched. The 2026-11-27 go-ahead approved the worktree and parallel-building work, and fix-as-we-go makes these defects the task's to fix. Line 254's 'a review recording in its own tree' (T257) is the plan-review record in the plan's tree. T442 does not move that record (the MANIFEST still records it per tree), and T275, already landed, put the review verdicts in the common dir. T442 only makes the readers follow those writers."
+    },
+    {
+     "id": "T442-resolvers",
+     "summary": "No new resolver: rev-parse --git-common-dir where a site already shelled out and its None matters (reviews::gitdir, set_down::git_dir), event_log_hooks::common_git_dir for the bare <root>/.git joins, and the plan crate's codeid::common_git_dir.",
+     "class": "within",
+     "why": "This is how the fix is built and it narrows nothing. It follows T275's 'no second resolver'."
+    },
+    {
+     "id": "T442-land-alone-copies",
+     "summary": "land-alone.sh stops copying review-verdicts/ and approach-owed.json into the landing worktree's own git dir.",
+     "class": "within",
+     "why": "The copies only stood in for the per-tree reads this task removes. Once no reader looks there, dropping them changes no outcome."
+    },
+    {
+     "id": "T442-rust-checks-kept",
+     "summary": "land-alone.sh still copies rust-checks/, because its reader is outside this task's census.",
+     "class": "within",
+     "why": "Nothing is fixed less: the copy is left working as it is, and the block names no wrong outcome for it. Under 'WHAT A DEFECT IS', leaving a working mechanism alone is not a narrowing."
+    },
+    {
+     "id": "T442-approach-owed-common",
+     "summary": "DECISION: approach-owed.json is common, not per tree, and all three of its parties (decide/tick, set-down, land-alone) move together.",
+     "class": "within",
+     "why": "An owed block belongs to the TASK, and a task moves between trees. Kept per tree, an owed part B written in a builder's tree was dropped at the carry, which is a wrong outcome. No request text puts this state per tree."
+    },
+    {
+     "id": "T442-since-start",
+     "summary": "set_down.rs since_start now reads task-starts.jsonl from the common dir where make task-start writes it; fixed by the same git_dir change and recorded under Found and left.",
+     "class": "within",
+     "why": "A defect found while doing the task and fixed in it, as fix-as-we-go requires. It is not deferred."
+    },
+    {
+     "id": "T442-landing-worktree-hold",
+     "summary": "In land-alone's landing worktree the tick's checkpoint hold and the glyph hour now read the clone's clock and event log, so the landing holds where the same landing would in the clone.",
+     "class": "within",
+     "why": "An existing check, already approved, now reaches the tree it previously missed. Before the fix it held nothing there, which is a check passing work it should hold: a defect under 'WHAT A DEFECT IS'. No new refusal and no new message."
+    },
+    {
+     "id": "T442-per-tree-kept",
+     "summary": "sync-with-main.sh:439 (runs from the session clone, where its own dir is the common one) and the eight sites T442's line rules 'not defects, by reading' (speckit_todo/report.rs:179, owed/answers.rs:422, ci/switches.rs:312, model_trial/case.rs, archive/store.rs:161, land-tooling.sh, verify_wait.sh, review-tree.sh) are left unchanged.",
+     "class": "within",
+     "why": "Leaving a non-defect alone is within the request. This class rests on the block's own statement of the task line's ruling: the bundle does not carry the task line, so that reading was not re-checked here. If any of those sites turns out to give a wrong outcome from a linked worktree, it is a defect left and would need fixing."
+    },
+    {
+     "id": "T442-no-guard-edit",
+     "summary": "Constraint: no guard file edited and no guard message changed.",
+     "class": "within",
+     "why": "A limit on the work that narrows nothing the GM asked for."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T436 to T442, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

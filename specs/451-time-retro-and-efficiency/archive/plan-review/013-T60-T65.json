@@ -1,0 +1,738 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T60": {
+   "section_sha256": "a41ec994bf645108f4b13e847bd62740ce90763ba02e53e56e80512ff1feac81",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T60-seat",
+     "summary": "The handoff's tree is the session's clone (shared::session clone_dir: claim map, else session name) where it is a work tree, else the cwd's tree as today",
+     "class": "within",
+     "why": "FR-006/D9 put the handoff under the git common dir of the tree the session works in, and approved improvement 1 has the session find it in one place. Routing it by the same resolve clone_sync_hooks uses for edits carries out what was asked. Falling back to the cwd's tree only keeps today's answer where no clone resolves."
+    },
+    {
+     "id": "T60-seat-lazy",
+     "summary": "The seat is resolved only past the cap or on a resume of a builder (a closure into judge)",
+     "class": "within",
+     "why": "This keeps D8/D9 as specified: the main session and a defined agent are never read, and no other call does any new work."
+    },
+    {
+     "id": "T60-four-reads",
+     "summary": "The handoff directory, the task in its name (filed_at with cwd set to the seat), the context-ok permit key (<clone>/context-cap:<aid>) and a resume's handoff/probe (D10) all read the one tree the seat gives",
+     "class": "within",
+     "why": "D9's handoff path, its task-named file, its make context-ok permit and D10's resume are one mechanism. If the four read different trees, the refusal, the Write exemption and the permit would disagree. Keying the permit by the clone makes it match where make context-ok grants it."
+    },
+    {
+     "id": "T60-cwd-gate-outside-tree",
+     "summary": "A call whose cwd is outside any git tree still passes the cap, as today",
+     "class": "within",
+     "why": "This is existing behavior that T60 keeps, not a new carve-out. T60 was filed to fix where the handoff is named, not when the cap fires. The bundle records no wrong outcome from it: no builder past the cap is found passing this way."
+    },
+    {
+     "id": "T60-defined-agent-stat-cwd",
+     "summary": "D8's defined-agent stat (.claude/agents/<type>.md) still reads the cwd's tree, not the seat",
+     "class": "within",
+     "why": "This is existing behavior that T60 keeps. It lies outside the four reads the task was filed to move. The bundle records no wrong outcome: no agent is misclassed because the mirror's agents directory differs from the clone's. Under the defect rule, a difference that produces no wrong outcome is not one."
+    },
+    {
+     "id": "T60-red-first",
+     "summary": "A red-first case: from the mirror, the refusal names the clone's T60-<aid>.md, a Write there passes and one to the mirror is refused, a resume names the clone's file, the cwd fallbacks hold, and the clone-keyed grant lets the call through. Red recorded at 416+1 failing, green at 417",
+     "class": "within",
+     "why": "FR-012 requires a red-first test of the refusal, and this case covers the requested behavior and its permit. It only enforces what was asked."
+    },
+    {
+     "id": "T60-move",
+     "summary": "The two misrouted handoffs in the mirror's .git/l7r-handoffs (byte-identical to the clone's copies, per cmp) are moved with a recorded MAIN_TREE_OK mv, and the empty directory is removed",
+     "class": "within",
+     "why": "The task as filed asks for this cleanup. The handoffs end up in the one place the request wants them, and the mv is recorded."
+    },
+    {
+     "id": "T60-T74-deferral",
+     "summary": "The event log's cwd filing (364 lines of 451 in the mirror, unseen by where-time in the clone) is left to T74, which lands before T22",
+     "class": "within",
+     "why": "T60 was not asked to fix the event log. The defect stays owed inside feature 451 as a filed task with an order. The item carries FR-009's three parts: why it is not fixed here (event_log_hooks is a shared module outside T60's files), the filed id T74, and 'lands before T22'. It drops nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T61": {
+   "section_sha256": "17600595ad7ae60631c0aa977da53df1f50acd2a92dc83ca0a4a91318f907116",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T61-1 process walk before gone",
+     "summary": "Before writer-alive.sh says gone it asks l7r-guard --finished-run alive, which uses the existing /proc walk (by pid, never by pattern) to find a live process outside the asker's ancestry whose command line or started script text writes the file (>, >>, >|, &>, tee).",
+     "class": "within",
+     "why": "This is what T61's line asks (ask the run's own process through finished_run_hooks' /proc walk, red first on a quiet log over a live run) and what its second brief asks (count only a process whose text WRITES the file). It serves FR-013 [perf] and the 2026-11-19 approval of the builders'-loop improvements."
+    },
+    {
+     "id": "T61-2 readers are no proof of life",
+     "summary": "A process that only names the file (a Monitor tail -f | grep in a bash -c wrapper, an until [ -s f ] wait) is not life; reader arguments (READERS) are never read as scripts; the held-open answer counts only a descriptor opened for writing (fdinfo flags), replacing fuser -s.",
+     "class": "within",
+     "why": "Fixes a defect the task found (a reader held a dead run's wait to its 90-minute ceiling, measured red first in round 2); it is the second brief's 'two reader shapes pinned dead'."
+    },
+    {
+     "id": "T61-3 non-redirect writers still read gone",
+     "summary": "A run that writes without shell redirection or tee (Python open(), sort -o) still reads gone once 45 s quiet; parsing each language's writes priced and not built.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the brief's 'a process whose text WRITES the file' to shell writes. Ruled on purpose: the only way to count such writers without parsing every language is to count a process that names the file, and the task measured that this keeps dead waits alive to the 90-minute ceiling, which defeats the purpose. The shape left behaves as it did before T61, and none of the 8 measured false firings had it, so no observed wrong outcome is left behind. A shape with no measured instance is not a known defect that FR-009 would make the plan file."
+    },
+    {
+     "id": "T61-4 phases.log waits deferred to T71",
+     "summary": "The 2 of 8 false firings on phases.log (an agent appending from separate foreground calls, no process between them) still read gone; filed as T71, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The /proc walk that T61's line names cannot reach these cases at all, because no process exists between the agent's calls. The defect is not dropped: it is filed as T71 with its reason and its order (lands before T22), which is what FR-009 requires of a deferral."
+    },
+    {
+     "id": "T61-5 wrapper called by clean path",
+     "summary": "writer-alive.sh calls the l7r-guard wrapper by its directory's clean path, not lib/../, which had made the wrapper run a stale build; the wrapper's own normalization line (absolute paths with ..) is left, reported, with no caller reaching it.",
+     "class": "within",
+     "why": "The defect the task hit is fixed at its only caller, and a repository grep found no other caller through '..'. The line left in scripts/hooks/l7r-guard.sh produces no wrong outcome with no caller reaching it, and the GM's request never asked for wrapper hardening, so leaving it narrows nothing that was asked."
+    },
+    {
+     "id": "T61-6 clause shape and wait.rs unchanged",
+     "summary": "The rewritten clause (writer-alive.sh \"<file>\" || exit 3) keeps its shape, so PROOF_CLAUSE and stale_waiters keep working; shared/src/wait.rs left.",
+     "class": "within",
+     "why": "Keeps the 451 T16 fix in place and inside the brief's files. It is an implementation choice and leaves out no part of the request."
+    },
+    {
+     "id": "T61-7 SCRIPT_BYTES knob",
+     "summary": "New constant SCRIPT_BYTES = 256 KiB, labeled a GUESS and a knob (the largest repo script measured at 48,086 bytes).",
+     "class": "within",
+     "why": "An implementation constant, labeled as the project requires. It does not narrow the request."
+    },
+    {
+     "id": "T61-8 real home for the wrapper",
+     "summary": "The helper asks the wrapper under the real home from the password database, as guard-shim.sh pins it, since a suite part moves HOME.",
+     "class": "within",
+     "why": "Makes the helper work under the test harness. It is implementation detail that changes no scope."
+    },
+    {
+     "id": "T61-9 perf classification",
+     "summary": "T61 is a [perf] task under 451 FR-013: it makes the builders' loop faster (no early false gone, no re-wait).",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work, and the GM's 2026-11-20 words ask for performance work first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T62": {
+   "section_sha256": "c2843f6d9584867853c8e9b200ac49bedc28c4487fea3ae1203c725e24c506a6",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T62-D1 parked_by as the backstop's third dispatcher source",
+     "summary": "clone_sync_hooks::parked_by treats the session whose record's parkedJobId equals this session's own jobId as its dispatcher, after L7R_DISPATCHER and forked_from, read in one pass over ~/.claude/sessions/*.json",
+     "class": "within",
+     "why": "Fixes a measured defect (a check refusing good work: the parked job's first edit of a clean clone refused, its builder falling back to exact-replacement scripts that skip every Edit and Write hook). That fallback defeats the GM's 'make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19), and fixing known defects as found is the standing rule. It follows the same dispatcher pattern forked_from and L7R_DISPATCHER already carry, and widens nothing past the job's own parker."
+    },
+    {
+     "id": "T62-D2 empty ids match nothing",
+     "summary": "an empty jobId, parkedJobId or session id matches no record",
+     "class": "within",
+     "why": "Keeps the new source from matching every record that lacks the field; it keeps the backstop as strict as before for anything that is not a real parked job."
+    },
+    {
+     "id": "T62-D3 sid_is_live and the dirty-clone early exit unchanged",
+     "summary": "a live claimant that did not park the job still refuses it; two sessions never write one clone",
+     "class": "within",
+     "why": "Keeps the backstop's purpose (docs/session-clones.md) whole. The refusal is lifted only for the claimant's own parked job, and the red-first shell twin ('did NOT park -> still blocked') pins that."
+    },
+    {
+     "id": "T62-D4 no rule for a parker that starts a new conversation",
+     "summary": "the unmeasured case of a parked interactive session keeping parkedJobId under a new session id gets no rule",
+     "class": "within",
+     "why": "No such record was found, so a rule would be a guess. Leaving it out narrows nothing the request or spec asked for; the task's line names only parkedJobId equal to this jobId."
+    },
+    {
+     "id": "T62-D5 the claim restated by measurement, tasks.md line left as filed",
+     "summary": "'refuses every Edit and Write' restated as 'the first edit of a clean clone, the job's main thread included'; T62's tasks.md line kept for the dispatcher",
+     "class": "within",
+     "why": "A claim the measurement contradicts is fixed by restating the claim (constitution XIV). The fix covers the measured scope, which is wider than the builder-only reading, so nothing is narrowed."
+    },
+    {
+     "id": "T62-D6 edit scope and isolation from T57/T58",
+     "summary": "edits only in clone_sync_hooks and its tests, the shell suite, two docs rows and this section; T57's rustc crate and T58's worktree untouched",
+     "class": "within",
+     "why": "Limits the change to the defect's own mechanism and adds nothing unrequested."
+    },
+    {
+     "id": "T62-D7 order and performance classification",
+     "summary": "after T57's Found and left filed it, before T22; 'Performance work? no'; budget one landing",
+     "class": "within",
+     "why": "A guard fix that measures and speeds up nothing is correctly classed as not performance or measurement work under FR-013 and the GM's 2026-11-20 words, so the scheduler sees it as it is. Whether starting it ahead of an open performance task needs an escape is FR-013's guard's call at start time, and this section does not override it."
+    },
+    {
+     "id": "T62-D8 exits and done-measures",
+     "summary": "red-first Rust test and shell case, the crate's tests, lint, format, coverage, dead code, and the replay that allows the job and refuses a stranger",
+     "class": "within",
+     "why": "Tests that fail only when the requested fix is absent, plus a pin that the stranger is still refused. This is enforcement of the fix, not unrequested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T63": {
+   "section_sha256": "ed3689c7881d6809d9347b0fcc37b807e1a774cfa3c871a467bbed0ee819312c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T63-measure-first",
+     "summary": "The fix's scope is set by a replay of the whole make-only guard log (286 refusals, 250 still standing; each still-refused program re-judged with its body blanked), finding 4 read-only programs among the refusals",
+     "class": "within",
+     "why": "T63's line asks to measure first which refusals were of read-only scripts; this is that measurement, labeled with date and method, and its partition (155+21+4 refusals of the 250, 196 refused rows with no Python program across refusals and escapes) is internally consistent."
+    },
+    {
+     "id": "T63-fix-in-py_c",
+     "summary": "The fix goes in py_c alone, the one judge of whether a Python program writes; make_only_hooks.rs and interp.rs untouched",
+     "class": "within",
+     "why": "Where the fix lives decides nothing about what passes; the line asks that a read-only heredoc pass, and fixing the judge that misread it does exactly that."
+    },
+    {
+     "id": "T63-FIXED_OPTION",
+     "summary": "An f-string argv element of the form --name={value}, the name literal and the value holding no ( ) \\ $ or line break, is judged as the literal option --name=_; writes_flag still judges it by its name, so writing options (--output=, --out=, --ext-diff=, grep's --filter=) stay writes",
+     "class": "within",
+     "why": "This is the mechanism that makes the one measured read-only heredoc not importing tree code (T58's, 2026-11-21T05:51:53Z) pass, which the line asks for; the writing-option names staying refused keeps the line's own condition (opens no file for writing). The placeholder _ is sound because writes_flag reads only the option name."
+    },
+    {
+     "id": "T63-residual-shapes-refused",
+     "summary": "f-string elements whose option name or effect py_c cannot know stay a write: a call, escape or $ in the value, short options, a field in the name (f'--{o}={x}'), no = (f'--since{x}', which a field can complete into another option name), a git global option before the subcommand, an option as the command, a writing subcommand",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read literally, the line ('a heredoc that opens no file for writing passes') would also pass a read-only program written in these shapes, so keeping them refused narrows it. But a static judge cannot tell that such an element writes nothing: a call in the value can itself open a file for writing (the plan's own {open(\"Makefile\", \"w\")} case), and a field in or right after the option name can render to a writing option. Passing them would let writes through, which defeats the guard the GM asked to be real enforcement (2026-11-19). The measured log holds no read-only refusal of these shapes (the 4 read-only programs are all accounted for), so the narrowing costs no measured case."
+    },
+    {
+     "id": "T63-tree-importers-stay-refused",
+     "summary": "The 3 programs of 2026-11-21T01:55:09Z (twice) and 01:55:10Z (T42's replay), which open nothing for writing in their own text but put scripts/ on sys.path and import _hm_house, the tree's own code, stay refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are refusals of programs whose own text opens nothing for writing, so the line read literally would pass them. But the line's condition is that the program opens no file for writing, and a program that imports tree code runs that code, which py_c does not read and which can be edited to write anything, a guard file included. So the condition cannot be established for these programs. Passing them would also open a direct bypass of the make-only guard: put the write in an importable helper and import it. That defeats the purpose of the guard the line refines, and the GM asked on 2026-11-19 that enforcement be real enforcement, not instructions. Refusing what cannot be judged is the guard's designed behavior, not a check refusing known-good work, so this leaves no defect behind. One episode (3 rows, one replay) is affected, and it can still take the existing recorded escape."
+    },
+    {
+     "id": "T63-red-first-and-pins",
+     "summary": "Red first on T58's heredoc verbatim (unit test and make-only suite case, both failing before, passing after), plus 18 refuse cases and a --output= suite twin pinned as writes before and after",
+     "class": "within",
+     "why": "The line asks for red first on the refused script's shape. The pins only enforce that the change passes nothing that writes, which serves the request (enforcement, not new behavior)."
+    },
+    {
+     "id": "T63-replay-flips-one",
+     "summary": "Done is measured by replaying the whole guard log on the new binary and comparing it row by row with the replay before T63: exactly one row (T58's) flips, refused to passed, and no writing, shell-refused, non-Python or tree-importing row changes",
+     "class": "within",
+     "why": "This verifies that the change does what the line asks and nothing more; it adds no behavior."
+    },
+    {
+     "id": "T63-c-programs-same",
+     "summary": "A python -c program reaches py_c the same way as a heredoc and is read by the same rule",
+     "class": "within",
+     "why": "It is the same judge reading the same program text. The line names a heredoc as the measured case, not as an exclusion, and a -c program that opens no file for writing is the same thing in another shape."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T64": {
+   "section_sha256": "89513f564558ba5fa112b8cb3d736c346ef6bc31fd54f93054e8b418167b4f80",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T64-key",
+     "summary": "The order notice skips an edit once its own task has a landing after it in the log (keyed on the edit's task), not keyed on the decide's task and not on the decide's task's landing-else-first-start",
+     "class": "within",
+     "why": "A fix to a wrong outcome (constitution XIV): the main session was told about a Makefile edit that had landed hours before, which teaches it to ignore the notice. The block measured that keying on the decide's task drops none of the 22 wrong firings (127 -> 127), so it would not fix the defect. The start-based reading also drops 2 right firings (a builder's unlanded edit made before its task's first start). Keying on the edit's task removes exactly the 22, all on landed edits, and keeps every unlanded builder edit, which is the notice's job under FR-013's builders' loop. This is the fix that does what it says it is for; it narrows nothing the GM asked."
+    },
+    {
+     "id": "T64-landed-rule",
+     "summary": "'Landed' reuses static_runs_hooks' rule: a Phase end line with landed true whose tasks names the task, whatever its exit code",
+     "class": "within",
+     "why": "Reuses one existing definition rather than a second one; it decides how the fix is built, not what was asked."
+    },
+    {
+     "id": "T64-any-caller",
+     "summary": "Landing lines are not filtered by caller, so the main session's make land lands a builder's edits of its tasks",
+     "class": "within",
+     "why": "Measured: all 21 landings in 451's log are the main session's lines, so filtering by caller would leave every builder edit unlanded forever and keep the defect for builders. Needed for the fix to work."
+    },
+    {
+     "id": "T64-taskless",
+     "summary": "An edit with no task is never skipped and counts as before",
+     "class": "within",
+     "why": "Keeps T55's behavior where no landing can name the edit; measured 127 such lines, all from 2026-11-20 04h-06h before edits carried a task, so nothing current is affected. Borrowing the decide's task would guess; leaving them as they were narrows nothing."
+    },
+    {
+     "id": "T64-text",
+     "summary": "The notice's wording becomes 'your last code edit not landed'",
+     "class": "within",
+     "why": "Says what the fixed rule now reads; wording only."
+    },
+    {
+     "id": "T64-kept",
+     "summary": "T55's other rules kept: caller by agent_id else session_id, start = a closing-checks line that ran, a notice never a refusal; only order.rs, its tests, the static-runs suite and the section edited",
+     "class": "within",
+     "why": "Leaves the rest of the notice as it was built; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T64-static-red",
+     "summary": "make closing-checks' static step was red on T56's builder's uncommitted measure test; left to that builder, and item 6's green exit stated as not yet met, with a re-run waiting on T56",
+     "class": "within",
+     "why": "Not a defect this task found in its own scope or carries forward: it is another task's work in progress, and the plan says plainly that its own exit is not met yet instead of claiming green. How execution proceeds, not a narrowing of the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T65": {
+   "section_sha256": "c5d7c3eef30c212ef0a8ee7f2dbb4e264d1d3a816e6222bf655df7f11d71beef",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T65-ordered-reader",
+     "summary": "running reads the transcript once, in order, line at a time; each line's events sorted by place; an id's last word kept (launched/resumed/interim), a final notice or stop drops it",
+     "class": "within",
+     "why": "T65's line as filed: the transcript read in order, an agent's last launch or resume after its last notification running. This is that rule, implemented."
+    },
+    {
+     "id": "T65-resume-key",
+     "summary": "a SendMessage resume is read from resumedAgentId in the tool's own record, as LAUNCHED's third key",
+     "class": "within",
+     "why": "T65's line: a resume after a notice reads as running; the key's shape is measured from a real transcript (153 records)."
+    },
+    {
+     "id": "T65-interim-via-own-transcript",
+     "summary": "an interim notice ends nothing by itself; an agent whose last word is interim runs while its own transcript holds its own work running, an interim sub-agent (cycle-guarded), or a wake since its last turn's end - not the literal 'interim never final'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the dispatch's 'an interim notice is not final' read literally (neither request.md nor the spec says interim is never final). The literal reading defeats the purpose of the Stop hook's test FR-013 relies on (set_down_hooks.rs): 8 agents never notified again, so the guard would be silent from line 2,132 of 50,891 for the rest of the session, 32 wrong turn ends (measured 2026-11-21, sim.py/stops.py). The adopted reading still treats an interim notice as non-final - running-ness is decided by the agent's own work - and its replay agrees with the approximate truth at all 1,868 turn ends. The plan states the departure openly under 'Why not the literal rule'."
+    },
+    {
+     "id": "T65-turn-end-text-block",
+     "summary": "a turn's end is read from the end_turn record holding the text block, not any end_turn record (the thinking record carries end_turn first)",
+     "class": "within",
+     "why": "Makes the interim reading correct on a measured case (a4e93c6a, 19 s gap); no scope beyond the task's reader."
+    },
+    {
+     "id": "T65-second-read-lazy",
+     "summary": "the interim agents' own transcripts are read only when the parent's read leaves nothing plainly running",
+     "class": "within",
+     "why": "The guard's question is whether anything runs; skipping the second read when something plainly runs changes no verdict and costs 45-70 ms less (measured). Within the performance-first rule FR-013."
+    },
+    {
+     "id": "T65-no-own-transcript",
+     "summary": "an interim agent with no transcript of its own reads not running, as before",
+     "class": "within",
+     "why": "Keeps existing behavior on a case measured to be correct (the first of the 8 never-notified agents, line 2,132, has no transcript and never ran again); not a defect left."
+    },
+    {
+     "id": "T65-blob-skip",
+     "summary": "api-request-blob lines are not read, since they re-emit old notices that would end a resumed agent",
+     "class": "within",
+     "why": "Required for the ordered reading to be correct; measured that no task-id appears only in a blob across 12 transcripts, so no notice is lost."
+    },
+    {
+     "id": "T65-bash-runs-unchanged",
+     "summary": "a background Bash run's launch and notice read as before; T66 and T11 left alone",
+     "class": "within",
+     "why": "The dispatch's constraint and the task's scope; no request clause is dropped."
+    },
+    {
+     "id": "T65-red-first-and-acceptance",
+     "summary": "five tests red first (4 failed, the no-file case passed, pinning kept behavior); the thinking-record assertion added with the turn-end fix and not run red; a temporary real-transcript acceptance test removed before the closing checks",
+     "class": "within",
+     "why": "T65's line asks red first on a resume after a notice, which was run red. FR-012's red-first rule covers the refusals of FR-006-FR-009, FR-011 and FR-013, and a Stop-hook reading fix is not one of those refusals, so the one assertion not run red narrows nothing that was asked."
+    },
+    {
+     "id": "T65-perf-class",
+     "summary": "T65 classed as performance work ([perf], FR-013): keeps the builders' loop running unrefused; no performance-checklist answers since not engine speed",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; a Stop hook that wrongly refuses turns while builders run slows that loop."
+    },
+    {
+     "id": "T65-found-and-left-none",
+     "summary": "nothing found and left",
+     "class": "within",
+     "why": "The final replay leaves no wrong turn end against the approximate truth; no defect is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T60 (the context cap named a builder's handoff under its call's cwd: 2 handoffs, T10's `T10-aa6406892e465f0a5.md` and T55's `T55-abe836de838b025ad.md`, in the mirror's `/diagram/.git/l7r-handoffs/`, against 56 entries in the clone's (55 handoffs and the `T59-scripts` directory), measured 2026-11-21 (`ls` of both))",
+    "### T60 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T60-seat",
+     "summary": "The handoff's tree is the session's clone (shared::session clone_dir: claim map, else session name) where it is a work tree, else the cwd's tree as today",
+     "class": "within",
+     "why": "FR-006/D9 put the handoff under the git common dir of the tree the session works in, and approved improvement 1 has the session find it in one place. Routing it by the same resolve clone_sync_hooks uses for edits carries out what was asked. Falling back to the cwd's tree only keeps today's answer where no clone resolves."
+    },
+    {
+     "id": "T60-seat-lazy",
+     "summary": "The seat is resolved only past the cap or on a resume of a builder (a closure into judge)",
+     "class": "within",
+     "why": "This keeps D8/D9 as specified: the main session and a defined agent are never read, and no other call does any new work."
+    },
+    {
+     "id": "T60-four-reads",
+     "summary": "The handoff directory, the task in its name (filed_at with cwd set to the seat), the context-ok permit key (<clone>/context-cap:<aid>) and a resume's handoff/probe (D10) all read the one tree the seat gives",
+     "class": "within",
+     "why": "D9's handoff path, its task-named file, its make context-ok permit and D10's resume are one mechanism. If the four read different trees, the refusal, the Write exemption and the permit would disagree. Keying the permit by the clone makes it match where make context-ok grants it."
+    },
+    {
+     "id": "T60-cwd-gate-outside-tree",
+     "summary": "A call whose cwd is outside any git tree still passes the cap, as today",
+     "class": "within",
+     "why": "This is existing behavior that T60 keeps, not a new carve-out. T60 was filed to fix where the handoff is named, not when the cap fires. The bundle records no wrong outcome from it: no builder past the cap is found passing this way."
+    },
+    {
+     "id": "T60-defined-agent-stat-cwd",
+     "summary": "D8's defined-agent stat (.claude/agents/<type>.md) still reads the cwd's tree, not the seat",
+     "class": "within",
+     "why": "This is existing behavior that T60 keeps. It lies outside the four reads the task was filed to move. The bundle records no wrong outcome: no agent is misclassed because the mirror's agents directory differs from the clone's. Under the defect rule, a difference that produces no wrong outcome is not one."
+    },
+    {
+     "id": "T60-red-first",
+     "summary": "A red-first case: from the mirror, the refusal names the clone's T60-<aid>.md, a Write there passes and one to the mirror is refused, a resume names the clone's file, the cwd fallbacks hold, and the clone-keyed grant lets the call through. Red recorded at 416+1 failing, green at 417",
+     "class": "within",
+     "why": "FR-012 requires a red-first test of the refusal, and this case covers the requested behavior and its permit. It only enforces what was asked."
+    },
+    {
+     "id": "T60-move",
+     "summary": "The two misrouted handoffs in the mirror's .git/l7r-handoffs (byte-identical to the clone's copies, per cmp) are moved with a recorded MAIN_TREE_OK mv, and the empty directory is removed",
+     "class": "within",
+     "why": "The task as filed asks for this cleanup. The handoffs end up in the one place the request wants them, and the mv is recorded."
+    },
+    {
+     "id": "T60-T74-deferral",
+     "summary": "The event log's cwd filing (364 lines of 451 in the mirror, unseen by where-time in the clone) is left to T74, which lands before T22",
+     "class": "within",
+     "why": "T60 was not asked to fix the event log. The defect stays owed inside feature 451 as a filed task with an order. The item carries FR-009's three parts: why it is not fixed here (event_log_hooks is a shared module outside T60's files), the filed id T74, and 'lands before T22'. It drops nothing the GM asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T61 (the finding as filed, restated by its measurement: `writer-alive.sh`, the proof of life the no-poll rewrite adds to a file wait, read a file nothing held open and nothing wrote for 45 s (its `STALE` knob) as a dead run, so a run appending to its summary only between steps was called gone while it ran - T55's builder's `until grep -q \"^total\" /tmp/t55/seq.times` ended at 55 s, exit 3, and T58's on `/tmp/t58/checks2.txt`, measured 2026-11-21 (the two waits' task outputs, `bd0e5tuie` and `bbuzlgz5p`, read for the helper's line), and of the 11 firings whose wait's output was still on disk, 8 were followed by a write to the file, measured 2026-11-21 (the session's `tasks/*.output` grepped for the helper's \"gone\" line, each watched file's mtime against its wait's end))",
+    "### T61 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T61-1 process walk before gone",
+     "summary": "Before writer-alive.sh says gone it asks l7r-guard --finished-run alive, which uses the existing /proc walk (by pid, never by pattern) to find a live process outside the asker's ancestry whose command line or started script text writes the file (>, >>, >|, &>, tee).",
+     "class": "within",
+     "why": "This is what T61's line asks (ask the run's own process through finished_run_hooks' /proc walk, red first on a quiet log over a live run) and what its second brief asks (count only a process whose text WRITES the file). It serves FR-013 [perf] and the 2026-11-19 approval of the builders'-loop improvements."
+    },
+    {
+     "id": "T61-2 readers are no proof of life",
+     "summary": "A process that only names the file (a Monitor tail -f | grep in a bash -c wrapper, an until [ -s f ] wait) is not life; reader arguments (READERS) are never read as scripts; the held-open answer counts only a descriptor opened for writing (fdinfo flags), replacing fuser -s.",
+     "class": "within",
+     "why": "Fixes a defect the task found (a reader held a dead run's wait to its 90-minute ceiling, measured red first in round 2); it is the second brief's 'two reader shapes pinned dead'."
+    },
+    {
+     "id": "T61-3 non-redirect writers still read gone",
+     "summary": "A run that writes without shell redirection or tee (Python open(), sort -o) still reads gone once 45 s quiet; parsing each language's writes priced and not built.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the brief's 'a process whose text WRITES the file' to shell writes. Ruled on purpose: the only way to count such writers without parsing every language is to count a process that names the file, and the task measured that this keeps dead waits alive to the 90-minute ceiling, which defeats the purpose. The shape left behaves as it did before T61, and none of the 8 measured false firings had it, so no observed wrong outcome is left behind. A shape with no measured instance is not a known defect that FR-009 would make the plan file."
+    },
+    {
+     "id": "T61-4 phases.log waits deferred to T71",
+     "summary": "The 2 of 8 false firings on phases.log (an agent appending from separate foreground calls, no process between them) still read gone; filed as T71, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The /proc walk that T61's line names cannot reach these cases at all, because no process exists between the agent's calls. The defect is not dropped: it is filed as T71 with its reason and its order (lands before T22), which is what FR-009 requires of a deferral."
+    },
+    {
+     "id": "T61-5 wrapper called by clean path",
+     "summary": "writer-alive.sh calls the l7r-guard wrapper by its directory's clean path, not lib/../, which had made the wrapper run a stale build; the wrapper's own normalization line (absolute paths with ..) is left, reported, with no caller reaching it.",
+     "class": "within",
+     "why": "The defect the task hit is fixed at its only caller, and a repository grep found no other caller through '..'. The line left in scripts/hooks/l7r-guard.sh produces no wrong outcome with no caller reaching it, and the GM's request never asked for wrapper hardening, so leaving it narrows nothing that was asked."
+    },
+    {
+     "id": "T61-6 clause shape and wait.rs unchanged",
+     "summary": "The rewritten clause (writer-alive.sh \"<file>\" || exit 3) keeps its shape, so PROOF_CLAUSE and stale_waiters keep working; shared/src/wait.rs left.",
+     "class": "within",
+     "why": "Keeps the 451 T16 fix in place and inside the brief's files. It is an implementation choice and leaves out no part of the request."
+    },
+    {
+     "id": "T61-7 SCRIPT_BYTES knob",
+     "summary": "New constant SCRIPT_BYTES = 256 KiB, labeled a GUESS and a knob (the largest repo script measured at 48,086 bytes).",
+     "class": "within",
+     "why": "An implementation constant, labeled as the project requires. It does not narrow the request."
+    },
+    {
+     "id": "T61-8 real home for the wrapper",
+     "summary": "The helper asks the wrapper under the real home from the password database, as guard-shim.sh pins it, since a suite part moves HOME.",
+     "class": "within",
+     "why": "Makes the helper work under the test harness. It is implementation detail that changes no scope."
+    },
+    {
+     "id": "T61-9 perf classification",
+     "summary": "T61 is a [perf] task under 451 FR-013: it makes the builders' loop faster (no early false gone, no re-wait).",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work, and the GM's 2026-11-20 words ask for performance work first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T62 (the finding as filed, restated by its measurement: the backstop refuses the job session's FIRST edit of a CLEAN clone, its main thread's and its builders' alike - every builder is an in-process subagent of the job `c6fd72d1` and carries its session id, and a dirty clone is let through before the backstop runs - because the live interactive session `d2dc8c63` that parked the job claims the clone and `forked_from` knows no parent of a `claude bg-spare` job; measured 2026-11-21 (the guard log, the 451 event log, the session records and a replay of the mirror's binary))",
+    "### T62 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T62-D1 parked_by as the backstop's third dispatcher source",
+     "summary": "clone_sync_hooks::parked_by treats the session whose record's parkedJobId equals this session's own jobId as its dispatcher, after L7R_DISPATCHER and forked_from, read in one pass over ~/.claude/sessions/*.json",
+     "class": "within",
+     "why": "Fixes a measured defect (a check refusing good work: the parked job's first edit of a clean clone refused, its builder falling back to exact-replacement scripts that skip every Edit and Write hook). That fallback defeats the GM's 'make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19), and fixing known defects as found is the standing rule. It follows the same dispatcher pattern forked_from and L7R_DISPATCHER already carry, and widens nothing past the job's own parker."
+    },
+    {
+     "id": "T62-D2 empty ids match nothing",
+     "summary": "an empty jobId, parkedJobId or session id matches no record",
+     "class": "within",
+     "why": "Keeps the new source from matching every record that lacks the field; it keeps the backstop as strict as before for anything that is not a real parked job."
+    },
+    {
+     "id": "T62-D3 sid_is_live and the dirty-clone early exit unchanged",
+     "summary": "a live claimant that did not park the job still refuses it; two sessions never write one clone",
+     "class": "within",
+     "why": "Keeps the backstop's purpose (docs/session-clones.md) whole. The refusal is lifted only for the claimant's own parked job, and the red-first shell twin ('did NOT park -> still blocked') pins that."
+    },
+    {
+     "id": "T62-D4 no rule for a parker that starts a new conversation",
+     "summary": "the unmeasured case of a parked interactive session keeping parkedJobId under a new session id gets no rule",
+     "class": "within",
+     "why": "No such record was found, so a rule would be a guess. Leaving it out narrows nothing the request or spec asked for; the task's line names only parkedJobId equal to this jobId."
+    },
+    {
+     "id": "T62-D5 the claim restated by measurement, tasks.md line left as filed",
+     "summary": "'refuses every Edit and Write' restated as 'the first edit of a clean clone, the job's main thread included'; T62's tasks.md line kept for the dispatcher",
+     "class": "within",
+     "why": "A claim the measurement contradicts is fixed by restating the claim (constitution XIV). The fix covers the measured scope, which is wider than the builder-only reading, so nothing is narrowed."
+    },
+    {
+     "id": "T62-D6 edit scope and isolation from T57/T58",
+     "summary": "edits only in clone_sync_hooks and its tests, the shell suite, two docs rows and this section; T57's rustc crate and T58's worktree untouched",
+     "class": "within",
+     "why": "Limits the change to the defect's own mechanism and adds nothing unrequested."
+    },
+    {
+     "id": "T62-D7 order and performance classification",
+     "summary": "after T57's Found and left filed it, before T22; 'Performance work? no'; budget one landing",
+     "class": "within",
+     "why": "A guard fix that measures and speeds up nothing is correctly classed as not performance or measurement work under FR-013 and the GM's 2026-11-20 words, so the scheduler sees it as it is. Whether starting it ahead of an open performance task needs an escape is FR-013's guard's call at start time, and this section does not override it."
+    },
+    {
+     "id": "T62-D8 exits and done-measures",
+     "summary": "red-first Rust test and shell case, the crate's tests, lint, format, coverage, dead code, and the replay that allows the job and refuses a stranger",
+     "class": "within",
+     "why": "Tests that fail only when the requested fix is absent, plus a pin that the stranger is still refused. This is enforcement of the fix, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T63 (the make-only guard refused T58's read-only heredoc over the event logs as a guard-file write; of the 250 make-only refusals still standing when the guard log was replayed, 4 were of programs that open nothing for writing and 1 of them, that heredoc, imports none of the tree's code, measured 2026-11-21 (the guard log replayed through `tests/hooks/make-only-hooks.sh` and each refused program re-judged with its body blanked))",
+    "### T63 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T63-measure-first",
+     "summary": "The fix's scope is set by a replay of the whole make-only guard log (286 refusals, 250 still standing; each still-refused program re-judged with its body blanked), finding 4 read-only programs among the refusals",
+     "class": "within",
+     "why": "T63's line asks to measure first which refusals were of read-only scripts; this is that measurement, labeled with date and method, and its partition (155+21+4 refusals of the 250, 196 refused rows with no Python program across refusals and escapes) is internally consistent."
+    },
+    {
+     "id": "T63-fix-in-py_c",
+     "summary": "The fix goes in py_c alone, the one judge of whether a Python program writes; make_only_hooks.rs and interp.rs untouched",
+     "class": "within",
+     "why": "Where the fix lives decides nothing about what passes; the line asks that a read-only heredoc pass, and fixing the judge that misread it does exactly that."
+    },
+    {
+     "id": "T63-FIXED_OPTION",
+     "summary": "An f-string argv element of the form --name={value}, the name literal and the value holding no ( ) \\ $ or line break, is judged as the literal option --name=_; writes_flag still judges it by its name, so writing options (--output=, --out=, --ext-diff=, grep's --filter=) stay writes",
+     "class": "within",
+     "why": "This is the mechanism that makes the one measured read-only heredoc not importing tree code (T58's, 2026-11-21T05:51:53Z) pass, which the line asks for; the writing-option names staying refused keeps the line's own condition (opens no file for writing). The placeholder _ is sound because writes_flag reads only the option name."
+    },
+    {
+     "id": "T63-residual-shapes-refused",
+     "summary": "f-string elements whose option name or effect py_c cannot know stay a write: a call, escape or $ in the value, short options, a field in the name (f'--{o}={x}'), no = (f'--since{x}', which a field can complete into another option name), a git global option before the subcommand, an option as the command, a writing subcommand",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read literally, the line ('a heredoc that opens no file for writing passes') would also pass a read-only program written in these shapes, so keeping them refused narrows it. But a static judge cannot tell that such an element writes nothing: a call in the value can itself open a file for writing (the plan's own {open(\"Makefile\", \"w\")} case), and a field in or right after the option name can render to a writing option. Passing them would let writes through, which defeats the guard the GM asked to be real enforcement (2026-11-19). The measured log holds no read-only refusal of these shapes (the 4 read-only programs are all accounted for), so the narrowing costs no measured case."
+    },
+    {
+     "id": "T63-tree-importers-stay-refused",
+     "summary": "The 3 programs of 2026-11-21T01:55:09Z (twice) and 01:55:10Z (T42's replay), which open nothing for writing in their own text but put scripts/ on sys.path and import _hm_house, the tree's own code, stay refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are refusals of programs whose own text opens nothing for writing, so the line read literally would pass them. But the line's condition is that the program opens no file for writing, and a program that imports tree code runs that code, which py_c does not read and which can be edited to write anything, a guard file included. So the condition cannot be established for these programs. Passing them would also open a direct bypass of the make-only guard: put the write in an importable helper and import it. That defeats the purpose of the guard the line refines, and the GM asked on 2026-11-19 that enforcement be real enforcement, not instructions. Refusing what cannot be judged is the guard's designed behavior, not a check refusing known-good work, so this leaves no defect behind. One episode (3 rows, one replay) is affected, and it can still take the existing recorded escape."
+    },
+    {
+     "id": "T63-red-first-and-pins",
+     "summary": "Red first on T58's heredoc verbatim (unit test and make-only suite case, both failing before, passing after), plus 18 refuse cases and a --output= suite twin pinned as writes before and after",
+     "class": "within",
+     "why": "The line asks for red first on the refused script's shape. The pins only enforce that the change passes nothing that writes, which serves the request (enforcement, not new behavior)."
+    },
+    {
+     "id": "T63-replay-flips-one",
+     "summary": "Done is measured by replaying the whole guard log on the new binary and comparing it row by row with the replay before T63: exactly one row (T58's) flips, refused to passed, and no writing, shell-refused, non-Python or tree-importing row changes",
+     "class": "within",
+     "why": "This verifies that the change does what the line asks and nothing more; it adds no behavior."
+    },
+    {
+     "id": "T63-c-programs-same",
+     "summary": "A python -c program reaches py_c the same way as a heredoc and is read by the same rule",
+     "class": "within",
+     "why": "It is the same judge reading the same program text. The line names a heredoc as the measured case, not as an exclusion, and a -c program that opens no file for writing is the same thing in another shape."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T64 (T55's order notice counted a code edit already landed: the main session was told at its `make decide` calls that its Makefile edit of 2026-11-20T15:48:51Z, filed under T12, had no closing-checks after it, though T12 landed at 15:55:22Z; replayed over 451's log, 22 of the rule's 127 firings at 211 decides were on an edit its task had landed, all the main session's, measured 2026-11-21 (`/tmp/claude-T64/replay.py`, the decide rule replayed over `.git/l7r-events/451-time-retro-and-efficiency.jsonl` to its last line at 2026-11-21T08:09:00Z))",
+    "### T64 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T64-key",
+     "summary": "The order notice skips an edit once its own task has a landing after it in the log (keyed on the edit's task), not keyed on the decide's task and not on the decide's task's landing-else-first-start",
+     "class": "within",
+     "why": "A fix to a wrong outcome (constitution XIV): the main session was told about a Makefile edit that had landed hours before, which teaches it to ignore the notice. The block measured that keying on the decide's task drops none of the 22 wrong firings (127 -> 127), so it would not fix the defect. The start-based reading also drops 2 right firings (a builder's unlanded edit made before its task's first start). Keying on the edit's task removes exactly the 22, all on landed edits, and keeps every unlanded builder edit, which is the notice's job under FR-013's builders' loop. This is the fix that does what it says it is for; it narrows nothing the GM asked."
+    },
+    {
+     "id": "T64-landed-rule",
+     "summary": "'Landed' reuses static_runs_hooks' rule: a Phase end line with landed true whose tasks names the task, whatever its exit code",
+     "class": "within",
+     "why": "Reuses one existing definition rather than a second one; it decides how the fix is built, not what was asked."
+    },
+    {
+     "id": "T64-any-caller",
+     "summary": "Landing lines are not filtered by caller, so the main session's make land lands a builder's edits of its tasks",
+     "class": "within",
+     "why": "Measured: all 21 landings in 451's log are the main session's lines, so filtering by caller would leave every builder edit unlanded forever and keep the defect for builders. Needed for the fix to work."
+    },
+    {
+     "id": "T64-taskless",
+     "summary": "An edit with no task is never skipped and counts as before",
+     "class": "within",
+     "why": "Keeps T55's behavior where no landing can name the edit; measured 127 such lines, all from 2026-11-20 04h-06h before edits carried a task, so nothing current is affected. Borrowing the decide's task would guess; leaving them as they were narrows nothing."
+    },
+    {
+     "id": "T64-text",
+     "summary": "The notice's wording becomes 'your last code edit not landed'",
+     "class": "within",
+     "why": "Says what the fixed rule now reads; wording only."
+    },
+    {
+     "id": "T64-kept",
+     "summary": "T55's other rules kept: caller by agent_id else session_id, start = a closing-checks line that ran, a notice never a refusal; only order.rs, its tests, the static-runs suite and the section edited",
+     "class": "within",
+     "why": "Leaves the rest of the notice as it was built; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T64-static-red",
+     "summary": "make closing-checks' static step was red on T56's builder's uncommitted measure test; left to that builder, and item 6's green exit stated as not yet met, with a re-run waiting on T56",
+     "class": "within",
+     "why": "Not a defect this task found in its own scope or carries forward: it is another task's work in progress, and the plan says plainly that its own exit is not met yet instead of claiming green. How execution proceeds, not a narrowing of the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T65 (the finding as filed, restated by its measurement: `set_down_hooks::running` read a transcript's launched and notified ids as two sets, so a SendMessage resume - its result's `\"resumedAgentId\":\"<id>\"`, 153 such records in the session `c6fd72d1-...jsonl` - was no launch and a resumed agent read as finished once it had notified, and an interim notice (`<summary>Agent \"...\" is waiting on its own background work</summary>`, its note \"the same task-id notifies again if it does; the result below may be interim\") ended its agent, which was waiting on its own work: resumes read, but an interim notice taken for final, \"nothing is running\" was read at 38 of that session's 1,864 turn ends while such an agent was alive, measured 2026-11-21 (a replay of the transcript and its agents' own transcripts, `/tmp/claude-T65/stops.py`, the truth approximate: an agent alive when its own transcript wrote again later without a parent resume first))",
+    "### T65 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T65-ordered-reader",
+     "summary": "running reads the transcript once, in order, line at a time; each line's events sorted by place; an id's last word kept (launched/resumed/interim), a final notice or stop drops it",
+     "class": "within",
+     "why": "T65's line as filed: the transcript read in order, an agent's last launch or resume after its last notification running. This is that rule, implemented."
+    },
+    {
+     "id": "T65-resume-key",
+     "summary": "a SendMessage resume is read from resumedAgentId in the tool's own record, as LAUNCHED's third key",
+     "class": "within",
+     "why": "T65's line: a resume after a notice reads as running; the key's shape is measured from a real transcript (153 records)."
+    },
+    {
+     "id": "T65-interim-via-own-transcript",
+     "summary": "an interim notice ends nothing by itself; an agent whose last word is interim runs while its own transcript holds its own work running, an interim sub-agent (cycle-guarded), or a wake since its last turn's end - not the literal 'interim never final'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the dispatch's 'an interim notice is not final' read literally (neither request.md nor the spec says interim is never final). The literal reading defeats the purpose of the Stop hook's test FR-013 relies on (set_down_hooks.rs): 8 agents never notified again, so the guard would be silent from line 2,132 of 50,891 for the rest of the session, 32 wrong turn ends (measured 2026-11-21, sim.py/stops.py). The adopted reading still treats an interim notice as non-final - running-ness is decided by the agent's own work - and its replay agrees with the approximate truth at all 1,868 turn ends. The plan states the departure openly under 'Why not the literal rule'."
+    },
+    {
+     "id": "T65-turn-end-text-block",
+     "summary": "a turn's end is read from the end_turn record holding the text block, not any end_turn record (the thinking record carries end_turn first)",
+     "class": "within",
+     "why": "Makes the interim reading correct on a measured case (a4e93c6a, 19 s gap); no scope beyond the task's reader."
+    },
+    {
+     "id": "T65-second-read-lazy",
+     "summary": "the interim agents' own transcripts are read only when the parent's read leaves nothing plainly running",
+     "class": "within",
+     "why": "The guard's question is whether anything runs; skipping the second read when something plainly runs changes no verdict and costs 45-70 ms less (measured). Within the performance-first rule FR-013."
+    },
+    {
+     "id": "T65-no-own-transcript",
+     "summary": "an interim agent with no transcript of its own reads not running, as before",
+     "class": "within",
+     "why": "Keeps existing behavior on a case measured to be correct (the first of the 8 never-notified agents, line 2,132, has no transcript and never ran again); not a defect left."
+    },
+    {
+     "id": "T65-blob-skip",
+     "summary": "api-request-blob lines are not read, since they re-emit old notices that would end a resumed agent",
+     "class": "within",
+     "why": "Required for the ordered reading to be correct; measured that no task-id appears only in a blob across 12 transcripts, so no notice is lost."
+    },
+    {
+     "id": "T65-bash-runs-unchanged",
+     "summary": "a background Bash run's launch and notice read as before; T66 and T11 left alone",
+     "class": "within",
+     "why": "The dispatch's constraint and the task's scope; no request clause is dropped."
+    },
+    {
+     "id": "T65-red-first-and-acceptance",
+     "summary": "five tests red first (4 failed, the no-file case passed, pinning kept behavior); the thinking-record assertion added with the turn-end fix and not run red; a temporary real-transcript acceptance test removed before the closing checks",
+     "class": "within",
+     "why": "T65's line asks red first on a resume after a notice, which was run red. FR-012's red-first rule covers the refusals of FR-006-FR-009, FR-011 and FR-013, and a Stop-hook reading fix is not one of those refusals, so the one assertion not run red narrows nothing that was asked."
+    },
+    {
+     "id": "T65-perf-class",
+     "summary": "T65 classed as performance work ([perf], FR-013): keeps the builders' loop running unrefused; no performance-checklist answers since not engine speed",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; a Stop hook that wrongly refuses turns while builders run slows that loop."
+    },
+    {
+     "id": "T65-found-and-left-none",
+     "summary": "nothing found and left",
+     "class": "within",
+     "why": "The final replay leaves no wrong turn end against the approximate truth; no defect is deferred."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T60 to T65, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

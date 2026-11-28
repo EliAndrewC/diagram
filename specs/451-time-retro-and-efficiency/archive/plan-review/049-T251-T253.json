@@ -1,0 +1,752 @@
+{
+ "blocks": {
+  "### T251 Approach (checklist part A)": {
+   "sha256": "677a1ae6d8a1f8af532c5e924b435708aef77205388749b93507c2789de4d7a9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T251 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, \"NOT a ruling\", is what such a claim cost once)": {
+   "sha256": "ca3f396696c2dfc33753e9105e76dca4886bd440f3caa00d17b7d0f4c0a0391e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T252 (T249's builder's closing run, 2026-11-25: test-closing-checks.sh case 1's static row reported FAIL while the output it printed showed it GREEN, observed 2026-11-25, method: that builder's report, quoted in tasks.md's T252)": {
+   "sha256": "0b3b768afdc91cf3dba26cb9ee057c1b1e870006d7d04f8fc6eaa7f3c39dea2d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T252 Approach (checklist part A)": {
+   "sha256": "fd60960c636480e5c13cda598a4a3c01fe665bc5772db83e9fbde3438da303b8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T253 (451 T252's found-and-left: the other pipefail guard suites grep a run's text through a pipe, 98 sites, observed 2026-11-25, method: T252's grep over the suites that set pipefail)": {
+   "sha256": "c8d7ea1a416420a0df2842f2616c8400ed96545e2390c4e242ec33f4641058a1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T253 Approach (checklist part A)": {
+   "sha256": "a2d115e22a41085a842cf7ee84dafa70ef90e98eff4bbb3548d90cf9df6f1c42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T251": {
+   "section_sha256": "8e64be402879b0fb0345775ceacd5dedd41a5ae3ec3decf46bbdf7bd28715167",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 five claims name their record",
+     "summary": "buildings at true size -> docs/gm-rulings.md; sheet follows its map and grove/burial knob -> specs/257 request.md; place.rs village half -> specs/156 request.md, town half -> l7r.md Demographics; threshold stones -> l7r.md Vermillion Threshold Stones, the two dated rulings with no record restated as this project's drawing rules",
+     "class": "within",
+     "why": "Exactly what the 2026-11-24 request asks (an attribution to the GM points at where his words are recorded). The two mixed-backing claims name a source for each half and say which half has none, rather than stretching one record over both."
+    },
+    {
+     "id": "D2 tub clear of the footprint -> pointer at 0100",
+     "summary": "CANON relabeled to a pointer at research/questions/0100 drawing page, which states the rule; the neighbouring no-tub-on-the-roof DEVIATION account names the claim instead of the ruling",
+     "class": "within",
+     "why": "The claim stops attributing anything to the GM, which is what was asked. 0100's own comment still names the same unrecorded ruling (this block says so), so the pointer only becomes clean once T250 fixes that comment; T250 is ordered before T251's claims round closes, so this converges and does not block."
+    },
+    {
+     "id": "D3 no screen axis -> CONVENTION",
+     "summary": "brook.rs twice: CANON -> CONVENTION; his 2026-08-26 words were of Inashiro's marsh edge, quoted only in a tasks.md, never of a brook",
+     "class": "within",
+     "why": "Removes an attribution his recorded words do not support and says whose extension the rule is; invents nothing."
+    },
+    {
+     "id": "D4 not in the reed fringe -> DEVIATION 0058",
+     "summary": "margins.rs: CANON -> DEVIATION research/questions/0058 (GUESS tried first, refused by claims-owed as a form problem)",
+     "class": "within",
+     "why": "An honest label for code that departs from its page, per the claims grammar; whether the departure is a defect is T264's (D10)."
+    },
+    {
+     "id": "D5 no gm-rulings.md entry minted",
+     "summary": "his brook and fringe words are not turned into a docs/gm-rulings.md entry to make a pointer",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-24 instruction and docs/gm-rulings.md 'NOT a ruling': his words back a different subject, and minting an entry would invent a ruling."
+    },
+    {
+     "id": "D6 baseline pruned",
+     "summary": "gm-attributions baseline 351 -> 341 lines, claim entries 10 -> 0, check silent rc 0",
+     "class": "within",
+     "why": "The T233 baseline is meant to shrink as attributions are fixed; the figures carry date and method."
+    },
+    {
+     "id": "D7 docs/buildings.md prose date tags",
+     "summary": "'GM 2026-09-26', 'GM 2026-07-25', 'GM rule 2026-07-25' beside the relabeled claims restated as this project's rule of <date> with no record of his words",
+     "class": "within",
+     "why": "Same class as the claims, in the same file, with a stated every-hit grep; removes reader-facing attributions with no record."
+    },
+    {
+     "id": "D8 claims round not run here",
+     "summary": "impl-drift claims round left to the coordinating session; each relabel framed as a MISLABELED for it to judge",
+     "class": "within",
+     "why": "The GM's 2026-11-25 approval of splitting the claims round off builders ('sounds good please do that ASAP')."
+    },
+    {
+     "id": "D9 0100 and 0039 page comments deferred to T250",
+     "summary": "page comments naming the same rulings left for T250, which lands before T251's claims round closes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not left: moved to a named task with an order inside this feature, and it closes before this task's claims round, so no claim here settles while its page still carries the unrecorded attribution. 0039's has a record (no defect); 0100's is the defect. Conditional on T250 existing as filed."
+    },
+    {
+     "id": "D10 margins.rs reed-fringe refusal deferred to T264",
+     "summary": "the code enforcing a rule 0058 declines is labeled DEVIATION and its removal filed as T264, lands before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruling only on the deferral: the work is engine code that moves maps, outside a comments-and-doc-lines task, and is moved to a named task with an order rather than left. Whether the refusal is a wrong outcome or a claim to restate (constitution XIV v2.36.0) is T264's question under the GM's 'if that is not what the research shows, then we shouldn't do it'. Conditional on T264 existing as filed."
+    },
+    {
+     "id": "D11a check pattern misses 'a GM ruling of <date>' -> T265",
+     "summary": "the gm-attributions check does not read the Inari dedication line's wording; fixing the pattern deferred to T265, lands before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A check that passes bad work is a defect, but changing the check's code is outside this task's comments-and-doc-lines scope, and it is moved to a named task with an order. Conditional on T265 existing as filed."
+    },
+    {
+     "id": "D11b the Inari dedication line itself left unrelabeled -> T265",
+     "summary": "docs/building-programs.md 'Inari the ordinary rural dedication, a GM ruling of 2026-09-20' not relabeled here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from D11a, because 'the pattern is the check's code' does not explain leaving a doc line this task already edits. The reason that does hold is the brief's limit to the baseline's entries, and leaving the line invents no words. The defect is moved to T265 with an order, not left. Two conditions: T265 must carry relabeling the line, not only the pattern. And its 'no record' premise must be searched again over the same space as the other ten (request.md, gm-request.md, docs/gm-rulings.md, gm-review.jsonl, make canon), because this block's grep covered only five request.md files."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T252": {
+   "section_sha256": "3c5bdbfa7cff84817d15c2bd5bfa9c23f86db45f3f4a78c2bf914cdb06c2c1e5",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T252-D1",
+     "summary": "test-closing-checks.sh's checks grep a run's text from a here-string via a `seen VAR <grep args>` helper instead of `printf '%s' \"$VAR\" | grep -q` under pipefail; the 47 pipes over $OUT, $A, $B are moved.",
+     "class": "within",
+     "why": "The task is to find the race in this suite and make its verdict deterministic; the plan names the mechanism (printf killed by SIGPIPE after grep -q exits, pipeline 141 under pipefail) and removes it in the one suite the task names. No behavior of any guard changes; only the test's reading of output."
+    },
+    {
+     "id": "T252-D2",
+     "summary": "A section 0 forces the interleaving (the row, then seq 200000, more than a pipe holds) and shows the old pipe form reads a present row absent while `seen` reads it present; the forcing line keeps the old form on purpose.",
+     "class": "within",
+     "why": "The task asks for the race reproduced red on a forced interleaving; this is that reproduction, kept as a red-first test (63 passed / 1 failed before, 64 / 0 after, one-shot labeled 2026-11-25). Enforcement of what was asked, not new scope."
+    },
+    {
+     "id": "T252-D3",
+     "summary": "A self-grep in the suite refuses the pipe-into-grep form coming back in this suite.",
+     "class": "within",
+     "why": "Its only effect is to keep the requested determinism from regressing in this suite; delete the requested fix and it has nothing left to check. It does not reach other suites, commands or agents."
+    },
+    {
+     "id": "T252-D4",
+     "summary": "The suite keeps `set -uo pipefail`; the fix changes how text is read, not the shell options.",
+     "class": "within",
+     "why": "Keeps the suite's existing strictness rather than weakening it to hide the race; no requirement is narrowed."
+    },
+    {
+     "id": "T252-D5",
+     "summary": "What was shared is stated as the CPU, not disk: every path case 1 reads is under the suite's own mktemp -d and the run directory is made with plain mkdir; the brief's candidates (fixed /tmp path, common .git run dir, timestamp collision, stamp file) ruled out by reading the suite and scripts/gates/closing-checks.sh.",
+     "class": "within",
+     "why": "The task asks to say what was shared; this answers it with a stated method. No map or engine change (n/a rows)."
+    },
+    {
+     "id": "T252-D6",
+     "summary": "The same pipe-into-grep -q form in the other 17 pipefail suites of tests/hooks/ (98 sites, observed 2026-11-25 with the stated grep) is not fixed here; filed as T253, landing before T139 (whose suite test-no-poll-hooks.sh is one of the 17).",
+     "class": "within",
+     "why": "T252's task is the one suite; the other suites are not dropped but filed with a reason, a task id and an order, the shape FR-009 sets for a found-and-left defect, and ordered before the task whose suite would otherwise carry the flake. The census states its search space (the grep pattern over the suites that set pipefail), and restricting it to pipefail suites and grep -q matches the mechanism (without pipefail, or without an early-exiting grep, the pipeline's status cannot be the writer's SIGPIPE). Aside, not a ruling: the space is tests/hooks/ only; T253 may wish to state whether pipefail scripts outside tests/hooks/ (other test directories, scripts/gates/) use the same form, and early-exit readers other than grep -q (grep -m, head)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T253": {
+   "section_sha256": "40cc71049cb4b58c2a6cc660d3613a449505c4d850d51b7e29aae25fb6b23033",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T253-D1",
+     "summary": "Scope is every tracked shell file under tests/ and scripts/ (149), pipefail or not.",
+     "class": "within",
+     "why": "Fixes a known defect (a check whose verdict depends on scheduling, a wrong outcome under constitution XIV) in every place the task names. Taking in files without pipefail widens the fix and does not narrow it: sourced files inherit the caller's pipefail. FR-009's how-found line is there (git ls-files, 2026-11-25)."
+    },
+    {
+     "id": "T253-D2a",
+     "summary": "The 31 '| head' pipes (and zero sed-q / awk-exit pipes) are left unconverted.",
+     "class": "within",
+     "why": "Censused with a stated method: none has its status read by &&, ||, if or set -e. So no verdict moves and no wrong outcome is left. Under XIV a non-defect left as it is stays within and needs no ruling. 'Found and left? none' agrees with FR-009 because nothing deferred is a defect."
+    },
+    {
+     "id": "T253-D2b",
+     "summary": "The pipe-race check refuses only a pipe into an early-exit grep, not head / sed q / awk exit readers.",
+     "class": "within",
+     "why": "The block states the ask as: recount every early-exit form (done, with a method), fix every instance (every defect instance is grep), and move T252's self-check, which is a grep check, to make hooks-test. Its reach matches that self-check, and the same fix spreads it over all 149 files. Nothing the GM or the spec asked for requires refusing reader forms that hold no defect."
+    },
+    {
+     "id": "T253-D3",
+     "summary": "Fix by form: seen V for printed variables, o=$(cmd) && seen o for commands, here-string inline in scripts/; the writer's status is kept by && on 14 lines and analyzed where it is dropped.",
+     "class": "within",
+     "why": "This is a design choice of the fix. Each place the writer's status is dropped is analyzed site by site with a method, and no verdict becomes wrong. The one change (grep -rl now counts the matches it printed) is the right answer, not a regression, under XIII and XIV."
+    },
+    {
+     "id": "T253-D3b (unlabeled)",
+     "summary": "Four suites (engine-freeze, land-tooling, stall-watchdog, workflow) and all of scripts/ grep a here-string inline rather than through the shared seen helper.",
+     "class": "within",
+     "why": "Every instance of the defect is still fixed, so this is design, not fidelity. 'One shared helper' is the task line's wording, not the GM's request or the spec. The Approach paragraph says the suites use seen while item 9 says four do not; that is a wording inconsistency the builder should reconcile, not a narrowing."
+    },
+    {
+     "id": "T253-D4",
+     "summary": "l7r-gate check pipe-race in make hooks-test's unconditional tail replaces T252's self-grep; escape '# pipe-ok: <reason>' of two words or more.",
+     "class": "within",
+     "why": "This is the enforcement the task asks for (T252's self-check moved to where every suite runs), so it is enforcement of the requested fix, not unrequested scope. Its two escaped uses are judged separately. (a) A guard's payload text is never run as a pipe, so no race exists there. (b) T252's forcing line exists to produce the race on purpose for the red test. Neither hides a defect."
+    },
+    {
+     "id": "T253-D5",
+     "summary": "Red first by a forced race (matching line plus seq 200000) on each form, 50 runs each; the check's tests run each form once on the forced text.",
+     "class": "within",
+     "why": "This is the task's own red-first requirement, met for one representative of each form, with a stated method."
+    },
+    {
+     "id": "T253-D6",
+     "summary": "T139's no-poll flake is not this race.",
+     "class": "within",
+     "why": "This answers the question the task asked, with a stated method. T139 stays open and is ordered after T253, so nothing is narrowed."
+    },
+    {
+     "id": "T253-set-lines (unlabeled)",
+     "summary": "The suites keep their set lines (pipefail stays).",
+     "class": "within",
+     "why": "The race is removed at the grep, so pipefail's protection of writers stays. Nothing asked for removing it."
+    },
+    {
+     "id": "T253-scope-roots (unlabeled)",
+     "summary": "The census and the check cover tests/ and scripts/; the Approach says the check refuses the pipe form 'anywhere'.",
+     "class": "within",
+     "why": "tests/ and scripts/ are the roots the task text names, and the census follows them. 'Anywhere' is read as anywhere in that scope. The builder could word it so; this is not a fidelity finding."
+    },
+    {
+     "id": "T253-order-perf (unlabeled)",
+     "summary": "Lands after T252 and before T139; 'Performance work? no'.",
+     "class": "within",
+     "why": "The order is a dependency: T139's suite is one of those changed. The task makes checks deterministic and does not make them faster, so 'not performance work' is a plain classification and no exception to FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T251 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, \"NOT a ruling\", is what such a claim cost once)",
+    "### T251 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "search",
+     "summary": "Each of the 10 claims searched for the GM's recorded words over request.md, gm-request.md, docs/gm-rulings.md, gm-review.jsonl gm_words, make canon, then tasks/notes/questions for provenance",
+     "class": "within",
+     "why": "The means of the T233 request (2026-11-24): an attribution names his recorded words; the search space is stated with its method and date."
+    },
+    {
+     "id": "five-recorded",
+     "summary": "Five claims (true size, sheet follows map, grove/burial knob, where a place sits, threshold stones) keep CANON and name their record; the place.rs town half and the threshold stones cite l7r.md; the stones' two dated drawing rules are restated as this project's rules with no record",
+     "class": "within",
+     "why": "Exactly what the request asks: a claim attributed to the GM names where his words are; what has no record is not called his (docs/gm-rulings.md 'NOT a ruling'). The dated drawing rules restated as the project's own sit on the GM 2026-10-25 words (research silent: a knob or whatever is easier)."
+    },
+    {
+     "id": "tub",
+     "summary": "'tub clear of the footprint' CANON -> pointer at research page 0100, which states it; the 'no tub on the roof' DEVIATION account names the claim instead of the ruling",
+     "class": "within",
+     "why": "A rule backed by a research page rather than by his words is what the 2026-11-24 request asks for. It stands on T250 landing first: 0100's own comment carries the same unrecorded attribution, and the plan orders T250 before T251's claims round closes."
+    },
+    {
+     "id": "brook",
+     "summary": "'no screen axis' in field/brook.rs CANON -> CONVENTION: his 2026-08-26 words were of Inashiro's marsh edge, never a brook, and are recorded only in a tasks.md",
+     "class": "within",
+     "why": "An extension of his words to a case he did not speak of is the project's rule, which the GM 2026-10-25 permits where research is silent; the line now says whose rule it is."
+    },
+    {
+     "id": "fringe",
+     "summary": "'not in the reed fringe' in seat/margins.rs CANON -> DEVIATION 0058: his 2026-08-28 words were of farmhouses on marshland and name no fringe; 0058 says a pond's reed fringe is not marsh and the code departs from it; the code is left as it is, with no Found-and-left entry",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The request section this task answers holds both of the GM's tests: research silent -> a knob or whatever is easier (2026-10-25); a rule wrongly called his that the research does not show -> 'if that is not what the research shows, then we shouldn't do it' (2026-11-24). By the plan's own label the fringe rule is the second case (the code departs from 0058), and its only backing was an attribution the GM never made - the same shape as the 0006/dry.rs finding the plan's item 12 says it answers. The plan keeps the behavior and says nothing of it: no reason it is not a wrong outcome, no filed task, no order. 'The brief is comments only' is the session's limit, not the GM's, and the claims round judging the label does not ask whether the departure should stand. Remedy (no code change needed here): either a Found-and-left line in FR-009's form - why it is not fixed in this task, its filed task id, its order - for making the code follow 0058 or showing research that supports keeping houses out of the fringe; or an observation with its method that the code does not contradict 0058 (no wrong outcome), in which case DEVIATION is the wrong label and the claim is relabeled to what it is."
+    },
+    {
+     "id": "no-minted-ruling",
+     "summary": "No docs/gm-rulings.md entry minted for the brook's or the fringe's words",
+     "class": "within",
+     "why": "docs/gm-rulings.md 'NOT a ruling': never invent his words; his words there would back a different subject than the claim."
+    },
+    {
+     "id": "baseline-prune",
+     "summary": "The gm-attributions baseline pruned 351 -> 341 lines, its claim entries 10 -> 0, the check silent (rc 0), measured 2026-11-25 with method",
+     "class": "within",
+     "why": "The T233 baseline is meant to shrink as its entries are answered; figures carry date and method."
+    },
+    {
+     "id": "claims-round-split",
+     "summary": "The claims round is not run in this task; the coordinating session dispatches impl-drift for the 11 claims owed, each relabel a MISLABELED to judge",
+     "class": "within",
+     "why": "The GM 2026-11-25: a builder's claims round split off by default ('sounds good please do that ASAP')."
+    },
+    {
+     "id": "buildings-prose-tags",
+     "summary": "docs/buildings.md prose 'GM 2026-09-26', 'GM 2026-07-25', 'GM rule 2026-07-25' restated as this project's rule of <date>, which no record of the GM's words backs; every hit of a stated grep",
+     "class": "within",
+     "why": "The same attribution in a doc line beside the claims; fixed here with the search that found every instance."
+    },
+    {
+     "id": "pages-0100-0039-to-T250",
+     "summary": "The page comments of 0100 and 0039 that name the same rulings are left to T250, which lands before T251's claims round closes",
+     "class": "within",
+     "why": "A page edit is T250's existing work, ordered before this task's claims round closes; nothing the request asks is dropped."
+    },
+    {
+     "id": "dedication-knob",
+     "summary": "docs/building-programs.md's dedication knob 'a GM ruling of 2026-09-20' (no request.md holds it), its mutual citation with 0222's comment, and the check's pattern that misses 'a GM ruling', deferred together to a task 'filed as T<n> by the coordinating session', landing before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Of the three parts, the check's pattern is check code and 0222's comment is a page edit, both outside this task's reach; the claim line itself is a doc line of the kind this task edits, but it and 0222 each cite the other as record, so relabeling the line alone would leave the page citing a claim that no longer holds the attribution - the plan states that coupling. Deferred, not dropped, to one task in the same feature ordered before T250. But 'T<n>' is not a filed id: FR-009 asks for the filed task id, and the plan must carry the real one before any tick."
+    }
+   ],
+   "tasks": [
+    "T251"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T251 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, \"NOT a ruling\", is what such a claim cost once)",
+    "### T251 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 five claims name their record",
+     "summary": "buildings at true size, sheet follows its map, grove and burial side knob, where a place sits (village half), threshold stones: each claim now names the request.md / docs/gm-rulings.md / l7r.md that backs it; class stays CANON",
+     "class": "within",
+     "why": "The request (2026-11-24, T233): a ruling attributed to the GM names his recorded words. Pointing each claim at the record found is that rule applied."
+    },
+    {
+     "id": "D2 place.rs town half cited to l7r.md",
+     "summary": "the county-seat half is backed by the GM's notes (Demographics), not by 156's request, and the line says so",
+     "class": "within",
+     "why": "Names what actually backs the claim instead of stretching one request over two halves; the purpose of T233."
+    },
+    {
+     "id": "D3 threshold stones' dated rulings restated as this project's drawing rules",
+     "summary": "the stones stay CANON on l7r.md; the two unrecorded dated rulings are said to be the project's rules with no record of his words",
+     "class": "within",
+     "why": "Exactly 'never invent his words' (docs/gm-rulings.md NOT a ruling) and says whose rule it is."
+    },
+    {
+     "id": "D4 tub clear of the footprint -> pointer at 0100's drawing page",
+     "summary": "CANON relabeled to the research page that states it; the neighboring DEVIATION names the claim instead of the ruling",
+     "class": "within",
+     "why": "The claim is backed by research, not by recorded words of his; relabeling to its real backing is the request."
+    },
+    {
+     "id": "D5 no screen axis CANON -> CONVENTION",
+     "summary": "his words of 2026-08-26 sit only in a tasks.md and were said of a marsh edge, not a brook; the line now says whose extension it is",
+     "class": "within",
+     "why": "An extension of his words to a different subject is not his ruling; labeling it as the project's convention is the request."
+    },
+    {
+     "id": "D6 reed fringe CANON -> DEVIATION 0058",
+     "summary": "the claim is relabeled to say the code departs from 0058",
+     "class": "within",
+     "why": "Truthful label of what backs (and contradicts) the code; it puts the departure on the claims round's list. The code itself is D12."
+    },
+    {
+     "id": "D7 no docs/gm-rulings.md entry minted",
+     "summary": "his words of the brook and the fringe are not turned into pointers",
+     "class": "within",
+     "why": "Minting an entry for words said of a different subject would invent a ruling, the failure docs/gm-rulings.md 'NOT a ruling' and the 2026-11-24 request forbid."
+    },
+    {
+     "id": "D8 baseline pruned 10 -> 0 claim entries",
+     "summary": "the gm-attributions baseline loses the 10 claim entries; the check is silent",
+     "class": "within",
+     "why": "T233's line: the baseline shrinks as attributions are fixed."
+    },
+    {
+     "id": "D9 claims round not run by this builder",
+     "summary": "impl-drift dispatched by the coordinating session; each relabel a MISLABELED to judge",
+     "class": "within",
+     "why": "The GM 2026-11-25: 'a builder's claims round split off ... sounds good please do that ASAP'."
+    },
+    {
+     "id": "D10 docs/buildings.md prose date tags reworded",
+     "summary": "'GM 2026-09-26', 'GM 2026-07-25', 'GM rule 2026-07-25' read as this project's rule with no record of his words; every grep hit",
+     "class": "within",
+     "why": "Same rule applied to the prose beside the claims; fixed here, not deferred."
+    },
+    {
+     "id": "D11 0100's page comment left to T250",
+     "summary": "0100's comment names an unrecorded ruling; 0039's has a record; the page edit is T250's, which lands before T251's claims round closes",
+     "class": "within",
+     "why": "The request's T233 build places page comments as page work ('fixing them page work'); T250 is that task, filed, and ordered. Not a narrowing of what was asked."
+    },
+    {
+     "id": "D12 seat/margins.rs reed-fringe refusal left, deferred to a filed task",
+     "summary": "the code refuses a seat in a pond's reed fringe against 0058, on a ruling nobody recorded; not removed here (engine code, moves maps, outside a comments-and-doc-lines task); deferred with why, a title, and order 'lands before T250'; the task id written by the coordinating session",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a research finding contradicted; the GM 2026-11-24: 'if that is not what the research shows, then we shouldn't do it'), and it is deferred, not left, in the project's deferral form (FR-009): why (removing the refusal is engine code that moves maps, in a task scoped to attributions in comments and doc lines), a filed task whose title carries both resolutions (drop the refusal, or a research pass that amends 0058), and an order ('lands before T250', the task that edits these pages' comments). The id is left to the coordinating session because task numbers come from one writer, among the four fixes the GM approved on 2026-11-25 ('sounds good, please start with that'). Holds only once a real id replaces 'T<n>' before the tick."
+    },
+    {
+     "id": "D13 dedication knob's 'a GM ruling of 2026-09-20' left, deferred to a filed task",
+     "summary": "the check's pattern does not read 'a GM ruling', and no request.md searched holds those words; the claim and 0222's comment cite each other; deferred with the check's pattern, ordered before T250; id written by the coordinating session",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Two halves, ruled apart. (a) The check's pattern missing 'a GM ruling' is a check that passes bad work; its fix is check code, outside this task, and is what finds every other line of the class: deferral legitimate. (b) The doc line itself is the kind of edit this task made ten times; the section leaves it on the brief's limit to the baseline's entries. Legitimate because it is not left but deferred, with 0222's drawing-page comment that cites it, to one filed task whose title carries the record search ('his recorded words or whose rule it is'), ordered before T250, so the claim and the page settle together rather than one being relabeled while the other still cites it. Same id condition as D12."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T251 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline's 10 walked CANON claims named a ruling of the GM's with no pointer to his words; `docs/gm-rulings.md`, \"NOT a ruling\", is what such a claim cost once)",
+    "### T251 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 five claims name their record",
+     "summary": "buildings at true size -> docs/gm-rulings.md; sheet follows its map and grove/burial knob -> specs/257 request.md; place.rs village half -> specs/156 request.md, town half -> l7r.md Demographics; threshold stones -> l7r.md Vermillion Threshold Stones, the two dated rulings with no record restated as this project's drawing rules",
+     "class": "within",
+     "why": "Exactly what the 2026-11-24 request asks (an attribution to the GM points at where his words are recorded). The two mixed-backing claims name a source for each half and say which half has none, rather than stretching one record over both."
+    },
+    {
+     "id": "D2 tub clear of the footprint -> pointer at 0100",
+     "summary": "CANON relabeled to a pointer at research/questions/0100 drawing page, which states the rule; the neighbouring no-tub-on-the-roof DEVIATION account names the claim instead of the ruling",
+     "class": "within",
+     "why": "The claim stops attributing anything to the GM, which is what was asked. 0100's own comment still names the same unrecorded ruling (this block says so), so the pointer only becomes clean once T250 fixes that comment; T250 is ordered before T251's claims round closes, so this converges and does not block."
+    },
+    {
+     "id": "D3 no screen axis -> CONVENTION",
+     "summary": "brook.rs twice: CANON -> CONVENTION; his 2026-08-26 words were of Inashiro's marsh edge, quoted only in a tasks.md, never of a brook",
+     "class": "within",
+     "why": "Removes an attribution his recorded words do not support and says whose extension the rule is; invents nothing."
+    },
+    {
+     "id": "D4 not in the reed fringe -> DEVIATION 0058",
+     "summary": "margins.rs: CANON -> DEVIATION research/questions/0058 (GUESS tried first, refused by claims-owed as a form problem)",
+     "class": "within",
+     "why": "An honest label for code that departs from its page, per the claims grammar; whether the departure is a defect is T264's (D10)."
+    },
+    {
+     "id": "D5 no gm-rulings.md entry minted",
+     "summary": "his brook and fringe words are not turned into a docs/gm-rulings.md entry to make a pointer",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-24 instruction and docs/gm-rulings.md 'NOT a ruling': his words back a different subject, and minting an entry would invent a ruling."
+    },
+    {
+     "id": "D6 baseline pruned",
+     "summary": "gm-attributions baseline 351 -> 341 lines, claim entries 10 -> 0, check silent rc 0",
+     "class": "within",
+     "why": "The T233 baseline is meant to shrink as attributions are fixed; the figures carry date and method."
+    },
+    {
+     "id": "D7 docs/buildings.md prose date tags",
+     "summary": "'GM 2026-09-26', 'GM 2026-07-25', 'GM rule 2026-07-25' beside the relabeled claims restated as this project's rule of <date> with no record of his words",
+     "class": "within",
+     "why": "Same class as the claims, in the same file, with a stated every-hit grep; removes reader-facing attributions with no record."
+    },
+    {
+     "id": "D8 claims round not run here",
+     "summary": "impl-drift claims round left to the coordinating session; each relabel framed as a MISLABELED for it to judge",
+     "class": "within",
+     "why": "The GM's 2026-11-25 approval of splitting the claims round off builders ('sounds good please do that ASAP')."
+    },
+    {
+     "id": "D9 0100 and 0039 page comments deferred to T250",
+     "summary": "page comments naming the same rulings left for T250, which lands before T251's claims round closes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not left: moved to a named task with an order inside this feature, and it closes before this task's claims round, so no claim here settles while its page still carries the unrecorded attribution. 0039's has a record (no defect); 0100's is the defect. Conditional on T250 existing as filed."
+    },
+    {
+     "id": "D10 margins.rs reed-fringe refusal deferred to T264",
+     "summary": "the code enforcing a rule 0058 declines is labeled DEVIATION and its removal filed as T264, lands before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruling only on the deferral: the work is engine code that moves maps, outside a comments-and-doc-lines task, and is moved to a named task with an order rather than left. Whether the refusal is a wrong outcome or a claim to restate (constitution XIV v2.36.0) is T264's question under the GM's 'if that is not what the research shows, then we shouldn't do it'. Conditional on T264 existing as filed."
+    },
+    {
+     "id": "D11a check pattern misses 'a GM ruling of <date>' -> T265",
+     "summary": "the gm-attributions check does not read the Inari dedication line's wording; fixing the pattern deferred to T265, lands before T250",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A check that passes bad work is a defect, but changing the check's code is outside this task's comments-and-doc-lines scope, and it is moved to a named task with an order. Conditional on T265 existing as filed."
+    },
+    {
+     "id": "D11b the Inari dedication line itself left unrelabeled -> T265",
+     "summary": "docs/building-programs.md 'Inari the ordinary rural dedication, a GM ruling of 2026-09-20' not relabeled here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled apart from D11a, because 'the pattern is the check's code' does not explain leaving a doc line this task already edits. The reason that does hold is the brief's limit to the baseline's entries, and leaving the line invents no words. The defect is moved to T265 with an order, not left. Two conditions: T265 must carry relabeling the line, not only the pattern. And its 'no record' premise must be searched again over the same space as the other ten (request.md, gm-request.md, docs/gm-rulings.md, gm-review.jsonl, make canon), because this block's grep covered only five request.md files."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T252 (T249's builder's closing run, 2026-11-25: test-closing-checks.sh case 1's static row reported FAIL while the output it printed showed it GREEN, observed 2026-11-25, method: that builder's report, quoted in tasks.md's T252)",
+    "### T252 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T252-D1",
+     "summary": "test-closing-checks.sh's checks grep a run's text from a here-string via a `seen VAR <grep args>` helper instead of `printf '%s' \"$VAR\" | grep -q` under pipefail; the 47 pipes over $OUT, $A, $B are moved.",
+     "class": "within",
+     "why": "The task is to find the race in this suite and make its verdict deterministic; the plan names the mechanism (printf killed by SIGPIPE after grep -q exits, pipeline 141 under pipefail) and removes it in the one suite the task names. No behavior of any guard changes; only the test's reading of output."
+    },
+    {
+     "id": "T252-D2",
+     "summary": "A section 0 forces the interleaving (the row, then seq 200000, more than a pipe holds) and shows the old pipe form reads a present row absent while `seen` reads it present; the forcing line keeps the old form on purpose.",
+     "class": "within",
+     "why": "The task asks for the race reproduced red on a forced interleaving; this is that reproduction, kept as a red-first test (63 passed / 1 failed before, 64 / 0 after, one-shot labeled 2026-11-25). Enforcement of what was asked, not new scope."
+    },
+    {
+     "id": "T252-D3",
+     "summary": "A self-grep in the suite refuses the pipe-into-grep form coming back in this suite.",
+     "class": "within",
+     "why": "Its only effect is to keep the requested determinism from regressing in this suite; delete the requested fix and it has nothing left to check. It does not reach other suites, commands or agents."
+    },
+    {
+     "id": "T252-D4",
+     "summary": "The suite keeps `set -uo pipefail`; the fix changes how text is read, not the shell options.",
+     "class": "within",
+     "why": "Keeps the suite's existing strictness rather than weakening it to hide the race; no requirement is narrowed."
+    },
+    {
+     "id": "T252-D5",
+     "summary": "What was shared is stated as the CPU, not disk: every path case 1 reads is under the suite's own mktemp -d and the run directory is made with plain mkdir; the brief's candidates (fixed /tmp path, common .git run dir, timestamp collision, stamp file) ruled out by reading the suite and scripts/gates/closing-checks.sh.",
+     "class": "within",
+     "why": "The task asks to say what was shared; this answers it with a stated method. No map or engine change (n/a rows)."
+    },
+    {
+     "id": "T252-D6",
+     "summary": "The same pipe-into-grep -q form in the other 17 pipefail suites of tests/hooks/ (98 sites, observed 2026-11-25 with the stated grep) is not fixed here; filed as T253, landing before T139 (whose suite test-no-poll-hooks.sh is one of the 17).",
+     "class": "within",
+     "why": "T252's task is the one suite; the other suites are not dropped but filed with a reason, a task id and an order, the shape FR-009 sets for a found-and-left defect, and ordered before the task whose suite would otherwise carry the flake. The census states its search space (the grep pattern over the suites that set pipefail), and restricting it to pipefail suites and grep -q matches the mechanism (without pipefail, or without an early-exiting grep, the pipeline's status cannot be the writer's SIGPIPE). Aside, not a ruling: the space is tests/hooks/ only; T253 may wish to state whether pipefail scripts outside tests/hooks/ (other test directories, scripts/gates/) use the same form, and early-exit readers other than grep -q (grep -m, head)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T253 (451 T252's found-and-left: the other pipefail guard suites grep a run's text through a pipe, 98 sites, observed 2026-11-25, method: T252's grep over the suites that set pipefail)",
+    "### T253 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T253-D1",
+     "summary": "Scope is every tracked shell file under tests/ and scripts/ (149), pipefail or not; the 4 files without pipefail (24 sites) change form too.",
+     "class": "within",
+     "why": "Widens rather than narrows: a sourced file runs under its caller's pipefail, so the fix reaches every place the defect can occur. (The block's D-ids are its own; the spec's D1-D6 in spec-cited.md are unrelated event-log decisions.)"
+    },
+    {
+     "id": "T253-D2a",
+     "summary": "The refused form is a pipe into grep with any early-exit flag (-q/-l/-m and the long forms), whatever the writer.",
+     "class": "within",
+     "why": "Names the defect's mechanism (the reader exiting early under pipefail) rather than one spelling of it."
+    },
+    {
+     "id": "T253-D2b",
+     "summary": "head readers are not refused or changed.",
+     "class": "within",
+     "why": "Measured in item 9: 31 pipes over the 149 files, none whose status is read (a grep of | head, then of the ones &&, ||, if or set -e would read). Leaving a pipe whose status nothing reads leaves no wrong outcome, so no defect is left (constitution XIV)."
+    },
+    {
+     "id": "T253-D2c",
+     "summary": "sed q readers are not refused or changed, on the claim that every one feeds a failure message or an unchecked assignment.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D2 says this is 'counted in item 9', but item 9 counts only | head (31 pipes, with its method). Nothing records how many sed ... q pipe readers the 149 files hold or whether any has its status read, so the exclusion of a defect class rests on a state nobody measured (FR-009: a fix naming a class of defect says how every instance was found, with its method). If one of them sits in an if, && or || under pipefail, a scheduling-dependent verdict is left in place, and that is the defect the task exists to remove. Fix: record a measured count of sed q pipe readers over the 149 files and which of them have a read status (zero is an answer), with the method, and fix any whose status is read or have the check refuse them."
+    },
+    {
+     "id": "T253-D3a",
+     "summary": "Fix by form: a variable becomes seen V <args>; a command or argument list is captured first, o=$(cmd) && seen o <args>; one seen definition in tests/hooks/seen.sh, sourced by each suite that greps, with T252's definition moved there.",
+     "class": "within",
+     "why": "Removes the pipe, and the && keeps the writer's success that pipefail used to demand, so the verdict comes from the text alone. Not blocking: 'unless the site's own logic never read it' and the -v/-c/empty-text sites 'read for a changed answer' state no count or outcome. Item 9's own list shows 26 tests/hooks files with hits but 22 suites sourcing seen.sh; the gap is presumably the variable-free command sites or the escaped lines, and is not stated."
+    },
+    {
+     "id": "T253-D3b",
+     "summary": "scripts/ greps a here-string inline instead of using the shared helper.",
+     "class": "within",
+     "why": "The GM's request and the spec ask for the defect fixed, not for a particular helper. The 11 script sites are fixed, and D4's check covers scripts/ with the rest. This departs from the block's own constraint in item 2 ('fix every one with one shared helper'), which the plan states openly. Where the helper lives is a design choice, not fidelity."
+    },
+    {
+     "id": "T253-D4",
+     "summary": "l7r-gate check pipe-race over tests/ and scripts/, run in make hooks-test's unconditional tail, names each line and its fix and exits 1; continued lines are joined; the escape is a '# pipe-ok: <reason>' comment of two or more words, for text never run as a pipe; T252's self-grep is replaced by it.",
+     "class": "within",
+     "why": "Moves T252's self-check to where every suite runs, as the task asks, and makes it real enforcement (the GM, 2026-11-19: 'real enforcement and not just instructions'). The escape is limited to text that is not executed as a pipe (a guard's payload, the forcing line), and both escaped lines are counted in item 9. Its reach is the defect's own scope, no wider."
+    },
+    {
+     "id": "T253-D5",
+     "summary": "Red first by the forced race per form (the matching line, then seq 200000), 50 runs each; the check's tests run each form through bash once on the forced text.",
+     "class": "within",
+     "why": "Each form and the negated false-pass is shown red before the fix and green after (measured 2026-11-25), which is the red-first proof the task names."
+    },
+    {
+     "id": "T253-D6",
+     "summary": "T139's no-poll flake is not this race: the case judges writer-alive.sh's exit code through alive(), with no grep pipe.",
+     "class": "within",
+     "why": "Answers the question the task asks, from a reading of the suite and T139's own measurement, and leaves T139 its own task. It is not a decision to leave a defect."
+    },
+    {
+     "id": "T253-order",
+     "summary": "Lands after T252 and before T139; one landing; not performance work.",
+     "class": "within",
+     "why": "Ordering and budget only; nothing the request or spec fixes is narrowed."
+    },
+    {
+     "id": "T253-found-and-left",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "Correct as stated only once D2c is measured: if any sed q reader has a read status and is not fixed here, it becomes a found-and-left item and FR-009 applies to it."
+    }
+   ],
+   "tasks": [
+    "T253"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T253 (451 T252's found-and-left: the other pipefail guard suites grep a run's text through a pipe, 98 sites, observed 2026-11-25, method: T252's grep over the suites that set pipefail)",
+    "### T253 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T253-D1",
+     "summary": "Scope is every tracked shell file under tests/ and scripts/ (149), pipefail or not, including sourced files and the 4 files without pipefail.",
+     "class": "within",
+     "why": "Request.md holds no GM words on T253; it is a found-and-left defect fix under fix-as-we-go (constitution XIV). The scope covers the task line's tests/ and scripts/ and widens it to files without pipefail (sourced files run under their caller's pipefail). Widening leaves no wrong outcome, so it narrows nothing. The search space is stated (git ls-files, .sh or sh/bash shebang). It does not reach Makefile recipes; see the aside."
+    },
+    {
+     "id": "T253-D2",
+     "summary": "Only a pipe into grep with an early-exit flag (-q/-l/-m and long forms) is refused; head, sed q and awk exit readers are not.",
+     "class": "within",
+     "why": "A defect is a wrong outcome. For grep -q/-l/-m the status is the answer, so the race corrupts the verdict. For head the output is the point, and the block measured (2026-11-25, grep over the 149 files and the && / || / if / set -e readers) 31 head pipes, none whose status is read, and no sed-q or awk-exit pipe. No verdict moves, so nothing defective is left and no ruling is needed."
+    },
+    {
+     "id": "T253-D3",
+     "summary": "The fix by form: seen V <args> for a variable, o=$(cmd) && seen o for a command where the writer's success mattered (14 lines), the writer's status dropped where a failed writer answers as the failed pipe did (14 lines plus pair's 12), inline here-strings in scripts/ and four suites, one seen.sh defining the helper.",
+     "class": "within",
+     "why": "This is the fix itself. The inline <<< in scripts/ and in four suites is the same fix written without the wrapper, and the pipe-race check (D4) enforces the result everywhere, so the purpose of one shared helper is met. Not blocking: the premise that a failing writer gives empty text is labeled '(the diff)', and a diff cannot show it. A writer that prints and then fails would now match where pipefail said no. No instance is known, so no defect is left, but the claim is unmeasured."
+    },
+    {
+     "id": "T253-D4",
+     "summary": "The l7r-gate check pipe-race Rust check, run in make hooks-test's unconditional tail, names each line with its fix, reads trailing-| continuations, takes a # pipe-ok: escape of two words or more, and replaces T252's self-grep (section 0 kept).",
+     "class": "within",
+     "why": "It enforces the requested fix. It moves T252's self-check to where every suite runs, as the task line asks, and follows the project's guard rules (named fix, recorded escape of two words or more). It refuses only the form being fixed, so its reach goes no further than the fix."
+    },
+    {
+     "id": "T253-D5",
+     "summary": "Red first by the forced race (matching line plus seq 200000), 50 runs per form; the check's tests run each form through bash once on the forced text.",
+     "class": "within",
+     "why": "The red-first proof the task line asks for, one representative per form, measured 2026-11-25."
+    },
+    {
+     "id": "T253-D6",
+     "summary": "T139's no-poll flake is not this race: the failing case judges writer-alive.sh's exit code through alive(), not a grep pipe, and reproduced only with a slowed tee.",
+     "class": "within",
+     "why": "Answers the question the task line asks, by reading the suite's alive() and T139's task line (2026-11-25). It leaves T139 to its own task and is not a carve-out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T253 (451 T252's found-and-left: the other pipefail guard suites grep a run's text through a pipe, 98 sites, observed 2026-11-25, method: T252's grep over the suites that set pipefail)",
+    "### T253 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T253-D1",
+     "summary": "Scope is every tracked shell file under tests/ and scripts/ (149), pipefail or not.",
+     "class": "within",
+     "why": "Fixes a known defect (a check whose verdict depends on scheduling, a wrong outcome under constitution XIV) in every place the task names. Taking in files without pipefail widens the fix and does not narrow it: sourced files inherit the caller's pipefail. FR-009's how-found line is there (git ls-files, 2026-11-25)."
+    },
+    {
+     "id": "T253-D2a",
+     "summary": "The 31 '| head' pipes (and zero sed-q / awk-exit pipes) are left unconverted.",
+     "class": "within",
+     "why": "Censused with a stated method: none has its status read by &&, ||, if or set -e. So no verdict moves and no wrong outcome is left. Under XIV a non-defect left as it is stays within and needs no ruling. 'Found and left? none' agrees with FR-009 because nothing deferred is a defect."
+    },
+    {
+     "id": "T253-D2b",
+     "summary": "The pipe-race check refuses only a pipe into an early-exit grep, not head / sed q / awk exit readers.",
+     "class": "within",
+     "why": "The block states the ask as: recount every early-exit form (done, with a method), fix every instance (every defect instance is grep), and move T252's self-check, which is a grep check, to make hooks-test. Its reach matches that self-check, and the same fix spreads it over all 149 files. Nothing the GM or the spec asked for requires refusing reader forms that hold no defect."
+    },
+    {
+     "id": "T253-D3",
+     "summary": "Fix by form: seen V for printed variables, o=$(cmd) && seen o for commands, here-string inline in scripts/; the writer's status is kept by && on 14 lines and analyzed where it is dropped.",
+     "class": "within",
+     "why": "This is a design choice of the fix. Each place the writer's status is dropped is analyzed site by site with a method, and no verdict becomes wrong. The one change (grep -rl now counts the matches it printed) is the right answer, not a regression, under XIII and XIV."
+    },
+    {
+     "id": "T253-D3b (unlabeled)",
+     "summary": "Four suites (engine-freeze, land-tooling, stall-watchdog, workflow) and all of scripts/ grep a here-string inline rather than through the shared seen helper.",
+     "class": "within",
+     "why": "Every instance of the defect is still fixed, so this is design, not fidelity. 'One shared helper' is the task line's wording, not the GM's request or the spec. The Approach paragraph says the suites use seen while item 9 says four do not; that is a wording inconsistency the builder should reconcile, not a narrowing."
+    },
+    {
+     "id": "T253-D4",
+     "summary": "l7r-gate check pipe-race in make hooks-test's unconditional tail replaces T252's self-grep; escape '# pipe-ok: <reason>' of two words or more.",
+     "class": "within",
+     "why": "This is the enforcement the task asks for (T252's self-check moved to where every suite runs), so it is enforcement of the requested fix, not unrequested scope. Its two escaped uses are judged separately. (a) A guard's payload text is never run as a pipe, so no race exists there. (b) T252's forcing line exists to produce the race on purpose for the red test. Neither hides a defect."
+    },
+    {
+     "id": "T253-D5",
+     "summary": "Red first by a forced race (matching line plus seq 200000) on each form, 50 runs each; the check's tests run each form once on the forced text.",
+     "class": "within",
+     "why": "This is the task's own red-first requirement, met for one representative of each form, with a stated method."
+    },
+    {
+     "id": "T253-D6",
+     "summary": "T139's no-poll flake is not this race.",
+     "class": "within",
+     "why": "This answers the question the task asked, with a stated method. T139 stays open and is ordered after T253, so nothing is narrowed."
+    },
+    {
+     "id": "T253-set-lines (unlabeled)",
+     "summary": "The suites keep their set lines (pipefail stays).",
+     "class": "within",
+     "why": "The race is removed at the grep, so pipefail's protection of writers stays. Nothing asked for removing it."
+    },
+    {
+     "id": "T253-scope-roots (unlabeled)",
+     "summary": "The census and the check cover tests/ and scripts/; the Approach says the check refuses the pipe form 'anywhere'.",
+     "class": "within",
+     "why": "tests/ and scripts/ are the roots the task text names, and the census follows them. 'Anywhere' is read as anywhere in that scope. The builder could word it so; this is not a fidelity finding."
+    },
+    {
+     "id": "T253-order-perf (unlabeled)",
+     "summary": "Lands after T252 and before T139; 'Performance work? no'.",
+     "class": "within",
+     "why": "The order is a dependency: T139's suite is one of those changed. The task makes checks deterministic and does not make them faster, so 'not performance work' is a plain classification and no exception to FR-013."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T251 to T253, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

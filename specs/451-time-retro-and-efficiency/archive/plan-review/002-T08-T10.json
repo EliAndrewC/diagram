@@ -1,0 +1,654 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T08": {
+   "section_sha256": "56688ab49b070ed42e758f9d37e8ba6956a06d4a7fc805f3be7397b0c15e5953",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "compile-split-any-run",
+     "summary": "Compile (the union of build and cover-build phases) is split out of ANY run a phase ties to, not only a tests run (data-model's wording); the critical path splits a main-session call's gap the same way.",
+     "class": "within",
+     "why": "D4's own text books compile 'inside the Bash call or background span that holds them', not inside a tests run; the GM asked 'how much time are we spending on recompiling things', and a landing's or gate's compile is recompiling. Widening the split books more of what was asked; it removes nothing."
+    },
+    {
+     "id": "phase-tie-by-task",
+     "summary": "A phase ties to the run of its session whose span holds it and whose target is its make OR whose task is its task, ranked target, then task, then latest start; unmatched phases counted in the footnote, never dropped; a phase starting after the window is none of it.",
+     "class": "within",
+     "why": "D4 ties by session, clone and target; adding task as a second key moved 567 untied compile phases (60.9 min) to 170 (12.1 min), measured, so it brings more of the GM's compile time under its task (the per-task breakdown he asked for). It narrows nothing. Note for the caller: the block's restatement omits D4's clone key; since builders share the main session's id (D4), dropping clone could tie a phase to a same-task or same-target run in another clone. Not ruled on - the block is silent, not explicit - but confirm the code still keys on clone."
+    },
+    {
+     "id": "bg-end-enqueue-first",
+     "summary": "A background run ends at the main transcript's queue-operation enqueue row naming its tool-use-id, before its BgEnd line's t.",
+     "class": "within",
+     "why": "D3 itself says a BgEnd's t is when the notice reached the session, not when the run ended (the notice waits while the session is mid-turn); the enqueue row is the nearer reading of the run's own end. More accurate booking of what was asked; nothing dropped - BgEnd remains the fallback."
+    },
+    {
+     "id": "bg-end-taskstop",
+     "summary": "A background run with no enqueue row or BgEnd ends at the TaskStop call that stopped it (read from the session's and its subagents' transcripts), else open to the window's end.",
+     "class": "within",
+     "why": "A stopped run has ended; booking it open to the window's end was a wrong outcome (ten runs, 6,070 of 6,792 machine minutes booked 'other', measured). D3's 'open to the window's end' is the fallback for a launch with no end anywhere, and a TaskStop is an end. Adds an end source; narrows nothing the GM asked."
+    },
+    {
+     "id": "builder-call-as-session-state",
+     "summary": "A subagent's call inside the main session's turn is booked on the critical path as what the session was doing (the call it waits on, or the model); between turns it keeps the wait open. The session's own line moves state before a zero gap is skipped, and SubagentStart/SubagentStop keep it.",
+     "class": "within",
+     "why": "D7 defines the critical path as the wall clock partitioned by what the MAIN SESSION was doing or waiting on; a builder's line cutting the session's make static in two misbooked the session's own state. This implements D7 literally; builder runs are still booked in the runs table (machine minutes)."
+    },
+    {
+     "id": "landing-precedence",
+     "summary": "A call running several targets is booked by the first of them in PRECEDENCE (land, gate, tests, review, docs, spec-kit step, other) in both tables; a phase ties to a run that runs its make at all; a landing's gate and cohort phases are split out as gate, less the compile inside them.",
+     "class": "within",
+     "why": "FR-001/D2 book a call by its target and are silent on a line with several; the day's 19 landings were launched 'make claims-owed ...; make ledger-owed; make land' and booked review by their first target, which misses the land and gate columns FR-005 asks for (land 4.2, gate 0.0 against 27.4 min of their own gate phases, measured). The block's own cross-check (land 5.3 + gate 14.4 + compile 13.0 = 32.7 min against the end phases' 32.4) shows precedence absorbs almost no non-land time. Cohort booked as gate follows D5 (cohort-landing is the landing's gate stage)."
+    },
+    {
+     "id": "two-tables",
+     "summary": "where-time shows a critical-path (wall clock) table and a runs table of every session's and agent's Bash calls in overlapping machine minutes, never summed into the wall clock.",
+     "class": "within",
+     "why": "D7 asks for the critical path 'and beside it the summed agent-minutes'; FR-005 'the wall clock on the critical path apart from the summed agent-minutes'. The runs table is that."
+    },
+    {
+     "id": "until-clip",
+     "summary": "UNTIL= passes --until (held Makefile edited); logs read to their end so a run still going at UNTIL is clipped there, not dropped.",
+     "class": "within",
+     "why": "FR-005 and D7 ask for UNTIL=; clipping rather than dropping keeps the run's in-window time booked."
+    },
+    {
+     "id": "untied-phases-left",
+     "summary": "159 compile and landing-gate phases (9.5 min) tie to no run; left, counted and shown in the runs table's footnote, ruled 'not a defect'.",
+     "class": "within",
+     "why": "The time is shown, not lost: the GM's 'how much time recompiling' is answered with the footnote. No reader is told a wrong number; per WHAT A DEFECT IS, a gap counted and displayed is not a wrong outcome."
+    },
+    {
+     "id": "feature-report-to-T11",
+     "summary": "feature-report is held unchanged here; its reading of the columns is T11's.",
+     "class": "within",
+     "why": "A task split inside the feature, not a removal: FR-005/D7 still require feature-report to read the same columns through the same functions, and the block assigns it to T11 rather than dropping it. Not verifiable from the bundle that T11's line carries it; the caller should confirm."
+    },
+    {
+     "id": "defer-subagent-queued-command-T09",
+     "summary": "A subagent's background run whose notice reached only its own transcript (the queued_command attachment) ends here at BgEnd, TaskStop or the window's end; reading queued_command is deferred to T09, lands before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D3 says 'The readers (T08) ... read the subagent transcript's queued_command attachment', so this narrows T08 against D3's own wording. It is legitimate as a task-ordering narrowing only: the requirement stays in the feature (FR-002/D3), the block gives the why (D3's end-of-run work is T09's), the filed task and the order ('lands before T10') as FR-009 requires, and T09 is the very next task on the same reader. The GM's request sets no task order that this breaks, and the defect is not carried past the reader work. Not verifiable from the bundle that T09's section names it; the caller should confirm before ticking T09."
+    },
+    {
+     "id": "defer-wait-booking-T09-T10",
+     "summary": "The critical path still books 866 of 1,354 min 'waiting on work'; booking a wait to the runs in flight (D3, the FR-005/D7 'background run' column) is deferred to T09 and the critical path apart from the agents to T10; filed as T09, lands before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the spec's headline wrong (SC-001: under a tenth unexplained; today 64%), so it is a narrowing of T08 and not a 'within'. It is legitimate on the same footing as the queued_command deferral: FR-002 and D3 assign wait-to-run booking a mechanism of its own (inflight on the Stop, else the holding launch), the block names the owner (T09, then T10 for D7's agent split) and the order, and the requirement and its success criterion are untouched. It also covers the 'background run' column FR-005 lists, which neither table carries yet. The deferral is legitimate only if T09 lands before any non-reader work; a spec where SC-001 is not met at the close would be a defect, not this."
+    },
+    {
+     "id": "defer-between-turn-model-T10",
+     "summary": "The critical path's model column (342 min) holds about 235.4 min between turns, because a turn's Stop line often lands in 449's log and the 451 walk never sees the turn end; reading a session's turn lines from every feature's log is folded into T10 (D5, D6), lands before T11. Two smaller wrongs the same check found (a builder's stop inside make static; the zero-gap skip) are fixed here.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known wrong outcome left standing (model minutes booked that are really the session waiting), so a narrowing. Legitimate because the fix needs a decision that belongs to the critical-path design T10 owns (how a turn spent on another feature is booked against this feature's wall clock - D7's critical path apart from the agents), the block states why, the task and the order (before T11) as FR-009 requires, the smaller wrongs reachable inside T08 were fixed here, and the requirement stays in the feature. Not verifiable from the bundle that T10's task line carries it (the caller says it does). Ordering seam for the caller: T09's wait booking keys on the Stop that opened a wait, and those are the very Stop lines this item says land in 449's log; T09 should read them across logs or know T10 will, else T09's numbers are built on the same missing lines."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T09": {
+   "section_sha256": "668f82c693bdd777046251c07f39dd1ccc364bbcdc232958651bc5686e5aea59",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T09-reader-pairing",
+     "summary": "A launch paired with its BgEnd, else the subagent transcript's queued_command row holding its tool-use-id, else open to the window's end; a wait booked to the runs its Stop names inflight, else to the launch whose span holds it (a Stop written before the field: the session's own runs/agents whose span holds the gap).",
+     "class": "within",
+     "why": "D3's reader half as written."
+    },
+    {
+     "id": "T09-turn-reader-every-log",
+     "summary": "Stop and UserPromptSubmit lines of the window's sessions read from every feature's log, kept once; a foreign Stop/prompt taken as 451's only when a line of the session's own lies between it and its paired line, else marked events::FOREIGN.",
+     "class": "within",
+     "why": "FR-002/D3 book a between-turns wait from the Stop that opened it; a misfiled Stop is otherwise invisible. Taking a foreign turn only when it holds 451's own lines keeps 449's turns out of 451's model. How the requested booking happens, not added scope."
+    },
+    {
+     "id": "T09-another-feature-column",
+     "summary": "A left-out foreign turn books from its prompt to the session's next line of 451's own to a new column 'another feature' (247 min in T08's window), the waits between 449's turns among it, moving no state of 451's walk.",
+     "class": "within",
+     "why": "D7 partitions the critical path by what the main session was DOING or waiting on; while it worked 449's turns it was doing another feature, so that time is not 451's model, idle or waits, and showing it as its own column keeps it visible rather than hiding it - 'where our time went on that task' answered without crediting 451 with 449's work. This is the cure of last round's NOT LEGITIMATE item, applied window-wide: the column also takes minutes that had sat in model, in 'none', and with a 451 agent in flight (the agent share fell 945 -> 864, none 147 -> 3); that is consistent, since the session in those minutes was on 449's turns, not waiting on 451's agent. A column beyond FR-005's list is within, as T08's plan review/other subagent/idle columns are: D7's partition needs a bucket for it."
+    },
+    {
+     "id": "T09-agent-lines-every-log",
+     "summary": "SubagentStart/SubagentStop lines read from every log as the turn lines are; an agent counts for the feature only where a line of its own log names it.",
+     "class": "within",
+     "why": "D3 books a wait to the agents inflight names and an agent's span needs its start and stop lines (9 of 115 had their start only in 449's log, measured); the own-log filter keeps 449's agents off 451's waits. Inside D3."
+    },
+    {
+     "id": "T09-several-in-flight-rank",
+     "summary": "With several runs in flight each second goes to one run by rank (named Bash column in PRECEDENCE order, agent, unnamed Bash 'background run', monitor; latest started breaks a tie); a Bash second splits into compile/gate as a call's does; an agent's second to its foreground-wait column; a second no run holds stays waiting on work; waits printed by holder.",
+     "class": "within",
+     "why": "D7's partition books each second once; D3 is silent on the split, so the order is design inside what was asked. The by-holder footnote serves the unexplained-waiting measure."
+    },
+    {
+     "id": "T09-fixture-moved",
+     "summary": "the_columns_book_make_runs_compile_and_until's no-inflight wait now books 5 min land and 7 min none instead of 12 min waiting on work.",
+     "class": "within",
+     "why": "The intended effect of FR-002 on a pinned fixture."
+    },
+    {
+     "id": "T09-perf-tag",
+     "summary": "Tagged [perf] under FR-013's measurement clause; the command 1.16-1.24 s -> 1.58-1.90 s wall, measured.",
+     "class": "within",
+     "why": "FR-013 counts where-time's readers as performance work for ordering. The slower command is a measured cost, not a wrong outcome."
+    },
+    {
+     "id": "T09-left-T10-model-minutes",
+     "summary": "The between-turn model minutes T10's line names are fixed here (model 342 -> 89); T10 keeps agent-minutes, tokens and rework, reading turn ends through events::turn_lines. The 253-vs-235.4 gap reconciled: 15.1 of the 18 min inside 449's own turns now booked another feature, 2.9 stated unreconciled, method given.",
+     "class": "within",
+     "why": "Pulling work forward into the walk that books both is inside FR-005; the reconciliation asked for last round is now in the block, and a stated 2.9 min residue is not a defect left. Text to correct (not a narrowing): this bullet still says the 253 moved 'to the waits', but by the section's own tables waits rose only ~866 -> ~994 and the rest went to 'another feature'; and the Measured footnote's 992 min of waits disagrees with its own parts (120+864+9+3 = 996) and with the wait columns (994, 996 with review) by more than rounding."
+    },
+    {
+     "id": "T09-left-idle-126-to-0",
+     "summary": "Idle 126 -> 0: the two stretches over an hour (08:32-09:35Z, 10:42-11:46Z) the session spent on 449's turns now book 'another feature' (123 min) and model (4 min), measured per stretch, with a red test (a_stop_in_another_features_log_opens_the_wait, red2/red3).",
+     "class": "within",
+     "why": "Last round's NOT LEGITIMATE item fixed in T09 as the cure prescribed: the session's time on another feature's turns is booked apart rather than to 451's runs or none, red first. Nothing is left, so no ruling is owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T10": {
+   "section_sha256": "da8d2c86d83321d577b4602dc4d8910d56e83ae542f6c1afa1c7eb07581ab86c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T10-tokens-transcript-first",
+     "summary": "Each agent's tokens are read from its agent-<aid>.jsonl usage rows inside the window, each message.id once, and the last SubagentStop tok is used only where no transcript row counts (a declared departure from D6's 'the reader keeps the last per aid').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Following the letter would defeat the request's purpose, which is an agent's token cost. By the block's own dated figures the stop's tok is short of the transcript rows on 16 of the 17 stops that carry one, and only 17 of 279 stops carry one, so reading it would report wrong costs. The stop line is still read as the fallback, so the request's 'read those new lines' and its cheap-history purpose survive for agents whose transcripts are gone. The writer defect is filed as T59 with why, id and order. Not settled from the bundle: whether the 262 stops with no tok at all are the same writer defect (T59 should cover an absent tok as well as a short one)."
+    },
+    {
+     "id": "T10-agent-to-task",
+     "summary": "Each agent is kept once with its kind and its task (first start's task from the launch brief per D6, else its first stop's) and booked by start to the task its lines name, or by tick to the mark at its first start. The old walk, which read only the 451 log and booked by the mark, is deleted.",
+     "class": "within",
+     "why": "D7 says 'each agent's span and tokens under its task', and D6 says where an agent's task comes from. It is read from every feature's log through T09's single build of the spans, as the dispatch states."
+    },
+    {
+     "id": "T10-window-clip",
+     "summary": "Agent spans are cut to SINCE/UNTIL, overlapping spans are merged (a double start with no stop between counts once), an agent with nothing left is dropped, and token rows are limited to the window. The clip applies to the flight's agents only, so the time table is untouched.",
+     "class": "within",
+     "why": "D7 reports the window's wall clock with the agent-minutes beside it, so the agent-minutes are the window's. The dispatch names the clip and the single count of a double start, and the time table is measured unchanged line for line."
+    },
+    {
+     "id": "T10-refused-landing",
+     "summary": "A refused landing is a landing end line whose landed is false, never read from its exit code. A landing of several tasks is one refusal, counted under each task.",
+     "class": "within",
+     "why": "This is D7's and D5's definition word for word: 'landed is false', and 'exit 3 with its ticks standing is a landing whatever its code'."
+    },
+    {
+     "id": "T10-plan-re-round",
+     "summary": "A plan re-round is any spec-fidelity or spec-fidelity-verify agent of a task after its first, each agent counted once (a resume is not a new round), with an agent naming no task counted as no task's re-round. The count therefore includes every spec-fidelity review dispatched under the task, not just its plan's rounds: 68 in the window, about 3x the feature report's 23 rounds past the first.",
+     "class": "within",
+     "why": "This is D7's parenthetical word for word: 'a task's spec-fidelity and spec-fidelity-verify dispatches after its first'. The request asks for no re-round count of its own, so the block narrows no clause. The block measures and discloses the 3x against the feature report's rounds-per-subject table, which is a different quantity. Whether D7's label 'plan re-rounds' overstates its own definition is a question about the spec, not this block."
+    },
+    {
+     "id": "T10-report-shape",
+     "summary": "After the time table, where-time prints a by-task table (agents, agent minutes, k tokens in, k tokens out, refused landings, plan re-rounds, kinds) with an all row, a row per agent under its task, and a line setting the agents' summed minutes beside the critical path's wall clock. feature-report is wired by T11.",
+     "class": "within",
+     "why": "FR-005 and D7 ask for the critical path's wall clock apart from the summed agent-minutes, each agent's span and tokens under its task, and the rework counts. This is that output."
+    },
+    {
+     "id": "T10-t09-restated",
+     "summary": "The critical path, the turn ends and the between-turn model minutes are T09's and are restated, not rebuilt. The 2.5 min left unreconciled is not traced further.",
+     "class": "within",
+     "why": "The dispatch says T09's work is restated. The time table is measured unchanged, and an untraced 2.5 min (under 1%) is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T10-t59-deferral",
+     "summary": "The SubagentStop writer's short tok is not fixed in T10. It is filed as T59, to land before T22, because the writer is the guard's file, outside T10.",
+     "class": "within",
+     "why": "T10 is FR-005's reader. The writer defect is FR-004's and is fixed in this feature by T59, which carries FR-009's why, id and order. The reader routes around it meanwhile, so no wrong number reaches the report."
+    },
+    {
+     "id": "T10-negzero-fix",
+     "summary": "The -0 minutes printed for a task row with no agent is fixed by folding the sums from 0.0, with a red-first pin.",
+     "class": "within",
+     "why": "A defect found and fixed in the task."
+    },
+    {
+     "id": "T10-untasked-agents",
+     "summary": "The 12 agents (94 min) that name no task stay under no task.",
+     "class": "within",
+     "why": "FR-004 gives an agent a task 'where its dispatch names one', so an agent whose dispatch names none has none to be booked under."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)",
+    "### T08 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "compile-split-any-run",
+     "summary": "Compile (the union of build and cover-build phases) is split out of ANY run a phase ties to, not only a tests run (data-model's wording); the critical path splits a main-session call's gap the same way.",
+     "class": "within",
+     "why": "D4's own text books compile 'inside the Bash call or background span that holds them', not inside a tests run; the GM asked 'how much time are we spending on recompiling things', and a landing's or gate's compile is recompiling. Widening the split books more of what was asked; it removes nothing."
+    },
+    {
+     "id": "phase-tie-by-task",
+     "summary": "A phase ties to the run of its session whose span holds it and whose target is its make OR whose task is its task, ranked target, then task, then latest start; unmatched phases counted in the footnote, never dropped; a phase starting after the window is none of it.",
+     "class": "within",
+     "why": "D4 ties by session, clone and target; adding task as a second key moved 567 untied compile phases (60.9 min) to 170 (12.1 min), measured, so it brings more of the GM's compile time under its task (the per-task breakdown he asked for). It narrows nothing. Note for the caller: the block's restatement omits D4's clone key; since builders share the main session's id (D4), dropping clone could tie a phase to a same-task or same-target run in another clone. Not ruled on - the block is silent, not explicit - but confirm the code still keys on clone."
+    },
+    {
+     "id": "bg-end-enqueue-first",
+     "summary": "A background run ends at the main transcript's queue-operation enqueue row naming its tool-use-id, before its BgEnd line's t.",
+     "class": "within",
+     "why": "D3 itself says a BgEnd's t is when the notice reached the session, not when the run ended (the notice waits while the session is mid-turn); the enqueue row is the nearer reading of the run's own end. More accurate booking of what was asked; nothing dropped - BgEnd remains the fallback."
+    },
+    {
+     "id": "bg-end-taskstop",
+     "summary": "A background run with no enqueue row or BgEnd ends at the TaskStop call that stopped it (read from the session's and its subagents' transcripts), else open to the window's end.",
+     "class": "within",
+     "why": "A stopped run has ended; booking it open to the window's end was a wrong outcome (ten runs, 6,070 of 6,792 machine minutes booked 'other', measured). D3's 'open to the window's end' is the fallback for a launch with no end anywhere, and a TaskStop is an end. Adds an end source; narrows nothing the GM asked."
+    },
+    {
+     "id": "builder-call-as-session-state",
+     "summary": "A subagent's call inside the main session's turn is booked on the critical path as what the session was doing (the call it waits on, or the model); between turns it keeps the wait open. The session's own line moves state before a zero gap is skipped, and SubagentStart/SubagentStop keep it.",
+     "class": "within",
+     "why": "D7 defines the critical path as the wall clock partitioned by what the MAIN SESSION was doing or waiting on; a builder's line cutting the session's make static in two misbooked the session's own state. This implements D7 literally; builder runs are still booked in the runs table (machine minutes)."
+    },
+    {
+     "id": "landing-precedence",
+     "summary": "A call running several targets is booked by the first of them in PRECEDENCE (land, gate, tests, review, docs, spec-kit step, other) in both tables; a phase ties to a run that runs its make at all; a landing's gate and cohort phases are split out as gate, less the compile inside them.",
+     "class": "within",
+     "why": "FR-001/D2 book a call by its target and are silent on a line with several; the day's 19 landings were launched 'make claims-owed ...; make ledger-owed; make land' and booked review by their first target, which misses the land and gate columns FR-005 asks for (land 4.2, gate 0.0 against 27.4 min of their own gate phases, measured). The block's own cross-check (land 5.3 + gate 14.4 + compile 13.0 = 32.7 min against the end phases' 32.4) shows precedence absorbs almost no non-land time. Cohort booked as gate follows D5 (cohort-landing is the landing's gate stage)."
+    },
+    {
+     "id": "two-tables",
+     "summary": "where-time shows a critical-path (wall clock) table and a runs table of every session's and agent's Bash calls in overlapping machine minutes, never summed into the wall clock.",
+     "class": "within",
+     "why": "D7 asks for the critical path 'and beside it the summed agent-minutes'; FR-005 'the wall clock on the critical path apart from the summed agent-minutes'. The runs table is that."
+    },
+    {
+     "id": "until-clip",
+     "summary": "UNTIL= passes --until (held Makefile edited); logs read to their end so a run still going at UNTIL is clipped there, not dropped.",
+     "class": "within",
+     "why": "FR-005 and D7 ask for UNTIL=; clipping rather than dropping keeps the run's in-window time booked."
+    },
+    {
+     "id": "untied-phases-left",
+     "summary": "159 compile and landing-gate phases (9.5 min) tie to no run; left, counted and shown in the runs table's footnote, ruled 'not a defect'.",
+     "class": "within",
+     "why": "The time is shown, not lost: the GM's 'how much time recompiling' is answered with the footnote. No reader is told a wrong number; per WHAT A DEFECT IS, a gap counted and displayed is not a wrong outcome."
+    },
+    {
+     "id": "feature-report-to-T11",
+     "summary": "feature-report is held unchanged here; its reading of the columns is T11's.",
+     "class": "within",
+     "why": "A task split inside the feature, not a removal: FR-005/D7 still require feature-report to read the same columns through the same functions, and the block assigns it to T11 rather than dropping it. Not verifiable from the bundle that T11's line carries it; the caller should confirm."
+    },
+    {
+     "id": "defer-subagent-queued-command-T09",
+     "summary": "A subagent's background run whose notice reached only its own transcript (the queued_command attachment) ends here at BgEnd, TaskStop or the window's end; reading queued_command is deferred to T09, lands before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D3 says 'The readers (T08) ... read the subagent transcript's queued_command attachment', so this narrows T08 against D3's own wording. It is legitimate as a task-ordering narrowing only: the requirement stays in the feature (FR-002/D3), the block gives the why (D3's end-of-run work is T09's), the filed task and the order ('lands before T10') as FR-009 requires, and T09 is the very next task on the same reader. The GM's request sets no task order that this breaks, and the defect is not carried past the reader work. Not verifiable from the bundle that T09's section names it; the caller should confirm before ticking T09."
+    },
+    {
+     "id": "defer-wait-booking-T09-T10",
+     "summary": "The critical path still books 866 of 1,354 min 'waiting on work'; booking a wait to the runs in flight (D3, the FR-005/D7 'background run' column) is deferred to T09 and the critical path apart from the agents to T10; filed as T09, lands before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the spec's headline wrong (SC-001: under a tenth unexplained; today 64%), so it is a narrowing of T08 and not a 'within'. It is legitimate on the same footing as the queued_command deferral: FR-002 and D3 assign wait-to-run booking a mechanism of its own (inflight on the Stop, else the holding launch), the block names the owner (T09, then T10 for D7's agent split) and the order, and the requirement and its success criterion are untouched. It also covers the 'background run' column FR-005 lists, which neither table carries yet. The deferral is legitimate only if T09 lands before any non-reader work; a spec where SC-001 is not met at the close would be a defect, not this."
+    },
+    {
+     "id": "defer-between-turn-model-T10",
+     "summary": "The critical path's model column (342 min) holds about 235.4 min between turns, because a turn's Stop line often lands in 449's log and the 451 walk never sees the turn end; reading a session's turn lines from every feature's log is folded into T10 (D5, D6), lands before T11. Two smaller wrongs the same check found (a builder's stop inside make static; the zero-gap skip) are fixed here.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known wrong outcome left standing (model minutes booked that are really the session waiting), so a narrowing. Legitimate because the fix needs a decision that belongs to the critical-path design T10 owns (how a turn spent on another feature is booked against this feature's wall clock - D7's critical path apart from the agents), the block states why, the task and the order (before T11) as FR-009 requires, the smaller wrongs reachable inside T08 were fixed here, and the requirement stays in the feature. Not verifiable from the bundle that T10's task line carries it (the caller says it does). Ordering seam for the caller: T09's wait booking keys on the Stop that opened a wait, and those are the very Stop lines this item says land in 449's log; T09 should read them across logs or know T10 will, else T09's numbers are built on the same missing lines."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)",
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)",
+    "### T22 Approach (checklist part A)",
+    "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)",
+    "### T33 Approach (checklist part A)",
+    "### T52 (<why: the finding or measurement that files it>)",
+    "### T52 Approach (checklist part A)",
+    "### T53 (<why: the finding or measurement that files it>)",
+    "### T53 Approach (checklist part A)",
+    "### T54 (<why: the finding or measurement that files it>)",
+    "### T54 Approach (checklist part A)",
+    "(removed) ### T36 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08-two-tables",
+     "summary": "where-time shows the wall-clock critical path and beside it a runs table of every session's and agent's Bash calls in overlapping machine minutes, never summed into the wall clock",
+     "class": "within",
+     "why": "D7/FR-005: the critical path apart from the summed agent-minutes; the GM asked how much time goes to tooling, tests and compiling, which ran in builders between turns"
+    },
+    {
+     "id": "T08-bg-end-sources",
+     "summary": "a background run ends at the main transcript's enqueue row, else its BgEnd, else the TaskStop that stopped it (an addition the plan did not name), else open to the window's end",
+     "class": "within",
+     "why": "Widens D3's end sources so stopped runs are not booked open (6,070 of 6,792 machine minutes, measured); keeps the spec's edge case (no end is open, not zero); drops nothing asked"
+    },
+    {
+     "id": "T08-compile-from-any-run",
+     "summary": "compile is the union of build/cover-build phases split out of any run, the rest staying the run's own bucket, not 'tests'",
+     "class": "within",
+     "why": "D4's 'the Bash call or background span that holds them'; a landing's or gate's compile is compile, as FR-005's compile column asks; booking a landing's remainder as tests would answer wrongly"
+    },
+    {
+     "id": "T08-phase-ties-by-task",
+     "summary": "a phase ties to a holding run of its session by target OR task (a labeled deviation from D4), ranked target, task, latest start; untied phases counted in a footnote",
+     "class": "within",
+     "why": "Ties more phases than D4 (567 untied -> 170, measured), so compile is booked more fully; FR-005 not narrowed; nothing dropped"
+    },
+    {
+     "id": "T08-subagent-in-turn",
+     "summary": "a subagent's line inside the main session's turn is booked as what the session was doing; between turns the wait stays open",
+     "class": "within",
+     "why": "Critical-path correctness under D7; fixes a wrong booking found by T08's own check"
+    },
+    {
+     "id": "T08-landing-precedence",
+     "summary": "a call running several targets is booked by the first in PRECEDENCE (land first), and a landing's gate/cohort phases are split out as gate less their compile",
+     "class": "within",
+     "why": "FR-005's land and gate columns; without it the 19 landings read as review (measured); checked against their end phases"
+    },
+    {
+     "id": "T08-zero-gap-state",
+     "summary": "the session's own line moves state on before a zero gap is skipped; SubagentStart/Stop keep it",
+     "class": "within",
+     "why": "A fixed wrong booking (model vs other subagent), inside D7"
+    },
+    {
+     "id": "T08-until",
+     "summary": "UNTIL= wired through the Makefile's --until; logs read to their end and runs clipped at UNTIL",
+     "class": "within",
+     "why": "FR-005 and D7 'where-time takes UNTIL='; fixed here before the tick"
+    },
+    {
+     "id": "T08-default-goal",
+     "summary": "a goal-less make is booked by the Makefile's .DEFAULT_GOAL or first rule's target",
+     "class": "within",
+     "why": "Books each make target by FR-001's table, as D2 asks"
+    },
+    {
+     "id": "T08-no-background-run-column",
+     "summary": "T08's built tables carry no 'background run' column (FR-005, D7); background time appears only as the runs table's in-the-background total",
+     "class": "within",
+     "why": "A wait booked to the background run in flight is FR-002's and D3's, the work T09's section carries (FR-002, FR-005, D3, D7); the column is owed by T09, not dropped from what was asked"
+    },
+    {
+     "id": "T08-FL-subagent-bg-end-to-T09",
+     "summary": "a subagent's background run whose notice is only in its own transcript is ended by BgEnd/TaskStop/window end here; the queued_command reading deferred to T09, lands before T10",
+     "class": "within",
+     "why": "D3's subagent end is FR-002's wait-to-run booking, which T09's section carries (FR-002, D3, R2's subagent transcripts); work moved between two open tasks of the feature, nothing dropped from what was asked; deferral formed (why, filed id, order)"
+    },
+    {
+     "id": "T08-FL-waiting-on-work-to-T09",
+     "summary": "the critical path still books 866 of 1,354 min waiting on work; deferred to T09 (wait booked to run) and T10 (critical path apart from agents), lands before T10",
+     "class": "within",
+     "why": "SC-001's bar is met by FR-002 and the critical path's tasks, measured at T22; T08 is the columns task; sequencing inside the plan, not a narrowing"
+    },
+    {
+     "id": "T08-FL-untied-phases-not-a-defect",
+     "summary": "159 compile and landing-gate phases (9.5 min) tie to no run and are counted in the footnote, judged not a defect",
+     "class": "within",
+     "why": "D4 books a phase inside the run that holds it; the untied remainder is shown, not dropped or misreported, so no wrong outcome (constitution XIV's defect definition); SC-002's tolerance is measured at T22"
+    },
+    {
+     "id": "T08-FL-model-column-to-T10",
+     "summary": "the critical path's model column books between-turn time (235.4 min) because a turn's Stop can land in another feature's log; folded into T10, lands before T11",
+     "class": "within",
+     "why": "A known wrong booking deferred with its why, filed task and order to T10, the task that owns the critical path apart from the agents (D5, D6, D7); nothing asked is narrowed, and it is fixed before the readers' last task (T11) and the close (T22); T10's section, still 'Found and left? none', owes that work when it is decided"
+    },
+    {
+     "id": "T08-T11-T22-perf",
+     "summary": "T08, T09, T10, T11 and T22 answer Performance work? yes, under FR-013's measurement clause, with no engine-speed checklist",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'; FR-013 names where-time's and feature-report's readers and the close's measured day; the checklist is for engine-speed tasks only. T22's order 'Last' stands with FR-013's escape (a performance task waiting on another task's landing)"
+    },
+    {
+     "id": "T33-path-as-words",
+     "summary": "T33's quoted page path in window#172 restated as words ('the urban-features record page')",
+     "class": "within",
+     "why": "Wording only so the research-pointer check does not read it as a pointer; the decision, its measurement and its deferral (T49) are unchanged from the CLEAR text"
+    },
+    {
+     "id": "T52-T54-templates",
+     "summary": "new empty section templates for T52, T53 and T54",
+     "class": "within",
+     "why": "Placeholders that decide nothing"
+    },
+    {
+     "id": "T36-removed",
+     "summary": "an unfilled template section for T36 removed",
+     "class": "within",
+     "why": "Its earlier text was a placeholder with no decision; removing it decides nothing and drops no requirement"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)",
+    "### T09 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T09-reader-pairing",
+     "summary": "A launch paired with its BgEnd, else the subagent transcript's queued_command row holding its tool-use-id, else open to the window's end; a wait booked to the runs its Stop names inflight, else to the launch whose span holds it (a Stop written before the field: the session's own runs/agents whose span holds the gap).",
+     "class": "within",
+     "why": "D3's reader half as written."
+    },
+    {
+     "id": "T09-turn-reader-every-log",
+     "summary": "Stop and UserPromptSubmit lines of the window's sessions read from every feature's log, kept once; a foreign Stop/prompt taken as 451's only when a line of the session's own lies between it and its paired line, else marked events::FOREIGN.",
+     "class": "within",
+     "why": "FR-002/D3 book a between-turns wait from the Stop that opened it; a misfiled Stop is otherwise invisible. Taking a foreign turn only when it holds 451's own lines keeps 449's turns out of 451's model. How the requested booking happens, not added scope."
+    },
+    {
+     "id": "T09-another-feature-column",
+     "summary": "A left-out foreign turn books from its prompt to the session's next line of 451's own to a new column 'another feature' (247 min in T08's window), the waits between 449's turns among it, moving no state of 451's walk.",
+     "class": "within",
+     "why": "D7 partitions the critical path by what the main session was DOING or waiting on; while it worked 449's turns it was doing another feature, so that time is not 451's model, idle or waits, and showing it as its own column keeps it visible rather than hiding it - 'where our time went on that task' answered without crediting 451 with 449's work. This is the cure of last round's NOT LEGITIMATE item, applied window-wide: the column also takes minutes that had sat in model, in 'none', and with a 451 agent in flight (the agent share fell 945 -> 864, none 147 -> 3); that is consistent, since the session in those minutes was on 449's turns, not waiting on 451's agent. A column beyond FR-005's list is within, as T08's plan review/other subagent/idle columns are: D7's partition needs a bucket for it."
+    },
+    {
+     "id": "T09-agent-lines-every-log",
+     "summary": "SubagentStart/SubagentStop lines read from every log as the turn lines are; an agent counts for the feature only where a line of its own log names it.",
+     "class": "within",
+     "why": "D3 books a wait to the agents inflight names and an agent's span needs its start and stop lines (9 of 115 had their start only in 449's log, measured); the own-log filter keeps 449's agents off 451's waits. Inside D3."
+    },
+    {
+     "id": "T09-several-in-flight-rank",
+     "summary": "With several runs in flight each second goes to one run by rank (named Bash column in PRECEDENCE order, agent, unnamed Bash 'background run', monitor; latest started breaks a tie); a Bash second splits into compile/gate as a call's does; an agent's second to its foreground-wait column; a second no run holds stays waiting on work; waits printed by holder.",
+     "class": "within",
+     "why": "D7's partition books each second once; D3 is silent on the split, so the order is design inside what was asked. The by-holder footnote serves the unexplained-waiting measure."
+    },
+    {
+     "id": "T09-fixture-moved",
+     "summary": "the_columns_book_make_runs_compile_and_until's no-inflight wait now books 5 min land and 7 min none instead of 12 min waiting on work.",
+     "class": "within",
+     "why": "The intended effect of FR-002 on a pinned fixture."
+    },
+    {
+     "id": "T09-perf-tag",
+     "summary": "Tagged [perf] under FR-013's measurement clause; the command 1.16-1.24 s -> 1.58-1.90 s wall, measured.",
+     "class": "within",
+     "why": "FR-013 counts where-time's readers as performance work for ordering. The slower command is a measured cost, not a wrong outcome."
+    },
+    {
+     "id": "T09-left-T10-model-minutes",
+     "summary": "The between-turn model minutes T10's line names are fixed here (model 342 -> 89); T10 keeps agent-minutes, tokens and rework, reading turn ends through events::turn_lines. The 253-vs-235.4 gap reconciled: 15.1 of the 18 min inside 449's own turns now booked another feature, 2.9 stated unreconciled, method given.",
+     "class": "within",
+     "why": "Pulling work forward into the walk that books both is inside FR-005; the reconciliation asked for last round is now in the block, and a stated 2.9 min residue is not a defect left. Text to correct (not a narrowing): this bullet still says the 253 moved 'to the waits', but by the section's own tables waits rose only ~866 -> ~994 and the rest went to 'another feature'; and the Measured footnote's 992 min of waits disagrees with its own parts (120+864+9+3 = 996) and with the wait columns (994, 996 with review) by more than rounding."
+    },
+    {
+     "id": "T09-left-idle-126-to-0",
+     "summary": "Idle 126 -> 0: the two stretches over an hour (08:32-09:35Z, 10:42-11:46Z) the session spent on 449's turns now book 'another feature' (123 min) and model (4 min), measured per stretch, with a red test (a_stop_in_another_features_log_opens_the_wait, red2/red3).",
+     "class": "within",
+     "why": "Last round's NOT LEGITIMATE item fixed in T09 as the cure prescribed: the session's time on another feature's turns is booked apart rather than to 451's runs or none, red first. Nothing is left, so no ruling is owed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)",
+    "### T09 Approach (checklist part A)",
+    "### T56 (<why: the finding or measurement that files it>)",
+    "### T56 Approach (checklist part A)",
+    "### T57 Approach (checklist part A)",
+    "### T58 (<why: the finding or measurement that files it>)",
+    "### T58 Approach (checklist part A)",
+    "### T59 (<why: the finding or measurement that files it>)",
+    "### T59 Approach (checklist part A)",
+    "### T60 (<why: the finding or measurement that files it>)",
+    "### T60 Approach (checklist part A)",
+    "### T61 (<why: the finding or measurement that files it>)",
+    "### T61 Approach (checklist part A)",
+    "### T62 Approach (checklist part A)",
+    "### T63 (<why: the finding or measurement that files it>)",
+    "### T63 Approach (checklist part A)",
+    "### T64 (<why: the finding or measurement that files it>)",
+    "### T64 Approach (checklist part A)",
+    "(removed) ### T53 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T09-wait-total",
+     "summary": "T09's footnote figure for the waits between 451's turns on work corrected from 992 to 996 min, stated as the sum of the four parts the command prints (120+864+9+3), and the Found-and-left wording on the 253 model minutes made to say they moved to the waits and to the another-feature column",
+     "class": "within",
+     "why": "A corrected figure and a restated description of what D3/D7's reader (FR-002, FR-005) already measured; no design, scope or rule changes from the CLEAR text."
+    },
+    {
+     "id": "T57-premise-restated",
+     "summary": "T57's premise (a plain build/test inside make static) restated by measurement: make static runs no plain test; the double run is make rust-test's plain run beside a green coverage run, and the fix widens T111's keep to 11 more crates so make rust-test after a green coverage pass stands on it",
+     "class": "within",
+     "why": "Serves the GM's approved improvement 2 ('Stop using make static as the edit loop') and FR-013; a false task-line premise restated rather than a plain run invented to drop, per constitution XIV. Unchanged in substance from the CLEAR text; this round only adds the T32/verdict_key_with method and drops two script names."
+    },
+    {
+     "id": "T57-feature-unification",
+     "summary": "T57 leaves the family coverage build's feature unification (a crate's covered tests may run with a dependency's testkit) as not a defect",
+     "class": "within",
+     "why": "Already judged CLEAR; no wrong outcome shown (lint runs on a crate's own features, the gate already rests on the coverage run). A difference, not a defect, so leaving it is within what was asked."
+    },
+    {
+     "id": "T57-T62-deferral-restated",
+     "summary": "T57's Found-and-left item on the clone-claim backstop restated by T62's measurement: the first edit of a clean clone, not every Edit and Write; still filed as T62, lands before T22",
+     "class": "within",
+     "why": "A claim corrected to what was measured; the deferral's target and order are unchanged and T62 is built."
+    },
+    {
+     "id": "T62-closing-measurement",
+     "summary": "T62's Done-measured item completed: the coverage rerun clean and make closing-checks GREEN (static 70 s, hooks-test 62 s, quick 8 s), and the filed claim ('refuses every Edit and Write') restated as the first edit of a clean clone",
+     "class": "within",
+     "why": "Records the last measurements the CLEAR text named as owed; the fix (a bg job parked by the clone's live claimant edits; any other still refused) is unchanged."
+    },
+    {
+     "id": "T53-removed",
+     "summary": "T53's unfilled template block removed from plan.md by hand",
+     "class": "within",
+     "why": "The removed block held only the filing template - no approach, decision or narrowing - so its removal takes nothing from what the GM asked for or the spec requires."
+    },
+    {
+     "id": "T56-T58-T59-T60-T61-T63-T64-templates",
+     "summary": "Filed templates with no approach written (T58's being written by its builder; T63 Approach's digest moved only because make task-add appended T64's template beside it; T64 newly filed)",
+     "class": "within",
+     "why": "Placeholders decide nothing; each owes its own review at its decide."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)",
+    "### T10 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T10-tokens-transcript-first",
+     "summary": "Each agent's tokens are read from its agent-<aid>.jsonl usage rows inside the window, each message.id once, and the last SubagentStop tok is used only where no transcript row counts (a declared departure from D6's 'the reader keeps the last per aid').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Following the letter would defeat the request's purpose, which is an agent's token cost. By the block's own dated figures the stop's tok is short of the transcript rows on 16 of the 17 stops that carry one, and only 17 of 279 stops carry one, so reading it would report wrong costs. The stop line is still read as the fallback, so the request's 'read those new lines' and its cheap-history purpose survive for agents whose transcripts are gone. The writer defect is filed as T59 with why, id and order. Not settled from the bundle: whether the 262 stops with no tok at all are the same writer defect (T59 should cover an absent tok as well as a short one)."
+    },
+    {
+     "id": "T10-agent-to-task",
+     "summary": "Each agent is kept once with its kind and its task (first start's task from the launch brief per D6, else its first stop's) and booked by start to the task its lines name, or by tick to the mark at its first start. The old walk, which read only the 451 log and booked by the mark, is deleted.",
+     "class": "within",
+     "why": "D7 says 'each agent's span and tokens under its task', and D6 says where an agent's task comes from. It is read from every feature's log through T09's single build of the spans, as the dispatch states."
+    },
+    {
+     "id": "T10-window-clip",
+     "summary": "Agent spans are cut to SINCE/UNTIL, overlapping spans are merged (a double start with no stop between counts once), an agent with nothing left is dropped, and token rows are limited to the window. The clip applies to the flight's agents only, so the time table is untouched.",
+     "class": "within",
+     "why": "D7 reports the window's wall clock with the agent-minutes beside it, so the agent-minutes are the window's. The dispatch names the clip and the single count of a double start, and the time table is measured unchanged line for line."
+    },
+    {
+     "id": "T10-refused-landing",
+     "summary": "A refused landing is a landing end line whose landed is false, never read from its exit code. A landing of several tasks is one refusal, counted under each task.",
+     "class": "within",
+     "why": "This is D7's and D5's definition word for word: 'landed is false', and 'exit 3 with its ticks standing is a landing whatever its code'."
+    },
+    {
+     "id": "T10-plan-re-round",
+     "summary": "A plan re-round is any spec-fidelity or spec-fidelity-verify agent of a task after its first, each agent counted once (a resume is not a new round), with an agent naming no task counted as no task's re-round. The count therefore includes every spec-fidelity review dispatched under the task, not just its plan's rounds: 68 in the window, about 3x the feature report's 23 rounds past the first.",
+     "class": "within",
+     "why": "This is D7's parenthetical word for word: 'a task's spec-fidelity and spec-fidelity-verify dispatches after its first'. The request asks for no re-round count of its own, so the block narrows no clause. The block measures and discloses the 3x against the feature report's rounds-per-subject table, which is a different quantity. Whether D7's label 'plan re-rounds' overstates its own definition is a question about the spec, not this block."
+    },
+    {
+     "id": "T10-report-shape",
+     "summary": "After the time table, where-time prints a by-task table (agents, agent minutes, k tokens in, k tokens out, refused landings, plan re-rounds, kinds) with an all row, a row per agent under its task, and a line setting the agents' summed minutes beside the critical path's wall clock. feature-report is wired by T11.",
+     "class": "within",
+     "why": "FR-005 and D7 ask for the critical path's wall clock apart from the summed agent-minutes, each agent's span and tokens under its task, and the rework counts. This is that output."
+    },
+    {
+     "id": "T10-t09-restated",
+     "summary": "The critical path, the turn ends and the between-turn model minutes are T09's and are restated, not rebuilt. The 2.5 min left unreconciled is not traced further.",
+     "class": "within",
+     "why": "The dispatch says T09's work is restated. The time table is measured unchanged, and an untraced 2.5 min (under 1%) is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T10-t59-deferral",
+     "summary": "The SubagentStop writer's short tok is not fixed in T10. It is filed as T59, to land before T22, because the writer is the guard's file, outside T10.",
+     "class": "within",
+     "why": "T10 is FR-005's reader. The writer defect is FR-004's and is fixed in this feature by T59, which carries FR-009's why, id and order. The reader routes around it meanwhile, so no wrong number reaches the report."
+    },
+    {
+     "id": "T10-negzero-fix",
+     "summary": "The -0 minutes printed for a task row with no agent is fixed by folding the sums from 0.0, with a red-first pin.",
+     "class": "within",
+     "why": "A defect found and fixed in the task."
+    },
+    {
+     "id": "T10-untasked-agents",
+     "summary": "The 12 agents (94 min) that name no task stay under no task.",
+     "class": "within",
+     "why": "FR-004 gives an agent a task 'where its dispatch names one', so an agent whose dispatch names none has none to be booked under."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T08 to T10, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

@@ -1,0 +1,967 @@
+{
+ "blocks": {
+  "### T490 Approach (checklist part A)": {
+   "sha256": "0017e2660b560e8816066b6b0171d79adf504aa57941fe965a5927595712a6f6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T490 (451 T387: every hook that read `checks-open.json` parsed the whole 3.0 MB state, 36 to 43 ms of CPU, while the hot calls read none of its 2.29 MB of `dispatches` or 0.51 MB of `versions`, measured 2026-11-27 (`t387-time.py`, 20 runs))": {
+   "sha256": "516939f317f264b37716139a82332dca96cddc77c5997974aadd07afaeff5c27",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T491 (451 T388: pair-hooks spent 50 of its 92 ms on every Agent call reading the feature's whole 50 MB event log for its first line, measured 2026-11-27 (T388's sandbox arms), to answer \"not due\" for a step-back switched off since 2026-10-21)": {
+   "sha256": "a20b96352a0d508eb9215cf46a8b68d375721a2ef2b70cbda9d83cbedbef449e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T491 Approach (checklist part A)": {
+   "sha256": "50286469a4f5e723a7d537086c6ee62a27083d6dbdefd0d6333883ba48f11e61",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T492 (a record check's dispatch ran a work-tree diff for the cascade tripwire where it could not trip, 451 T388)": {
+   "sha256": "41c862eafde609324806fe5237929fb6ec97ffc0bdf9772a88813b6f06fc51cf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T492 Approach (checklist part A)": {
+   "sha256": "d4b66742a46a21fc5095e8450fe9f20413b6f3cd49850e236d22ec4d8c787f95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T493 (451 T388: review-round-hooks parsed the whole 4.7 MB `plan-review.json` into values on every plan review, for one task's round count - 40 ms of the guard's 82, measured 2026-11-27 (T388's shim))": {
+   "sha256": "bd5330d6a96e08560a13b3d6471162477233d9c138c4291004055a3c30fe6011",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T493 Approach (checklist part A)": {
+   "sha256": "13497e813e1ee3a171888746ae9fa84a3f72345ccd0159a867a6b48c18d80033",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T494 (451 T388: a guard's gate call paid the gate launcher's 17.5 ms source walk on every call, and review-round and check-bundle a 2.5 ms `/usr/bin/env` start, about 460 calls a day, measured 2026-11-27 (T388's sandbox arms))": {
+   "sha256": "618e12ff77ad787b242c0f553026b822620d509965e5e04c869af1c233c33513",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T494 Approach (checklist part A)": {
+   "sha256": "644c89bbecf319f9eb8aa517d7f232b37b3e57d98bb4e433a35a216f03037c5f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T495 (a carry's record merge gave a same-day tie to the pool tree's verdict on a stub over the clone's CLEAR on the filled block, 451 T487)": {
+   "sha256": "12ba43c624610dcfaacefd180f04c04226d569aa11936a87a10bb49d70f545c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T495 Approach (checklist part A)": {
+   "sha256": "1f35a995a841f01054edcf6035bbbeb88e1349fa9a01131e4804e22412208764",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T496 (found by 451 T489: `planhold::refusal`'s dead-hold escape - the `escaped && dead` pass and the \"its dispatch looks dead: PLAN_EDIT_OK\" tail - is reached only by `planhold/tests.rs`'s direct calls, since `purge` runs in `snapshot` before `edit_mode` and leaves no dead hold at a hooked call)": {
+   "sha256": "aa164cd29dfa9d131e79d39b241a7f35e3261c45a59329084aba7225752bd2f8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T496 Approach (checklist part A)": {
+   "sha256": "f01000a07e8d36a81790d84f9ac679109bdff4bc6c5245dd1a80788a347dead7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T497 (451 T493: review-round-hooks read and scanned the 4.7 MB `plan-review.json` once for each task a plan-delta dispatch names, about 18 ms each after T493, measured 2026-11-27 (T388's 40 ms less T493's 22 saved))": {
+   "sha256": "eb457dd21a561024f2bf2c3c2b89b5d1cc303ad164842a52b2b82aee36e62a02",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T497 Approach (checklist part A)": {
+   "sha256": "fd6333cef4716dc483ddb34bcca4b89ba88c88a1e8acad5e10e558c37e1c0026",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T498 (451 T491: with the step-back switched on, `checkpoint due` read the feature's whole event log twice - `state_in` called `gm_waits` and `idle`, each calling `events` - 50 MB, about 50 ms a read on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms))": {
+   "sha256": "2a818d73f8d8970a9bb9f494d714454353b1f0638d128b46f870aa41fd31766e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T498 Approach (checklist part A)": {
+   "sha256": "0a4f2b2366fb2d2bb4e9068c35c100f1e4d6e25720d390796f4753b2233d5fe0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T499 (found by the GM's question of 2026-11-27, whether builders pull the 824,251-byte plan.md and 3,131,453-byte plan-done.md into context: no figure said)": {
+   "sha256": "8ccc5c26da6856281b8a7316147688a3f19e4a1c739e51a835b61e0b544628f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T499 Approach (checklist part A)": {
+   "sha256": "30fba6f2b281109bffb695ce01c758baa0e7f9f6428eab3ce7fd79a5f3e85737",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T500 (451 T494's found-and-left: five guards still started the gate launcher by its `#!/usr/bin/env bash` shebang or outside `tool::ask_gate`'s shared walk, 2.5 ms of `env` a call, measured 2026-11-27 (T388's record), and clone-sync's prompt sync asked `own-make` twice)": {
+   "sha256": "0faab3adc5a64367ed6b588e1e6d111f59ed90b6be71e32a798128a99d8df981",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T500 Approach (checklist part A)": {
+   "sha256": "3c88772526daea805e2db4e1acd17f3c17155873684deba626c2b6d625a91eaa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T501 (451 T499: builders read 3,683,572 bytes of plan.md and plan-done.md text by grep and sed in 114 builders' tool results over 2026-11-26/27, median 30,377 a builder, measured 2026-11-27 (`plan-reads.py`); the GM 2026-11-27 on token cost: \"That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens\" (request.md))": {
+   "sha256": "46a50d776a8b3f167eaab452f920ed5dd512513155be47ee0647060665c7e7e8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T501 Approach (checklist part A)": {
+   "sha256": "ca7af191b3ab0961e498c4a2dee4ddd72f97e14abb53af84bc82ad79ad4c338f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T502 (found by 451 T501's build half: the block `make builder-brief` prints names no plan read, so `make plan-section` reached a builder only through the rules file, 2026-11-27)": {
+   "sha256": "cd96df08c73dc01e2674050b6b09146657c34ee1d987bc2a30b0c24d77b1207e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T502 Approach (checklist part A)": {
+   "sha256": "87232aa832eb0edebe955e07a0de2fb5ea239dffe49d80595675e430ee5c4462",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T503 (<why: the finding or measurement that files it>)": {
+   "sha256": "3dc862c0df53a5b15612f6ddcb515cae98218bba4727cd0042c72343fb4cf27e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T504 (451 T500's found-and-left: three guards started the gate launcher by `bash` but outside `tool::ask_gate`'s shared walk, so a later call could not ride an earlier fresh call's proof, up to a 17.5 ms walk a call, measured 2026-11-27 (T494's walk on T388's sandbox))": {
+   "sha256": "0eef8738f06aa9d1d4c0dc00313a3f01ef3ad3ac39ef0a8a7e802eebf878fa66",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T504 Approach (checklist part A)": {
+   "sha256": "c3178b22b128673004820520376ec7ebcc5efeb86a14400f42add1354baab3e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T505 (451 T490: every SubagentStop booked and rewrote the whole 2.6 MB check state, 92 to 95 ms of CPU a stop and 22 of 22 writing, because 14 check-wave rows `returned` with no reply, 861 to 863 hours old, still counted as waiting for an agent, measured 2026-11-27 (`t490-time.py`'s agent-stop arm, 20 runs))": {
+   "sha256": "a56fb95525678b9e8e2fbb72febe2309fb03967f7dc2614ade8a5a33a91d4693",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T505 Approach (checklist part A)": {
+   "sha256": "45613b9e5887bd1eefe3362346ab55e4e1559b81c8863f69551ac7e96c9da501",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T499": {
+   "section_sha256": "48ea890a26c59718b34b5f5c14367bd656d94e9cea719a90e059d61b89297a94",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T499-D1",
+     "summary": "No make target or brief line printing one task's plan section is filed; reopened when a builder reaches the cap with plan reads above 25% of its tool results",
+     "class": "within",
+     "why": "request.md holds no clause asking that builders' plan-file reads be cut or that a lever be filed; the GM's question (paraphrased in the block heading) asked how much reaches context, and the block answers with measured figures. Declining to add unrequested behavior narrows nothing. The GM's token words (request.md 2026-11-27: efficient token use a huge project goal) are a goal, not an ask for this lever, and his 2026-11-26 words weigh complexity cost against token cost. Whether the lever pays is design and cost, outside this review."
+    },
+    {
+     "id": "T499-population",
+     "summary": "The 114 builders of 2026-11-26/27, picked by a BUILDER-BRIEF line in the first prompt, deduplicated by agent id",
+     "class": "within",
+     "why": "The face-value population for a question about what builders read; dated and methoded."
+    },
+    {
+     "id": "T499-counting",
+     "summary": "Counts Read and Bash calls naming plan.md or plan-done.md, a Bash call's whole output counted, so every figure is an upper bound",
+     "class": "within",
+     "why": "Answers the question as asked (those two files entering context), with its bias stated."
+    },
+    {
+     "id": "T499-tokens",
+     "summary": "Tokens estimated at 4 bytes a token, labeled ESTIMATE",
+     "class": "within",
+     "why": "A labeled estimate derived from measured bytes; the arithmetic follows (32,312 bytes mean / 4 = about 8,000; 116,795 / 4 = about 29,000)."
+    },
+    {
+     "id": "T499-perf",
+     "summary": "Counted as performance work for scheduling",
+     "class": "within",
+     "why": "FR-013's measurement clause (the GM 2026-11-20: measurement tasks count as performance tasks for scheduling)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T505": {
+   "section_sha256": "436742c5e1cd77329160070dcf588cabd5c06a4dba4fa2b8a81b7d5869210136",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T505-approach",
+     "summary": "Bound how long a check-wave row waits for an agent (WAVE_WAIT_S after its dispatch), asked by both readers of the wait (handle::concerns, rounds::pair_wave), with Row keeping t for concerns, so a SubagentStop no row names neither books nor rewrites the 2.6 MB check state.",
+     "class": "within",
+     "why": "Performance work on the checks' tooling is what the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013), and this one is measured before and after (89.6/94.3 -> 14.1/14.3 ms CPU, writes 22 of 22 -> 0 of 22). It takes cost off every subagent stop and narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T505-D1",
+     "summary": "WAVE_WAIT_S is 6 hours, a GUESS knob labeled in its doc comment as HOLD_MAX_S is, timed from the dispatch t; a pending row past it stops waiting too; WAVE_PENDING_S unchanged.",
+     "class": "within",
+     "why": "Picking the knob's value and what it is timed from is a design choice inside the perf fix. 6 h is many times the longest wave agent measured (585 s over 362 agents), so no wave inside its own run is affected. A pending row is already dead to live after WAVE_PENDING_S (30 min), so a pending row that stops waiting at 6 h changes nothing anyone relies on. Nothing in the request sets this value."
+    },
+    {
+     "id": "T505-late-reply",
+     "summary": "An agent paired after the wait is treated as one no row names: its reply, round and EDIT blocks are not booked; the row stays returned-with-no-reply as before; said in the doc comment.",
+     "class": "within",
+     "why": "This is the cost of the age bound, stated and not hidden. It only reaches a wave unit retried more than 6 h after its wave's dispatch, against a measured longest run of 585 s, and it leaves the row as it stood before the late agent came. That is not a wrong outcome on any path the request or the spec names, so it is not a defect left and not a narrowing of what was asked."
+    },
+    {
+     "id": "T505-age-not-save-on-change",
+     "summary": "Choose the age bound over saving only when a booking changed a row, because comparing needs the whole parse (the 55 ms clone and compare T387 removed).",
+     "class": "within",
+     "why": "Choosing between two ways to make the same perf improvement is design, not fidelity. Neither option narrows the request."
+    },
+    {
+     "id": "T505-red-first-and-tests",
+     "summary": "Red-first test a_wave_row_past_its_wait_is_not_booked (1 of 9 failing on the old code), two existing tests extended to pin the past-the-wait cases, part tests reading t; crate-scoped builder checks green.",
+     "class": "within",
+     "why": "These tests only enforce the change this task makes, so they serve the request. They add no behavior of their own."
+    },
+    {
+     "id": "T505-no-message-changed",
+     "summary": "No guard message is changed; the brief's constraints are kept.",
+     "class": "within",
+     "why": "Nothing is removed or narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T490 (<why: the finding or measurement that files it>)",
+    "### T490 Approach (checklist part A)",
+    "### T496 (found by 451 T489: `planhold::refusal`'s dead-hold escape - the `escaped && dead` pass and the \"its dispatch looks dead: PLAN_EDIT_OK\" tail - is reached only by `planhold/tests.rs`'s direct calls, since `purge` runs in `snapshot` before `edit_mode` and leaves no dead hold at a hooked call)",
+    "### T496 Approach (checklist part A)",
+    "### T498 (451 T491: with the step-back switched on, `checkpoint due` read the feature's whole event log twice - `state_in` called `gm_waits` and `idle`, each calling `events` - 50 MB, about 50 ms a read on T388's sandbox, measured 2026-11-27 (451 T388's sandbox arms))",
+    "### T498 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T490-stub",
+     "summary": "T490's two blocks are the unfilled template: every field a placeholder, no approach, no step row.",
+     "class": "within",
+     "why": "A block of placeholders decides nothing, so there is nothing to narrow; its decisions are owed review when the section is written."
+    },
+    {
+     "id": "T498-A",
+     "summary": "state_in reads events() once, inside the !off branch, and passes the one list to gm_waits and idle, which take &[(f64, Value)] instead of a root and a feature; each answer unchanged.",
+     "class": "within",
+     "why": "A performance task (FR-013; the GM 2026-11-20 'prioritize performance improvements') that removes a duplicate read with the same walks over the same list; the off switch's read-nothing path (T491) is kept."
+    },
+    {
+     "id": "T498-B",
+     "summary": "Red first through a test-only thread-local READS counter bumped by events under #[cfg(test)]: 2 reads before, 1 after.",
+     "class": "within",
+     "why": "A test whose only effect is to show the requested saving happens and stays; enforcement of the task, no behavior added."
+    },
+    {
+     "id": "T498-C",
+     "summary": "The saving is not timed again: it cites T388's dated sandbox figure (about 50 ms a read of the 50 MB log) and notes the switch is off since 2026-10-21, so no call saves it today.",
+     "class": "within",
+     "why": "The figure carries its date and method; the task's done-measure is the read count, which was measured. Not timing a path that runs on no call today does not narrow what was asked."
+    },
+    {
+     "id": "T496-D1",
+     "summary": "refusal skips every dead hold (as purge would drop it) instead of refusing it with or without an escape; its escaped parameter, the escaped-and-dead pass and the PLAN_EDIT_OK tail are retired.",
+     "class": "within",
+     "why": "One of the two options the task line itself offers ('retire them, or keep them for a caller that does not purge'); refusal's one caller is edit_mode after snapshot's purge (grep observed 2026-11-27), so no hooked call answers differently and no correct work is refused. A live hold had no escape before and has none now."
+    },
+    {
+     "id": "T496-B",
+     "summary": "edit_mode stops reading PLAN_EDIT_OK; docs/guards.md's record_edit_hooks.rs row, the module comment and refusal's shared-text comment say a held plan has no escape and a dead hold refuses nothing; handle/tests.rs drops the token from a plain-ls command.",
+     "class": "within",
+     "why": "The consequences of D1 carried to the caller, the docs row the brief names, and a test fixture; nothing beyond the task."
+    },
+    {
+     "id": "T496-C",
+     "summary": "No message-check dispatched: the live refusal's words are unchanged, the removed tail was never rendered by any suite (message store read, observed 2026-11-27), and make guard-messages read 23 wordings within budget.",
+     "class": "within",
+     "why": "The brief's condition is a changed guard message; no message any call renders changed, and the claim carries its observation and method. This is not a carve-out from the brief but its plain scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T490 (<why: the finding or measurement that files it>)",
+    "### T490 Approach (checklist part A)",
+    "### T501 (451 T499: builders read 3,683,572 bytes of plan.md and plan-done.md text by grep and sed in 114 builders' tool results over 2026-11-26/27, median 30,377 a builder, measured 2026-11-27 (`plan-reads.py`); the GM 2026-11-27 on token cost: \"That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens\" (request.md))",
+    "### T501 Approach (checklist part A)",
+    "### T502 (found by 451 T501's build half: the block `make builder-brief` prints names no plan read, so `make plan-section` reached a builder only through the rules file, 2026-11-27)",
+    "### T502 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T490",
+     "summary": "T490's two blocks are the unfilled template (placeholder heading, empty table, placeholder checklist)",
+     "class": "within",
+     "why": "They decide nothing: no approach, no decision, no deferral. Nothing to rule; a later fill changes the blocks and owes review then."
+    },
+    {
+     "id": "T501-approach",
+     "summary": "one read-only verb `l7r-gate plan section` behind `make plan-section T= [F=] [CITED=1]`, reading through the crate's own task_sections over plan.md then plan-done.md, each parsed once, named by one bullet in builder-brief.md",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-27 words on token cost (request.md lines 431, 479) and T499's measured plan reads; it is the lever those words reopened."
+    },
+    {
+     "id": "T501-D1",
+     "summary": "an id only mentioned in another task's heading is not that task's section; fall through to the next file, else say 'no section of its own'",
+     "class": "within",
+     "why": "Makes the command return the task's own section, which is its purpose; without it the tool would answer wrongly."
+    },
+    {
+     "id": "T501-D2",
+     "summary": "output form: '==> T<n> (<file>)' headers, archive marker lines dropped, a shared bundle heading printed once, exit 0 with a line saying which tasks had no section",
+     "class": "within",
+     "why": "Presentation convention; settles nothing the request or spec decides."
+    },
+    {
+     "id": "T501-D3a",
+     "summary": "CITED=1 (one level of cited sections) exists and is off by default",
+     "class": "within",
+     "why": "An option, off by default on the measurement (4.6 to 18 times the plain bytes); keeps the default at the fewest bytes, which is the GM's token-cost purpose."
+    },
+    {
+     "id": "T501-D3b",
+     "summary": "Known limit left: in '449 T92, T93' the T93 is read as this feature's T93, so CITED=1 prints feature 451's T93 section labeled 'cited by T<m>' when T<m> cites 449's T93",
+     "class": "narrowing",
+     "why": "NOT LEGITIMATE. A defect by constitution XIV's own test, not a difference: the tool answers wrongly, printing a section the requested task does not cite under a label saying it does, and spending bytes in a task whose purpose is fewer bytes. It is not impossible to fix (the same block fixed the sibling form, the hard-wrapped '449\\n T92', red-first), not implied by the GM's words, and fixing it does not defeat the request. It is also outside D15/FR-009's form: absent from 'Found and left?' (which lists only T502 and T503), with no 'fixed here' and no 'Not fixed here / Filed as T<n> / lands before T<m>'. Clears by either: fix it in this task with a red-first test (a feature-number prefix carries across a comma- or 'and'-list of ids), or carry it as a Found-and-left item in D15's form.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T501-D4",
+     "summary": "a bare number is its T id as tasks.md writes it, no zero padding (5 is T5, not T05)",
+     "class": "within",
+     "why": "Input convention; matches ids as filed."
+    },
+    {
+     "id": "T501-D5",
+     "summary": "T499-D1 (declining this lever at about 2.7% of a 300k cap, an ESTIMATE) reopened",
+     "class": "within",
+     "why": "Reopened on the GM's own words, request.md line 479 ('That's just as important as task throughput ... the real limit on throughput is often tokens') and line 431 ('efficient use of tokens is a huge project goal'). The block's 'the GM filed T501 on them' is not shown in this bundle; D5 stands on the quoted words without it."
+    },
+    {
+     "id": "T501-T503",
+     "summary": "the day-long before-and-after over builders briefed with the command is T503's, not this task's",
+     "class": "narrowing",
+     "why": "LEGITIMATE. Physically impossible inside this task: the 'after' needs a day of builders briefed with the command after it lands. The before (T499's 3.68 MB, 30,377 median) is recorded and the after is filed as its own task.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T502-approach",
+     "summary": "one line in the builder-brief block (builder_brief.rs plan_read) after the rules-file line: read plan sections with `make plan-section T=<task(s)>`, never by grep, sed or a Read over plan.md or plan-done.md",
+     "class": "within",
+     "why": "Puts T501's command in front of every builder; found by T501's build half, fixed in the same tree (fix as we go). An instruction, not a guard, so no enforcement scope is added."
+    },
+    {
+     "id": "T502-D1",
+     "summary": "every kind of brief gets the line",
+     "class": "within",
+     "why": "A measurement builder also reads its task's section; one fixed line serves the purpose for all."
+    },
+    {
+     "id": "T502-D2",
+     "summary": "the line names no CITED=1",
+     "class": "within",
+     "why": "Follows T501-D3a's default; the rules file says when to take it."
+    },
+    {
+     "id": "T502-cap",
+     "summary": "the block's 2,000-character cap kept; longest real block 1,942 with the line (58 characters of margin), a further line will need one shortened",
+     "class": "within",
+     "why": "Keeps an existing convention; the margin note is a forecast, not a defect left."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T490 (<why: the finding or measurement that files it>)",
+    "### T490 Approach (checklist part A)",
+    "### T501 (451 T499: builders read 3,683,572 bytes of plan.md and plan-done.md text by grep and sed in 114 builders' tool results over 2026-11-26/27, median 30,377 a builder, measured 2026-11-27 (`plan-reads.py`); the GM 2026-11-27 on token cost: \"That's just as important as task throughput, since over the course of a week, the real limit on throughput is often tokens\" (request.md))",
+    "### T501 Approach (checklist part A)",
+    "### T502 (found by 451 T501's build half: the block `make builder-brief` prints names no plan read, so `make plan-section` reached a builder only through the rules file, 2026-11-27)",
+    "### T502 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T490 (both blocks)",
+     "summary": "An unfilled template: every field a placeholder; it decides nothing.",
+     "class": "within",
+     "why": "No decision is made, so nothing narrows the request or spec. Whether a placeholder may be decided is make decide's and the template lint's job, not fidelity's."
+    },
+    {
+     "id": "T501 approach",
+     "summary": "A new read-only verb l7r-gate plan section behind make plan-section, reading through the crate's own task_sections (plan.md first, plan-done.md only for a task plan.md lacks), named in builder-brief.md.",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-27 question on builders re-reading plan text and his words putting token cost beside throughput (request.md lines 473-479); FR-013 counts it as performance work."
+    },
+    {
+     "id": "T501-D1",
+     "summary": "A section counts only where its first heading's leading_tasks holds the id; else the next file; else one line saying no section of its own.",
+     "class": "within",
+     "why": "A correctness choice so an archived task does not print another task's section; it narrows nothing asked."
+    },
+    {
+     "id": "T501-D2",
+     "summary": "Output form: ==> T<n> (<file>) headers, cited-by labels, archive lines dropped, bundle heading once, exit 0 either way.",
+     "class": "within",
+     "why": "Convention of output; no requirement settles it and none is narrowed."
+    },
+    {
+     "id": "T501-D3",
+     "summary": "CITED=1 off by default; one level of cited sections, other features' ids skipped including across a hard wrap and across a list of ids after another feature's number.",
+     "class": "within",
+     "why": "Default off follows from the measured 4.6x to 18x bytes, which would defeat the token purpose. Round 1's finding (T93 in '449 T92, T93' misread as this feature's, a wrong cited-by label) is now fixed here with a red-first test (6 passed 1 failed on the build half's code, 7 of 7 after), so no known defect is carried."
+    },
+    {
+     "id": "T501-D4",
+     "summary": "A bare number is its id, no zero padding.",
+     "class": "within",
+     "why": "Convention matching tasks.md's ids; nothing narrowed."
+    },
+    {
+     "id": "T501-D5",
+     "summary": "T499-D1 (declining this lever) reopened on the GM's token-cost words.",
+     "class": "within",
+     "why": "The reopening rests on the GM's own words, verbatim in request.md line 479. Round 1's unsupported clause 'and the GM filed T501 on them' is removed; what remains is the request's own text."
+    },
+    {
+     "id": "T501 day-long before/after to T503",
+     "summary": "The task line's before-and-after measurement over a day of builders is filed as T503; this task measures the bytes printed against T499's builder rows.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible inside this task: the after needs a day of builders briefed with the command, which exists only after this lands. The measurement is moved, not dropped (T503), and the before is recorded (T499's 3.68 MB, 30,377-byte median). It is a measurement, not a defect, so it is not a defect carried past the step."
+    },
+    {
+     "id": "T502 approach",
+     "summary": "One line in the builder brief's opening block naming make plan-section, never grep/sed/Read over plan.md or plan-done.md.",
+     "class": "within",
+     "why": "Puts T501's command where every builder reads it; serves the same token-cost purpose. Fixed here as a found item of T501."
+    },
+    {
+     "id": "T502-D1",
+     "summary": "Every kind of brief gets the line.",
+     "class": "within",
+     "why": "Every kind reads its task's plan section; widening to all kinds narrows nothing."
+    },
+    {
+     "id": "T502-D2",
+     "summary": "The line names no CITED=1; the rules file's bullet says when.",
+     "class": "within",
+     "why": "Follows T501-D3's default-off and keeps the block under its cap."
+    },
+    {
+     "id": "T502 cap",
+     "summary": "The block stays under the 2,000-character convention: longest real block 1,942 with the line, 58 margin, measured 2026-11-27.",
+     "class": "within",
+     "why": "Holds an existing convention; nothing narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T490 (451 T387: every hook that read `checks-open.json` parsed the whole 3.0 MB state, 36 to 43 ms of CPU, while the hot calls read none of its 2.29 MB of `dispatches` or 0.51 MB of `versions`, measured 2026-11-27 (`t387-time.py`, 20 runs))",
+    "### T490 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T490-D1",
+     "summary": "Route (b), a partial read of the check state on the hot hooks, is built; (a) moving settled rows to a second file and (c) pruning old versions are priced and not taken.",
+     "class": "within",
+     "why": "The GM asked that performance work come first (FR-013, 2026-11-20) and named no route. Picking between routes is a design choice inside that request. (b) takes about 18 ms off each hot hook. (a) would save about 7 ms more, but the state lives in the common git dir that pool trees on different HEADs share, so an older tree would answer wrongly in settled.rs, the earlier-rounds bundle and cascade's count. (c) moves the oscillation tripwire. Neither one is a narrowing of what the GM asked."
+    },
+    {
+     "id": "T490-D2",
+     "summary": "Part::read parses every top-level key except dispatches, versions and seen, plus a small Row per dispatch for concerns. Part::whole parses the rest at every save, keep_trips, counted-check dispatch, spec-fidelity hold, freeze path and booked launch or return. load is unchanged for the cold callers.",
+     "class": "within",
+     "why": "This is how the partial read is built. It drops nothing the GM asked for, and every call that reads a row or saves still gets the whole parse."
+    },
+    {
+     "id": "T490-D3",
+     "summary": "The skipped keys are scanned with an exact visitor (Skip, through deserialize_any), and malformed shapes fall back to the whole parse. The cheaper IgnoredAny scan (about 5 to 8 ms a hook more saved) is priced and filed as T506, to land before T302.",
+     "class": "within",
+     "why": "This defers a further speedup. It is not a defect: no answer is wrong, nothing crashes, and no valid input is refused. It is filed as T506 with an order before T302 (FR-009) and is scheduled first as perf work under FR-013, so nothing the GM asked for is cut. The block names no wrong outcome under the cheaper scan on a state that can occur. Its only stated reason is acceptance parity on texts no writer produces (1e400, a lone surrogate), and that parity is the brief's wording, not the GM's. Under the no-exactness standard, parity is not a reason to refuse the cheaper scan. T506 must be judged on whether everything works, for example whether a hot hook could pass on a state the gate refuses in practice. Differing acceptance of texts no writer emits is not a ground to keep the slower scan. The exact scan stands for now only because the deferral loses nothing."
+    },
+    {
+     "id": "T490-verify",
+     "summary": "Red-first test (no row parsed on calls that read none). A differential of 15 calls on a copy of the clone's state, comparing exit code, stdout, stderr and the saved state's bytes, also run on a non-JSON state. Part tests compare against a forced whole read.",
+     "class": "within",
+     "why": "These tests check that a pure refactor of the reader changes no outcome. Because the shared state file is read by trees at other HEADs, unchanged saved bytes are what shows that every cold reader still works. This is enforcement that serves the request, not an exactness standard used to block a port, and nothing is refused or narrowed for a difference."
+    },
+    {
+     "id": "T490-found-T505",
+     "summary": "Every SubagentStop still books and rewrites the whole state (92 to 95 ms), because 14 old returned-without-reply wave rows are taken by concerns as still waiting. Left here and filed as T505, to land before T302.",
+     "class": "within",
+     "why": "The observed effect is CPU time per return, not a wrong answer. Fixing it needs an age limit on wave rows or a booking-only save, which changes the rounds' rules and so is a separate decision. It is filed with an id, a reason and an order before the next step (T302), which meets FR-009 and fix-as-we-go. Nothing the GM asked for is cut."
+    },
+    {
+     "id": "T490-order",
+     "summary": "Lands after T387 and T489, before T505 and T506. One landing. The step table marks no map and no pool manifest moved.",
+     "class": "within",
+     "why": "This is ordering and bookkeeping inside the feature, consistent with FR-013's perf-first ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T491 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T491-1",
+     "summary": "pair-hooks skips reading the event log while the step-back switch is off; the feature's start reads only the log's first lines",
+     "class": "within",
+     "why": "Performance work the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?', FR-013); takes measured time off every Agent call's PreToolUse."
+    },
+    {
+     "id": "T491-2",
+     "summary": "Constraints: due/status/hold/open verdicts unchanged, checkpoint-admitted mark still written, first_event's find rule kept, no guard message changes",
+     "class": "within",
+     "why": "Preserves every existing answer; narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T491-3",
+     "summary": "The one changed answer (a log whose bytes after its first event are not UTF-8) is left as D2's",
+     "class": "within",
+     "why": "A difference in output on a malformed-log edge, not a wrong outcome a reader sees; under the GM's 2026-11-18 no-exactness standard a differing output that still works is the rule, not an exception needing a ruling."
+    },
+    {
+     "id": "T491-4",
+     "summary": "Exits: green at below 40 ms with the two red tests and the crate green; red recorded and set down, a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Exit criteria for the task's own performance goal; no part of a request is dropped."
+    },
+    {
+     "id": "T491-5",
+     "summary": "Shares a landing with T493 as a bundle; independent of T492-T494",
+     "class": "within",
+     "why": "The GM's 2026-11-22 bundling of small tasks ('let's do that then')."
+    },
+    {
+     "id": "T491-6",
+     "summary": "Changed since the CLEAR verdict: item 9's timing provenance restated (the runs' end times), and the Performance work line no longer claims the 53 ms saving as measured for make done - stated as expected, 'not timed'",
+     "class": "within",
+     "why": "A correction that withdraws an unmeasured claim and labels it as such; it changes no decision and narrows nothing asked. Figures carry date and method (one-shot labels)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T492 (a record check's dispatch ran a work-tree diff for the cascade tripwire where it could not trip, 451 T388)",
+    "### T492 Approach (checklist part A)",
+    "### T495 (a carry's record merge gave a same-day tie to the pool tree's verdict on a stub over the clone's CLEAR on the filled block, 451 T487)",
+    "### T495 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T495-A",
+     "summary": "The record's merge prefers, where the two sides' entries for a key differ, the entry whose digest the merged plan.md holds (blocks by sha256, tasks by section_sha256); else the old rule, the later reviewed day, a tie theirs.",
+     "class": "within",
+     "why": "Fixes a wrong outcome measured in 451 T487 (a carry kept a verdict on a stub over the CLEAR on the filled block, and the orphaned block refused a 12-task landing's ticks); serves the 2026-11-25 request words 'the plan-review record no longer conflicting' and FIX AS WE GO. 451 T256's entry-whole merge is kept."
+    },
+    {
+     "id": "T495-B",
+     "summary": "The carry runs its cherry-pick with merge.plan-review.driver=false so a record both sides changed stops unmerged, and resolve_all merges it in process after the other paths, given the feature's plan.md as resolved.",
+     "class": "within",
+     "why": "The means of A: the plan's probe (dated, method stated) shows git's driver is given no merged plan, so the carry is where the plan is known. No behavior outside the carry's record merge changes."
+    },
+    {
+     "id": "T495-C",
+     "summary": "Found and left: git's own merges of a record outside the carry (sync-with-main's pull) keep the day rule; not filed.",
+     "class": "within",
+     "why": "The plan states no wrong outcome measured on that path, and nothing in request.md or the spec reports one (grep of the bundle for sync-with-main/merge-record/T256/pull finds only the 2026-11-25 line). An unobserved exposure is not a known defect under constitution XIV's definition, so leaving it is not a narrowing. T256-D2's text, which the plan cites for 'as before', is not in the bundle; that does not change the class. Should a lost verdict on a pull be seen, it is a defect and owed a fix then."
+    },
+    {
+     "id": "T495-D",
+     "summary": "Not performance work; ordered after 451 T487 and before T484; one landing; exits green on five new tests and first-tier checks.",
+     "class": "within",
+     "why": "Ordering and exits settle nothing the request or FR-013 leaves to the GM; a defect fix of the landing tooling is ordered behind performance work as FR-013 says."
+    },
+    {
+     "id": "T492-A",
+     "summary": "cascade_check asks arbiter::cascade_can_trip(n, last) (the n - last >= CASCADE_MIN predicate, now shared with cascade) before counting changed lines with the work-tree git diff; CASCADE_MIN, CASCADE_RATIO and guard messages unchanged.",
+     "class": "within",
+     "why": "The skipped diff is only skipped where the trip cannot fire, so the tripwire of feature 375 FR-010 fires on the same numbers (the red test shows 10 dispatches still tripping cascade@1 with the same detail). Serves the GM's 2026-11-20 'prioritize performance improvements' and 451 FR-013: about 47 ms off the check's median, figures dated with method."
+    },
+    {
+     "id": "T492-B",
+     "summary": "Classed performance work; ordered after 451 T388 and before T302; one landing.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the checks or the hooks faster as performance work, and the plan's timing (dated, method stated) shows it does."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T494 (451 T388: a guard's gate call paid the gate launcher's 17.5 ms source walk on every call, and review-round and check-bundle a 2.5 ms `/usr/bin/env` start, about 460 calls a day, measured 2026-11-27 (T388's sandbox arms))",
+    "### T494 Approach (checklist part A)",
+    "### T497 (451 T493: review-round-hooks read and scanned the 4.7 MB `plan-review.json` once for each task a plan-delta dispatch names, about 18 ms each after T493, measured 2026-11-27 (T388's 40 ms less T493's 22 saved))",
+    "### T497 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T494-D1",
+     "summary": "tool::ask_gate starts the gate launcher as `bash <script>` rather than by its shebang through /usr/bin/env; a script that cannot start answers 127 instead of -1",
+     "class": "within",
+     "why": "Performance work under FR-013 (the GM 2026-11-20: prioritize performance improvements). An implementation choice that removes an env start; the plan states every caller reads only exit 0, exit 1 with output, or the output, so 127 and -1 read the same and no verdict or message changes. Narrows nothing the GM asked for."
+    },
+    {
+     "id": "T494-D2",
+     "summary": "within one hook process, after a call through the same launcher to a plain subcommand exits 0, later calls pass L7R_GATE_FRESH=<binary> and skip the launcher's source walk; variants, failed calls, other launchers and an already exported variable get no proof",
+     "class": "within",
+     "why": "Serves FR-013. Its constraint - no stale gate runs where the launcher would not already run one - is the task's own safety rule, and the three conditions (same launcher, same process, plain subcommand) are drawn to keep it; the launcher still checks the named binary. The residual window (a source edited during one hook process) is no wider than a call started that much earlier, so this is no new behavior against the GM's words. Pinned by a test against the launcher's own L7R_GATE_PRINT_FRESH answer."
+    },
+    {
+     "id": "T494-D3",
+     "summary": "declined: reusing l7r-guard.sh's walk, an in-process walk, and a kept stamp; pair-hooks' first walk per Agent call stays (about 5 s a day)",
+     "class": "within",
+     "why": "Not a narrowing of a request: the GM asked that performance work come first, not that every walk be removed. The guard launcher's walk does not cover rust/gate so cannot stand for the gate's; the in-process walk was measured slower than the fork it would replace (111.6 vs 51.4 ms); the stamp stays declined on an earlier recorded reason (settled choices stay settled, GM 2026-11-23). The decline is recorded with its measurement and what would reopen it, which is what the GM asked for declined decisions (2026-11-25: record what NOT to implement). Leaving a slower path that works is not a defect."
+    },
+    {
+     "id": "T494-found-and-left",
+     "summary": "five more Bash-call guards (record_edit, measure, clone_sync, gate_write, ledger) still start the launcher by shebang outside the shared walk; filed as T500, lands before T498",
+     "class": "within",
+     "why": "A remaining performance cost (about 2.5 ms a call), not a defect - no wrong outcome. It is filed as performance work, so FR-013 schedules it first anyway, and the item carries the why, the filed id and the order that FR-009 requires. No part of what the GM asked is narrowed."
+    },
+    {
+     "id": "T497-D1",
+     "summary": "plan_cap_refusal reads plan-review.json once per dispatch and asks plan_cap_held lazily per task in dispatch order, with rounds_in(doc, task) counting exactly as before; plan_rounds kept as the tests' entry",
+     "class": "within",
+     "why": "Performance work under FR-013 that changes no count, cap, bundle rule (T141), stub rule (T462), first-tripping task or message, shown by the red test (4 reads to 1) and the unchanged differential. Not timing it on the sandbox is stated with its reason (the sandbox's bundle name names no task), and the read count is measured; nothing asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T499 (found by the GM's question of 2026-11-27, whether builders pull the 824,251-byte plan.md and 3,131,453-byte plan-done.md into context: no figure said)",
+    "### T499 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T499-D1",
+     "summary": "No make target or brief line printing one task's plan section is filed; reopened when a builder reaches the cap with plan reads above 25% of its tool results",
+     "class": "within",
+     "why": "request.md holds no clause asking that builders' plan-file reads be cut or that a lever be filed; the GM's question (paraphrased in the block heading) asked how much reaches context, and the block answers with measured figures. Declining to add unrequested behavior narrows nothing. The GM's token words (request.md 2026-11-27: efficient token use a huge project goal) are a goal, not an ask for this lever, and his 2026-11-26 words weigh complexity cost against token cost. Whether the lever pays is design and cost, outside this review."
+    },
+    {
+     "id": "T499-population",
+     "summary": "The 114 builders of 2026-11-26/27, picked by a BUILDER-BRIEF line in the first prompt, deduplicated by agent id",
+     "class": "within",
+     "why": "The face-value population for a question about what builders read; dated and methoded."
+    },
+    {
+     "id": "T499-counting",
+     "summary": "Counts Read and Bash calls naming plan.md or plan-done.md, a Bash call's whole output counted, so every figure is an upper bound",
+     "class": "within",
+     "why": "Answers the question as asked (those two files entering context), with its bias stated."
+    },
+    {
+     "id": "T499-tokens",
+     "summary": "Tokens estimated at 4 bytes a token, labeled ESTIMATE",
+     "class": "within",
+     "why": "A labeled estimate derived from measured bytes; the arithmetic follows (32,312 bytes mean / 4 = about 8,000; 116,795 / 4 = about 29,000)."
+    },
+    {
+     "id": "T499-perf",
+     "summary": "Counted as performance work for scheduling",
+     "class": "within",
+     "why": "FR-013's measurement clause (the GM 2026-11-20: measurement tasks count as performance tasks for scheduling)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T500 (451 T494's found-and-left: five guards still started the gate launcher by its `#!/usr/bin/env bash` shebang or outside `tool::ask_gate`'s shared walk, 2.5 ms of `env` a call, measured 2026-11-27 (T388's record), and clone-sync's prompt sync asked `own-make` twice)",
+    "### T500 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T500-D1",
+     "summary": "The five guards' launcher calls (record-edit, measure, clone-sync, gate-write's bounded preflight, ledger) go through tool::ask_gate, started by bash and sharing the hook process's freshness proof; each caller's reading (.ok()/.out, working directory, failed-start meaning) unchanged.",
+     "class": "within",
+     "why": "Performance work, which FR-013 and the GM's 2026-11-20 words put first; it takes measured time off gate calls and changes no guard message or verdict, so it serves the request and narrows nothing."
+    },
+    {
+     "id": "T500-D2",
+     "summary": "ask_gate's body becomes gate_asked taking the run as a closure; new ask_gate_within reuses ask_within's limit, kill, null stdin and -1-at-limit, and a killed call proves nothing.",
+     "class": "within",
+     "why": "An implementation choice serving D1's move of the bounded gate-write call; it keeps the existing limit behavior and decides nothing the request or spec constrains."
+    },
+    {
+     "id": "T500-D3",
+     "summary": "clone-sync's prompt sync asks own-make once (running = making || locked; sync asks making then locked), lines and order unchanged.",
+     "class": "within",
+     "why": "Removes a whole redundant gate call per prompt in a clean clone, measured; performance work fixed in the task, with no visible output change."
+    },
+    {
+     "id": "T500-scope-claim",
+     "summary": "The task claims no walk saved (each measured call is the first of its hook process) and claims only the measured env and own-make savings.",
+     "class": "within",
+     "why": "States the limit of what was measured rather than narrowing any work; consistent with the project's measured-figures rule."
+    },
+    {
+     "id": "T500-found-and-left",
+     "summary": "Three more guards (engine_freeze_hooks plan engine-edit, pair_hooks/state stamp_fresh, builder_stop_hooks ask_within) start the launcher by bash outside the shared asker; left, filed as T504, landing before T501, with T500 ordered before T504.",
+     "class": "within",
+     "why": "Not a defect in the constitution's sense (no wrong outcome: every verdict and message is right; the cost is a missed walk saving of up to 17.5 ms where an earlier call exited 0). It is filed as its own performance task, which FR-013 puts first in the queue, with the why, task id and order FR-009 asks for; nothing the GM asked is dropped or deferred behind non-performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T503 (<why: the finding or measurement that files it>)",
+    "### T503 Approach (checklist part A)",
+    "### T508 (451 T507, `dev/measurements/2026-11-27/t507-part-cost/results.md`: the Bash hooks' prefilters read the whole 2.6 MB check state to find one key on every Bash call, 4.83 ms of a no-hold `PreToolUse`'s 7.11 and 2.75 of a `PostToolUse`'s 4.72, measured 2026-11-27 (`t507-time.py`, 20 runs))",
+    "### T508 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T503 (both blocks)",
+     "summary": "Both T503 blocks are the unfilled section template (placeholders only); they make no decision.",
+     "class": "within",
+     "why": "Nothing is decided, so nothing narrows the request or FR-013; there is nothing to rule on until the section is written."
+    },
+    {
+     "id": "T508-D1",
+     "summary": "Both Bash-hook prefilters stream the check state in CHUNK-sized reads with memchr memmem, carrying needle.len()-1 bytes across chunk edges, stopping at the first match, then applying the old plan_holds emptiness test to the decoded prefix.",
+     "class": "within",
+     "why": "An implementation of performance work on the builders' loop, which FR-013 and the GM's 2026-11-20 words ('prioritize performance improvements') ask for; it narrows nothing asked."
+    },
+    {
+     "id": "T508-D2",
+     "summary": "Route B (stream) chosen over A (memmem on the whole string) and C (A plus handing the string to handle under a hold), all three priced on the same arms; B saves most outside a hold and on every bash-post case.",
+     "class": "within",
+     "why": "A choice among implementations of the same speed-up, made by measurement. Design merit is not a fidelity question, and no part of the request is given up."
+    },
+    {
+     "id": "T508-D3",
+     "summary": "The key is searched in the whole file, with no prefix-only read, because the sorted keys put plan_holds/plan_snaps after dispatches at a position that moves.",
+     "class": "within",
+     "why": "A correctness choice that keeps every verdict; it narrows nothing."
+    },
+    {
+     "id": "T508-D4",
+     "summary": "Every verdict unchanged, shown by a differential over five state copies and many chunk sizes; the one changed internal path (a non-UTF-8 byte before the key now lets handle run) gives the same hook answer.",
+     "class": "within",
+     "why": "Outcomes are kept; a differing internal path that still answers the same is the rule (constitution XIII, GM 2026-11-18), not an exception."
+    },
+    {
+     "id": "T508 other readers",
+     "summary": "No other hot-path reader of the whole state found (search stated: grep of the guards for checks-open.json and state_path, 2026-11-27); nothing filed.",
+     "class": "within",
+     "why": "A census with its search space stated. Filing nothing narrows nothing the GM asked."
+    },
+    {
+     "id": "T508 CHUNK knob",
+     "summary": "CHUNK = 64 KiB, a new GUESS speed knob that no claim states.",
+     "class": "within",
+     "why": "A tuning constant inside the requested work."
+    },
+    {
+     "id": "T508 found-and-left",
+     "summary": "Under a plan hold, handle still reads the state a second time after the stream (0.50 to 1.02 ms against route C on bash-pre); classed as not a defect and not filed.",
+     "class": "within",
+     "why": "It is time, not a wrong outcome, so under constitution XIV v2.36.0 (GM 2026-11-19) it is not a defect, and no known defect is carried forward. It is a measured tradeoff against the larger saving outside a hold, not a carve-out from what was asked."
+    },
+    {
+     "id": "T508 order and classification",
+     "summary": "Lands after T507 and before T302; tagged performance work (the builders' loop), not an engine-speed task, so the engine checklist does not apply.",
+     "class": "within",
+     "why": "Consistent with FR-013's definition of performance work and its ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T504 (451 T500's found-and-left: three guards started the gate launcher by `bash` but outside `tool::ask_gate`'s shared walk, so a later call could not ride an earlier fresh call's proof, up to a 17.5 ms walk a call, measured 2026-11-27 (T494's walk on T388's sandbox))",
+    "### T504 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T504-D1",
+     "summary": "engine-freeze's plan engine-edit, pair_hooks/state.rs stamp_fresh and builder-stop's plan decided move onto tool::ask_gate / ask_gate_within, each from the same directory, stdin and limit as before, reading the same fields",
+     "class": "within",
+     "why": "Performance work the GM asked to have prioritized (request 2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013): it takes a launcher walk off a later gate call in the same hook process, with no guard message or verdict changed and a stale binary never run where the launcher would not run it (T494-D2)."
+    },
+    {
+     "id": "T504-search",
+     "summary": "the set of launcher starts censused by grep -rn 'l7r-gate.sh' over non-test files of rust/guard/src and rust/guard/shared/src, cross-checked by a 'bash' grep; every remaining hit classified as through the asker or starting nothing",
+     "class": "within",
+     "why": "The enumeration names its search space and its cross-check (spec-fidelity item 8); nothing found is left out of the task."
+    },
+    {
+     "id": "T504-red",
+     "summary": "three new red-first tests, one per moved caller, riding L7R_GATE_FRESH; the brief's no-shebang/no-exec-bit red test is not written because all three already ran by bash and their existing stubs already pin that start",
+     "class": "within",
+     "why": "Tests that only fail when the requested behavior is absent enforce the request. Dropping the brief's second red test does not narrow anything the GM asked for: the request asks for performance work, not that test, and the start it would pin is already pinned by the named existing tests."
+    },
+    {
+     "id": "T504-claim",
+     "summary": "the saving is claimed only on the measured Edit path (2 walks -> 1, T494's 17.5 ms a walk), with medians declared unable to resolve it at load 20-25 and the SubagentStop and pair paths stated as unmeasured",
+     "class": "within",
+     "why": "A claim restricted to what was measured is the project's measurement rule, not a narrowing of the work: all three callers are still moved."
+    },
+    {
+     "id": "T504-order",
+     "summary": "after T494 and T500, before T501; one landing; exits green on the red tests, suites and walk count, red routed through make arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and exits inside the feature; the task is performance work, which FR-013 puts first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T505 (451 T490: every SubagentStop booked and rewrote the whole 2.6 MB check state, 92 to 95 ms of CPU a stop and 22 of 22 writing, because 14 check-wave rows `returned` with no reply, 861 to 863 hours old, still counted as waiting for an agent, measured 2026-11-27 (`t490-time.py`'s agent-stop arm, 20 runs))",
+    "### T505 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T505 Approach",
+     "summary": "A wave row waits for an agent only for WAVE_WAIT_S after its dispatch; both readers of the wait (handle::concerns, rounds::pair_wave) ask wave_waits; Row keeps t for concerns.",
+     "class": "within",
+     "why": "Performance work (FR-013, the GM 2026-11-20 'can we in general priotitize performance improvements going forward?'), taking ~75-80 ms CPU and a 2.6 MB write off every SubagentStop no row names. No request clause or requirement is narrowed; no guard message changed."
+    },
+    {
+     "id": "T505-D1",
+     "summary": "WAVE_WAIT_S = 6 hours, a GUESS knob timed from the dispatch t, also ending a pending row's wait; WAVE_PENDING_S unchanged.",
+     "class": "within",
+     "why": "A tuning choice inside the performance fix, labeled GUESS and listed in make tunables, set far above the longest measured wave agent run (585 s of 362). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T505 late reply",
+     "summary": "An agent paired after the wait is treated as an agent no row names: its reply, round and EDIT blocks are not booked; the row stays returned with no reply, read by running and open_round as before; stated in the knob's doc comment.",
+     "class": "within",
+     "why": "A stated, bounded consequence of the bound (only a unit retried hours after its wave's dispatch meets it), not a carve-out from any GM clause or spec requirement; no requirement in the spec governs check-wave booking. No defect is left: the 14 rows it affects were 861-863 hours old and reply-less."
+    },
+    {
+     "id": "T505 age vs save-on-change",
+     "summary": "Bound the wait by age rather than saving only where a booking changed a row, since save-on-change needs the full parse (the 55 ms clone and compare T387 replaced).",
+     "class": "within",
+     "why": "A design choice between two ways of doing the requested performance work; fidelity does not judge which is better."
+    },
+    {
+     "id": "T505 order",
+     "summary": "After T490, before T302; one landing; red-first test and before/after timings on a copy of the clone's state.",
+     "class": "within",
+     "why": "Performance work ordered first per FR-013; verification only of the fix itself."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T505 (451 T490: every SubagentStop booked and rewrote the whole 2.6 MB check state, 92 to 95 ms of CPU a stop and 22 of 22 writing, because 14 check-wave rows `returned` with no reply, 861 to 863 hours old, still counted as waiting for an agent, measured 2026-11-27 (`t490-time.py`'s agent-stop arm, 20 runs))",
+    "### T505 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T505-approach",
+     "summary": "Bound how long a check-wave row waits for an agent (WAVE_WAIT_S after its dispatch), asked by both readers of the wait (handle::concerns, rounds::pair_wave), with Row keeping t for concerns, so a SubagentStop no row names neither books nor rewrites the 2.6 MB check state.",
+     "class": "within",
+     "why": "Performance work on the checks' tooling is what the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'; FR-013), and this one is measured before and after (89.6/94.3 -> 14.1/14.3 ms CPU, writes 22 of 22 -> 0 of 22). It takes cost off every subagent stop and narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T505-D1",
+     "summary": "WAVE_WAIT_S is 6 hours, a GUESS knob labeled in its doc comment as HOLD_MAX_S is, timed from the dispatch t; a pending row past it stops waiting too; WAVE_PENDING_S unchanged.",
+     "class": "within",
+     "why": "Picking the knob's value and what it is timed from is a design choice inside the perf fix. 6 h is many times the longest wave agent measured (585 s over 362 agents), so no wave inside its own run is affected. A pending row is already dead to live after WAVE_PENDING_S (30 min), so a pending row that stops waiting at 6 h changes nothing anyone relies on. Nothing in the request sets this value."
+    },
+    {
+     "id": "T505-late-reply",
+     "summary": "An agent paired after the wait is treated as one no row names: its reply, round and EDIT blocks are not booked; the row stays returned-with-no-reply as before; said in the doc comment.",
+     "class": "within",
+     "why": "This is the cost of the age bound, stated and not hidden. It only reaches a wave unit retried more than 6 h after its wave's dispatch, against a measured longest run of 585 s, and it leaves the row as it stood before the late agent came. That is not a wrong outcome on any path the request or the spec names, so it is not a defect left and not a narrowing of what was asked."
+    },
+    {
+     "id": "T505-age-not-save-on-change",
+     "summary": "Choose the age bound over saving only when a booking changed a row, because comparing needs the whole parse (the 55 ms clone and compare T387 removed).",
+     "class": "within",
+     "why": "Choosing between two ways to make the same perf improvement is design, not fidelity. Neither option narrows the request."
+    },
+    {
+     "id": "T505-red-first-and-tests",
+     "summary": "Red-first test a_wave_row_past_its_wait_is_not_booked (1 of 9 failing on the old code), two existing tests extended to pin the past-the-wait cases, part tests reading t; crate-scoped builder checks green.",
+     "class": "within",
+     "why": "These tests only enforce the change this task makes, so they serve the request. They add no behavior of their own."
+    },
+    {
+     "id": "T505-no-message-changed",
+     "summary": "No guard message is changed; the brief's constraints are kept.",
+     "class": "within",
+     "why": "Nothing is removed or narrowed."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T490 to T505, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

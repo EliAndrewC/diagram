@@ -1,0 +1,788 @@
+{
+ "blocks": {
+  "### T212 (the cascade test's 8 false sends from the three ABSENCE phrases)": {
+   "sha256": "5ae83ee5f09b54c7c3d3e1639ef5203b0422ef03bade7857ad3d9fbab7fba229",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T212 Approach (checklist part A)": {
+   "sha256": "1d38b61b930057c494447ec11c65204e643d5b9c8f0240c90ae86ff9300f4c54",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T213 (the cascade test's T400 miss: relabeled_only passes a MISLABELED claim's rewritten account)": {
+   "sha256": "5584c4f7fe56f1d9c5610ac07024cfb83b1905da5a40b4d011dfd5a5016cd715",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T213 Approach (checklist part A)": {
+   "sha256": "dd185ac31be3be18849697b509725afd3c18cc1b74e0b356fcccf21efede97ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T214 (the cascade test's review-fixed refusal on a sheet with no carried verdict)": {
+   "sha256": "7dfcb3e5c34edf374110ec9d1f9a6523f9820068d7a115e74146827f948d7a5e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T214 Approach (checklist part A)": {
+   "sha256": "ef185b78658f55b2c82de5e67914c6d4e48e24f676ecb9559a14b17014ee71de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T215 (the GM's question 2026-11-24: T210's kept section words lived in each clone's .git, so another clone forced its sections)": {
+   "sha256": "11702e69586c79e60650680c5ac3bebc7e3faf38a359cf8695cece1d22d01cbc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T215 Approach (checklist part A)": {
+   "sha256": "2ec65b39068a530ed547a47d6a58a2f993951e9a6199dc93d1797263e75f89bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T216 (the GM 2026-11-24: builders were sent with `model: opus` under a Fable 5.2 session; an ad-hoc agent that judges or builds runs on the session's model)": {
+   "sha256": "a2312f96a35504aefbd4b653bd9def76d70b2c949ec9272a9cf8b2a1b3ab4c3d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  },
+  "### T216 Approach (checklist part A)": {
+   "sha256": "09b6fa603e7261fa3c973f020ae00cec868f2948fd60707f2213ff1afe25b2c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T212": {
+   "section_sha256": "ee74d7217528a97e9bfd46611023fe2d921d8ca6e68b2ed0b46e325105f052f5",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T212-drop",
+     "summary": "The phrase arm of change::fires (ABSENCE: 'the one case', 'only one case', 'every plan', and says_absence) is removed rather than narrowed; the alternative of tying a phrase to the pop-up sentence sharing the new block's subject was measured and rejected.",
+     "class": "within",
+     "why": "The GM (2026-11-24) approved fixing T212, '8 false sends from three fixed phrases'. The convergence talk separates cascades that could plausibly have needed review from changes that never could. Removing the arm that produced the false sends serves that directly. It stays within the request only if real absence breaks still send. Item 9's dated replay (2026-11-24, the three landings) says they do: 0 of the 17 page-caused corrections and none of the cascade test's 3 are missed, and the arm (c) corrections are each sent by the addition rule alone. That replay was not re-run here (bundle-only review), so this ruling rests on it. Choosing the drop over the narrower alternative is a design choice, not a narrowing of what was asked."
+    },
+    {
+     "id": "T212-judged",
+     "summary": "judged (triage.rs) passes no new findings; T209's addition rule and then the triage agent decide instead, landed as one change with T209 (item 5).",
+     "class": "within",
+     "why": "This follows from the drop. Absence detection moves to T209's addition rule, which is itself one of the six fixes the GM approved on 2026-11-24. Because the two land together (item 5), there is no window in which absence breaks go undetected."
+    },
+    {
+     "id": "T212-new_findings-kept",
+     "summary": "new_findings stays, because the claims' triage reads it.",
+     "class": "within",
+     "why": "Keeping a reader that another part of the pipeline still uses removes nothing the GM asked for."
+    },
+    {
+     "id": "T212-reach",
+     "summary": "The fix covers all 11 sends the arm made over the three landings (10 cleared, 1 kept by the addition rule), not just the 8 named in the task title.",
+     "class": "within",
+     "why": "The '8' in the GM's line is the cascade test's count: item 12 names main-gate's three checks and servants' quarters' depiction, each on two pairs (0097/0334 and 0108.drawing/0334). Item 9 clears all of those pairs. Applying the same fix to the arm's other sends in the same replays is the same defect at wider reach, not added scope."
+    },
+    {
+     "id": "T212-residuals",
+     "summary": "Two sends remain and are recorded with 'Found and left? none': residence x 0107, sent by the addition rule (the doma phrase), and servants' quarters x 0097, sent through the echo check (a check session's rewording of 'a few men to each').",
+     "class": "within",
+     "why": "Neither is a send from the three phrases. One comes from T209's addition rule reading the pop-up's stated absence. The other comes from the echo check, which the GM approved on 2026-11-23 as T186's first filter, and it fires on a pair other than the 8 false ones. Item 9 records both openly, so nothing T212 was asked to fix is left undone."
+    },
+    {
+     "id": "T212-perf",
+     "summary": "The task is labeled performance work ([perf]): 10 phrase-only sends no longer reach the triage agent.",
+     "class": "within",
+     "why": "The GM (2026-11-20) asked to prioritize performance improvements, and the convergence talk is about time spent on cascades that fix nothing. Fewer triage-agent dispatches fits that. The label affects scheduling only, not what the fix does."
+    },
+    {
+     "id": "T212-exits",
+     "summary": "Green when every phrase-only send is cleared and no correction is missed. Red means recording what failed and setting the task down, with any 'cannot be done' claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "These are the standard exits. The green condition matches both what the request asks for (no false sends) and its purpose (no missed corrections)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T213": {
+   "section_sha256": "e0d7e1b9fe4b50601a23d100597a2adfd23f7c9dd27f64315c26d1f50cbd4715",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T213-D1",
+     "summary": "relabeled_only's MISLABELED arm passes only a relabel: the stored claim's account equal word for word to the claim's account now (account_of, split as parse_claim splits it); the backing (class or cited question) free to change.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 ('T213 a claim marked mislabeled can be rewritten unchecked' ... 'Yes let's fix all 6 of those'): a restated account is now owed. Leaving the label and its backing free keeps the convergence talk's 'attested versus guess ... cascades mechanically' and the approved rule 'labels are data and propagate by regeneration'."
+    },
+    {
+     "id": "T213-D2",
+     "summary": "A row storing no claim is no relabel, so it is owed.",
+     "class": "within",
+     "why": "Where no stored account exists the account cannot be shown unchanged; treating it as owed checks more, not less, and serves the request that a mislabeled claim not be rewritten unchecked."
+    },
+    {
+     "id": "T213-D3",
+     "summary": "relabel_answered (the push's carry, carry.rs) reads the same rule, so a restated account no longer answers a MISLABELED verdict there either.",
+     "class": "within",
+     "why": "Closes the same defect on the second path that reads it; without it a rewrite could still pass at the push, defeating the fix."
+    },
+    {
+     "id": "T213-D4",
+     "summary": "A relabel alone still owes nothing; T204's item-naming arms are untouched.",
+     "class": "within",
+     "why": "Preserves what the GM asked for in the convergence talk (labels cascade mechanically) and leaves another task's settled behavior alone; it is not a carve-out from T213, whose defect is the account rewrite only."
+    },
+    {
+     "id": "T213-D5",
+     "summary": "Two fixtures that asserted the defect (an account rewrite passing as a relabel) are restated as true relabels; a new red-first test pins a restated account as owed.",
+     "class": "within",
+     "why": "Tests that encoded the defect are corrected to the fixed behavior while still covering the relabel-passes case; the new test only fails when the requested fix is absent - enforcement of the request."
+    },
+    {
+     "id": "T213-D6",
+     "summary": "The 8 MISLABELED claims newly owed (the T400 miss among them) are owed impl-drift at this task's landing claims round, not deferred; no map change; nothing found and left.",
+     "class": "within",
+     "why": "Those 8 are exactly the unchecked restatements the defect let through; checking them at landing is the fix taking effect, not a narrowing or deferral."
+    },
+    {
+     "id": "T213-D7",
+     "summary": "Order after T204, beside T210 and T211; one landing; exits green/red via arbiter-ask.",
+     "class": "within",
+     "why": "Scheduling inside the GM's instruction to fix all six before the port resumes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T214": {
+   "section_sha256": "f6b4f98b90ca001156d4e8e9611ee9b70103793518092c1fc2aa1c0bef41820e",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T214-bare-name",
+     "summary": "declare reads a bare sheet name (UNIT=ochiba-roundtrip-test) as its building-review--<sheet> unit and prints that slug",
+     "class": "within",
+     "why": "Removes cause (a) of the measured refusal, a bare name looked up as a unit with no verdict record; directly fixes the defect the GM approved fixing (T214: the change-scoped review refuses a sheet with no earlier verdict)."
+    },
+    {
+     "id": "T214-owed-first",
+     "summary": "owed is taken from unit_sheet (reviews owed's own list) before any snapshot; a unit no delta owes gets exit 0 'not owed by this delta, no round', its last verdict left on file; a name with no pool sheet is refused as such, never read as not owed",
+     "class": "within",
+     "why": "Removes cause (b), a stale landed snapshot making an unowed unit read as owed, so review-fixed agrees with reviews owed, make verify and the push's review gate. Serves the 2026-11-23 rule that only a claim-changing edit triggers review and re-reviews are scoped to the change. Refusing an unknown name keeps a typo from passing as not owed; that is correctness, not new scope."
+    },
+    {
+     "id": "T214-history-recovery",
+     "summary": "where no .reviewed copy was kept, scoped/recover.rs finds the sheet as reviewed from git history (DEPTH 200 commits) plus the drawing as it reads now, hashed by files_key so the hash is the verdict's own; the match is written as the kept copy and the change-scoped prompt pairs it as before",
+     "class": "within",
+     "why": "Removes cause (c), a verdict written before T199 kept copies. This is the mechanism by which a sheet with an earlier verdict and no kept copy gets a change-scoped round instead of a full one, the exact case the GM approved fixing. Measured on the real sheet: the notes at 03cc1514d1 with today's drawing hash to the verdict's 9b7b9464d35cc002. DEPTH 200 is a search bound against 15 commits observed over seven weeks; a bound, not a carve-out of a case."
+    },
+    {
+     "id": "T214-full-round-kept",
+     "summary": "the full round is still owed (1) for an owed unit with no PASS or NEEDS-WORK on file, i.e. a sheet never reviewed, and (2) where the sheet as reviewed is neither kept nor found in git history; the message now says which",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read against the GM's approval of 'T214 the change-scoped review refuses a sheet with no earlier verdict', keeping a full round anywhere could read as preserving the behavior asked to change, so it is ruled. Each case separately: (1) a sheet never reviewed has no earlier review to scope a re-review to, so a change-scoped round is physically impossible; the measured defect was a sheet that HAD a verdict being misread as having none, and that is fixed. (2) With no reviewed version anywhere, there is no baseline to diff the change against, which is again physically impossible, not merely awkward; the measured case is recovered. Neither case guts the purpose (no full round for a notes-only or nitpick fix on a sheet that was reviewed)."
+    },
+    {
+     "id": "T214-T199-rule-kept",
+     "summary": "the rest of T199's rule unchanged: a named non-nitpick, an open error or questionable finding, or an unchanged sheet still owes/refuses as before",
+     "class": "within",
+     "why": "The GM asked to fix the six defects named; T199's rule (an error or questionable finding owes the full round) was not among them and matches the 2026-11-23 rule that only factual findings cascade. Leaving it is not a carve-out of the requested fix."
+    },
+    {
+     "id": "T214-scope-crate",
+     "summary": "only the reviews crate's files touched; FR-012 red-first tests; 100% line coverage; exits via crate-checks and closing-checks",
+     "class": "within",
+     "why": "Constraints of execution and enforcement of the fix itself (red-first tests pin the requested behavior); no added behavior."
+    },
+    {
+     "id": "T214-left-not-defects",
+     "summary": "left as not defects: make verify's first run taking 4 of 27 files (review tree takes the started task's files by design); per-clone verdict records differing; docs/reviews.md, the Makefile help line and rust/gate/CLAUDE.md's reviews row left as they read, still true but less complete",
+     "class": "within",
+     "why": "Per constitution XIV v2.36.0 a defect is a wrong outcome; none of these is one: the first two are by design and owed nothing either way, and the docs stay true. Nothing here is a defect deferred, so FR-009's filed-task demand does not bite."
+    },
+    {
+     "id": "T214-perf-tag",
+     "summary": "the task is tagged [perf] under FR-013 as builders'-loop work (no full review round for a notes-only nitpick fix)",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; this ordering choice sits inside the GM's 2026-11-20 rule and inside his 2026-11-24 instruction to fix all six before resuming."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T215": {
+   "section_sha256": "8016f4ab8ad1e03d53dd9969a5991dc6e470d70a9a467eb87299042a8dd03bf9",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T215-D1",
+     "summary": "A section snapshot's words move from the clone's .git blob map into a committed file, dev/claims-section-words.jsonl, read in any clone.",
+     "class": "within",
+     "why": "The GM's 2026-11-24 question ('should it live in the clone rather than in the repo?') was about T210's kept section words, and his 'Yes let's fix all 6 of those before we resume.' covers T210's wrong outcome: 147 claims forced in another clone. Keeping the words in the repository removes that outcome, measured by the replay (fresh clone 147 forced unfixed, 0 fixed)."
+    },
+    {
+     "id": "T215-D2",
+     "summary": "The file holds one line per block, keyed by block digest, sorted, and pruned to the blocks of the snapshots the index's rows name. It is written only when it changes.",
+     "class": "within",
+     "why": "This is a choice of storage format for the same goal and narrows nothing. The prune keeps every block of every snapshot a row still names, so no word the triage needs is dropped."
+    },
+    {
+     "id": "T215-D3",
+     "summary": "Every writer that records a section snapshot writes its words through one path, save_recorded, plus claims backfill-sections. The class census is stated with its method (rg over save_store( and \"section\").",
+     "class": "within",
+     "why": "Making every writer write the words is what makes the fix whole. The census carries its search space and method, as FR-009 asks of a fix that names a class of writers."
+    },
+    {
+     "id": "T215-D4",
+     "summary": "Page texts stay per clone and are not moved into the repository.",
+     "class": "within",
+     "why": "The GM's question and the defect T215 fixes (T210's) name section words only, so page texts lie outside what was asked rather than being cut from it. Ruled on that scope, not on the block's unmeasured premise that git history holds every page's text."
+    },
+    {
+     "id": "T215-D5",
+     "summary": "The per-clone section path (kept_section, the section: keys) is deleted, and a stale section: key in a clone's blob map is ignored.",
+     "class": "within",
+     "why": "Purpose test: another clone forces nothing. The backfilled file resolves all 257 blocks of the 20 snapshots the committed index names, measured 2026-11-24. That measurement does not reach a clone holding a snapshot recorded but not yet landed. The worst case there is a one-time force, which is the pre-fix behavior and not a new wrong outcome, and the bundle shows no such clone exists. So the deletion does not gut the fix."
+    },
+    {
+     "id": "T215-D6",
+     "summary": "The one force left: a removed block whose words are in neither the file nor history owes in full. A line that does not parse, or whose words do not hash to its digest, is not read.",
+     "class": "within",
+     "why": "No path the block describes loses the words of a named snapshot. The prune keeps them, a union merge only adds lines, and every record writes them. So this is the fallback for lost or corrupt data, not a case carved out of the fix."
+    },
+    {
+     "id": "T215-D7",
+     "summary": "The file merges with merge=union. A union may keep a pruned line or leave the file unsorted, which the reader tolerates and the next write repairs.",
+     "class": "within",
+     "why": "This keeps two clones' records from conflicting, measured by the merge test (a conflict without the attribute, clean with it). It is a mechanism serving the same goal."
+    },
+    {
+     "id": "T215-D8",
+     "summary": "The file is registered wherever dev/claims-pages.json is: the push's claims gate (cohort, push::judges) and the gate preflight's RECORDS.",
+     "class": "within",
+     "why": "This treats the new record the way the existing claims records are treated so the gate judges it. It is consistency and enforcement of the fix, not new scope."
+    },
+    {
+     "id": "T215-D9",
+     "summary": "section_words and gather_section no longer return a Result, after clippy's unnecessary_wraps.",
+     "class": "within",
+     "why": "An incidental signature change forced by the static checks once the functions can no longer fail. It is not a scope decision."
+    },
+    {
+     "id": "T215-D10",
+     "summary": "Not performance work, with no [perf] tag. Found and left: none.",
+     "class": "within",
+     "why": "It fixes a wrong outcome (a full impl-drift owed for text already checked) under 'fix all 6'. No defect is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T216": {
+   "section_sha256": "3f44a0f1c0e3e196e099322f435ee2d0e7a93ca9bc11bf574c6b33f6da3425ee",
+   "reviewed": "2026-11-24",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The carrier: an ad-hoc dispatch with no model asks for the session's model by a prompt line `SESSION_MODEL: <reason>` (line start, reason of two words / eight characters, logged as the guard log's detail).",
+     "class": "within",
+     "why": "The GM asked that judging agents inherit the session model while the Sonnet rule for read/fetch/translate/extract stays enforced ('that ruling from before is something that I still want'). Omitting the model is how inheritance happens, and the guard needs some way to tell an omission the caller decided on from an accidental one, or reading work would land on the session's model by default. A marker line is a mechanism for doing what was asked and narrows nothing. Recording the reason follows the project's every-firing-recorded convention."
+    },
+    {
+     "id": "(b)",
+     "summary": "Any named model other than sonnet or haiku is refused, the session's own model included (stricter than the task line's 'a named opus or fable that is not the session's'). The allow-list form means a future alias is refused until its tier is decided.",
+     "class": "within",
+     "why": "Judged against the GM's words, not against the task line (which is the session's text; spec-cited.md is empty). The GM asked for 'inheriting the parent session model for anything that judges' and 'if I switch back to Opus 5.5, then I would want them to use that'. A pinned name that happens to equal today's session model stops following at the next switch, so refusing it moves toward the request rather than away from it. What this costs is the ability to pin an ad-hoc judging agent to some other model, and nobody asked for that."
+    },
+    {
+     "id": "(c)",
+     "summary": "A named sonnet beside the SESSION_MODEL line passes as sonnet; the line is inert.",
+     "class": "within",
+     "why": "Sonnet is the tier the GM's kept ruling enforces for reading work. The caller named it, and what is named is what runs. Neither request quote is narrowed."
+    },
+    {
+     "id": "(d)",
+     "summary": "A dispatch with no model and no SESSION_MODEL line stays refused (no-model).",
+     "class": "within",
+     "why": "This is the GM's own words verbatim: 'that ruling from before is something that I still want with regards to enforcing that Sonnet should be used to read, fetch, translate, or extract.' Letting an unmarked omission through would put reading work on the session's model by default."
+    },
+    {
+     "id": "defined-agents",
+     "summary": "Defined agent types (files under .claude/agents/) pass whatever model they name, with that check moved ahead of the model check. Their pinned tiers in agent_models.rs ('judgment is on Opus') are left alone.",
+     "class": "within",
+     "why": "This is the one decision here that could narrow the GM's literal 'anything that judges', so it is decided on his words alone. The subject of his question is 'the general purpose subagents that you're firing off to do stuff', and he wants them to 'use whatever model it is that I have selected'. His second message changes 'that ruling from before', which he identifies by its enforcement of Sonnet for read, fetch, translate and extract. That is the ad-hoc dispatch rule whose text said 'opus for anything that judges'. Nothing in either quote reaches the defined review agents' frontmatter tiers, so the request as written never covered them. Leaving them alone therefore does not carve anything out of it. The same builder-versus-defined-review-agent line is drawn by the spec at FR-006. I relied on neither the session-written heading nor the plan's own assertion of scope."
+    },
+    {
+     "id": "builds",
+     "summary": "The inheritance rule covers ad-hoc agents that build as well as those that judge.",
+     "class": "within",
+     "why": "The GM's first quote asks that the general-purpose subagents 'you are firing off to do stuff use whatever model it is that I have selected', and builders are among them. The request was set off by builders named opus under a Fable session."
+    },
+    {
+     "id": "haiku",
+     "summary": "haiku is in the allow-list beside sonnet.",
+     "class": "within",
+     "why": "Per the Approach, the old guard passed any named model, so haiku was already allowed. The GM asked to keep the Sonnet half of the ruling and to replace only its Opus half. Keeping haiku allowed changes nothing he asked to change. (The bundle does not quote the 2026-09-19 rule's text, so this rests on the plan's description of the guard as built.)"
+    },
+    {
+     "id": "workflow-agent",
+     "summary": "workflow_hooks holds a script's ad-hoc agent() call to the same rule: the model literal is read, a computed model is refused as '?', the marker is accepted anywhere in the call's text including a comment, and a marked call is recorded session-model.",
+     "class": "within",
+     "why": "An agent() call from a workflow script is an ad-hoc subagent the session fires off, so the GM's rule reaches it. Without this change, scripts would go on pinning opus. Refusing a model the guard cannot read is how it enforces the Sonnet half of the kept ruling. Accepting the marker in the call text is the carrier of (a), fitted to that call's form."
+    },
+    {
+     "id": "no-escape",
+     "summary": "The SESSION_MODEL line is a compliant form, not an escape, and the guard has no escape.",
+     "class": "within",
+     "why": "The guard already had no escape, and the compliant dispatch is always available. FR-012's escape requirement covers FR-006 to FR-009, FR-011 and FR-013, not this guard, so nothing that was asked is narrowed."
+    },
+    {
+     "id": "restatements",
+     "summary": "The rule is restated in the root CLAUDE.md and its suite check, docs/guards.md, docs/spec-kit-and-reviews.md, docs/research-doctrine.md, page-session-rules.md and rust/guard/CLAUDE.md. Spec directories 252 and 293 are left alone as history.",
+     "class": "within",
+     "why": "These make the rule's written text match the rule the GM set. The search space is stated: grep for the rule's two phrases over the tree outside .git, observed 2026-11-24. Leaving history unedited narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T212 (the cascade test's 8 false sends from the three ABSENCE phrases)",
+    "### T212 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T212-drop",
+     "summary": "The phrase arm of change::fires (ABSENCE: 'the one case', 'only one case', 'every plan', and says_absence) is removed rather than narrowed; the alternative of tying a phrase to the pop-up sentence sharing the new block's subject was measured and rejected.",
+     "class": "within",
+     "why": "The GM (2026-11-24) approved fixing T212, '8 false sends from three fixed phrases'. The convergence talk separates cascades that could plausibly have needed review from changes that never could. Removing the arm that produced the false sends serves that directly. It stays within the request only if real absence breaks still send. Item 9's dated replay (2026-11-24, the three landings) says they do: 0 of the 17 page-caused corrections and none of the cascade test's 3 are missed, and the arm (c) corrections are each sent by the addition rule alone. That replay was not re-run here (bundle-only review), so this ruling rests on it. Choosing the drop over the narrower alternative is a design choice, not a narrowing of what was asked."
+    },
+    {
+     "id": "T212-judged",
+     "summary": "judged (triage.rs) passes no new findings; T209's addition rule and then the triage agent decide instead, landed as one change with T209 (item 5).",
+     "class": "within",
+     "why": "This follows from the drop. Absence detection moves to T209's addition rule, which is itself one of the six fixes the GM approved on 2026-11-24. Because the two land together (item 5), there is no window in which absence breaks go undetected."
+    },
+    {
+     "id": "T212-new_findings-kept",
+     "summary": "new_findings stays, because the claims' triage reads it.",
+     "class": "within",
+     "why": "Keeping a reader that another part of the pipeline still uses removes nothing the GM asked for."
+    },
+    {
+     "id": "T212-reach",
+     "summary": "The fix covers all 11 sends the arm made over the three landings (10 cleared, 1 kept by the addition rule), not just the 8 named in the task title.",
+     "class": "within",
+     "why": "The '8' in the GM's line is the cascade test's count: item 12 names main-gate's three checks and servants' quarters' depiction, each on two pairs (0097/0334 and 0108.drawing/0334). Item 9 clears all of those pairs. Applying the same fix to the arm's other sends in the same replays is the same defect at wider reach, not added scope."
+    },
+    {
+     "id": "T212-residuals",
+     "summary": "Two sends remain and are recorded with 'Found and left? none': residence x 0107, sent by the addition rule (the doma phrase), and servants' quarters x 0097, sent through the echo check (a check session's rewording of 'a few men to each').",
+     "class": "within",
+     "why": "Neither is a send from the three phrases. One comes from T209's addition rule reading the pop-up's stated absence. The other comes from the echo check, which the GM approved on 2026-11-23 as T186's first filter, and it fires on a pair other than the 8 false ones. Item 9 records both openly, so nothing T212 was asked to fix is left undone."
+    },
+    {
+     "id": "T212-perf",
+     "summary": "The task is labeled performance work ([perf]): 10 phrase-only sends no longer reach the triage agent.",
+     "class": "within",
+     "why": "The GM (2026-11-20) asked to prioritize performance improvements, and the convergence talk is about time spent on cascades that fix nothing. Fewer triage-agent dispatches fits that. The label affects scheduling only, not what the fix does."
+    },
+    {
+     "id": "T212-exits",
+     "summary": "Green when every phrase-only send is cleared and no correction is missed. Red means recording what failed and setting the task down, with any 'cannot be done' claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "These are the standard exits. The green condition matches both what the request asks for (no false sends) and its purpose (no missed corrections)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T213 (the cascade test's T400 miss: relabeled_only passes a MISLABELED claim's rewritten account)",
+    "### T213 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T213-D1",
+     "summary": "relabeled_only's MISLABELED arm passes only when the stored claim's account equals the current one word for word (account_of, split as parse_claim splits it); the backing (class or cited question) may change.",
+     "class": "within",
+     "why": "This is the fix for the defect the GM approved fixing on 2026-11-24 ('T213 a claim marked mislabeled can be rewritten unchecked'; 'Yes let's fix all 6 of those before we resume.'). Letting the label change alone pass is what the convergence talk approved ('labels are data and propagate by regeneration'; 'attested versus guess ... cascades mechanically'). Sending a restated account to review follows 'only a claim-changing edit triggers review'."
+    },
+    {
+     "id": "T213-D2",
+     "summary": "A MISLABELED row that stores no claim is not treated as a relabel, so it is owed rather than passed.",
+     "class": "within",
+     "why": "Without a stored account there is nothing to compare, so passing such a row would bring back the unchecked rewrite this task removes. The row is treated as owed, the conservative outcome. The recorded measurement (item 9) shows that none of the 8 newly owed claims comes from this arm, so it adds no cascade the GM did not ask for."
+    },
+    {
+     "id": "T213-D3",
+     "summary": "relabel_answered (the push's carry, carry.rs) reads the fixed relabeled_only, so a restated account no longer answers a MISLABELED verdict at the push either.",
+     "class": "within",
+     "why": "The same defect through its other consumer. The fix lives in the shared function, so every caller inherits it. Narrowing the fix to the index path only would leave the T213 defect in place."
+    },
+    {
+     "id": "T213-D4",
+     "summary": "T204's item-naming arms are left untouched and run before this arm; a relabel alone still owes nothing.",
+     "class": "within",
+     "why": "This keeps behavior the GM approved (T204 and the labels rule). It does not narrow T213, whose defect concerns the account, not item naming."
+    },
+    {
+     "id": "T213-D5",
+     "summary": "Two fixtures that asserted the defect (an account rewrite passing as a relabel) are rewritten as true relabels, and a red-first test, a_mislabeled_claim_s_restated_account_is_owed, pins the fix.",
+     "class": "within",
+     "why": "Fixtures that encoded the defect are fixed along with it (fix as we go). The red-first test only fails if the requested fix is absent, so it is enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T213-D6",
+     "summary": "The 8 claims the fix newly owes (all MISLABELED rows whose account was restated, T400's among them) are taken through impl-drift in this landing's claims round, not deferred.",
+     "class": "within",
+     "why": "Bringing those restatements to review is exactly what the GM approved fixing. They are handled at this task's landing, so no defect is deferred and none is left."
+    },
+    {
+     "id": "T213-D7",
+     "summary": "Order: after T204, beside T210 and T211. Budget: one landing. No map, fresh block or pool manifest changes. Filed [perf] with the cascade test's six.",
+     "class": "within",
+     "why": "Scheduling and bookkeeping inside the GM's 2026-11-24 instruction to fix all six before the port resumes. It narrows nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T213 (the cascade test's T400 miss: relabeled_only passes a MISLABELED claim's rewritten account)",
+    "### T213 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T213-D1",
+     "summary": "relabeled_only's MISLABELED arm passes only a relabel: the stored claim's account equal word for word to the claim's account now (account_of, split as parse_claim splits it); the backing (class or cited question) free to change.",
+     "class": "within",
+     "why": "This is the fix the GM approved on 2026-11-24 ('T213 a claim marked mislabeled can be rewritten unchecked' ... 'Yes let's fix all 6 of those'): a restated account is now owed. Leaving the label and its backing free keeps the convergence talk's 'attested versus guess ... cascades mechanically' and the approved rule 'labels are data and propagate by regeneration'."
+    },
+    {
+     "id": "T213-D2",
+     "summary": "A row storing no claim is no relabel, so it is owed.",
+     "class": "within",
+     "why": "Where no stored account exists the account cannot be shown unchanged; treating it as owed checks more, not less, and serves the request that a mislabeled claim not be rewritten unchecked."
+    },
+    {
+     "id": "T213-D3",
+     "summary": "relabel_answered (the push's carry, carry.rs) reads the same rule, so a restated account no longer answers a MISLABELED verdict there either.",
+     "class": "within",
+     "why": "Closes the same defect on the second path that reads it; without it a rewrite could still pass at the push, defeating the fix."
+    },
+    {
+     "id": "T213-D4",
+     "summary": "A relabel alone still owes nothing; T204's item-naming arms are untouched.",
+     "class": "within",
+     "why": "Preserves what the GM asked for in the convergence talk (labels cascade mechanically) and leaves another task's settled behavior alone; it is not a carve-out from T213, whose defect is the account rewrite only."
+    },
+    {
+     "id": "T213-D5",
+     "summary": "Two fixtures that asserted the defect (an account rewrite passing as a relabel) are restated as true relabels; a new red-first test pins a restated account as owed.",
+     "class": "within",
+     "why": "Tests that encoded the defect are corrected to the fixed behavior while still covering the relabel-passes case; the new test only fails when the requested fix is absent - enforcement of the request."
+    },
+    {
+     "id": "T213-D6",
+     "summary": "The 8 MISLABELED claims newly owed (the T400 miss among them) are owed impl-drift at this task's landing claims round, not deferred; no map change; nothing found and left.",
+     "class": "within",
+     "why": "Those 8 are exactly the unchecked restatements the defect let through; checking them at landing is the fix taking effect, not a narrowing or deferral."
+    },
+    {
+     "id": "T213-D7",
+     "summary": "Order after T204, beside T210 and T211; one landing; exits green/red via arbiter-ask.",
+     "class": "within",
+     "why": "Scheduling inside the GM's instruction to fix all six before the port resumes."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T214 (the cascade test's review-fixed refusal on a sheet with no carried verdict)",
+    "### T214 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T214-bare-name",
+     "summary": "declare reads a bare sheet name (UNIT=ochiba-roundtrip-test) as its building-review--<sheet> unit and prints that slug",
+     "class": "within",
+     "why": "Removes cause (a) of the measured refusal, a bare name looked up as a unit with no verdict record; directly fixes the defect the GM approved fixing (T214: the change-scoped review refuses a sheet with no earlier verdict)."
+    },
+    {
+     "id": "T214-owed-first",
+     "summary": "owed is taken from unit_sheet (reviews owed's own list) before any snapshot; a unit no delta owes gets exit 0 'not owed by this delta, no round', its last verdict left on file; a name with no pool sheet is refused as such, never read as not owed",
+     "class": "within",
+     "why": "Removes cause (b), a stale landed snapshot making an unowed unit read as owed, so review-fixed agrees with reviews owed, make verify and the push's review gate. Serves the 2026-11-23 rule that only a claim-changing edit triggers review and re-reviews are scoped to the change. Refusing an unknown name keeps a typo from passing as not owed; that is correctness, not new scope."
+    },
+    {
+     "id": "T214-history-recovery",
+     "summary": "where no .reviewed copy was kept, scoped/recover.rs finds the sheet as reviewed from git history (DEPTH 200 commits) plus the drawing as it reads now, hashed by files_key so the hash is the verdict's own; the match is written as the kept copy and the change-scoped prompt pairs it as before",
+     "class": "within",
+     "why": "Removes cause (c), a verdict written before T199 kept copies. This is the mechanism by which a sheet with an earlier verdict and no kept copy gets a change-scoped round instead of a full one, the exact case the GM approved fixing. Measured on the real sheet: the notes at 03cc1514d1 with today's drawing hash to the verdict's 9b7b9464d35cc002. DEPTH 200 is a search bound against 15 commits observed over seven weeks; a bound, not a carve-out of a case."
+    },
+    {
+     "id": "T214-full-round-kept",
+     "summary": "the full round is still owed (1) for an owed unit with no PASS or NEEDS-WORK on file, i.e. a sheet never reviewed, and (2) where the sheet as reviewed is neither kept nor found in git history; the message now says which",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read against the GM's approval of 'T214 the change-scoped review refuses a sheet with no earlier verdict', keeping a full round anywhere could read as preserving the behavior asked to change, so it is ruled. Each case separately: (1) a sheet never reviewed has no earlier review to scope a re-review to, so a change-scoped round is physically impossible; the measured defect was a sheet that HAD a verdict being misread as having none, and that is fixed. (2) With no reviewed version anywhere, there is no baseline to diff the change against, which is again physically impossible, not merely awkward; the measured case is recovered. Neither case guts the purpose (no full round for a notes-only or nitpick fix on a sheet that was reviewed)."
+    },
+    {
+     "id": "T214-T199-rule-kept",
+     "summary": "the rest of T199's rule unchanged: a named non-nitpick, an open error or questionable finding, or an unchanged sheet still owes/refuses as before",
+     "class": "within",
+     "why": "The GM asked to fix the six defects named; T199's rule (an error or questionable finding owes the full round) was not among them and matches the 2026-11-23 rule that only factual findings cascade. Leaving it is not a carve-out of the requested fix."
+    },
+    {
+     "id": "T214-scope-crate",
+     "summary": "only the reviews crate's files touched; FR-012 red-first tests; 100% line coverage; exits via crate-checks and closing-checks",
+     "class": "within",
+     "why": "Constraints of execution and enforcement of the fix itself (red-first tests pin the requested behavior); no added behavior."
+    },
+    {
+     "id": "T214-left-not-defects",
+     "summary": "left as not defects: make verify's first run taking 4 of 27 files (review tree takes the started task's files by design); per-clone verdict records differing; docs/reviews.md, the Makefile help line and rust/gate/CLAUDE.md's reviews row left as they read, still true but less complete",
+     "class": "within",
+     "why": "Per constitution XIV v2.36.0 a defect is a wrong outcome; none of these is one: the first two are by design and owed nothing either way, and the docs stay true. Nothing here is a defect deferred, so FR-009's filed-task demand does not bite."
+    },
+    {
+     "id": "T214-perf-tag",
+     "summary": "the task is tagged [perf] under FR-013 as builders'-loop work (no full review round for a notes-only nitpick fix)",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; this ordering choice sits inside the GM's 2026-11-20 rule and inside his 2026-11-24 instruction to fix all six before resuming."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T215 (the GM's question 2026-11-24: T210's kept section words lived in each clone's .git, so another clone forced its sections)",
+    "### T215 Approach (checklist part A)",
+    "### T215 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T215-D1",
+     "summary": "Kept section words move from the clone's .git blob map to a committed file, dev/claims-section-words.jsonl, read in any clone",
+     "class": "within",
+     "why": "The GM asked 'should it live in the clone rather than in the repo?' about T210's kept section words; the session answered 'in the repository' and escalation-check ruled it the session's to build under 'Yes let's fix all 6 of those before we resume.' The move is the fix of T210's wrong outcome (147 claims forced in a fresh clone), which the GM approved fixing."
+    },
+    {
+     "id": "T215-D2",
+     "summary": "One line a block keyed by block digest, sorted by digest, pruned to the blocks of the snapshots the saved index names, written only on change",
+     "class": "within",
+     "why": "Format and pruning are how the file is kept; they bound its size (measured: a regenerated row adds one line and drops one) and keep it diff-friendly. Nothing the request asked is dropped."
+    },
+    {
+     "id": "T215-D3",
+     "summary": "Every section-snapshot writer (claims-checked, the tool's clear, the all-forced record, claims-triaged, claims backfill-sections) writes through one path, save_recorded; the two page-only save_store writers are left as they are",
+     "class": "within",
+     "why": "Makes the fix reach every writer of a section snapshot, with the search space stated (rg 'save_store\\(|\"section\"' over the crate) per the enumeration rule; the two left out record page snapshots only, which carry no section words."
+    },
+    {
+     "id": "T215-D4",
+     "summary": "The reader reads the file then the history; a line that does not parse or whose words do not hash to its digest is not read",
+     "class": "within",
+     "why": "Integrity check on what the fix stores; it serves the request (the words read are the words judged) and narrows nothing."
+    },
+    {
+     "id": "T215-D5",
+     "summary": "The per-clone section path is deleted (kept_section, the section: keys); a stale section: key is ignored",
+     "class": "within",
+     "why": "The GM's question was whether the words should live in the clone or the repo, answered 'the repo'; removing the clone copy follows. The plan states the case it checked (the file resolves all 257 blocks of the 20 named snapshots), so nothing that worked is lost."
+    },
+    {
+     "id": "T215-D6",
+     "summary": "Page texts stay per clone",
+     "class": "within",
+     "why": "The GM's question and the defect concern T210's kept SECTION words; the session's answer put to the GM already said page texts stay per clone because git history holds a page's text, so no other clone is left forcing claims. Not a defect left, and outside the question's subject."
+    },
+    {
+     "id": "T215-D7",
+     "summary": "The file merges by merge=union; a union may keep a pruned line or leave the order unsorted, tolerated by the reader and repaired at the next write",
+     "class": "within",
+     "why": "Keeps the committed file from conflicting across clones (measured: conflict without, clean with); the temporary extra lines are not a wrong outcome."
+    },
+    {
+     "id": "T215-D8",
+     "summary": "The file is registered beside dev/claims-pages.json: judged by the push's claims gate (cohort push::judges) and counted a claims record by the gate's preflight (measure preflight::RECORDS)",
+     "class": "within",
+     "why": "Registration so the existing gates treat the new record like its siblings; enforcement of the fix, not new behavior beyond it."
+    },
+    {
+     "id": "T215-D9",
+     "summary": "section_words and gather_section return plainly after clippy's unnecessary_wraps",
+     "class": "within",
+     "why": "A consequence of the change (they no longer fail); no scope."
+    },
+    {
+     "id": "T215-D10",
+     "summary": "Exits and order: green when the fresh clone's replay forces none of the 147; after T210, before the port resumes; one landing",
+     "class": "within",
+     "why": "Matches 'fix all 6 of those before we resume' and the defect as measured."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T215 (the GM's question 2026-11-24: T210's kept section words lived in each clone's .git, so another clone forced its sections)",
+    "### T215 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T215-D1",
+     "summary": "A section snapshot's words move from the clone's .git blob map into a committed file, dev/claims-section-words.jsonl, read in any clone.",
+     "class": "within",
+     "why": "The GM's 2026-11-24 question ('should it live in the clone rather than in the repo?') was about T210's kept section words, and his 'Yes let's fix all 6 of those before we resume.' covers T210's wrong outcome: 147 claims forced in another clone. Keeping the words in the repository removes that outcome, measured by the replay (fresh clone 147 forced unfixed, 0 fixed)."
+    },
+    {
+     "id": "T215-D2",
+     "summary": "The file holds one line per block, keyed by block digest, sorted, and pruned to the blocks of the snapshots the index's rows name. It is written only when it changes.",
+     "class": "within",
+     "why": "This is a choice of storage format for the same goal and narrows nothing. The prune keeps every block of every snapshot a row still names, so no word the triage needs is dropped."
+    },
+    {
+     "id": "T215-D3",
+     "summary": "Every writer that records a section snapshot writes its words through one path, save_recorded, plus claims backfill-sections. The class census is stated with its method (rg over save_store( and \"section\").",
+     "class": "within",
+     "why": "Making every writer write the words is what makes the fix whole. The census carries its search space and method, as FR-009 asks of a fix that names a class of writers."
+    },
+    {
+     "id": "T215-D4",
+     "summary": "Page texts stay per clone and are not moved into the repository.",
+     "class": "within",
+     "why": "The GM's question and the defect T215 fixes (T210's) name section words only, so page texts lie outside what was asked rather than being cut from it. Ruled on that scope, not on the block's unmeasured premise that git history holds every page's text."
+    },
+    {
+     "id": "T215-D5",
+     "summary": "The per-clone section path (kept_section, the section: keys) is deleted, and a stale section: key in a clone's blob map is ignored.",
+     "class": "within",
+     "why": "Purpose test: another clone forces nothing. The backfilled file resolves all 257 blocks of the 20 snapshots the committed index names, measured 2026-11-24. That measurement does not reach a clone holding a snapshot recorded but not yet landed. The worst case there is a one-time force, which is the pre-fix behavior and not a new wrong outcome, and the bundle shows no such clone exists. So the deletion does not gut the fix."
+    },
+    {
+     "id": "T215-D6",
+     "summary": "The one force left: a removed block whose words are in neither the file nor history owes in full. A line that does not parse, or whose words do not hash to its digest, is not read.",
+     "class": "within",
+     "why": "No path the block describes loses the words of a named snapshot. The prune keeps them, a union merge only adds lines, and every record writes them. So this is the fallback for lost or corrupt data, not a case carved out of the fix."
+    },
+    {
+     "id": "T215-D7",
+     "summary": "The file merges with merge=union. A union may keep a pruned line or leave the file unsorted, which the reader tolerates and the next write repairs.",
+     "class": "within",
+     "why": "This keeps two clones' records from conflicting, measured by the merge test (a conflict without the attribute, clean with it). It is a mechanism serving the same goal."
+    },
+    {
+     "id": "T215-D8",
+     "summary": "The file is registered wherever dev/claims-pages.json is: the push's claims gate (cohort, push::judges) and the gate preflight's RECORDS.",
+     "class": "within",
+     "why": "This treats the new record the way the existing claims records are treated so the gate judges it. It is consistency and enforcement of the fix, not new scope."
+    },
+    {
+     "id": "T215-D9",
+     "summary": "section_words and gather_section no longer return a Result, after clippy's unnecessary_wraps.",
+     "class": "within",
+     "why": "An incidental signature change forced by the static checks once the functions can no longer fail. It is not a scope decision."
+    },
+    {
+     "id": "T215-D10",
+     "summary": "Not performance work, with no [perf] tag. Found and left: none.",
+     "class": "within",
+     "why": "It fixes a wrong outcome (a full impl-drift owed for text already checked) under 'fix all 6'. No defect is deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-24",
+   "blocks": [
+    "### T216 (the GM 2026-11-24: builders were sent with `model: opus` under a Fable 5.2 session; an ad-hoc agent that judges or builds runs on the session's model)",
+    "### T216 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The carrier: an ad-hoc dispatch with no model asks for the session's model by a prompt line `SESSION_MODEL: <reason>` (line start, reason of two words / eight characters, logged as the guard log's detail).",
+     "class": "within",
+     "why": "The GM asked that judging agents inherit the session model while the Sonnet rule for read/fetch/translate/extract stays enforced ('that ruling from before is something that I still want'). Omitting the model is how inheritance happens, and the guard needs some way to tell an omission the caller decided on from an accidental one, or reading work would land on the session's model by default. A marker line is a mechanism for doing what was asked and narrows nothing. Recording the reason follows the project's every-firing-recorded convention."
+    },
+    {
+     "id": "(b)",
+     "summary": "Any named model other than sonnet or haiku is refused, the session's own model included (stricter than the task line's 'a named opus or fable that is not the session's'). The allow-list form means a future alias is refused until its tier is decided.",
+     "class": "within",
+     "why": "Judged against the GM's words, not against the task line (which is the session's text; spec-cited.md is empty). The GM asked for 'inheriting the parent session model for anything that judges' and 'if I switch back to Opus 5.5, then I would want them to use that'. A pinned name that happens to equal today's session model stops following at the next switch, so refusing it moves toward the request rather than away from it. What this costs is the ability to pin an ad-hoc judging agent to some other model, and nobody asked for that."
+    },
+    {
+     "id": "(c)",
+     "summary": "A named sonnet beside the SESSION_MODEL line passes as sonnet; the line is inert.",
+     "class": "within",
+     "why": "Sonnet is the tier the GM's kept ruling enforces for reading work. The caller named it, and what is named is what runs. Neither request quote is narrowed."
+    },
+    {
+     "id": "(d)",
+     "summary": "A dispatch with no model and no SESSION_MODEL line stays refused (no-model).",
+     "class": "within",
+     "why": "This is the GM's own words verbatim: 'that ruling from before is something that I still want with regards to enforcing that Sonnet should be used to read, fetch, translate, or extract.' Letting an unmarked omission through would put reading work on the session's model by default."
+    },
+    {
+     "id": "defined-agents",
+     "summary": "Defined agent types (files under .claude/agents/) pass whatever model they name, with that check moved ahead of the model check. Their pinned tiers in agent_models.rs ('judgment is on Opus') are left alone.",
+     "class": "within",
+     "why": "This is the one decision here that could narrow the GM's literal 'anything that judges', so it is decided on his words alone. The subject of his question is 'the general purpose subagents that you're firing off to do stuff', and he wants them to 'use whatever model it is that I have selected'. His second message changes 'that ruling from before', which he identifies by its enforcement of Sonnet for read, fetch, translate and extract. That is the ad-hoc dispatch rule whose text said 'opus for anything that judges'. Nothing in either quote reaches the defined review agents' frontmatter tiers, so the request as written never covered them. Leaving them alone therefore does not carve anything out of it. The same builder-versus-defined-review-agent line is drawn by the spec at FR-006. I relied on neither the session-written heading nor the plan's own assertion of scope."
+    },
+    {
+     "id": "builds",
+     "summary": "The inheritance rule covers ad-hoc agents that build as well as those that judge.",
+     "class": "within",
+     "why": "The GM's first quote asks that the general-purpose subagents 'you are firing off to do stuff use whatever model it is that I have selected', and builders are among them. The request was set off by builders named opus under a Fable session."
+    },
+    {
+     "id": "haiku",
+     "summary": "haiku is in the allow-list beside sonnet.",
+     "class": "within",
+     "why": "Per the Approach, the old guard passed any named model, so haiku was already allowed. The GM asked to keep the Sonnet half of the ruling and to replace only its Opus half. Keeping haiku allowed changes nothing he asked to change. (The bundle does not quote the 2026-09-19 rule's text, so this rests on the plan's description of the guard as built.)"
+    },
+    {
+     "id": "workflow-agent",
+     "summary": "workflow_hooks holds a script's ad-hoc agent() call to the same rule: the model literal is read, a computed model is refused as '?', the marker is accepted anywhere in the call's text including a comment, and a marked call is recorded session-model.",
+     "class": "within",
+     "why": "An agent() call from a workflow script is an ad-hoc subagent the session fires off, so the GM's rule reaches it. Without this change, scripts would go on pinning opus. Refusing a model the guard cannot read is how it enforces the Sonnet half of the kept ruling. Accepting the marker in the call text is the carrier of (a), fitted to that call's form."
+    },
+    {
+     "id": "no-escape",
+     "summary": "The SESSION_MODEL line is a compliant form, not an escape, and the guard has no escape.",
+     "class": "within",
+     "why": "The guard already had no escape, and the compliant dispatch is always available. FR-012's escape requirement covers FR-006 to FR-009, FR-011 and FR-013, not this guard, so nothing that was asked is narrowed."
+    },
+    {
+     "id": "restatements",
+     "summary": "The rule is restated in the root CLAUDE.md and its suite check, docs/guards.md, docs/spec-kit-and-reviews.md, docs/research-doctrine.md, page-session-rules.md and rust/guard/CLAUDE.md. Spec directories 252 and 293 are left alone as history.",
+     "class": "within",
+     "why": "These make the rule's written text match the rule the GM set. The search space is stated: grep for the rule's two phrases over the tree outside .git, observed 2026-11-24. Leaving history unedited narrows nothing."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T212 to T216, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

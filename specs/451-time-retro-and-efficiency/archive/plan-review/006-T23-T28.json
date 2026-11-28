@@ -1,0 +1,823 @@
+{
+ "blocks": {
+  "### T23 (two builders' cargo runs in one clone corrupted each other's coverage: T02's `make static` beside T234's cargo failed on corrupt or missing coverage profiles in seven crates, observed 2026-11-20, method: T02's `make static` log)": {
+   "sha256": "47659170c04a4cb5e43bd28cdcd4040a6be061e85112fd0ded477973c549948e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (checklist part A)": {
+   "sha256": "014586e061a03c2441a27f080bfeaa8ceef7f924b2f89b7590419889ca6de23a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T23": {
+   "section_sha256": "fa1bb563fbfc6d546c7d9705dd8dca402c71b267e27c6072af5f3fc18cfb0605",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T23-task",
+     "summary": "File and build a cross-run lock on a clone's cargo target directory, a fix none of the six improvements or four ideas names",
+     "class": "within",
+     "why": "A widening, not a narrowing: nothing the GM asked for is dropped. It fixes a measured defect, a check refusing good work: two builders' runs corrupted each other's coverage (T02's make static, 2 of 12 real-cargo pairs failed). That serves the request's purpose, time lost to tooling, because a spurious coverage failure means another make static run at 1.5-3 min, the waste improvement 2 targets. Fixing a known defect found during the work is the standing rule, not an exception."
+    },
+    {
+     "id": "T23-scope",
+     "summary": "Lock every directory a l7r-rust run writes (the clone's target directory with its cover-*/view/<crate> trees, and any override's target and coverage directory), sorted, for the process's whole length",
+     "class": "within",
+     "why": "This narrows nothing in request.md or spec-index.md, which do not ask for this lock. Every directory the block names is locked, in sorted order, which avoids lock-order deadlock. From the bundle alone I cannot verify that the other party in the incident (T234's cargo) went through l7r-rust; the lock covers 'l7r-gate rust <cmd>' runs only. That is a premise left unmeasured, not a narrowing of anything asked."
+    },
+    {
+     "id": "T23-run-identity",
+     "summary": "A run is the outermost make above the process; checks one make runs side by side (static beside counters-inert in make done), and runs nested in a run's tests, share it and do not wait on each other; with no make above, the process is its own run",
+     "class": "within",
+     "why": "This is the plan's one 'except when': runs under one outermost make share the lock. It narrows nothing in request.md. The why rests on what was measured. The make done shape (rust cover beside rust test-counters under one parent named make) joined one run, had 0 waits and both exited 0. In 12 of 12 real-cargo pairs with separate parents, the second run waited. The 5-overlaps red shows that two takers sharing one run id get no protection. The bundle has no measurement of two builders' make runs getting distinct run ids under the real harness. Not blocking: that premise is the obvious one (each builder's Bash call starts its own make), but it is unmeasured here."
+    },
+    {
+     "id": "T23-membership",
+     "summary": "A member is a pid plus start time, gone when the process is; a killed run leaves nothing to clear",
+     "class": "within",
+     "why": "This is how the lock is implemented. A stale holder cannot wedge later runs, and no manual clearing step is needed."
+    },
+    {
+     "id": "T23-wait",
+     "summary": "A second run waits, printing a line on stderr at once and every 30 s (GUESS) that names the holder (pid, check, run's make line and pid, since when) and the seconds waited",
+     "class": "within",
+     "why": "This narrows nothing in request.md or spec-index.md. A wait named and timed, rather than a race, is the mechanism the block describes. The 30 s interval is labeled GUESS."
+    },
+    {
+     "id": "T23-ceiling-refusal",
+     "summary": "Past L7R_RUST_LOCK_CEILING (default 1800 s, GUESS) the check refuses, naming the holder and 'kill <run pid>'",
+     "class": "within",
+     "why": "Real enforcement in the GM's sense ('real enforcement and not just instructions'): the binary itself waits and refuses, and no prose asks builders to avoid overlapping. FR-012's first line lists only the refusals of FR-006 to FR-009 and FR-011, so it does not require a red-first test here. The block names a red-first test only for taking turns. For the refusal it claims only that the crate is at 100% of its lines, which shows the path ran, not that a test proves the refusal fires. The block does not say how a zero or unparseable ceiling is handled. The block calls the lock-off switch used for the cost measurement 'temporary', and item 10's list of new knobs does not include it; that list is the only evidence it does not ship. Two conditions stand, neither blocking the class: no off-switch ships, and a test shows the ceiling refusal fires."
+    },
+    {
+     "id": "T23-usage-error",
+     "summary": "A usage error takes no lock",
+     "class": "within",
+     "why": "Such a run writes nothing to a target directory, so it has nothing to protect."
+    },
+    {
+     "id": "T23-granularity",
+     "summary": "The lock is per process, not per crate; side.rs and the coverage pass's threads run inside it",
+     "class": "within",
+     "why": "A coarser lock excludes more than a per-crate lock would, never less, so it does not narrow the protection."
+    },
+    {
+     "id": "T23-red-first",
+     "summary": "Red first: two_runs_in_one_target_directory_take_turns with a fake cargo noting overlaps (3 before, 0 after, 5 when both takers share one run id), plus 12 real-cargo pairs (2 of 12 failed before, 0 after)",
+     "class": "within",
+     "why": "A test that fails only when the requested lock is absent enforces the task. It is not unrequested scope."
+    },
+    {
+     "id": "T23-knobs",
+     "summary": "New knobs: ceiling 1800 s, 30 s wait-line interval, 0.5 s poll, record lock 10 s, each labeled GUESS",
+     "class": "within",
+     "why": "Tuning values for the mechanism, each labeled GUESS. They change nothing that was asked."
+    },
+    {
+     "id": "T23-order",
+     "summary": "Independent of T03-T22; land before any other task's make static runs beside a builder's in this clone",
+     "class": "within",
+     "why": "Sequencing only. No requested item is deferred or dropped."
+    },
+    {
+     "id": "T23-wait-accounting",
+     "summary": "A lock wait of up to 1800 s is reported on stderr only; the block says nothing about how it is counted in FR-003's per-crate build/test/cover seconds or FR-001's classing",
+     "class": "within",
+     "why": "Checked against spec-index: FR-003 asks the Rust checks to append build, test and cover seconds per crate, and nothing T23 decides drops or changes those lines. Whether lock-wait seconds should be booked as their own phase is a design question FR-003 does not settle, not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T24": {
+   "section_sha256": "eb52df7a0883d96b5ecea7b791b54691e6da35b6280862273fdaa9003021fe7a",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T24-seam-guard",
+     "summary": "The guard's consulted::context gains context_from(root, var) with the environment handed in; context delegates to it with the guard's own var, so other callers are unchanged.",
+     "class": "within",
+     "why": "An implementation choice for repairing a test that read the real environment (make static red on the bundle crate's coverage with SPECIFY_FEATURE exported). It changes no behavior the request or spec settles; the existing entry point keeps its behavior."
+    },
+    {
+     "id": "T24-seam-bundle",
+     "summary": "The bundle crate's source_pages asks context_from with the process environment in the binary and, under cfg(test), its own thread-local map (helpers::VARS), empty unless a test names a variable.",
+     "class": "within",
+     "why": "Test-only seam so the test, not the builder's shell, decides the branch; the binary still reads the process environment. Nothing in request.md or the spec is narrowed."
+    },
+    {
+     "id": "T24-test-exact",
+     "summary": "The test at helpers/tests.rs asserts the one outcome it means (code 1 and the exact AttributeError on a [1] pointer), then names SPECIFY_FEATURE in its own map and asserts the pointer skipped (code 0); red first with SPECIFY_FEATURE exported.",
+     "class": "within",
+     "why": "Makes the test assert exactly rather than depend on the environment; tightens a check, narrows nothing asked. Red-first runs carry dated methods."
+    },
+    {
+     "id": "T24-no-env-mutation",
+     "summary": "Constraint: no process-environment mutation in a test (it races other tests on the thread pool); 100% line coverage of each crate by its own tests kept.",
+     "class": "within",
+     "why": "A constraint on how the fix is made, not a reduction of any requested outcome."
+    },
+    {
+     "id": "T24-order",
+     "summary": "Lands before T08 (T03's plan review); independent of the land crate's work.",
+     "class": "within",
+     "why": "Ordering of a blocker repair (make static red stops landings); the spec does not settle T24's position and nothing requested is deferred by it."
+    },
+    {
+     "id": "T24-sweep-left",
+     "summary": "The sweep's other either-outcome tests (arbiter/tests.rs:579, gate/src/lib.rs:309, record/tests.rs:301, measure/spec/tests.rs:54, owed/.../answer_modes.rs:149) and modal.rs:866's raw CHECK_ORDER_OK read are named in the report, outside T24's edit scope, not filed.",
+     "class": "within",
+     "why": "Neither request.md nor the spec asks for these tests to be changed, and the plan states, with a measured probe for CHECK_ORDER_OK (78 of 78 exported, 2026-11-20), that none reads SPECIFY_FEATURE or flips with this task's defect. No wrong outcome is shown for them here, so leaving them is not a defect deferred and needs no ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T25": {
+   "section_sha256": "241053226218ac363e5a4c02455baf52bd3fc24b9cafd1ca234946f65889a123",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 every finding in one refusal",
+     "summary": "Each plan-lint rule runs to the section's end and returns every finding with its span; lint::findings gathers them, lint::render reports them in one refusal grouped by rule, each placed by its plan.md line; Rewritten maps offsets back without changing any rule's text.",
+     "class": "within",
+     "why": "Serves the approved improvement 4 (fewer plan re-rounds) and the request's purpose of cutting time lost to tooling: a section with four findings no longer takes four runs. Reporting only; 0 verdicts moved over 946 sections and every old first finding is in the new report (labeled dump, measured 2026-11-20)."
+    },
+    {
+     "id": "D2 decide adds the approach gate's refusal",
+     "summary": "make decide reports the approach gate's refusal beside the lint's findings instead of stopping at the lint's first.",
+     "class": "within",
+     "why": "Same purpose as D1: one run shows all of a section's refusals. No gate verdict changes."
+    },
+    {
+     "id": "D3 plan-delta reports the same way",
+     "summary": "make plan-delta reports every changed block's findings and the open tasks with no approach block in one report.",
+     "class": "within",
+     "why": "Extends the same reporting change to the other command that runs the lint; no verdict changes."
+    },
+    {
+     "id": "D4 merge only identical spans",
+     "summary": "A label rule's finding is merged into an earlier one only where both found the very same span; a clause inside a longer finding stays reported.",
+     "class": "within",
+     "why": "Reporting detail that keeps every owed label visible; drops nothing the lint refuses."
+    },
+    {
+     "id": "D5 each refusal states its unit",
+     "summary": "Each rule's refusal states the unit it reads and where its label must sit (unit figure: clause cut at ';'; GM quote: to sentence end or blank line; item 4: sentence, only measured/m: pass; count and differential: sentence; red exit: item 6).",
+     "class": "within",
+     "why": "Wording of refusals only, so an author fixes each finding in one pass; serves fewer re-rounds. Verdicts unchanged per the labeled dump."
+    },
+    {
+     "id": "D6 item-4 rule reads every Approach block's item 4",
+     "summary": "The item-4 rule reads item 4 of every Approach block (part A or B) and one under no heading, where it read only the first '4. **' item; red first a_second_approach_blocks_item_4_is_read_too 0 of 1 -> 1 of 1.",
+     "class": "within",
+     "why": "Fixes a defect in a check that passed bad work (a re-answered block's unlabelled figure reached review unrefused) - fix as we go, and real enforcement as the GM asked. It broadens enforcement, not narrows it. Reach measured and named: 0 verdicts moved over 949 sections, 51 new findings in 28 named sections (4 + 6 + 18 = 28), each already refused."
+    },
+    {
+     "id": "D7 performance checklist's item 4 not read",
+     "summary": "The item-4 rule filters by the Approach block heading (APPROACH_BLOCK), so a performance checklist's item 4 is not read.",
+     "class": "within",
+     "why": "Leaves no defect: the item-4 rule's subject is the Approach checklist's 'Do they describe the world here?' question, and the old rule read only the first '4. **' item, so it never read a performance checklist's item 4 as such; the change moved 0 verdicts over 949 sections (labeled dump, measured 2026-11-20). Nothing passes that the rule was meant to refuse. The block's '444 T26 and T27' sentence carries no measurement label and is not relied on here."
+    },
+    {
+     "id": "D8 constraints and exits",
+     "summary": "Edits held to rust/gate/crates/plan/; exits are the red-first tests, rust-test, quick, static, hooks-test and the verdict dump moving no verdict but where a bug is fixed; found and left: none.",
+     "class": "within",
+     "why": "Bounds the work to the task as filed; leaves no known defect (the item-4 bug is fixed in this task, not deferred)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T26": {
+   "section_sha256": "8404451a3f5b3cceb01f4906d00c90cc2bf0ae387583205e9f90a67c4b5c7a06",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T26-writer-chain",
+     "summary": "The writer files each event-log line by the feature of the task it carries: a make command's F=, else the dispatch brief (Agent description, else the subagent meta file's), else the task-start in force naming the line's task, else feature.json as before.",
+     "class": "within",
+     "why": "Request: a per-task breakdown 'kept for every feature' that can be reviewed historically; lines filed under whichever feature task-start named last book one feature's time to another, a wrong outcome of where-time/feature-report (FR-005, SC-001, SC-002). Fixing it is fix-as-we-go. Narrows nothing."
+    },
+    {
+     "id": "T26-brief-feature-hold",
+     "summary": "brief_feature reads the number before a task id, else a standalone (non-hyphenated) number naming a feature this clone has started a task of.",
+     "class": "within",
+     "why": "The mechanism that makes the brief rule work without misfiling FR-008-style ids and counts (the measured 2,707-line plain-number failure). Within the writer chain above. The two forms are unlike: a number before a task id names the feature the work served; a standalone number names a feature the brief mentions, which need not be the one served - see the by-brief entries."
+    },
+    {
+     "id": "T26-task-chain",
+     "summary": "Task: the command's T=, else the brief's T<n>, else the task-start in force for the LINE's feature; D2's 'the clone's last task-starts entry for the feature' read as the line's feature.",
+     "class": "within",
+     "why": "D2's 'the feature' is not narrowed; the line's own feature is the reading that makes D2's task field name a task of the log it sits in. Hook cost stays as D2 had it."
+    },
+    {
+     "id": "T26-refile-by-task-id",
+     "summary": "make events-refile moves a past line whose task is no task of its log's feature to the feature whose start of that id was in force at the line's time.",
+     "class": "within",
+     "why": "The re-file the task line names; repairs the historical data the GM asked to review (2026-11-19, the tooling question)."
+    },
+    {
+     "id": "T26-refile-by-brief-task-id-form",
+     "summary": "Extension beyond T26's line: the re-file also moves a past subagent/dispatch line whose brief names another feature by the number before a task id ('451 T26: ...').",
+     "class": "within",
+     "why": "Widens, does not narrow: it applies the writer's own brief rule to the past lines the task-id rule cannot reach (untasked or D2-fallback-tasked builder lines). Carried by 'review historical data on' and 'kept for every feature', and by fix-as-we-go on a measured misfiling defect; without it the 449/451 split stays wrong for most builder lines. The rule names the feature the work served. That the re-file has already run does not weigh on this classification."
+    },
+    {
+     "id": "T26-refile-by-brief-standalone-form",
+     "summary": "The re-file also moves lines on a brief's standalone feature number (no task id), including older closed features' lines (716 by brief); two flagged moves, 435->427 'Classify 427's call-cutting hunks' and 443->405 'Check the 405 per-claim draft'.",
+     "class": "within",
+     "why": "Not a narrowing, and the writer adopts the same source for live lines. But a standalone number names a feature the brief is ABOUT, which the block's own goal ('the feature whose task it served') does not guarantee. The bundle cannot settle the two flagged moves and this review does not rule them either way: the deciding fact is which task was in force in the dispatching session (435's, 443's) and whether the dispatched work was that task's own. An unverified attribution is not a known defect, so this does not block; the backup at /tmp/t26/backup/ keeps it reversible."
+    },
+    {
+     "id": "T26-refile-write",
+     "summary": "Moves appended O_APPEND to targets, duplicates skipped, source rewritten via temp file with bytes appended meanwhile carried over; idempotent second run.",
+     "class": "within",
+     "why": "Implementation of the re-file; measured no line lost."
+    },
+    {
+     "id": "T26-fallback-mark-live",
+     "summary": "A line nothing names is filed under feature.json's feature, its task that feature's start in force, and marked \"fallback\": true.",
+     "class": "within",
+     "why": "The 'plan for the lines with no task' the task line asks for; keeps guessed attribution apart so where-time/feature-report do not book it to whichever task feature.json named (FR-005, SC-001's unexplained share). Adds a field; narrows nothing."
+    },
+    {
+     "id": "T26-fallback-mark-past-lines",
+     "summary": "Past fallback lines are not marked by the re-file; a reader is to recognize them by shape (no by, a task, no carried T=).",
+     "class": "within",
+     "why": "Leaves a reader-side test rather than writing a mark. The stated shape does not match the block's own measurement: the 154 count also excludes Agent and subagent events, because a past subagent line whose brief named a task (and was never moved) has the same shape. The block should state the shape as measured. Not a narrowing of the request."
+    },
+    {
+     "id": "T26-fallback-mark-env-carveout",
+     "summary": "The fallback mark is omitted when the environment declared the feature.",
+     "class": "within",
+     "why": "Justified for L7R_FEATURE_DIRECTORY (a page session's declared feature is not a guess). The fallback chain also takes SPECIFY_FEATURE from the hook's environment, and the block does not say whether that counts as 'declared' or why; the seam should be stated. Not a narrowing."
+    },
+    {
+     "id": "T26-start-slack",
+     "summary": "START_SLACK 60 s, a GUESS bounded by measured task-start durations.",
+     "class": "within",
+     "why": "A tuning constant labeled GUESS; decides nothing the request or spec settles."
+    },
+    {
+     "id": "T26-left-refile-after-landing",
+     "summary": "Lines written until T26 lands are still filed by feature.json; make events-refile is owed once more after landing.",
+     "class": "within",
+     "why": "The reason is stated (the hooks run the mirror's binary until landing) and the re-run is idempotent, but the owed run has no carrier - no task, no landing step. It should be given one so the defect is not left in the logs. Not a narrowing."
+    },
+    {
+     "id": "T26-left-make-static",
+     "summary": "make static stopped at another builder's uncommitted rust/phases lint; T26's crates passed every step per crate and the tree-wide steps.",
+     "class": "within",
+     "why": "Another task's red, not T26's defect; the exits are the plan's own, not the request's."
+    },
+    {
+     "id": "T26-left-claude-md-rows",
+     "summary": "rust/guard and rust/gate CLAUDE.md index rows do not name filed.rs and refile.rs.",
+     "class": "within",
+     "why": "Index wording outside T26's files; no wrong outcome for the request."
+    },
+    {
+     "id": "T26-left-d6-to-T07",
+     "summary": "Dispatch line carries the brief's task now; the prompt's first line and the agent's tokens stay with T07 (D6).",
+     "class": "within",
+     "why": "D6 is T07's by the spec's own decision; T26 takes nothing from it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T27": {
+   "section_sha256": "6f42c2b098716a8fb010832492b4dfafeafd146b9195c3e4f0015c6251746311",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T27-withdrawn",
+     "summary": "T27 makes no change of its own; its fix (the item-4 rule reading every Approach block's item 4, not only the first) is folded into T25, red first, per T25's plan review which ruled the deferral NOT LEGITIMATE.",
+     "class": "within",
+     "why": "Nothing is dropped: the defect is still fixed, with a red-first test (FR-009, FR-012), only in T25 rather than a separate task. Moving where a fix lands does not narrow what the GM approved ('make sure all of the enforcement is real enforcement')."
+    },
+    {
+     "id": "T27-exits",
+     "summary": "Done when T25 is ticked with the fix; on red, the failure is recorded and the task set down, with any cannot-be-done claim ruled through make arbiter-ask; no landing of its own beyond the tick.",
+     "class": "within",
+     "why": "Bookkeeping that ties T27's completion to the task that carries its fix; it sets aside no requirement and leaves no defect unfixed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T28": {
+   "section_sha256": "8456a15ce34ed8d1d559e89a1fcfe801af5a9f8261a8a34385b4ffd7fde00e80",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T28-reader",
+     "summary": "One reader performance(id, title, plan): the [perf] tag among the bracketed tags right after a task's id (not a quoted [perf] in prose), or PERF=1's '### T<n> Performance checklist' heading.",
+     "class": "within",
+     "why": "FR-013 defines performance work as a task filed with PERF=1 or tagged [perf] on its line; the reader recognizes exactly those two marks."
+    },
+    {
+     "id": "T28-active",
+     "summary": "The Stop hook's active test comes out of verdict() as active() (open box but the GM's, not set down since the last task-start, not closed by status) and is shared by task-start.",
+     "class": "within",
+     "why": "FR-013 defines an active feature as exactly the Stop hook's own test in set_down_hooks.rs; sharing one function is how that definition is honored."
+    },
+    {
+     "id": "T28-picker",
+     "summary": "next_performance(root, git dir, prefer) picks the open performance task: the feature being started first (counted active even if set down, since its start ends that), then each other feature started in this clone, latest start first; both the Stop hook and task-start ask this one picker.",
+     "class": "within",
+     "why": "FR-013: task-start refuses while an open performance task exists in any active feature, and the Stop hook names one before any other. The active set is the Stop hook's own test (which reads this clone's start log); counting the feature being started as active widens, not narrows, the refusal; one picker for both keeps the hook from naming a task the start refuses."
+    },
+    {
+     "id": "T28-refusal-escape",
+     "summary": "task_start.rs perf_first reads PERF_LATER_OK first (reason of two words or more, refused short, recorded in the guard log under perf-first), then refuses a non-performance task naming the picked task and its make task-start F= T= command.",
+     "class": "within",
+     "why": "FR-013 (refusal naming the task and the command to start it, an escape of a reason) and FR-012 (two-word recorded escape, message naming the compliant command, red-first test with the check deleted - the reds, greens and deleted-check reds are recorded)."
+    },
+    {
+     "id": "T28-tree",
+     "summary": "Specs read under the clone's toplevel where resolve_feature found the feature, never L7R_GATE_TREE.",
+     "class": "within",
+     "why": "An implementation choice of where to read the tasks FR-013's test reads; it removes no case FR-013 covers."
+    },
+    {
+     "id": "T28-tags",
+     "summary": "Tagged [perf]: 451 T12-T21, T28, T29; 444 T34, T36, T43. 444 T27 and T30 already marked by PERF=1. Left untagged, each with its reason: 451 T07-T11, T22, T24; 444 T24, T25, T28, T29, T31-T33, T35, T39, T42; 449's listed open boxes; 417 (engine deleted); every box of the 20 closed features.",
+     "class": "within",
+     "why": "An application of FR-013's own definition (a task that makes the engine, checks, gate, landings or builders' loop faster) to the measured list of 248 open boxes; the tasks whose stated outcome is less time are tagged, including all six improvements the GM ordered first (T12-T21), and the left ones are measurement, correctness, deletion, budget or record work, or work on a deleted engine that would speed nothing. No performance-improving task is shown left out."
+    },
+    {
+     "id": "T28-perf-question",
+     "summary": "The plan template's 'Performance work?' question is read in FR-013's sense (yes for a [perf] task; PERF=1 is the other mark and adds the checklist); T12-T19's sections flip to yes.",
+     "class": "within",
+     "why": "Aligns the plan's own question with FR-013's definition; the caller reports (b) and (c) done, the latter reviewed in the plan-delta round beside this."
+    },
+    {
+     "id": "T28-self-mark",
+     "summary": "T28 is itself [perf]-tagged, not filed with PERF=1, since the checklist measures an engine stage's operations and time and a refusal's order has neither.",
+     "class": "within",
+     "why": "FR-013 accepts either mark; the tag makes T28 performance work in its sense."
+    },
+    {
+     "id": "T28-escape-record-form",
+     "summary": "PERF_LATER_OK added to the Makefile's FREE_TEXT and named in task-start's help; recorded once by the tool itself (as plan.rs records PLAN_REVIEW_OK), with no $(LOGESCAPE) make-side line - a stated departure from D15/D16's make-side form.",
+     "class": "within",
+     "why": "FR-012 asks that the escape be recorded; it is, once, in the guard log, and SC-006 reads it off the escape log. The departure is of mechanism, not of anything the GM or FR-012 required, and avoids a double record."
+    },
+    {
+     "id": "T28-order",
+     "summary": "T28 lands right after T18, with T29.",
+     "class": "within",
+     "why": "T28 is itself performance work and the GM's 2026-11-20 order puts the remaining improvement fixes first; placing it among them honors that order."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T23 (two builders' cargo runs in one clone corrupted each other's coverage: T02's `make static` beside T234's cargo failed on corrupt or missing coverage profiles in seven crates, observed 2026-11-20, method: T02's `make static` log)",
+    "### T23 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T23-task",
+     "summary": "File and build a cross-run lock on a clone's cargo target directory, a fix none of the six improvements or four ideas names",
+     "class": "within",
+     "why": "A widening, not a narrowing: nothing the GM asked for is dropped. It fixes a measured defect, a check refusing good work: two builders' runs corrupted each other's coverage (T02's make static, 2 of 12 real-cargo pairs failed). That serves the request's purpose, time lost to tooling, because a spurious coverage failure means another make static run at 1.5-3 min, the waste improvement 2 targets. Fixing a known defect found during the work is the standing rule, not an exception."
+    },
+    {
+     "id": "T23-scope",
+     "summary": "Lock every directory a l7r-rust run writes (the clone's target directory with its cover-*/view/<crate> trees, and any override's target and coverage directory), sorted, for the process's whole length",
+     "class": "within",
+     "why": "This narrows nothing in request.md or spec-index.md, which do not ask for this lock. Every directory the block names is locked, in sorted order, which avoids lock-order deadlock. From the bundle alone I cannot verify that the other party in the incident (T234's cargo) went through l7r-rust; the lock covers 'l7r-gate rust <cmd>' runs only. That is a premise left unmeasured, not a narrowing of anything asked."
+    },
+    {
+     "id": "T23-run-identity",
+     "summary": "A run is the outermost make above the process; checks one make runs side by side (static beside counters-inert in make done), and runs nested in a run's tests, share it and do not wait on each other; with no make above, the process is its own run",
+     "class": "within",
+     "why": "This is the plan's one 'except when': runs under one outermost make share the lock. It narrows nothing in request.md. The why rests on what was measured. The make done shape (rust cover beside rust test-counters under one parent named make) joined one run, had 0 waits and both exited 0. In 12 of 12 real-cargo pairs with separate parents, the second run waited. The 5-overlaps red shows that two takers sharing one run id get no protection. The bundle has no measurement of two builders' make runs getting distinct run ids under the real harness. Not blocking: that premise is the obvious one (each builder's Bash call starts its own make), but it is unmeasured here."
+    },
+    {
+     "id": "T23-membership",
+     "summary": "A member is a pid plus start time, gone when the process is; a killed run leaves nothing to clear",
+     "class": "within",
+     "why": "This is how the lock is implemented. A stale holder cannot wedge later runs, and no manual clearing step is needed."
+    },
+    {
+     "id": "T23-wait",
+     "summary": "A second run waits, printing a line on stderr at once and every 30 s (GUESS) that names the holder (pid, check, run's make line and pid, since when) and the seconds waited",
+     "class": "within",
+     "why": "This narrows nothing in request.md or spec-index.md. A wait named and timed, rather than a race, is the mechanism the block describes. The 30 s interval is labeled GUESS."
+    },
+    {
+     "id": "T23-ceiling-refusal",
+     "summary": "Past L7R_RUST_LOCK_CEILING (default 1800 s, GUESS) the check refuses, naming the holder and 'kill <run pid>'",
+     "class": "within",
+     "why": "Real enforcement in the GM's sense ('real enforcement and not just instructions'): the binary itself waits and refuses, and no prose asks builders to avoid overlapping. FR-012's first line lists only the refusals of FR-006 to FR-009 and FR-011, so it does not require a red-first test here. The block names a red-first test only for taking turns. For the refusal it claims only that the crate is at 100% of its lines, which shows the path ran, not that a test proves the refusal fires. The block does not say how a zero or unparseable ceiling is handled. The block calls the lock-off switch used for the cost measurement 'temporary', and item 10's list of new knobs does not include it; that list is the only evidence it does not ship. Two conditions stand, neither blocking the class: no off-switch ships, and a test shows the ceiling refusal fires."
+    },
+    {
+     "id": "T23-usage-error",
+     "summary": "A usage error takes no lock",
+     "class": "within",
+     "why": "Such a run writes nothing to a target directory, so it has nothing to protect."
+    },
+    {
+     "id": "T23-granularity",
+     "summary": "The lock is per process, not per crate; side.rs and the coverage pass's threads run inside it",
+     "class": "within",
+     "why": "A coarser lock excludes more than a per-crate lock would, never less, so it does not narrow the protection."
+    },
+    {
+     "id": "T23-red-first",
+     "summary": "Red first: two_runs_in_one_target_directory_take_turns with a fake cargo noting overlaps (3 before, 0 after, 5 when both takers share one run id), plus 12 real-cargo pairs (2 of 12 failed before, 0 after)",
+     "class": "within",
+     "why": "A test that fails only when the requested lock is absent enforces the task. It is not unrequested scope."
+    },
+    {
+     "id": "T23-knobs",
+     "summary": "New knobs: ceiling 1800 s, 30 s wait-line interval, 0.5 s poll, record lock 10 s, each labeled GUESS",
+     "class": "within",
+     "why": "Tuning values for the mechanism, each labeled GUESS. They change nothing that was asked."
+    },
+    {
+     "id": "T23-order",
+     "summary": "Independent of T03-T22; land before any other task's make static runs beside a builder's in this clone",
+     "class": "within",
+     "why": "Sequencing only. No requested item is deferred or dropped."
+    },
+    {
+     "id": "T23-wait-accounting",
+     "summary": "A lock wait of up to 1800 s is reported on stderr only; the block says nothing about how it is counted in FR-003's per-crate build/test/cover seconds or FR-001's classing",
+     "class": "within",
+     "why": "Checked against spec-index: FR-003 asks the Rust checks to append build, test and cover seconds per crate, and nothing T23 decides drops or changes those lines. Whether lock-wait seconds should be booked as their own phase is a design question FR-003 does not settle, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T24 (a gate test read the real environment: with `SPECIFY_FEATURE` exported, `make static`'s coverage of the bundle crate went red, observed 2026-11-20, method: T02's `make static` log)",
+    "### T24 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T24-seam-guard",
+     "summary": "The guard's consulted::context gains context_from(root, var) with the environment handed in; context delegates to it with the guard's own var, so other callers are unchanged.",
+     "class": "within",
+     "why": "An implementation choice for repairing a test that read the real environment (make static red on the bundle crate's coverage with SPECIFY_FEATURE exported). It changes no behavior the request or spec settles; the existing entry point keeps its behavior."
+    },
+    {
+     "id": "T24-seam-bundle",
+     "summary": "The bundle crate's source_pages asks context_from with the process environment in the binary and, under cfg(test), its own thread-local map (helpers::VARS), empty unless a test names a variable.",
+     "class": "within",
+     "why": "Test-only seam so the test, not the builder's shell, decides the branch; the binary still reads the process environment. Nothing in request.md or the spec is narrowed."
+    },
+    {
+     "id": "T24-test-exact",
+     "summary": "The test at helpers/tests.rs asserts the one outcome it means (code 1 and the exact AttributeError on a [1] pointer), then names SPECIFY_FEATURE in its own map and asserts the pointer skipped (code 0); red first with SPECIFY_FEATURE exported.",
+     "class": "within",
+     "why": "Makes the test assert exactly rather than depend on the environment; tightens a check, narrows nothing asked. Red-first runs carry dated methods."
+    },
+    {
+     "id": "T24-no-env-mutation",
+     "summary": "Constraint: no process-environment mutation in a test (it races other tests on the thread pool); 100% line coverage of each crate by its own tests kept.",
+     "class": "within",
+     "why": "A constraint on how the fix is made, not a reduction of any requested outcome."
+    },
+    {
+     "id": "T24-order",
+     "summary": "Lands before T08 (T03's plan review); independent of the land crate's work.",
+     "class": "within",
+     "why": "Ordering of a blocker repair (make static red stops landings); the spec does not settle T24's position and nothing requested is deferred by it."
+    },
+    {
+     "id": "T24-sweep-left",
+     "summary": "The sweep's other either-outcome tests (arbiter/tests.rs:579, gate/src/lib.rs:309, record/tests.rs:301, measure/spec/tests.rs:54, owed/.../answer_modes.rs:149) and modal.rs:866's raw CHECK_ORDER_OK read are named in the report, outside T24's edit scope, not filed.",
+     "class": "within",
+     "why": "Neither request.md nor the spec asks for these tests to be changed, and the plan states, with a measured probe for CHECK_ORDER_OK (78 of 78 exported, 2026-11-20), that none reads SPECIFY_FEATURE or flips with this task's defect. No wrong outcome is shown for them here, so leaving them is not a defect deferred and needs no ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T25 (`make decide`'s lint stopped at its first finding: a section with four findings took four runs and four turns to clear, found writing T23's section, 2026-11-20)",
+    "### T25 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 every rule runs to the section's end",
+     "summary": "Each plan-lint rule returns every finding with its span, gathered by lint::findings in rule order and rendered by lint::render as one refusal (count first, each rule's words once, findings beneath with plan.md lines).",
+     "class": "within",
+     "why": "This is T25's line itself: every finding of the section together, each with its line. It reduces the re-runs and turns spent clearing a plan section, the process-efficiency purpose of the 2026-11-19 request (improvement 4, fewer plan re-rounds)."
+    },
+    {
+     "id": "D2 decide adds the approach gate's refusal to the report",
+     "summary": "make decide no longer stops at the lint's first finding before asking the approach gate; the gate's refusal joins the one report.",
+     "class": "within",
+     "why": "Same purpose as D1: everything the section owes is reported in one run. No rule's verdict changes."
+    },
+    {
+     "id": "D3 plan-delta reports the same way",
+     "summary": "make plan-delta reports every changed block's findings and the open tasks lacking an approach block in the same all-findings form.",
+     "class": "within",
+     "why": "The same lint rendered by the second command that runs it; adding one-run reporting there changes no verdict and adds no new refusal. It serves the task's purpose rather than adding behavior."
+    },
+    {
+     "id": "D4 Rewritten maps offsets back",
+     "summary": "Findings are placed through the fenced-block and code-span rewrites by a Rewritten type that keeps each rule's text as before and maps offsets on the side; lint::plan_lines places a section joined from several headings.",
+     "class": "within",
+     "why": "Implementation of 'each with its line'; the rule text is explicitly kept unchanged, so verdicts are unaffected (measured: 0 of 946 sections moved)."
+    },
+    {
+     "id": "D5 label findings merged only on the identical span",
+     "summary": "A label rule's finding is merged into an earlier one only where both found the very same span; a clause inside a longer finding stays.",
+     "class": "within",
+     "why": "A presentation choice that keeps every owed label visible; it hides no finding, so nothing the task asked to report is dropped."
+    },
+    {
+     "id": "D6 each refusal states its unit and where its label sits",
+     "summary": "The unit figure, GM quote, item-4, count/differential and red-exit rules each state the unit they read in their refusal text.",
+     "class": "within",
+     "why": "T25's brief: a rule whose unit surprises its author says so in its refusal. The units listed describe the rules' existing behavior (the dump shows no verdict moved), not new rules."
+    },
+    {
+     "id": "D7 no rule's verdict moves; edits held to the plan crate",
+     "summary": "The change is reporting-only, checked by a before/after dump over every task section of every plan.md and plan-done.md, with edits confined to rust/gate/crates/plan/.",
+     "class": "within",
+     "why": "The brief's constraint, stated and measured (946 sections, 0 verdicts moved, each old first finding present in the new report, 2026-11-20)."
+    },
+    {
+     "id": "D8 found and left: ITEM4 reads only the first item 4",
+     "summary": "The item-4 rule lints only the first '4. **' of a section, so a re-answered Approach block's item 4 goes unlinted; not fixed here, filed as T27 to land before T17.",
+     "class": "within",
+     "why": "A real defect (a check passing bad work), but fixing it changes a rule's verdict, which T25's brief forbids; it is not part of what T25 or the GM's request asked T25 to do, so leaving it here narrows nothing asked. It is not dropped: it is filed as its own task with a stated landing order, and the section states why it is not fixed here (as FR-009 requires of a deferral)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T25 (`make decide`'s lint stopped at its first finding: a section with four findings took four runs and four turns to clear, found writing T23's section, 2026-11-20)",
+    "### T25 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 every finding in one refusal",
+     "summary": "Each plan-lint rule runs to the section's end and returns every finding with its span; lint::findings gathers them, lint::render reports them in one refusal grouped by rule, each placed by its plan.md line; Rewritten maps offsets back without changing any rule's text.",
+     "class": "within",
+     "why": "Serves the approved improvement 4 (fewer plan re-rounds) and the request's purpose of cutting time lost to tooling: a section with four findings no longer takes four runs. Reporting only; 0 verdicts moved over 946 sections and every old first finding is in the new report (labeled dump, measured 2026-11-20)."
+    },
+    {
+     "id": "D2 decide adds the approach gate's refusal",
+     "summary": "make decide reports the approach gate's refusal beside the lint's findings instead of stopping at the lint's first.",
+     "class": "within",
+     "why": "Same purpose as D1: one run shows all of a section's refusals. No gate verdict changes."
+    },
+    {
+     "id": "D3 plan-delta reports the same way",
+     "summary": "make plan-delta reports every changed block's findings and the open tasks with no approach block in one report.",
+     "class": "within",
+     "why": "Extends the same reporting change to the other command that runs the lint; no verdict changes."
+    },
+    {
+     "id": "D4 merge only identical spans",
+     "summary": "A label rule's finding is merged into an earlier one only where both found the very same span; a clause inside a longer finding stays reported.",
+     "class": "within",
+     "why": "Reporting detail that keeps every owed label visible; drops nothing the lint refuses."
+    },
+    {
+     "id": "D5 each refusal states its unit",
+     "summary": "Each rule's refusal states the unit it reads and where its label must sit (unit figure: clause cut at ';'; GM quote: to sentence end or blank line; item 4: sentence, only measured/m: pass; count and differential: sentence; red exit: item 6).",
+     "class": "within",
+     "why": "Wording of refusals only, so an author fixes each finding in one pass; serves fewer re-rounds. Verdicts unchanged per the labeled dump."
+    },
+    {
+     "id": "D6 item-4 rule reads every Approach block's item 4",
+     "summary": "The item-4 rule reads item 4 of every Approach block (part A or B) and one under no heading, where it read only the first '4. **' item; red first a_second_approach_blocks_item_4_is_read_too 0 of 1 -> 1 of 1.",
+     "class": "within",
+     "why": "Fixes a defect in a check that passed bad work (a re-answered block's unlabelled figure reached review unrefused) - fix as we go, and real enforcement as the GM asked. It broadens enforcement, not narrows it. Reach measured and named: 0 verdicts moved over 949 sections, 51 new findings in 28 named sections (4 + 6 + 18 = 28), each already refused."
+    },
+    {
+     "id": "D7 performance checklist's item 4 not read",
+     "summary": "The item-4 rule filters by the Approach block heading (APPROACH_BLOCK), so a performance checklist's item 4 is not read.",
+     "class": "within",
+     "why": "Leaves no defect: the item-4 rule's subject is the Approach checklist's 'Do they describe the world here?' question, and the old rule read only the first '4. **' item, so it never read a performance checklist's item 4 as such; the change moved 0 verdicts over 949 sections (labeled dump, measured 2026-11-20). Nothing passes that the rule was meant to refuse. The block's '444 T26 and T27' sentence carries no measurement label and is not relied on here."
+    },
+    {
+     "id": "D8 constraints and exits",
+     "summary": "Edits held to rust/gate/crates/plan/; exits are the red-first tests, rust-test, quick, static, hooks-test and the verdict dump moving no verdict but where a bug is fixed; found and left: none.",
+     "class": "within",
+     "why": "Bounds the work to the task as filed; leaves no known defect (the item-4 bug is fixed in this task, not deferred)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T26 (the event log filed every line under `.specify/feature.json`, which `make task-start` rewrites to the feature started last: 50 lines of 451's T26 and T03 sat in 449's log as 449's, observed 2026-11-20, method: the 449 log's lines whose `task` is no 449 task, matched to `task-starts.jsonl`)",
+    "### T26 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T26-writer-chain",
+     "summary": "The writer files each event-log line by the feature of the task it carries: a make command's F=, else the dispatch brief (Agent description, else the subagent meta file's), else the task-start in force naming the line's task, else feature.json as before.",
+     "class": "within",
+     "why": "Request: a per-task breakdown 'kept for every feature' that can be reviewed historically; lines filed under whichever feature task-start named last book one feature's time to another, a wrong outcome of where-time/feature-report (FR-005, SC-001, SC-002). Fixing it is fix-as-we-go. Narrows nothing."
+    },
+    {
+     "id": "T26-brief-feature-hold",
+     "summary": "brief_feature reads the number before a task id, else a standalone (non-hyphenated) number naming a feature this clone has started a task of.",
+     "class": "within",
+     "why": "The mechanism that makes the brief rule work without misfiling FR-008-style ids and counts (the measured 2,707-line plain-number failure). Within the writer chain above. The two forms are unlike: a number before a task id names the feature the work served; a standalone number names a feature the brief mentions, which need not be the one served - see the by-brief entries."
+    },
+    {
+     "id": "T26-task-chain",
+     "summary": "Task: the command's T=, else the brief's T<n>, else the task-start in force for the LINE's feature; D2's 'the clone's last task-starts entry for the feature' read as the line's feature.",
+     "class": "within",
+     "why": "D2's 'the feature' is not narrowed; the line's own feature is the reading that makes D2's task field name a task of the log it sits in. Hook cost stays as D2 had it."
+    },
+    {
+     "id": "T26-refile-by-task-id",
+     "summary": "make events-refile moves a past line whose task is no task of its log's feature to the feature whose start of that id was in force at the line's time.",
+     "class": "within",
+     "why": "The re-file the task line names; repairs the historical data the GM asked to review (2026-11-19, the tooling question)."
+    },
+    {
+     "id": "T26-refile-by-brief-task-id-form",
+     "summary": "Extension beyond T26's line: the re-file also moves a past subagent/dispatch line whose brief names another feature by the number before a task id ('451 T26: ...').",
+     "class": "within",
+     "why": "Widens, does not narrow: it applies the writer's own brief rule to the past lines the task-id rule cannot reach (untasked or D2-fallback-tasked builder lines). Carried by 'review historical data on' and 'kept for every feature', and by fix-as-we-go on a measured misfiling defect; without it the 449/451 split stays wrong for most builder lines. The rule names the feature the work served. That the re-file has already run does not weigh on this classification."
+    },
+    {
+     "id": "T26-refile-by-brief-standalone-form",
+     "summary": "The re-file also moves lines on a brief's standalone feature number (no task id), including older closed features' lines (716 by brief); two flagged moves, 435->427 'Classify 427's call-cutting hunks' and 443->405 'Check the 405 per-claim draft'.",
+     "class": "within",
+     "why": "Not a narrowing, and the writer adopts the same source for live lines. But a standalone number names a feature the brief is ABOUT, which the block's own goal ('the feature whose task it served') does not guarantee. The bundle cannot settle the two flagged moves and this review does not rule them either way: the deciding fact is which task was in force in the dispatching session (435's, 443's) and whether the dispatched work was that task's own. An unverified attribution is not a known defect, so this does not block; the backup at /tmp/t26/backup/ keeps it reversible."
+    },
+    {
+     "id": "T26-refile-write",
+     "summary": "Moves appended O_APPEND to targets, duplicates skipped, source rewritten via temp file with bytes appended meanwhile carried over; idempotent second run.",
+     "class": "within",
+     "why": "Implementation of the re-file; measured no line lost."
+    },
+    {
+     "id": "T26-fallback-mark-live",
+     "summary": "A line nothing names is filed under feature.json's feature, its task that feature's start in force, and marked \"fallback\": true.",
+     "class": "within",
+     "why": "The 'plan for the lines with no task' the task line asks for; keeps guessed attribution apart so where-time/feature-report do not book it to whichever task feature.json named (FR-005, SC-001's unexplained share). Adds a field; narrows nothing."
+    },
+    {
+     "id": "T26-fallback-mark-past-lines",
+     "summary": "Past fallback lines are not marked by the re-file; a reader is to recognize them by shape (no by, a task, no carried T=).",
+     "class": "within",
+     "why": "Leaves a reader-side test rather than writing a mark. The stated shape does not match the block's own measurement: the 154 count also excludes Agent and subagent events, because a past subagent line whose brief named a task (and was never moved) has the same shape. The block should state the shape as measured. Not a narrowing of the request."
+    },
+    {
+     "id": "T26-fallback-mark-env-carveout",
+     "summary": "The fallback mark is omitted when the environment declared the feature.",
+     "class": "within",
+     "why": "Justified for L7R_FEATURE_DIRECTORY (a page session's declared feature is not a guess). The fallback chain also takes SPECIFY_FEATURE from the hook's environment, and the block does not say whether that counts as 'declared' or why; the seam should be stated. Not a narrowing."
+    },
+    {
+     "id": "T26-start-slack",
+     "summary": "START_SLACK 60 s, a GUESS bounded by measured task-start durations.",
+     "class": "within",
+     "why": "A tuning constant labeled GUESS; decides nothing the request or spec settles."
+    },
+    {
+     "id": "T26-left-refile-after-landing",
+     "summary": "Lines written until T26 lands are still filed by feature.json; make events-refile is owed once more after landing.",
+     "class": "within",
+     "why": "The reason is stated (the hooks run the mirror's binary until landing) and the re-run is idempotent, but the owed run has no carrier - no task, no landing step. It should be given one so the defect is not left in the logs. Not a narrowing."
+    },
+    {
+     "id": "T26-left-make-static",
+     "summary": "make static stopped at another builder's uncommitted rust/phases lint; T26's crates passed every step per crate and the tree-wide steps.",
+     "class": "within",
+     "why": "Another task's red, not T26's defect; the exits are the plan's own, not the request's."
+    },
+    {
+     "id": "T26-left-claude-md-rows",
+     "summary": "rust/guard and rust/gate CLAUDE.md index rows do not name filed.rs and refile.rs.",
+     "class": "within",
+     "why": "Index wording outside T26's files; no wrong outcome for the request."
+    },
+    {
+     "id": "T26-left-d6-to-T07",
+     "summary": "Dispatch line carries the brief's task now; the prompt's first line and the agent's tokens stay with T07 (D6).",
+     "class": "within",
+     "why": "D6 is T07's by the spec's own decision; T26 takes nothing from it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T27 (T25: the item-4 rule read only a section's first Approach block)",
+    "### T27 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T27-withdrawn",
+     "summary": "T27 makes no change of its own; its fix (the item-4 rule reading every Approach block's item 4, not only the first) is folded into T25, red first, per T25's plan review which ruled the deferral NOT LEGITIMATE.",
+     "class": "within",
+     "why": "Nothing is dropped: the defect is still fixed, with a red-first test (FR-009, FR-012), only in T25 rather than a separate task. Moving where a fix lands does not narrow what the GM approved ('make sure all of the enforcement is real enforcement')."
+    },
+    {
+     "id": "T27-exits",
+     "summary": "Done when T25 is ticked with the fix; on red, the failure is recorded and the task set down, with any cannot-be-done claim ruled through make arbiter-ask; no landing of its own beyond the tick.",
+     "class": "within",
+     "why": "Bookkeeping that ties T27's completion to the task that carries its fix; it sets aside no requirement and leaves no defect unfixed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T28 (FR-013, the GM 2026-11-20: \"can we in general priotitize performance improvements going forward?\" - nothing ordered the work by it, observed 2026-11-20, method: `make task-start`'s source and the Stop hook's, read)",
+    "### T28 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T28-reader",
+     "summary": "One reader performance(id, title, plan): the [perf] tag among the bracketed tags right after a task's id (not a quoted [perf] in prose), or PERF=1's '### T<n> Performance checklist' heading.",
+     "class": "within",
+     "why": "FR-013 defines performance work as a task filed with PERF=1 or tagged [perf] on its line; the reader recognizes exactly those two marks."
+    },
+    {
+     "id": "T28-active",
+     "summary": "The Stop hook's active test comes out of verdict() as active() (open box but the GM's, not set down since the last task-start, not closed by status) and is shared by task-start.",
+     "class": "within",
+     "why": "FR-013 defines an active feature as exactly the Stop hook's own test in set_down_hooks.rs; sharing one function is how that definition is honored."
+    },
+    {
+     "id": "T28-picker",
+     "summary": "next_performance(root, git dir, prefer) picks the open performance task: the feature being started first (counted active even if set down, since its start ends that), then each other feature started in this clone, latest start first; both the Stop hook and task-start ask this one picker.",
+     "class": "within",
+     "why": "FR-013: task-start refuses while an open performance task exists in any active feature, and the Stop hook names one before any other. The active set is the Stop hook's own test (which reads this clone's start log); counting the feature being started as active widens, not narrows, the refusal; one picker for both keeps the hook from naming a task the start refuses."
+    },
+    {
+     "id": "T28-refusal-escape",
+     "summary": "task_start.rs perf_first reads PERF_LATER_OK first (reason of two words or more, refused short, recorded in the guard log under perf-first), then refuses a non-performance task naming the picked task and its make task-start F= T= command.",
+     "class": "within",
+     "why": "FR-013 (refusal naming the task and the command to start it, an escape of a reason) and FR-012 (two-word recorded escape, message naming the compliant command, red-first test with the check deleted - the reds, greens and deleted-check reds are recorded)."
+    },
+    {
+     "id": "T28-tree",
+     "summary": "Specs read under the clone's toplevel where resolve_feature found the feature, never L7R_GATE_TREE.",
+     "class": "within",
+     "why": "An implementation choice of where to read the tasks FR-013's test reads; it removes no case FR-013 covers."
+    },
+    {
+     "id": "T28-tags",
+     "summary": "Tagged [perf]: 451 T12-T21, T28, T29; 444 T34, T36, T43. 444 T27 and T30 already marked by PERF=1. Left untagged, each with its reason: 451 T07-T11, T22, T24; 444 T24, T25, T28, T29, T31-T33, T35, T39, T42; 449's listed open boxes; 417 (engine deleted); every box of the 20 closed features.",
+     "class": "within",
+     "why": "An application of FR-013's own definition (a task that makes the engine, checks, gate, landings or builders' loop faster) to the measured list of 248 open boxes; the tasks whose stated outcome is less time are tagged, including all six improvements the GM ordered first (T12-T21), and the left ones are measurement, correctness, deletion, budget or record work, or work on a deleted engine that would speed nothing. No performance-improving task is shown left out."
+    },
+    {
+     "id": "T28-perf-question",
+     "summary": "The plan template's 'Performance work?' question is read in FR-013's sense (yes for a [perf] task; PERF=1 is the other mark and adds the checklist); T12-T19's sections flip to yes.",
+     "class": "within",
+     "why": "Aligns the plan's own question with FR-013's definition; the caller reports (b) and (c) done, the latter reviewed in the plan-delta round beside this."
+    },
+    {
+     "id": "T28-self-mark",
+     "summary": "T28 is itself [perf]-tagged, not filed with PERF=1, since the checklist measures an engine stage's operations and time and a refusal's order has neither.",
+     "class": "within",
+     "why": "FR-013 accepts either mark; the tag makes T28 performance work in its sense."
+    },
+    {
+     "id": "T28-escape-record-form",
+     "summary": "PERF_LATER_OK added to the Makefile's FREE_TEXT and named in task-start's help; recorded once by the tool itself (as plan.rs records PLAN_REVIEW_OK), with no $(LOGESCAPE) make-side line - a stated departure from D15/D16's make-side form.",
+     "class": "within",
+     "why": "FR-012 asks that the escape be recorded; it is, once, in the guard log, and SC-006 reads it off the escape log. The departure is of mechanism, not of anything the GM or FR-012 required, and avoids a double record."
+    },
+    {
+     "id": "T28-order",
+     "summary": "T28 lands right after T18, with T29.",
+     "class": "within",
+     "why": "T28 is itself performance work and the GM's 2026-11-20 order puts the remaining improvement fixes first; placing it among them honors that order."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T23 to T28, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

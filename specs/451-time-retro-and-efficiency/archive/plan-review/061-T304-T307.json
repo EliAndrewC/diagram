@@ -1,0 +1,788 @@
+{
+ "blocks": {
+  "### T304 (451 T281's census, 2026-11-26: a carry test red under load, and the session clone's `index.lock` met by the session's own commits while builders ran; the stamps of the task's line are its remainder)": {
+   "sha256": "44f60cc54d0bc2b1ef2f20f8120f7e512ced1ea0700a897c49a228967beb18a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T304 Approach (checklist part A)": {
+   "sha256": "c38e67a6a3ce9e2b7a7d82bb6b0ecb40ee2cc60a0448070865639fc223a00bd1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T304 part B (the remainder: the suite and gate stamps that worktrees overwrite in the common git directory, measured 2026-11-27)": {
+   "sha256": "4d166a60f0a9c2e8dac542799f2f8490b5f3703291f9dcc1dac81032d3caa1c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T304 part B Approach (checklist part A)": {
+   "sha256": "d622957d761a55b1b6af99a2b63620ca0925c900f0cc96d9509bc1697e0d15ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T305 (2026-11-26: the ledger-owed check refused 451 T272's landing once and the T281 and T284 landing three times, each on a message-check round another builder had run in its own tree for a different task)": {
+   "sha256": "f7081035c7419d198d6a5bbc4f893bce9230f7a475e14fbc990b118f2a520a0b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T305 Approach (checklist part A)": {
+   "sha256": "588f78e3b614d2858be36bb2ac5d875033d3b97b610844ffa4f939b13ab7612b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T306 Approach (checklist part A)": {
+   "sha256": "8051df5674a63ce2572e571ed4fdfe591828137dbe782a5d46fc3e15fe28823f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T306 (2026-11-26, left by 451 T295's builder and filed by the coordinating session: six spellings of a program the tree guards did not read)": {
+   "sha256": "ddab8eeaaa1bd5a015981b5d54e07c5f3af4f1d23637750936572ba917fdf1ee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T307 Approach (checklist part A)": {
+   "sha256": "3b8b1569f4c0897f19165aff798acccb9ed291dcb8fa73ed932b18036149d67d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))": {
+   "sha256": "9f5e3917fade0e72cedf8a88aea0eb8512ec3dfe235851850701f909f8c09103",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T307 part 2 (the landing's first pass asks the push's own checks, and a task built inside another task's section closes with it: a push check met only after the gate costs the gate's minutes, and five filed tasks built inside other tasks' reviewed sections had no way out)": {
+   "sha256": "50c4cd336901dcd0b34a16e544166b8b6211f10397a9900659b249178dbbc156",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T307 part 2 Approach (checklist part A)": {
+   "sha256": "e1503de0e2da9b36a253ad659f5a2e26cc50c1ec5d2c82ad9c6f4602b0255f0e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T304": {
+   "section_sha256": "bf54d16548b753e02edebaa0bf41b38e6588279adab3054634dad37e8bf37022",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 empty pick skipped",
+     "summary": "make carry treats a failed pick or failed --continue that leaves CHERRY_PICK_HEAD with nothing unmerged and nothing staged as an empty pick: git cherry-pick --skip, then the END verification (nothing in progress/unmerged/staged, non-spec files in HEAD), exit 0. A pick that never started, or a continue a hook refused, still stops.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a second carry of a carried commit stopped with a pick standing, which make land refuses), as constitution XIV and fix-as-we-go require. The carry still ends verified, never assumed (T292); the stop cases that hold real unfinished work are kept and pinned. Nothing asked is narrowed."
+    },
+    {
+     "id": "D2 tests off the clock",
+     "summary": "The clean-carry test ends at its first carry; three tests replace its second half (the clone given its own commit so the pick sha differs; history reached by fast-forward; the kept-equal-ours continue door), red first with skipped_empty off.",
+     "class": "within",
+     "why": "Makes the test exercise the case that happens in a real clone rather than the same-second sha collision; enforcement of the fix, not new scope."
+    },
+    {
+     "id": "D3 GIT_OPTIONAL_LOCKS=0 on every asked program",
+     "summary": "shared::tool's three askers start their program through command, which sets GIT_OPTIONAL_LOCKS=0 for every program a guard asks (git and the scripts/gate it runs, which inherit it); locks a command needs are still taken. The per-call --no-optional-locks flag was priced and rejected because it reaches neither the scripts nor the gate.",
+     "class": "within",
+     "why": "Carries the brief's instruction (make the hooks' read-only git calls take no optional locks) at the one place every such call passes through. Reaching the scripts and gate a guard asks is reaching the hooks' own calls by the route they take, not a new behavior: only optional locks are dropped, the cost (a stale entry re-read by each such status) is stated."
+    },
+    {
+     "id": "D4 direct git spawns read and left",
+     "summary": "The guard crates' direct Command::new(\"git\") calls (rev-parse, for-each-ref, worktree remove, a tree-to-tree diff, a suite tool's own tree) are left, none refreshing an index.",
+     "class": "within",
+     "why": "None of the listed verbs writes an index refresh, so leaving them leaves no part of the lock fix undone. (Its count is noted in the report: the sentence says five calls and lists six files and about eight verbs.)"
+    },
+    {
+     "id": "D5 stamps remainder sequenced",
+     "summary": "The hooks-test suite stamps, gate-green-<area> stamps and semantic-id-cache-2.json (single-valued in the common git dir, overwritten by every worktree; a suite reruns though its tree last passed) are left to a later builder as T304's remainder, before T302; this landing does not tick T304.",
+     "class": "within",
+     "why": "Not dropped: the work stays in T304, which this landing does not tick, ordered before T302 with why it is not fixed here (FR-009's three parts). Its visible effect is reruns (time), not a false pass, and it is to be measured before it changes."
+    },
+    {
+     "id": "D6 guards' git diff lock left as remainder",
+     "summary": "The guards' git diff calls against a work tree (delta_crates, changed_lines, stages_ledger, conflict_marker_hooks) still take index.lock where a stale entry stands (142 of 200 with the variable); left as T304's remainder, lands before T302.",
+     "class": "within",
+     "why": "This is a wrong outcome that can still occur, so it is weighed as the only candidate narrowing; it is not one, because it is sequenced, not excluded: T304 is not ticked by this landing, the remainder is filed under T304 and ordered before T302, and the reason the uniform mechanism cannot reach it is measured (diff writes its refresh whatever GIT_OPTIONAL_LOCKS says; diff.autoRefreshIndex=false changes what it lists). The unmeasured premise that none reaches the session clone from a builder's tree carries nothing here and must not be used to tick T304 without that measurement or the fix."
+    },
+    {
+     "id": "D7 order and exits",
+     "summary": "Lands before T302; builder-checks for the two crates green in the builder's tree; full gate and coverage at landing; red recorded and set down, a can't-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "Process order and exits under the project's standing landing rules; nothing asked is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T305": {
+   "section_sha256": "d41f0e7f7192d10aaab6b35826f1b316e4e87d5a82d0c39eba7be9524186410e",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "pool-rung",
+     "summary": "whose.rs gains a pool rung after the pass's own words and before its builder and page session: the tree the subject or the dispatching brief's first line names, and its holder at the pass's first transcript record by builder-pool.log; the pass is that task's landing's while the task is not ticked",
+     "class": "within",
+     "why": "Fixes the wrong outcome the task line names (a landing refused on another task's builder's pass, four times on 2026-11-26); it serves the GM's 'synchronization' and builder-worktree requests (T284, T285) by making the pool's parallel builders not block each other's landings."
+    },
+    {
+     "id": "log-not-registry",
+     "summary": "the holder is read from the pool's log at the time of the pass, not from builder-pool.json now",
+     "class": "within",
+     "why": "Design choice inside the fix; the registry read would hand T295's pass to T303 (measured case), so the log is what makes the rule do what it is for."
+    },
+    {
+     "id": "hold-as-start-this-rung-only",
+     "summary": "a pool hold stands for the task's start for the pool rung alone; T157's and T167's started rule unchanged for every other source",
+     "class": "within",
+     "why": "Leaves other sources as they are; no wrong outcome is shown for them, so nothing is narrowed and no defect is left."
+    },
+    {
+     "id": "write-side",
+     "summary": "make land's ledger write carries --landing <feature> --tasks <its tasks>: another open task's pass not written, its own tasks' written, others as the trace; a write no landing asks unchanged",
+     "class": "within",
+     "why": "The second half of the same defect (the landing wrote another task's row and could not write its own); FR-019's write from the record is kept."
+    },
+    {
+     "id": "untied-still-holds",
+     "summary": "a pass tied to no task, and a ticked holder's, still hold the push; escalation-check passes (coordinating session's own, spawnDepth 1) unchanged",
+     "class": "within",
+     "why": "Preserves feature 371 / 385 FR-019 (every pass owes its row); the change only re-assigns passes a pool tree ties to a task, measured on the day's three escalation-check passes."
+    },
+    {
+     "id": "t272-hand-made-tree",
+     "summary": "the new rung reaches only passes from pool trees (log from 2026-11-26T14:57Z); T272's refusal, from a hand-made tree, is not reached and was not replayed",
+     "class": "within",
+     "why": "Hand-made trees are refused since 451 T285, so the cause cannot recur by that route; the rung covers every tree a builder can now be given. Not a defect left."
+    },
+    {
+     "id": "found-and-left-T310",
+     "summary": "the event log books a pool builder's check dispatch to no task (builder_brief's ^\\s*(\\d{3}) pattern misses 'Build 451 T295 ...'; the booking wants a start row a pool task lacks), so task-time and feature-report book that time to no task; shared reader with four callers (stalls.rs, builder_stop_hooks.rs, check_bundle_hooks/own.rs) not fixed here. Filed as T310; lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A wrong outcome against the GM's task time breakdown (every minute named, 2026-11-25), so it may not be dropped; round 1 blocked it for want of a filed task and an order, and it is now filed as T310 with an order (before T302), which is how a known defect is carried rather than abandoned. It is a separate mechanism (the guard's shared description reader and its hook suites) from this task's ledger reading, and this task's fix does not depend on it. The time is not silently lost meanwhile: it is booked to no task, which the breakdown reports as a remainder."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T307": {
+   "section_sha256": "44c3f2fd50551803ecdb358e9f9ba49eea299b9f0ccc71e761ff2a5283f4ef36",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "part1 (D1-D3, tests, Found and left T405/T406/T409)",
+     "summary": "Part (1)'s section, unchanged from its CLEAR verdict (compared line by line with earlier.md).",
+     "class": "within",
+     "why": "Text identical to the block judged CLEAR; nothing new to rule on."
+    },
+    {
+     "id": "part2 scope",
+     "summary": "This section is part (2) of T307; T307 is not ticked from it; part (3) remains open on the box.",
+     "class": "within",
+     "why": "Matches the remainder part (1)'s CLEAR section promised for part (2): every check of the push asked in the first pass, with the parity table, and the way out for a task built inside another's reviewed section."
+    },
+    {
+     "id": "part2 D1",
+     "summary": "The first pass calls push-checks --every (the push's own table, run without stopping), told L7R_LAND_TICKS and SPECIFY_FEATURE as the push is; entry-gate.sh joins the first pass.",
+     "class": "within",
+     "why": "Directly implements 'every check of the push also in the landing's first pass', by construction (one call of the same table, so a row added later is asked too)."
+    },
+    {
+     "id": "part2 D1 skips / parity rows that cannot precede the gate",
+     "summary": "Not asked up front: the gate's stamp rows, make gated-check (its condition is the green gate), and the cohort gate (its record is written by the second pass, which rolls the cohort before the gate where it would refuse).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible before the gate: each one checks something only the gate or the second pass writes, so asking it in the first pass could only ever refuse. The cohort gate is still settled before the gate's minutes are spent, so the part's purpose holds."
+    },
+    {
+     "id": "part2 D1 ledger row / CLOSE_OK / work-budget-review",
+     "summary": "The ledger's row is asked in the landing's own form naming its tasks; the closing row is skipped under a CLOSE_OK that states a reason, as the push skips it; work-budget-review stays in the second pass before the gate.",
+     "class": "within",
+     "why": "Each is still asked before the gate's minutes are spent, or skipped exactly where the push skips it. That is parity, not a carve-out."
+    },
+    {
+     "id": "part2 D2",
+     "summary": "tick::checks asks the closing check in the first pass where the landing's tasks are every open box of the feature; a tooling fix the landing carries is no reason there.",
+     "class": "within",
+     "why": "Moves the push's closing row ahead of the gate, as asked."
+    },
+    {
+     "id": "part2 D3",
+     "summary": "Defect fixed in passing: each refusing row's sync-with-main line is kept whole, and only each row's own output is cut (to 600 characters, a stated convention).",
+     "class": "within",
+     "why": "A wrong outcome (the earliest refusals were cut from the list --every exists to give), fixed within the asked mechanism."
+    },
+    {
+     "id": "part2 D4",
+     "summary": "The first pass's closing row writes a closing-owes guard-log line when it refuses, as the push's does.",
+     "class": "within",
+     "why": "Records a real refusal of the push's own check. This is a bookkeeping choice inside the asked mechanism and narrows nothing."
+    },
+    {
+     "id": "part2 D5",
+     "summary": "A 'Built here: T<n>' line in the host's section; T<n>'s tick asks the host's plan gate in its place and refuses when its own section is filled, the host has no current CLEAR (no escape), or the host is neither in this landing nor ticked; the accepted tick marks the box ' built inside T<host>', removes the unfilled stub and logs TaskBuiltInside; make land hands the tick its tasks.",
+     "class": "within",
+     "why": "This is the requested way out for a task built inside another task's reviewed section. The refusals keep feature 243's rule that the host's review stands for the absorbed task's, never none."
+    },
+    {
+     "id": "part2 D6",
+     "summary": "make decide's lint gains BuiltHere: each Built here line must name an open box with an unfilled stub or none, or one already ticked built inside a task the section decides.",
+     "class": "within",
+     "why": "Enforcement of D5: the host's plan review sees, and rules on, what it absorbs. It serves the request and adds no behavior beyond it."
+    },
+    {
+     "id": "part2 D7",
+     "summary": "status::scope_of and push_held read a box ending ' built inside T<n>' as a withdrawn box: its removed unfilled stub owes no review, and a filled block removed beside it still does.",
+     "class": "within",
+     "why": "Needed so the way out actually closes without a review owed on a stub; T359-D15b is kept (the form alone exempts nothing filled)."
+    },
+    {
+     "id": "part2 T413 deferral",
+     "summary": "The unrelated-history refusal, the in-progress rule over the other touched spec directories and the feature pointer, and fixtures for the late ledger-row and changed-block cases are not asked or pinned here; they are filed as T413, which lands before T307's tick.",
+     "class": "within",
+     "why": "Sequenced, not dropped: T307's box stays open and T413 lands before its tick, the same pattern part (1)'s CLEAR section used for T405/T406/T409. The requested scope for the task as a whole is unchanged."
+    },
+    {
+     "id": "part2 LEDGER_ROWS_OK",
+     "summary": "The first pass's own ledger refusal stays stricter than the push and does not honor LEDGER_ROWS_OK, as before this part.",
+     "class": "within",
+     "why": "Pre-existing, and it refuses earlier rather than later, so it does not defeat part (2)'s purpose (the landing told before its gate every refusal the push would make). No wrong outcome is shown."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T304 (451 T281's census, 2026-11-26: a carry test red under load, and the session clone's `index.lock` met by the session's own commits while builders ran; the stamps of the task's line are its remainder)",
+    "### T304 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 empty pick skipped",
+     "summary": "make carry treats a failed pick or failed --continue that leaves CHERRY_PICK_HEAD with nothing unmerged and nothing staged as an empty pick: git cherry-pick --skip, then the END verification (nothing in progress/unmerged/staged, non-spec files in HEAD), exit 0. A pick that never started, or a continue a hook refused, still stops.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a second carry of a carried commit stopped with a pick standing, which make land refuses), as constitution XIV and fix-as-we-go require. The carry still ends verified, never assumed (T292); the stop cases that hold real unfinished work are kept and pinned. Nothing asked is narrowed."
+    },
+    {
+     "id": "D2 tests off the clock",
+     "summary": "The clean-carry test ends at its first carry; three tests replace its second half (the clone given its own commit so the pick sha differs; history reached by fast-forward; the kept-equal-ours continue door), red first with skipped_empty off.",
+     "class": "within",
+     "why": "Makes the test exercise the case that happens in a real clone rather than the same-second sha collision; enforcement of the fix, not new scope."
+    },
+    {
+     "id": "D3 GIT_OPTIONAL_LOCKS=0 on every asked program",
+     "summary": "shared::tool's three askers start their program through command, which sets GIT_OPTIONAL_LOCKS=0 for every program a guard asks (git and the scripts/gate it runs, which inherit it); locks a command needs are still taken. The per-call --no-optional-locks flag was priced and rejected because it reaches neither the scripts nor the gate.",
+     "class": "within",
+     "why": "Carries the brief's instruction (make the hooks' read-only git calls take no optional locks) at the one place every such call passes through. Reaching the scripts and gate a guard asks is reaching the hooks' own calls by the route they take, not a new behavior: only optional locks are dropped, the cost (a stale entry re-read by each such status) is stated."
+    },
+    {
+     "id": "D4 direct git spawns read and left",
+     "summary": "The guard crates' direct Command::new(\"git\") calls (rev-parse, for-each-ref, worktree remove, a tree-to-tree diff, a suite tool's own tree) are left, none refreshing an index.",
+     "class": "within",
+     "why": "None of the listed verbs writes an index refresh, so leaving them leaves no part of the lock fix undone. (Its count is noted in the report: the sentence says five calls and lists six files and about eight verbs.)"
+    },
+    {
+     "id": "D5 stamps remainder sequenced",
+     "summary": "The hooks-test suite stamps, gate-green-<area> stamps and semantic-id-cache-2.json (single-valued in the common git dir, overwritten by every worktree; a suite reruns though its tree last passed) are left to a later builder as T304's remainder, before T302; this landing does not tick T304.",
+     "class": "within",
+     "why": "Not dropped: the work stays in T304, which this landing does not tick, ordered before T302 with why it is not fixed here (FR-009's three parts). Its visible effect is reruns (time), not a false pass, and it is to be measured before it changes."
+    },
+    {
+     "id": "D6 guards' git diff lock left as remainder",
+     "summary": "The guards' git diff calls against a work tree (delta_crates, changed_lines, stages_ledger, conflict_marker_hooks) still take index.lock where a stale entry stands (142 of 200 with the variable); left as T304's remainder, lands before T302.",
+     "class": "within",
+     "why": "This is a wrong outcome that can still occur, so it is weighed as the only candidate narrowing; it is not one, because it is sequenced, not excluded: T304 is not ticked by this landing, the remainder is filed under T304 and ordered before T302, and the reason the uniform mechanism cannot reach it is measured (diff writes its refresh whatever GIT_OPTIONAL_LOCKS says; diff.autoRefreshIndex=false changes what it lists). The unmeasured premise that none reaches the session clone from a builder's tree carries nothing here and must not be used to tick T304 without that measurement or the fix."
+    },
+    {
+     "id": "D7 order and exits",
+     "summary": "Lands before T302; builder-checks for the two crates green in the builder's tree; full gate and coverage at landing; red recorded and set down, a can't-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "Process order and exits under the project's standing landing rules; nothing asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T304 part B (the remainder: the suite and gate stamps that worktrees overwrite in the common git directory, measured 2026-11-27)",
+    "### T304 part B Approach (checklist part A)",
+    "### T446 (<why: the finding or measurement that files it>)",
+    "### T446 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T304-B.1 suite stamps keep a key set",
+     "summary": "hooks-test/<guard> holds a bounded newest-first list of content keys (with shards for a split suite, replacing <guard>.jobs), each key with its own rendering and trace; the recipe skips at any kept key that has its rendering",
+     "class": "within",
+     "why": "This is the fix the task exists for: a tree whose content went green no longer reruns because another tree of other content went green between. It serves the 2026-11-27 go-ahead for the worktree and parallel-building tasks and FR-013's performance-first ordering, and it keeps 451 T281's invariant (renderings gathered at the key skipped on)."
+    },
+    {
+     "id": "T304-B.2 gate area stamps keep a key set",
+     "summary": "gate-green-<area> becomes one key a line, newest first, bounded by STAMP_KEEP; --write moves the key to the front; atomic rename; --fresh and --check pass on any kept key; still a file; no message changes",
+     "class": "within",
+     "why": "The same fix for the gate's hooks-test step. --check passing on any kept key stays sound because each key vouches for one content: a key that matches was green at that very content, so the push path is not loosened to content that was not green."
+    },
+    {
+     "id": "T304-B.3 bound of 6 (HOOKS_STAMP_KEEP, STAMP_KEEP)",
+     "summary": "both sets are bounded at 6, a labeled GUESS knob; a key past the bound reruns its suite once",
+     "class": "within",
+     "why": "A labeled GUESS knob on a cost-only trade. Eviction causes a rerun, which is the old behavior, and never a wrong verdict. Under the two tiers the measured writers are the clone and its landing tree, well inside 6, and the knob can be tuned against the event log. It narrows nothing the GM asked."
+    },
+    {
+     "id": "T304-B.4 semantic-id-cache-2.json left as it is",
+     "summary": "measured to be content-keyed by blob id, and merged on save, so no tree invalidates another's entries; a read-rename race can drop an entry, which is recomputed at the next read",
+     "class": "within",
+     "why": "Measured, not assumed (file read, jq length 13,412). A dropped entry is recomputed, which is no wrong outcome, so under constitution XIV it is not a defect and is correctly left alone."
+    },
+    {
+     "id": "T304-B.5 <id>.s and missing-program-hook stay single-valued",
+     "summary": "the suite start order and the user's own-hook stamp keep one value",
+     "class": "within",
+     "why": "Overwriting either makes no tree rerun anything, so neither touches the goal. Leaving them is not a narrowing."
+    },
+    {
+     "id": "T304-B.6 one-time transition rerun",
+     "summary": "the pre-T304 single-key stamp is read as one key; the old single trace and .jobs file go at the guard's next stamp, so the first run after the change can rerun a split suite or a trace-fresh suite once",
+     "class": "within",
+     "why": "A one-off cost of the migration that gives no wrong outcome and leaves no lasting gap."
+    },
+    {
+     "id": "T304-B.7 test-parts.3.sh case restated",
+     "summary": "the case 'the other tree, at the old wording, reruns the suite' asserted the defect and is restated: A at its old wording skips at its own kept key",
+     "class": "within",
+     "why": "The test pinned the defective behavior the task removes. Restating it follows from the fix and loosens no requested guarantee. Red-first evidence is given: 20 of 22 on the old code, 22 of 22 with the fix."
+    },
+    {
+     "id": "T304-B.8 T304 ticks with part 2 deferred to T446",
+     "summary": "the guards' work-tree git diff calls that take the index lock (delta_crates, changed_lines, stages_ledger, conflict_marker_hooks and its git add --dry-run), a known defect whose visible effect is a commit dying on index.lock, are filed as T446, landing before T302; T304 ticks at this landing",
+     "class": "within",
+     "why": "Nothing the GM asked goes undone or lands later than his words order. His 2026-11-27 go-ahead asks for all the load-bearing and refinement tasks before the orchestrator talk, and the 2026-11-18 rule asks for known defects to be fixed before the next port step. T446 is filed in D15's form (a why, a filed id, 'lands before T302'), inside the same pre-port batch. The stated why leans partly on 'the brief's order', which is the coordinating session's brief, not the GM's words, and is not credited as his. The split stands on its other ground: several sites, each to be measured. That T446 and T302 are open boxes is checked mechanically by make decide."
+    },
+    {
+     "id": "T304-B.9 git status calls not yet read",
+     "summary": "the gate's and scripts' git status calls are not yet read for which tree they ask, and are carried to T446",
+     "class": "within",
+     "why": "Adjudicated apart from B.8: this is an unmeasured question, not a known defect, so carrying the reading into the task that measures part 2 leaves no known defect unfixed."
+    },
+    {
+     "id": "T446 blocks",
+     "summary": "both T446 blocks are the unfilled task-add template",
+     "class": "within",
+     "why": "They decide nothing, so no ruling is owed. They are owed review when filled, since their digests will change."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T305 (2026-11-26: the ledger-owed check refused 451 T272's landing once and the T281 and T284 landing three times, each on a message-check round another builder had run in its own tree for a different task)",
+    "### T305 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 pool rung",
+     "summary": "A new rung of whose.rs (ledger_passes/left/pool.rs), after a pass's own words and before its builder and page session, ties a pass to the task that held the pool tree it was dispatched from.",
+     "class": "within",
+     "why": "Fixes a check refusing good work (another task's landing refused on a pass it did not run), a defect under constitution XIV, in tooling the GM's 2026-11-26 builder-worktree (T285) and build-slot (T284) words put in place; every pass still owes its row (FR-019)."
+    },
+    {
+     "id": "D2 which tree",
+     "summary": "The tree is the one the pass's subject names, else the one the first line of its dispatching agent's brief names.",
+     "class": "within",
+     "why": "Mechanism of D1; widens attribution, removes no owed row."
+    },
+    {
+     "id": "D3 log not registry",
+     "summary": "The holder is read from builder-pool.log at the time of the pass transcript's first record, not from builder-pool.json.",
+     "class": "within",
+     "why": "Measured reason given (t270 was T295's then T303's); keeps a pass with the task that ran it."
+    },
+    {
+     "id": "D4 hold stands for start",
+     "summary": "A pool hold stands for the task's start for this rung alone; T157/T167's started rule unchanged for every other source.",
+     "class": "within",
+     "why": "Confined to the new rung; no other attribution loosened."
+    },
+    {
+     "id": "D5 fallbacks",
+     "summary": "Task ticked, tree free at the time, hold naming no feature, or transcript with no time: the pass is owed by every push as before.",
+     "class": "within",
+     "why": "Keeps FR-019's refusal wherever the rung cannot tie the pass."
+    },
+    {
+     "id": "D6 write side",
+     "summary": "make land's ledger write carries --landing <feature> --tasks <its tasks>: another open task's pass is not written, its own tasks' is; writes no landing asks (make ledger-owed WRITE=, page sessions) unchanged.",
+     "class": "within",
+     "why": "The other task's row stays owed by its own landing; the landing's own row is now written from the record, as FR-019 asks, instead of by hand."
+    },
+    {
+     "id": "D7 untied passes hold",
+     "summary": "Passes tied to no task (199 coordinating-session dispatches, escalation-check passes, pre-pool subagent passes) hold the push as before.",
+     "class": "within",
+     "why": "Unchanged FR-019 behavior; the coordinating session's own passes owing rows is not a wrong outcome."
+    },
+    {
+     "id": "D8 hand-made tree shape",
+     "summary": "T272's hand-made-tree case (no pool log names it) is not reached by the rung.",
+     "class": "within",
+     "why": "Hand-made trees are refused since 451 T285, so the case cannot recur; nothing live is left."
+    },
+    {
+     "id": "D9 exits",
+     "summary": "Builder's exit is make builder-checks on the two crates (the first tier); the full gate and coverage run at the landing.",
+     "class": "within",
+     "why": "The two-tier trial adopted 2026-11-26; the full gate still runs before the push."
+    },
+    {
+     "id": "D10 event-log booking left",
+     "summary": "The block records that 'the event log's own booking failed the same way: the two dispatches' lines carry no task', counts 73 subagent-dispatched check lines with no task in three days, and states that the event log books by the same sources whose.rs reads; yet its steps and tests are ledger-only and Found-and-left says none.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Feature 451's request is time per task ('for each task that you've done ... a breakdown of where our time went'); a builder's check dispatch booked to no task is a wrong answer from where-time/feature-report, a defect by the block's own word ('failed'), and its stated causes are the same as the ledger's (builder_brief not reading 'Build 451 T295 ...' as a builder's, and T295 having no start row for its pool tree). FR-004's 'where its dispatch names one' does not settle it: the block itself says the booking should have found the task by the same sources and did not. Leaving a known defect unstated violates fix-as-we-go and FR-009's found-and-left form. Remedy, the author's choice: state and pin with a test that the event log's booking takes the new pool rung (so these lines carry T295), or carry it in Found and left with why it is not fixed here, its filed task id and its order."
+    }
+   ],
+   "tasks": [
+    "T305"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T305 (2026-11-26: the ledger-owed check refused 451 T272's landing once and the T281 and T284 landing three times, each on a message-check round another builder had run in its own tree for a different task)",
+    "### T305 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "pool-rung",
+     "summary": "whose.rs gains a pool rung after the pass's own words and before its builder and page session: the tree the subject or the dispatching brief's first line names, and its holder at the pass's first transcript record by builder-pool.log; the pass is that task's landing's while the task is not ticked",
+     "class": "within",
+     "why": "Fixes the wrong outcome the task line names (a landing refused on another task's builder's pass, four times on 2026-11-26); it serves the GM's 'synchronization' and builder-worktree requests (T284, T285) by making the pool's parallel builders not block each other's landings."
+    },
+    {
+     "id": "log-not-registry",
+     "summary": "the holder is read from the pool's log at the time of the pass, not from builder-pool.json now",
+     "class": "within",
+     "why": "Design choice inside the fix; the registry read would hand T295's pass to T303 (measured case), so the log is what makes the rule do what it is for."
+    },
+    {
+     "id": "hold-as-start-this-rung-only",
+     "summary": "a pool hold stands for the task's start for the pool rung alone; T157's and T167's started rule unchanged for every other source",
+     "class": "within",
+     "why": "Leaves other sources as they are; no wrong outcome is shown for them, so nothing is narrowed and no defect is left."
+    },
+    {
+     "id": "write-side",
+     "summary": "make land's ledger write carries --landing <feature> --tasks <its tasks>: another open task's pass not written, its own tasks' written, others as the trace; a write no landing asks unchanged",
+     "class": "within",
+     "why": "The second half of the same defect (the landing wrote another task's row and could not write its own); FR-019's write from the record is kept."
+    },
+    {
+     "id": "untied-still-holds",
+     "summary": "a pass tied to no task, and a ticked holder's, still hold the push; escalation-check passes (coordinating session's own, spawnDepth 1) unchanged",
+     "class": "within",
+     "why": "Preserves feature 371 / 385 FR-019 (every pass owes its row); the change only re-assigns passes a pool tree ties to a task, measured on the day's three escalation-check passes."
+    },
+    {
+     "id": "t272-hand-made-tree",
+     "summary": "the new rung reaches only passes from pool trees (log from 2026-11-26T14:57Z); T272's refusal, from a hand-made tree, is not reached and was not replayed",
+     "class": "within",
+     "why": "Hand-made trees are refused since 451 T285, so the cause cannot recur by that route; the rung covers every tree a builder can now be given. Not a defect left."
+    },
+    {
+     "id": "found-and-left-T310",
+     "summary": "the event log books a pool builder's check dispatch to no task (builder_brief's ^\\s*(\\d{3}) pattern misses 'Build 451 T295 ...'; the booking wants a start row a pool task lacks), so task-time and feature-report book that time to no task; shared reader with four callers (stalls.rs, builder_stop_hooks.rs, check_bundle_hooks/own.rs) not fixed here. Filed as T310; lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A wrong outcome against the GM's task time breakdown (every minute named, 2026-11-25), so it may not be dropped; round 1 blocked it for want of a filed task and an order, and it is now filed as T310 with an order (before T302), which is how a known defect is carried rather than abandoned. It is a separate mechanism (the guard's shared description reader and its hook suites) from this task's ledger reading, and this task's fix does not depend on it. The time is not silently lost meanwhile: it is booked to no task, which the breakdown reports as a remainder."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T306 (2026-11-26, left by 451 T295's builder and filed by the coordinating session: six spellings of a program the tree guards did not read)",
+    "### T306 Approach (checklist part A)",
+    "### T453 (<why: the finding or measurement that files it>)",
+    "### T453 Approach (checklist part A)",
+    "(removed) ### T306 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T306-D1",
+     "summary": "xargs is read as a wrapper in shared spelled.rs/tree.rs: the program after xargs' own options is the command word for every reader of `spelled` and for the walk, so `xargs ... git add` writes in its tree, `xargs git worktree add <clones>/x` meets builder-pool and `xargs git push -f` the history guard; what xargs appends from stdin stays unknown.",
+     "class": "within",
+     "why": "Closes a spelling by which existing, approved guards were bypassed (the GM 2026-11-19: 'make sure all of the enforcement is real enforcement and not just instructions'; 2026-11-26 T285: tooling that 'automatically enforces ... without the opportunity for this kind of mistake'). It adds no new refusal kind: each guard refuses what it already refused, read past one more wrapper. Measured use first (5 xargs git add writes, 2 reads), red-first tests named."
+    },
+    {
+     "id": "T306-D2",
+     "summary": "The plan hold places a Bash call where its command lands (call_root: the first write's tree from its cd/-C, else the tree it ends in, else its cwd's), for the snapshot, write-back and refusal; commands with no cd/-C keep the cwd's; the Agent dispatch hold keeps D3's bundle tree. Ends T295's D3 limit. The arbiter's `make done` check in edit_mode still reads the cwd's clone.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a builder's shell edit of its held section neither refused nor restored, then a verdict refused as changed while reviewed - 23 such results measured) in the plan hold the feature already built. The make-done note is a stated boundary of what this decision touches, not a deferred defect: no wrong outcome is claimed for it, so it does not owe a Found-and-left item."
+    },
+    {
+     "id": "T306-D3",
+     "summary": "cargo spelled `\\cargo` is read at make-only, and cargo by its path or `\\cargo` at no-poll (`~/.cargo/bin/cargo build &` detached past no-poll).",
+     "class": "within",
+     "why": "Directly FR-008 (a guard refuses a cargo run put in the background inside a Bash call) and the GM-approved improvement 3; reading the program however spelled is FR-008 doing its job. Cargo by path is the dominant spelling measured (213 calls)."
+    },
+    {
+     "id": "T306-restate",
+     "summary": "T295's census claimed make-only missed cargo by path and behind the four wrappers; measured red, it did not, so the claim is restated rather than code changed.",
+     "class": "within",
+     "why": "Constitution XIV: a claim the measurement contradicts is restated; nothing the GM asked is dropped."
+    },
+    {
+     "id": "T306-deferral-T453",
+     "summary": "A shell's -c string at the walk (1 call), a quoted \"git\" at the history guard (0), and the exempting readers on the bare name (0 each) are recorded as limits in docs/guards.md with their counts and deferred as T453, landing before T302; discard's quoted \"git\" was not shown missed (shlex drops quotes).",
+     "class": "within",
+     "why": "Not a narrowing of what was asked: the defects (visible effects stated: `sh -c 'git worktree add ...'` past builder-pool, `\"git\" push -f` past the history guard) are not left, they are filed as an open task in the spec's own deferral form (FR-009 / D15: why, filed id, 'lands before'), bound by the same order T306 itself holds (before T302), so no known defect is carried past the point T306 was due. The 'limits' text in docs/guards.md documents the interim state, not a permanent carve-out. T453's own section is owed its review when filled."
+    },
+    {
+     "id": "T306-removed-template",
+     "summary": "The template heading block '### T306 (<why...>)' is removed, replaced by the filled T306 heading block.",
+     "class": "within",
+     "why": "The placeholder renamed as it was filled; nothing of substance was removed (its earlier text was the empty template)."
+    },
+    {
+     "id": "T453-template",
+     "summary": "T453's section and Approach are the unfilled template.",
+     "class": "within",
+     "why": "A just-filed task's placeholders decide nothing; its decisions are judged when the section is written."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings, this one and a Write of a handoff under `.git` at 01:22))",
+    "### T307 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T307-split",
+     "summary": "This landing builds part (1) only; part (2) is not started and T307 is not ticked from this landing.",
+     "class": "within",
+     "why": "Nothing is dropped: the remainder stays open on T307's box. Splitting a task into landings is ordering, not a narrowing."
+    },
+    {
+     "id": "T307-D1",
+     "summary": "A commit, an add or a record-writing make is held only where the shared tree walk (cd, git -C) places it in the gated tree. It is still held where the walk cannot place it (cd \"$VAR\") or places nothing while the pattern matches (a quoted git commit).",
+     "class": "within",
+     "why": "385 D13 refuses, while 'a make done of this tree runs', what moves what the gate's end checks. A commit in another worktree moves nothing that tree() compares, so the old refusal refused good work, which is a defect. The conservative holds keep D13 and 375 FR-004 whole."
+    },
+    {
+     "id": "T307-msg",
+     "summary": "The refusal's text is unchanged, so no message-check is owed.",
+     "class": "within",
+     "why": "Only the guard's reach changes; what it says to the refused command is untouched."
+    },
+    {
+     "id": "T307-D2",
+     "summary": "An Edit or Write under the gated tree's .git is let through, as the shell-write rule already lets it through.",
+     "class": "within",
+     "why": "D13 itself names a write 'only under .git/' as not refused, and the gate's snapshot (git diff --name-only HEAD) never holds such a path. Refusing a builder's handoff there refused good work, a defect fixed in passing (fix as we go)."
+    },
+    {
+     "id": "T307-D3",
+     "summary": "Part (1b), the gate's tree check voiding a gate for writes it never read and the landing's pre-tick refusal of a log appended mid-pass, is measured with an options table (A/B/C), not built, and filed as T405, which lands before T307.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It carries FR-009's three. Why: each option changes what a landing commits or pushes, and (A) alone only moves the refusal from the gate to the pre-tick check. The filed task is T405, and its order is 'lands before T307'. Nothing of the ask is dropped, because T307 stays open and T405 precedes its tick. FR-004's purpose (a gate vouches for none of a tree that moved) is kept, not relaxed."
+    },
+    {
+     "id": "T307-left-a",
+     "summary": "Found and left: a commit sent INTO the gated tree by a session standing in another tree is not held. The guard asks only of the tree its own process stands in. Filed as T406, which lands before T307.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a pre-existing missed hold, not introduced by D1, and in the opposite direction to part (1a)'s change. Its own reason is stated: the guard would have to ask of every tree a command writes, which is a new rule with its own suite. The filed id and the order are given, and T307 stays open behind it."
+    },
+    {
+     "id": "T307-left-b",
+     "summary": "Found and left: make's own -C is not read by the walk, so 'make -C <another tree> tick' (a record-writing make run in another tree) is held as the gated tree's. Bundled under T406.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is the same wrong outcome D1 exists to remove: a write to a tree that is not being gated, refused as if it were (a guard refusing good work, a defect). It sits inside D1's own mechanism, the walk that places each GIT_WRITE/MAKE_WRITE command. The section's 'Not fixed here' sentence gives a reason only for the first defect ('the first needs the guard to ask of every tree a command writes'). It gives this one no reason at all, which fails FR-009's requirement that each deferred defect state why it is not fixed in this task. One justification is stretched over two unlike items. Either fix it here (the walk reads make's -C for MAKE_WRITE commands, with a let-through case in the new test) or give it its own reason, its own filed id and its own order."
+    }
+   ],
+   "tasks": [
+    "T307"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))",
+    "### T307 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "part-split",
+     "summary": "This section builds only part (1) of T307; parts (2) and (3) remain open on the task's box and the task is not ticked from this landing.",
+     "class": "within",
+     "why": "Sequencing inside one task. Nothing T307 asks for is dropped, because the task stays open and its tick is the point where the whole of it is owed."
+    },
+    {
+     "id": "D1-release",
+     "summary": "A git commit/add or record-writing make is held only when the guard's shared walk (cd, git -C) places it in the gated tree. One placed in another tree (a builder's worktree) is let through.",
+     "class": "within",
+     "why": "This is the behavior the block states part (1) asks for: hold only writes to the tree being gated. It also keeps feature 385 D13's purpose, which is to refuse what moves HEAD or git diff of the gated tree, since a commit in another worktree moves neither."
+    },
+    {
+     "id": "D1-fail-closed",
+     "summary": "Where the walk cannot place a command (cd \"$VAR\"), or the pattern matches but the walk places nothing (a quoted git commit), the command is held as before.",
+     "class": "within",
+     "why": "This is the conservative side of the rule and keeps D13 and 375 FR-004. It narrows nothing the GM asked to have released, as far as the request and spec in the bundle show."
+    },
+    {
+     "id": "D1-message",
+     "summary": "The refusal's text is unchanged, so no message check is owed.",
+     "class": "within",
+     "why": "Nothing new is refused, so there is no new message to check against FR-012."
+    },
+    {
+     "id": "D2-dotgit",
+     "summary": "The Edit/Write rule no longer refuses a file under the gated tree's .git (a builder's handoff under .git/l7r-handoffs), matching the shell-write rule.",
+     "class": "within",
+     "why": "The 01:22 firing that T307's heading names is this refusal. D13 itself leaves writes that land only under .git unrefused (make modal-triaged). The premise 'no file of the tree' is loose for .git/HEAD and refs, but a Write there would still be caught by 375 FR-004's comparison of HEAD at the gate's end, so the worst case is a voided gate, never a false green."
+    },
+    {
+     "id": "D3-1b-deferred",
+     "summary": "Part (1b) is measured and not built: the tree check voids a gate for moved paths it never reads, and the landing's up-front check refuses a log appended between its two readings. It is filed as T405 with the options table, ordered to land before T307.",
+     "class": "within",
+     "why": "The deferral meets 451 FR-009: it gives why (each option changes what a landing commits, pushes or where it runs), a filed id (T405) and an order (lands before T307). T307 is not ticked here, so the ask is not narrowed but sequenced. 'Chosen: none built' binds this section only. T405 inherits the defect and must decide an option and build it, because a brief's 'no change to what a landing commits' is the session's words, not the GM's. Option (C) changes where a landing runs, not what it commits."
+    },
+    {
+     "id": "T406-deferred",
+     "summary": "A commit sent into the gated tree from a session standing in another tree is not held. The gap predates this change, and it is filed as T406 to land before T307.",
+     "class": "within",
+     "why": "D1 does not cause or widen this gap. It meets FR-009 (why, id, order), and its worst case is a gate voided by FR-004's end check, not a false green. It is owed before T307's tick."
+    },
+    {
+     "id": "T409-deferred",
+     "summary": "make -C <another tree> tick is still held as the gated tree's write, because the shared walk does not read make's -C. A held case of the new test pins this, and it is filed as T409 to land before T307.",
+     "class": "within",
+     "why": "This is a false refusal that stays, so the built part (1a) falls short of 'only writes to the tree being gated are held' for this one form. It is within only because T307 is not ticked here and T409 is ordered before that tick, which meets FR-009's why, id and order. The test that pins the held case must be inverted when T409 lands."
+    },
+    {
+     "id": "perf-class",
+     "summary": "T307 is classed [perf] (it removes a wait from landings and builders), not engine speed, so the performance checklist's questions do not apply.",
+     "class": "within",
+     "why": "The GM ruled on 2026-11-20 that performance improvements come first. Classing the task this way schedules it earlier and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T307 (part 1 of the task, the gate and the clone's other writers: on 2026-11-26 07:51 UTC the session, standing in the clone while its gate ran, was refused the commit of a builder's worktree, `cd /diagram/.clones/diagram-backlog-t265 && ... git add -u; ... git commit` (observed 2026-11-26, method: `make guard-log GUARD=gate-write SINCE=2026-11-26 FULL=1`, 3 firings: this one, a Write of a handoff under `.git` at 01:22, and that Write's escape at 01:22))",
+    "### T307 Approach (checklist part A)",
+    "### T307 part 2 (the landing's first pass asks the push's own checks, and a task built inside another task's section closes with it: a push check met only after the gate costs the gate's minutes, and five filed tasks built inside other tasks' reviewed sections had no way out)",
+    "### T307 part 2 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "part1 (D1-D3, tests, Found and left T405/T406/T409)",
+     "summary": "Part (1)'s section, unchanged from its CLEAR verdict (compared line by line with earlier.md).",
+     "class": "within",
+     "why": "Text identical to the block judged CLEAR; nothing new to rule on."
+    },
+    {
+     "id": "part2 scope",
+     "summary": "This section is part (2) of T307; T307 is not ticked from it; part (3) remains open on the box.",
+     "class": "within",
+     "why": "Matches the remainder part (1)'s CLEAR section promised for part (2): every check of the push asked in the first pass, with the parity table, and the way out for a task built inside another's reviewed section."
+    },
+    {
+     "id": "part2 D1",
+     "summary": "The first pass calls push-checks --every (the push's own table, run without stopping), told L7R_LAND_TICKS and SPECIFY_FEATURE as the push is; entry-gate.sh joins the first pass.",
+     "class": "within",
+     "why": "Directly implements 'every check of the push also in the landing's first pass', by construction (one call of the same table, so a row added later is asked too)."
+    },
+    {
+     "id": "part2 D1 skips / parity rows that cannot precede the gate",
+     "summary": "Not asked up front: the gate's stamp rows, make gated-check (its condition is the green gate), and the cohort gate (its record is written by the second pass, which rolls the cohort before the gate where it would refuse).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible before the gate: each one checks something only the gate or the second pass writes, so asking it in the first pass could only ever refuse. The cohort gate is still settled before the gate's minutes are spent, so the part's purpose holds."
+    },
+    {
+     "id": "part2 D1 ledger row / CLOSE_OK / work-budget-review",
+     "summary": "The ledger's row is asked in the landing's own form naming its tasks; the closing row is skipped under a CLOSE_OK that states a reason, as the push skips it; work-budget-review stays in the second pass before the gate.",
+     "class": "within",
+     "why": "Each is still asked before the gate's minutes are spent, or skipped exactly where the push skips it. That is parity, not a carve-out."
+    },
+    {
+     "id": "part2 D2",
+     "summary": "tick::checks asks the closing check in the first pass where the landing's tasks are every open box of the feature; a tooling fix the landing carries is no reason there.",
+     "class": "within",
+     "why": "Moves the push's closing row ahead of the gate, as asked."
+    },
+    {
+     "id": "part2 D3",
+     "summary": "Defect fixed in passing: each refusing row's sync-with-main line is kept whole, and only each row's own output is cut (to 600 characters, a stated convention).",
+     "class": "within",
+     "why": "A wrong outcome (the earliest refusals were cut from the list --every exists to give), fixed within the asked mechanism."
+    },
+    {
+     "id": "part2 D4",
+     "summary": "The first pass's closing row writes a closing-owes guard-log line when it refuses, as the push's does.",
+     "class": "within",
+     "why": "Records a real refusal of the push's own check. This is a bookkeeping choice inside the asked mechanism and narrows nothing."
+    },
+    {
+     "id": "part2 D5",
+     "summary": "A 'Built here: T<n>' line in the host's section; T<n>'s tick asks the host's plan gate in its place and refuses when its own section is filled, the host has no current CLEAR (no escape), or the host is neither in this landing nor ticked; the accepted tick marks the box ' built inside T<host>', removes the unfilled stub and logs TaskBuiltInside; make land hands the tick its tasks.",
+     "class": "within",
+     "why": "This is the requested way out for a task built inside another task's reviewed section. The refusals keep feature 243's rule that the host's review stands for the absorbed task's, never none."
+    },
+    {
+     "id": "part2 D6",
+     "summary": "make decide's lint gains BuiltHere: each Built here line must name an open box with an unfilled stub or none, or one already ticked built inside a task the section decides.",
+     "class": "within",
+     "why": "Enforcement of D5: the host's plan review sees, and rules on, what it absorbs. It serves the request and adds no behavior beyond it."
+    },
+    {
+     "id": "part2 D7",
+     "summary": "status::scope_of and push_held read a box ending ' built inside T<n>' as a withdrawn box: its removed unfilled stub owes no review, and a filled block removed beside it still does.",
+     "class": "within",
+     "why": "Needed so the way out actually closes without a review owed on a stub; T359-D15b is kept (the form alone exempts nothing filled)."
+    },
+    {
+     "id": "part2 T413 deferral",
+     "summary": "The unrelated-history refusal, the in-progress rule over the other touched spec directories and the feature pointer, and fixtures for the late ledger-row and changed-block cases are not asked or pinned here; they are filed as T413, which lands before T307's tick.",
+     "class": "within",
+     "why": "Sequenced, not dropped: T307's box stays open and T413 lands before its tick, the same pattern part (1)'s CLEAR section used for T405/T406/T409. The requested scope for the task as a whole is unchanged."
+    },
+    {
+     "id": "part2 LEDGER_ROWS_OK",
+     "summary": "The first pass's own ledger refusal stays stricter than the push and does not honor LEDGER_ROWS_OK, as before this part.",
+     "class": "within",
+     "why": "Pre-existing, and it refuses earlier rather than later, so it does not defeat part (2)'s purpose (the landing told before its gate every refusal the push would make). No wrong outcome is shown."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T304 to T307, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

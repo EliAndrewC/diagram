@@ -1,0 +1,907 @@
+{
+ "blocks": {
+  "### T425 Approach (checklist part A)": {
+   "sha256": "669453acb2a6289200ca1d1ca9ec645e4ee0fd6294e74ebf6150c608d0770b56",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T425 (found by T420, 2026-11-27: of the 13 real waits for the small lane from 00:20Z to 03:56Z, 87.4 s, a wide build slot stood free for 85.7 s, measured 2026-11-27 (the event logs' `slot-wait` and `slot-small` lines, `dev/measurements/2026-11-27/slot-waits/waits.py`))": {
+   "sha256": "4fb24ecb254aceb33452d7346cba561fdec22a0b0bdf1563b55768a8ec8c1f57",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T426 Approach (checklist part A)": {
+   "sha256": "70a3350529b8023a8c029eb52137de15a207b31f11dd6464ca28a8cf1a385908",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T426 (found by T420: 221.9 of the 283.5 s T367's record counted as `slot-wait` from 00:20Z to 03:30Z were T355's `lint-wait.sh` holding the wide slots of a SCRATCH slot directory, and `make task-time` booked them as waiting on a build slot, measured 2026-11-27 (the event logs' `slot-wait` lines, `dev/measurements/2026-11-27/slot-waits/results.md`))": {
+   "sha256": "a652bd6f6925aedcc36e317c876e05c340b4810ca704b5ee62fb2462d793019f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T427, T428 (bundle) (found by T417's plan review and by T417 itself, 2026-11-26: the wrap-up band let a redirect write any file, and the resume refusal's last line was false inside the band)": {
+   "sha256": "43813e0a906600cb5af49ac851f4e6c18bd4bb23bf76533e8579db66a68d41fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T427, T428 Approach (checklist part A)": {
+   "sha256": "c4e129b720f3f0b726df7409f089b422b3f412b4bd9054fba57c6b34f994a1ed",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T430 Approach (checklist part A)": {
+   "sha256": "b1314c4621311bc6ef33472bffbdcb09c181901da9b72bb20e8d12da1547d592",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T430 (found by 451 T406 by reading, no firing observed: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree was not held - `gate_refusal` judged a file tool, and `shell_write` was reached, only where `c.own`, the tree the hook's process stands in (read 2026-11-27 from `rust/guard/src/guards/gate_write_hooks.rs`); the coordinating session wrote the clone twice while its gate ran on the night of 2026-11-26/27, seen only because it stood IN the clone (observed 2026-11-27, method: the coordinating session's report in T430's brief))": {
+   "sha256": "61823d6bd9c311a4f580c5d268956042d8c78135c0551d78575ba3b46877af10",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T431 Approach (checklist part A)": {
+   "sha256": "0ca7e1af78c1a2237e094fd8322ce451593467a909ac8cad4684849162bda86d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T431 (found 2026-11-27: `make builder-brief` refused T369's brief as a new mechanism, `make -`, passed only by SIZING_OK)": {
+   "sha256": "6adc73e6be82926c3c958f9b51f5fa21f39057c72a61eceed5a109c969329b0d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T432 Approach (checklist part A)": {
+   "sha256": "1d4f0652c7b40de8b60747228f7e66d3125794c8d8ee17a7aba4a3270e6a8e4e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T432 (found by 451 T413, 2026-11-27, by reading: a landing ruled ready exempted every feature's hold at the push)": {
+   "sha256": "aa8a03df9438db3a1a41cf3db2fda5fae18dd816a77542a766f332818ad13759",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T433 Approach (checklist part A)": {
+   "sha256": "9539920a7d1bc2db614a9b7b4ca4fb953c19d7821d993ea7ea3a827e919b58bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T433 (found by T427, 2026-11-27: the shared walk read no write in `tail -n 0 x >& rust/a.rs` or `>&rust/a.rs`, so no walk reader saw it)": {
+   "sha256": "9180cce69c95fe1c112fa86099cd1a2b3c79384963c2c1721f6f31c0935f186d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T434 Approach (checklist part A)": {
+   "sha256": "41475e0aef910ca013c8f9fb59cdce61c3c691a8b766cc2aa9dc0d6a0fab9631",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T434 (found by T341, 2026-11-27: after a real rebuild of `l7r-rust` the views cache was thrown away whole and all 1,504 Rust files read and hashed again, 1.9 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`))": {
+   "sha256": "a41ede100356cda39ae2b0dc1a05c6518703ee2e870de8e4dd3ef917cfb2517f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T435 Approach (checklist part A)": {
+   "sha256": "b3ecefa489bcffe141d4fbb4c68cf0ca8cfa8a33dec2bfebee06357291f3b23c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T435 (T342's build, filed by its measurement `dev/measurements/2026-11-27/test-selection/results.md`: 476 pool `rust-test` runs spent 2,303 s of test wall in 11.6 h, a change reaching 14% of a crate's tests by module, an estimated 13.8 to 32.4 builder-minutes saved in that window by running only those while iterating, measured 2026-11-27 (T342's record, sections 1, 2 and 4))": {
+   "sha256": "c4ade1867fbb93e4576f42feb68d4ef2c3adf89de2cad95a2526b420990d3493",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T425": {
+   "section_sha256": "71d4ea1f5bd62ca09c9b3091a9a56f33c29bb616ca76c953dc02d6a8d4d7079f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T425-1 overflow",
+     "summary": "A build or lint pass told alone (cargo_small / around_small) that finds the small lane held takes a wide build slot that is free at that instant, never a place in the wide queue.",
+     "class": "within",
+     "why": "Performance work on the builders' loop (FR-013; the GM 2026-11-20 'can we in general priotitize performance improvements going forward?', 2026-11-26 'Our goal is to maximize task throughput', T284 'some synchronization rather than pre-emptively limiting'). T420 measured 85.7 of 87.4 s of lane waits with a wide slot free; using idle capacity serves the request and narrows nothing."
+    },
+    {
+     "id": "T425-2 lane preferred",
+     "summary": "The lane is asked first at every look; a wide slot goes to a lane-class build only while the lane is held.",
+     "class": "within",
+     "why": "Keeps T347's lane as the class's home and the wide slots for wide builds; a design order inside the request, it withholds nothing the GM asked for."
+    },
+    {
+     "id": "T425-3 one wait loop over both",
+     "summary": "take becomes take_or(first, also): one non-blocking poll loop (flock -n per slot file, the lane's 500 ms GUESS poll, its ceiling, notice and clock) that ends at whichever of lane or wide slot frees first; no thread, no blocking lock.",
+     "class": "within",
+     "why": "Mechanism of the overflow; keeps T284's never-deadlock, never-refuse contract (one slot held, none waited for while held). Design, not scope."
+    },
+    {
+     "id": "T425-4 degraded sides",
+     "summary": "A wide side that cannot be asked gives no slot and the wait goes on in the lane; a lane that cannot be asked still runs without at once, as before.",
+     "class": "within",
+     "why": "Preserves T284/T347's existing non-refusal behavior; the overflow is purely additive and removes no case the request covers."
+    },
+    {
+     "id": "T425-5 event lines",
+     "summary": "The wait stays one slot-wait line booked 'waiting on a build slot'; slot-small gains code 2 (OVERFLOW); no new step name or task-time category; the waiter's minute and ceiling lines name holders of both sets.",
+     "class": "within",
+     "why": "Keeps the time breakdown's (FR-001..FR-005, T243) booking intact and makes the overflow countable for the measured 'done' - measurement in service of the request."
+    },
+    {
+     "id": "T425-6 memory and no wider lane",
+     "summary": "A lane-class build (1.42 GiB measured 2026-11-26) fits a wide slot's 2.0 GiB in T347's paper budget; widening the lane to two was priced by T420 (8.2 > 7) and not done.",
+     "class": "within",
+     "why": "Respects T347's memory budget; not widening the lane is an option the GM never asked for, not a defect left and not a narrowing of any requirement."
+    },
+    {
+     "id": "T425-7 take kept for tests, run_in untouched",
+     "summary": "Single-set take stays #[cfg(test)] only, every checks call takes through take_or; T364's run_in unchanged.",
+     "class": "within",
+     "why": "Code-organization and sequencing beside T364; no requested behavior is narrowed."
+    },
+    {
+     "id": "T425-8 [perf] classification",
+     "summary": "Filed as a [perf] task under FR-013; no engine-speed checklist.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work; this is exactly that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T430": {
+   "section_sha256": "ecbd1775a8f9d217ff26b3760f9d6ab1e19b59a2fe9b4891778e798f2223e545",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T430-1",
+     "summary": "File tools (Edit, Write, NotebookEdit) judged in every gated tree by where the file lands: gate_refusal drops `&& c.own`, relying on relative_in(&c.top, file) to answer None outside that tree.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (feature 385 D13's guard let a write void a running gate when the writing session stood in another tree; FR-004's end-hash then refuses green and the whole make done is owed again). The request's parallel-builder work (the GM 2026-11-25/26/27: several builders at once, 'synchronization rather than pre-emptively limiting builders') is what makes cross-tree writes happen; holding a write that would void the gate is D13's purpose applied to the case it missed, not new scope. Fix-as-we-go: a known defect fixed in its step."
+    },
+    {
+     "id": "T430-2",
+     "summary": "The `if !c.own { return None; }` before shell_write is removed, so a shell write the walk places under another gated tree's top is held there (T406's positive-placement rule, extended from a commit to an Edit and a shell write).",
+     "class": "within",
+     "why": "Same defect, same purpose as T430-1, for shell writes; uses the existing `seen` placement test, so it refuses only writes positively placed in the running gate's tree. No refusal beyond the thing D13 exists to stop."
+    },
+    {
+     "id": "T430-3",
+     "summary": "A shell write the walk cannot place is held in the hook process's own tree alone (stands_here's fail-closed split unchanged); in another gated tree it passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's own goal carves this case out of 'no write lands in a running gate's tree from any session'. Applying the rule literally - holding every unplaceable write (a `$VAR` target, say) in every tree while any gate anywhere runs - would refuse good work in every builder's tree whenever any one gate ran, which defeats the request's stated purpose (the GM 2026-11-26: synchronization rather than limiting builders; 2026-11-26 on coverage: 'Our goal is to maximize task throughput'), and a check that refuses good work is itself a defect under the project's rule. The residual is not a silent wrong outcome: FR-004's end-of-gate hash still refuses green on any tracked file that moved. The case is one class (writes whose landing place is unknown), so one argument covers it. It is also T406's existing rule, kept, not a new carve-out."
+    },
+    {
+     "id": "T430-4",
+     "summary": "A Write under the gated tree's `.git` (a handoff file) is let through; a tree whose `l7r-gate preflight --tree-check` answers unseen lets writes through.",
+     "class": "within",
+     "why": "Both are what the gate already does not see: D13 refuses only what moves 'what the gate's end checks' (HEAD and `git diff --name-only HEAD`), and names `.git/`-only writes as not refused. Unchanged behavior, consistent with the request."
+    },
+    {
+     "id": "T430-5",
+     "summary": "A write from the gated tree into an ungated pool tree passes (T307's rule kept); no guard message changes; escape GATE_WRITE_OK kept.",
+     "class": "within",
+     "why": "Keeps existing, requested behavior (D13's escape; another tree's write is not this gate's). Nothing narrowed."
+    },
+    {
+     "id": "T430-6",
+     "summary": "Cost accepted: one more walk of a Bash command per other gated tree while it runs.",
+     "class": "within",
+     "why": "A cost note, not a scope decision; no process is spawned unless a path lands in that tree."
+    },
+    {
+     "id": "T430-7",
+     "summary": "Tests: the pinned let-through Write of a_commit_sent_into_a_gated_tree_from_another_is_held flipped to held; new a_write_sent_into_a_gated_tree_from_another_is_held; 3 cases in tests/hooks/test-gate-write-hooks.sh; red first on the old code.",
+     "class": "within",
+     "why": "Enforcement of the fix: each test fails only when the held-write behavior is absent, and the let-through cases pin that good work is not refused. Not unrequested scope (GM 2026-09-20). Figures carry dates and methods."
+    },
+    {
+     "id": "T430-8",
+     "summary": "Ordered after T406 and before T307's tick; tagged [perf] under FR-013 because a voided gate owes the whole make done again (about ten minutes, labeled as the brief's figure).",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the landings faster; preventing a voided gate removes a full rerun from the landing. Scheduling and order only; no requirement narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T433": {
+   "section_sha256": "fd663f28e7ebc02abf282ed0aabfd65c3820264e1279928c0658f381b7349156",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T433-D1",
+     "summary": "REDIRECT reads >& (with or without a space) as a write of the word after it",
+     "class": "within",
+     "why": "Fixes a guard gap (a write no walk reader saw), a check passing bad work and so a defect under fix-as-we-go; serves the GM's 2026-11-19 'make sure all of the enforcement is real enforcement and not just instructions'. Bash behavior measured, red-first test recorded. Narrows nothing asked."
+    },
+    {
+     "id": "T433-D2",
+     "summary": "An fd is a whole word: DUP_FD takes '>& 2', '>&-' closes what follows, '>&2.log' kept as a file, read in code not a lookahead",
+     "class": "within",
+     "why": "Keeps D1 from reading fds as files and fixes the earlier miscut of >&2.log, each case matched to bash as measured 2026-11-27. Implementation of the fix, no narrowing."
+    },
+    {
+     "id": "T433-D3",
+     "summary": "/dev/null by every spelling (>&, &>, &>>) is no write",
+     "class": "within",
+     "why": "Prevents D1 from creating a false write target that would make readers refuse good work; matches bash and the existing '> /dev/null' treatment."
+    },
+    {
+     "id": "T433-D4",
+     "summary": "&> stays in its command's segment in split.rs; make-only's statement pairing reads it the same way",
+     "class": "within",
+     "why": "Places the write where bash does (after a cd, T436's case); the make-only change only keeps an existing test's verdict under the new split, so no guard verdict the GM asked for moves."
+    },
+    {
+     "id": "T433-D5",
+     "summary": ">&$NAME read as a file write (the walk cannot tell a variable fd from a name); 2>&g2 likewise read as a write",
+     "class": "within",
+     "why": "The safe side for a guard (a possible write is seen, not missed); measured 0 invocations of >&$NAME over the week's 73,482 Bash calls, so no wrong outcome is observed and nothing asked is left unenforced."
+    },
+    {
+     "id": "T433-file-scale",
+     "summary": "The redirect reading moves to tree/redirect.rs to bring tree.rs under the file-scale limit",
+     "class": "within",
+     "why": "Code organisation to satisfy an existing check; changes no behavior asked for."
+    },
+    {
+     "id": "T433-found-and-left",
+     "summary": "The band's whole-command refusal of any leftover >& (and of a cd with a redirect) is now a stopgap that refuses good /tmp writes; left, filed as T460, lands before T420",
+     "class": "within",
+     "why": "The section fixes the walk the GM's enforcement rests on and does not carry the band's over-refusal past the step: it states why it is not fixed here (it changes the band's verdicts, beyond the brief's no-message-change), names its filed task and its order (lands before T420), as FR-009 requires of a deferral. It is scheduled within the feature before the next dependent task rather than left, so it narrows nothing the request or spec asked of this task."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T425 (found by T420, 2026-11-27: of the 13 real waits for the small lane from 00:20Z to 03:56Z, 87.4 s, a wide build slot stood free for 85.7 s, measured 2026-11-27 (the event logs' `slot-wait` and `slot-small` lines, `dev/measurements/2026-11-27/slot-waits/waits.py`))",
+    "### T425 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T425-1 overflow",
+     "summary": "A build or lint pass told alone (cargo_small / around_small) that finds the small lane held takes a wide build slot that is free at that instant, never a place in the wide queue.",
+     "class": "within",
+     "why": "Performance work on the builders' loop (FR-013; the GM 2026-11-20 'can we in general priotitize performance improvements going forward?', 2026-11-26 'Our goal is to maximize task throughput', T284 'some synchronization rather than pre-emptively limiting'). T420 measured 85.7 of 87.4 s of lane waits with a wide slot free; using idle capacity serves the request and narrows nothing."
+    },
+    {
+     "id": "T425-2 lane preferred",
+     "summary": "The lane is asked first at every look; a wide slot goes to a lane-class build only while the lane is held.",
+     "class": "within",
+     "why": "Keeps T347's lane as the class's home and the wide slots for wide builds; a design order inside the request, it withholds nothing the GM asked for."
+    },
+    {
+     "id": "T425-3 one wait loop over both",
+     "summary": "take becomes take_or(first, also): one non-blocking poll loop (flock -n per slot file, the lane's 500 ms GUESS poll, its ceiling, notice and clock) that ends at whichever of lane or wide slot frees first; no thread, no blocking lock.",
+     "class": "within",
+     "why": "Mechanism of the overflow; keeps T284's never-deadlock, never-refuse contract (one slot held, none waited for while held). Design, not scope."
+    },
+    {
+     "id": "T425-4 degraded sides",
+     "summary": "A wide side that cannot be asked gives no slot and the wait goes on in the lane; a lane that cannot be asked still runs without at once, as before.",
+     "class": "within",
+     "why": "Preserves T284/T347's existing non-refusal behavior; the overflow is purely additive and removes no case the request covers."
+    },
+    {
+     "id": "T425-5 event lines",
+     "summary": "The wait stays one slot-wait line booked 'waiting on a build slot'; slot-small gains code 2 (OVERFLOW); no new step name or task-time category; the waiter's minute and ceiling lines name holders of both sets.",
+     "class": "within",
+     "why": "Keeps the time breakdown's (FR-001..FR-005, T243) booking intact and makes the overflow countable for the measured 'done' - measurement in service of the request."
+    },
+    {
+     "id": "T425-6 memory and no wider lane",
+     "summary": "A lane-class build (1.42 GiB measured 2026-11-26) fits a wide slot's 2.0 GiB in T347's paper budget; widening the lane to two was priced by T420 (8.2 > 7) and not done.",
+     "class": "within",
+     "why": "Respects T347's memory budget; not widening the lane is an option the GM never asked for, not a defect left and not a narrowing of any requirement."
+    },
+    {
+     "id": "T425-7 take kept for tests, run_in untouched",
+     "summary": "Single-set take stays #[cfg(test)] only, every checks call takes through take_or; T364's run_in unchanged.",
+     "class": "within",
+     "why": "Code-organization and sequencing beside T364; no requested behavior is narrowed."
+    },
+    {
+     "id": "T425-8 [perf] classification",
+     "summary": "Filed as a [perf] task under FR-013; no engine-speed checklist.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work; this is exactly that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T426 (found by T420: 221.9 of the 283.5 s T367's record counted as `slot-wait` from 00:20Z to 03:30Z were T355's `lint-wait.sh` holding the wide slots of a SCRATCH slot directory, and `make task-time` booked them as waiting on a build slot, measured 2026-11-27 (the event logs' `slot-wait` lines, `dev/measurements/2026-11-27/slot-waits/results.md`))",
+    "### T426 Approach (checklist part A)",
+    "### T435 (<why: the finding or measurement that files it>)",
+    "### T435 Approach (checklist part A)",
+    "### T438 (<why: the finding or measurement that files it>)",
+    "### T438 Approach (checklist part A)",
+    "(removed) ### T426 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 Approach (checklist part A)",
+    "(removed) ### T428 (<why: the finding or measurement that files it>)",
+    "(removed) ### T428 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T426-mark",
+     "summary": "The writer (rustc crate) marks a slot-wait / slot-small line with \"scratch\": true where L7R_BUILD_SLOT_DIR names a directory other than the home's default; set in Slots::of, written by phase.rs, no call line of slot.rs changed",
+     "class": "within",
+     "why": "Fixes a wrong outcome in the task time breakdown the GM asked for (2026-11-25: where our time goes, minutes and blocking per category; T347's line asks for make task-time's minutes waiting on a build slot to be right before and after): a measurement script's hold on a scratch slot directory was booked as waiting on the machine's build slots. Marking the line is the data-collection context clue the GM's (l) invites."
+    },
+    {
+     "id": "T426-known-scratch",
+     "summary": "KNOWN_SCRATCH names the one past unmarked run (tree diagram-backlog-t270, 01:48:50-02:01:30Z 2026-11-27, T355's lint-wait.sh) so the readers tell its four lines as scratch",
+     "class": "within",
+     "why": "Corrects the already-recorded window the misreading came from, so the breakdown over existing logs reads right; a fixed past run, not a tunable, and it narrows nothing the request asked for."
+    },
+    {
+     "id": "T426-booking",
+     "summary": "Readers (where_time/columns.rs, shared by where-time and task-time) keep a scratch line's span apart and book it to its run's own bucket, taken out before every category so it is neither waiting on a build slot nor compile; grand total unchanged; task-time's footnote and where-time's runs line name the count and minutes, only when nonzero; task-time counts the window's lines, not BACK= read-back",
+     "class": "within",
+     "why": "Every minute stays booked and the moved minutes are named with what they are (the session's recorded amendment (c): never a silent other); totals and blocking unchanged; this is the requested breakdown made correct, not a narrowing."
+    },
+    {
+     "id": "T426-fixed-here-runs-column",
+     "summary": "where-time's runs table gains the missing 'waiting on a build slot' column (absent since T284, so every slot wait split out of a run fell in no column), with the tests pinning that table widened by its cell",
+     "class": "within",
+     "why": "A wrong outcome (minutes missing from the table) found while re-measuring, fixed in this task as the fix-as-we-go rule requires; widening the pinned rows is the test following the fix, not a new exactness demand."
+    },
+    {
+     "id": "T426-checklist",
+     "summary": "Checklist part A: goal, constraints (T284's slot unchanged for real calls, totals unchanged, T425's carry unhindered), order after T420 beside T425, exits, done-measured 5.3 -> 1.6 min with a 4-wait (3.7 min) footnote, performance work yes as a measurement task",
+     "class": "within",
+     "why": "Restates the approach's own decisions; classing a measurement task as performance work is the GM's 2026-11-20 words (FR-013). Figures carry a dated one-shot method label."
+    },
+    {
+     "id": "T435-T438-templates",
+     "summary": "T435 and T438 sections and checklists are the unfilled template",
+     "class": "within",
+     "why": "Placeholders only; they decide nothing."
+    },
+    {
+     "id": "removed-T426-T427-T428-templates",
+     "summary": "The unfilled template blocks of T426 (replaced by the filled section above), T427 and T428 are removed",
+     "class": "within",
+     "why": "Their earlier text was the bare template with no decision in it, so removing them withdraws nothing decided and narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T427, T428 (bundle) (found by T417's plan review and by T417 itself, 2026-11-26: the wrap-up band let a redirect write any file, and the resume refusal's last line was false inside the band)",
+    "### T427, T428 Approach (checklist part A)",
+    "### T436 (<why: the finding or measurement that files it>)",
+    "### T436 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T427-cd-whole",
+     "summary": "In the wrap-up band, a cd or pushd segment carrying a redirect is refused whole, naming the command, because the shared walk moves the shell and reads no write of that segment.",
+     "class": "within",
+     "why": "Closes a route by which a builder past the cap could truncate a source file the band refuses as an Edit or Write; it serves the bundle's goal (nothing but the handoff and /tmp, by any route) and T417's band as the GM's 2026-11-27 words shaped it (finish the stop point, not write anything). The redirect sits on the cd segment itself, so an ordinary `cd X && cmd > /tmp/log` is unaffected, and the refusal names the command. That a few harmless forms are also refused is the band's existing way of handling commands it cannot read, not a narrowing of anything the GM asked for."
+    },
+    {
+     "id": "T427-dup-whole",
+     "summary": "In the band, any `>&` left after sanitize strips 2>&1 and >&2 (a `>& FILE` or `>&FILE`) is refused whole, naming the command; the T433 found-and-left item now says the band's exposure is fixed here.",
+     "class": "within",
+     "why": "The same hole closed for the band by the same refused-whole pattern. The 2>&1 and >&2 forms builders use for logs still pass, so the GM's purpose of letting a capped builder finish its stop point efficiently is untouched."
+    },
+    {
+     "id": "T427-red-first-probes",
+     "summary": "Both whole-command shapes were added to band/tests.rs's refused table and probed red before their rules (each Allowed, 1 failed of 562; with the rules, 562 green, observed 2026-11-27).",
+     "class": "within",
+     "why": "A test whose only effect is to make the requested band behavior hold enforces the request (GM 2026-09-20). Each figure is dated with its method."
+    },
+    {
+     "id": "T436-deferral",
+     "summary": "The shared walk's cd branch skipping a cd/pushd segment's writes, for every other guard that reads the walk, is left unfixed here: 'Not fixed here: a change to the shared walk's cd branch reaches every guard that reads it, past this bundle's two jobs and its first-tier checks. Filed as T436; lands before T420.'",
+     "class": "within",
+     "why": "FR-009/D15 is the approved form for leaving a found defect: a reason, a filed task id and an order. This item has all three, and T436's section now exists. The band, which is this task's job, is fixed here, so the defect still open is in other guards and is ordered to land before T420, which follows fix-as-we-go. It is the same structure as the T433 item judged CLEAR last round. Whether T436 and T420 are both open boxes is checked mechanically by `make decide` (D15), and this bundle cannot see tasks.md."
+    },
+    {
+     "id": "T436-template",
+     "summary": "T436's section and its checklist part A are the unfilled template.",
+     "class": "within",
+     "why": "A placeholder decides nothing; its approach is decided when T436 itself is started and goes through make decide."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T430 (found by 451 T406 by reading, no firing observed: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree was not held - `gate_refusal` judged a file tool, and `shell_write` was reached, only where `c.own`, the tree the hook's process stands in (read 2026-11-27 from `rust/guard/src/guards/gate_write_hooks.rs`); the coordinating session wrote the clone twice while its gate ran on the night of 2026-11-26/27, seen only because it stood IN the clone (observed 2026-11-27, method: the coordinating session's report in T430's brief))",
+    "### T430 Approach (checklist part A)",
+    "(removed) ### T430 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T430-file-tools",
+     "summary": "gate_refusal's file-tool branch drops `&& c.own`: an Edit, Write or NotebookEdit is held in every gated tree it lands in, wherever the session stands; a file under that tree's .git is still no file of it",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a running gate voided by a write sent in from another tree), which is what D13 and 375 FR-004 exist to prevent; with the GM's parallel builders and pool trees (2026-11-26/27 go-ahead) a write from another tree is the case that occurs. Fixing a known defect found by this feature's own task is owed (fix as we go); .git exemption matches D13 (writes only under .git are not what the gate sees)."
+    },
+    {
+     "id": "T430-shell-write-placement",
+     "summary": "The `if !c.own { return None; }` before shell_write is removed: in another gated tree a shell write is held only on a positive placement under that tree's top; a write the walk cannot place stays fail-closed in the hook process's own tree alone (T406's rule)",
+     "class": "within",
+     "why": "Strictly widens the guard's reach from the old own-tree-only scope that D13 states ('while a make done of this tree runs'); nothing asked or specified that an unplaceable write be refused in every tree, and doing so would refuse correct work (any `$VAR` write anywhere whenever any gate runs), against the GM's throughput rulings. The unplaceable case keeps the scope D13 already had, so it narrows nothing that was asked."
+    },
+    {
+     "id": "T430-messages-docs",
+     "summary": "No guard message changes; the module's and gate_refusal's doc comments restated",
+     "class": "within",
+     "why": "Keeps the existing refusal text and escape (GATE_WRITE_OK, D13); the doc restatement records the changed behavior."
+    },
+    {
+     "id": "T430-cost",
+     "summary": "One more command walk per Bash call per other gated tree, no process unless a path lands there",
+     "class": "within",
+     "why": "Implementation cost of the fix, stated and bounded; not a scope decision."
+    },
+    {
+     "id": "T430-tests",
+     "summary": "Flip the pinned let-through Write of a_commit_sent_into_a_gated_tree_from_another_is_held to held; new a_write_sent_into_a_gated_tree_from_another_is_held; 3 shell-suite cases; red on the old code first",
+     "class": "within",
+     "why": "Tests that only enforce the fix (red-first per FR-012's practice and constitution); enforcement of what was asked, not unrequested scope."
+    },
+    {
+     "id": "T430-order",
+     "summary": "After T406, before T307's tick, as T406's Found and left orders it",
+     "class": "within",
+     "why": "Ordering of a known defect's fix before the dependent tick, consistent with fixing known defects before moving on."
+    },
+    {
+     "id": "T430-perf-tag",
+     "summary": "Tagged performance work (FR-013) by its effect on landings: a voided gate owes the whole make done again (about ten minutes, labeled)",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the landings faster; preventing a voided gate's rerun does that. A scheduling classification, it narrows nothing."
+    },
+    {
+     "id": "T430-found-left",
+     "summary": "Found and left: none",
+     "class": "within",
+     "why": "No defect deferred."
+    },
+    {
+     "id": "T430-removed-placeholder",
+     "summary": "The template heading `### T430 (<why: ...>)` removed, replaced by the filled heading block",
+     "class": "within",
+     "why": "The removed block was an unfilled task-add template; its content now lives in the filled T430 block. Nothing of substance is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T430 (found by 451 T406 by reading, no firing observed: an Edit, a Write or a shell write INTO a gated tree from a session standing in another tree was not held - `gate_refusal` judged a file tool, and `shell_write` was reached, only where `c.own`, the tree the hook's process stands in (read 2026-11-27 from `rust/guard/src/guards/gate_write_hooks.rs`); the coordinating session wrote the clone twice while its gate ran on the night of 2026-11-26/27, seen only because it stood IN the clone (observed 2026-11-27, method: the coordinating session's report in T430's brief))",
+    "### T430 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T430-1",
+     "summary": "File tools (Edit, Write, NotebookEdit) judged in every gated tree by where the file lands: gate_refusal drops `&& c.own`, relying on relative_in(&c.top, file) to answer None outside that tree.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (feature 385 D13's guard let a write void a running gate when the writing session stood in another tree; FR-004's end-hash then refuses green and the whole make done is owed again). The request's parallel-builder work (the GM 2026-11-25/26/27: several builders at once, 'synchronization rather than pre-emptively limiting builders') is what makes cross-tree writes happen; holding a write that would void the gate is D13's purpose applied to the case it missed, not new scope. Fix-as-we-go: a known defect fixed in its step."
+    },
+    {
+     "id": "T430-2",
+     "summary": "The `if !c.own { return None; }` before shell_write is removed, so a shell write the walk places under another gated tree's top is held there (T406's positive-placement rule, extended from a commit to an Edit and a shell write).",
+     "class": "within",
+     "why": "Same defect, same purpose as T430-1, for shell writes; uses the existing `seen` placement test, so it refuses only writes positively placed in the running gate's tree. No refusal beyond the thing D13 exists to stop."
+    },
+    {
+     "id": "T430-3",
+     "summary": "A shell write the walk cannot place is held in the hook process's own tree alone (stands_here's fail-closed split unchanged); in another gated tree it passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's own goal carves this case out of 'no write lands in a running gate's tree from any session'. Applying the rule literally - holding every unplaceable write (a `$VAR` target, say) in every tree while any gate anywhere runs - would refuse good work in every builder's tree whenever any one gate ran, which defeats the request's stated purpose (the GM 2026-11-26: synchronization rather than limiting builders; 2026-11-26 on coverage: 'Our goal is to maximize task throughput'), and a check that refuses good work is itself a defect under the project's rule. The residual is not a silent wrong outcome: FR-004's end-of-gate hash still refuses green on any tracked file that moved. The case is one class (writes whose landing place is unknown), so one argument covers it. It is also T406's existing rule, kept, not a new carve-out."
+    },
+    {
+     "id": "T430-4",
+     "summary": "A Write under the gated tree's `.git` (a handoff file) is let through; a tree whose `l7r-gate preflight --tree-check` answers unseen lets writes through.",
+     "class": "within",
+     "why": "Both are what the gate already does not see: D13 refuses only what moves 'what the gate's end checks' (HEAD and `git diff --name-only HEAD`), and names `.git/`-only writes as not refused. Unchanged behavior, consistent with the request."
+    },
+    {
+     "id": "T430-5",
+     "summary": "A write from the gated tree into an ungated pool tree passes (T307's rule kept); no guard message changes; escape GATE_WRITE_OK kept.",
+     "class": "within",
+     "why": "Keeps existing, requested behavior (D13's escape; another tree's write is not this gate's). Nothing narrowed."
+    },
+    {
+     "id": "T430-6",
+     "summary": "Cost accepted: one more walk of a Bash command per other gated tree while it runs.",
+     "class": "within",
+     "why": "A cost note, not a scope decision; no process is spawned unless a path lands in that tree."
+    },
+    {
+     "id": "T430-7",
+     "summary": "Tests: the pinned let-through Write of a_commit_sent_into_a_gated_tree_from_another_is_held flipped to held; new a_write_sent_into_a_gated_tree_from_another_is_held; 3 cases in tests/hooks/test-gate-write-hooks.sh; red first on the old code.",
+     "class": "within",
+     "why": "Enforcement of the fix: each test fails only when the held-write behavior is absent, and the let-through cases pin that good work is not refused. Not unrequested scope (GM 2026-09-20). Figures carry dates and methods."
+    },
+    {
+     "id": "T430-8",
+     "summary": "Ordered after T406 and before T307's tick; tagged [perf] under FR-013 because a voided gate owes the whole make done again (about ten minutes, labeled as the brief's figure).",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the landings faster; preventing a voided gate removes a full rerun from the landing. Scheduling and order only; no requirement narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T431 (found 2026-11-27: `make builder-brief` refused T369's brief as a new mechanism, `make -`, passed only by SIZING_OK)",
+    "### T431 Approach (checklist part A)",
+    "### T432 (found by 451 T413, 2026-11-27, by reading: a landing ruled ready exempted every feature's hold at the push)",
+    "### T432 Approach (checklist part A)",
+    "(removed) ### T431 (<why: the finding or measurement that files it>)",
+    "(removed) ### T432 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T431-D1",
+     "summary": "mechanism() reads a make word as a target only when it does not open with '-'; a flag is never read past, so in `make -C <tree> <target>` the target behind -C is never read, and that miss (a new target written behind a flag) is added to the function's MISSES list",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The fix stops the refusal of correct work, as T431's line asks, but it does so by leaving the sizing check blind on `make -C <tree> <target>`. That is the form both of the block's own fixture lines (T369, T437) use, and the form this project's pool-tree commands take. So a brief whose line names a NEW target as `make -C <tree> new-thing` is now sized as one builder with nothing refusing. That is a check passing bad work, a defect by constitution XIV, on the sizing rule the GM asked the tooling to enforce (T334: the coordinating session broke builder-brief.md's sizing rules 'with nothing refusing'; 2026-11-19: 'make sure all of the enforcement is real enforcement and not just instructions'). None of the three grounds holds. Reading past a flag's argument is not impossible: only a short, documented set of make flags take one (-C, -f, -I, -o, -W and their long forms, with or without '='). The reason given ('would need make's flag grammar', 'the algorithmically easier route') is implementation cost, which is not a ground. The simpler-route rule picks between routes that both work, not a route that knowingly leaves a check passing bad work. The block also names the miss and then writes 'Found and left? none'. A known defect left unfixed goes in Found-and-left with its reason, a filed task and its order (FR-009, and the form T432's block uses for T479), not in a MISSES comment. Remedy: read past the argument of the flags that take one (at least -C/--directory), with a red-first case for `make -C <tree> new-thing` refused as a new mechanism; or else record the miss under Found and left as a deferral with a filed task and 'lands before ...'."
+    },
+    {
+     "id": "T431-shared",
+     "summary": "the gate's builder_brief.rs and the builders' queue (an unlisted task's KIND) both call the one mechanism function, so both read the fix the same way",
+     "class": "within",
+     "why": "One function serving two callers; no new behavior beyond the fix itself."
+    },
+    {
+     "id": "T432-D1",
+     "summary": "holding_with applies the L7R_LAND_READY exemption only where SPECIFY_FEATURE (already exported by make land) equals the asked directory's name; unset or another feature exempts nothing (fails closed)",
+     "class": "within",
+     "why": "It restores the push's in-progress rule (feature 133) for every feature but the one being landed, which is what T432's finding asks. It reuses an existing variable, and failing closed only tightens the hold."
+    },
+    {
+     "id": "T432-D2",
+     "summary": "the first pass's (parity.rs others_in_progress) self.ready early return is removed, and T413's pinned test is renamed and inverted so the first pass asks every other feature under a ready ruling, as the push now does",
+     "class": "within",
+     "why": "It keeps the standing rule that the first pass refuses what the push refuses (451 T307, T413). The test it inverts pinned the gap being fixed."
+    },
+    {
+     "id": "T432-sync-suite",
+     "summary": "the sync suite's ready case names its feature, and a new case under another feature's SPECIFY_FEATURE is refused",
+     "class": "within",
+     "why": "A test that enforces the fix; it adds no behavior."
+    },
+    {
+     "id": "T432-found-and-left",
+     "summary": "L7R_LAND_TICKS is equally unscoped (a landing of 449's T5 un-holds 451's started T5); not fixed here, filed as T479, lands before T415",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It defers a known defect, but in the form the feature requires (FR-009): its reason (a second job past the brief's one-job sizing, with its own red-first case), a filed task (T479) and its order (before T415, and T432's item 5 orders it after this). It stays inside feature 451's pre-port tasking, so it is fixed in this step, before the port resumes."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "the two removed blocks are the unfilled template headings of T431 and T432, replaced by the filled sections above",
+     "class": "within",
+     "why": "The removed text is template placeholders only; nothing decided is lost."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T431 (found 2026-11-27: `make builder-brief` refused T369's brief as a new mechanism, `make -`, passed only by SIZING_OK)",
+    "### T431 Approach (checklist part A)",
+    "### T432 (found by 451 T413, 2026-11-27, by reading: a landing ruled ready exempted every feature's hold at the push)",
+    "### T432 Approach (checklist part A)",
+    "(removed) ### T431 (<why: the finding or measurement that files it>)",
+    "(removed) ### T432 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T431-D1",
+     "summary": "builder-brief's mechanism test reads the first word past make's flags as the target, skipping the argument of -C/-f/-I/-o/-W and their long forms; one shared function serves the gate's brief check and the builders' queue",
+     "class": "within",
+     "why": "Fixes a check that refused correct work (T369's `make -C <tree> task-unstart` refused as `make -`, red on the old code) and restores what round 1 dropped and was BLOCKED for: a new target written behind `make -C <tree>` is still refused, pinned by the positive case red on round 1's code. What the sizing rule (a new mechanism is two builders) is for is kept for the forms the block pins (-C, --directory, -f, -j, -s, attached arguments); FLAG_ARGS is a closed list, and a spaced argument to an unlisted flag in a task line is hypothetical, not a known defect."
+    },
+    {
+     "id": "T431-approach",
+     "summary": "checklist part A: goal, constraints (no guard message changes, red-first, 100% line coverage), exits, budget one landing, nothing found and left",
+     "class": "within",
+     "why": "Restates the task's goal and the project's standing constraints; decides nothing the request or spec leaves open."
+    },
+    {
+     "id": "T432-D1",
+     "summary": "the L7R_LAND_READY exemption in holding_with applies only to the directory SPECIFY_FEATURE names (exported by make land already); unset or another feature exempts nothing, failing closed",
+     "class": "within",
+     "why": "Fixes a hold that let another feature's started task reach main under a ready ruling (feature 133's in-progress rule). Scopes the exemption to the landed feature, which is what the ready rule was for; adds no knob or variable. These T432 blocks are byte-identical to the text last judged BLOCKED; that verdict was the bundle's, given for T431-D1 (the T431 block says the plan review blocked round 1's no-word-past-a-flag rule), and the bundle cites no ruling against T432, so the verdict changes with T431-D1's fix, not with any T432 change."
+    },
+    {
+     "id": "T432-D2",
+     "summary": "the first pass's others_in_progress drops its self.ready early return, so it asks every other feature as the push now does; its test inverted and renamed",
+     "class": "within",
+     "why": "Keeps the first pass refusing what the push refuses (451 T307 part 2, T413) after D1; removing a mirror of the defect, not new behavior."
+    },
+    {
+     "id": "T432-sync-suite",
+     "summary": "the sync suite's ready case names its feature, and a new case under another feature's SPECIFY_FEATURE is refused",
+     "class": "within",
+     "why": "Tests that pin the requested hold: the ready case scoped to its feature, and the other feature's case refused (rc 1) with the fix. The block says the new case was not run on the old code, so its red-first is not shown; the refusal is shown red-first at unit level (the speckit assertions and the inverted push_parity test, each red on the old code). Enforcement of the fix, not added scope."
+    },
+    {
+     "id": "T432-found-and-left-T479",
+     "summary": "L7R_LAND_TICKS is as unscoped as L7R_LAND_READY was (a landed tick's id un-holds a started task of the same id in every feature); left from T432, filed as T479, ordered after T432 and before T415",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a hold gap: a landed tick's id un-holds a same-id started task in another feature) left out of this task, so presumed wrong. Legitimate because the GM-approved improvements make fixing in the task a DEFAULT ('Briefs that default to fixing in the task', improvement 4, approved 2026-11-19), and the accepted spec's FR-009 implements that default with its exception: a deferred defect states why it is not fixed here, its filed task id and its order. All three are stated (past this brief's two jobs under builder-brief SIZING, with its own red-first case; T479; after T432 and 'lands before T415'), and T479 is filed in this same feature, so the defect is scheduled, not dropped. It does not gut T432's purpose: the ready ruling's cross-feature exemption, the gap T413 found, is closed by D1 regardless."
+    },
+    {
+     "id": "removed-placeholders",
+     "summary": "the empty T431 and T432 template blocks removed",
+     "class": "within",
+     "why": "Unfilled templates replaced by the filled sections; nothing of what was asked is removed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T433 (found by T427, 2026-11-27: the shared walk read no write in `tail -n 0 x >& rust/a.rs` or `>&rust/a.rs`, so no walk reader saw it)",
+    "### T433 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T433-D1",
+     "summary": "REDIRECT reads >& (with or without a space) as a write of the word after it",
+     "class": "within",
+     "why": "Fixes a guard gap (a write no walk reader saw), a check passing bad work and so a defect under fix-as-we-go; serves the GM's 2026-11-19 'make sure all of the enforcement is real enforcement and not just instructions'. Bash behavior measured, red-first test recorded. Narrows nothing asked."
+    },
+    {
+     "id": "T433-D2",
+     "summary": "An fd is a whole word: DUP_FD takes '>& 2', '>&-' closes what follows, '>&2.log' kept as a file, read in code not a lookahead",
+     "class": "within",
+     "why": "Keeps D1 from reading fds as files and fixes the earlier miscut of >&2.log, each case matched to bash as measured 2026-11-27. Implementation of the fix, no narrowing."
+    },
+    {
+     "id": "T433-D3",
+     "summary": "/dev/null by every spelling (>&, &>, &>>) is no write",
+     "class": "within",
+     "why": "Prevents D1 from creating a false write target that would make readers refuse good work; matches bash and the existing '> /dev/null' treatment."
+    },
+    {
+     "id": "T433-D4",
+     "summary": "&> stays in its command's segment in split.rs; make-only's statement pairing reads it the same way",
+     "class": "within",
+     "why": "Places the write where bash does (after a cd, T436's case); the make-only change only keeps an existing test's verdict under the new split, so no guard verdict the GM asked for moves."
+    },
+    {
+     "id": "T433-D5",
+     "summary": ">&$NAME read as a file write (the walk cannot tell a variable fd from a name); 2>&g2 likewise read as a write",
+     "class": "within",
+     "why": "The safe side for a guard (a possible write is seen, not missed); measured 0 invocations of >&$NAME over the week's 73,482 Bash calls, so no wrong outcome is observed and nothing asked is left unenforced."
+    },
+    {
+     "id": "T433-file-scale",
+     "summary": "The redirect reading moves to tree/redirect.rs to bring tree.rs under the file-scale limit",
+     "class": "within",
+     "why": "Code organisation to satisfy an existing check; changes no behavior asked for."
+    },
+    {
+     "id": "T433-found-and-left",
+     "summary": "The band's whole-command refusal of any leftover >& (and of a cd with a redirect) is now a stopgap that refuses good /tmp writes; left, filed as T460, lands before T420",
+     "class": "within",
+     "why": "The section fixes the walk the GM's enforcement rests on and does not carry the band's over-refusal past the step: it states why it is not fixed here (it changes the band's verdicts, beyond the brief's no-message-change), names its filed task and its order (lands before T420), as FR-009 requires of a deferral. It is scheduled within the feature before the next dependent task rather than left, so it narrows nothing the request or spec asked of this task."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T434 (found by T341, 2026-11-27: after a real rebuild of `l7r-rust` the views cache was thrown away whole and all 1,504 Rust files read and hashed again, 1.9 s at load 12, measured 2026-11-27 (step lines, `dev/measurements/2026-11-27/checks-start/`))",
+    "### T434 Approach (checklist part A)",
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)",
+    "(removed) ### T434 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T434 stamp = hash of the views code",
+     "summary": "The views cache is keyed by code::stamp(): sha256 of each SOURCES file's path, length and text (kept/code.rs, shared sha256.rs) plus char::UNICODE_VERSION; the binary's identity (this_binary, size, time, content) leaves the key; View's private fields force construction through View::of/parse.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the GM 2026-11-20, 'prioritize performance improvements'): it removes a 1.9 s full recompute after a rebuild of l7r-rust while keeping the brief's constraint that a stale view after a change to its computation is impossible - every input that shapes a kept line is in the hash. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T434 compiled-in paths read by hand, not by regex",
+     "summary": "include_at parses the old include!/include_str!/include_bytes! pattern by hand so the hashed set does not reach fancy_regex, l7r_shared::regex, Cargo.lock or crate features; same paths as the regex over every tracked .rs file (1,521 files, 44 paths, measured 2026-11-27), pinned by a_compiled_in_path_is_read_as_the_pattern_read_it.",
+     "class": "within",
+     "why": "An implementation choice that keeps the stamp's hashed set closed; the behavior is shown to work (same paths) and nothing asked for is left out."
+    },
+    {
+     "id": "T434 reach test",
+     "summary": "the_views_reach_nothing_outside_their_hashed_sources fails when the views code reaches any function, macro, derive, module, cfg or compiled-in file outside SOURCES; each rule proved on a fixture; mutation check recorded.",
+     "class": "within",
+     "why": "Enforcement of the task's own no-stale-view constraint, which the stamp's correctness depends on; a test that fails only when that guarantee is broken serves what was asked and is not new behavior."
+    },
+    {
+     "id": "T434 T341's test restated",
+     "summary": "T341's last step (a rebuilt binary keeps nothing) becomes a_rebuilt_binary_keeps_its_views_and_a_moved_views_code_does_not.",
+     "class": "within",
+     "why": "T341's pinned step was that task's mechanism for freshness, not anything the GM asked for; the freshness property is kept (a moved views code throws the cache away whole) and only the over-conservative key is dropped, which is the performance work itself."
+    },
+    {
+     "id": "T434 step table and no checklist",
+     "summary": "Step table: fresh block vs HEAD 'n/a: tooling', pool manifests moved and last resort 'none'; a [perf] task that is not engine-speed, so no performance checklist.",
+     "class": "within",
+     "why": "Classification of the task's own reach under the feature's process; it leaves out nothing the GM asked for."
+    },
+    {
+     "id": "T434 Unicode version stands for the std tables",
+     "summary": "char::UNICODE_VERSION is in the stamp in place of the std tables that chars, is_alphanumeric, is_whitespace and trim_end read.",
+     "class": "within",
+     "why": "A scoping choice of what the key covers, made to keep the freshness constraint; whether the proxy suffices is design, not fidelity."
+    },
+    {
+     "id": "T434 order and exits",
+     "summary": "After T341 (landed), before T365; green is the same edit's run spending no time on views (0.012 s vs 1.939 s, measured 2026-11-27); Found and left: none.",
+     "class": "within",
+     "why": "Ordering and an exit inside the feature's process; it carries no known defect forward."
+    },
+    {
+     "id": "T443, T449 template blocks",
+     "summary": "Both tasks' blocks are the unfilled template.",
+     "class": "within",
+     "why": "A placeholder decides nothing."
+    },
+    {
+     "id": "removed T311, T392, T434 template blocks",
+     "summary": "Three unfilled template blocks removed; T434's is replaced by its filled section above.",
+     "class": "within",
+     "why": "Their earlier text held no decision, so removing them narrows nothing; T434's content now stands under its full heading."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T435 (<why: the finding or measurement that files it>)",
+    "### T435 Approach (checklist part A)",
+    "### T438 (<why: the finding or measurement that files it>)",
+    "### T438 Approach (checklist part A)",
+    "### T441 (<why: the finding or measurement that files it>)",
+    "### T441 Approach (checklist part A)",
+    "### T442 (<why: the finding or measurement that files it>)",
+    "### T442 Approach (checklist part A)",
+    "(removed) ### T275 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 (<why: the finding or measurement that files it>)",
+    "(removed) ### T427 Approach (checklist part A)",
+    "(removed) ### T428 (<why: the finding or measurement that files it>)",
+    "(removed) ### T428 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "removal of T275/T427/T428 blocks",
+     "summary": "Five blocks removed by hand; their earlier text (each CLEAR) was the unfilled section template - placeholders only, no approach, no figure, no Found-and-left item.",
+     "class": "within",
+     "why": "Removing a block that held no decision removes no decision and narrows nothing the request or spec asked for; whether those tasks are done or dropped is tasks.md's record, not this plan text."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T435 (T342's build, filed by its measurement `dev/measurements/2026-11-27/test-selection/results.md`: 476 pool `rust-test` runs spent 2,303 s of test wall in 11.6 h, a change reaching 14% of a crate's tests by module, an estimated 13.8 to 32.4 builder-minutes saved in that window by running only those while iterating, measured 2026-11-27 (T342's record, sections 1, 2 and 4))",
+    "### T435 Approach (checklist part A)",
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)",
+    "(removed) ### T435 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T435-filtered-no-green",
+     "summary": "A run under ONLY= writes no kept result and no binary-<crate> passed line (keep_green returns early); it may read a whole green that stands on the same code.",
+     "class": "within",
+     "why": "The task line's own clause ('a part of a suite is no green for the crate') and T342's DECISION that builder-checks stays the whole crate; it enforces that the iteration shortcut cannot stand in for the whole run the two-tier process keeps. Reading a standing whole green is no narrowing: the part is contained in the whole that passed on this code."
+    },
+    {
+     "id": "T435-zero-match-red",
+     "summary": "A filter that runs no test of a named crate fails that crate, naming the fix.",
+     "class": "within",
+     "why": "Makes the requested filter honest (libtest exits 0 on zero matches, so a mistyped module would read as a pass); it narrows nothing the request or FR-013 asks, and only refuses a run that tested nothing."
+    },
+    {
+     "id": "T435-only-without-crate-refused",
+     "summary": "ONLY= with no CRATE= is refused at parse, exit 2, with the command to run (make rust-test CRATE=<dir> ONLY=...).",
+     "class": "within",
+     "why": "What was asked (T342's measurement, the request's improvement 2 'a crate-scoped check while iterating', FR-013's builders' loop) is a builder running the tests a change reaches in the crate it is iterating on; the crated form carries that whole. The uncrated form names no use in the handoff and, under the zero-match rule, fails on any crate the filter misses; refusing it with the crated command removes no requested capability."
+    },
+    {
+     "id": "T435-only-test-takes-flag",
+     "summary": "Only `test` accepts --only; test-counters, cover, lint and the rest refuse it with the usage; a word opening '-' is refused.",
+     "class": "within",
+     "why": "The request's improvement 2 and T342 concern the iteration test run; the counters, coverage and lint keep results a part would stand in for (the same no-green purpose), test-times already isolates each test, and a leading '-' would be read by libtest as its own flag. Nothing the GM asked for is withheld."
+    },
+    {
+     "id": "T435-args-not-env",
+     "summary": "The filter is read from the arguments alone; only make rust-test's recipe hands ONLY= on, so make builder-checks ONLY=x is not filtered silently.",
+     "class": "within",
+     "why": "Keeps builder-checks and the gate whole (T342's DECISION, the two tiers), which is the no-green purpose; an implementation convention that narrows nothing asked."
+    },
+    {
+     "id": "T435-phase-line-marked",
+     "summary": "The filtered test Phase line carries \"only\": \"<words>\"; build lines are not marked.",
+     "class": "within",
+     "why": "The task line asks the Phase line marked; the GM's 2026-11-22 'we want everything measured so we know where our time goes' is served by telling a part's run from a crate's. The build is the same build a whole run makes, so leaving it unmarked misstates nothing."
+    },
+    {
+     "id": "T435-where-time-moves",
+     "summary": "The saving is in builders' iteration runs alone; builder-checks and the batch gate stay whole, so no test time moves to the gate; the brief's TWO TIERS bullet says to use ONLY= while iterating.",
+     "class": "within",
+     "why": "Matches the request's improvement 2 verbatim in shape ('a crate-scoped check while iterating, with make static once at the end') and the GM's two-tier rulings of 2026-11-26; the brief line is the task line's 'said in scripts/container/builder-brief.md'."
+    },
+    {
+     "id": "T435-approach-checklist",
+     "summary": "Part A filled: goal, constraints (FR-013, T342's DECISION, the task line, kept-result rule), order after T342 with T445 landing first, exits, done measured, found and left none, [perf].",
+     "class": "within",
+     "why": "Restates the decisions above and their measurements (each dated with its method, t435-filtered.txt); it decides nothing further and leaves no defect."
+    },
+    {
+     "id": "T443-T449-templates",
+     "summary": "T443 and T449 sections and Part A checklists added as unfilled templates.",
+     "class": "within",
+     "why": "Placeholders only; they make no decision."
+    },
+    {
+     "id": "removed-T311-T392-T435-templates",
+     "summary": "The unfilled template sections of T311, T392 and T435 removed (T435's replaced by its filled heading above).",
+     "class": "within",
+     "why": "Each removed block was an empty template when last judged CLEAR (earlier.md); removing it drops no decision and narrows nothing."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T425 to T435, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

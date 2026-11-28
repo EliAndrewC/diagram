@@ -1,0 +1,764 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T89": {
+   "section_sha256": "a7f4fdfe2fae91056bf0ef47c942ca50b66d9feda76d2ea93685e744cbd56b16",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "binding",
+     "summary": "A -c program's sys.argv[N] in a write is read as the command's N-th word after the program, placed as the walk places a word (py_c::argv_word); anything the binding cannot read keeps HEAD's reading (feature 204 D5).",
+     "class": "within",
+     "why": "This is T89 as filed (a -c program writing a place it computes from sys.argv judged as writing where the shell stands); the fallback to D5 keeps the accepted rule for every program it cannot read."
+    },
+    {
+     "id": "argv_writes",
+     "summary": "Writes through sys.argv[N] (open with a non-read mode, chained .write/.writelines, json.dump into that open) are read past and the rest must pass only_reads; argv must be plain sys.argv[N] reads and sys the imported module.",
+     "class": "within",
+     "why": "The mechanism of the fix; reads/only_reads unchanged in what they judge, and any other argv use falls back to HEAD's reading."
+    },
+    {
+     "id": "argv_inlined",
+     "summary": "A name bound once to sys.argv[N] and mentioned otherwise only as an open's path is read as sys.argv[N] (bx#58999); any other mention keeps HEAD's reading.",
+     "class": "within",
+     "why": "The review ruled bx#58999's -c form inside T89's own description (a program that writes a place it computes from sys.argv); it widens the fix toward the filed task, not away from it."
+    },
+    {
+     "id": "placement-tree-hunk",
+     "summary": "argv_places called from one hunk of writes_in's -c branch in tree.rs, outside the brief's file list: the bound program a READ where it stands plus a write of each word at path_write's place; a Known::Nothing place keeps HEAD's reading (feature 204 D6).",
+     "class": "within",
+     "why": "The -c write is pushed and path_write lives in tree.rs, so the fix cannot be placed elsewhere; the hunk is named and kept clear of T129's ASSIGN/sanitize hunks, and the unknown case keeps the accepted D6 rule."
+    },
+    {
+     "id": "may_split-option-A",
+     "summary": "A loop's or a read's value before the argv word (which bash may split; the walk holds quoted words without quotes and a loop value's blank as _) ends the count, so ux#2209 and bx#54240 (quoted \"$f\") and bx#58694 (bare $f, no blank in its matches) stay refused as at HEAD; the fuller fix is filed as T140, waits for T129, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T89 (three of its corpus scratch writes stay refused). The measured alternative (fix2) passed real writes of the mirror through split loop values (/tmp/t89/b2 p3,p4), so the narrowing removes a verdict worse than HEAD's - applying the rule literally with the current walk would defeat the guard's own purpose. Telling \"$f\" from $f needs the walk to carry quote state (tree/bind.rs, another task's file); the defect left is HEAD's existing over-refusal, not a new one, and the deferral carries its reason, its filed id (T140) and its order (before T22), as FR-009 requires, so no known defect is carried past the next step."
+    },
+    {
+     "id": "stdin-deferral-T137",
+     "summary": "A stdin program writing through a name bound to sys.argv[N] (bx#52396) keeps HEAD's reading; filed as T137, lands before T22; argv_inlined stands alone so the stdin arm can call it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T89 is filed for a python3 -c program; the stdin route is a different arm of the walk outside this task's files, so the case is adjacent rather than T89's own. It is filed with its reason, id and order before T22 (FR-009), the shared function is built so the fix is a call, and the earlier review ruled the same deferral legitimate."
+    },
+    {
+     "id": "exits-budget-order",
+     "summary": "Green/red exits, one landing, ordering after T79/T83/T87, beside T129 and T118 (T129 first, alone), before T125 and the filed tasks.",
+     "class": "within",
+     "why": "Sequencing and exit conditions that decide nothing the request or the task leaves open."
+    },
+    {
+     "id": "not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A guard-verdict correctness fix, neither a performance improvement nor a measurement task in FR-013's sense."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T90": {
+   "section_sha256": "2c4750b9c143d3750b59bc3d5129347574997a54e6301477c50f665152be32fd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T90 the task",
+     "summary": "Fix gate-write refusing a make behind more than 120 characters of VAR=value prefixes as a shell write of '.' while a gate runs.",
+     "class": "within",
+     "why": "A guard of this feature (451 T33's shell-write rule, T79's wrappers) refusing correct work is a defect - a check that refuses good work (constitution XIV) - and fix-as-we-go (GM 2026-11-18) owes its fix; the refusal is shown by the red test of 2026-11-22. Serves the request's 'real enforcement' clause (2026-11-19 approval) by keeping the enforcement from refusing compliant work."
+    },
+    {
+     "id": "Approach: Target.head via command_head",
+     "summary": "The walk's Target gains a head field, written from the same shown text as segment: leading VAR=value words dropped (also among HEAD_WRAPPERS and timeout, whose duration is kept), the rest kept, cut at 120 characters.",
+     "class": "within",
+     "why": "The mechanism of the fix; it reaches the stated case (the 120-character cut now falls after the prefixes, so the make is seen) and the red test pins it. Implementation choice, no part of what was asked is narrowed."
+    },
+    {
+     "id": "Approach: segment unchanged",
+     "summary": "segment keeps its present text and 120-character cut for every other reader and every message.",
+     "class": "within",
+     "why": "Leaves other behavior as it is; nothing the GM asked for is removed. The block names no other reader that derives a command head from segment, and 'Found and left? none' states no known defect is carried; if another reader shares the truncation it would be a separate defect to file, not a narrowing of this plan."
+    },
+    {
+     "id": "Approach: head_of reads t.head",
+     "summary": "gate-write's head_of reads t.head and skips only the wrappers, the = words being gone.",
+     "class": "within",
+     "why": "Completes the fix in the one reader the defect was found in; the refusals of real shell writes behind long prefixes (cp, git apply behind 130) are kept by the table's pinned cases, so the shell-write rule is not weakened."
+    },
+    {
+     "id": "Approach part A item 5: order after T118",
+     "summary": "Sequenced after T118 (landed), which last moved tree.rs and gate-write.",
+     "class": "within",
+     "why": "Scheduling, no scope effect."
+    },
+    {
+     "id": "Approach part A item 6: exits",
+     "summary": "Green on the guard crate's rust-test, cover, lint, format and gate-write's hook suite; red recorded and a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Verification of the requested enforcement and the standing 100% line coverage rule; no unrequested verification."
+    },
+    {
+     "id": "Approach part A item 10: 120-character cut stays",
+     "summary": "The 120-character constant is not moved; head takes the same cut after the prefixes.",
+     "class": "within",
+     "why": "Keeps an existing constant; the defect is fixed without it, so nothing defective is left."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T91": {
+   "section_sha256": "24d2625f3778e6a00aa2fa3359e19aa39f9fec262d6c79fb2da208dd04f58568",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a) Bound::Straight",
+     "summary": "A name assigned more than once in straight-line code is one binding: each bare assignment renamed, each read bound to the last assignment before it, a read before any assignment the environment's value or empty.",
+     "class": "within",
+     "why": "This is what T91's line asks for (a straight-line reassignment reads its last value). It is a fix of a check refusing good work, which constitution XIV and the fix-as-we-go rule ask to be fixed."
+    },
+    {
+     "id": "D-a (&&, ||, branch, loop, function, source)",
+     "summary": "A read whose last assignment follows && or ||, or that stands after a branch, a loop, a function or a source, keeps HEAD's reading at each value. Widening the rule to && was priced and not taken.",
+     "class": "within",
+     "why": "None of these is straight-line code, which is what T91's line names. An assignment after && or || may not run, so the read may see the earlier value, and judging each value is the correct answer there, not an over-refusal. No mirror refusal is lost. The moved pin's && form agrees: its last assignment follows a ;."
+    },
+    {
+     "id": "D-a (opaque forms in the stretch, filed as T145)",
+     "summary": "A backtick, $(, brace group, comment or ${X:-$(...)} between the last assignment and the read keeps HEAD's reading at each value, so a scratch write that bash makes is still refused there. Filed as T145, which lands before T140.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T91's line, because these commands are straight-line code and the leftover over-refusal is a defect (a check refusing good work). The plan's stated reason, that bind.rs's flat scanner would need to parse substitution bodies, comments and brace groups, is a cost and does not make it legitimate by itself. What does is this: the defect is not dropped but sequenced, filed as T145 to land before T140, the task that waits on T91. So no known defect is carried into the next step, which is what fix-as-we-go asks. The GM's own words of 2026-11-22 are that tasks keep being filed at the current rate and are bundled when fixed, so filing a sibling task departs from no instruction. The deferral also carries FR-009's why, id and order. T91's purpose is met: ordinary straight reassignments are read as bash reads them. The exception errs only toward HEAD's refusal, and the either-end pin holds it there."
+    },
+    {
+     "id": "(a) default/assign ops excluded",
+     "summary": "A name read through ${D:=W}, ${D:-W} or ${D-W} is not taken as Straight and falls back to HEAD's reading at each value (added on T91's first plan review).",
+     "class": "within",
+     "why": "This prevents a regression the first cut introduced: a mirror write read as elsewhere. Keeping a mirror value at either end refused is in T91's line, and the exclusion only returns a name to HEAD's reading."
+    },
+    {
+     "id": "(b) / D-b MAX_VALUES = 128",
+     "summary": "The single many-valued name of a command is judged value by value up to 128 values. Past 128 it falls back to T79's unknown reading.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T91's line asks that a lone loop past the 64 cap be judged value by value, and the plan bounds that at 128. Some bound is physically required, because a guard that runs on every Bash call has to finish in bounded time: measured, 128 values cost 44.7 ms and 256 cost 171 ms (2026-11-22, T83's timer). The fallback is the conservative one (refuse, never under-refuse). The measured corpora hold no lone loop past 64 at all, so the bound defeats no case the purpose covers. The constant is labeled a CONVENTION."
+    },
+    {
+     "id": "D-b products of names",
+     "summary": "A command with several many-valued names keeps MAX_BINDINGS = 64 and T79's unknown reading, unchanged.",
+     "class": "within",
+     "why": "T91's line names a lone loop. Products of names are outside it, and the plan leaves them exactly as HEAD has them."
+    },
+    {
+     "id": "D-b gate-write's 7 product refusals not judged",
+     "summary": "Whether gate-write's 7 refusals of over-cap product rows are right is left unjudged.",
+     "class": "within",
+     "why": "These rows are outside T91's line and unchanged from HEAD. No defect is established, so nothing is being deferred."
+    },
+    {
+     "id": "(b) dedup and bindings skip",
+     "summary": "Loop values are deduplicated by text, and bindings skips a name already bound.",
+     "class": "within",
+     "why": "These are mechanics of (b), and they change no verdict in the replay."
+    },
+    {
+     "id": "moved pin (WT=$PWD case)",
+     "summary": "The && form of a_name_assigned_from_pwd_is_where_the_shell_stands_then now reads elsewhere, as bash writes it. Its ; variant keeps clone and elsewhere.",
+     "class": "within",
+     "why": "This is a correction that follows directly from (a): bash writes there."
+    },
+    {
+     "id": "Found and left: T144 (${D:-W} and ${D:+W} default dropped)",
+     "summary": "A defect that predates T91 (T79): replaced() drops the :- and :+ operand, so a mirror write can be read as elsewhere. Filed as T144, which lands before T140.",
+     "class": "narrowing",
+     "why": "This is a defect left, and the more serious kind: a check passing bad work, because a mirror write can be read as elsewhere. It is ruled LEGITIMATE on the same ground as T145. It is not dropped: it is filed as T144 to land before T140, the next task that depends on this one, so it is not carried into the next step, and FR-009's why, id and order are all present. It predates T91 (it is T79's). T91's fix reads it exactly as HEAD does, because the default and assign ops are excluded from Straight, so T91 neither causes it nor makes it worse. Fixing it needs tree.rs's expand, which lies outside T91's bind rule. That last point is the plan's stated reason, not the ground for this ruling.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "Performance work? No",
+     "summary": "The task is classed as not performance work.",
+     "class": "within",
+     "why": "This is a guard correctness fix. The cost measurement shows no rise (0.06% fewer instructions on ux)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T92": {
+   "section_sha256": "e68eb0364bb5b1f34feb33adf934f9f0a33589316daf14b10bb07408a2f0ff07",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T92-D1-scope",
+     "summary": "An arbiter accept clears only the owed/BLOCKED blocks inside the sections of the tasks its trigger names (round trigger #<task>, or the ask subject's task ids via named_tasks), plus their removed blocks; a block outside every named span is not cleared. Scope is read from the trigger, never the question's prose.",
+     "class": "within",
+     "why": "A defect fix (fix as we go; constitution XIV's 'a check that passes bad work'): measured 2026-11-21, four accepts cleared 28, 10, 9 and 2 blocks outside the asked task's section, including T76's and T77's unreviewed changes. The rulings themselves scope the accept to the asked task ('This accept stands as the verdict of T79's plan review on the section as it reads now'; T67's and T33's likewise), and FR-043 keeps the verdict per block, so a task round's accept covering only that task's blocks implements what the arbiter ruled and narrows nothing the GM asked."
+    },
+    {
+     "id": "T92-D1-no-task-named",
+     "summary": "An accept whose trigger names no task (5 of 21 accepted plan asks, measured) clears the whole plan as before.",
+     "class": "within",
+     "why": "Keeps the existing behavior for asks whose subject was the plan (e.g. ask:420-plan-round3, whose ruling is 'The plan stands as it reads now'); the question was the plan, so the whole plan is its verdict's scope."
+    },
+    {
+     "id": "T92-D1-named-no-section",
+     "summary": "A named task with no section in plan.md or plan-done.md: the whole plan's scope, as plan decided (decision_refusal) reads such a task.",
+     "class": "within",
+     "why": "This is the one arm that keeps whole-plan clearing for a named task, and it is not the defect surviving. A task with no section anywhere has no blocks of its own, so its decisions can only be in the plan-stage blocks, and plan decided (decision_refusal) already reads it that way. For such a task the question put to the arbiter was the plan, so the accept's scope matches the question. The over-clearing the section fixes happened only where the named task HAD a section and blocks outside it were cleared too, and D1 ends that."
+    },
+    {
+     "id": "T92-D1-archived-section",
+     "summary": "A named task whose section is archived (plan-done.md only): nothing recorded, never the whole plan.",
+     "class": "within",
+     "why": "FR-044: no review reads plan-done.md and a removed section owes no review, so there is nothing to record; refusing to fall back to the whole plan prevents the over-clearing this task fixes."
+    },
+    {
+     "id": "T92-D1-convention",
+     "summary": "Labeled CONVENTION: the trigger is the scope source because its subject is already a machine-read id (the GM 2026-10-25, the algorithmically easier route where the record is silent).",
+     "class": "within",
+     "why": "A mechanism choice inside the fix, applying a standing GM rule; it decides no question the request or rulings settle differently."
+    },
+    {
+     "id": "T92-D2-task-verdict",
+     "summary": "Each named task's tasks.<id> is written CLEAR, declared round-arbiter, at its section digest, with the replaced reviewer entry kept as accepted_over; the tick, push, plan decided and T84's builder-stop guard read that one entry.",
+     "class": "within",
+     "why": "Feature 409 (an ask with REVIEW=plan stands as the plan review's verdict) and each cited ruling ('this accept is the plan review's verdict on T67's plan section') require the accept to BE the task verdict; measured 2026-11-21 the store held T33, T46, T67 and T79 BLOCKED though each landed on an accept - a gate reading wrong. Writing it fixes that defect."
+    },
+    {
+     "id": "T92-D3-output-and-batch",
+     "summary": "make arbiter-ruled names the scope, each heading recorded CLEAR and the task verdict; a batch's plan accept (BATCH=1) is applied as a single ruling's is.",
+     "class": "within",
+     "why": "The output change makes the fix visible where a bare count hid 28 blocks; the batch path recording a plan accept but never applying it is a found defect (observed 2026-11-21 by grep -rn arbiter_accept rust/), fixed here as fix-as-we-go requires."
+    },
+    {
+     "id": "T92-unreviewed-changes-ruled",
+     "summary": "The unreviewed changes the over-broad accepts cleared (T56 log path, T77 filing named, T76 make events-refile now takes FROM=) are ruled within and not re-reviewed, T76 being landed and archived.",
+     "class": "within",
+     "why": "This ruling is the reviewer's own, not the author's 'Ruled here', and it rests on the before/after fragments the section quotes, not on the blocks' full text, which the bundle does not carry. The section's counts check out (28 = 2 + T76's and T77's 2 + 24 templates; 10 = 2 + 1 + 7; 9 = 2 + 7). On those fragments: T56's log path and T77's naming its filed task are typo-scale. T76's change wires its own tool's FROM= argument into its own make target, which is within its task, narrows nothing and leaves no wrong outcome. T76's section is in plan-done.md, which FR-044 says no review reads."
+    },
+    {
+     "id": "T92-left-as-is",
+     "summary": "Left: task_refusal's deferral arm (the decide lint, a separate check), and the four stale BLOCKED entries in plan-review.json, not hand-edited.",
+     "class": "within",
+     "why": "Neither is a defect under constitution XIV: the deferral arm is a different check this task does not touch, and the four entries' sections are archived, so nothing that gates reads them (plan decided finds no section). No request clause asks for either."
+    },
+    {
+     "id": "T92-performance-class",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "T92 fixes plan-review record keeping: what an arbiter accept clears and writes. It neither saves time nor measures where time goes, so neither FR-013 nor the GM's 2026-11-20 widening to measurement work ('this kind of measurement task ... counted as a performance task') reaches it."
+    },
+    {
+     "id": "T92-order",
+     "summary": "Order: before T22, as its line says; beside T96 and T103, whose files it leaves.",
+     "class": "within",
+     "why": "Fix as we go: a known defect in the review gate is fixed before the next step. Sitting beside T96 and T103 is file-disjoint scheduling and defers nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T93": {
+   "section_sha256": "ae4bd40efe730745dc7678efcebd1a27c8a11ef15ed2b10e7c257868cfd8bd17",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T93-field-at-end",
+     "summary": "The write targets are logged on a Bash call's END lines (PostToolUse and PostToolUseFailure), not its start; the start was priced and not taken, and the failure end is included.",
+     "class": "within",
+     "why": "This is how T93's line gets done, and it is the more conservative choice: a refused call whose start would have claimed the caller's own file for another task would give a wrong green. It narrows nothing in the GM's request or the accepted spec."
+    },
+    {
+     "id": "T93-field-exclusions",
+     "summary": "writes leaves out programs that only read, targets the walk cannot place, and directories; no target means no field; the form is pinned.",
+     "class": "within",
+     "why": "A file that no line names stays the caller's, so an exclusion can only cost a saving, never give a wrong green. This choice is about precision, and it takes away nothing that was asked for. The Python-heredoc gap it creates is ruled on separately, as T93-python-heredoc-left."
+    },
+    {
+     "id": "T93-no-walk-reuse",
+     "summary": "No walk is reused or memoized, because no guard walks at PostToolUse (each hook event runs in its own process, observed with a method). A memo in shared::tree is not added.",
+     "class": "within",
+     "why": "The brief asked for reuse only where the process had already done the walk. The plan measured that this never happens, so the condition never holds and nothing asked for is dropped."
+    },
+    {
+     "id": "T93-exact-path-reader",
+     "summary": "closing-checks.sh claims a dirty file only by an exact edit path or writes path, never by a prefix, under T86's existing rules (no fallback line, a task named, newer than the last commit, never the caller's). The header's list of what stays the caller's is restated.",
+     "class": "within",
+     "why": "This is the reader half of the task's own goal. The exact-path rule stops a make at the clone root from claiming the whole clone for another task, which would be a wrong green."
+    },
+    {
+     "id": "T93-landed-line-claims-nothing",
+     "summary": "A log line older than its own task's last 'ticked (make land)' commit claims nothing. This fixes a T86 defect found during T93's own closing run (T66's stale Edit line on rust/guard/CLAUDE.md).",
+     "class": "within",
+     "why": "A defect found in the work is fixed in the task (fix as we go, constitution XIV). It is a wrong outcome (a caller's own red reported apart, a wrong green), it lives in a file the task already owns, and the red-first test is recorded."
+    },
+    {
+     "id": "T93-no-prefilter",
+     "summary": "A prefilter that would skip 35.5% of commands was measured and not taken: it would lose 6 files and add a second list of writers that could drift from the walk.",
+     "class": "within",
+     "why": "This is a design choice inside the task, and it keeps the full coverage the task asks for."
+    },
+    {
+     "id": "T93-no-clone-path-cut",
+     "summary": "writes keeps /tmp paths and is not cut to the clone's paths (1.56% log growth, measured).",
+     "class": "within",
+     "why": "A choice of form with a measured cost. It narrows nothing asked for."
+    },
+    {
+     "id": "T93-first-walk-cost-left",
+     "summary": "The first walk in a process costs 3.2-8.6 ms (about 3.89 ms added per Bash end, roughly 37 s a night). It is left in place, called not a defect, and proposed as a [perf] task of its own in shared::tree.",
+     "class": "within",
+     "why": "Every verdict and every line stays right, only slower, so under constitution XIV (v2.36.0) this is not a defect and needs no ruling. The cost is measured and stated, and it is passed on as a performance task rather than hidden."
+    },
+    {
+     "id": "T93-python-heredoc-left",
+     "summary": "Files written by a Python program run from a heredoc or -c get no writes entry: the walk places them where the shell stands. The reader for them, program_names, is in the guard crate, which the shared event log cannot reach. Filed as T96, to land before T22. Measured effect: T86's runs 2 and 3 stay red on the task and plan crates, and 15 of the night's 51 still-missed files.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T93's own line covers 'shell-written files', and these are shell-written, so leaving them narrows the task as filed. The defect is not dropped and not carried past the next step. It is filed as T96, with its reason and its order ('lands before T22', T86's filing) as FR-009 requires, and every instance was measured and classed. The reason is concrete: shared cannot depend on the guard crate, so the reader for these programs lives outside T93's files. Splitting the fix this way does not undermine the request's purpose (performance work first, closing verdicts that are not red on another builder's files), because T93's part removes wrong reds now and introduces no wrong green."
+    },
+    {
+     "id": "T93-perf-classification",
+     "summary": "T93 is ordered as a [perf] task under FR-013 (the builders' loop), with no engine performance checklist.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-21 that the closing-checks work be filed as a performance task, and FR-013 counts the builders' loop as performance work. T93 extends that work."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c \"import sys; open(sys.argv[2],'w').write('x')\" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))",
+    "### T89 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T89-binding",
+     "summary": "py_c::argv_word places a -c program's sys.argv[N] at the command's N-th word after the program, as the walk places a word; argv[0], an index past the words, and any index at or past a word that may be other than one word (glob, brace, $@, substitution, unknown name, value with a blank or empty, partly quoted) give None and keep HEAD's reading; $__unread__ counts one word.",
+     "class": "within",
+     "why": "This is the fix T89 was filed for: main-tree judged a -c program writing through sys.argv as writing where the shell stands, which item 4 measured wrong both ways (scratch writes refused, mirror writes passed or moved into a clone). Falling back to HEAD's reading wherever the word count is uncertain leaves the existing feature 204 D5 rule in place rather than carving out anything."
+    },
+    {
+     "id": "T89-write-forms",
+     "summary": "py_c::argv_writes reads past only an open(sys.argv[N], ...) whose arguments are not all a read's, its chained .write/.writelines and json.dump(x, <that open>); the rest of the program must pass only_reads, every argv mention must be a plain sys.argv[N] read and sys the imported module; anything else keeps HEAD's reading.",
+     "class": "within",
+     "why": "The forms covered are the ones the corpus scan measured (11 open(sys.argv[N]) writers, none through Path or another file call). Every other form stays on the rule in force today (D5, a write where the shell stands), and no defect is measured in those forms, so nothing the task was filed for is left out."
+    },
+    {
+     "id": "T89-bound-name",
+     "summary": "py_c::argv_inlined reads a name bound once by NAME = sys.argv[N], whose every other mention is an open's path, as sys.argv[N]; any other mention or rebinding leaves the program as it is (HEAD's reading). It stands alone so the stdin route can call it.",
+     "class": "within",
+     "why": "The review ruled bx#58999's bound-name form part of T89's filed scope (a program that writes a place it computes from sys.argv), and the replay measured that this is the whole fix for it. Every other use keeps the current rule."
+    },
+    {
+     "id": "T89-tree-hunk",
+     "summary": "One hunk in writes_in's -c branch in tree.rs, outside the brief's file list, calls py_c::argv_places: a bound program is a read where it stands plus a write of each word at path_write's place; Known::Nothing keeps HEAD's reading (feature 204 D6).",
+     "class": "within",
+     "why": "The hunk is the only place the -c program's write is pushed, so the fix cannot work without it. It is named openly and stays clear of T129's and T118's hunks, and it keeps D6's unknown-resolves-toward-main reading. It changes where the work is done, not what is delivered."
+    },
+    {
+     "id": "T89-replay-scope",
+     "summary": "The review fix's (fix2) replay covers only the 1,838 corpus rows whose command names argv, through all 25 configurations, after the first fix's full 59,116-row replay.",
+     "class": "within",
+     "why": "This scopes verification, not behavior: argv_inlined only touches a -c program naming sys.argv[N], so rows that never name argv cannot move. The full replay of the first fix already covered the rest. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T89-stdin-deferred",
+     "summary": "Found and left: a stdin program writing through a name bound to sys.argv[N] (bx#52396, a scratch write main-tree refuses) keeps HEAD's reading here; it is filed as T137, which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a measured defect (a false refusal) unfixed, so it is a narrowing. T89 was filed for a python3 -c program, though, and the stdin program is judged in the walk's stdin arm, a different route outside this task's files. Nothing in the GM's request makes T89 own that route. The deferral meets what FR-009 requires: it says why the defect is not fixed in this task, gives the filed task id (T137) and its order (lands before T22). argv_inlined is built standalone so T137 can call it, which keeps the follow-up small. The defect is carried to a named, ordered task rather than dropped, and the review already ruled the deferral legitimate on 2026-11-21."
+    },
+    {
+     "id": "T89-not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "T89 corrects a guard's verdicts. It does not improve performance or measure time, so it falls outside the GM's 2026-11-20 performance and measurement classes (FR-013)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c \"import sys; open(sys.argv[2],'w').write('x')\" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))",
+    "### T89 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "binding",
+     "summary": "A -c program's sys.argv[N] in a write is read as the command's N-th word after the program, placed as the walk places a word (py_c::argv_word); anything the binding cannot read keeps HEAD's reading (feature 204 D5).",
+     "class": "within",
+     "why": "This is T89 as filed (a -c program writing a place it computes from sys.argv judged as writing where the shell stands); the fallback to D5 keeps the accepted rule for every program it cannot read."
+    },
+    {
+     "id": "argv_writes",
+     "summary": "Writes through sys.argv[N] (open with a non-read mode, chained .write/.writelines, json.dump into that open) are read past and the rest must pass only_reads; argv must be plain sys.argv[N] reads and sys the imported module.",
+     "class": "within",
+     "why": "The mechanism of the fix; reads/only_reads unchanged in what they judge, and any other argv use falls back to HEAD's reading."
+    },
+    {
+     "id": "argv_inlined",
+     "summary": "A name bound once to sys.argv[N] and mentioned otherwise only as an open's path is read as sys.argv[N] (bx#58999); any other mention keeps HEAD's reading.",
+     "class": "within",
+     "why": "The review ruled bx#58999's -c form inside T89's own description (a program that writes a place it computes from sys.argv); it widens the fix toward the filed task, not away from it."
+    },
+    {
+     "id": "placement-tree-hunk",
+     "summary": "argv_places called from one hunk of writes_in's -c branch in tree.rs, outside the brief's file list: the bound program a READ where it stands plus a write of each word at path_write's place; a Known::Nothing place keeps HEAD's reading (feature 204 D6).",
+     "class": "within",
+     "why": "The -c write is pushed and path_write lives in tree.rs, so the fix cannot be placed elsewhere; the hunk is named and kept clear of T129's ASSIGN/sanitize hunks, and the unknown case keeps the accepted D6 rule."
+    },
+    {
+     "id": "may_split-option-A",
+     "summary": "A loop's or a read's value before the argv word (which bash may split; the walk holds quoted words without quotes and a loop value's blank as _) ends the count, so ux#2209 and bx#54240 (quoted \"$f\") and bx#58694 (bare $f, no blank in its matches) stay refused as at HEAD; the fuller fix is filed as T140, waits for T129, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T89 (three of its corpus scratch writes stay refused). The measured alternative (fix2) passed real writes of the mirror through split loop values (/tmp/t89/b2 p3,p4), so the narrowing removes a verdict worse than HEAD's - applying the rule literally with the current walk would defeat the guard's own purpose. Telling \"$f\" from $f needs the walk to carry quote state (tree/bind.rs, another task's file); the defect left is HEAD's existing over-refusal, not a new one, and the deferral carries its reason, its filed id (T140) and its order (before T22), as FR-009 requires, so no known defect is carried past the next step."
+    },
+    {
+     "id": "stdin-deferral-T137",
+     "summary": "A stdin program writing through a name bound to sys.argv[N] (bx#52396) keeps HEAD's reading; filed as T137, lands before T22; argv_inlined stands alone so the stdin arm can call it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T89 is filed for a python3 -c program; the stdin route is a different arm of the walk outside this task's files, so the case is adjacent rather than T89's own. It is filed with its reason, id and order before T22 (FR-009), the shared function is built so the fix is a call, and the earlier review ruled the same deferral legitimate."
+    },
+    {
+     "id": "exits-budget-order",
+     "summary": "Green/red exits, one landing, ordering after T79/T83/T87, beside T129 and T118 (T129 first, alone), before T125 and the filed tasks.",
+     "class": "within",
+     "why": "Sequencing and exit conditions that decide nothing the request or the task leaves open."
+    },
+    {
+     "id": "not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A guard-verdict correctness fix, neither a performance improvement nor a measurement task in FR-013's sense."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T90 (gate-write read a target's command from its segment, which the walk cuts at 120 characters, so a `make` behind more than 120 characters of `VAR=value` prefixes was refused as a shell write of `.` under a running gate - found by T79, measured 2026-11-21 through HEAD's gate-write and T79's, `/tmp/t79b/judge/probe-gw5.jsonl`, gone by 2026-11-22)",
+    "### T90 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T90 the task",
+     "summary": "Fix gate-write refusing a make behind more than 120 characters of VAR=value prefixes as a shell write of '.' while a gate runs.",
+     "class": "within",
+     "why": "A guard of this feature (451 T33's shell-write rule, T79's wrappers) refusing correct work is a defect - a check that refuses good work (constitution XIV) - and fix-as-we-go (GM 2026-11-18) owes its fix; the refusal is shown by the red test of 2026-11-22. Serves the request's 'real enforcement' clause (2026-11-19 approval) by keeping the enforcement from refusing compliant work."
+    },
+    {
+     "id": "Approach: Target.head via command_head",
+     "summary": "The walk's Target gains a head field, written from the same shown text as segment: leading VAR=value words dropped (also among HEAD_WRAPPERS and timeout, whose duration is kept), the rest kept, cut at 120 characters.",
+     "class": "within",
+     "why": "The mechanism of the fix; it reaches the stated case (the 120-character cut now falls after the prefixes, so the make is seen) and the red test pins it. Implementation choice, no part of what was asked is narrowed."
+    },
+    {
+     "id": "Approach: segment unchanged",
+     "summary": "segment keeps its present text and 120-character cut for every other reader and every message.",
+     "class": "within",
+     "why": "Leaves other behavior as it is; nothing the GM asked for is removed. The block names no other reader that derives a command head from segment, and 'Found and left? none' states no known defect is carried; if another reader shares the truncation it would be a separate defect to file, not a narrowing of this plan."
+    },
+    {
+     "id": "Approach: head_of reads t.head",
+     "summary": "gate-write's head_of reads t.head and skips only the wrappers, the = words being gone.",
+     "class": "within",
+     "why": "Completes the fix in the one reader the defect was found in; the refusals of real shell writes behind long prefixes (cp, git apply behind 130) are kept by the table's pinned cases, so the shell-write rule is not weakened."
+    },
+    {
+     "id": "Approach part A item 5: order after T118",
+     "summary": "Sequenced after T118 (landed), which last moved tree.rs and gate-write.",
+     "class": "within",
+     "why": "Scheduling, no scope effect."
+    },
+    {
+     "id": "Approach part A item 6: exits",
+     "summary": "Green on the guard crate's rust-test, cover, lint, format and gate-write's hook suite; red recorded and a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Verification of the requested enforcement and the standing 100% line coverage rule; no unrequested verification."
+    },
+    {
+     "id": "Approach part A item 10: 120-character cut stays",
+     "summary": "The 120-character constant is not moved; head takes the same cut after the prefixes.",
+     "class": "within",
+     "why": "Keeps an existing constant; the defect is fixed without it, so nothing defective is left."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T91 (T79's bind rule refuses two kinds of scratch write HEAD allowed, found by T79's second plan review, 2026-11-21: a name assigned twice in straight-line code is judged at each value, and past the 64-binding cap a lone loop falls back to T79's unknown reading, the mirror)",
+    "### T91 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a) Bound::Straight",
+     "summary": "A name assigned more than once in straight-line code is one binding: each bare assignment renamed, each read bound to the last assignment before it, a read before any assignment the environment's value or empty.",
+     "class": "within",
+     "why": "This is what T91's line asks for (a straight-line reassignment reads its last value). It is a fix of a check refusing good work, which constitution XIV and the fix-as-we-go rule ask to be fixed."
+    },
+    {
+     "id": "D-a (&&, ||, branch, loop, function, source)",
+     "summary": "A read whose last assignment follows && or ||, or that stands after a branch, a loop, a function or a source, keeps HEAD's reading at each value. Widening the rule to && was priced and not taken.",
+     "class": "within",
+     "why": "None of these is straight-line code, which is what T91's line names. An assignment after && or || may not run, so the read may see the earlier value, and judging each value is the correct answer there, not an over-refusal. No mirror refusal is lost. The moved pin's && form agrees: its last assignment follows a ;."
+    },
+    {
+     "id": "D-a (opaque forms in the stretch, filed as T145)",
+     "summary": "A backtick, $(, brace group, comment or ${X:-$(...)} between the last assignment and the read keeps HEAD's reading at each value, so a scratch write that bash makes is still refused there. Filed as T145, which lands before T140.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T91's line, because these commands are straight-line code and the leftover over-refusal is a defect (a check refusing good work). The plan's stated reason, that bind.rs's flat scanner would need to parse substitution bodies, comments and brace groups, is a cost and does not make it legitimate by itself. What does is this: the defect is not dropped but sequenced, filed as T145 to land before T140, the task that waits on T91. So no known defect is carried into the next step, which is what fix-as-we-go asks. The GM's own words of 2026-11-22 are that tasks keep being filed at the current rate and are bundled when fixed, so filing a sibling task departs from no instruction. The deferral also carries FR-009's why, id and order. T91's purpose is met: ordinary straight reassignments are read as bash reads them. The exception errs only toward HEAD's refusal, and the either-end pin holds it there."
+    },
+    {
+     "id": "(a) default/assign ops excluded",
+     "summary": "A name read through ${D:=W}, ${D:-W} or ${D-W} is not taken as Straight and falls back to HEAD's reading at each value (added on T91's first plan review).",
+     "class": "within",
+     "why": "This prevents a regression the first cut introduced: a mirror write read as elsewhere. Keeping a mirror value at either end refused is in T91's line, and the exclusion only returns a name to HEAD's reading."
+    },
+    {
+     "id": "(b) / D-b MAX_VALUES = 128",
+     "summary": "The single many-valued name of a command is judged value by value up to 128 values. Past 128 it falls back to T79's unknown reading.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T91's line asks that a lone loop past the 64 cap be judged value by value, and the plan bounds that at 128. Some bound is physically required, because a guard that runs on every Bash call has to finish in bounded time: measured, 128 values cost 44.7 ms and 256 cost 171 ms (2026-11-22, T83's timer). The fallback is the conservative one (refuse, never under-refuse). The measured corpora hold no lone loop past 64 at all, so the bound defeats no case the purpose covers. The constant is labeled a CONVENTION."
+    },
+    {
+     "id": "D-b products of names",
+     "summary": "A command with several many-valued names keeps MAX_BINDINGS = 64 and T79's unknown reading, unchanged.",
+     "class": "within",
+     "why": "T91's line names a lone loop. Products of names are outside it, and the plan leaves them exactly as HEAD has them."
+    },
+    {
+     "id": "D-b gate-write's 7 product refusals not judged",
+     "summary": "Whether gate-write's 7 refusals of over-cap product rows are right is left unjudged.",
+     "class": "within",
+     "why": "These rows are outside T91's line and unchanged from HEAD. No defect is established, so nothing is being deferred."
+    },
+    {
+     "id": "(b) dedup and bindings skip",
+     "summary": "Loop values are deduplicated by text, and bindings skips a name already bound.",
+     "class": "within",
+     "why": "These are mechanics of (b), and they change no verdict in the replay."
+    },
+    {
+     "id": "moved pin (WT=$PWD case)",
+     "summary": "The && form of a_name_assigned_from_pwd_is_where_the_shell_stands_then now reads elsewhere, as bash writes it. Its ; variant keeps clone and elsewhere.",
+     "class": "within",
+     "why": "This is a correction that follows directly from (a): bash writes there."
+    },
+    {
+     "id": "Found and left: T144 (${D:-W} and ${D:+W} default dropped)",
+     "summary": "A defect that predates T91 (T79): replaced() drops the :- and :+ operand, so a mirror write can be read as elsewhere. Filed as T144, which lands before T140.",
+     "class": "narrowing",
+     "why": "This is a defect left, and the more serious kind: a check passing bad work, because a mirror write can be read as elsewhere. It is ruled LEGITIMATE on the same ground as T145. It is not dropped: it is filed as T144 to land before T140, the next task that depends on this one, so it is not carried into the next step, and FR-009's why, id and order are all present. It predates T91 (it is T79's). T91's fix reads it exactly as HEAD does, because the default and assign ops are excluded from Straight, so T91 neither causes it nor makes it worse. Fixing it needs tree.rs's expand, which lies outside T91's bind rule. That last point is the plan's stated reason, not the ground for this ruling.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "Performance work? No",
+     "summary": "The task is classed as not performance work.",
+     "class": "within",
+     "why": "This is a guard correctness fix. The cost measurement shows no rise (0.06% fewer instructions on ux)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T92 (<why: the finding or measurement that files it>)",
+    "### T92 Approach (checklist part A)",
+    "### T93 (<why: the finding or measurement that files it>)",
+    "### T93 Approach (checklist part A)",
+    "### T94 (the land crate's tests read the session's `PLAN_REVIEW_OK` and write the real guard log, measured 2026-11-21 by T84 (the guard log's `plan-gate` rows naming the land tests' fixture feature `449-x`: 20-odd `plan-review-stale 449-x` blocks and `plan-review-ok 449-x: 451 T41 and T43 reviewed CLEAR ...`, the session's own escape text, taken by a fixture's tick during a landing's `make done`))",
+    "### T94 Approach (checklist part A)",
+    "### T95 (<why: the finding or measurement that files it>)",
+    "### T95 Approach (checklist part A)",
+    "(removed) ### T84 (<why: the finding or measurement that files it>)",
+    "(removed) ### T85 (<why: the finding or measurement that files it>)",
+    "(removed) ### T86 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T94 filing",
+     "summary": "Files a task for a defect T84's builder measured: the land crate's tests read the session's PLAN_REVIEW_OK from the environment and write the real guard log (plan-gate rows naming fixture feature 449-x, the session's escape text taken by a fixture's tick).",
+     "class": "within",
+     "why": "A wrong outcome in this feature's own tooling (tests leak the real environment and pollute the real guard log that FR-012's recorded escapes and FR-005/SC-006's readers depend on); filing it to be fixed is fix-as-we-go, not new scope. The section is otherwise an unfilled template and decides no approach, so nothing is narrowed."
+    },
+    {
+     "id": "T92, T93, T95 sections",
+     "summary": "Unfilled task-section templates: placeholder heading, approach, checklist and found-and-left text only.",
+     "class": "within",
+     "why": "They make no decision; the template restates FR-009/D15's deferral form and FR-013's performance tagging, which the spec already settles. Their content is owed at make decide, when each is filled."
+    },
+    {
+     "id": "T84, T85, T86 removed",
+     "summary": "Three unfilled template blocks (each CLEAR when last judged) removed from plan.md.",
+     "class": "within",
+     "why": "The earlier text was a bare template that decided nothing, so removing it drops no decision and narrows nothing the request or spec asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T92 (an arbiter's accept with REVIEW=plan on one task's round recorded CLEAR for every changed block of the plan - `make arbiter-ruled` on `ask:451-T79-third-plan-round` replied \"28 plan block(s) recorded CLEAR\", 2 of them T79's - and wrote no task verdict, so the store the tick, the push, `plan decided` and T84's builder-stop guard read held T33's, T46's, T67's and T79's BLOCKED though each landed on an accept, measured 2026-11-21 (plan-review.json's history; T84's replay, its item 4))",
+    "### T92 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T92-D1-scope",
+     "summary": "An arbiter accept clears only the owed/BLOCKED blocks inside the sections of the tasks its trigger names (round trigger #<task>, or the ask subject's task ids via named_tasks), plus their removed blocks; a block outside every named span is not cleared. Scope is read from the trigger, never the question's prose.",
+     "class": "within",
+     "why": "A defect fix (fix as we go; constitution XIV's 'a check that passes bad work'): measured 2026-11-21, four accepts cleared 28, 10, 9 and 2 blocks outside the asked task's section, including T76's and T77's unreviewed changes. The rulings themselves scope the accept to the asked task ('This accept stands as the verdict of T79's plan review on the section as it reads now'; T67's and T33's likewise), and FR-043 keeps the verdict per block, so a task round's accept covering only that task's blocks implements what the arbiter ruled and narrows nothing the GM asked."
+    },
+    {
+     "id": "T92-D1-no-task-named",
+     "summary": "An accept whose trigger names no task (5 of 21 accepted plan asks, measured) clears the whole plan as before.",
+     "class": "within",
+     "why": "Keeps the existing behavior for asks whose subject was the plan (e.g. ask:420-plan-round3, whose ruling is 'The plan stands as it reads now'); the question was the plan, so the whole plan is its verdict's scope."
+    },
+    {
+     "id": "T92-D1-named-no-section",
+     "summary": "A named task with no section in plan.md or plan-done.md: the whole plan's scope, as plan decided (decision_refusal) reads such a task.",
+     "class": "within",
+     "why": "This is the one arm that keeps whole-plan clearing for a named task, and it is not the defect surviving. A task with no section anywhere has no blocks of its own, so its decisions can only be in the plan-stage blocks, and plan decided (decision_refusal) already reads it that way. For such a task the question put to the arbiter was the plan, so the accept's scope matches the question. The over-clearing the section fixes happened only where the named task HAD a section and blocks outside it were cleared too, and D1 ends that."
+    },
+    {
+     "id": "T92-D1-archived-section",
+     "summary": "A named task whose section is archived (plan-done.md only): nothing recorded, never the whole plan.",
+     "class": "within",
+     "why": "FR-044: no review reads plan-done.md and a removed section owes no review, so there is nothing to record; refusing to fall back to the whole plan prevents the over-clearing this task fixes."
+    },
+    {
+     "id": "T92-D1-convention",
+     "summary": "Labeled CONVENTION: the trigger is the scope source because its subject is already a machine-read id (the GM 2026-10-25, the algorithmically easier route where the record is silent).",
+     "class": "within",
+     "why": "A mechanism choice inside the fix, applying a standing GM rule; it decides no question the request or rulings settle differently."
+    },
+    {
+     "id": "T92-D2-task-verdict",
+     "summary": "Each named task's tasks.<id> is written CLEAR, declared round-arbiter, at its section digest, with the replaced reviewer entry kept as accepted_over; the tick, push, plan decided and T84's builder-stop guard read that one entry.",
+     "class": "within",
+     "why": "Feature 409 (an ask with REVIEW=plan stands as the plan review's verdict) and each cited ruling ('this accept is the plan review's verdict on T67's plan section') require the accept to BE the task verdict; measured 2026-11-21 the store held T33, T46, T67 and T79 BLOCKED though each landed on an accept - a gate reading wrong. Writing it fixes that defect."
+    },
+    {
+     "id": "T92-D3-output-and-batch",
+     "summary": "make arbiter-ruled names the scope, each heading recorded CLEAR and the task verdict; a batch's plan accept (BATCH=1) is applied as a single ruling's is.",
+     "class": "within",
+     "why": "The output change makes the fix visible where a bare count hid 28 blocks; the batch path recording a plan accept but never applying it is a found defect (observed 2026-11-21 by grep -rn arbiter_accept rust/), fixed here as fix-as-we-go requires."
+    },
+    {
+     "id": "T92-unreviewed-changes-ruled",
+     "summary": "The unreviewed changes the over-broad accepts cleared (T56 log path, T77 filing named, T76 make events-refile now takes FROM=) are ruled within and not re-reviewed, T76 being landed and archived.",
+     "class": "within",
+     "why": "This ruling is the reviewer's own, not the author's 'Ruled here', and it rests on the before/after fragments the section quotes, not on the blocks' full text, which the bundle does not carry. The section's counts check out (28 = 2 + T76's and T77's 2 + 24 templates; 10 = 2 + 1 + 7; 9 = 2 + 7). On those fragments: T56's log path and T77's naming its filed task are typo-scale. T76's change wires its own tool's FROM= argument into its own make target, which is within its task, narrows nothing and leaves no wrong outcome. T76's section is in plan-done.md, which FR-044 says no review reads."
+    },
+    {
+     "id": "T92-left-as-is",
+     "summary": "Left: task_refusal's deferral arm (the decide lint, a separate check), and the four stale BLOCKED entries in plan-review.json, not hand-edited.",
+     "class": "within",
+     "why": "Neither is a defect under constitution XIV: the deferral arm is a different check this task does not touch, and the four entries' sections are archived, so nothing that gates reads them (plan decided finds no section). No request clause asks for either."
+    },
+    {
+     "id": "T92-performance-class",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "T92 fixes plan-review record keeping: what an arbiter accept clears and writes. It neither saves time nor measures where time goes, so neither FR-013 nor the GM's 2026-11-20 widening to measurement work ('this kind of measurement task ... counted as a performance task') reaches it."
+    },
+    {
+     "id": "T92-order",
+     "summary": "Order: before T22, as its line says; beside T96 and T103, whose files it leaves.",
+     "class": "within",
+     "why": "Fix as we go: a known defect in the review gate is fixed before the next step. Sitting beside T96 and T103 is file-disjoint scheduling and defers nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T93 (T86's closing checks could not set aside another task's shell-written files: the event log's Bash lines carried no write path, its Edit and Write lines naming 127 of the 796 files 2026-11-21's landings had changed, measured 2026-11-21 (T86's `/tmp/t86/recall.py`, T86's Found and left); T86's closing run 2 red only on such a file, another builder's `rust/gate/crates/task/src/task_add/tests.rs`)",
+    "### T93 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T93-field-at-end",
+     "summary": "The write targets are logged on a Bash call's END lines (PostToolUse and PostToolUseFailure), not its start; the start was priced and not taken, and the failure end is included.",
+     "class": "within",
+     "why": "This is how T93's line gets done, and it is the more conservative choice: a refused call whose start would have claimed the caller's own file for another task would give a wrong green. It narrows nothing in the GM's request or the accepted spec."
+    },
+    {
+     "id": "T93-field-exclusions",
+     "summary": "writes leaves out programs that only read, targets the walk cannot place, and directories; no target means no field; the form is pinned.",
+     "class": "within",
+     "why": "A file that no line names stays the caller's, so an exclusion can only cost a saving, never give a wrong green. This choice is about precision, and it takes away nothing that was asked for. The Python-heredoc gap it creates is ruled on separately, as T93-python-heredoc-left."
+    },
+    {
+     "id": "T93-no-walk-reuse",
+     "summary": "No walk is reused or memoized, because no guard walks at PostToolUse (each hook event runs in its own process, observed with a method). A memo in shared::tree is not added.",
+     "class": "within",
+     "why": "The brief asked for reuse only where the process had already done the walk. The plan measured that this never happens, so the condition never holds and nothing asked for is dropped."
+    },
+    {
+     "id": "T93-exact-path-reader",
+     "summary": "closing-checks.sh claims a dirty file only by an exact edit path or writes path, never by a prefix, under T86's existing rules (no fallback line, a task named, newer than the last commit, never the caller's). The header's list of what stays the caller's is restated.",
+     "class": "within",
+     "why": "This is the reader half of the task's own goal. The exact-path rule stops a make at the clone root from claiming the whole clone for another task, which would be a wrong green."
+    },
+    {
+     "id": "T93-landed-line-claims-nothing",
+     "summary": "A log line older than its own task's last 'ticked (make land)' commit claims nothing. This fixes a T86 defect found during T93's own closing run (T66's stale Edit line on rust/guard/CLAUDE.md).",
+     "class": "within",
+     "why": "A defect found in the work is fixed in the task (fix as we go, constitution XIV). It is a wrong outcome (a caller's own red reported apart, a wrong green), it lives in a file the task already owns, and the red-first test is recorded."
+    },
+    {
+     "id": "T93-no-prefilter",
+     "summary": "A prefilter that would skip 35.5% of commands was measured and not taken: it would lose 6 files and add a second list of writers that could drift from the walk.",
+     "class": "within",
+     "why": "This is a design choice inside the task, and it keeps the full coverage the task asks for."
+    },
+    {
+     "id": "T93-no-clone-path-cut",
+     "summary": "writes keeps /tmp paths and is not cut to the clone's paths (1.56% log growth, measured).",
+     "class": "within",
+     "why": "A choice of form with a measured cost. It narrows nothing asked for."
+    },
+    {
+     "id": "T93-first-walk-cost-left",
+     "summary": "The first walk in a process costs 3.2-8.6 ms (about 3.89 ms added per Bash end, roughly 37 s a night). It is left in place, called not a defect, and proposed as a [perf] task of its own in shared::tree.",
+     "class": "within",
+     "why": "Every verdict and every line stays right, only slower, so under constitution XIV (v2.36.0) this is not a defect and needs no ruling. The cost is measured and stated, and it is passed on as a performance task rather than hidden."
+    },
+    {
+     "id": "T93-python-heredoc-left",
+     "summary": "Files written by a Python program run from a heredoc or -c get no writes entry: the walk places them where the shell stands. The reader for them, program_names, is in the guard crate, which the shared event log cannot reach. Filed as T96, to land before T22. Measured effect: T86's runs 2 and 3 stay red on the task and plan crates, and 15 of the night's 51 still-missed files.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T93's own line covers 'shell-written files', and these are shell-written, so leaving them narrows the task as filed. The defect is not dropped and not carried past the next step. It is filed as T96, with its reason and its order ('lands before T22', T86's filing) as FR-009 requires, and every instance was measured and classed. The reason is concrete: shared cannot depend on the guard crate, so the reader for these programs lives outside T93's files. Splitting the fix this way does not undermine the request's purpose (performance work first, closing verdicts that are not red on another builder's files), because T93's part removes wrong reds now and introduces no wrong green."
+    },
+    {
+     "id": "T93-perf-classification",
+     "summary": "T93 is ordered as a [perf] task under FR-013 (the builders' loop), with no engine performance checklist.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-21 that the closing-checks work be filed as a performance task, and FR-013 counts the builders' loop as performance work. T93 extends that work."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T89 to T93, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

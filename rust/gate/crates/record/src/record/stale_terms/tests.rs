@@ -56,6 +56,7 @@ fn no_subject_no_value_or_a_pure_insertion_yields_nothing() {
 fn skipped_files_and_history_and_verify_notes_keep_their_old_values() {
     assert!(watched_lines("request.md", "x\n").is_empty());
     assert!(watched_lines("measure/a.md", "x\n").is_empty());
+    assert!(watched_lines("archive/plan-review/001-T1-T2.json", "x\n").is_empty());
     let text = "a\n## Review history\nb\n## Next\nc\n      verify: d\n";
     assert_eq!(
         watched_lines("s.md", text)

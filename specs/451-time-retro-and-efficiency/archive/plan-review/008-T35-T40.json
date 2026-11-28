@@ -1,0 +1,885 @@
+{
+ "blocks": {
+  "### T36 Approach (checklist part A)": {
+   "sha256": "47336feb03bfa0de749a55df0a9eba44a59a9c083907619c2a9093a5fa148145",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)": {
+   "sha256": "91c5b14d7591b0924c647ee1acfc5675860ea9049c19190737152560b4d8bdf9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T35": {
+   "section_sha256": "752d5eb7ca179bf2336254152c201d75e84e57247c0164edb5664a803a587ca6",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T35-clock-seam",
+     "summary": "runlock's wait reads time through a Clock seam (now, sleep) on the Taker: Wall (Instant, thread::sleep) in a run, Stepped in the test; the run's behavior and L7R_RUST_LOCK_CEILING (wall-clock seconds) unchanged",
+     "class": "within",
+     "why": "Fixes a defect in the constitution's sense - a check that refuses correct work (make static red on correct work, T12's log, reproduced 10 of 10 on a shared core). A red gate on correct work costs a make static rerun, which is the time the request's improvement 2 and FR-013's perf priority are about; nothing the GM asked for is narrowed and the run's behavior is unchanged."
+    },
+    {
+     "id": "T35-exact-count",
+     "summary": "the test asserts exactly 6 waiting lines (0 to 50 ms, refused at 60) on the stepped clock where it asked >= 2",
+     "class": "within",
+     "why": "A tighter assertion on a deterministic event count, shown red with the behavior broken (left 1, right 6). Not the struck bitwise-exactness standard: it holds no port to a replaced output, it checks the wait's own behavior."
+    },
+    {
+     "id": "T35-reads-cap",
+     "summary": "a wait that never ends reads the stepped clock past READS=100 and panics rather than hangs",
+     "class": "within",
+     "why": "Makes the never-ends failure a red test instead of a hang; shown red with the ceiling broken. Enforcement of the fix, no new behavior in a run."
+    },
+    {
+     "id": "T35-other-tests-wall",
+     "summary": "the crate's other runlock tests keep the wall clock (two_runs_in_one_target_directory_take_turns at a 60 s ceiling against two 0.1 s calls; a_refusal_is_the_checks_reply asserting a refusal only), so Wall stays covered",
+     "class": "within",
+     "why": "Neither has failed; both stayed green 5 of 5 on the shared core that failed the old test 10 of 10, one has about 300x headroom and the other asserts nothing timed. A difference from T35's 'never a bare wall-clock bound' wording with no wrong outcome is not a defect (constitution XIV), so leaving them is not a defect left and needs no ruling; they also keep the Wall path covered."
+    },
+    {
+     "id": "T35-perf-tag",
+     "summary": "the task is performance work under FR-013 by its [perf] tag, not filed with PERF=1 (no engine stage's operations or time)",
+     "class": "within",
+     "why": "FR-013 names both routes ('filed with PERF=1 or tagged [perf]') and counts a task making the gate or the builders' loop faster; the choice of route is inside the requirement."
+    },
+    {
+     "id": "T35-land-half-to-T20",
+     "summary": "the land-tooling half of the finding is folded into T20; T35 is independent of the other lanes",
+     "class": "within",
+     "why": "Ordering and task boundaries only; the land-tooling wall-clock finding stays owned (T20), nothing is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T36": {
+   "section_sha256": "3678090da2bba03f01a953e42e50ebdd2323bf3a75801d63a43bc7841eb7562a",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T36-method",
+     "summary": "Each archived deferral is read by hand once and gets one verdict (carried / fixed / still open, filed / not a defect); ticked tasks' history is not re-judged",
+     "class": "within",
+     "why": "This applies D15 (a deferral needs a filed task and an order) and constitution XIV (only a wrong outcome is a defect) to the deferrals T17's replay found. It does not narrow either one: every deferral gets a named carrier, a commit, a filed task or a stated reason it has no wrong outcome."
+    },
+    {
+     "id": "449-T201a",
+     "summary": "make work-budget reading only the roll's stages is ruled not a defect, because make work-budget-review (T224) re-counts every Mode A sheet stage (placer, compound, pipeline) and holds it to twice its budget",
+     "class": "within",
+     "why": "The deferral describes how the work is split between tools, not a wrong outcome. The row says, with the files and the dev/work-budget.json keys read at HEAD as its measurement, that every Mode A stage is counted and held by another target. A stage would have to go unchecked for a check to be passing bad work, and none does. Under XIV v2.36.0 leaving this as it is stays within what was asked and needs no ruling."
+    },
+    {
+     "id": "449-T201b",
+     "summary": "a pool-sheet stage has no change, raise or accept path; filed as 449 T243",
+     "class": "within",
+     "why": "Filed as an open task with its evidence (the header of sheets.rs read at HEAD). The work is not left undone."
+    },
+    {
+     "id": "449-T208b",
+     "summary": "the reviewer's notes (an unstated radius, a 'ten zones' slip, the fire gap) are ruled not a defect",
+     "class": "within",
+     "why": "No total moved by more than a few operations, T152 held both sheets within twice their budget, and the slip is in the prose of a SOUND derivation. No map, check or research finding is wrong, so under XIV this is a difference, not a defect."
+    },
+    {
+     "id": "449-T221b",
+     "summary": "the Python cache's old entries under .gencache/<map>/ are ruled not a defect (disk only)",
+     "class": "within",
+     "why": "Nothing reads them: the Rust cache's DIR is .gencache/rust. Disk used in one clone is not a wrong map, a wrong check or a crashing tool."
+    },
+    {
+     "id": "449-carried-rows",
+     "summary": "449 T156, T200, T218, T219, T221a, T224, T239(1)(3) are carried by named tasks, each ticked at a cited commit or open (T240); T239(2) was fixed by T238",
+     "class": "within",
+     "why": "Each deferral names the task or commit that covers it. Nothing is dropped."
+    },
+    {
+     "id": "451-T02-T52",
+     "summary": "the shared make-call reading class is censused (13 modules through shared::make; 10 own readers, up from 8 now that measure_hooks' has() and gate_write_hooks' head_of are found) and filed as 451 T52, measure first, landing before T22",
+     "class": "within",
+     "why": "The census states its search space as D15 and the enumeration rule require: greps of rust/, scripts/ and the Makefile, rechecked with git grep at HEAD and a grep for \"make literals, each hit read. The fix is filed with an order rather than left. Measuring first follows XIV: whether any of the 10 gives a real command a wrong verdict has not been shown yet."
+    },
+    {
+     "id": "451-T02-set-apart",
+     "summary": "process-table argv readers, cheap contains(\"make\") prefilters, batching_hooks' NOT_RECON, log-field readers and research prose are set apart from the T02 class",
+     "class": "within",
+     "why": "The class is reading which make targets a command text runs. Process-table readers read a live process's argv, where a wrapper is its own process. Prefilters only skip work. batching_hooks only tests whether make is present, can never refuse wrongly, and was read at cited lines. Log-field readers read an already-parsed field. Each is set apart for a stated, checked reason. That is defining the class, not carving a case out of it."
+    },
+    {
+     "id": "451-T03",
+     "summary": "T03's deferrals: three fixed at commits; the lines filed by feature.json carried by T26, with the remainder in T53; booking by make carried by T08 (open); the live line fixed (66 make static lines carry cat tests); the two unmatched data-model rows ruled not a defect",
+     "class": "within",
+     "why": "Every item has a carrier, a commit or a filed task. A row that never matches books nothing wrong, so it has no wrong outcome under XIV."
+    },
+    {
+     "id": "451-T16",
+     "summary": "POLL_CHECK_S going into D14's knob table is carried by T22 (open)",
+     "class": "within",
+     "why": "D14's knob table is T22's line. It is carried, not dropped."
+    },
+    {
+     "id": "451-T26",
+     "summary": "(a) events-refile still owed and (d) the indexes missing filed.rs and refile.rs, both filed as T53 (narrowed to the one builder checked); (b) two re-file judgment calls on closed features and (c) another builder's uncommitted work stopping make static ruled not a defect; (e) fixed by T07",
+     "class": "within",
+     "why": "The open items are filed with a measured remainder (19 lines, from make events-refile DRY=1). (b) is history between the reports of closed features, with the copy from before the re-file kept. (c) is not a defect of the tree. Neither (b) nor (c) is a wrong outcome of the tooling."
+    },
+    {
+     "id": "T36-found-and-left",
+     "summary": "Found and left: none, since the three still-open deferrals are filed (449 T243, 451 T52, T53) and the two 451 filings land before T22",
+     "class": "within",
+     "why": "Filing the deferrals is this task's own work, and each one carries a task id and an order, so nothing found is left unfiled."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T37": {
+   "section_sha256": "6b8d3535a7b83a03d183a914b954b5ddb4fcd9a36b50ca02652f682c4c898b2e",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T37-writer",
+     "summary": "The one cited-text writer (`paragraphs` in bundle.rs, shared by build, foreign and requirements) runs each match to the next match or next heading instead of the first blank line, so a cited decision or requirement reaches the reviewer whole with its lists and tables.",
+     "class": "within",
+     "why": "Serves FR-013 and the approved improvement 4 ('Fewer plan re-rounds'): the cut text cost T17's and T19's reviews a round each. It widens what the reviewer is given; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T37-item-end",
+     "summary": "A match written as a list item (bulleted requirement or decision) stops at a blank line its own indented lines do not follow (`item_end`), and no longer carries a following heading; a requirement written as a heading is read as before.",
+     "class": "within",
+     "why": "Same purpose as the writer fix: the reviewer gets the item's own text, nested lists included, and not an unrelated heading. The 43 decisions and 3 requirements that shrink lose only a heading line the old cut wrongly carried - a defect fixed in the task, not a narrowing."
+    },
+    {
+     "id": "T37-no-cap",
+     "summary": "No size cap is added to spec-cited.md; the bundle grows (T18's +6.7%, all decisions +5.6%).",
+     "class": "within",
+     "why": "Carrying the cited text whole is the point of the task; adding no cap keeps nothing out. Feature 375 amendment 11's lean bundle (cited text, not the plan) is kept, since only cited items are carried."
+    },
+    {
+     "id": "T37-perf-tag",
+     "summary": "T37 is filed as a [perf] task under FR-013.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster, and the request's approved improvement 4 names fewer plan re-rounds as a time saving; a decision cut at its colon costs a review round. This is FR-013's own definition applied, not a carve-out from it."
+    },
+    {
+     "id": "T37-found-left",
+     "summary": "The heading-carry defect found while doing the work is fixed here, pinned by a red-first test.",
+     "class": "within",
+     "why": "Fixed in the task, nothing deferred; consistent with fixing known defects as found."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T38": {
+   "section_sha256": "6c82c8fe93328c52b3e833b9a4566a45ce175624f3a441d001eb1f7b3d74da7c",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T38-perf",
+     "summary": "T38 is filed as performance work under FR-013: gate crates' tests stop reading the builder's shell exports, so a builder no longer spends a round on 49 reds caused by its shell, and a test no longer writes into or deletes a real event log or answer store.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work, and the GM asked on 2026-11-20 that performance work go first. Tests that fail because of the environment and tests that delete real answer records are wrong outcomes, so fixing them is also fix-as-we-go work."
+    },
+    {
+     "id": "seam",
+     "summary": "The seam is shared::env::Rooted, a root with its own env reader that derefs to &Path. It is threaded through every call site that reads the guard (owed, reviews, rustc, measure, bundle, record, land, arbiter). The guard's explicit-env _in variants are made public, and the old names become wrappers over shared::env::opt.",
+     "class": "within",
+     "why": "This is how the fix is built. It does not narrow FR-013 or the request."
+    },
+    {
+     "id": "no-cargo-feature",
+     "summary": "The cargo dev-dependency feature route was measured with cargo tree and ruled out. It would reach a package's whole test build, its binary included, and the task line forbids it.",
+     "class": "within",
+     "why": "Choosing between two ways to build the fix is not a narrowing. The choice is measured, and the GM's request does not depend on it."
+    },
+    {
+     "id": "no-process-env-in-tests",
+     "summary": "No test sets the process's environment. Land's restore helper, which set and removed a process variable, is removed together with its test.",
+     "class": "within",
+     "why": "A test that set a process variable was part of the defect, so removing it is part of the fix."
+    },
+    {
+     "id": "try_trip-removed",
+     "summary": "try_trip had no caller left and is deleted.",
+     "class": "within",
+     "why": "Removing dead code inside the fix changes no behavior anyone asked to keep."
+    },
+    {
+     "id": "sweep-12-fixed",
+     "summary": "The 78-variable sweep moved 12 more tests (owed 11, land 1) through RECORD_CHECKS_DIR. Those 12 are fixed here: owed's own reads go behind answers::record_checks_dir, and land's replay hands bundle_in its store.",
+     "class": "within",
+     "why": "These are defects of the same kind, found during this step and fixed in it, as fix-as-we-go requires."
+    },
+    {
+     "id": "answers-split",
+     "summary": "owed/answers.rs went over the 1,000-line bar at 1,012 lines. Its command-line half is split into answers/cli.rs, leaving 807 lines.",
+     "class": "within",
+     "why": "The task's own growth tripped the file-scale check, and the plan fixes that here."
+    },
+    {
+     "id": "tree-rs-to-T42",
+     "summary": "rust/guard/src/shared/tree.rs at 1,064 lines belongs to T42 and is left to T42. T42's split has since brought it to 673 lines, and make quick is clean.",
+     "class": "within",
+     "why": "Another task owns the file and has already fixed it (measured), so no known defect is carried past this step."
+    },
+    {
+     "id": "check-keys-earlier-section",
+     "summary": "The bundle crate's check and keys bundles still reach earlier::section through its process wrapper. The plan says this is not a defect: no test outcome moved with any variable exported, and nothing is written.",
+     "class": "within",
+     "why": "The before-rest and after3 sweeps measured no wrong outcome. By the constitution XIV definition, a read that moves no outcome is a difference, not a defect, so leaving it needs no ruling."
+    },
+    {
+     "id": "guard-cargo-dropped",
+     "summary": "L7R_GUARD_CARGO is classed as a runner variable and dropped from the swept list (77 swept). The 19 bundle reds once attributed to it were not borne out: exported alone it moved none, and bundle was green with all 78 after the store fix.",
+     "class": "within",
+     "why": "Only bundle was measured for this variable: exported alone it moved none, and with all 78 after the store fix bundle was green (guard-cargo-bundle.log, bundle-78.log). The 27-crate after3 sweep ran with 77 variables. Which variables the sweep lists is not part of the GM's request or of FR-013, and no wrong outcome is shown, so it is within."
+    },
+    {
+     "id": "delta-store-left",
+     "summary": "Delta::store and sibling_stores still read the process's RECORD_CHECKS_DIR. Against a seeded exported store, the 8 crates that reach them were each green and the store was unchanged (diff -r empty). No test reaches either read, and in the binary they are the real reads.",
+     "class": "within",
+     "why": "A wrong outcome was checked for and none was found (measured). In production the process read is the correct behavior. Not a defect."
+    },
+    {
+     "id": "t32-claim-restated",
+     "summary": "T32's cargo-feature claim is restated as narrower than T32 said: the feature reaches a test build's binary but never the tool binaries.",
+     "class": "within",
+     "why": "Correcting a claim to match measurement changes no code, so it is not a narrowing."
+    },
+    {
+     "id": "twice-run-rust-gate",
+     "summary": "rust/gate was left out of the run twice against one store and was covered instead by the seeded-store run (green, store unchanged).",
+     "class": "within",
+     "why": "This is exit-evidence coverage inside the task, it is measured, and it narrows nothing that was asked."
+    },
+    {
+     "id": "exits-and-order",
+     "summary": "Exits: 7 crates and the guard green both plain and exported, every gate crate swept, 100% coverage of each changed crate, make static once. Order: after T32, independent of T42, lands before T22. Budget: one landing.",
+     "class": "within",
+     "why": "These are exit conditions and ordering inside the task. They narrow nothing in the request or in FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T39": {
+   "section_sha256": "2b5a0380d9219fc3e6937edffc5601e9c261ba910c839de4d391d21f6ad896b0",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T39-close",
+     "summary": "Close T39 with no code change: a FRESH=1 run that waits on the target-directory lock runs its own tests (runner log: 10 of 10 executions over 5 concurrent FRESH runs; T32's two runs each wrote their own build and test Phase rows); the claim that a waiter replays the holder's result is withdrawn.",
+     "class": "within",
+     "why": "The task asked whether a FRESH run could report green without running. The measurement and the code reading show it cannot, so there is no wrong outcome to fix. Withdrawing a claim the measurement refutes is what constitution XIV asks for. Nothing in request.md or FR-013 is narrowed."
+    },
+    {
+     "id": "T39-left-summary-line",
+     "summary": "Leave as it is that the rust-checks summary line quotes only the first `test result:` line of a crate's cargo test.",
+     "class": "within",
+     "why": "This is a display difference, not a wrong outcome: per the section, a failure in any binary fails the crate and prints cargo's full output. The GM did not ask for it, and it is not a defect under constitution XIV. The section says why it is not a defect, which is what FR-009 requires."
+    },
+    {
+     "id": "T39-left-hundredths",
+     "summary": "Leave the matching 4.21 s figures unexplained, labeled as a GUESS (chance under load).",
+     "class": "within",
+     "why": "Both runs executed, as the Phase rows measured on 2026-11-20 show, so the match is not a sign of replay and there is no wrong outcome. Leaving a harmless coincidence unexplained narrows nothing that was asked."
+    },
+    {
+     "id": "T39-perf-class",
+     "summary": "T39 stays a [perf] task under FR-013 and closes with no change.",
+     "class": "within",
+     "why": "The section records the task's existing FR-013 classification. It adds no scope and removes none."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T40": {
+   "section_sha256": "eb77685131655569189fdc2b91575b3d1bbb3a4875f3827d61de413b69075897",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "goal-restated",
+     "summary": "T40's goal restated from 'the full run's wall falls' to 'the suite measurably faster alone and in an incremental run that reruns it', after measurement showed the full run's wall now set by the run's total work over its 8 jobs rather than this suite.",
+     "class": "within",
+     "why": "What the GM asked (improvement 5, approved 2026-11-19) is a faster `make hooks-test`; FR-010 asks that the slow suites be split into shards of about 20 s, and FR-013 that performance work go first. Neither the request nor the spec names the full run's wall as the target; that was this task's own first framing. The restated goal still serves the request: the incremental run, the common case, fell 2.2-5.9 s per alternated pair with the suite still setting its wall, and the suite alone fell about 3.7 s. Dropping the full-run target cuts nothing the GM asked for. The measured reason it cannot be the target (once cut, the suite no longer sets the wall, and the cuts remove no CPU work) is a physical limit on what this task's files can reach, not a convenience."
+    },
+    {
+     "id": "cut-1-answers-side-by-side",
+     "summary": "The three --answer calls in answer_all run together and are then waited on; this moves work and removes none.",
+     "class": "within",
+     "why": "A test-suite speed change that keeps every case and assertion. The gate's output was held identical, and the suite still goes red on a broken gate (12 passed, 1 failed with --unanswered dropped)."
+    },
+    {
+     "id": "cut-2-sparse-clone",
+     "summary": "The fixture clones with --no-checkout and makes a sparse checkout of the three paths the suite uses (8,499 of 28,472 files); case 7's find is quiet when dev/bypass-log is absent.",
+     "class": "within",
+     "why": "It removes checkout and index work. Both clones were driven through the eight states and the outputs diffed identical, and case 7 still counts the bypass records before and after one gate. Nothing the suite checks is dropped."
+    },
+    {
+     "id": "cuts-kept-cpu-flat",
+     "summary": "Both cuts are kept although CPU-seconds did not fall (incremental 158-182 before against 171-190 after; system time down about 3 s, user time up about 12 s).",
+     "class": "within",
+     "why": "The request is for a faster `make hooks-test` in wall time. CPU-seconds are not part of what was asked, and the wall was measured faster in the common case and alone. A flat or slightly higher CPU cost is a cost, not a wrong outcome (constitution XIV), so keeping the cuts narrows nothing."
+    },
+    {
+     "id": "rejected-shallow-and-shared",
+     "summary": "A --depth 1 single-pack clone and a fixture shared between cases were rejected on measurement.",
+     "class": "within",
+     "why": "Design choices among ways to speed up the suite, with measured reasons. Nothing requested is dropped."
+    },
+    {
+     "id": "base-reread-deferred-T43",
+     "summary": "Every owed-units computation re-reads 1,951 base blobs (0.63-1.13 s of each 1.4-1.6 s computation). The fix is deferred to T43, a change to the owed crate's Delta::fetch outside this task's files, filed to land before T22.",
+     "class": "within",
+     "why": "This is a performance cost, not a defect: no wrong outcome, no check's verdict changes. It is filed as its own task, not left unfiled, and ordered ahead of T22, so FR-013's performance-first order still reaches it. It also reaches every gate run, including the push, not only this suite. Putting it in a separate task with its own landing is scheduling, not a narrowing of what was asked."
+    },
+    {
+     "id": "push-gate-skip-diff-not-defect",
+     "summary": "push-gate skip's unscoped `git diff --name-only HEAD` (0.24 s a gate run on the full clone) is judged not a defect and is not filed.",
+     "class": "within",
+     "why": "Under constitution XIV a defect is a wrong outcome, and a 0.24 s cost is not one. FR-013 orders performance tasks first but does not require every observed cost to be filed. A real gate pays this once a push, and the sparse clone already shrinks the index this suite walks. Nothing the GM asked for is left undone."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T35 (rustc's `another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused` asked for two waiting lines inside a 60 ms ceiling at a 10 ms poll of the wall clock and saw one under `make static`'s load, a red gate on correct work, observed 2026-11-20, method: T12's `make static` log; its land-tooling half folded into T20)",
+    "### T35 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T35-clock-seam",
+     "summary": "runlock's wait reads time through a Clock seam (now, sleep) on the Taker: Wall (Instant, thread::sleep) in a run, Stepped in the test; the run's behavior and L7R_RUST_LOCK_CEILING (wall-clock seconds) unchanged",
+     "class": "within",
+     "why": "Fixes a defect in the constitution's sense - a check that refuses correct work (make static red on correct work, T12's log, reproduced 10 of 10 on a shared core). A red gate on correct work costs a make static rerun, which is the time the request's improvement 2 and FR-013's perf priority are about; nothing the GM asked for is narrowed and the run's behavior is unchanged."
+    },
+    {
+     "id": "T35-exact-count",
+     "summary": "the test asserts exactly 6 waiting lines (0 to 50 ms, refused at 60) on the stepped clock where it asked >= 2",
+     "class": "within",
+     "why": "A tighter assertion on a deterministic event count, shown red with the behavior broken (left 1, right 6). Not the struck bitwise-exactness standard: it holds no port to a replaced output, it checks the wait's own behavior."
+    },
+    {
+     "id": "T35-reads-cap",
+     "summary": "a wait that never ends reads the stepped clock past READS=100 and panics rather than hangs",
+     "class": "within",
+     "why": "Makes the never-ends failure a red test instead of a hang; shown red with the ceiling broken. Enforcement of the fix, no new behavior in a run."
+    },
+    {
+     "id": "T35-other-tests-wall",
+     "summary": "the crate's other runlock tests keep the wall clock (two_runs_in_one_target_directory_take_turns at a 60 s ceiling against two 0.1 s calls; a_refusal_is_the_checks_reply asserting a refusal only), so Wall stays covered",
+     "class": "within",
+     "why": "Neither has failed; both stayed green 5 of 5 on the shared core that failed the old test 10 of 10, one has about 300x headroom and the other asserts nothing timed. A difference from T35's 'never a bare wall-clock bound' wording with no wrong outcome is not a defect (constitution XIV), so leaving them is not a defect left and needs no ruling; they also keep the Wall path covered."
+    },
+    {
+     "id": "T35-perf-tag",
+     "summary": "the task is performance work under FR-013 by its [perf] tag, not filed with PERF=1 (no engine stage's operations or time)",
+     "class": "within",
+     "why": "FR-013 names both routes ('filed with PERF=1 or tagged [perf]') and counts a task making the gate or the builders' loop faster; the choice of route is inside the requirement."
+    },
+    {
+     "id": "T35-land-half-to-T20",
+     "summary": "the land-tooling half of the finding is folded into T20; T35 is independent of the other lanes",
+     "class": "within",
+     "why": "Ordering and task boundaries only; the land-tooling wall-clock finding stays owned (T20), nothing is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)",
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T36-approach",
+     "summary": "Each of the thirteen archived deferrals is read by hand once and given one of four verdicts (carried, fixed, still open and filed by make task-add, not a defect); history is not re-judged, so a ticked carrier counts as its tick says",
+     "class": "within",
+     "why": "This applies D15/FR-009 (a deferral carries a filed task and an order) back to sections archived before the form was enforced. The four verdicts cover every outcome, and 'not a defect' follows the constitution XIV standard the GM set on 2026-11-19. Taking a ticked carrier as its tick says matches the replay's purpose: it asks whether each deferral has a home, not whether earlier work was correct."
+    },
+    {
+     "id": "T36-carried-and-fixed-rows",
+     "summary": "449 T156, T200, T201(a), T208(a), T218, T219, T221(a), T224, T239(1)(2)(3); 451 T03 (fixed and carried parts), T16, T26(e) are recorded as carried by a named open or ticked task, or fixed by a named commit",
+     "class": "within",
+     "why": "Each row names its carrier or commit and the reading behind it, which gives every one of these deferrals the name and order D15 asks for. Nothing is left unaddressed."
+    },
+    {
+     "id": "T36-not-a-defect-rows",
+     "summary": "449 T208(b) (reviewer's notes, prose slip in a SOUND derivation), 449 T221(b) (old Python cache entries nothing reads, disk only), 451 T03's two never-matching data-model rows, 451 T26(b) (history between closed features' reports) and (c) (another builder's uncommitted work) are judged not defects and not filed",
+     "class": "within",
+     "why": "Each row states why there is no wrong outcome: no total moved beyond a few operations and budgets held; nothing reads the old entries; a row that never matches books nothing wrong; closed history; not a defect of the tree. Under constitution XIV (GM 2026-11-19), a difference with no wrong outcome is not a defect, and leaving it stays within what was asked and needs no ruling."
+    },
+    {
+     "id": "T36-still-open-filings",
+     "summary": "Three still-open deferrals are filed now: 449 T243 (pool-sheet stage change/raise/accept path, header re-read at HEAD), 451 T52 (the 8 command-text readers keeping their own make-call reading, measure-first) and 451 T53 (events-refile owed again, indexes not naming filed.rs/refile.rs); the two 451 filings land before T22",
+     "class": "within",
+     "why": "Filing with a task id is the remedy D15 prescribes for a deferral. T52 is measure-first because no wrong verdict on a real command has been shown yet, which fits the defect standard. The 451 T02 class census gives its search space (a grep of rust/, scripts/ and the Makefile, each hit read and sorted), as D15's class rule asks. Aside, not a narrowing: the block states no lands-before order for 449 T243. That is outside this feature's T22 close, and 449's own task order would carry it."
+    },
+    {
+     "id": "T36-found-and-left-none",
+     "summary": "T36's own Found and left is 'none', because the three still-open deferrals are filed in the table",
+     "class": "within",
+     "why": "T36 defers nothing of its own. Its whole job is to resolve the earlier sections' deferrals, and each one gets a verdict and a name, so 'none' is accurate."
+    },
+    {
+     "id": "T36-scope-budget",
+     "summary": "No map change; one landing, specs only; ordered after T17 and before T22",
+     "class": "within",
+     "why": "The replay is a specs-only follow-up to T17's enforcement and does not reach maps or code. The ordering keeps the 451 filings ahead of the feature's close."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)",
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T36-method",
+     "summary": "Each archived deferral is read by hand once and gets one verdict (carried / fixed / still open, filed / not a defect); ticked tasks' history is not re-judged",
+     "class": "within",
+     "why": "This applies D15 (a deferral needs a filed task and an order) and constitution XIV (only a wrong outcome is a defect) to the deferrals T17's replay found. It does not narrow either one: every deferral gets a named carrier, a commit, a filed task or a stated reason it has no wrong outcome."
+    },
+    {
+     "id": "449-T201a",
+     "summary": "make work-budget reading only the roll's stages is ruled not a defect, because make work-budget-review (T224) re-counts every Mode A sheet stage (placer, compound, pipeline) and holds it to twice its budget",
+     "class": "within",
+     "why": "The deferral describes how the work is split between tools, not a wrong outcome. The row says, with the files and the dev/work-budget.json keys read at HEAD as its measurement, that every Mode A stage is counted and held by another target. A stage would have to go unchecked for a check to be passing bad work, and none does. Under XIV v2.36.0 leaving this as it is stays within what was asked and needs no ruling."
+    },
+    {
+     "id": "449-T201b",
+     "summary": "a pool-sheet stage has no change, raise or accept path; filed as 449 T243",
+     "class": "within",
+     "why": "Filed as an open task with its evidence (the header of sheets.rs read at HEAD). The work is not left undone."
+    },
+    {
+     "id": "449-T208b",
+     "summary": "the reviewer's notes (an unstated radius, a 'ten zones' slip, the fire gap) are ruled not a defect",
+     "class": "within",
+     "why": "No total moved by more than a few operations, T152 held both sheets within twice their budget, and the slip is in the prose of a SOUND derivation. No map, check or research finding is wrong, so under XIV this is a difference, not a defect."
+    },
+    {
+     "id": "449-T221b",
+     "summary": "the Python cache's old entries under .gencache/<map>/ are ruled not a defect (disk only)",
+     "class": "within",
+     "why": "Nothing reads them: the Rust cache's DIR is .gencache/rust. Disk used in one clone is not a wrong map, a wrong check or a crashing tool."
+    },
+    {
+     "id": "449-carried-rows",
+     "summary": "449 T156, T200, T218, T219, T221a, T224, T239(1)(3) are carried by named tasks, each ticked at a cited commit or open (T240); T239(2) was fixed by T238",
+     "class": "within",
+     "why": "Each deferral names the task or commit that covers it. Nothing is dropped."
+    },
+    {
+     "id": "451-T02-T52",
+     "summary": "the shared make-call reading class is censused (13 modules through shared::make; 10 own readers, up from 8 now that measure_hooks' has() and gate_write_hooks' head_of are found) and filed as 451 T52, measure first, landing before T22",
+     "class": "within",
+     "why": "The census states its search space as D15 and the enumeration rule require: greps of rust/, scripts/ and the Makefile, rechecked with git grep at HEAD and a grep for \"make literals, each hit read. The fix is filed with an order rather than left. Measuring first follows XIV: whether any of the 10 gives a real command a wrong verdict has not been shown yet."
+    },
+    {
+     "id": "451-T02-set-apart",
+     "summary": "process-table argv readers, cheap contains(\"make\") prefilters, batching_hooks' NOT_RECON, log-field readers and research prose are set apart from the T02 class",
+     "class": "within",
+     "why": "The class is reading which make targets a command text runs. Process-table readers read a live process's argv, where a wrapper is its own process. Prefilters only skip work. batching_hooks only tests whether make is present, can never refuse wrongly, and was read at cited lines. Log-field readers read an already-parsed field. Each is set apart for a stated, checked reason. That is defining the class, not carving a case out of it."
+    },
+    {
+     "id": "451-T03",
+     "summary": "T03's deferrals: three fixed at commits; the lines filed by feature.json carried by T26, with the remainder in T53; booking by make carried by T08 (open); the live line fixed (66 make static lines carry cat tests); the two unmatched data-model rows ruled not a defect",
+     "class": "within",
+     "why": "Every item has a carrier, a commit or a filed task. A row that never matches books nothing wrong, so it has no wrong outcome under XIV."
+    },
+    {
+     "id": "451-T16",
+     "summary": "POLL_CHECK_S going into D14's knob table is carried by T22 (open)",
+     "class": "within",
+     "why": "D14's knob table is T22's line. It is carried, not dropped."
+    },
+    {
+     "id": "451-T26",
+     "summary": "(a) events-refile still owed and (d) the indexes missing filed.rs and refile.rs, both filed as T53 (narrowed to the one builder checked); (b) two re-file judgment calls on closed features and (c) another builder's uncommitted work stopping make static ruled not a defect; (e) fixed by T07",
+     "class": "within",
+     "why": "The open items are filed with a measured remainder (19 lines, from make events-refile DRY=1). (b) is history between the reports of closed features, with the copy from before the re-file kept. (c) is not a defect of the tree. Neither (b) nor (c) is a wrong outcome of the tooling."
+    },
+    {
+     "id": "T36-found-and-left",
+     "summary": "Found and left: none, since the three still-open deferrals are filed (449 T243, 451 T52, T53) and the two 451 filings land before T22",
+     "class": "within",
+     "why": "Filing the deferrals is this task's own work, and each one carries a task id and an order, so nothing found is left unfiled."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T37 (the plan-review bundle cut a decision at its list: `spec-cited.md` stopped D16 at \"Two things make the comparison real:\" and D15 at its colon, so the reviewer judged each without its bullets, observed 2026-11-20, method: T19's and T17's plan reviews and T18's bundle rebuilt, `/tmp/t37-before/T18/spec-cited.md`)",
+    "### T37 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T37-writer",
+     "summary": "The one cited-text writer (`paragraphs` in bundle.rs, shared by build, foreign and requirements) runs each match to the next match or next heading instead of the first blank line, so a cited decision or requirement reaches the reviewer whole with its lists and tables.",
+     "class": "within",
+     "why": "Serves FR-013 and the approved improvement 4 ('Fewer plan re-rounds'): the cut text cost T17's and T19's reviews a round each. It widens what the reviewer is given; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T37-item-end",
+     "summary": "A match written as a list item (bulleted requirement or decision) stops at a blank line its own indented lines do not follow (`item_end`), and no longer carries a following heading; a requirement written as a heading is read as before.",
+     "class": "within",
+     "why": "Same purpose as the writer fix: the reviewer gets the item's own text, nested lists included, and not an unrelated heading. The 43 decisions and 3 requirements that shrink lose only a heading line the old cut wrongly carried - a defect fixed in the task, not a narrowing."
+    },
+    {
+     "id": "T37-no-cap",
+     "summary": "No size cap is added to spec-cited.md; the bundle grows (T18's +6.7%, all decisions +5.6%).",
+     "class": "within",
+     "why": "Carrying the cited text whole is the point of the task; adding no cap keeps nothing out. Feature 375 amendment 11's lean bundle (cited text, not the plan) is kept, since only cited items are carried."
+    },
+    {
+     "id": "T37-perf-tag",
+     "summary": "T37 is filed as a [perf] task under FR-013.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster, and the request's approved improvement 4 names fewer plan re-rounds as a time saving; a decision cut at its colon costs a review round. This is FR-013's own definition applied, not a carve-out from it."
+    },
+    {
+     "id": "T37-found-left",
+     "summary": "The heading-carry defect found while doing the work is fixed here, pinned by a red-first test.",
+     "class": "within",
+     "why": "Fixed in the task, nothing deferred; consistent with fixing known defects as found."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T38 (the gate crates' tests read the real environment through the guard: with `L7R_FEATURE_DIRECTORY` and `L7R_EVENTS_DIR` exported, 49 tests of 7 gate crates failed, found by T32, observed 2026-11-20, method: T32's per-crate sweep, `/tmp/t32-sweep/all2/summary.txt`)",
+    "### T38 Approach (checklist part A)",
+    "### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T38-perf",
+     "summary": "T38 is filed as performance work under FR-013: gate crates' tests stop reading the builder's shell exports, so a builder no longer spends a round on 49 reds caused by its shell, and a test no longer writes into or deletes a real event log or answer store.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work, and the GM asked on 2026-11-20 that performance work go first. Tests that fail because of the environment and tests that delete real answer records are wrong outcomes, so fixing them is also fix-as-we-go work."
+    },
+    {
+     "id": "seam",
+     "summary": "The seam is shared::env::Rooted, a root with its own env reader that derefs to &Path. It is threaded through every call site that reads the guard (owed, reviews, rustc, measure, bundle, record, land, arbiter). The guard's explicit-env _in variants are made public, and the old names become wrappers over shared::env::opt.",
+     "class": "within",
+     "why": "This is how the fix is built. It does not narrow FR-013 or the request."
+    },
+    {
+     "id": "no-cargo-feature",
+     "summary": "The cargo dev-dependency feature route was measured with cargo tree and ruled out. It would reach a package's whole test build, its binary included, and the task line forbids it.",
+     "class": "within",
+     "why": "Choosing between two ways to build the fix is not a narrowing. The choice is measured, and the GM's request does not depend on it."
+    },
+    {
+     "id": "no-process-env-in-tests",
+     "summary": "No test sets the process's environment. Land's restore helper, which set and removed a process variable, is removed together with its test.",
+     "class": "within",
+     "why": "A test that set a process variable was part of the defect, so removing it is part of the fix."
+    },
+    {
+     "id": "try_trip-removed",
+     "summary": "try_trip had no caller left and is deleted.",
+     "class": "within",
+     "why": "Removing dead code inside the fix changes no behavior anyone asked to keep."
+    },
+    {
+     "id": "sweep-12-fixed",
+     "summary": "The 78-variable sweep moved 12 more tests (owed 11, land 1) through RECORD_CHECKS_DIR. Those 12 are fixed here: owed's own reads go behind answers::record_checks_dir, and land's replay hands bundle_in its store.",
+     "class": "within",
+     "why": "These are defects of the same kind, found during this step and fixed in it, as fix-as-we-go requires."
+    },
+    {
+     "id": "answers-split",
+     "summary": "owed/answers.rs went over the 1,000-line bar at 1,012 lines. Its command-line half is split into answers/cli.rs, leaving 807 lines.",
+     "class": "within",
+     "why": "The task's own growth tripped the file-scale check, and the plan fixes that here."
+    },
+    {
+     "id": "tree-rs-to-T42",
+     "summary": "rust/guard/src/shared/tree.rs at 1,064 lines belongs to T42 and is left to T42. T42's split has since brought it to 673 lines, and make quick is clean.",
+     "class": "within",
+     "why": "Another task owns the file and has already fixed it (measured), so no known defect is carried past this step."
+    },
+    {
+     "id": "check-keys-earlier-section",
+     "summary": "The bundle crate's check and keys bundles still reach earlier::section through its process wrapper. The plan says this is not a defect: no test outcome moved with any variable exported, and nothing is written.",
+     "class": "within",
+     "why": "The before-rest and after3 sweeps measured no wrong outcome. By the constitution XIV definition, a read that moves no outcome is a difference, not a defect, so leaving it needs no ruling."
+    },
+    {
+     "id": "guard-cargo-dropped",
+     "summary": "L7R_GUARD_CARGO is classed as a runner variable and dropped from the swept list (77 swept). The 19 bundle reds once attributed to it were not borne out: exported alone it moved none, and bundle was green with all 78 after the store fix.",
+     "class": "within",
+     "why": "Only bundle was measured for this variable: exported alone it moved none, and with all 78 after the store fix bundle was green (guard-cargo-bundle.log, bundle-78.log). The 27-crate after3 sweep ran with 77 variables. Which variables the sweep lists is not part of the GM's request or of FR-013, and no wrong outcome is shown, so it is within."
+    },
+    {
+     "id": "delta-store-left",
+     "summary": "Delta::store and sibling_stores still read the process's RECORD_CHECKS_DIR. Against a seeded exported store, the 8 crates that reach them were each green and the store was unchanged (diff -r empty). No test reaches either read, and in the binary they are the real reads.",
+     "class": "within",
+     "why": "A wrong outcome was checked for and none was found (measured). In production the process read is the correct behavior. Not a defect."
+    },
+    {
+     "id": "t32-claim-restated",
+     "summary": "T32's cargo-feature claim is restated as narrower than T32 said: the feature reaches a test build's binary but never the tool binaries.",
+     "class": "within",
+     "why": "Correcting a claim to match measurement changes no code, so it is not a narrowing."
+    },
+    {
+     "id": "twice-run-rust-gate",
+     "summary": "rust/gate was left out of the run twice against one store and was covered instead by the seeded-store run (green, store unchanged).",
+     "class": "within",
+     "why": "This is exit-evidence coverage inside the task, it is measured, and it narrows nothing that was asked."
+    },
+    {
+     "id": "exits-and-order",
+     "summary": "Exits: 7 crates and the guard green both plain and exported, every gate crate swept, 100% coverage of each changed crate, make static once. Order: after T32, independent of T42, lands before T22. Budget: one landing.",
+     "class": "within",
+     "why": "These are exit conditions and ordering inside the task. They narrow nothing in the request or in FR-013."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T38 (the gate crates' tests read the real environment through the guard: with `L7R_FEATURE_DIRECTORY` and `L7R_EVENTS_DIR` exported, 49 tests of 7 gate crates failed, found by T32, observed 2026-11-20, method: T32's per-crate sweep, `/tmp/t32-sweep/all2/summary.txt`)",
+    "### T38 Approach (checklist part A)",
+    "### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T44 (<why: the finding or measurement that files it>)",
+    "### T44 Approach (checklist part A)",
+    "### T45 (<why: the finding or measurement that files it>)",
+    "### T45 Approach (checklist part A)",
+    "### T46 (<why: the finding or measurement that files it>)",
+    "### T46 Approach (checklist part A)",
+    "(removed) ### T38 (<why: the finding or measurement that files it>)",
+    "(removed) ### T42 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T38-seam",
+     "summary": "The guard's explicit-environment `_in` variants made public; each gate crate hands them a `shared::env::Rooted` (root plus environment reader, derefs to the root); old names stay as wrappers over `shared::env::opt`; no cargo feature, no test sets the process environment.",
+     "class": "within",
+     "why": "This is the task as filed (the gate crates' tests read the real environment through the guard) under FR-013's performance work on the builders' loop: a builder's gate-crate run is no longer red from its shell's exports. Nothing the request or spec asks for is dropped."
+    },
+    {
+     "id": "T38-try_trip-removed",
+     "summary": "`arbiter::try_trip` had no caller left and is deleted.",
+     "class": "within",
+     "why": "Removing a function with no caller narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T38-record-checks-dir",
+     "summary": "The fix widened to `RECORD_CHECKS_DIR` (owed's own reads, land's replay setting it in the process, record's round and bundle's modal chain reading and writing the process's answer store), all fixed here, red first and measured.",
+     "class": "within",
+     "why": "Fixing a defect found in the task, in the task (fix as we go, constitution XIV): tests writing into and deleting a session's real answer store is a wrong outcome. It widens the work; it narrows nothing."
+    },
+    {
+     "id": "T38-answers-split",
+     "summary": "`owed/answers.rs` split, its command-line half moved to `answers/cli.rs`, to get back under the file-scale test's 1,000-line bar.",
+     "class": "within",
+     "why": "A check this task tripped, fixed in the task."
+    },
+    {
+     "id": "T38-tree-rs-deferral",
+     "summary": "`rust/guard/src/shared/tree.rs` over the file-scale bar (1,064 lines) not fixed here: deferred to T42, lands before T22; T42's split has since left it at 673 lines and `make quick` clean.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Leaving a failing check to another task is a narrowing, so it is ruled. Legitimate because: (1) the GM approved improvement 4 (2026-11-19), and FR-009/D15 provide for exactly this deferral, with why it is not fixed here, a filed task and an order; (2) the block carries all three: the file was another builder's, mid-edit in this clone; filed as T42; lands before T22; (3) the defect is measured gone (673 lines, make quick clean, 2026-11-20), so no known defect is carried past this step."
+    },
+    {
+     "id": "T38-check-keys-wrapper",
+     "summary": "Bundle's `check` and `keys` bundles still reach `earlier::section` through its process wrapper: not a defect (reads only the active feature and its rulings, writes nothing, no test outcome moved under any exported variable).",
+     "class": "within",
+     "why": "Per constitution XIV v2.36.0 a defect is a wrong outcome. Measured: no test moved with every variable exported, and nothing is written. A path that only differs from the seam's form, with no wrong outcome, needs no ruling, and leaving it is not a narrowing of the GM's request or of FR-013."
+    },
+    {
+     "id": "T38-delta-store",
+     "summary": "`Delta::store` and `sibling_stores` still read the process's `RECORD_CHECKS_DIR`: not a defect, since no test reaches them (shown by a seeded-store run of 8 crates, green and the store unchanged under diff -r); the binary's reads are the real ones.",
+     "class": "within",
+     "why": "Measured to have no wrong outcome: no test reads or writes the real store through them, and the production binary reading the real store is correct behavior. Not a defect, so leaving it narrows nothing."
+    },
+    {
+     "id": "T38-guard-cargo-dropped",
+     "summary": "`L7R_GUARD_CARGO` dropped from the sweep's variable list as a runner variable (77 swept). The 19 bundle reds once attributed to it are not borne out: exported alone it moved none, and bundle was green with all 78 after the store fix. Their cause (the shared pre-filled store) is labeled a guess.",
+     "class": "within",
+     "why": "Within: 'every gate crate swept' is the task line's wording, not the GM's or the spec's. The variable was measured alone and in the full 78-variable set for the bundle crate only (guard-cargo-bundle.log, after3/bundle-78.log), with no outcome moved; the other gate crates were swept with 77. Dropping it there rests on the block's unlabelled statement that only the hook launcher and the guard's bench read it, following T32's precedent of dropping runner names. No red is left to carry, and the unmeasured cause of the earlier 19 is labeled a guess, not stated as fact."
+    },
+    {
+     "id": "T38-cargo-feature-claim",
+     "summary": "T32's claim about the cargo-feature route restated as narrower (a dev-dependency feature reaches a package's test build, binary included, never the tool binaries); the route stays out by the task line's words.",
+     "class": "within",
+     "why": "Restating a claim to match measurement (cargo tree) and keeping to the task's own exclusion. No requested behavior is dropped."
+    },
+    {
+     "id": "T38-order-exits",
+     "summary": "Order: after T32, independent of T42, lands before T22. Exits: the 7 crates and the guard green plain and exported, the sweep of every gate crate green, the store left empty, lint and cover clean, `make static` once, `make quick`, `make hooks-test`.",
+     "class": "within",
+     "why": "Ordering and acceptance measurements inside the task. `make static` once matches FR-007's intent."
+    },
+    {
+     "id": "T38-restore-helper-removed",
+     "summary": "Land's `restore` helper, which set and removed a process variable around `triage::bundle`, is deleted with its test; the replay now hands `bundle_in` its store.",
+     "class": "within",
+     "why": "The task forbids a test changing the process environment, and the helper existed only to do that. Its test goes with it because nothing is left for it to test, and the replay's behavior is still covered through `bundle_in`."
+    },
+    {
+     "id": "T38-rust-gate-not-twice",
+     "summary": "`rust/gate` left out of the twice-against-one-store run; it was green once against the seeded store with diff -r empty, and is in the 27-crate sweep.",
+     "class": "within",
+     "why": "An acceptance measurement inside the task, with the gap stated openly and covered by the seeded-store run. It narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T38-perf-classification",
+     "summary": "Marked `[perf]` under FR-013 (removes builders' red rounds caused by the shell's exports), not engine speed; the performance checklist is answered with stage-time n/a and no map moved.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work. The claim is backed by the 49-before / 0-after measurement."
+    },
+    {
+     "id": "T44-T45-T46-templates",
+     "summary": "Three new tasks' template sections (T44 from T42, T45 and T46 from T42's builders), all placeholders.",
+     "class": "within",
+     "why": "Unfilled templates decide nothing."
+    },
+    {
+     "id": "removed-T38-T42-template-headings",
+     "summary": "The T38 and T42 template headings removed: T38's replaced by its built section above, T42's template removed.",
+     "class": "within",
+     "why": "Their earlier text (earlier.md) was pure placeholder with no decision, so removing them loses no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T39 (a FRESH=1 run queued behind the target-directory lock might replay the holder's kept result: T32's two `make rust-test CRATE=rust/guard FRESH=1` runs both said \"finished in 4.21s\", found by T32, observed 2026-11-20, method: T32's transcript, `/tmp/t32-final-plain.log` and `/tmp/t32-final-exported.log` at 17:30-17:31 UTC)",
+    "### T39 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T39-close",
+     "summary": "Close T39 with no code change: a FRESH=1 run that waits on the target-directory lock runs its own tests (runner log: 10 of 10 executions over 5 concurrent FRESH runs; T32's two runs each wrote their own build and test Phase rows); the claim that a waiter replays the holder's result is withdrawn.",
+     "class": "within",
+     "why": "The task asked whether a FRESH run could report green without running. The measurement and the code reading show it cannot, so there is no wrong outcome to fix. Withdrawing a claim the measurement refutes is what constitution XIV asks for. Nothing in request.md or FR-013 is narrowed."
+    },
+    {
+     "id": "T39-left-summary-line",
+     "summary": "Leave as it is that the rust-checks summary line quotes only the first `test result:` line of a crate's cargo test.",
+     "class": "within",
+     "why": "This is a display difference, not a wrong outcome: per the section, a failure in any binary fails the crate and prints cargo's full output. The GM did not ask for it, and it is not a defect under constitution XIV. The section says why it is not a defect, which is what FR-009 requires."
+    },
+    {
+     "id": "T39-left-hundredths",
+     "summary": "Leave the matching 4.21 s figures unexplained, labeled as a GUESS (chance under load).",
+     "class": "within",
+     "why": "Both runs executed, as the Phase rows measured on 2026-11-20 show, so the match is not a sign of replay and there is no wrong outcome. Leaving a harmless coincidence unexplained narrows nothing that was asked."
+    },
+    {
+     "id": "T39-perf-class",
+     "summary": "T39 stays a [perf] task under FR-013 and closes with no change.",
+     "class": "within",
+     "why": "The section records the task's existing FR-013 classification. It adds no scope and removes none."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T40 (<why: the finding or measurement that files it>)",
+    "### T40 Approach (checklist part A)",
+    "(removed) ### T35 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T40-template",
+     "summary": "T40's plan section is added as the unfilled task template (heading, Approach, step table, checklist part A, found-and-left, performance-work prompts) with every slot still a placeholder",
+     "class": "within",
+     "why": "Every field is a placeholder; the block settles no scope, constraint, order, exit or deferral, so it narrows nothing the request or spec carries (FR-009/D15 deferral form and FR-013 performance prompt appear only as the template's own questions)."
+    },
+    {
+     "id": "T35-template-removed",
+     "summary": "T35's plan section, which was likewise only the unfilled template, is removed",
+     "class": "within",
+     "why": "The removed text (earlier.md, verdict CLEAR) held no decision - only placeholders - so deleting it drops no requirement, deferral or found-and-left item from the plan."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T40 (T21's finding: `make hooks-test`'s full-run wall is entry-gate's suite plus 2-3 s, measured 2026-11-20 (T21's full runs), its case-4 chain of record gates the last thing running)",
+    "### T40 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "goal-restated",
+     "summary": "T40's goal restated from 'the full run's wall falls' to 'the suite measurably faster alone and in an incremental run that reruns it', after measurement showed the full run's wall now set by the run's total work over its 8 jobs rather than this suite.",
+     "class": "within",
+     "why": "What the GM asked (improvement 5, approved 2026-11-19) is a faster `make hooks-test`; FR-010 asks that the slow suites be split into shards of about 20 s, and FR-013 that performance work go first. Neither the request nor the spec names the full run's wall as the target; that was this task's own first framing. The restated goal still serves the request: the incremental run, the common case, fell 2.2-5.9 s per alternated pair with the suite still setting its wall, and the suite alone fell about 3.7 s. Dropping the full-run target cuts nothing the GM asked for. The measured reason it cannot be the target (once cut, the suite no longer sets the wall, and the cuts remove no CPU work) is a physical limit on what this task's files can reach, not a convenience."
+    },
+    {
+     "id": "cut-1-answers-side-by-side",
+     "summary": "The three --answer calls in answer_all run together and are then waited on; this moves work and removes none.",
+     "class": "within",
+     "why": "A test-suite speed change that keeps every case and assertion. The gate's output was held identical, and the suite still goes red on a broken gate (12 passed, 1 failed with --unanswered dropped)."
+    },
+    {
+     "id": "cut-2-sparse-clone",
+     "summary": "The fixture clones with --no-checkout and makes a sparse checkout of the three paths the suite uses (8,499 of 28,472 files); case 7's find is quiet when dev/bypass-log is absent.",
+     "class": "within",
+     "why": "It removes checkout and index work. Both clones were driven through the eight states and the outputs diffed identical, and case 7 still counts the bypass records before and after one gate. Nothing the suite checks is dropped."
+    },
+    {
+     "id": "cuts-kept-cpu-flat",
+     "summary": "Both cuts are kept although CPU-seconds did not fall (incremental 158-182 before against 171-190 after; system time down about 3 s, user time up about 12 s).",
+     "class": "within",
+     "why": "The request is for a faster `make hooks-test` in wall time. CPU-seconds are not part of what was asked, and the wall was measured faster in the common case and alone. A flat or slightly higher CPU cost is a cost, not a wrong outcome (constitution XIV), so keeping the cuts narrows nothing."
+    },
+    {
+     "id": "rejected-shallow-and-shared",
+     "summary": "A --depth 1 single-pack clone and a fixture shared between cases were rejected on measurement.",
+     "class": "within",
+     "why": "Design choices among ways to speed up the suite, with measured reasons. Nothing requested is dropped."
+    },
+    {
+     "id": "base-reread-deferred-T43",
+     "summary": "Every owed-units computation re-reads 1,951 base blobs (0.63-1.13 s of each 1.4-1.6 s computation). The fix is deferred to T43, a change to the owed crate's Delta::fetch outside this task's files, filed to land before T22.",
+     "class": "within",
+     "why": "This is a performance cost, not a defect: no wrong outcome, no check's verdict changes. It is filed as its own task, not left unfiled, and ordered ahead of T22, so FR-013's performance-first order still reaches it. It also reaches every gate run, including the push, not only this suite. Putting it in a separate task with its own landing is scheduling, not a narrowing of what was asked."
+    },
+    {
+     "id": "push-gate-skip-diff-not-defect",
+     "summary": "push-gate skip's unscoped `git diff --name-only HEAD` (0.24 s a gate run on the full clone) is judged not a defect and is not filed.",
+     "class": "within",
+     "why": "Under constitution XIV a defect is a wrong outcome, and a 0.24 s cost is not one. FR-013 orders performance tasks first but does not require every observed cost to be filed. A real gate pays this once a push, and the sparse clone already shrinks the index this suite walks. Nothing the GM asked for is left undone."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T35 to T40, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

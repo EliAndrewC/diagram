@@ -1,0 +1,725 @@
+{
+ "blocks": {
+  "### T336 (a pool tree's first test build after its pre-warm failed to link, `rust-lld: undefined hidden symbol`, twice on code that was right (2026-11-26, `diagram-backlog-t270`, found by 451 T299's builder); the cause is proved by the measurement under `dev/measurements/2026-11-26/prewarm-link/`: a test build killed past rustc's front end, as the pre-warm's cut killed it)": {
+   "sha256": "b8b07d9110572c21eaed94b7595aee1b5f9180b3b60ca7eb08058cfb2e61b658",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T336 Approach (checklist part A)": {
+   "sha256": "00026bedcc46ee44d1ef4e2df1066be3145b36e1faf8dce03158fd1f443531de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T337 (<why: the finding or measurement that files it>)": {
+   "sha256": "3b06f8931b139acb8345e3298a938e662fb1ff3e429f1de69a2ee241ff579c89",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T337 Approach (checklist part A)": {
+   "sha256": "a3a03b8cca6cccd4f6902892ab2d0cf3e80a9ec164757f9af0eaa67be81222c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T338 (<why: the finding or measurement that files it>)": {
+   "sha256": "c8ba5c9ceb880c8090d0c0e54c502d38362c63a04868afc0da2b27540f3676b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T338 Approach (checklist part A)": {
+   "sha256": "3ea28cc6ab8ee078c4ba251ff9939ba5dda51aa7b45c5cb75c5bfba4a54b0c9e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T339 (451 T315's measurement of 2026-11-26: most of every run of `rust/guard/shared`'s suite is one test of the idle check waiting real seconds, and two more wait a second each)": {
+   "sha256": "331cff4d9c9f02294bfd7a797065cb007f5f202708c8e0b59eed431f79a5157f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T339 Approach (checklist part A)": {
+   "sha256": "8bcdb05e4f73a42302e9b0beffddf98ff9ec5dee2198506b4df8955a6f0b1c53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T339 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "01c394e2f769832ea3e3f818d3acc18e935f9e949ad19ee5f33c1a2e335dcc7d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T340 (451 T315's measurement of 2026-11-26: the guard crate's test run goes on waiting after its tests end, on processes the tests leave behind)": {
+   "sha256": "873b71538cc4d1119a3ad2ce35309cf07c5b87abdfd3da356b08c72c14f4fc1b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T340 Approach (checklist part A)": {
+   "sha256": "32aee0c1b25421a350bfba79901be033b1dfdd80c415a5b3ebf5ef4940fe581d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T340 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "0a35cfe35589839af3b9ddf7d459a2e6994279b8aa42c4942480fa4b8115a51f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T342 Approach (checklist part A)": {
+   "sha256": "2bef83ed7cee3acb588a2e04ca4a43286816af1873b4f5dfdfc20b628e48dc21",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T342 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "668e35345c06828b8483f6f8dcc1213acce3ed4110197cd6c1c79005373bf5b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T342 (found by 451 T315, measured 2026-11-26 in the pool tree diagram-backlog-t269: the checks' tool takes a crate and nothing narrower, so every run of `rust/gate/crates/land` starts 4,177 processes for 21 s of processor time, where its tests filtered to one module took 0.8 to 1.4 s; the line asks for a filtered run measured beside working builders first, then the build if it holds)": {
+   "sha256": "537c13b18f10c69034cef1035b6bd1f3133c7f8d3777d807915d208d9128a47e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T343 (<why: the finding or measurement that files it>)": {
+   "sha256": "a57fbefdaa6411993e9edf8a3848aa9c10336a540afc2772269a638526936dcf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T343 Approach (checklist part A)": {
+   "sha256": "071837ad018dc73c7d0a2ef77482890d2b6c375458c1dda434e6455ab36eca60",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T336": {
+   "section_sha256": "04f21ff4e56f66d4f299155f1cc1aefe79578ef36a606b58ae1ed64f87026d05",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T336-fix1",
+     "summary": "The pre-warm never cuts a crate in flight: a real run, the last slot taken or the ceiling passing mid-crate is noted and the crate runs to its end, slot held; End::Cut and code 130 go",
+     "class": "within",
+     "why": "Fixes a measured wrong outcome (a test build red on right code, 29 of 54 cut tries vs 0 of 20 uncut) in T316's mechanism. The GM's T316 words ask only whether to begin compiling at once; the cut was T316's design, not his. Holding the slot until the crate ends is synchronization, as his T284 words prefer. Nothing he asked is narrowed."
+    },
+    {
+     "id": "T336-brief-reading",
+     "summary": "On no spare slot the pre-warm WAITS at the loop head rather than ending, departing from the brief's sentence, stated",
+     "class": "within",
+     "why": "The brief is the coordinating session's, not the GM's; the behavior is T316's as built and keeps the pre-warm doing what the GM's T316 question is for (compile ahead). Stated openly, nothing of request.md or the spec narrowed."
+    },
+    {
+     "id": "T336-cost-accepted",
+     "summary": "A real run may wait on cargo's lock, and another tree's compile in the slot queue, for the rest of one crate (median 2.0 s, p90 13.0 s, max 82.7 s, measured 2026-11-26); alternatives priced and rejected; reopening bounds GUESS 90 s / one in ten past 13 s",
+     "class": "within",
+     "why": "A design tradeoff chosen on a labeled measurement; no GM words promise a real run pre-empts a pre-warm within a poll - that was T316's promise. Not a fidelity matter."
+    },
+    {
+     "id": "T336-fix2",
+     "summary": "stepped's --no-run build becomes one call, stale::built: on 'undefined hidden symbol' it drops every incremental directory of each named crate and each named fingerprint under cargo's lock, builds once more, never a third; nothing dropped when the linker names nothing of the tree, no incremental dir, or the lock is held past LOCK_S (120 s, GUESS)",
+     "class": "within",
+     "why": "Heals the same wrong outcome for builds killed any other way, the make rust-test half of the already filed T146; fix-as-we-go of a known defect. Scope wider than T142's one-directory retry is a design choice backed by the harness's measured repair (29 of 29 green)."
+    },
+    {
+     "id": "T336-counted",
+     "summary": "A heal writes one Phase line step link-heal inside the build line's span, seconds booked as compile, countable in .git/l7r-events/",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-22 'we want everything measured so we know where our time goes, especially for compiling': the heal is logged and its seconds are booked as the compile they are."
+    },
+    {
+     "id": "T336-left-T361",
+     "summary": "make task-time does not show heals apart (columns::category names no category for link-heal); filed T361, lands before T302",
+     "class": "within",
+     "why": "Not a defect by the constitution's definition: the report answers truly (the heal's seconds are compile, inside the build span) and the raw lines exist, so nothing goes unmeasured or misbooked. A separate heal column is a refinement, filed with reason, id and order as FR-009 asks."
+    },
+    {
+     "id": "T336-left-T362",
+     "summary": "The heal is not run live on a really broken cache; the fixture follows the kept real link-failure text; filed T362, lands before T302",
+     "class": "within",
+     "why": "A verification gap, not a known defect: the tests pin the heal against the kept example of the real error, and should real words differ the failure returns with the repair named - no worse outcome than today. Filed with reason, id and order."
+    },
+    {
+     "id": "T336-T146-T206-remainder",
+     "summary": "The guard launcher's own incremental build stays with T146; the coverage build's link stays with T206",
+     "class": "within",
+     "why": "Both are existing open tasks for their own mechanisms; fix 1 removes the pre-warm cause for all of them, and this task's brief is the pool tree's pre-warm and make rust-test. Leaving already-filed separate work with its owners narrows nothing the GM asked."
+    },
+    {
+     "id": "T336-order-and-interim",
+     "summary": "After T316 and T142, before T347 and T302; pool handouts carry L7R_PREWARM=0 until this lands",
+     "class": "within",
+     "why": "Scheduling and an interim that stops the defect recurring; nothing of the request narrowed."
+    },
+    {
+     "id": "T336-exits",
+     "summary": "Green is the first tier (make builder-checks over rustc and task) plus the changed crate's coverage; the full gate runs once in the clone over the batch",
+     "class": "within",
+     "why": "The two-tier arrangement the GM asked for on 2026-11-26 (T308): full rigor deferred to the session clone's gate."
+    },
+    {
+     "id": "T336-performance",
+     "summary": "Counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words count measurement and performance-mechanism work as performance work, first in order (FR-013)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T339": {
+   "section_sha256": "4d57938c0adc0ef0d989170d21cc9744bdaa0df4ac8cbe60ad9f1a032091a7e4",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T339-clock-route",
+     "summary": "Of the brief's two routes, a clock the test drives is taken over knobs in fractions or milliseconds",
+     "class": "within",
+     "why": "Both routes are the brief's own; the reasons given (a constant second past a crossing, a whole-number bound printed in the notice, waits left open to load) keep the production path and every guard message unchanged. It serves FR-013 (the builders' loop faster) and the GM's T104 words on the test that fails under load. It narrows nothing that was asked."
+    },
+    {
+     "id": "T339-procs-clock",
+     "summary": "Procs gains now() and sleep() with default bodies (Instant::now, thread::sleep); the check's four clock uses go through them; Blind and the guard crate's Ctx define neither, so production makes the same calls; stalls::stalled's SystemTime read unchanged; no file outside rust/guard/shared changes",
+     "class": "within",
+     "why": "This is the mechanism for the chosen route. The production behavior, its looks, budget and hand-on (451 T193/T201) are unchanged, and the plan states that and pins it (Blind's clock tested against the machine's)."
+    },
+    {
+     "id": "T339-stand-in-table",
+     "summary": "The tests' Table notes each wait, advances a stand-in time, runs a meanwhile (it backdates the builder's transcript, appends turns), and fails past 50 waits",
+     "class": "within",
+     "why": "A test fixture that makes the idle tests independent of load and turns a check that never stops looking into a red test, not a hang. It is enforcement of the existing behavior, not new behavior."
+    },
+    {
+     "id": "T339-test-pins",
+     "summary": "The idle tests are rewritten to exact counts of looks and waits; the old budget-of-one case is kept as budget zero; the crossing case uses the shipped ten-minute bound in place of two seconds; the reply-during-wait test has no thread or timing",
+     "class": "within",
+     "why": "Every behavior the old tests proved is still proved, more strictly: exact counts in place of elapsed wall time, and the five breaks of idle.rs each turn a test red, measured 2026-11-26. The ten-minute bound is the shipped value, so it narrows no coverage, and the plan gives the reason (the real-clock read of the transcript). The old one-second case's meaning is kept as budget zero."
+    },
+    {
+     "id": "T339-long-text",
+     "summary": "The spelling test's text goes from 50,000 to 40,000 repeats (LONG_TEXT, a CONVENTION knob), 8% past the old million-step limit, with the test's own assertion proving the limit fires; CPU_BOUND_NS is not moved",
+     "class": "within",
+     "why": "What the test pins (451 T81, 449 T185) is that the text is past the old limit, and its own assertion still proves that on every run. Cutting a test's own text length changes no behavior and no claim. Leaving the bound alone loosens nothing."
+    },
+    {
+     "id": "T339-next-slowest-left",
+     "summary": "The next slowest tests (the context test at 1.57 s, two at 0.47 s) are read and left; the context test is real work, not a wait; nothing filed",
+     "class": "within",
+     "why": "The task is the waits T315 measured, and the brief bounds the read. Slow work that gives correct results is not a defect (a wrong outcome) under constitution XIV, so leaving it defers no known defect. No GM request asks for every test in the crate to be shortened."
+    },
+    {
+     "id": "T339-exits",
+     "summary": "Green is builder-checks and crate-checks in the builder's tree, with the full gate at the landing; red is recorded and set down, and a claim of cannot-be-done goes through make arbiter-ask",
+     "class": "within",
+     "why": "This follows the two-tier checking the GM asked for (451 T308): the full rigor is at the landing's gate. It skips no check."
+    },
+    {
+     "id": "T339-perf-class",
+     "summary": "The task is classed [perf] under FR-013, as builders'-loop speed",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work in words, and this task cuts the shared guard crate's test run from about 8.3 s to about 2.9 s, measured 2026-11-26."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T340": {
+   "section_sha256": "2165cebafd9f0fb4d4f1ac77ee0cb27c625bcaf04ca22ff7de2de6f89ce26d65",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T340-approach",
+     "summary": "The clone check's stand-in sessions become sh -c 'read _' <args> on a pipe the test holds, in place of sh -c 'sleep 5; :' whose sleep child outlived kill+wait; only the one test file changes, no guard code or message.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the GM 2026-11-20, 'priotitize performance improvements'): removes 3.2 s of post-test waiting and nine leftover processes per run (measured 2026-11-26). The three tests keep a live process whose cmdline names claude, so what they prove is unchanged; read is a builtin, so nothing forks, and the pipe ends the stand-in if a test panics. Followed literally it does what it says (0 alive after, pipe end = exit)."
+    },
+    {
+     "id": "T340-alternatives",
+     "summary": "Chosen over closing the sleep's output and over killing the shell's process group.",
+     "class": "within",
+     "why": "A design choice among ways to the same goal; closing output would leave the processes alive, so the chosen fix is the one that removes the leak. Not a fidelity matter."
+    },
+    {
+     "id": "T340-red-first",
+     "summary": "New test a_stand_in_session_starts_no_process_of_its_own reads /proc/<pid>/task/<pid>/children of a stand-in; red on the old stand-in (1 of 549, 20 of 20 alone), green on the new.",
+     "class": "within",
+     "why": "Enforcement of the fix itself (fails only when the stand-in forks a child); serves the task, not unrequested scope."
+    },
+    {
+     "id": "T340-gate-reader-left",
+     "summary": "The gate's run_in (Command::output, returning at pipe end rather than binary exit) is not changed; filed T364, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured after the fix: pipe end and exit coincide (2.14/2.39/2.29 s vs exit 2.14/2.39/2.28 s), so with the leak removed it is no wrong outcome today - a latent cost, not a defect under constitution XIV's definition; the coordinating session's brief scoped the gate reader to 'filed and not changed unless it is the narrower fix', and it is not the narrower fix (it changes every crate's output reading). The found-and-left item states why, its filed id and its order (FR-009), and it lands before T302, so nothing known is carried past the next step."
+    },
+    {
+     "id": "T340-general-leak-pin-left",
+     "summary": "The task line's ask for a pin that a crate's test run leaves no process behind is met for this stand-in only (the new test); a check over every crate's run, a new gate mechanism in rust/gate/crates/rustc, is filed as T363, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated against purpose: the purpose (FR-013, the builders' loop faster; the leak gone) is achieved here and pinned for the cause found; the absent general pin is a check that would pass a future leak, so it is a defect, but it is not dropped - it is split into its own task ordered before T302, which satisfies fix-as-we-go (defects fixed before the next step begins). The split is implied by the GM's own words on builder sizing (2026-11-26, T334, the sizing rules of builder-brief.md that the session must follow, and 2026-11-25 on one builder doing too much): a new gate mechanism in another crate is a builder's job of its own. The task line is the coordinating session's, not the GM's (block's item 3: G none). FR-009's why / id / order are all present."
+    },
+    {
+     "id": "T340-tmpdir-slowness-left",
+     "summary": "The guard test binary runs 5.3-6.0 s under the default TMPDIR vs 2.0 s under an empty one; cause not found, gate does not pay it; filed T365, lands before T302.",
+     "class": "within",
+     "why": "A separate finding outside this task's subject (the gate's run, which uses a fresh TMPDIR and so does not pay it); filed with why, id and order. Leaving an unrelated found issue to its own filed task narrows nothing the GM or the spec asked of T340."
+    },
+    {
+     "id": "T340-shared-and-T357",
+     "summary": "rust/guard/shared looked at once and found free of this leak; T357's orphaned self-copy in tempdir tests is a different cause, left to T357.",
+     "class": "within",
+     "why": "T357 is an existing filed task with its own cause; recording that this fix does not cover it is scoping by fact (measured 2026-11-26), not a narrowing of what T340 was asked."
+    },
+    {
+     "id": "T340-exits-and-order",
+     "summary": "Exits: builder-checks first tier, the clone-sync hook suite, the crate's cover step; full gate at landing; one landing; before T302 and independent of T339/T341/T342/T344/T347/T357.",
+     "class": "within",
+     "why": "Follows the GM's two-tier checking (2026-11-26, T308: the rigor belongs at the landing) and FR-013's ordering; settles nothing the spec left open against the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T341": {
+   "section_sha256": "38dcd269d467de402c8116c5707e32fd25174ec3a6e22b2d1eb32040f8a80f81",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T364-a1",
+     "summary": "T364: run_in's Command::output replaced by a spawn, each pipe read on its own thread, the run waiting on the child's exit rather than on the pipes' end",
+     "class": "within",
+     "why": "This is T364's own finding: the run waited for the end of the pipe, not for the binary's exit. Ending a run at its program's exit is what the task asks for. It serves FR-013 and the GM's 2026-11-20 priority on performance."
+    },
+    {
+     "id": "T364-a2",
+     "summary": "T364: a new DRAIN constant of 250 ms, a GUESS knob, for the readers to reach the pipe's end after the exit",
+     "class": "within",
+     "why": "A bound has to exist for a run that stops at the exit to still collect what was written before it. The constant is labeled a GUESS, and the plan states its cost: at most 250 ms past the exit, where the holder's whole life was spent before."
+    },
+    {
+     "id": "T364-a3",
+     "summary": "T364: a pipe still open after DRAIN is cut only where another process holds it; where none holds it, the run waits for the pipe's end",
+     "class": "within",
+     "why": "This keeps every byte written before the exit, so a test build's last executable lines are never dropped. That is the plan's constraint 2, and the test a_late_reader_with_no_holder_is_waited_for_not_cut pins it. Nothing asked for is narrowed: the leak case, which is the one T364 names, is still cut."
+    },
+    {
+     "id": "T364-a4",
+     "summary": "T364: the naming half of T363 built here - holders scans /proc/*/fd and writes one HELD line, which answer also prints for a green crate",
+     "class": "within",
+     "why": "T363 is an open task of this feature, so bringing its smallest half forward adds no new behavior outside the feature. The line only prints. It refuses, blocks and rewrites nothing. The GM's 2026-11-22 words allow small tasks to be worked together."
+    },
+    {
+     "id": "T364-a5",
+     "summary": "T364: T363's other half (failing the crate, ending the leftover processes, checking the process group) stays open as its own task",
+     "class": "within",
+     "why": "That is T363's scope, not T364's, and T364 is complete without it: the run ends at the exit and the leak is named. T363 stays filed, and the plan orders T364 before it."
+    },
+    {
+     "id": "T341-b1",
+     "summary": "T341: the code-views cache stamp gains the binary's content id, so a touched binary (l7r-gate.sh touches it after a guard build that did not change it) keeps its views and has its new mtime written back, while a rebuilt binary is still another binary",
+     "class": "within",
+     "why": "This is T341's finding: about 2.0 s before the first build after a one-line guard edit, which falls under the GM's 2026-11-26 complaint that more of the compilation was not able to be cached. The fix is measured: 6.95 to 7.66 s fell to 0.30 to 0.33 s. Constraint 2's rule that a rebuilt tool never reads another binary's views is kept, and a test pins it."
+    },
+    {
+     "id": "T341-b2",
+     "summary": "T341: fixed by a different mechanism from the one T341's line guessed (a kept key over the guard's sources and declared reads), after step lines showed the guessed cost to be 0.02 to 0.2 s and the cost to be the views recompute",
+     "class": "within",
+     "why": "The task line's mechanism was a guess, and the measurement showed the time going elsewhere. The goal, a fast start after an edit, is delivered. Choosing the mechanism by measurement follows the project's standing rule and narrows nothing the GM asked."
+    },
+    {
+     "id": "T341-left1",
+     "summary": "T341: a real rebuild of l7r-rust (an edit of rust/guard/shared, core, tree or rustc) still recomputes all 1,504 files' views, 1.9 s; left, and filed as T434, to land before T365",
+     "class": "within",
+     "why": "Slowness is not a wrong outcome, so under the definition of a defect (constitution XIV, the GM 2026-11-19) it is no defect, and the fix-as-we-go rule does not hold this task to it. The work is not dropped: it is filed as T434 with an order ('lands before T365'), which is the deferral form FR-009 requires. The reason given for not fixing it here is real: keying by the code that computes the views needs a test that holds the key to its functions, which is a mechanism of its own. Filing found work as new tasks is the GM's 2026-11-22 process ('we can file new tasks just as fast as we are now if we bundle them'), and nothing he asked is narrowed out of the feature."
+    },
+    {
+     "id": "T364-left2",
+     "summary": "T364: a green cover run does not show the HELD line, because cover_ran rebuilds its result from the lines it missed; left to T363, to land before T365",
+     "class": "within",
+     "why": "The time saving, which is T364's purpose, holds in the cover run too. Only the naming is missing there, and the naming is T363's half carried forward, not T364's own requirement. T363's failing half makes a held pipe a red crate, and a red cover run shows its stderr. The work is filed and ordered before T365."
+    },
+    {
+     "id": "both-perf",
+     "summary": "Both tasks classed as [perf] work (FR-013) with before and after figures; no engine speed is involved, so no engine-speed checklist",
+     "class": "within",
+     "why": "Both make the checks faster, which is FR-013's own example of performance work. The note is a factual one about which checklist applies, and it decides nothing the request asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T344": {
+   "section_sha256": "60b59261a6f55b3176508b83386fdb03bdc27169d214a1e1ff420650092b743c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the rule: the task read from the pool registry in filed.rs's last link",
+     "summary": "A tool's own line from a held pool tree that names no task and has no agent or page session takes the first task of the registry entry for that tree, where the entry's feature is the line's feature; trees not listed, free, or held for another feature or none fall through to in_force as before.",
+     "class": "within",
+     "why": "Both tasks: the defect is a wrong outcome against the task time breakdown the GM asked for (2026-11-25, T243: time broken down per task; 2026-11-22: everything measured, compiling and tests above all). Booking a builder's build and test seconds to the task its tree was handed out for is that request working. For T344 in particular: its line asked for the mark to be set at make builder-tree T=. The plan reaches the same outcome by another mechanism and shows the asked-for one would not reach it (the Phase writer reads no marks; the mark directories were empty, observed 2026-11-27 with ls). Picking a mechanism that delivers the outcome the task asked for is within; it does not narrow the outcome."
+    },
+    {
+     "id": "D2 scope: only lines that reached in_force (no agent, no page session, no task named)",
+     "summary": "pool_task is asked only where in_force was asked; an agent's or page session's line that names no task still carries none (451 T161).",
+     "class": "within",
+     "why": "It leaves T161's settled rule alone and covers every line the defect reached (the Phase lines, which carry no payload). Nothing the GM asked for is cut out."
+    },
+    {
+     "id": "D3 a start after the handout stands",
+     "summary": "A make task-start in the tree after the entry's since names the task (a bundle's builder starting its second member books to it); an untimed start is not one; a handout whose time does not read counts as older than every timed start.",
+     "class": "within",
+     "why": "It keeps the builder's own later record in force over the handout, so the booking is more correct per task. The GM's 2026-11-25 (l) words accept about 90% accuracy for the breakdown, so the tie-break rules are a design choice inside the request."
+    },
+    {
+     "id": "D4 a bundle's lines go to its first task until a later start",
+     "summary": "A tree held for a,b books to a unless the builder starts b.",
+     "class": "within",
+     "why": "A bundle's tasks are worked at the same time (the GM, 2026-11-22, T141). Putting shared seconds under one named member, rather than under the stale task of an unrelated earlier start, is inside 'it doesn't have to be 100% exact' (2026-11-25 (l)). No minute is lost from the breakdown."
+    },
+    {
+     "id": "D5 no start row or undo row written at the handout",
+     "summary": "The registry is read instead of a start row being written at take and undone at release, because land/ready.rs, the stall check, task_time's first start, and the raw-log static-runs count would read a start nobody made wrongly, and the undo would erase the builder's own starts.",
+     "class": "within",
+     "why": "It is a mechanism choice that avoids putting wrong outcomes into four other readers (T359's constraints). It narrows neither task's outcome. T344's mark route is covered under D1."
+    },
+    {
+     "id": "D6 the fix in filed.rs, not phase.rs",
+     "summary": "The link in filed answers for every tool that appends a row from a tree (append_row_with), not only the rustc Phase writer.",
+     "class": "within",
+     "why": "Its only effect is that every tool row with the same defect is booked right, including the pre-warm's (T316) lines that the breakdown counts, so it serves the breakdown request. The fix sits at the waist every task-less tool row passes through (filed's last link), so no census of writers is needed. The block's 'one of several tools' (append_row_with) carries no count or command, and the ruling does not rest on it."
+    },
+    {
+     "id": "D7 the re-file left as it is",
+     "summary": "make events-refile is not changed, since it moves lines between features and does not undo the new booking.",
+     "class": "within",
+     "why": "This is an analysis that no change is needed, with the reason. It decides nothing that narrows the request."
+    },
+    {
+     "id": "D8 the lines already written are not rewritten, and make task-time's reader fix is deferred to T391 (lands before T317)",
+     "summary": "3,255 of 3,883 pool-tree Phase lines carry another task (observed 2026-11-27 with its method). make task-progress already re-tasks them at read time; make task-time still books 2026-11-26's tables wrong until T391.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing for T344, whose finding is make task-time's existing tables (five tasks' seconds booked to one); T332's line, as the block gives it, asks only for the task to be read from the pool. The plan's own reason ('a job of its own', another crate) would not carry it: that is a more-code reason, and the measure crate is already in this section's green exit. What carries it is the accepted spec's FR-009, which is the form a defect deferral takes and which this item meets in full: why it is not fixed here, the filed id T391, and its order, 'lands before T317'. T317 is the next work that reads a line's task (the pre-warm's category), so the defect is not carried into the work that would build on it, and that is what fix-as-we-go requires. The raw lines are left as written, and the correction belongs in the reader, as make task-progress's retask already does. The forward booking is fixed here, so the request's purpose (an accurate per-task breakdown) is not defeated. CONDITION: this ruling holds only while T391 lands before T317. If T317 is started first, the deferral is NOT LEGITIMATE."
+    },
+    {
+     "id": "D9 constraints and exits (no guard message changes; crate-scoped checks then the full gate at landing; red-first tests)",
+     "summary": "Two red-first tests pinned on the old code (510 passed, 2 failed; then 512 passed, 2026-11-27, its command named); green via make builder-checks; no map changes.",
+     "class": "within",
+     "why": "The two tests fail only when the asked-for booking is absent, so they enforce the request and are not added scope."
+    },
+    {
+     "id": "D10 the section classed as performance work",
+     "summary": "'Performance work? yes: a measurement task.'",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'. Booking the build and test seconds right is that kind of measurement task."
+    },
+    {
+     "id": "D11 the registry read left untimed",
+     "summary": "One read of builder-pool.json (39 lines, observed 2026-11-27 with wc -l) per line that reaches the last link; the read's time was not measured.",
+     "class": "within",
+     "why": "No claim rests on a speed figure, and no performance claim is made for the read. The file's size is measured and labeled."
+    },
+    {
+     "id": "D12 the reach to the main session's task-less hook lines",
+     "summary": "The link also answers the main session's hook lines that name no task, where their tree is a held pool tree.",
+     "class": "within",
+     "why": "It is the same booking defect on the same link, and only where the tree is held for the line's feature. Elsewhere in_force answers as before. It adds no new refusal and no new behavior beyond the booking."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T345": {
+   "section_sha256": "c8f658d976eaacd5597025cf53341bb875c08707252b1bc70feebe66a0f51c17",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T324-key",
+     "summary": "T324: a SubagentStart/SubagentStop line (agent id, no call id) is keyed by agent, kind and second (Key::Agent), so every start and stop of a resumed agent is kept and a line two logs hold in one second is kept once",
+     "class": "within",
+     "why": "This is the fix itself. The T243 breakdown (request 2026-11-25) and the live view (T293) are asked to show where a task's time goes, and the old key dropped every start and stop after an agent's first. Keeping a same-second repeat once keeps the existing two-log dedup, so nothing new is decided."
+    },
+    {
+     "id": "T324-edges",
+     "summary": "T324: descend and beside cut a wait at every span's end and at the ends of what an agent started (Ix::edges), where before they cut only at the first start and the last stop",
+     "class": "within",
+     "why": "This follows from keeping the lines. The booking had never seen an agent with two spans, and without this the 220 s red case was booked to 'after the work its Stop named had ended'. It applies the existing T243 rule that a wait is booked to what was in flight. It adds no new rule."
+    },
+    {
+     "id": "T324-windows",
+     "summary": "T324: task_phases::windows is fixed here so that a stop ends its run, where it had kept an agent's first start for every later stop",
+     "class": "within",
+     "why": "This is a defect in another reader of the same stream: a session's own call between an agent's runs was marked as the agent's. It is fixed in this task with a red-first test. That is fixing as we go, not added scope."
+    },
+    {
+     "id": "T324-other-readers",
+     "summary": "T324: subagent_runs, foreground_spans, feature_report/tables.rs, task_phases::cuts and where_time's walk were each read for repeated starts and stops and are left as they are, or yield each run. stepback_bundle and tool_yield are untouched",
+     "class": "within",
+     "why": "The section says what each reader does with repeated lines and finds no wrong outcome. A reader that already behaves correctly has nothing to fix."
+    },
+    {
+     "id": "T324-live-view",
+     "summary": "T324: in make task-progress, a resumed builder is RUNNING and one stopped again is stopped at its last stop. The hedge is dropped, the state line reads 'RUNNING, resumed after a stop', and make task-time's footnote says builder minutes are every span with the stopped time left out, and are a floor where T382's lines are",
+     "class": "within",
+     "why": "This serves T293 ('see while a task is in progress where the time is going'). The hedge is dropped only because the live view's rows come from the builder's own lines and not from its spans, so T382's gap does not reach them. The footnote tells the reader the one place the figures are still a floor, so nothing is hidden."
+    },
+    {
+     "id": "T345-stopped-is-wait",
+     "summary": "T345: from a builder's stop to its next line (and from the line before a start, where no log holds the stop) the builder is STOPPED: a wait on everything it started, with no minutes of its own, so the time leaves the builders' model-turn rows",
+     "class": "within",
+     "why": "Amendment (i) makes the percentages 'of the time that our Claude Code sessions spent working', and a stopped builder is not working. The breakdown's existing rule already gives waits blocking and no minutes, as the main session's 'waiting: ...' rows have none. So the 25.6 min the old booking gave as the builder's model turn was a wrong outcome, and removing it is the fix. Amendment (c), 'never a silent other', is met because the time is not dropped unnamed: a reader sees it as blocking on what the stopped builder had in flight, or under the new STOPPED category's blocking, and task-time's footnote says the builder minutes leave the stopped time out."
+    },
+    {
+     "id": "T345-category",
+     "summary": "T345: one new category, 'builders: stopped, waiting to be resumed' (STOPPED in book/cats.rs), for stopped time with nothing of the builder's own in flight. Where its own run or agent is in flight, the wait is booked to that",
+     "class": "within",
+     "why": "Amendment (c) asks for every minute to be named, and the existing names would misstate this time: 'waiting on its background work' says something is running, and 'waiting: nothing in flight' is the main session's and is special-cased in descend. The wording says only what the log shows. Naming a category is within a breakdown the GM asked to be broken down automatically (j)."
+    },
+    {
+     "id": "T345-in-flight",
+     "summary": "T345: a builder is in flight from its first start to its last stop, and its stopped piece is booked through its stop's wait. A review agent between two rounds is not in flight",
+     "class": "within",
+     "why": "This applies the per-task, by-dependency blocking definition (l) to a resumed builder. The task does not end while its builder can still be resumed, but a review agent's next round is a new dispatch. No narrowing of the request."
+    },
+    {
+     "id": "T345-rank",
+     "summary": "T345: a stopped builder with nothing of its own in flight is what a wait is on only where nothing else in flight blocks the task (stopped ranked last in each_task and descend). So beside a claims round, the session's wait is on the round",
+     "class": "within",
+     "why": "This applies (l), 'blocking ... when something else is waiting on it to be done'. A stopped builder does no work, so what the session waits on is the running round that will lead to its resumption. The GM accepted approximation in blocking attribution in (l) ('it doesn't have to be 100% exact'). There is a red-first test with the rank switched off."
+    },
+    {
+     "id": "T345-one-level",
+     "summary": "T345: stopped looks one level down, to the runs and agents the builder itself started",
+     "class": "within",
+     "why": "The section states that this is as deep as a builder's dispatches go: it dispatches review agents, not builders. Nothing deeper exists, so nothing is left out."
+    },
+    {
+     "id": "T382-deferral",
+     "summary": "Found and left: a builder's own lines after a stop with no SubagentStart between, or with no start at all, are in no span (columns::flight opens a span only at a start line), so the builder-minutes column and 'Working at once' leave them out (64 of 1,390 agents, 1,981 of 94,136 lines). Filed as T382, to land before T346",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect, a column that understates, and it is left in place, so it is ruled. Its mechanism is different from the one T324 fixes. T324's is the reader's dedup key dropping start and stop lines that exist. T382's is the span rule in columns::flight having no line to open a span from, so there is no start or stop line for T324's goal ('every span from the log's own start and stop lines') to recover. The deferral meets FR-009 in full: it says why it is not fixed here, gives the filed id and gives its order ('lands before T346'). The defect is not hidden: task-time's footnote calls the builder minutes a floor where T382's lines are, and the live view's rows are unaffected. It is ordered ahead of the next measurement task, so it is not carried past the next step. The ruling does not rest on 'past this bundle's two jobs', which is a cost argument."
+    },
+    {
+     "id": "open-T346-T332-T344",
+     "summary": "T346 (a carry booked to the task that retook the tree) and T332/T344 (a pool tree's Phase lines carrying an old task) stay open and separate. The section states which columns they distort in its figures and that neither touches the builder-minutes column or the builders' turn rows",
+     "class": "within",
+     "why": "These are tasks already filed for other mechanisms, not defects this section found or was asked to fix. Saying what they distort in the published figures keeps those figures honest. Leaving a separately filed task to its own order is the bundling the GM described on 2026-11-22."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T336 (a pool tree's first test build after its pre-warm failed to link, `rust-lld: undefined hidden symbol`, twice on code that was right (2026-11-26, `diagram-backlog-t270`, found by 451 T299's builder); the cause is proved by the measurement under `dev/measurements/2026-11-26/prewarm-link/`: a test build killed past rustc's front end, as the pre-warm's cut killed it)",
+    "### T336 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T336-fix1",
+     "summary": "The pre-warm never cuts a crate in flight: a real run, the last slot taken or the ceiling passing mid-crate is noted and the crate runs to its end, slot held; End::Cut and code 130 go",
+     "class": "within",
+     "why": "Fixes a measured wrong outcome (a test build red on right code, 29 of 54 cut tries vs 0 of 20 uncut) in T316's mechanism. The GM's T316 words ask only whether to begin compiling at once; the cut was T316's design, not his. Holding the slot until the crate ends is synchronization, as his T284 words prefer. Nothing he asked is narrowed."
+    },
+    {
+     "id": "T336-brief-reading",
+     "summary": "On no spare slot the pre-warm WAITS at the loop head rather than ending, departing from the brief's sentence, stated",
+     "class": "within",
+     "why": "The brief is the coordinating session's, not the GM's; the behavior is T316's as built and keeps the pre-warm doing what the GM's T316 question is for (compile ahead). Stated openly, nothing of request.md or the spec narrowed."
+    },
+    {
+     "id": "T336-cost-accepted",
+     "summary": "A real run may wait on cargo's lock, and another tree's compile in the slot queue, for the rest of one crate (median 2.0 s, p90 13.0 s, max 82.7 s, measured 2026-11-26); alternatives priced and rejected; reopening bounds GUESS 90 s / one in ten past 13 s",
+     "class": "within",
+     "why": "A design tradeoff chosen on a labeled measurement; no GM words promise a real run pre-empts a pre-warm within a poll - that was T316's promise. Not a fidelity matter."
+    },
+    {
+     "id": "T336-fix2",
+     "summary": "stepped's --no-run build becomes one call, stale::built: on 'undefined hidden symbol' it drops every incremental directory of each named crate and each named fingerprint under cargo's lock, builds once more, never a third; nothing dropped when the linker names nothing of the tree, no incremental dir, or the lock is held past LOCK_S (120 s, GUESS)",
+     "class": "within",
+     "why": "Heals the same wrong outcome for builds killed any other way, the make rust-test half of the already filed T146; fix-as-we-go of a known defect. Scope wider than T142's one-directory retry is a design choice backed by the harness's measured repair (29 of 29 green)."
+    },
+    {
+     "id": "T336-counted",
+     "summary": "A heal writes one Phase line step link-heal inside the build line's span, seconds booked as compile, countable in .git/l7r-events/",
+     "class": "within",
+     "why": "Serves the GM's 2026-11-22 'we want everything measured so we know where our time goes, especially for compiling': the heal is logged and its seconds are booked as the compile they are."
+    },
+    {
+     "id": "T336-left-T361",
+     "summary": "make task-time does not show heals apart (columns::category names no category for link-heal); filed T361, lands before T302",
+     "class": "within",
+     "why": "Not a defect by the constitution's definition: the report answers truly (the heal's seconds are compile, inside the build span) and the raw lines exist, so nothing goes unmeasured or misbooked. A separate heal column is a refinement, filed with reason, id and order as FR-009 asks."
+    },
+    {
+     "id": "T336-left-T362",
+     "summary": "The heal is not run live on a really broken cache; the fixture follows the kept real link-failure text; filed T362, lands before T302",
+     "class": "within",
+     "why": "A verification gap, not a known defect: the tests pin the heal against the kept example of the real error, and should real words differ the failure returns with the repair named - no worse outcome than today. Filed with reason, id and order."
+    },
+    {
+     "id": "T336-T146-T206-remainder",
+     "summary": "The guard launcher's own incremental build stays with T146; the coverage build's link stays with T206",
+     "class": "within",
+     "why": "Both are existing open tasks for their own mechanisms; fix 1 removes the pre-warm cause for all of them, and this task's brief is the pool tree's pre-warm and make rust-test. Leaving already-filed separate work with its owners narrows nothing the GM asked."
+    },
+    {
+     "id": "T336-order-and-interim",
+     "summary": "After T316 and T142, before T347 and T302; pool handouts carry L7R_PREWARM=0 until this lands",
+     "class": "within",
+     "why": "Scheduling and an interim that stops the defect recurring; nothing of the request narrowed."
+    },
+    {
+     "id": "T336-exits",
+     "summary": "Green is the first tier (make builder-checks over rustc and task) plus the changed crate's coverage; the full gate runs once in the clone over the batch",
+     "class": "within",
+     "why": "The two-tier arrangement the GM asked for on 2026-11-26 (T308): full rigor deferred to the session clone's gate."
+    },
+    {
+     "id": "T336-performance",
+     "summary": "Counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words count measurement and performance-mechanism work as performance work, first in order (FR-013)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T339 (451 T315's measurement of 2026-11-26: most of every run of `rust/guard/shared`'s suite is one test of the idle check waiting real seconds, and two more wait a second each)",
+    "### T339 Approach (checklist part A)",
+    "### T339 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T339-clock-route",
+     "summary": "Of the brief's two routes, a clock the test drives is taken over knobs in fractions or milliseconds",
+     "class": "within",
+     "why": "Both routes are the brief's own; the reasons given (a constant second past a crossing, a whole-number bound printed in the notice, waits left open to load) keep the production path and every guard message unchanged. It serves FR-013 (the builders' loop faster) and the GM's T104 words on the test that fails under load. It narrows nothing that was asked."
+    },
+    {
+     "id": "T339-procs-clock",
+     "summary": "Procs gains now() and sleep() with default bodies (Instant::now, thread::sleep); the check's four clock uses go through them; Blind and the guard crate's Ctx define neither, so production makes the same calls; stalls::stalled's SystemTime read unchanged; no file outside rust/guard/shared changes",
+     "class": "within",
+     "why": "This is the mechanism for the chosen route. The production behavior, its looks, budget and hand-on (451 T193/T201) are unchanged, and the plan states that and pins it (Blind's clock tested against the machine's)."
+    },
+    {
+     "id": "T339-stand-in-table",
+     "summary": "The tests' Table notes each wait, advances a stand-in time, runs a meanwhile (it backdates the builder's transcript, appends turns), and fails past 50 waits",
+     "class": "within",
+     "why": "A test fixture that makes the idle tests independent of load and turns a check that never stops looking into a red test, not a hang. It is enforcement of the existing behavior, not new behavior."
+    },
+    {
+     "id": "T339-test-pins",
+     "summary": "The idle tests are rewritten to exact counts of looks and waits; the old budget-of-one case is kept as budget zero; the crossing case uses the shipped ten-minute bound in place of two seconds; the reply-during-wait test has no thread or timing",
+     "class": "within",
+     "why": "Every behavior the old tests proved is still proved, more strictly: exact counts in place of elapsed wall time, and the five breaks of idle.rs each turn a test red, measured 2026-11-26. The ten-minute bound is the shipped value, so it narrows no coverage, and the plan gives the reason (the real-clock read of the transcript). The old one-second case's meaning is kept as budget zero."
+    },
+    {
+     "id": "T339-long-text",
+     "summary": "The spelling test's text goes from 50,000 to 40,000 repeats (LONG_TEXT, a CONVENTION knob), 8% past the old million-step limit, with the test's own assertion proving the limit fires; CPU_BOUND_NS is not moved",
+     "class": "within",
+     "why": "What the test pins (451 T81, 449 T185) is that the text is past the old limit, and its own assertion still proves that on every run. Cutting a test's own text length changes no behavior and no claim. Leaving the bound alone loosens nothing."
+    },
+    {
+     "id": "T339-next-slowest-left",
+     "summary": "The next slowest tests (the context test at 1.57 s, two at 0.47 s) are read and left; the context test is real work, not a wait; nothing filed",
+     "class": "within",
+     "why": "The task is the waits T315 measured, and the brief bounds the read. Slow work that gives correct results is not a defect (a wrong outcome) under constitution XIV, so leaving it defers no known defect. No GM request asks for every test in the crate to be shortened."
+    },
+    {
+     "id": "T339-exits",
+     "summary": "Green is builder-checks and crate-checks in the builder's tree, with the full gate at the landing; red is recorded and set down, and a claim of cannot-be-done goes through make arbiter-ask",
+     "class": "within",
+     "why": "This follows the two-tier checking the GM asked for (451 T308): the full rigor is at the landing's gate. It skips no check."
+    },
+    {
+     "id": "T339-perf-class",
+     "summary": "The task is classed [perf] under FR-013, as builders'-loop speed",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work in words, and this task cuts the shared guard crate's test run from about 8.3 s to about 2.9 s, measured 2026-11-26."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T340 (451 T315's measurement of 2026-11-26: the guard crate's test run goes on waiting after its tests end, on processes the tests leave behind)",
+    "### T340 Approach (checklist part A)",
+    "### T340 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T340-approach",
+     "summary": "The clone check's stand-in sessions become sh -c 'read _' <args> on a pipe the test holds, in place of sh -c 'sleep 5; :' whose sleep child outlived kill+wait; only the one test file changes, no guard code or message.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the GM 2026-11-20, 'priotitize performance improvements'): removes 3.2 s of post-test waiting and nine leftover processes per run (measured 2026-11-26). The three tests keep a live process whose cmdline names claude, so what they prove is unchanged; read is a builtin, so nothing forks, and the pipe ends the stand-in if a test panics. Followed literally it does what it says (0 alive after, pipe end = exit)."
+    },
+    {
+     "id": "T340-alternatives",
+     "summary": "Chosen over closing the sleep's output and over killing the shell's process group.",
+     "class": "within",
+     "why": "A design choice among ways to the same goal; closing output would leave the processes alive, so the chosen fix is the one that removes the leak. Not a fidelity matter."
+    },
+    {
+     "id": "T340-red-first",
+     "summary": "New test a_stand_in_session_starts_no_process_of_its_own reads /proc/<pid>/task/<pid>/children of a stand-in; red on the old stand-in (1 of 549, 20 of 20 alone), green on the new.",
+     "class": "within",
+     "why": "Enforcement of the fix itself (fails only when the stand-in forks a child); serves the task, not unrequested scope."
+    },
+    {
+     "id": "T340-gate-reader-left",
+     "summary": "The gate's run_in (Command::output, returning at pipe end rather than binary exit) is not changed; filed T364, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured after the fix: pipe end and exit coincide (2.14/2.39/2.29 s vs exit 2.14/2.39/2.28 s), so with the leak removed it is no wrong outcome today - a latent cost, not a defect under constitution XIV's definition; the coordinating session's brief scoped the gate reader to 'filed and not changed unless it is the narrower fix', and it is not the narrower fix (it changes every crate's output reading). The found-and-left item states why, its filed id and its order (FR-009), and it lands before T302, so nothing known is carried past the next step."
+    },
+    {
+     "id": "T340-general-leak-pin-left",
+     "summary": "The task line's ask for a pin that a crate's test run leaves no process behind is met for this stand-in only (the new test); a check over every crate's run, a new gate mechanism in rust/gate/crates/rustc, is filed as T363, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated against purpose: the purpose (FR-013, the builders' loop faster; the leak gone) is achieved here and pinned for the cause found; the absent general pin is a check that would pass a future leak, so it is a defect, but it is not dropped - it is split into its own task ordered before T302, which satisfies fix-as-we-go (defects fixed before the next step begins). The split is implied by the GM's own words on builder sizing (2026-11-26, T334, the sizing rules of builder-brief.md that the session must follow, and 2026-11-25 on one builder doing too much): a new gate mechanism in another crate is a builder's job of its own. The task line is the coordinating session's, not the GM's (block's item 3: G none). FR-009's why / id / order are all present."
+    },
+    {
+     "id": "T340-tmpdir-slowness-left",
+     "summary": "The guard test binary runs 5.3-6.0 s under the default TMPDIR vs 2.0 s under an empty one; cause not found, gate does not pay it; filed T365, lands before T302.",
+     "class": "within",
+     "why": "A separate finding outside this task's subject (the gate's run, which uses a fresh TMPDIR and so does not pay it); filed with why, id and order. Leaving an unrelated found issue to its own filed task narrows nothing the GM or the spec asked of T340."
+    },
+    {
+     "id": "T340-shared-and-T357",
+     "summary": "rust/guard/shared looked at once and found free of this leak; T357's orphaned self-copy in tempdir tests is a different cause, left to T357.",
+     "class": "within",
+     "why": "T357 is an existing filed task with its own cause; recording that this fix does not cover it is scoping by fact (measured 2026-11-26), not a narrowing of what T340 was asked."
+    },
+    {
+     "id": "T340-exits-and-order",
+     "summary": "Exits: builder-checks first tier, the clone-sync hook suite, the crate's cover step; full gate at landing; one landing; before T302 and independent of T339/T341/T342/T344/T347/T357.",
+     "class": "within",
+     "why": "Follows the GM's two-tier checking (2026-11-26, T308: the rigor belongs at the landing) and FR-013's ordering; settles nothing the spec left open against the request."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T336 to T345, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

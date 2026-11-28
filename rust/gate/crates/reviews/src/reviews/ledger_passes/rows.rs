@@ -239,7 +239,7 @@ pub fn in_the_record(p: &Pass, repo: &Path) -> Result<bool, String> {
     let Some(feature) = group(&PLAN_FEATURE, subject) else {
         return Ok(false);
     };
-    let path = repo.join("specs").join(feature).join("plan-review.json");
+    let path = repo.join("specs").join(&feature).join("plan-review.json");
     let Some(rec) = std::fs::read_to_string(&path)
         .ok()
         .filter(|_| path.is_file())
@@ -250,9 +250,18 @@ pub fn in_the_record(p: &Pass, repo: &Path) -> Result<bool, String> {
     let date = field(p, "date");
     if let Some(task) = group(&PLAN_TASK, subject) {
         let tasks = or_empty(get(&rec, "tasks")?);
-        let entry = get(&tasks, &task)?
-            .cloned()
-            .unwrap_or_else(|| Value::Object(serde_json::Map::new()));
+        // a closed task's entry may stand in the review's parts since the split (462 T545): read there where the live record has none
+        let entry = get(&tasks, &task)?.cloned().unwrap_or_else(|| {
+            let d = repo.join("specs").join(feature);
+            let parts = l7r_shared::speckit::archive::review(
+                &l7r_shared::speckit::archive::files(&d),
+                &task,
+            );
+            parts["tasks"]
+                .get(&task)
+                .cloned()
+                .unwrap_or_else(|| Value::Object(serde_json::Map::new()))
+        });
         return Ok(same(get(&entry, "reviewed")?, date));
     }
     let blocks = or_empty(get(&rec, "blocks")?);

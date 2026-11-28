@@ -1,0 +1,756 @@
+{
+ "blocks": {
+  "### T413 Approach (checklist part A)": {
+   "sha256": "0014f2dba876f2b541a64f4b39fe8e7616730629f42b2ac4ebfe558e66f93272",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T413 (the landing's first pass asks the push's unrelated-history and in-progress holds, and the ledger and batch cases of 2026-11-26/27 are pinned: a push refusal met only after the gate costs the gate's minutes)": {
+   "sha256": "a90cd368fcb54a60c9fb7a810332a54e1a2eb0bab64369087501108bac08e0d0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T414 (a red hook suite inside a batch gate left no record of which case failed: the red state-sync run of 2026-11-26 18:27 UTC left one event line - its name, 94.7 s, exit 1, observed 2026-11-26, method: the task line's reading of that event line - and nothing else, its log in the run's mktemp work directory, printed once and removed, the land log overwritten by the next landing, so 451 T314 could not tell which case had failed)": {
+   "sha256": "340c553e941e491638578be1b544aaf6c65d6e81fe49f5b406b300f4d33a5a1c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T414 Approach (checklist part A)": {
+   "sha256": "aa4999e71d24a88548b15e016aa54c07ddbf788698b6ddbe966143ed49bafea4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T414 part B (2026-11-27T04:14Z)": {
+   "sha256": "8cb9c775ce35ed9723d552a867730efefa9073d371511d5c474a6965f8c831e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T415 (<why: the finding or measurement that files it>)": {
+   "sha256": "35d6c232b2f35108c5bda479807687a082ffec927a8c940e82b54c0dd1c1741d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T415 Approach (checklist part A)": {
+   "sha256": "c924ff264b12486863114fcaac2e304b40e9a2035a64b31ca55d2db97f7ba5e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T417, T352 (bundle) (the GM 2026-11-27 on the cap's abrupt cutoff: on 2026-11-26/27 three of about 35 builders reached the 300k cap, T315's at 308k and T325's at 310k refused only the mechanical end of their stop points; and the cap's one exit refused the handoff names the briefs give, found by T334 2026-11-26)": {
+   "sha256": "a7ed8af4d9c668807d59ac6a430f22ae85ac08156898013f2178ce107474a69e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T417, T352 Approach (checklist part A)": {
+   "sha256": "8b15adef78f5b95fb8815bea0141eb9a7a27cadeb2dbfb904094b5162655e32a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T418 Approach (checklist part A)": {
+   "sha256": "2822caa19950393b6504a8c8f76ed36b12385e7e3c1a7f90ebe120ac220b5d6d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T418 (left by 451 T313's closing half: with `SPECIFY_FEATURE` unset in a pool tree, `make queue` and `make builder-next` ended on line 1 of `specs/269-research-backfill/queue.txt`, a page session's queue, and listed nothing - observed 2026-11-27)": {
+   "sha256": "3c100548faac201b65394fbcb08bf744143ff068cf579b100c251024d87af9a4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T419, T404 (bundle)": {
+   "sha256": "e05427d56473d0188a57a2af72540a5ca101240222c5689e0d3831147f36dace",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T419, T404 Approach (checklist part A)": {
+   "sha256": "119971e4960f832f74af0005957faa7379588bac6e497e00df96ff11d52ec2a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T420 Approach (checklist part A)": {
+   "sha256": "ec989968e600cb225cb905b4a0517a67a059ddf873bf9cd232b7fa7dafd675fb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T420 (T367's record counted 279.5 of 283.5 s of `slot-wait` from 2026-11-27 00:20Z to 03:30Z in builds after a dependency's edit, measured 2026-11-27 (`dev/measurements/2026-11-27/prewarm-keys/results.md`, the event log's `slot-wait` lines))": {
+   "sha256": "b627e9b15d2598ee199683b76df7c90b3cc82f9c63caba86e054d537d6489b22",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T423 (<why: the finding or measurement that files it>)": {
+   "sha256": "8e399d5fdbe3a3c1fd8fa59196fb6bbb1f0793f5b987f31a3246f9f3dfbc948e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T423 Approach (checklist part A)": {
+   "sha256": "21388c36516370c1ec9597d943e8789a98733695306578e9ebc1f4e32ad7f3b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T424 Approach (checklist part A)": {
+   "sha256": "f9e3df9f09e741e850f446ab0077de2b75bb66c89427cbed24cd059d7d5c0e51",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: \"assertion failed: builds(&world).is_empty() && spare(&world.slots)\", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)": {
+   "sha256": "16790d68b06333f3b7d4d75300c4a4baa07b121e4ad2caf828e1f3309b6a3b8e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T413": {
+   "section_sha256": "0a94734a100d2c5ebc55b0de3bbaefc17a17e5f748a65175705632a63b1a2b26",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T413-D1",
+     "summary": "The first pass asks the push's unrelated-history hold (HEAD and origin/main resolve, no merge base) right after its fetch and says it alone before committing anything; a second copy of the shell's two git questions rather than a shared function, its words the shell's but naming the mirror by where it is.",
+     "class": "within",
+     "why": "Moves a refusal the push already makes (feature 301 FR-019) ahead of the gate so a landing is not refused after the gate's minutes, which serves the request's throughput aim (2026-11-19 improvements, 2026-11-20 performance first, 2026-11-27 'maximize productivity'). Refuses nothing the push lets through. Copy versus shared function is design, not fidelity, and message wording that differs from the shell's is not an exactness finding."
+    },
+    {
+     "id": "T413-D2",
+     "summary": "After hold, others_in_progress asks every other specs/<dir> the delta touches and the .specify/feature.json pointer through the push's own readers (holding_with with the landing's ticks, closed_by_status, json-field's function), holding fail-closed on a reader error as the push does; any other directory held is a refusal, the push's one exception (a delta of that feature's specs/ alone) kept.",
+     "class": "within",
+     "why": "A mirror of the push's in-progress loop (feature 133) in the first pass, by the same readers and the same exception and fail-closed behavior; it widens what the first pass asks to exactly what the push asks, and narrows nothing."
+    },
+    {
+     "id": "T413-D3",
+     "summary": "Under L7R_LAND_READY the first pass skips D2 where it ruled the landing ready, because the push's holding_with answers nothing for any directory once every tick is ruled ready.",
+     "class": "within",
+     "why": "The task's ask is that the first pass say every refusal its push would make; the push makes none here, so skipping refuses nothing the push lets through and leaves nothing the push would refuse unasked. Asking more than the push would be new blocking behavior beyond this task. The push's exemption being too wide is a separate defect, recorded under Found-and-left (next item)."
+    },
+    {
+     "id": "T413-left-T432",
+     "summary": "Left: a landing ruled ready exempts every feature's in-progress hold at the push, not only the landed one's; filed as T432, lands before T307, D3 mirroring it until then.",
+     "class": "within",
+     "why": "This is a real defect (a wrong outcome: another feature's started task can reach main beside a ready landing, against feature 133). It is in the push's own rule, not in anything T413 was asked to build: T413 brings the push's existing holds into the first pass. It is filed as its own task with why it is not fixed here, its id and its order (lands before T307, the parent task), which is what FR-009 asks. Because it is fixed before T307 ticks, it is not carried into the next step. T432 has to change the push's rule and D3's mirror together, and D3's own wording ('mirrors it until then') commits to that. A defect outside the task's scope, filed and ordered, does not narrow what T413 was asked to do."
+    },
+    {
+     "id": "T413-D4",
+     "summary": "After the claims wait's ledger write, the landing asks the first pass's ledger refusal again (one function, ledger_refusal) and, where a row is still owed, stops before the ticks naming make ledger-owed WRITE=, having written what it can first; grounded on a measurement through the real ledger.",
+     "class": "within",
+     "why": "The push already refuses an owed ledger row. Asking it before the ticks turns a refusal after the gate into one with a named cure before the landing commits, and it refuses nothing the push lets through. It mirrors a push hold and is not new blocking reach."
+    },
+    {
+     "id": "T413-D5",
+     "summary": "A fixture pins that a batch of T1 and T2 whose T2 block changed since review is refused in the first pass for T2 alone, naming make plan-delta F=; no code change.",
+     "class": "within",
+     "why": "A test that only fails if the existing first-pass refusal goes missing. It enforces what was asked and adds no behavior."
+    },
+    {
+     "id": "T413-parity-table",
+     "summary": "T307 part 2's parity table updated for the four rows this task moves.",
+     "class": "within",
+     "why": "A record of what D1 to D5 do. It decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T414": {
+   "section_sha256": "1111e9f0dd0e6c8fa18420cf353af2558c8b4f5840805b97ab4cb5fac47c2e43",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T414-approach",
+     "summary": "A red hook job's whole log is kept in the common git directory, its name is left in <job>.kept, the hooks-test FAIL line names it (appended, head unchanged), and the event line carries it as a sixth span field written as the Phase line's log; a green job keeps none and removes a stale .kept.",
+     "class": "within",
+     "why": "This is the task's own goal: a red suite's failing case can be read after the run. It answers a wrong outcome (the evidence was printed once and deleted, so T314 could not tell which case failed), in line with the GM's 2026-11-22 'we want everything measured so we know where our time goes' and the fix-as-we-go rule. Keeping the FAIL line's head unchanged and adding a span field serves the same goal. Nothing the GM asked for is removed."
+    },
+    {
+     "id": "T414-self-test",
+     "summary": "The user-level self-test's FAIL line (missing-program-hook), which loses its log from the same work directory, keeps it through hookrun.sh --keep, fixed in this task.",
+     "class": "within",
+     "why": "It is the same defect in a second place, fixed in the task that found it, so nothing is deferred. That follows the fix-all-known-bugs rule (GM 2026-11-18) and is not added scope."
+    },
+    {
+     "id": "T414-D1",
+     "summary": "Name and place: <git common dir>/l7r-hooks-failed/<utc-ns>-<job>-p<pid>.log, beside l7r-events and l7r-handoffs and outside hooks-test/; no colon or space, so the name can ride as a span field.",
+     "class": "within",
+     "why": "This is a naming convention inside the constraint (under the common git directory) that the task line and brief both set. Of the two names offered it takes the brief's directory and gives a reason. The request is not narrowed."
+    },
+    {
+     "id": "T414-D2",
+     "summary": "Bound HOOKS_FAILED_KEEP, a GUESS knob defaulting to 50; a value that is not a number reads as 50; only files named as kept logs are removed, and nothing a later run reuses reads the directory.",
+     "class": "within",
+     "why": "The brief asks for the directory to be bounded, and this does it with a labeled GUESS knob. It does not break the GM's 2026-11-26 disk principle (do not clean what costs time later), because the plan states that no runner, stamp, key or check reads the directory, so removing an old log costs no rerun time. The kept logs are evidence for a reader, not a cache."
+    },
+    {
+     "id": "T414-D3",
+     "summary": "The bound runs once a run in hookrun.sh --sweep <gitdir> before the fan-out, so no job removes a log another job of the same run is about to name; a job run by hand bounds after keeping its own; T372's one sweep and --swept are unchanged.",
+     "class": "within",
+     "why": "This is a choice of mechanism. Doing the sweep before the fan-out keeps every log of the current run, which serves the goal. Keeping T372's behavior keeps existing work the GM did not ask to change and narrows nothing."
+    },
+    {
+     "id": "T414-order-and-performance",
+     "summary": "The order is independent of the queue and lands with any batch; the Performance line says no (the task keeps a defect's evidence, makes nothing faster and measures no time).",
+     "class": "within",
+     "why": "The GM's 2026-11-20 rule counts measurement-of-where-time-goes tasks as performance. This task records which test case failed, not time, so 'no' is a fair reading and the task's content is not narrowed. The phase line gains a log field but no time measure."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T417": {
+   "section_sha256": "4604f671aeac3443876d5f125b6f34e33aa7d26704232cfb9df39992163f6b2f",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T352-exit",
+     "summary": "The cap's exit also takes any .md file under l7r-handoffs/ that the builder's own brief names; the refusal names the brief's first such file; the <agent_id>.md rule is kept for a brief naming none.",
+     "class": "within",
+     "why": "FR-006 lets a builder past the threshold write 'its handoff file, naming the file'. An exit that refuses the file its brief named is a tool refusing valid input, a defect against FR-006; taking the briefed name and keeping the old rule beside it repairs it without widening the exit past handoff files."
+    },
+    {
+     "id": "T352-brief-not-task-id",
+     "summary": "Match the briefed name rather than any name holding the task id.",
+     "class": "within",
+     "why": "A mechanism choice for the same FR-006 exit; it settles nothing the request or spec decides."
+    },
+    {
+     "id": "T352-resume",
+     "summary": "A resume's refusal names a written briefed file first, then <agent>.md, then the brief's first, then the cap's own name, and its 'not written yet' line follows the file named.",
+     "class": "within",
+     "why": "FR-006's resume refusal names the handoff; naming the one actually written fixes a wrong message (a build half told its handoff is unwritten)."
+    },
+    {
+     "id": "T352-landing",
+     "summary": "open_handoffs counts a build half's <task>-build.md (and a bundle's) as finished, so it is no longer named beside foreign changes as their likely writer; open stays T<n>-<agent id>.md.",
+     "class": "within",
+     "why": "open_handoffs refuses nothing by itself; it names a likely writer in writer_refusal's message. Naming a builder that ended as briefed as an open writer is a wrong answer; reconciling the landing's reading with the briefed names narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T417-band",
+     "summary": "A wrap-up band from the 300,000 cap to a 340,000 ceiling (a GUESS knob, falsifier in the audit) in which a builder may finish its stop point's steps; past the ceiling the guard is as before.",
+     "class": "within",
+     "why": "The GM's 2026-11-27 question challenges the abrupt cutoff because it stops builders 'even finishing their handoff', while conceding 'I understand wanting to hand off to a new builder'. A band that lets the stop point finish answers the question; a ceiling keeps the handoff he accepted and FR-006's threshold, and the 2026-11-26 words on closing builders out ('wary of needing to keep them around') support bounding it. The 340k figure is a coordinator's GUESS, not his words, and is labeled one."
+    },
+    {
+     "id": "T417-allowed-set-and-shapes",
+     "summary": "In the band: Read/Grep, a MODE 4 spec-fidelity dispatch, and Bash whose every simple command is allowed (cd, export, VAR=value, git status/diff, head/tail/grep, make decide/plan-delta/plan-verdict/claims-triage/claims-owed/task-add/task-withdraw/builder-checks), matched by invocation through shared::tree::commands; redirects not judged.",
+     "class": "within",
+     "why": "These are the stop point's mechanical steps the motivating builders were refused (heading: T315 and T325 'refused only the mechanical end of their stop points'); matching invocations not mentions follows the project's guard rule. The set is a strict loosening of the old guard."
+    },
+    {
+     "id": "T417-plan-delta",
+     "summary": "make plan-delta allowed though the task line's list omits it.",
+     "class": "within",
+     "why": "A widening of the coordinator's list toward the GM's purpose, not a narrowing of what he asked: it is the plan review's own command in every stop point and T325's refused step. Without it the band would refuse the case the request answers."
+    },
+    {
+     "id": "T417-second-round",
+     "summary": "A later plan-review round is admitted, judged as the original spec-fidelity MODE 4 call before review_round_hooks reroutes it.",
+     "class": "within",
+     "why": "T315's motivating case was a second round; admitting it serves the request directly."
+    },
+    {
+     "id": "T417-still-refused",
+     "summary": "In the band: Edit/Write of any file but the handoff, any other dispatch (claims-triage/impl-drift dispatches included), any other target or program, and SendMessage; the main session's resume of a builder past the cap stays refused.",
+     "class": "within",
+     "why": "The GM's question asks that a builder be let finish its handoff, and concedes the handoff itself; it does not ask that a capped builder keep writing code. The motivating cases were refused only the mechanical end of their stop points, and the goal sends code still owed to a fresh builder 'as before'. A plan review that returns findings in the band ends in a handoff, which is the behavior he accepted, not a narrowing of the loosening he asked for. The claims dispatch is split off by the GM's 2026-11-25 ruling, so refusing it in the band keeps that rule. Keeping the resume refused follows his 2026-11-26 words on closing builders out and FR-006."
+    },
+    {
+     "id": "T417-past-ceiling-unchanged",
+     "summary": "Past the ceiling the old refusal and its render are unchanged ('byte for byte its old render').",
+     "class": "within",
+     "why": "This describes unchanged behavior the plan chose to keep (the request's 'hand off' past a limit), with existing message-store rows left valid; it is not a port held to exactness against a replacement, so the struck exactness standard does not apply."
+    },
+    {
+     "id": "T417-other-readers",
+     "summary": "builder_stop_hooks, set_down_hooks::stalls and make task-progress unchanged; only the guard reads the ceiling.",
+     "class": "within",
+     "why": "Nothing in the request asks those readers to change; a band builder may still stop, and a stall is still marked."
+    },
+    {
+     "id": "T417-refusal-and-message",
+     "summary": "The band's refusal (wrap-up-refused) is recorded, red-first tested (suite 49 of 96 failing with the branch off), escapable by the existing CONTEXT_OK judged before the band, one message-checked wording naming what is still allowed and the handoff.",
+     "class": "within",
+     "why": "FR-012's three owed parts for a refusal of FR-006's guard: a red-first test, an escape of a reason, a message naming the compliant command; all three are present."
+    },
+    {
+     "id": "T417-T352-perf-and-order",
+     "summary": "Tagged [perf] under FR-013 (faster builders' loop), measured by wrap-up passes per builder against the re-read saved; T352 first, then the band.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order is a dependency the spec leaves open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T419": {
+   "section_sha256": "01e4f6500919122510feaefc7cef3dcb810fa011a6eba44e3863c06e60b6d245",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T419 (a) merge by heading",
+     "summary": "T419: make carry merges plan.md per '### T<n>' heading line (keyed by the whole line), T300's rules applied per heading, a builder-only section placed after its task's last section, each task's sections put together in a fixed order; 'two places' is no longer a stop",
+     "class": "within",
+     "why": "Serves the goal the block states and the GM's standing words that tooling, not the session's memory, performs the correct behavior (T285, 2026-11-26) and that throughput is the goal (T308): it replaces the session's hand resolution (resolve-heads.py) of the two carries stopped on 2026-11-27. It widens what carries; nothing asked is narrowed."
+    },
+    {
+     "id": "T419 (a) stops kept and one added",
+     "summary": "T419: the merge still stops where both sides changed one section, both added one heading differently, one removed what the other changed, both changed the opening, a side holds a heading twice, and newly where both replaced one base section with different headings",
+     "class": "within",
+     "why": "T300's constraint that a choice between the sides is never made for the session, restated per heading. The added stop closes a case the hand script would have resolved wrongly (two main sections); it refuses no case the request asks to carry."
+    },
+    {
+     "id": "T419 (a) other headings and tidy plans",
+     "summary": "T419: a heading of another kind (Decisions, notes) keeps its place after the section before it; a join the clone already had keeps its bytes; a tidy plan is never reordered (281 of 285 plans byte-identical when merged against themselves, the other 4 ones the old merge stopped on)",
+     "class": "within",
+     "why": "Design choices that keep the merge from touching plans that need nothing (the first build's 9 needless changes, dropped). Leaving existing formatting as it is narrows nothing the GM asked."
+    },
+    {
+     "id": "T419 (b) the owed block's words",
+     "summary": "T419: make arbiter-ruled's and the cohort's 'approach owed:' line and make tick's refusal now say to add the block directly after the task's other sections, never at the plan's end",
+     "class": "within",
+     "why": "Removes the cause of the stop the carry hit; serves the same goal and the GM's T285 words that tooling enforce the correct behavior."
+    },
+    {
+     "id": "T419 (b) decide refuses a part B apart (unlabeled by the author as a decision)",
+     "summary": "T419: make decide gains a new refusal - a 'part B' section of a task it decides whose preceding '### T<n>' heading names another task - limited to the tasks being decided, no escape stated",
+     "class": "within",
+     "why": "A new refusal, but its whole reach is the thing the task exists to prevent (a task's sections written apart), and it is limited to the tasks decided, so it reaches no other agent, command or default. It is not one of FR-012's enumerated refusals (FR-006 to FR-009, FR-011, FR-013), so FR-012's escape-and-red-test rule does not bind it; it sits beside decide's other findings. The limit to decided tasks narrows nothing: the merge in (a) already puts other tasks' apart sections together."
+    },
+    {
+     "id": "T404 (c) done ref kept outside the clone",
+     "summary": "T404: a carry deletes a done commit's ref only when it ran in the clone's main worktree (marks::main_top / marks::same_tree); elsewhere it keeps the ref and says so, at both ends that spend one; builder_done's author-time-and-subject test deliberately not used",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a linked worktree's carry deleted the shared ref of a done commit the clone still lacked, hiding it from make builder-trees). It serves the 'make land carrying by commit' of T394's line and the GM's T285 words that worktree tooling perform the correct behavior. Not using builder_done's test is a mechanism choice that keeps T397's empty-pick case passing unchanged."
+    },
+    {
+     "id": "T419 found-and-left: 452's duplicate headings (T423)",
+     "summary": "T419: specs/452-building-plan-followups/plan.md holds 16 heading lines twice, so a carry whose plan conflicts there stops; not fixed here, filed as T423, lands before T400",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The stop on a heading held twice is correct behavior under T300's constraint, not a defect of this task's tooling: which copy of each pair is kept is a reading of 452's own content, a choice between texts the carry must not make for the session and that belongs to that feature. It differs from 417, 444 and 449, whose sections are only reordered with no choice of content. FR-009's three requirements are met: why it is not fixed here, the filed id (T423), and the order (lands before T400). Nothing carries the defect past a step: it is filed and ordered."
+    },
+    {
+     "id": "T419/T404 [perf] tag",
+     "summary": "T419, T404: tagged performance work under FR-013 (the builders' loop made faster: a stopped carry costs the session's turns while trees stand idle); no engine speed, so no checklist",
+     "class": "within",
+     "why": "FR-013 counts work that makes the landings or the builders' loop faster as performance work; a carry that no longer stops is that."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T413 (<why: the finding or measurement that files it>)",
+    "### T413 Approach (checklist part A)",
+    "### T417 (<why: the finding or measurement that files it>)",
+    "### T417 Approach (checklist part A)",
+    "### T419 (<why: the finding or measurement that files it>)",
+    "### T419 Approach (checklist part A)",
+    "### T420 (<why: the finding or measurement that files it>)",
+    "### T420 Approach (checklist part A)",
+    "### T424 (a pre-warm test failed once inside the batch gate's coverage run of 2026-11-27 about 04:03 UTC, landing T367 T411 T414: \"assertion failed: builds(&world).is_empty() && spare(&world.slots)\", `rust/gate/crates/rustc/src/rustc/tests/prewarm.rs` line 261, and passed 3 of 3 alone straight after)",
+    "### T424 Approach (checklist part A)",
+    "(removed) ### T314 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T424-fix-the-test",
+     "summary": "The pre-warm test's `spare` half is read by a waiting take (`let_go`, 10 ms polls) instead of a single read; prewarm.rs and slot.rs are unchanged.",
+     "class": "within",
+     "why": "A check that refuses correct work on a documented transient (slot.rs lines 12-13: a let-go slot may read held while another thread's child holds a copy of the file until exec) is fixed as the check, not the code (constitution XIV; the GM 2026-11-26 'I agree with prioritizing the test that fails under load being fixed'). The fixed check still does its job: red 3 of 3 on the old form under the slowed simulation, and a hold never let go still fails it (let_go false after 60.96 s, measured 2026-11-27)."
+    },
+    {
+     "id": "T424-ceiling",
+     "summary": "The waiting take is bounded at 60 s, labeled GUESS, matching until_calls's bound.",
+     "class": "within",
+     "why": "A labeled knob inside the fix; it widens nothing the GM asked for and a real held slot still fails within it."
+    },
+    {
+     "id": "T424-not-a-defect",
+     "summary": "Classed a flaky check, not a defect of the pre-warm; Performance work: no; Found and left: none.",
+     "class": "within",
+     "why": "The candidates (ceiling, lint calls, a hold between free_now and filter, a shared directory) are each ruled out by a stated test; the 04:03 failure is honestly labeled inferred from the simulation. A test fix that speeds nothing is not FR-013 performance work."
+    },
+    {
+     "id": "T413-T417-T419-T420-placeholders",
+     "summary": "Unfilled template sections for T413, T417, T419, T420 (the why/Approach and checklist part A placeholders, including the FR-013 measurement wording in T419/T420).",
+     "class": "within",
+     "why": "Placeholders decide nothing; the template text restates FR-013 and D15 as written in the spec."
+    },
+    {
+     "id": "T314-removed",
+     "summary": "T314's empty template block removed.",
+     "class": "within",
+     "why": "Its earlier text (verdict CLEAR) was an unfilled placeholder carrying no decision, so its removal narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T413 (the landing's first pass asks the push's unrelated-history and in-progress holds, and the ledger and batch cases of 2026-11-26/27 are pinned: a push refusal met only after the gate costs the gate's minutes)",
+    "### T413 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T413-D1",
+     "summary": "The first pass asks the push's unrelated-history hold (HEAD and origin/main resolve, no merge base) right after its fetch and says it alone before committing anything; a second copy of the shell's two git questions rather than a shared function, its words the shell's but naming the mirror by where it is.",
+     "class": "within",
+     "why": "Moves a refusal the push already makes (feature 301 FR-019) ahead of the gate so a landing is not refused after the gate's minutes, which serves the request's throughput aim (2026-11-19 improvements, 2026-11-20 performance first, 2026-11-27 'maximize productivity'). Refuses nothing the push lets through. Copy versus shared function is design, not fidelity, and message wording that differs from the shell's is not an exactness finding."
+    },
+    {
+     "id": "T413-D2",
+     "summary": "After hold, others_in_progress asks every other specs/<dir> the delta touches and the .specify/feature.json pointer through the push's own readers (holding_with with the landing's ticks, closed_by_status, json-field's function), holding fail-closed on a reader error as the push does; any other directory held is a refusal, the push's one exception (a delta of that feature's specs/ alone) kept.",
+     "class": "within",
+     "why": "A mirror of the push's in-progress loop (feature 133) in the first pass, by the same readers and the same exception and fail-closed behavior; it widens what the first pass asks to exactly what the push asks, and narrows nothing."
+    },
+    {
+     "id": "T413-D3",
+     "summary": "Under L7R_LAND_READY the first pass skips D2 where it ruled the landing ready, because the push's holding_with answers nothing for any directory once every tick is ruled ready.",
+     "class": "within",
+     "why": "The task's ask is that the first pass say every refusal its push would make; the push makes none here, so skipping refuses nothing the push lets through and leaves nothing the push would refuse unasked. Asking more than the push would be new blocking behavior beyond this task. The push's exemption being too wide is a separate defect, recorded under Found-and-left (next item)."
+    },
+    {
+     "id": "T413-left-T432",
+     "summary": "Left: a landing ruled ready exempts every feature's in-progress hold at the push, not only the landed one's; filed as T432, lands before T307, D3 mirroring it until then.",
+     "class": "within",
+     "why": "This is a real defect (a wrong outcome: another feature's started task can reach main beside a ready landing, against feature 133). It is in the push's own rule, not in anything T413 was asked to build: T413 brings the push's existing holds into the first pass. It is filed as its own task with why it is not fixed here, its id and its order (lands before T307, the parent task), which is what FR-009 asks. Because it is fixed before T307 ticks, it is not carried into the next step. T432 has to change the push's rule and D3's mirror together, and D3's own wording ('mirrors it until then') commits to that. A defect outside the task's scope, filed and ordered, does not narrow what T413 was asked to do."
+    },
+    {
+     "id": "T413-D4",
+     "summary": "After the claims wait's ledger write, the landing asks the first pass's ledger refusal again (one function, ledger_refusal) and, where a row is still owed, stops before the ticks naming make ledger-owed WRITE=, having written what it can first; grounded on a measurement through the real ledger.",
+     "class": "within",
+     "why": "The push already refuses an owed ledger row. Asking it before the ticks turns a refusal after the gate into one with a named cure before the landing commits, and it refuses nothing the push lets through. It mirrors a push hold and is not new blocking reach."
+    },
+    {
+     "id": "T413-D5",
+     "summary": "A fixture pins that a batch of T1 and T2 whose T2 block changed since review is refused in the first pass for T2 alone, naming make plan-delta F=; no code change.",
+     "class": "within",
+     "why": "A test that only fails if the existing first-pass refusal goes missing. It enforces what was asked and adds no behavior."
+    },
+    {
+     "id": "T413-parity-table",
+     "summary": "T307 part 2's parity table updated for the four rows this task moves.",
+     "class": "within",
+     "why": "A record of what D1 to D5 do. It decides nothing new."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T414 (a red hook suite inside a batch gate left no record of which case failed: the red state-sync run of 2026-11-26 18:27 UTC left one event line - its name, 94.7 s, exit 1, observed 2026-11-26, method: the task line's reading of that event line - and nothing else, its log in the run's mktemp work directory, printed once and removed, the land log overwritten by the next landing, so 451 T314 could not tell which case had failed)",
+    "### T414 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T414-approach",
+     "summary": "A red hook job's whole log is kept in the common git directory, its name is left in <job>.kept, the hooks-test FAIL line names it (appended, head unchanged), and the event line carries it as a sixth span field written as the Phase line's log; a green job keeps none and removes a stale .kept.",
+     "class": "within",
+     "why": "This is the task's own goal: a red suite's failing case can be read after the run. It answers a wrong outcome (the evidence was printed once and deleted, so T314 could not tell which case failed), in line with the GM's 2026-11-22 'we want everything measured so we know where our time goes' and the fix-as-we-go rule. Keeping the FAIL line's head unchanged and adding a span field serves the same goal. Nothing the GM asked for is removed."
+    },
+    {
+     "id": "T414-self-test",
+     "summary": "The user-level self-test's FAIL line (missing-program-hook), which loses its log from the same work directory, keeps it through hookrun.sh --keep, fixed in this task.",
+     "class": "within",
+     "why": "It is the same defect in a second place, fixed in the task that found it, so nothing is deferred. That follows the fix-all-known-bugs rule (GM 2026-11-18) and is not added scope."
+    },
+    {
+     "id": "T414-D1",
+     "summary": "Name and place: <git common dir>/l7r-hooks-failed/<utc-ns>-<job>-p<pid>.log, beside l7r-events and l7r-handoffs and outside hooks-test/; no colon or space, so the name can ride as a span field.",
+     "class": "within",
+     "why": "This is a naming convention inside the constraint (under the common git directory) that the task line and brief both set. Of the two names offered it takes the brief's directory and gives a reason. The request is not narrowed."
+    },
+    {
+     "id": "T414-D2",
+     "summary": "Bound HOOKS_FAILED_KEEP, a GUESS knob defaulting to 50; a value that is not a number reads as 50; only files named as kept logs are removed, and nothing a later run reuses reads the directory.",
+     "class": "within",
+     "why": "The brief asks for the directory to be bounded, and this does it with a labeled GUESS knob. It does not break the GM's 2026-11-26 disk principle (do not clean what costs time later), because the plan states that no runner, stamp, key or check reads the directory, so removing an old log costs no rerun time. The kept logs are evidence for a reader, not a cache."
+    },
+    {
+     "id": "T414-D3",
+     "summary": "The bound runs once a run in hookrun.sh --sweep <gitdir> before the fan-out, so no job removes a log another job of the same run is about to name; a job run by hand bounds after keeping its own; T372's one sweep and --swept are unchanged.",
+     "class": "within",
+     "why": "This is a choice of mechanism. Doing the sweep before the fan-out keeps every log of the current run, which serves the goal. Keeping T372's behavior keeps existing work the GM did not ask to change and narrows nothing."
+    },
+    {
+     "id": "T414-order-and-performance",
+     "summary": "The order is independent of the queue and lands with any batch; the Performance line says no (the task keeps a defect's evidence, makes nothing faster and measures no time).",
+     "class": "within",
+     "why": "The GM's 2026-11-20 rule counts measurement-of-where-time-goes tasks as performance. This task records which test case failed, not time, so 'no' is a fair reading and the task's content is not narrowed. The phase line gains a log field but no time measure."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T417, T352 (bundle) (the GM 2026-11-27 on the cap's abrupt cutoff: on 2026-11-26/27 three of about 35 builders reached the 300k cap, T315's at 308k and T325's at 310k refused only the mechanical end of their stop points; and the cap's one exit refused the handoff names the briefs give, found by T334 2026-11-26)",
+    "### T417, T352 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T352-exit",
+     "summary": "The cap's exit also takes any .md file under l7r-handoffs/ that the builder's own brief names; the refusal names the brief's first such file; the <agent_id>.md rule is kept for a brief naming none.",
+     "class": "within",
+     "why": "FR-006 lets a builder past the threshold write 'its handoff file, naming the file'. An exit that refuses the file its brief named is a tool refusing valid input, a defect against FR-006; taking the briefed name and keeping the old rule beside it repairs it without widening the exit past handoff files."
+    },
+    {
+     "id": "T352-brief-not-task-id",
+     "summary": "Match the briefed name rather than any name holding the task id.",
+     "class": "within",
+     "why": "A mechanism choice for the same FR-006 exit; it settles nothing the request or spec decides."
+    },
+    {
+     "id": "T352-resume",
+     "summary": "A resume's refusal names a written briefed file first, then <agent>.md, then the brief's first, then the cap's own name, and its 'not written yet' line follows the file named.",
+     "class": "within",
+     "why": "FR-006's resume refusal names the handoff; naming the one actually written fixes a wrong message (a build half told its handoff is unwritten)."
+    },
+    {
+     "id": "T352-landing",
+     "summary": "open_handoffs counts a build half's <task>-build.md (and a bundle's) as finished, so it is no longer named beside foreign changes as their likely writer; open stays T<n>-<agent id>.md.",
+     "class": "within",
+     "why": "open_handoffs refuses nothing by itself; it names a likely writer in writer_refusal's message. Naming a builder that ended as briefed as an open writer is a wrong answer; reconciling the landing's reading with the briefed names narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T417-band",
+     "summary": "A wrap-up band from the 300,000 cap to a 340,000 ceiling (a GUESS knob, falsifier in the audit) in which a builder may finish its stop point's steps; past the ceiling the guard is as before.",
+     "class": "within",
+     "why": "The GM's 2026-11-27 question challenges the abrupt cutoff because it stops builders 'even finishing their handoff', while conceding 'I understand wanting to hand off to a new builder'. A band that lets the stop point finish answers the question; a ceiling keeps the handoff he accepted and FR-006's threshold, and the 2026-11-26 words on closing builders out ('wary of needing to keep them around') support bounding it. The 340k figure is a coordinator's GUESS, not his words, and is labeled one."
+    },
+    {
+     "id": "T417-allowed-set-and-shapes",
+     "summary": "In the band: Read/Grep, a MODE 4 spec-fidelity dispatch, and Bash whose every simple command is allowed (cd, export, VAR=value, git status/diff, head/tail/grep, make decide/plan-delta/plan-verdict/claims-triage/claims-owed/task-add/task-withdraw/builder-checks), matched by invocation through shared::tree::commands; redirects not judged.",
+     "class": "within",
+     "why": "These are the stop point's mechanical steps the motivating builders were refused (heading: T315 and T325 'refused only the mechanical end of their stop points'); matching invocations not mentions follows the project's guard rule. The set is a strict loosening of the old guard."
+    },
+    {
+     "id": "T417-plan-delta",
+     "summary": "make plan-delta allowed though the task line's list omits it.",
+     "class": "within",
+     "why": "A widening of the coordinator's list toward the GM's purpose, not a narrowing of what he asked: it is the plan review's own command in every stop point and T325's refused step. Without it the band would refuse the case the request answers."
+    },
+    {
+     "id": "T417-second-round",
+     "summary": "A later plan-review round is admitted, judged as the original spec-fidelity MODE 4 call before review_round_hooks reroutes it.",
+     "class": "within",
+     "why": "T315's motivating case was a second round; admitting it serves the request directly."
+    },
+    {
+     "id": "T417-still-refused",
+     "summary": "In the band: Edit/Write of any file but the handoff, any other dispatch (claims-triage/impl-drift dispatches included), any other target or program, and SendMessage; the main session's resume of a builder past the cap stays refused.",
+     "class": "within",
+     "why": "The GM's question asks that a builder be let finish its handoff, and concedes the handoff itself; it does not ask that a capped builder keep writing code. The motivating cases were refused only the mechanical end of their stop points, and the goal sends code still owed to a fresh builder 'as before'. A plan review that returns findings in the band ends in a handoff, which is the behavior he accepted, not a narrowing of the loosening he asked for. The claims dispatch is split off by the GM's 2026-11-25 ruling, so refusing it in the band keeps that rule. Keeping the resume refused follows his 2026-11-26 words on closing builders out and FR-006."
+    },
+    {
+     "id": "T417-past-ceiling-unchanged",
+     "summary": "Past the ceiling the old refusal and its render are unchanged ('byte for byte its old render').",
+     "class": "within",
+     "why": "This describes unchanged behavior the plan chose to keep (the request's 'hand off' past a limit), with existing message-store rows left valid; it is not a port held to exactness against a replacement, so the struck exactness standard does not apply."
+    },
+    {
+     "id": "T417-other-readers",
+     "summary": "builder_stop_hooks, set_down_hooks::stalls and make task-progress unchanged; only the guard reads the ceiling.",
+     "class": "within",
+     "why": "Nothing in the request asks those readers to change; a band builder may still stop, and a stall is still marked."
+    },
+    {
+     "id": "T417-refusal-and-message",
+     "summary": "The band's refusal (wrap-up-refused) is recorded, red-first tested (suite 49 of 96 failing with the branch off), escapable by the existing CONTEXT_OK judged before the band, one message-checked wording naming what is still allowed and the handoff.",
+     "class": "within",
+     "why": "FR-012's three owed parts for a refusal of FR-006's guard: a red-first test, an escape of a reason, a message naming the compliant command; all three are present."
+    },
+    {
+     "id": "T417-T352-perf-and-order",
+     "summary": "Tagged [perf] under FR-013 (faster builders' loop), measured by wrap-up passes per builder against the re-read saved; T352 first, then the band.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order is a dependency the spec leaves open."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T419, T404 (bundle)",
+    "### T419, T404 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T419 (a) merge by heading",
+     "summary": "T419: make carry merges plan.md per '### T<n>' heading line (keyed by the whole line), T300's rules applied per heading, a builder-only section placed after its task's last section, each task's sections put together in a fixed order; 'two places' is no longer a stop",
+     "class": "within",
+     "why": "Serves the goal the block states and the GM's standing words that tooling, not the session's memory, performs the correct behavior (T285, 2026-11-26) and that throughput is the goal (T308): it replaces the session's hand resolution (resolve-heads.py) of the two carries stopped on 2026-11-27. It widens what carries; nothing asked is narrowed."
+    },
+    {
+     "id": "T419 (a) stops kept and one added",
+     "summary": "T419: the merge still stops where both sides changed one section, both added one heading differently, one removed what the other changed, both changed the opening, a side holds a heading twice, and newly where both replaced one base section with different headings",
+     "class": "within",
+     "why": "T300's constraint that a choice between the sides is never made for the session, restated per heading. The added stop closes a case the hand script would have resolved wrongly (two main sections); it refuses no case the request asks to carry."
+    },
+    {
+     "id": "T419 (a) other headings and tidy plans",
+     "summary": "T419: a heading of another kind (Decisions, notes) keeps its place after the section before it; a join the clone already had keeps its bytes; a tidy plan is never reordered (281 of 285 plans byte-identical when merged against themselves, the other 4 ones the old merge stopped on)",
+     "class": "within",
+     "why": "Design choices that keep the merge from touching plans that need nothing (the first build's 9 needless changes, dropped). Leaving existing formatting as it is narrows nothing the GM asked."
+    },
+    {
+     "id": "T419 (b) the owed block's words",
+     "summary": "T419: make arbiter-ruled's and the cohort's 'approach owed:' line and make tick's refusal now say to add the block directly after the task's other sections, never at the plan's end",
+     "class": "within",
+     "why": "Removes the cause of the stop the carry hit; serves the same goal and the GM's T285 words that tooling enforce the correct behavior."
+    },
+    {
+     "id": "T419 (b) decide refuses a part B apart (unlabeled by the author as a decision)",
+     "summary": "T419: make decide gains a new refusal - a 'part B' section of a task it decides whose preceding '### T<n>' heading names another task - limited to the tasks being decided, no escape stated",
+     "class": "within",
+     "why": "A new refusal, but its whole reach is the thing the task exists to prevent (a task's sections written apart), and it is limited to the tasks decided, so it reaches no other agent, command or default. It is not one of FR-012's enumerated refusals (FR-006 to FR-009, FR-011, FR-013), so FR-012's escape-and-red-test rule does not bind it; it sits beside decide's other findings. The limit to decided tasks narrows nothing: the merge in (a) already puts other tasks' apart sections together."
+    },
+    {
+     "id": "T404 (c) done ref kept outside the clone",
+     "summary": "T404: a carry deletes a done commit's ref only when it ran in the clone's main worktree (marks::main_top / marks::same_tree); elsewhere it keeps the ref and says so, at both ends that spend one; builder_done's author-time-and-subject test deliberately not used",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a linked worktree's carry deleted the shared ref of a done commit the clone still lacked, hiding it from make builder-trees). It serves the 'make land carrying by commit' of T394's line and the GM's T285 words that worktree tooling perform the correct behavior. Not using builder_done's test is a mechanism choice that keeps T397's empty-pick case passing unchanged."
+    },
+    {
+     "id": "T419 found-and-left: 452's duplicate headings (T423)",
+     "summary": "T419: specs/452-building-plan-followups/plan.md holds 16 heading lines twice, so a carry whose plan conflicts there stops; not fixed here, filed as T423, lands before T400",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The stop on a heading held twice is correct behavior under T300's constraint, not a defect of this task's tooling: which copy of each pair is kept is a reading of 452's own content, a choice between texts the carry must not make for the session and that belongs to that feature. It differs from 417, 444 and 449, whose sections are only reordered with no choice of content. FR-009's three requirements are met: why it is not fixed here, the filed id (T423), and the order (lands before T400). Nothing carries the defect past a step: it is filed and ordered."
+    },
+    {
+     "id": "T419/T404 [perf] tag",
+     "summary": "T419, T404: tagged performance work under FR-013 (the builders' loop made faster: a stopped carry costs the session's turns while trees stand idle); no engine speed, so no checklist",
+     "class": "within",
+     "why": "FR-013 counts work that makes the landings or the builders' loop faster as performance work; a carry that no longer stops is that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T423 (<why: the finding or measurement that files it>)",
+    "### T423 Approach (checklist part A)",
+    "### T425 (<why: the finding or measurement that files it>)",
+    "### T425 Approach (checklist part A)",
+    "### T426 (<why: the finding or measurement that files it>)",
+    "### T426 Approach (checklist part A)",
+    "### T427 (<why: the finding or measurement that files it>)",
+    "### T427 Approach (checklist part A)",
+    "### T428 (<why: the finding or measurement that files it>)",
+    "### T428 Approach (checklist part A)",
+    "(removed) ### T352 (<why: the finding or measurement that files it>)",
+    "(removed) ### T352 Approach (checklist part A)",
+    "(removed) ### T404 (<why: the finding or measurement that files it>)",
+    "(removed) ### T404 Approach (checklist part A)",
+    "(removed) ### T417 (<why: the finding or measurement that files it>)",
+    "(removed) ### T417 Approach (checklist part A)",
+    "(removed) ### T419 (<why: the finding or measurement that files it>)",
+    "(removed) ### T419 Approach (checklist part A)",
+    "(removed) ### T424 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T423/T425/T426/T427/T428 new blocks",
+     "summary": "Ten new blocks (a heading block and a checklist part A block for each of T423, T425, T426, T427, T428), every one the unfilled template: angle-bracket placeholders only, no approach, no constraint, no figure, no Found-and-left item.",
+     "class": "within",
+     "why": "An unfilled template decides nothing the spec leaves open. Its only fixed wording, the Performance work? line, restates FR-013 (measurement tasks count as performance work for scheduling, the GM 2026-11-20), and the Found and left? line restates D15's deferral form; neither narrows the request."
+    },
+    {
+     "id": "removed T352/T404/T417/T419/T424 blocks",
+     "summary": "Nine blocks deleted (T352, T404, T417, T419 heading and part A; T424 heading), each judged CLEAR earlier as the same unfilled template.",
+     "class": "within",
+     "why": "Per earlier.md each removed block carried only template placeholders, so its removal withdraws no decision, approach, constraint or deferral; nothing the GM asked for is narrowed by deleting text that held no content."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T423 (<why: the finding or measurement that files it>)",
+    "### T423 Approach (checklist part A)",
+    "### T425 (<why: the finding or measurement that files it>)",
+    "### T425 Approach (checklist part A)",
+    "### T426 (<why: the finding or measurement that files it>)",
+    "### T426 Approach (checklist part A)",
+    "### T427, T428 (bundle) (found by T417's plan review and by T417 itself, 2026-11-26: the wrap-up band let a redirect write any file, and the resume refusal's last line was false inside the band)",
+    "### T427, T428 Approach (checklist part A)",
+    "### T433 (<why: the finding or measurement that files it>)",
+    "### T433 Approach (checklist part A)",
+    "(removed) ### T352 (<why: the finding or measurement that files it>)",
+    "(removed) ### T352 Approach (checklist part A)",
+    "(removed) ### T404 (<why: the finding or measurement that files it>)",
+    "(removed) ### T404 Approach (checklist part A)",
+    "(removed) ### T417 (<why: the finding or measurement that files it>)",
+    "(removed) ### T417 Approach (checklist part A)",
+    "(removed) ### T419 (<why: the finding or measurement that files it>)",
+    "(removed) ### T419 Approach (checklist part A)",
+    "(removed) ### T424 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T427-redirects-judged",
+     "summary": "In the wrap-up band every Bash redirect must land under /tmp or in the cap's allowed handoff; this reverses T417's decision to leave redirects unjudged.",
+     "class": "within",
+     "why": "FR-006 refuses a builder past the threshold every write but its handoff, and T417's band (the GM 2026-11-27, 'may finish its stop point') already refuses an Edit or Write to a source file; a redirect writing that file was a bypass of the same rule. Closing it enforces what was asked and narrows nothing the GM granted: the stop point's programs and make targets still run, and their logs under /tmp still pass."
+    },
+    {
+     "id": "T427-unplaceable-refused",
+     "summary": "A redirect the walk cannot place (a command substitution) is refused; an unassigned name reads as empty, as bash does.",
+     "class": "within",
+     "why": "A fail-closed detail of the same guard; matches invocations not mentions (a quoted > passes), per the project's guard rule."
+    },
+    {
+     "id": "T427-target-redirect-flag",
+     "summary": "shared::tree::walk's Target gains redirect: bool so the band can tell a redirect from make's own write; no other reader changes; walk_text's unread block folded for clippy's 100-line limit.",
+     "class": "within",
+     "why": "Implementation choice (reuse the shared walk rather than re-parse); no behavior beyond the band changes."
+    },
+    {
+     "id": "T428-resume-message",
+     "summary": "resume_refusal's last line and its not-written-yet line are reworded to say truly what a resumed builder may run inside and past the band (340000 tokens = band::CEILING_TOKENS), after three message-check rounds.",
+     "class": "within",
+     "why": "Corrects a guard message made false by T417; FR-012 requires each refusal's message to name the compliant command, and a false one does not."
+    },
+    {
+     "id": "T427-defer-dup-redirect",
+     "summary": "The shared walk misses a '>& FILE' redirect (affecting the band, main-tree and house-style guards alike); not fixed here, filed as T433, lands before T420.",
+     "class": "within",
+     "why": "A known defect is not left: it is deferred in FR-009/D15's stated form (reason, an open filed task, an order) to its own task inside this feature, because the fix is to a pattern every walk reader shares, beyond this bundle's two jobs. The defect is fixed within the step, before T420, so it does not carry forward. Note: step 1's 'by any route' is not true until T433 lands."
+    },
+    {
+     "id": "templates-and-removals",
+     "summary": "T423, T425, T426 and T433 blocks are unfilled templates; T352, T404, T417, T419 and T424 blocks (each an unfilled template, CLEAR when last judged) are removed.",
+     "class": "within",
+     "why": "Placeholders decide nothing; the removals drop template text that carried no decision."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T413 to T424, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

@@ -1,0 +1,527 @@
+{
+ "blocks": {
+  "### T286 Approach (checklist part A)": {
+   "sha256": "ed4560983331a19a6dab05155a10976fbf8a20a83bdab9697af0139177e4214f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter"
+  },
+  "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)": {
+   "sha256": "6fcd4dda08746e78695a7cd75ebfd95d8435f1d1200f99690097b11da04ccd24",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter"
+  },
+  "### T287 (<why: the finding or measurement that files it>)": {
+   "sha256": "1b982b029164cfb7d1ff29bffa40f00a0339600d50ba8b706f8c4d29ab248e67",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T287 Approach (checklist part A)": {
+   "sha256": "d5f7f9e1fd4096dcf0c174c43bb50ece62a6572099f11e692f3a6cb60464ee3e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T288 Approach (checklist part A)": {
+   "sha256": "e78c6f8972b21ca3a9e150abc476023f60f52ee2ee71df1f82fb3e3f0332d4a7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T288 (451 T271's own section, which left a task's own plan bundle keyed by its task alone because \"a task has one builder, so two builders never do\"; since 451 T369 a task is routinely started in a pool tree and in the coordinating clone both, so both run `make decide` on one task and share its bundle)": {
+   "sha256": "8073dbdcc5e985d3db5e0dda1f5ef93ce957aa240359e493af842643265eb989",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T289 (2026-11-26: a builder listed what it found as candidates and the coordinating session filed them from memory - four went unfiled until the GM asked, and six plan reviews BLOCKED in round 1 on a found-and-left item with no filed task id: T250, T265, T295, T305, T309 and T285's limit, counted by the coordinating session from that day's reviews and given in this task's brief)": {
+   "sha256": "35840fb55a7b35caa0ac9005c713e489aa44779ccd6ab8d0a4c122df2e5aa459",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T289 Approach (checklist part A)": {
+   "sha256": "598918c0d24ef84a12ebe2e51ee21d90f3aa22478b39a810c89f8243973c5f2f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T290 (<why: the finding or measurement that files it>)": {
+   "sha256": "c9d0b1bdcb1b45c3644f3957173ee80995bb5b5e2d3f2afbf42d1d07866e3416",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T290 Approach (checklist part A)": {
+   "sha256": "00666f4678ce056cb86e51ae25e2fa3d27304c1e95d97d96645cfe43d987008c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T291 (<why: the finding or measurement that files it>)": {
+   "sha256": "2d95f5cc3b5b40f169b86475a4075abe37778d0b7f7e111634105f36dd56c07b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T286": {
+   "section_sha256": "7a7261da5b9e06710baf2ef57f26018264b56a3bb3e688ccd253d6e22d2afa05",
+   "reviewed": "2026-11-27",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T286-plan-round-3",
+     "class": "within",
+     "summary": "the round arbiter accepted T286's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T289": {
+   "section_sha256": "3c0c7754e93eeb487867b5491feb3e5e5a16e5240960224f5a696d148528635f",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "No command that reads a builder's report; the builder files what it finds and leaves itself with the existing make task-add, at the find, so its plan section carries the filed id in round 1.",
+     "class": "within",
+     "why": "The replaced design (a report-reading command) is the session's task line, not the GM's words; request.md holds nothing on T289 beyond the approved improvement 4, 'Fewer plan re-rounds', and the GM's 2026-11-22 'not bother cutting back on new tasks filed'. Filing at the find serves both costs the task names (unfiled candidates, round-1 BLOCKs on a deferral with no filed id) more fully than the command would, since a command run on the finished report comes after the plan review that needs the id. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "make task-add left unchanged: cross-worktree id allotment already holds (451 T255's flock in the common git dir and the shared task-ids.txt), measured by a new kept test that passed on the old code.",
+     "class": "within",
+     "why": "A measured premise (observed 2026-11-26 with its method), not an assumption; the brief's concern is answered and the test is kept as the guard. Leaving correct code unchanged narrows nothing."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "make carry resolves plan.md and keeps both sides' added blocks (tasks.md list line plus continuation lines; plan.md whole ### T<n> sections), ours first then theirs, and still stops on any real choice between the two sides (451 T292's Occasions case unchanged).",
+     "class": "within",
+     "why": "A defect found by this task and reproduced red-first on each fault: a second tree's filed task stopped the carry, or lost its research line, which would break the approach of Decision 1. Fixing it here follows the fix-as-we-go rule; the carry still stops wherever keeping both is not provably the answer, so no resolution is widened beyond what both sides only added."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "Builder brief gains the FILE-what-you-find line and withdraws 'do not file tasks'; the report format's CANDIDATES lists each item as filed: T<n> or NOT filed: <refusal>; Makefile, gate CLAUDE.md and module text updated for plan.md.",
+     "class": "within",
+     "why": "Documentation of Decisions 1 and 3; the 'do not file' instruction was the session's own brief wording (grep with method recorded), and no guard refuses a builder's task-add. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "Performance classification",
+     "summary": "Tagged [perf] as a builders'-loop saving under the GM-approved 'Fewer plan re-rounds'; no engine-speed checklist and no before/after timing owed.",
+     "class": "within",
+     "why": "The saving is exactly improvement 4 the GM approved on 2026-11-19; no tool is claimed faster, so no timing claim is left unmeasured."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)",
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "(removed) ### T286 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T286-floor-cold-build",
+     "summary": "DISK_FLOOR alone sets L7R_GUARD_COLD_SECS (600 s, a GUESS knob): with no good guard binary the floor's call waits for the build lock and builds within that bound instead of dying; a good binary runs at once; hook entries keep the 45 s, no-wait build",
+     "class": "within",
+     "why": "Fixes a wrong outcome (make closing-checks / done / land dying in a tree for want of a binary its own step can build). The hooks' bounded, never-waited build (449 T004) is untouched because no hook sets the seam; the floor is not a hook."
+    },
+    {
+     "id": "T286-floor-past-bound",
+     "summary": "Past the 600 s bound the call ends as before, exit 1, not stamped failed",
+     "class": "within",
+     "why": "Keeps the existing failure arm for the case the fix cannot cover; narrows nothing that was asked."
+    },
+    {
+     "id": "T286-counter-launch-line",
+     "summary": "A closing run is counted by a new Phase line (src closing-checks, step static-started) written as the three checks launch, rather than by its PreToolUse line paired with an end line; a start dead at the floor or refused before the checks writes none",
+     "class": "within",
+     "why": "FR-007 refuses a third make static; D11 counts runs that RAN and already excludes a call that ran nothing. The measured premise (every closing call's end line returns at its backgrounded launch, 405 of 492 paired) shows the old pairing counted dead starts as runs, which made the guard refuse correct work. The count stays on the event log (D11, T14)."
+    },
+    {
+     "id": "T286-phase-writer-task-feature",
+     "summary": "l7r-gate measure event-log phase gains --task (the caller's T= first task) and --feature, so the launch line is filed under the call's task, not the tree's marks",
+     "class": "within",
+     "why": "Mechanism for the decision above; the measured misfiling of Phase lines (filed by the tree's marks) is why it is needed."
+    },
+    {
+     "id": "T286-rollout-old-closing-runs",
+     "summary": "Rollout: closing runs already in the logs wrote no launch line and stop counting - at most one landing's worth of lenience per task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal rule (count the closing runs that reached static) cannot be applied to lines already written: by the block's own measurement the old Phase lines carry no tool-use id and are filed by the tree's marks, so nothing in the old log ties a run that reached static to its call. Some deviation at the cutover is therefore forced. Counting old starts by the old pairing would keep refusing correct starts, which is the defect this task fixes. The leniency is bounded to each task's next landing, so it does not gut FR-007's purpose going forward."
+    },
+    {
+     "id": "T286-closing-run-without-T",
+     "summary": "A closing run with no T= writes its launch line under the writer's chain's task, which may not be the call's; that run may go uncounted (justified as lenient, since the closing step's form carries T=)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a permanent carve-out, not a transient one. Before this change such a run was counted under its own call's task (its PreToolUse line is filed by event_log_hooks TASK / own_step, as the block itself says), so the task is knowable and the rule is not physically impossible. D11: 'Every session and agent's run counts'. The GM's approval (request.md, 2026-11-19): 'let's make sure all of the enforcement is real enforcement and not just instructions'. Resting the count on 'the closing step's form carries T=' makes the count depend on instructions. The mechanism also does worse than 'may go uncounted': the counter counts a launch line under the task it is filed under. A line filed under the chain's task (the block measured Phase lines naming only other tasks after 198 of 464 calls) adds to ANOTHER task's count, which can refuse that task's correct third start, the very defect T286 fixes. No figure says how many closing calls lack T=. What it should say instead: a closing run with no T= is counted under the call's own task and under no other task's - however it is achieved (for example a fallback to the call's PreToolUse/end pairing, or refusing closing-checks without T=) - with a red-first test for the no-T= case."
+    },
+    {
+     "id": "T286-defer-builder-tree-build",
+     "summary": "builder_tree.rs build_guard still takes the lock with flock -n beside another build, and its handout note ('first closing checks may stop on the hook wrapper's limit') is stale; deferred to T448, lands before T296",
+     "class": "within",
+     "why": "What is left is a stale sentence and a handout build that loses a lock race; since this task the floor builds a never-built guard within its bound, so no closing run fails on it. The deferral has D15's form (a reason, filed task T448, order before T296), and FR-009 provides for it."
+    },
+    {
+     "id": "T286-order-perf",
+     "summary": "T286 is independent of the queue, T448 after it; tagged performance work of the builders' loop",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; the order narrows nothing."
+    },
+    {
+     "id": "T448-template-and-removed-T286-template",
+     "summary": "T448's two blocks are the unfilled template; the removed T286 block was the unfilled template replaced by T286's filled heading",
+     "class": "within",
+     "why": "They make no decision. The removal only replaces a placeholder heading with the task's real one."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)",
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "(removed) ### T286 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T286-floor-cold-build",
+     "class": "within",
+     "summary": "A new seam L7R_GUARD_COLD_SECS (600 s, GUESS), set only by the Makefile's DISK_FLOOR: where no good guard binary exists the wrapper waits for the build lock (flock -w) and builds within the bound, so make closing-checks/done/land answers instead of dying; with a good binary nothing changes; hooks keep the 45 s limit and the no-wait lock; past the bound exit 1 unstamped as before.",
+     "why": "Fixes a defect (the closing step dying for want of a binary its own step can build). It keeps the hooks' bounded, never-waited-on build (449 T004) untouched, since only DISK_FLOOR sets the seam. It touches no requirement of FR-007/D11 and changes no guard message. The new constant is labeled GUESS."
+    },
+    {
+     "id": "T286-counter-own-T-by-launch-line",
+     "class": "within",
+     "summary": "A closing-checks call naming its own T= is marked own_t on its PreToolUse line. closing-checks.sh writes one Phase line (src closing-checks, step static-started) as it launches the checks, filed by --task under that T='s first task. The static-runs counter counts such a run by that line since the last landing or first start, never by its call, so a start refused before the checks or dead at the floor is no run.",
+     "why": "D11 counts `make static` runs that RAN, and T14 already took a call that ran nothing out of the count. The 2026-11-27 measurement shows a backgrounded closing call gets its end line at launch (405 of 492, all PostToolUse with a bg id), so the old pairing test could not tell a dead start from a run. Counting by a line written only once static starts carries out D11's own test (ran). The line is filed under the same T= reading that files the call's PreToolUse line (own_step), so no other task's count moves and D11's 'every session and agent's run counts' holds. The reset point (last landing, else first start) is D11's. It removes a check refusing correct work (Principle XIV); it does not narrow FR-007."
+    },
+    {
+     "id": "T286-counter-bare-call-unchanged",
+     "class": "narrowing",
+     "summary": "A closing-checks call with no T= of its own (or one the TASK pattern does not read) writes no launch line and is still counted by its own call, under the task its own line is filed under, as on HEAD. Such a bare start that dies at the floor is still counted, which narrows the task's goal (item 1: 'a start that never reached make static costs the task none of its two static runs') to the T= form.",
+     "why": "D11 requires counting a run under its own task and every run counting. Without a T=, a launch line could only be filed under the tree's guess, which the plan measured as another task's after 198 of 464 calls. That is the risk to another task's count, and the D11 narrowing, that the previous round BLOCKED. Leaving the bare form on D11's existing mechanism is the only form that keeps D11 whole: it can over-count a dead bare start but never moves another task's count or under-counts a real run. That errs toward FR-007's purpose (making `make static` stop being the edit loop) and has the recorded STATIC_OK escape. The defect left is also small: this task's floor fix removes the observed cause of dead starts (the cold-guard death) for every call form, bare calls included, so a bare dead start now needs the 600 s bound to run out. It is the accepted spec's own mechanism, not a departure from what the GM asked. One limitation: the plan says how many bare calls there are is not measured, so this ruling rests on the residual's rarity following from the floor fix, not on a count.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T286-rollout",
+     "class": "within",
+     "summary": "Lines written before own_t existed carry none, so every closing run already in the logs is counted as before: no lenience and no count changed at the switch.",
+     "why": "This replaces round 1's 'stop counting old runs, one landing of lenience' with no change to any existing count, which keeps D11's count exactly as it was at the switch."
+    },
+    {
+     "id": "T286-phase-writer-task-flag",
+     "class": "within",
+     "summary": "The one Phase writer (l7r-gate measure event-log phase) gains --task and --feature, and the PreToolUse line gains an own_t field written by event_log_hooks' fields.rs.",
+     "why": "These are tooling seams that serve the counter fix. The count stays the event log's (D11, T14), and the change keeps one writer rather than adding a second log."
+    },
+    {
+     "id": "T286-found-and-left-T448",
+     "class": "within",
+     "summary": "builder-tree's handout build (builder_tree.rs build_guard) still takes the lock with flock -n and its note about the hook limit is now stale. Deferred: 'Not fixed here: it is the task crate's ... Filed as T448; lands before T296.'",
+     "why": "This is the deferral form the accepted spec sanctions (FR-009, D15): a reason, a filed task id and an order. The defect's visible effect (a first closing check dying in such a tree) is covered in the meantime by this task's floor fix, so what remains is a stale note and a lost handout build that the floor now does. It is ordered to land before T296, not carried open-ended."
+    },
+    {
+     "id": "T286-perf-tag",
+     "class": "within",
+     "summary": "Tagged [perf] as builders'-loop work (dead starts and the STATIC_OK round they cause).",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)",
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "(removed) ### T286 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T286-floor-cold-build",
+     "class": "within",
+     "summary": "A new seam L7R_GUARD_COLD_SECS (600 s, GUESS), set only by the Makefile's DISK_FLOOR: where no good guard binary exists the wrapper waits for the build lock (flock -w) and builds within the bound, so make closing-checks/done/land answers instead of dying; with a good binary nothing changes; hooks keep the 45 s limit and the no-wait lock; past the bound exit 1 unstamped as before.",
+     "why": "Fixes a defect (the closing step dying for want of a binary its own step can build). It keeps the hooks' bounded, never-waited-on build (449 T004) untouched, since only DISK_FLOOR sets the seam. It touches no requirement of FR-007/D11 and changes no guard message. The new constant is labeled GUESS."
+    },
+    {
+     "id": "T286-counter-own-T-by-launch-line",
+     "class": "within",
+     "summary": "A closing-checks call naming its own T= is marked own_t on its PreToolUse line. closing-checks.sh writes one Phase line (src closing-checks, step static-started) as it launches the checks, filed by --task under that T='s first task. The static-runs counter counts such a run by that line since the last landing or first start, never by its call, so a start refused before the checks or dead at the floor is no run.",
+     "why": "D11 counts `make static` runs that RAN, and T14 already took a call that ran nothing out of the count. The 2026-11-27 measurement shows a backgrounded closing call gets its end line at launch (405 of 492, all PostToolUse with a bg id), so the old pairing test could not tell a dead start from a run. Counting by a line written only once static starts carries out D11's own test (ran). The line is filed under the same T= reading that files the call's PreToolUse line (own_step), so no other task's count moves and D11's 'every session and agent's run counts' holds. The reset point (last landing, else first start) is D11's. It removes a check refusing correct work (Principle XIV); it does not narrow FR-007."
+    },
+    {
+     "id": "T286-counter-bare-call-unchanged",
+     "class": "narrowing",
+     "summary": "A closing-checks call with no T= of its own (or one the TASK pattern does not read) writes no launch line and is still counted by its own call, under the task its own line is filed under, as on HEAD. Such a bare start that dies at the floor is still counted, which narrows the task's goal (item 1: 'a start that never reached make static costs the task none of its two static runs') to the T= form.",
+     "why": "NOT LEGITIMATE as written. Leaving the bare form on D11's existing mechanism keeps round 1's concern answered (no other task's count moves), but the plan itself states the result: a bare start that never reached static is still counted, so the static-runs guard can still refuse a correct third start (STATIC_OK owed). That is a check refusing good work, a DEFECT under constitution XIV, and the task's own goal (item 1) states it is to be gone. The plan neither fixes it nor lists it under Found and left with a filed task and order (FR-009, D15). Impossibility is not shown: the plan shows only that a launch line filed under the tree's guess is unreliable (198 of 464). It does not show that a bare run cannot be tied to the task its own PreToolUse line is filed under. Rarity does not save it either. The plan says the number of bare calls is not measured. And the floor fix removes only one of the two dead-start paths the block names; the other, a start refused before the checks (no feature, 451 T303), still counts a bare call. Fix: either fix the bare form so a bare start that never reached static is not counted, without filing any run under another task; or measure that bare closing-checks calls do not occur, which makes it no defect; or list it under Found and left in D15's form (Not fixed here: <why>. Filed as T<n>; lands before T<m>.).",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T286-rollout",
+     "class": "narrowing",
+     "summary": "Rollout: lines written before own_t carry none, so the closing runs already in the logs count as before. The block claims 'no lenience, no change to a count at the switch'. But the block also says hooks run the MIRROR's guard (event_log_hooks' own_t mark and static_runs_hooks' count both run there), while the launch line is written by the TREE's own closing-checks.sh and l7r-gate.",
+     "why": "NOT LEGITIMATE as written. Take a tree whose checked-out closing-checks.sh predates this change: a session clone not yet pulled, or a pool tree on an older base. Under a mirror that already marks own_t, a call naming its own T= is marked own_t, is counted 'never by its call', and writes no launch line, so it is not counted at all. That is an uncounted run, a narrowing of D11's 'every session and agent's run counts' (the same class round 1 BLOCKED). It also contradicts the block's own 'no lenience' claim, and the Rollout sentence covers only old LINES, not old SCRIPTS. Fix: close the gap (for example, mark own_t only where the tree's script writes the launch line, or count an own_t call by its call when no launch line exists for it), or state the lenience and its bound and rule it as a narrowing.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T286-phase-writer-task-flag",
+     "class": "within",
+     "summary": "The one Phase writer (l7r-gate measure event-log phase) gains --task and --feature, and the PreToolUse line gains an own_t field written by event_log_hooks' fields.rs.",
+     "why": "These are tooling seams that serve the counter fix. The count stays the event log's (D11, T14), and the change keeps one writer rather than adding a second log."
+    },
+    {
+     "id": "T286-found-and-left-T448",
+     "class": "within",
+     "summary": "builder-tree's handout build (builder_tree.rs build_guard) still takes the lock with flock -n and its note about the hook limit is now stale. Deferred: 'Not fixed here: it is the task crate's ... Filed as T448; lands before T296.'",
+     "why": "This is the deferral form the accepted spec sanctions (FR-009, D15): a reason, a filed task id and an order. The defect's visible effect (a first closing check dying in such a tree) is covered in the meantime by this task's floor fix, so what remains is a stale note and a lost handout build that the floor now does. It is ordered to land before T296, not carried open-ended."
+    },
+    {
+     "id": "T286-perf-tag",
+     "class": "within",
+     "summary": "Tagged [perf] as builders'-loop work (dead starts and the STATIC_OK round they cause).",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)",
+    "### T448 (<why: the finding or measurement that files it>)",
+    "### T448 Approach (checklist part A)",
+    "### T451 (<why: the finding or measurement that files it>)",
+    "### T451 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T286-floor-cold-seam",
+     "class": "within",
+     "summary": "A new seam L7R_GUARD_COLD_SECS (600 s, a GUESS knob) set only by DISK_FLOOR: with no good guard binary the floor's call waits for the build lock and builds within the bound instead of dying; a good binary never waits; hook entries keep the 45 s no-wait build.",
+     "why": "Fixes the dead start T286 files; hooks' bounded no-wait build (449 T004) unchanged; nothing the request or spec asked is narrowed."
+    },
+    {
+     "id": "T286-count-by-launch-line",
+     "class": "within",
+     "summary": "A closing call naming its own T= is marked own_t on its PreToolUse line; its script writes one static-started Phase line at launch; the counter counts such a run by that line, so a start refused or dead at the floor is no run.",
+     "why": "D11 counts make static runs that RAN, excluding a call that ran nothing; a start dead before static ran nothing, so counting by the launch line serves D11 and FR-007's purpose (item 2 of the approved improvements: stop make static as the edit loop)."
+    },
+    {
+     "id": "T286-bare-call-as-head",
+     "class": "within",
+     "summary": "A call with no T= of its own writes no launch line and is counted by its own call under its own task, as on HEAD.",
+     "why": "Keeps D11's 'every run counts' and avoids charging another task's count; the plan review's round 1 finding is answered."
+    },
+    {
+     "id": "T286-rollout-a-old-lines",
+     "class": "within",
+     "summary": "Event-log lines written before own_t carry none, so every closing run already logged is counted as before.",
+     "why": "No count changes at the switch; nothing narrowed."
+    },
+    {
+     "id": "T286-rollout-b-old-scripts",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "summary": "In a tree whose closing-checks.sh predates T286 (a session clone not yet synced, a pool tree on an older base), the mirror's guard marks an own-T= call own_t but the tree's script writes no launch line, so that run is counted none until the tree's next prompt or handout; accepted by the builder as a lenient narrowing of D11.",
+     "why": "Presumed not legitimate and none of the three tests is met. Not impossible: the block itself names a strict-side rollout (mark own_t, or count by launch line, only where the tree's script writes that line) and rejects it for cost alone ('the guard reading the tree's script at every call'), which is the excluded reason. Not implied by the GM's words: the approval asks that 'all of the enforcement is real enforcement and not just instructions', and D11 says every run counts. The literal rule does not defeat the purpose; the lenience does reach it: in the window FR-007's guard passes a third make static without STATIC_OK, a check passing bad work. Judged per population: a session clone's window ends at its next prompt (sync-in), but a pool tree on an older base keeps its old script for its whole in-flight task; neither bound carries a date or method, and the bundle cannot verify them, so 'bounded' carries no weight. Restate: a call whose tree's closing-checks.sh carries no launch-line writer is counted by its call as on HEAD (e.g. own_t written only where the tree's script writes the static-started line), with a test that an own-T= run in an old-script tree is still counted; no tree undercounts."
+    },
+    {
+     "id": "T286-defer-T448",
+     "class": "within",
+     "summary": "builder-tree's handout guard build (flock -n, stale note) left to T448, in the task crate, ordered before T296.",
+     "why": "A D15-form deferral to an open task of the same feature; the defect stays owed and the floor now covers the miss meanwhile."
+    },
+    {
+     "id": "T286-defer-T451-bare-dead-start",
+     "class": "within",
+     "summary": "A bare make closing-checks (no T=) that dies before make static is still counted as a run; deferred to T451, lands before T296, with its reason (the launch line cannot be tied to a bare call without a new field; the bare count is unmeasured).",
+     "why": "A D15-form deferral within feature 451, so the defect is still owed under 'fix all of this as part of our tasking ... before resuming our port' rather than carved out. T296's identity is not in the bundle; this ruling assumes nothing about it beyond its being an open task of the feature that D15's form requires."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T286 (a fresh worktree's first `make closing-checks` died twice at the disk-floor step, its tree's guard binary never built and the build past the hook wrapper's 45 s limit at load 56, four calls to finish, and the static-run counter counted both dead starts, so the next start needed `STATIC_OK` - observed 2026-11-26, method: 451 T270's builder's report, as T286's line in tasks.md records it)",
+    "### T286 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T286-plan-round-3",
+     "class": "within",
+     "summary": "the round arbiter accepted T286's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T286"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T288 (451 T271's own section, which left a task's own plan bundle keyed by its task alone because \"a task has one builder, so two builders never do\"; since 451 T369 a task is routinely started in a pool tree and in the coordinating clone both, so both run `make decide` on one task and share its bundle)",
+    "### T288 Approach (checklist part A)",
+    "(removed) ### T288 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T288-D1",
+     "summary": "A task's own plan bundle (make decide) is named <task>-<first 8 hex of SHA-256 of tree_of(spec_dir)>, as T271 keyed the changed-blocks bundle; one tree's re-decide keeps its directory.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (one tree's MANIFEST overwriting another's while its reviewer reads it, so a verdict is recorded by the other tree's command); keeps 451 T257 (a bundle names its tree, the verdict records there) and FR-003(a)'s decision preflight working. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T288-D2",
+     "summary": "A tree spelled two ways (symlink and target) gets a bundle per spelling, since tree_of is std::path::absolute, not canonical; left so.",
+     "class": "within",
+     "why": "Each bundle is correct for its own make -C; no wrong outcome results, so under constitution XIV it is a difference, not a defect, and leaving it narrows nothing."
+    },
+    {
+     "id": "T288-D3",
+     "summary": "The plan hold's BUNDLE pattern (planhold.rs) takes an optional -<8 hex> after the task, a guard edit recorded by make guard-edit; old-shape bundles still match.",
+     "class": "within",
+     "why": "Required so the plan hold still takes a task review's hold (a stated constraint); it widens a matcher to the new name and refuses nothing new."
+    },
+    {
+     "id": "T288-D4",
+     "summary": "The other readers (round cap SECTION, ledger TASK, event log manifest field, handle.rs MANIFEST matcher) left unchanged because they read the prompt's words or any path; enumeration from a stated grep over rust, scripts, Makefile, .claude, 2026-11-27.",
+     "class": "within",
+     "why": "The enumeration carries its search space and starts from the waist (task_prompt/build's output directory); leaving readers that do not depend on the name's shape unchanged narrows nothing."
+    },
+    {
+     "id": "T288-D5",
+     "summary": "The scratch-file prefix rule is measured (56 builders, 260 writes, 0 of 254 real unprefixed writes, dated 2026-11-27 with its script) and left an instruction; the guard is declined, with a stated reopen condition.",
+     "class": "within",
+     "why": "No words of the GM ask for a scratch-file guard (the block's G: none, and request.md has none); the task's own condition was a guard only if the rule is shown to fail, and the measurement shows no failure. Not adding an unrequested guard is not a narrowing."
+    },
+    {
+     "id": "T288-D6",
+     "summary": "The plan hold's new test case was written before its pattern changed but not run red on its own; its redness is argued from the old pattern instead.",
+     "class": "within",
+     "why": "A verification-practice choice, not a narrowing of what was asked; FR-012's red-first rule covers FR-006 to FR-009, FR-011 and FR-013's refusals, not the plan hold, and the plan crate's test was run red first."
+    },
+    {
+     "id": "T288-D7",
+     "summary": "The template placeholder section heading '### T288 (<why: ...>)' is removed, replaced by the filled section under its real heading.",
+     "class": "within",
+     "why": "The placeholder carried no decision; its content is superseded by the filled section, so removing it drops nothing that was approved."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T289 (2026-11-26: a builder listed what it found as candidates and the coordinating session filed them from memory - four went unfiled until the GM asked, and six plan reviews BLOCKED in round 1 on a found-and-left item with no filed task id: T250, T265, T295, T305, T309 and T285's limit, counted by the coordinating session from that day's reviews and given in this task's brief)",
+    "### T289 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "no command that reads a builder's report; the builder files what it finds itself with the existing make task-add, at the find",
+     "class": "within",
+     "why": "The report-reading command is the task line's design, not the GM's: no GM words in request.md and no requirement in spec-index.md name a command over a report or candidates file (grepped for candidate/report/file). The replacement serves the task's purpose more fully - an id exists before the plan section, which FR-009's deferral refusal needs in round 1 - and leaves nothing the task line asked for undone; a refused filing is reported as NOT filed with the refusal, not dropped."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "make task-add unchanged; the cross-tree id allotment (451 T255's shared task-ids.txt under the common-dir flock) measured already safe, the test kept as the record",
+     "class": "within",
+     "why": "The brief asked for the allotment to be safe across trees; it was measured (2026-11-26, a new test, green on the old code) and the existing mechanism kept. Nothing asked for is left out."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "make carry keeps both sides' additions by block: tasks.md blocks (a list line with its continuations) kept ours-then-theirs, plan.md whole ### T<n> sections kept, a section written differently by both sides stops",
+     "class": "within",
+     "why": "A defect found in this task (a second tree's filed task stopped on plan.md, or lost its research line) that the approach cannot work without; fixed here, red-first on each fault, T292's stop-on-the-rest kept. Fixing a found defect in the task is what the project's rules ask."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "the brief and report-format words: FILE what you find, CANDIDATES as filed: T<n> or NOT filed: <refusal>, the 'do not file tasks' brief instruction withdrawn in the brief file; no guard change",
+     "class": "within",
+     "why": "Words that carry Decision 1; the absence of the instruction in the repository and of any guard refusing a builder's task-add are labeled observations with their method. The GM's 'real enforcement and not just instructions' (2026-11-19) was said of the six approved improvements and four data ideas, not this task, and the mechanical backstop for the costly case (a deferral with no filed id) is FR-009's existing make decide refusal."
+    },
+    {
+     "id": "Found and left? none",
+     "summary": "nothing found and left; the carry's line-by-line fault fixed here",
+     "class": "within",
+     "why": "The NOT filed path is a runtime outcome of a future builder's report, not an item this task finds and leaves."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "the task is classed not performance work because 'no check, gate, engine or landing runs faster', although it removes a filing by hand and blocked plan-review rounds",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The plan's test (a tool runs faster) is narrower than the GM's. On 2026-11-19 he approved six improvements 'ranked by minutes they'd have saved', item 4 being 'Fewer plan re-rounds: about 10 min', which makes no tool faster; on 2026-11-20 he asked to 'prioritize those remaining improvement fixes ... doing those first makes everything after them faster' and 'in general priotitize performance improvements going forward', and counted measurement work as performance 'even if the task itself doesn't improve performance'. The plan's reading would exclude his own approved item 4; T289's stated payoff (six round-1 BLOCKs and four unfiled candidates in one day, removed) is of exactly that class. FR-013's full definition is cut at [...] in this bundle and was not read; if it defines performance work as only a faster tool, that definition is itself narrower than these words. Fix: answer yes, as process-time work that removes re-rounds and hand filing, and carry what FR-013 and the register (451 T259) owe such work."
+    }
+   ],
+   "tasks": [
+    "T289"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T289 (2026-11-26: a builder listed what it found as candidates and the coordinating session filed them from memory - four went unfiled until the GM asked, and six plan reviews BLOCKED in round 1 on a found-and-left item with no filed task id: T250, T265, T295, T305, T309 and T285's limit, counted by the coordinating session from that day's reviews and given in this task's brief)",
+    "### T289 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "No command that reads a builder's report; the builder files what it finds and leaves itself with the existing make task-add, at the find, so its plan section carries the filed id in round 1.",
+     "class": "within",
+     "why": "The replaced design (a report-reading command) is the session's task line, not the GM's words; request.md holds nothing on T289 beyond the approved improvement 4, 'Fewer plan re-rounds', and the GM's 2026-11-22 'not bother cutting back on new tasks filed'. Filing at the find serves both costs the task names (unfiled candidates, round-1 BLOCKs on a deferral with no filed id) more fully than the command would, since a command run on the finished report comes after the plan review that needs the id. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "make task-add left unchanged: cross-worktree id allotment already holds (451 T255's flock in the common git dir and the shared task-ids.txt), measured by a new kept test that passed on the old code.",
+     "class": "within",
+     "why": "A measured premise (observed 2026-11-26 with its method), not an assumption; the brief's concern is answered and the test is kept as the guard. Leaving correct code unchanged narrows nothing."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "make carry resolves plan.md and keeps both sides' added blocks (tasks.md list line plus continuation lines; plan.md whole ### T<n> sections), ours first then theirs, and still stops on any real choice between the two sides (451 T292's Occasions case unchanged).",
+     "class": "within",
+     "why": "A defect found by this task and reproduced red-first on each fault: a second tree's filed task stopped the carry, or lost its research line, which would break the approach of Decision 1. Fixing it here follows the fix-as-we-go rule; the carry still stops wherever keeping both is not provably the answer, so no resolution is widened beyond what both sides only added."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "Builder brief gains the FILE-what-you-find line and withdraws 'do not file tasks'; the report format's CANDIDATES lists each item as filed: T<n> or NOT filed: <refusal>; Makefile, gate CLAUDE.md and module text updated for plan.md.",
+     "class": "within",
+     "why": "Documentation of Decisions 1 and 3; the 'do not file' instruction was the session's own brief wording (grep with method recorded), and no guard refuses a builder's task-add. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "Performance classification",
+     "summary": "Tagged [perf] as a builders'-loop saving under the GM-approved 'Fewer plan re-rounds'; no engine-speed checklist and no before/after timing owed.",
+     "class": "within",
+     "why": "The saving is exactly improvement 4 the GM approved on 2026-11-19; no tool is claimed faster, so no timing claim is left unmeasured."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T286 to T291, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

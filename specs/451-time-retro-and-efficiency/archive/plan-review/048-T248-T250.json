@@ -1,0 +1,551 @@
+{
+ "blocks": {
+  "### T248 (451 T227's builder, 2026-11-25: record-format's 2026-11-24 rounds on 0097 spanned two `origin/main` batches, and the batch rule restarts a unit's count on any move of `origin/main`, so with several sessions landing the cap seldom fires)": {
+   "sha256": "76ec936a6dbdc1fe6258308410a740b8042a6fc14562dc7a4b20e100e57cff8a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T248 Approach (checklist part A)": {
+   "sha256": "c29ae9f7cecf32e7101600c8a8566164c29453679144c5f8766d8de6565dba31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T249 (T232's two found-and-left items, its builder 2026-11-25: a research page's record-check re-run applied its wording EDITs, and a later round with no kept snapshot read as scoped to a change it was never handed)": {
+   "sha256": "729dd4a16a0160cf2a57db2cbc0e42bd137a4607ffa26bb79e43eb6acd1c9b9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T249 Approach (checklist part A)": {
+   "sha256": "58260278403d8bba64d23b389cb3bcc4ec080cb9a15cf23550565b4a223a0dee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T250 Approach (checklist part A)": {
+   "sha256": "d10a4f1660bd6add7a28fdf7013c6630ece3b61273ac8a5373a1edbd00537a84",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
+  },
+  "### T250 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline listed 341 research-page comments that named a ruling of the GM's with no pointer to his words, 74 of them with no recorded words at all by the audit of 2026-11-24; `docs/gm-rulings.md`, \"NOT a ruling\", is what one such comment cost)": {
+   "sha256": "c0e808af99fc139514ef7d30e05a56f1742d74637c6ee529ce28e842f1345712",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter"
+  }
+ },
+ "tasks": {
+  "T248": {
+   "section_sha256": "dda5ee6906a37b513c2da11e7d2eb636f0a698ee3cc6a146993516c602016cad",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the restart kept for another session's change",
+     "summary": "A later origin/main batch restarts a unit's count when moved_upstream finds a non-push (fetch or pull) reflog step whose diff names a file of the subject. A batch whose moves leave the subject alone no longer restarts it.",
+     "class": "within",
+     "why": "Baseline: the GM's request, 451's spec, 375 FR-010 (the cap dispatches the arbiter) and FR-011 (the arbiter's ruling binds where the GM was asked). Under that baseline, the binding 374 ruling (a fresh count for a later page change no counted round saw) is part of what was asked. Another session's change to the subject is that case, and it is kept. Batches that never touched the subject were never that case. Measured 2026-11-25: nine of 0097's ten moves were such batches. Dropping their restart restores FR-010's cap where it had stopped firing, a defect fixed under fix-as-we-go."
+    },
+    {
+     "id": "D2a a page the unit only reads",
+     "summary": "A change to a page the unit reads but which is not one of its own files (the 374 ruling's own 0077 trigger) no longer restarts the count. The third round is held for one arbiter ruling.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the 374 ruling's automatic fresh count, so it is judged as an exception and presumed wrong. It is legitimate on the GM's own rule and on purpose. The root CLAUDE.md tripwire (labeled G in the block) owes the arbiter a ruling at a check's third round on one subject, so the fresh count was the exception and this returns that case to the rule. The ruling's purpose survives: such a cause still gets its look. The arbiter rules on it under FR-011 and can rule continue, which is exactly how the 374 ruling itself was reached (the cap tripped at round 3 and the arbiter ruled continue). FR-010 says the tripwire 'does not stop the feature'. The GM's 2026-11-24 words, 'that we really are cascading in situations that do call for it', still hold: the cascade owed by a read page's change still runs, through modal-triage and one ruling, and is neither dropped nor settled silently. Restarting on every read page's move would bring back what the GM's 2026-11-23 cascade talk was about, every pop-up citing an edited page re-owed without limit. This is the ruling's reach narrowed to its own mechanism, not a carve-out against it. Not counted as grounds: 'the task's words' and cost."
+    },
+    {
+     "id": "D2b the subject's own files changed by other work in this clone",
+     "summary": "Every push from this clone counts as the round's own edits. So a later edit to the subject's own files by other work of this session (another task, a page session), landed by push, no longer restarts the count and goes to the arbiter.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a different case from D2a and is ruled on its own. It is a change to the subject itself that no counted round saw, so it falls inside the 374 ruling's words, and the mechanism reaches further than goal line 1 says ('the round's own edits'). It is legitimate on the same two grounds. First, the GM's tripwire is a third round on one subject, and that holds whichever of this session's edits re-owed it. Second, a session's own later edits re-owing its own checks is the very loop the cap exists to catch (the GM's 2026-11-23 cascade talk), while another session's change, which D1 keeps, is not this session's loop. The case still reaches the arbiter, who can rule continue. With 147 of the clone's last 150 reflog entries pushes (measured 2026-11-25, as the block states), D1's restart still reaches every fetched landing from another session, and those arrive in large fetches (one of 36 commits), so the kept restart is not hollowed out."
+    },
+    {
+     "id": "D3 fallback where authorship cannot be read",
+     "summary": "If the reflog does not reach the stored batch (expired or no tracking log), any change to the subject between the batches restarts the count. An unrecognized reflog message counts as another session's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In this branch the round's own edits can reset the count, which goes past the 374 ruling (a page change no counted round saw) and against FR-010's cap, so it is ruled as an exception. It is legitimate because the deciding fact, who made the change, cannot physically be read here. Either default breaks one owed rule some of the time: holding puts another session's real new cause into a capped count against the binding ruling, and restarting lets own edits reset it. It still requires an actual change to the subject, and it needs two rounds on one unit further apart than the reflog's expiry, so it does not gut the cap."
+    },
+    {
+     "id": "D4 fallback where git cannot read the stored batch or its diff",
+     "summary": "A stored batch git cannot read, or a diff git refuses, moves nothing. The cap holds and the arbiter rules.",
+     "class": "within",
+     "why": "Fails toward FR-010's cap and FR-011's ruling."
+    },
+    {
+     "id": "D5 the split into rounds/cap.rs",
+     "summary": "The cap's functions move unchanged from rounds.rs (1,029 lines with the rule) into rounds/cap.rs. rounds.rs is now 843 lines and cap.rs 198 (measured 2026-11-25, wc -l).",
+     "class": "within",
+     "why": "A behavior-neutral split under the file-scale bar."
+    },
+    {
+     "id": "D6 tests and fires-proof",
+     "summary": "A 0097 replay through handle with a bare origin and a second clone, red on HEAD. A moved-page replay and the restated batch test, each pinned by disabling one half of the rule.",
+     "class": "within",
+     "why": "Enforcement of FR-010's cap and of the restart D1 keeps. Per the 2026-09-20 rule, enforcement serves the request."
+    },
+    {
+     "id": "D7 order, exits, budget",
+     "summary": "After T227, before T22, parallel with T249 in other crates. Closing-checks exit, with a cannot-be-done claim ruled through make arbiter-ask. One landing.",
+     "class": "within",
+     "why": "Scheduling and scope. None of it narrows anything."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T249": {
+   "section_sha256": "986134df3b3055f3768ca7de1a243029c74e2c54d5c2cb5a854b090a5b14d3ee",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T249(a) the hold reaches a research page",
+     "summary": "apply-edits' re-run hold maps an EDIT's file to its unit's subject with unit_of: a pop-up's unit as before, or the question number for any research/questions/NNNN-* file, the subject of record-format:NNNN and intro-check:NNNN; T232's rule otherwise unchanged (wording EDIT held and listed in noted.jsonl where every check carries rerun at the current fingerprint, RERUN_OK applies it, logged).",
+     "class": "within",
+     "why": "Fixes the wrong outcome T232 found and left: a re-run on unchanged research-page text applied wording EDITs, rewording what an earlier answer settled and re-owing the checks after it. That is the GM's 2026-11-23 rules as approved ('only factual findings cascade', 'settled choices stay settled', 'style edits are just a different category of thing than factual inaccuracies'), carried to the record checks' own units. Enforces what was asked; adds no new behavior beyond T232's hold."
+    },
+    {
+     "id": "T249(a) factual checks' EDITs apply and cascade",
+     "summary": "quote-check and translation-check EDITs are factual (in neither WORDING_CHECKS nor WORDING_CATEGORIES), so they apply and cascade as a first round's; their per-note units are never looked up; pinned by a test green before and after.",
+     "class": "within",
+     "why": "The GM's split is that factual findings DO cascade; holding them would contradict 'we really are cascading in situations that do call for it' (2026-11-24). Leaving them applied is the rule, not a carve-out."
+    },
+    {
+     "id": "T249(a) a source write-up's and a GLOSSARY term file's EDIT not held",
+     "summary": "A write-up under research/sources/ names no question, and a GLOSSARY block writes a term file, never the question, so neither EDIT is held.",
+     "class": "within",
+     "why": "The hold's condition is 'unchanged text', read as a re-run at the current fingerprint of the check's subject; record-format's and intro-check's subject is the question (units::fingerprint reads the question's files), so neither file is part of what the earlier answer settled or what the fingerprint proves unchanged. The defect found is on the question unit; no wrong outcome on write-ups or term files is named or measured, and FIX AS WE GO reaches defects, not hypothetical cases. Adjudicated separately: write-up EDITs come through the factual checks (applied by the decision above); a term file is outside the unit entirely."
+    },
+    {
+     "id": "T249(a) the re-run mark is not rebuilt",
+     "summary": "No change to how rerun is written for record checks: answer_unit serves every check, and a page session records its answer before applying EDITs (settle requires it); measured 2026-11-25 that record-format's 82 and intro-check's 7 records are per question and none yet carries rerun.",
+     "class": "within",
+     "why": "A measured statement that the existing mechanism already reaches the case; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T249(b) a later round with no kept snapshot says its scope",
+     "summary": "parts_in also returns each check/subject that is a later round with no snapshot of its last round, and headed_in (called by both MANIFEST writers, check::with_earlier and the modal bundle) writes one line under the MANIFEST title: judge the whole unit, every block, as in a first round.",
+     "class": "within",
+     "why": "Fixes the wrong outcome of 2026-11-24: a later round with no change section judged one bullet where the whole unit was owed, and missed the alcove gap for a round. The GM's 'Re-reviews scoped to the change' presupposes a change to scope to; where none is kept, feature 393's Earlier rounds rule (a round with no change section judges as a first round, GM 2026-10-18) applies, and the line makes it happen. The fix sits at headed_in, the function the bundle writers pass through, rather than at each writer."
+    },
+    {
+     "id": "T249(b) who gets no line",
+     "summary": "A first round, a subject with rulings only, and a later round whose last bundle was kept get no line; a rebuild before dispatch keeps it.",
+     "class": "within",
+     "why": "These are the cases the defect does not reach: a first round already judges the whole unit, and a kept snapshot gives a change section. Nothing the GM asked for is excluded."
+    },
+    {
+     "id": "T249 order and brief",
+     "summary": "After T232, parallel with T248 (disjoint files), before T246 as T232 filed it; build and test only, no page session and no edit of a research page, the research switch deferred.",
+     "class": "within",
+     "why": "The GM deferred the queued research on 2026-11-25 ('defer all of it until at least tomorrow'); the defect is in tooling and is fixed in this task, so nothing defective is carried forward. Ordering is scheduling, not scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T250": {
+   "section_sha256": "03f7c1b51261248a529a0bb0673812a0ed9fdb63719f732a48454da439a7da9d",
+   "reviewed": "2026-11-26",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T250@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T250's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "f56560aa4cce4dddd532e65f25c6397536707770e070390c7342b0e8f2d6257d",
+    "reviewed": "2026-11-26",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1 approach (a)/(b)/(c)",
+      "summary": "Each listed comment is searched for his recorded words, then points at the record, names a file the check does not take that holds them, or says whose rule it is; comments only.",
+      "class": "within",
+      "why": "This is the GM's 2026-11-24 request as written (\"I never made a ruling that dry plots are rectangles... That is what a session told me\") and T233's build: no comment calls a rule his without his words behind it. Route (b) still points at his verbatim words, so the purpose (no session builds on a ruling he never made) is met. That the check cannot accept those files is filed as T265."
+     },
+     {
+      "id": "D2 misquotations and quotation marks",
+      "summary": "Four comments that quoted as his words a sentence from the retired rule file or a session now carry his recorded words or no quotation marks; batch 5 dropped the marks from quotations no record holds.",
+      "class": "within",
+      "why": "Directly serves the request, and docs/gm-rulings.md \"NOT a ruling\" (no quotation marks on words no record holds), which the request cites."
+     },
+     {
+      "id": "D3 batch 10's five dispositions",
+      "summary": "0138 points at specs/292/request.md; 0140 says it was a catch on a draft with no recorded words; 0173's two REMOVED comments say the entries were credited to the GM; 0173's paddies-first comment calls it this project's rule with no words of his recorded.",
+      "class": "within",
+      "why": "Each applies (a) or (c) to one comment. None claims a ruling with no words behind it, and 0140 and 0173 refuse to complete his thought."
+     },
+     {
+      "id": "D4 ten batches, one commit each",
+      "summary": "The 340 comments are fixed in ten worktree batches, each its own commit; 0006 was fixed before batch 1.",
+      "class": "within",
+      "why": "How the work is organized, not what it covers. The counts sum: 3x25 + 4x45 + 37 + 43 + 5 = 340, plus 0006 makes 341."
+     },
+     {
+      "id": "D5 empty baseline kept as a zero-byte file",
+      "summary": "The baseline is left as an empty file rather than deleted, so --seed refuses and the only-shrinks comparison holds new entries to an empty list.",
+      "class": "within",
+      "why": "Enforcement of the request: it keeps the T233 check refusing new unbacked attributions. Deleting the file would reopen the hole the request asked to close."
+     },
+     {
+      "id": "D6 visible sentences not edited by the comment batches; 0173/0138/0140/0142 fixed by P16",
+      "summary": "Visible sentences on four pages that contradicted his records were fixed within this task's span by page session P16 (landed 6acb69f1e1). The four canon statements (0220, 0155, 0185, 0002) stand, with comments naming his 2026-11-24 entry.",
+      "class": "within",
+      "why": "The request concerns rulings attributed to him. The contradicting visible sentences were found along the way, and every one of these was fixed (landed) or confirmed as his canon. Nothing is left on these pages."
+     },
+     {
+      "id": "D7 0156/0193 left with no filed task id and no order",
+      "summary": "The visible sentences on 0156 and 0193 that call the burakumin neighborhood a deliberate deviation, against his words of 2026-11-26, are deferred to P17's uncommitted rewrite. The block says 'No task of tasks.md holds it: the builder of this section may not file one'. No 'lands before' is given.",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "This is a defect by the block's own account (a reader is told the opposite of his words). Routing its fix to P17 instead of T250 is reasonable. But the accepted spec's FR-009 requires a deferred defect to carry its filed task id and its order ('lands before ...'), and the fix-as-we-go rule exists so that a known defect is not lost. This item gives only the why. 'The builder may not file one' is a process limit, not an impossibility: the coordinating session can file it. A rewrite that stands uncommitted in another clone with no task holding it is the one most likely to be lost. The T265 and T266 items in the same section carry all three parts. Fix: the coordinating session files the task (or the section names the record that tracks P17's fix by id), and the item states that id and its 'lands before ...'."
+     },
+     {
+      "id": "D8 check's accepted record kinds deferred to T265",
+      "summary": "47 comments whose records are rulings-*.md, audit.md, tasks.md or commit messages cannot name them as pointers; widening the check is filed as T265, landing before T264.",
+      "class": "within",
+      "why": "A check that refuses good pointers is a defect in the check's code, outside this comments-only task. It is filed with a reason, an id and an order, as FR-009 requires."
+     },
+     {
+      "id": "D9 pages near the question cap; trims to comments only",
+      "summary": "Where a page stood near its 20,000-byte cap, the comment rewording was trimmed, never the visible text. Five pages within 20 bytes of the cap are filed as T266, landing before T264.",
+      "class": "within",
+      "why": "Every page is under its cap and nothing reads wrong, so this is not a defect today. It is a risk, filed anyway with an order. Keeping the visible text untouched follows the comments-only brief."
+     },
+     {
+      "id": "D10 order: after T233, beside T251, under the research switch reopened 2026-11-25",
+      "summary": "The task runs after T233 and beside T251, with the research switch reopened on 2026-11-25 on the GM's words of that day as dev/switches.json records them (commit 205938ebc3).",
+      "class": "within",
+      "why": "Ordering only. The bundle's request.md carries his deferral ('defer all of it until at least tomorrow') but not the reopening words, so the reopening was not verified here: it rests on dev/switches.json and 205938ebc3, which were not read. It does not decide fidelity either way: T250's searches are over the project's own records of his words, not the queued external research he deferred."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T248 (451 T227's builder, 2026-11-25: record-format's 2026-11-24 rounds on 0097 spanned two `origin/main` batches, and the batch rule restarts a unit's count on any move of `origin/main`, so with several sessions landing the cap seldom fires)",
+    "### T248 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T248-1 the batch rule narrowed",
+     "summary": "new_cause restarts a unit's count in a later batch only where the subject itself moved upstream by another session's landing (a non-push origin/main reflog step whose diff names a file of the subject), never by this clone's own push of the round's edits or by moves elsewhere.",
+     "class": "within",
+     "why": "What was asked is 375 FR-010: the same check on the same thing reaching its round cap is a tripwire that dispatches the round arbiter (FR-011). The batch restart is a carve-out from that cap built by c5db336fd3, not something the GM asked for; narrowing it makes the cap fire where FR-010 says it fires, and the case that still restarts (a page change no counted round saw, made by another session) is the 374 ruling's case. Measured: with several sessions landing, every restart for 0097 came from moves of other files or the round's own landing, so the cap as built seldom fired - a check failing at its job, a defect under XIV."
+    },
+    {
+     "id": "T248-2 the subject is the unit's own files, not the pages it reads",
+     "summary": "A change to a page the pop-up reads (the 374 ruling's own trigger, 0077 for a hamlet pop-up) no longer restarts the count; it trips the cap and one round-arbiter ruling stands where the automatic restart stood. Counting read pages as the subject was priced and not built.",
+     "class": "within",
+     "why": "Nothing is removed from what was asked: the read-page case still gets its fresh round if warranted, by the arbiter's ruling, which is exactly FR-010/FR-011's design (the tripwire dispatches the arbiter, who may rule continue). The automatic restart was a tooling build, not the GM's words or the spec's. Even read against the 374 ruling as a narrowing it would be LEGITIMATE: the ruling's case still reaches a ruling rather than being dropped, and the cascade from a read page is owed its own triage (make modal-triage). The block states the cost openly."
+    },
+    {
+     "id": "T248-3 authorship read from the origin/main reflog kind",
+     "summary": "An 'update by push' step is this clone's landing; a fetch or pull step is another session's; an unrecognized message counts as another session's. HEAD-reflog authorship was tried and rejected on measurement.",
+     "class": "within",
+     "why": "A mechanism choice inside the task, measured 2026-11-25 on 150 reflog entries (147 pushes, 3 fetches, every pushed commit made in this clone). Its failure direction (unknown = another session's) can only restart, never hold, so it narrows nothing the spec asks."
+    },
+    {
+     "id": "T248-4 the fallbacks",
+     "summary": "Reflog not reaching the stored batch: any change of the subject between the two batches restarts, whoever made it. Stored batch unreadable or diff refused: nothing moves, the cap holds and the arbiter rules.",
+     "class": "within",
+     "why": "Each fallback either keeps the 374 ruling's intent where authorship cannot be read or fails toward the FR-010 tripwire and FR-011 ruling; neither carves anything out of what was asked."
+    },
+    {
+     "id": "T248-5 ROUND_CAP and T227's per-unit count unchanged",
+     "summary": "The cap stays 2 and the count still follows its unit.",
+     "class": "within",
+     "why": "Leaves FR-010's cap (record checks capped at two rounds like review checks) as specified."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T248 (451 T227's builder, 2026-11-25: record-format's 2026-11-24 rounds on 0097 spanned two `origin/main` batches, and the batch rule restarts a unit's count on any move of `origin/main`, so with several sessions landing the cap seldom fires)",
+    "### T248 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the restart kept for another session's change",
+     "summary": "A later origin/main batch restarts a unit's count when moved_upstream finds a non-push (fetch or pull) reflog step whose diff names a file of the subject. A batch whose moves leave the subject alone no longer restarts it.",
+     "class": "within",
+     "why": "Baseline: the GM's request, 451's spec, 375 FR-010 (the cap dispatches the arbiter) and FR-011 (the arbiter's ruling binds where the GM was asked). Under that baseline, the binding 374 ruling (a fresh count for a later page change no counted round saw) is part of what was asked. Another session's change to the subject is that case, and it is kept. Batches that never touched the subject were never that case. Measured 2026-11-25: nine of 0097's ten moves were such batches. Dropping their restart restores FR-010's cap where it had stopped firing, a defect fixed under fix-as-we-go."
+    },
+    {
+     "id": "D2a a page the unit only reads",
+     "summary": "A change to a page the unit reads but which is not one of its own files (the 374 ruling's own 0077 trigger) no longer restarts the count. The third round is held for one arbiter ruling.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the 374 ruling's automatic fresh count, so it is judged as an exception and presumed wrong. It is legitimate on the GM's own rule and on purpose. The root CLAUDE.md tripwire (labeled G in the block) owes the arbiter a ruling at a check's third round on one subject, so the fresh count was the exception and this returns that case to the rule. The ruling's purpose survives: such a cause still gets its look. The arbiter rules on it under FR-011 and can rule continue, which is exactly how the 374 ruling itself was reached (the cap tripped at round 3 and the arbiter ruled continue). FR-010 says the tripwire 'does not stop the feature'. The GM's 2026-11-24 words, 'that we really are cascading in situations that do call for it', still hold: the cascade owed by a read page's change still runs, through modal-triage and one ruling, and is neither dropped nor settled silently. Restarting on every read page's move would bring back what the GM's 2026-11-23 cascade talk was about, every pop-up citing an edited page re-owed without limit. This is the ruling's reach narrowed to its own mechanism, not a carve-out against it. Not counted as grounds: 'the task's words' and cost."
+    },
+    {
+     "id": "D2b the subject's own files changed by other work in this clone",
+     "summary": "Every push from this clone counts as the round's own edits. So a later edit to the subject's own files by other work of this session (another task, a page session), landed by push, no longer restarts the count and goes to the arbiter.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a different case from D2a and is ruled on its own. It is a change to the subject itself that no counted round saw, so it falls inside the 374 ruling's words, and the mechanism reaches further than goal line 1 says ('the round's own edits'). It is legitimate on the same two grounds. First, the GM's tripwire is a third round on one subject, and that holds whichever of this session's edits re-owed it. Second, a session's own later edits re-owing its own checks is the very loop the cap exists to catch (the GM's 2026-11-23 cascade talk), while another session's change, which D1 keeps, is not this session's loop. The case still reaches the arbiter, who can rule continue. With 147 of the clone's last 150 reflog entries pushes (measured 2026-11-25, as the block states), D1's restart still reaches every fetched landing from another session, and those arrive in large fetches (one of 36 commits), so the kept restart is not hollowed out."
+    },
+    {
+     "id": "D3 fallback where authorship cannot be read",
+     "summary": "If the reflog does not reach the stored batch (expired or no tracking log), any change to the subject between the batches restarts the count. An unrecognized reflog message counts as another session's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In this branch the round's own edits can reset the count, which goes past the 374 ruling (a page change no counted round saw) and against FR-010's cap, so it is ruled as an exception. It is legitimate because the deciding fact, who made the change, cannot physically be read here. Either default breaks one owed rule some of the time: holding puts another session's real new cause into a capped count against the binding ruling, and restarting lets own edits reset it. It still requires an actual change to the subject, and it needs two rounds on one unit further apart than the reflog's expiry, so it does not gut the cap."
+    },
+    {
+     "id": "D4 fallback where git cannot read the stored batch or its diff",
+     "summary": "A stored batch git cannot read, or a diff git refuses, moves nothing. The cap holds and the arbiter rules.",
+     "class": "within",
+     "why": "Fails toward FR-010's cap and FR-011's ruling."
+    },
+    {
+     "id": "D5 the split into rounds/cap.rs",
+     "summary": "The cap's functions move unchanged from rounds.rs (1,029 lines with the rule) into rounds/cap.rs. rounds.rs is now 843 lines and cap.rs 198 (measured 2026-11-25, wc -l).",
+     "class": "within",
+     "why": "A behavior-neutral split under the file-scale bar."
+    },
+    {
+     "id": "D6 tests and fires-proof",
+     "summary": "A 0097 replay through handle with a bare origin and a second clone, red on HEAD. A moved-page replay and the restated batch test, each pinned by disabling one half of the rule.",
+     "class": "within",
+     "why": "Enforcement of FR-010's cap and of the restart D1 keeps. Per the 2026-09-20 rule, enforcement serves the request."
+    },
+    {
+     "id": "D7 order, exits, budget",
+     "summary": "After T227, before T22, parallel with T249 in other crates. Closing-checks exit, with a cannot-be-done claim ruled through make arbiter-ask. One landing.",
+     "class": "within",
+     "why": "Scheduling and scope. None of it narrows anything."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T249 (T232's two found-and-left items, its builder 2026-11-25: a research page's record-check re-run applied its wording EDITs, and a later round with no kept snapshot read as scoped to a change it was never handed)",
+    "### T249 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T249(a) the hold reaches a research page",
+     "summary": "apply-edits' re-run hold maps an EDIT's file to its unit's subject with unit_of: a pop-up's unit as before, or the question number for any research/questions/NNNN-* file, the subject of record-format:NNNN and intro-check:NNNN; T232's rule otherwise unchanged (wording EDIT held and listed in noted.jsonl where every check carries rerun at the current fingerprint, RERUN_OK applies it, logged).",
+     "class": "within",
+     "why": "Fixes the wrong outcome T232 found and left: a re-run on unchanged research-page text applied wording EDITs, rewording what an earlier answer settled and re-owing the checks after it. That is the GM's 2026-11-23 rules as approved ('only factual findings cascade', 'settled choices stay settled', 'style edits are just a different category of thing than factual inaccuracies'), carried to the record checks' own units. Enforces what was asked; adds no new behavior beyond T232's hold."
+    },
+    {
+     "id": "T249(a) factual checks' EDITs apply and cascade",
+     "summary": "quote-check and translation-check EDITs are factual (in neither WORDING_CHECKS nor WORDING_CATEGORIES), so they apply and cascade as a first round's; their per-note units are never looked up; pinned by a test green before and after.",
+     "class": "within",
+     "why": "The GM's split is that factual findings DO cascade; holding them would contradict 'we really are cascading in situations that do call for it' (2026-11-24). Leaving them applied is the rule, not a carve-out."
+    },
+    {
+     "id": "T249(a) a source write-up's and a GLOSSARY term file's EDIT not held",
+     "summary": "A write-up under research/sources/ names no question, and a GLOSSARY block writes a term file, never the question, so neither EDIT is held.",
+     "class": "within",
+     "why": "The hold's condition is 'unchanged text', read as a re-run at the current fingerprint of the check's subject; record-format's and intro-check's subject is the question (units::fingerprint reads the question's files), so neither file is part of what the earlier answer settled or what the fingerprint proves unchanged. The defect found is on the question unit; no wrong outcome on write-ups or term files is named or measured, and FIX AS WE GO reaches defects, not hypothetical cases. Adjudicated separately: write-up EDITs come through the factual checks (applied by the decision above); a term file is outside the unit entirely."
+    },
+    {
+     "id": "T249(a) the re-run mark is not rebuilt",
+     "summary": "No change to how rerun is written for record checks: answer_unit serves every check, and a page session records its answer before applying EDITs (settle requires it); measured 2026-11-25 that record-format's 82 and intro-check's 7 records are per question and none yet carries rerun.",
+     "class": "within",
+     "why": "A measured statement that the existing mechanism already reaches the case; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T249(b) a later round with no kept snapshot says its scope",
+     "summary": "parts_in also returns each check/subject that is a later round with no snapshot of its last round, and headed_in (called by both MANIFEST writers, check::with_earlier and the modal bundle) writes one line under the MANIFEST title: judge the whole unit, every block, as in a first round.",
+     "class": "within",
+     "why": "Fixes the wrong outcome of 2026-11-24: a later round with no change section judged one bullet where the whole unit was owed, and missed the alcove gap for a round. The GM's 'Re-reviews scoped to the change' presupposes a change to scope to; where none is kept, feature 393's Earlier rounds rule (a round with no change section judges as a first round, GM 2026-10-18) applies, and the line makes it happen. The fix sits at headed_in, the function the bundle writers pass through, rather than at each writer."
+    },
+    {
+     "id": "T249(b) who gets no line",
+     "summary": "A first round, a subject with rulings only, and a later round whose last bundle was kept get no line; a rebuild before dispatch keeps it.",
+     "class": "within",
+     "why": "These are the cases the defect does not reach: a first round already judges the whole unit, and a kept snapshot gives a change section. Nothing the GM asked for is excluded."
+    },
+    {
+     "id": "T249 order and brief",
+     "summary": "After T232, parallel with T248 (disjoint files), before T246 as T232 filed it; build and test only, no page session and no edit of a research page, the research switch deferred.",
+     "class": "within",
+     "why": "The GM deferred the queued research on 2026-11-25 ('defer all of it until at least tomorrow'); the defect is in tooling and is fixed in this task, so nothing defective is carried forward. Ordering is scheduling, not scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T250 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline listed 341 research-page comments that named a ruling of the GM's with no pointer to his words, 74 of them with no recorded words at all by the audit of 2026-11-24; `docs/gm-rulings.md`, \"NOT a ruling\", is what one such comment cost)",
+    "### T250 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "approach-a-c",
+     "summary": "Each listed comment either names the record that holds the GM's words (a) or, where no record holds words of his, is reworded to say whose rule it is with its reasoning kept (c).",
+     "class": "within",
+     "why": "This is what the GM's 2026-11-24 words in request.md ask for: a rule credited to him that he never made must not stand as his ('That is what a session told me the research showed'). Naming the record, or saying whose rule it is, carries that out exactly."
+    },
+    {
+     "id": "approach-b",
+     "summary": "Where his verbatim words stand only in a file the check does not accept (rulings-*.md, audit.md, tasks.md, commit messages), the comment names that file in wording the check passes.",
+     "class": "within",
+     "why": "Tested against the purpose: the comment still sends a reader to a file holding his verbatim words, so nobody builds on a ruling he never made. The accepted-record list is the coordinating session's build of T233 (request.md marks line 250 as not his words), so working around it in honest wording does not narrow anything he asked for. The check's resulting blind spot is a separate decision (T265)."
+    },
+    {
+     "id": "visible-text-defects-to-P16-P17",
+     "summary": "Visible sentences the sweep found contradicting his records are not edited here; P16 (6acb69f1e1) fixed 0173, 0138 and 0140, and 'the rest' are left to a page session P17 that the coordinating session names.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A visible sentence that contradicts the GM's records is a defect (a research finding contradicted / a page that reads wrong), and this task found it. 'Comments only' comes from the brief, and 'fixing them page work' at request.md line 250 is marked as the coordinating session's words, not his, so none of his words cover leaving these unfixed. Splitting the work off to a page session is fine; leaving the defect untracked is not. As written the deferral sits in the Approach rather than under 'Found and left?', so FR-009's check never sees it. It names a session (P17) rather than a filed task id, gives no 'lands before ...', and does not say which pages and sentences 'the rest' are or what search found them, although the block's own constraint 2 says such sentences are 'listed'. The cure: under 'Found and left?', list the remaining sentences by page, give the search that found them (labeled as an observation with its method), say why they are not fixed in T250, and give the filed task id and its order. T250 does not have to edit visible text."
+    },
+    {
+     "id": "T265-deferral",
+     "summary": "The check accepts only four kinds of record, so 47 comments whose record exists name it in passable wording and the check cannot tell them from a comment with no record; left to T265, landing before T264.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a defect in the check (it refuses a correct pointer), so it needs a ruling. It meets FR-009: it says why it is not fixed here (the accepted list is the check's code and this task changes comments only), gives a filed id (T265) and gives an order (lands before T264). In the meantime no comment is wrongly credited to him, because each of the 47 names the file that holds his words. The deferral therefore does not gut the purpose; it is tracked work on a different artifact."
+    },
+    {
+     "id": "empty-baseline-kept",
+     "summary": "The empty baseline stays as a zero-byte file rather than being deleted, so --seed cannot re-admit new unbacked attributions.",
+     "class": "within",
+     "why": "This is an implementation choice that keeps the check from letting new unbacked attributions through. It enforces what T233 was asked for and narrows nothing."
+    },
+    {
+     "id": "misquotations",
+     "summary": "Four comments that quoted another party's sentence as his words now carry his recorded words or no quotation marks, and batch 5 dropped quotation marks from quotations no record holds.",
+     "class": "within",
+     "why": "docs/gm-rulings.md 'NOT a ruling' (never invent his words) applied directly. Figures: the four comes from the batch commits' own subjects, which are covered by the parent bullet's label (git log --grep=T250, read 2026-11-26)."
+    },
+    {
+     "id": "near-cap-trims",
+     "summary": "Where a page stood near its cap, the new comment wording was trimmed and the page's visible text was never cut.",
+     "class": "within",
+     "why": "The GM said on 2026-11-23 that 'no edit to maintain entry size should ever be substantive'. Here only the new attribution wording was kept short, the Approach keeps each comment's reasoning, and no claim or visible detail was cut."
+    },
+    {
+     "id": "size-cap-proximity-not-filed",
+     "summary": "Five drawing pages sit within 20 bytes of the 20,000-byte cap; this is not filed as a defect.",
+     "class": "within",
+     "why": "No page is over its cap (make question-sizes: 0 over, 2026-11-26), no reader sees a difference and no research finding breaks, so by the GM's 2026-11-19 definition this is not a defect. The figures carry a date and a method."
+    },
+    {
+     "id": "order-batches-exits",
+     "summary": "Runs after T233 and beside T251, in ten batches with one commit each. Green: closing-checks; red: arbiter-ask. Done means an empty baseline and a silent check.",
+     "class": "within",
+     "why": "This is sequencing and how 'done' is measured, and it narrows nothing. A note: 'the research switch reopened before the first batch' is the premise for starting, against his 2026-11-25 deferral 'until at least tomorrow', and it has no date or method. The bundle does not contradict it, but it should be labeled."
+    }
+   ],
+   "tasks": [
+    "T250"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T250 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline listed 341 research-page comments that named a ruling of the GM's with no pointer to his words, 74 of them with no recorded words at all by the audit of 2026-11-24; `docs/gm-rulings.md`, \"NOT a ruling\", is what one such comment cost)",
+    "### T250 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 approach (a)/(b)/(c)",
+     "summary": "Each listed comment is searched for his recorded words, then points at the record, names a file the check does not take that holds them, or says whose rule it is; comments only.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-24 request as written (\"I never made a ruling that dry plots are rectangles... That is what a session told me\") and T233's build: no comment calls a rule his without his words behind it. Route (b) still points at his verbatim words, so the purpose (no session builds on a ruling he never made) is met. That the check cannot accept those files is filed as T265."
+    },
+    {
+     "id": "D2 misquotations and quotation marks",
+     "summary": "Four comments that quoted as his words a sentence from the retired rule file or a session now carry his recorded words or no quotation marks; batch 5 dropped the marks from quotations no record holds.",
+     "class": "within",
+     "why": "Directly serves the request, and docs/gm-rulings.md \"NOT a ruling\" (no quotation marks on words no record holds), which the request cites."
+    },
+    {
+     "id": "D3 batch 10's five dispositions",
+     "summary": "0138 points at specs/292/request.md; 0140 says it was a catch on a draft with no recorded words; 0173's two REMOVED comments say the entries were credited to the GM; 0173's paddies-first comment calls it this project's rule with no words of his recorded.",
+     "class": "within",
+     "why": "Each applies (a) or (c) to one comment. None claims a ruling with no words behind it, and 0140 and 0173 refuse to complete his thought."
+    },
+    {
+     "id": "D4 ten batches, one commit each",
+     "summary": "The 340 comments are fixed in ten worktree batches, each its own commit; 0006 was fixed before batch 1.",
+     "class": "within",
+     "why": "How the work is organized, not what it covers. The counts sum: 3x25 + 4x45 + 37 + 43 + 5 = 340, plus 0006 makes 341."
+    },
+    {
+     "id": "D5 empty baseline kept as a zero-byte file",
+     "summary": "The baseline is left as an empty file rather than deleted, so --seed refuses and the only-shrinks comparison holds new entries to an empty list.",
+     "class": "within",
+     "why": "Enforcement of the request: it keeps the T233 check refusing new unbacked attributions. Deleting the file would reopen the hole the request asked to close."
+    },
+    {
+     "id": "D6 visible sentences not edited by the comment batches; 0173/0138/0140/0142 fixed by P16",
+     "summary": "Visible sentences on four pages that contradicted his records were fixed within this task's span by page session P16 (landed 6acb69f1e1). The four canon statements (0220, 0155, 0185, 0002) stand, with comments naming his 2026-11-24 entry.",
+     "class": "within",
+     "why": "The request concerns rulings attributed to him. The contradicting visible sentences were found along the way, and every one of these was fixed (landed) or confirmed as his canon. Nothing is left on these pages."
+    },
+    {
+     "id": "D7 0156/0193 left with no filed task id and no order",
+     "summary": "The visible sentences on 0156 and 0193 that call the burakumin neighborhood a deliberate deviation, against his words of 2026-11-26, are deferred to P17's uncommitted rewrite. The block says 'No task of tasks.md holds it: the builder of this section may not file one'. No 'lands before' is given.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a defect by the block's own account (a reader is told the opposite of his words). Routing its fix to P17 instead of T250 is reasonable. But the accepted spec's FR-009 requires a deferred defect to carry its filed task id and its order ('lands before ...'), and the fix-as-we-go rule exists so that a known defect is not lost. This item gives only the why. 'The builder may not file one' is a process limit, not an impossibility: the coordinating session can file it. A rewrite that stands uncommitted in another clone with no task holding it is the one most likely to be lost. The T265 and T266 items in the same section carry all three parts. Fix: the coordinating session files the task (or the section names the record that tracks P17's fix by id), and the item states that id and its 'lands before ...'."
+    },
+    {
+     "id": "D8 check's accepted record kinds deferred to T265",
+     "summary": "47 comments whose records are rulings-*.md, audit.md, tasks.md or commit messages cannot name them as pointers; widening the check is filed as T265, landing before T264.",
+     "class": "within",
+     "why": "A check that refuses good pointers is a defect in the check's code, outside this comments-only task. It is filed with a reason, an id and an order, as FR-009 requires."
+    },
+    {
+     "id": "D9 pages near the question cap; trims to comments only",
+     "summary": "Where a page stood near its 20,000-byte cap, the comment rewording was trimmed, never the visible text. Five pages within 20 bytes of the cap are filed as T266, landing before T264.",
+     "class": "within",
+     "why": "Every page is under its cap and nothing reads wrong, so this is not a defect today. It is a risk, filed anyway with an order. Keeping the visible text untouched follows the comments-only brief."
+    },
+    {
+     "id": "D10 order: after T233, beside T251, under the research switch reopened 2026-11-25",
+     "summary": "The task runs after T233 and beside T251, with the research switch reopened on 2026-11-25 on the GM's words of that day as dev/switches.json records them (commit 205938ebc3).",
+     "class": "within",
+     "why": "Ordering only. The bundle's request.md carries his deferral ('defer all of it until at least tomorrow') but not the reopening words, so the reopening was not verified here: it rests on dev/switches.json and 205938ebc3, which were not read. It does not decide fidelity either way: T250's searches are over the project's own records of his words, not the queued external research he deferred."
+    }
+   ],
+   "tasks": [
+    "T250"
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T250 (451 T233's \"Found and left\", 2026-11-25: the gm-attributions baseline listed 341 research-page comments that named a ruling of the GM's with no pointer to his words, 74 of them with no recorded words at all by the audit of 2026-11-24; `docs/gm-rulings.md`, \"NOT a ruling\", is what one such comment cost)",
+    "### T250 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T250@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T250's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T250"
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T248 to T250, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

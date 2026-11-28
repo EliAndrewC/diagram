@@ -1,0 +1,886 @@
+{
+ "blocks": {
+  "### T388 Approach (checklist part A)": {
+   "sha256": "e952e9d4902410f2943529fec9f123ce756069588ea6590ef46b237d4f7ae13d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T388 (an Agent call's PreToolUse took 154 ms and its PostToolUse 135, its guards' causes not read, found by T373, measured 2026-11-26 (`t373-tools2.tsv`, 20 runs))": {
+   "sha256": "0fdfea27cca0786127807921a1b13f7b4252308ce840b008ec9c493e9a35472f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T390 (<why: the finding or measurement that files it>)": {
+   "sha256": "cbbd962c02d9ba544b747332392d99907aa4324ce9302afeda7569073f8be3f2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T390 Approach (checklist part A)": {
+   "sha256": "8fe4060fac414ea0864a988a777aaca2f495b8d2847cbb3d30950b0c9e40fb92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T391 (T332's review made it a condition, and T332's own measurement files it: 3,255 of the 3,883 `Phase` lines pool trees wrote into the 451 log name a task other than the first task of the tree's holder at their start, 385 minutes of spans, measured 2026-11-27 (T332's plan section: each line's task against the detail of the tree's last take at or before its `t0` in `.git/builder-pool.log`); `make task-progress` re-tasked them at read time and `make task-time` did not. T393 - a bundle's carry is no task's - is built here too, in the same file family)": {
+   "sha256": "20cef837c8687e74b3b63689700c5f538fedb9f90c21d142ba657226f48dc0b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T391 Approach (checklist part A)": {
+   "sha256": "07067c0d5aaa808ebd0782fbc708899bb29fe97ead8c43811d4a1264ef3650c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T391 part B (2026-11-27T01:51Z)": {
+   "sha256": "06b68c12c5200f0fbebb6a9c37a18355a7cc38e6a845720e0ac3200008ca1c14",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T392 Approach (checklist part A)": {
+   "sha256": "099916987285a8369c743e95cebc8e8158e4bffc96251569e1e55313f31db510",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "446d2a7fc65c5ca04e7a3eac539ae312e0619e3634a54ade827c71e89b833b99",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T392 (found by T383, `dev/measurements/2026-11-26/edit-hook/t383-results.md`: after T383's screen an Edit's `event-log-hooks` was still 78.3 / 107.8 ms of a pool worktree's 89.8 / 109.0 ms hook and 81.0 of the clone's 204.2, measured 2026-11-26 (T383's record), the read of the whole 41.9 MB log into one string, growing with the log)": {
+   "sha256": "de292de46e55c40ea05a9612c1c5cb4a79f35793d9d13e293f73a9c7c1c31e65",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T394 (the GM's question of 2026-11-27 on the blocking minutes `make task-time` booked to the second tier, and the measurement it led to, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`), because the session worked a builder's end as commit, carry, resolve, check, land and only then briefed the next builder)": {
+   "sha256": "2b87bdedd03186b91b61c2733ae64da56a9d4d9af35962264b66b6606b073033",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T394 Approach (checklist part A)": {
+   "sha256": "a46fe1b4592ac48c55e7e40d43cc9e1ce56e5a81a4b27786f1e286b713424683",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T394 part B (2026-11-27T01:51Z)": {
+   "sha256": "a0bcab4d1276b0c3c4e3673dfd3191eb3b90f6c1fa98d90fd3277797b73daa87",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T396 (<why: the finding or measurement that files it>)": {
+   "sha256": "869b725d549b922cd3163961afb9ae6ab101ddf881b9ff528549a97f4e0b9c06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T396 Approach (checklist part A)": {
+   "sha256": "badef8c9b2fe0c1f6173c9220f60e20c2bc72f653a4a41a286b62e7fabc49c60",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T391": {
+   "section_sha256": "e1d779de2da17533ffb6dec7f17eefb4c1ed9850a00eb061077fb122d654fe50",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "read-time",
+     "summary": "The reports re-task a pool tree's Phase line at read time by the pool log's holder; the event log is left as written.",
+     "class": "within",
+     "why": "Serves the task time breakdown the GM asked for (2026-11-19, 2026-11-25 T243: per-task compile and tests minutes). The breakdown is fixed in every reader; nothing the GM asked for depends on the log's bytes being rewritten."
+    },
+    {
+     "id": "one-function-four-readers",
+     "summary": "One held::retask is called by task-time, task-progress (its own copy deleted) and where-time; feature-report gets it through where-time's columns.",
+     "class": "within",
+     "why": "Makes all the breakdown's readers agree. T293's constraint (one function, not a copy) is carried, and no reader is left out."
+    },
+    {
+     "id": "hold-ends-at-release",
+     "summary": "The log is read as holds that end at a release or the next handout, so a line written after a release no longer takes the last holder; task-progress takes this too.",
+     "class": "within",
+     "why": "Fixes a defect. Giving a released tree's later lines to its last holder books minutes to the wrong task, which is a wrong outcome in the breakdown. Fixing it is fix-as-we-go and narrows nothing."
+    },
+    {
+     "id": "make-and-adopt-open-a-hold",
+     "summary": "make and adopt rows open a hold, for retask and for tiers::takes (held::opens shared), so T274's carry is found here and T402 is withdrawn.",
+     "class": "within",
+     "why": "Fixes a known defect inside the same breakdown: T274's tests were misbooked and its table ran past its carry (T298's rule). Pulling the deferred fix in follows the GM's fix-known-bugs-before-moving-on. It widens the work rather than narrowing it, and the plan review's first round asked for it."
+    },
+    {
+     "id": "holder-task-kept",
+     "summary": "A line that already names one of the holder's tasks keeps it; only a task that is none of the holder's is replaced by the first.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally (every line becomes the holder's first task), the rule would defeat its own purpose. T332's writer deliberately books a bundle's line to the member whose builder started it, and overwriting that at read time would misbook correctly attributed work, the very defect T391 exists to remove. The request's purpose is per-task minutes that are right. A line naming a member of the current holder's bundle is not stale, so excepting it guts nothing."
+    },
+    {
+     "id": "holder-feature-checked",
+     "summary": "A line is re-tasked only when its feature is the holder's (number, or number plus hyphen); where-time uses the feature it reads for untagged logs.",
+     "class": "within",
+     "why": "The rule's own scope is the holder for the line's feature, as T332's writer rule has it. A line in another feature's log is that feature's work, and giving it a task of this feature would itself misbook. This does not cut down what was asked."
+    },
+    {
+     "id": "T393-bundled",
+     "summary": "T393 (a bundle's carry is each member's) is built in this task: held::holder splits a detail on spaces and commas, used by tiers::batches, task-progress, retask and run_booking.",
+     "class": "within",
+     "why": "A filed defect in the same breakdown (eight bundle members showing no carry found, their tables running past their carries), fixed in the same file family. The GM approved bundling small tasks (2026-11-22, T141)."
+    },
+    {
+     "id": "T282-left",
+     "summary": "T282 stays at no carry found: the pool log holds no row naming it (its bundle's take reads 451 T299), and the log is not rewritten.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "No reader of that log can recover the fact for this one past record, because the data is not there. The same window shows bundle takes written with every member (451 T324,T345), so the record is historical and not a live writer defect. One past task in a 24-hour window does not defeat the GM's stated purpose ('it doesn't have to be 100% exact ... a broad understanding', 2026-11-25). If a take writer still drops bundle members, that is a separate defect and must be filed."
+    },
+    {
+     "id": "T336-not-moved",
+     "summary": "T336's 163.3 minutes do not move, against the brief's expectation: they are its builders' own runs, booked by their own lines.",
+     "class": "within",
+     "why": "This is a measured correction of the brief's expectation, not a defect left. The minutes are booked to the right task and category. Under the 2026-11-19 definition of a defect, a wrong expectation is fixed by restating the claim, which the section does."
+    },
+    {
+     "id": "order-before-T317",
+     "summary": "Lands after T332 and before T317 starts; T393 lands with it.",
+     "class": "within",
+     "why": "This is sequencing that T332's review made a condition, so that T317 reads correctly tasked pre-warm lines. It decides nothing the request left open."
+    },
+    {
+     "id": "tests-and-exits",
+     "summary": "Red-first report tests and held_tests unit tests; crate-scoped builder checks, then the full gate at the landing.",
+     "class": "within",
+     "why": "These tests enforce the requested breakdown's per-task attribution and do not add scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T392": {
+   "section_sha256": "4d3374378497a899264db496119b4a23527920856047072a8d16ff4fb10f3269",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T392 Approach: chunked byte read with memmem pre-screen",
+     "summary": "The reversal tripwire streams the event log in CHUNK-sized reads, searches only whole lines, pre-screens with memmem on the rarer needle, and passes each hit to the unchanged candidate screen, parse and test; every line still read, nothing kept between hooks.",
+     "class": "within",
+     "why": "Performance work on every Edit's hook, which the GM asked to prioritize (2026-11-20, 'can we in general priotitize performance improvements going forward?', FR-013). It keeps the tripwire's catches: the differential against the full parse over all 34 real logs dropped 0 of 8,958 Edit lines and 0 of 1,878 paths' lists differed (measured 2026-11-27, t392-differential.tsv). No requested behavior is narrowed."
+    },
+    {
+     "id": "DECISION: the side file and the kept offset are not built here",
+     "summary": "The faster options (a writer-kept side file of Edit lines, a kept offset) are declined because a missing line in a second copy is a missed reversal; a reader-derived index is filed as T443, ordered to land before T302.",
+     "class": "within",
+     "why": "The request asks for performance to come first, not for a particular mechanism or a particular figure. The task delivers its improvement (event-log-hooks median 83.9 to 29.4 ms in a worktree, 72.0 to 28.3 ms in the clone, measured 2026-11-27), and the remaining read cost is not a defect (no wrong outcome, per constitution XIV as quoted). The further step is filed with its id and order (FR-009's form), and as performance work it is scheduled first under FR-013, so nothing the GM asked is withheld. It also records a decision about what NOT to build, as the GM asked on 2026-11-25."
+    },
+    {
+     "id": "DECISION: a line that is not UTF-8 costs only itself",
+     "summary": "A non-UTF-8 line is skipped alone rather than the whole log read as empty; a partial I/O failure keeps the whole lines read before it; Interrupted is retried.",
+     "class": "within",
+     "why": "Fixes a latent wrong outcome (a missed reversal for a whole feature on one bad byte) found in passing, which the fix-as-we-go rule asks for; it can only find more of the lines the full parse uses, never fewer. Pinned red-first by its fixture."
+    },
+    {
+     "id": "CHUNK = 256 KiB, a GUESS knob",
+     "summary": "New chunk-size constant; 64, 256 and 1,024 KiB within one another's noise, any size reads the same lines.",
+     "class": "within",
+     "why": "An implementation parameter no verdict depends on, labeled GUESS; the every-chunk-size test shows the output does not depend on it."
+    },
+    {
+     "id": "Order: after T383, before T443",
+     "summary": "Keeps T383's screen word for word; precedes the derived index that would reuse candidate and Kept.",
+     "class": "within",
+     "why": "Sequencing inside the feature's own tasks; narrows nothing the request or spec asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T394": {
+   "section_sha256": "9e78cf91308ab8d4ca036b45c5db696728bcb67c8aab9bd81e1d4f52f197ec0d",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 one command at a builder's end",
+     "summary": "make builder-done commits the pool tree, keeps the commit under a ref, releases the tree and prints the next dispatch ahead of the carry; never carries, lands or pushes; refuses with nothing done on the listed cases",
+     "class": "within",
+     "why": "The GM asked (2026-11-27) that 2 hours of blocking on the second tier be got to the bottom of ASAP, 'either with our measurements or with our process'. The measurement found the process cause (trees idle while the session carried and landed before briefing), and a command that hands the tree on and prints the dispatch before the carry is a direct answer. Running no check keeps the GM's two-tier ruling (T308)."
+    },
+    {
+     "id": "D2 the commit is kept by a ref",
+     "summary": "refs/l7r/done/<feature>-<task> keeps the builder's commit until carried; one ref per task on a bundle's one commit",
+     "class": "within",
+     "why": "Mechanism that keeps the work from being lost once the tree moves on; serves the request and narrows nothing."
+    },
+    {
+     "id": "D3 carried is told by author time and subject",
+     "summary": "a done commit counts as carried when HEAD holds a commit with the same author time and subject; the carry deletes the ref at its verified end; one stated miss (same second and same subject)",
+     "class": "within",
+     "why": "Mechanism choice. The stated miss is not reached by a real builder-done subject, which names its task, so it is not a wrong outcome that is being left in place."
+    },
+    {
+     "id": "D4 guard-file rule asked in process, list copied (T396)",
+     "summary": "builder-done refuses a changed guard file with no GUARD= reason, using a copy of the guard's list because a gate crate may not read the guard crate; the single list is filed as T396, lands before T313",
+     "class": "within",
+     "why": "Adds enforcement of an existing rule (feature 170) that a binary-run commit would otherwise skip; this narrows nothing the GM asked. The drift risk of the copy is latent, not a current wrong outcome, and it is filed with its id and order as FR-009 requires."
+    },
+    {
+     "id": "D5 queue's next task left as a placeholder (T395)",
+     "summary": "the printed builder-brief carries a placeholder for the next task instead of reading queue.md; filed as T395, lands before T313",
+     "class": "within",
+     "why": "This departs only from the coordinating session's own task line, not from the GM's words or the spec. Its purpose, printing the dispatch before the carry, still holds. The session reads queue.md itself, which is the state the request was about anyway."
+    },
+    {
+     "id": "D6 printed carry keeps FROM=",
+     "summary": "the printed make carry names the tree from the pool log; any worktree of the clone resolves the commit",
+     "class": "within",
+     "why": "Mechanism detail, and the land crate's test pins it."
+    },
+    {
+     "id": "D7 T398 and T397 parts one and two built here",
+     "summary": "make builder-tree refuses a handout while the task's own done commit waits; make carry deletes the done ref at its verified end; make carry takes COMMIT= without FROM=",
+     "class": "within",
+     "why": "Each one makes the requested behavior work safely. T398 stops a closing half from starting without the work it closes. Without T397 part one, T398 would refuse valid input (a defect, fixed as we go). Part two is the carry 'the tree gone on' that the line describes. None of them adds behavior beyond what this command needs."
+    },
+    {
+     "id": "D8 task_unstart test fixed in passing",
+     "summary": "the test now matches the quoted id rather than T01 anywhere, which also matched timestamps",
+     "class": "within",
+     "why": "A check that refused good work is a defect, and fixing it is fix-as-we-go. The clone has already landed the same fix."
+    },
+    {
+     "id": "D9 audit entry with a 10% GUESS falsifier",
+     "summary": "dev/audits/builder-done.md (adopted); falsified by warm trees still idle 10% or more over a like window, or a lost done commit",
+     "class": "within",
+     "why": "The audit register the GM asked for on 2026-11-25 (T259) wants the logic, the measurements and a falsifier for each optimization. The 10% is labeled a GUESS knob."
+    },
+    {
+     "id": "D10 re-measurement deferred to T401",
+     "summary": "the tree-idle table is not re-measured in this task; T401, lands before T313",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Confirming that the fix removed the blocking is part of the GM's 'get to the bottom of that'. Here it is physically impossible: it needs an eight-hour window of the session actually using the command, and a builder's tree cannot supply that before the command exists. It is filed with its order and read against the audit falsifier, so the confirmation is scheduled, not dropped."
+    },
+    {
+     "id": "D11 make land carry-by-commit (T397 part three) and Stop-hook refusal (T313) left open",
+     "summary": "the landing still expects a hand make carry per task; the Stop hook does not refuse a turn's end while a tree is free; both filed with their order",
+     "class": "within",
+     "why": "These are further automation that the coordinating session's line proposes; the GM's words do not ask for them. The cause measured (briefing only after the carry and the landing) is removed by D1's order of steps. Splitting them into their own builders, filed with ids and order, leaves nothing the GM asked for undone."
+    },
+    {
+     "id": "D12 landing split: T394 and T398 ticked, the rest in filed tasks",
+     "summary": "T394 is ticked as the command; what the line asks beyond it lives in T397 (third part), T313 and T401, each open",
+     "class": "within",
+     "why": "This is bookkeeping. Every remaining ask has a named open task, so nothing is closed without a record."
+    },
+    {
+     "id": "D13 T394's own box copied in; the clone's stub conflict taken this side",
+     "summary": "the builder's tree predated the clone's T394 line; the box was copied word for word, and the carry's section conflict resolves to this side",
+     "class": "within",
+     "why": "Handling a tooling artifact; it narrows nothing."
+    },
+    {
+     "id": "D14 docs",
+     "summary": "builder-brief.md, efficiency-tooling.md, rust/gate/CLAUDE.md and make-targets.html updated",
+     "class": "within",
+     "why": "Documents the new command."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T388 (an Agent call's PreToolUse took 154 ms and its PostToolUse 135, its guards' causes not read, found by T373, measured 2026-11-26 (`t373-tools2.tsv`, 20 runs))",
+    "### T388 Approach (checklist part A)",
+    "(removed) ### T388 (<why: the finding or measurement that files it>)",
+    "(removed) ### T475 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T388-measure-only",
+     "summary": "T388 is a measurement: no source changed, its record and scripts in dev/measurements/2026-11-27/agent-hook/",
+     "class": "within",
+     "why": "The task asks where an Agent call's hook time goes before any change; the GM's 2026-11-20 words count a measurement task as performance work, and 'we want everything measured so we know where our time goes' (2026-11-22). Measuring without changing source is what was asked."
+    },
+    {
+     "id": "T388-sandbox",
+     "summary": "Measured in a throwaway copy of T373's world (state restored before every run, launcher barred from building, leak check of the real state)",
+     "class": "within",
+     "why": "Method only; it keeps the measurement from writing to the real logs and state and narrows nothing asked."
+    },
+    {
+     "id": "T388-scope-cases",
+     "summary": "Three dispatch cases (builder brief, plan review, record check) from the day's 296; time split by guard, the top guards' costs read to their line and isolated by arms, the rest noted",
+     "class": "within",
+     "why": "The split covers every guard on the three kinds of dispatch the day actually ran, and the causes read (pair-hooks, checks-hooks, check-bundle-hooks, review-round-hooks, the cascade diff, the launcher walk) are the ones that carry the time; choosing representative cases is method, not dropping anything the request or task line asks for."
+    },
+    {
+     "id": "T388-levers-filed",
+     "summary": "Levers A-D filed as T491-T494, each ordered 'lands before T302'; lever E (checks state load and save) left to the already-open T387, measured only to say what it leaves",
+     "class": "within",
+     "why": "A measurement builder changes no source by its own task; every priced lever is filed rather than dropped, so nothing found is lost. The four are speed opportunities, not wrong outcomes (constitution XIV v2.36.0), so deferring them to filed performance tasks leaves no defect unfixed. Leaving E to T387 avoids filing the same work twice."
+    },
+    {
+     "id": "T388-artifact",
+     "summary": "The fresh clone's racily-clean index (212 ms diff) set aside as a sandbox artifact, its rows kept and marked",
+     "class": "within",
+     "why": "Measurement hygiene, disclosed and kept in the record; the record-check figure uses the refreshed and real-clone values (40.6 and 78.6 ms)."
+    },
+    {
+     "id": "T388-perf",
+     "summary": "Marked performance work (yes), a measurement that makes nothing faster itself",
+     "class": "within",
+     "why": "Exactly the GM's 2026-11-20 ruling: a measurement task counts as performance work for scheduling."
+    },
+    {
+     "id": "removed-T388-stub",
+     "summary": "The unfilled template stub of T388 removed, its content now in the filled T388 block",
+     "class": "within",
+     "why": "The stub held only placeholders; the filled block replaces it and nothing asked is lost."
+    },
+    {
+     "id": "removed-T475-stub",
+     "summary": "The unfilled template stub of T475 removed",
+     "class": "within",
+     "why": "The stub held only template placeholders and no decision; its removal drops no content and narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T391 (T332's review made it a condition, and T332's own measurement files it: 3,255 of the 3,883 `Phase` lines pool trees wrote into the 451 log name a task other than the first task of the tree's holder at their start, 385 minutes of spans, measured 2026-11-27 (T332's plan section: each line's task against the detail of the tree's last take at or before its `t0` in `.git/builder-pool.log`); `make task-progress` re-tasked them at read time and `make task-time` did not. T393 - a bundle's carry is no task's - is built here too, in the same file family)",
+    "### T391 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "read-time-retask",
+     "summary": "The reports re-task a pool tree's Phase line at read time by the pool log's holder; the log is left as written.",
+     "class": "within",
+     "why": "The task line itself says the log is not rewritten, and T293 already re-tasks at read time. This is the fix T332's review asked for, serving the task time breakdown's compile and tests rows (2026-11-25 request)."
+    },
+    {
+     "id": "one-function-four-readers",
+     "summary": "held::retask is called by task-time, task-progress (its own retask deleted), where-time, and through columns_text by feature-report.",
+     "class": "within",
+     "why": "One shared reader for every report that books these lines. Nothing is dropped and no reader is left on the old code."
+    },
+    {
+     "id": "DECISION-hold-ends-at-release",
+     "summary": "The log is read as holds that end at a release or the next handout, so a line written after a release keeps its own task, task-progress included.",
+     "class": "within",
+     "why": "This fixes a wrong outcome in the old task-progress reading, where a line after a release went to the last holder. No requested behavior is narrowed."
+    },
+    {
+     "id": "DECISION-make-and-adopt-rows-open-a-hold",
+     "summary": "A tree's make row and an adopt row open a hold, as a take does.",
+     "class": "within",
+     "why": "Reading take rows alone would leave the stale task on a tree made for a task (diagram-backlog-b1, T274). The decision widens the fix to that case and narrows nothing."
+    },
+    {
+     "id": "DECISION-line-naming-a-holder-task-keeps-it",
+     "summary": "A line already naming one of the holder's tasks keeps that task. Only a task that is none of the holder's is replaced by the first.",
+     "class": "within",
+     "why": "This preserves T332's writer-side rule (a builder's later start stands) instead of undoing it at read time. The replaced lines are exactly the wrong ones, so nothing asked is narrowed."
+    },
+    {
+     "id": "DECISION-holder-feature-checked",
+     "summary": "A line is re-tasked only when its feature is the holder's.",
+     "class": "within",
+     "why": "This matches T332's writer rule and stops a line in another feature's log from being given this feature's task. It is a correctness guard, not a narrowing."
+    },
+    {
+     "id": "T393-built-here",
+     "summary": "T393 is built in this section: held::holder splits a bundle detail on spaces and commas, and run_booking keys the carry's run to the first task.",
+     "class": "within",
+     "why": "Small tasks in one file family are bundled, as the GM asked (2026-11-22, T141). It fixes bundle members' tables running past their carries, which serves the ask that a task's own table ends at its carry (T298)."
+    },
+    {
+     "id": "T282-no-carry-left",
+     "summary": "T282 still shows 'no carry found' because the pool log has no row naming it (its bundle's take reads 451 T299). It is not in 'Found and left?' and no task is filed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This rests on the plan's own reading of the log: no row names T282, so no read-time reader of that log can find its carry. On that observation the fix is impossible from this data, not merely awkward. Bundle takes are now written with every member (the 451 T324,T345 form held::holder parses), so the gap is in a historic row, not live code."
+    },
+    {
+     "id": "T274-no-carry-deferred-to-T402",
+     "summary": "Found and left: tiers::takes keeps take rows only, so T274 (made with a make row) still reads 'no carry found' and its own table runs on to its landing. It is deferred to T402, to land before T394, because the brief limits this task's edit of tiers.rs to the splitting while T346/T382's commit changes tiers::carries beside it.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a defect, not a difference: by the plan's own account T274's table books time after its carry, against the T298 rule that a task's own table ends at its carry. None of the three grounds holds. (1) It is not impossible: this task already edits tiers.rs (tiers::batches), the defect is in tiers::takes and the other commit changed tiers::carries, and held::holds in this same task already reads make rows as opening a hold. (2) No GM words license it: checklist item 3 says no task line quotes the GM, rulings.md cites no arbiter ruling, and the approved improvement 4 asks for briefs that default to fixing in the task. (3) The plan does not claim that fixing it here would defeat any purpose. The stated reason, a parallel commit beside the edit, is coordination convenience. FR-009 requires a why, an id and an order, but meeting that form does not make the why sufficient. 'Lands before T394' is an order, not a reason, and the bundle does not show that T394 is the next step. To clear: read make rows in tiers::takes in this task (pinned by a test that is red on the old code), or cite the GM's words or an arbiter ruling that licenses the deferral."
+    }
+   ],
+   "tasks": [
+    "T391"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T391 (T332's review made it a condition, and T332's own measurement files it: 3,255 of the 3,883 `Phase` lines pool trees wrote into the 451 log name a task other than the first task of the tree's holder at their start, 385 minutes of spans, measured 2026-11-27 (T332's plan section: each line's task against the detail of the tree's last take at or before its `t0` in `.git/builder-pool.log`); `make task-progress` re-tasked them at read time and `make task-time` did not. T393 - a bundle's carry is no task's - is built here too, in the same file family)",
+    "### T391 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "read-time",
+     "summary": "The reports re-task a pool tree's Phase line at read time by the pool log's holder; the event log is left as written.",
+     "class": "within",
+     "why": "Serves the task time breakdown the GM asked for (2026-11-19, 2026-11-25 T243: per-task compile and tests minutes). The breakdown is fixed in every reader; nothing the GM asked for depends on the log's bytes being rewritten."
+    },
+    {
+     "id": "one-function-four-readers",
+     "summary": "One held::retask is called by task-time, task-progress (its own copy deleted) and where-time; feature-report gets it through where-time's columns.",
+     "class": "within",
+     "why": "Makes all the breakdown's readers agree. T293's constraint (one function, not a copy) is carried, and no reader is left out."
+    },
+    {
+     "id": "hold-ends-at-release",
+     "summary": "The log is read as holds that end at a release or the next handout, so a line written after a release no longer takes the last holder; task-progress takes this too.",
+     "class": "within",
+     "why": "Fixes a defect. Giving a released tree's later lines to its last holder books minutes to the wrong task, which is a wrong outcome in the breakdown. Fixing it is fix-as-we-go and narrows nothing."
+    },
+    {
+     "id": "make-and-adopt-open-a-hold",
+     "summary": "make and adopt rows open a hold, for retask and for tiers::takes (held::opens shared), so T274's carry is found here and T402 is withdrawn.",
+     "class": "within",
+     "why": "Fixes a known defect inside the same breakdown: T274's tests were misbooked and its table ran past its carry (T298's rule). Pulling the deferred fix in follows the GM's fix-known-bugs-before-moving-on. It widens the work rather than narrowing it, and the plan review's first round asked for it."
+    },
+    {
+     "id": "holder-task-kept",
+     "summary": "A line that already names one of the holder's tasks keeps it; only a task that is none of the holder's is replaced by the first.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken literally (every line becomes the holder's first task), the rule would defeat its own purpose. T332's writer deliberately books a bundle's line to the member whose builder started it, and overwriting that at read time would misbook correctly attributed work, the very defect T391 exists to remove. The request's purpose is per-task minutes that are right. A line naming a member of the current holder's bundle is not stale, so excepting it guts nothing."
+    },
+    {
+     "id": "holder-feature-checked",
+     "summary": "A line is re-tasked only when its feature is the holder's (number, or number plus hyphen); where-time uses the feature it reads for untagged logs.",
+     "class": "within",
+     "why": "The rule's own scope is the holder for the line's feature, as T332's writer rule has it. A line in another feature's log is that feature's work, and giving it a task of this feature would itself misbook. This does not cut down what was asked."
+    },
+    {
+     "id": "T393-bundled",
+     "summary": "T393 (a bundle's carry is each member's) is built in this task: held::holder splits a detail on spaces and commas, used by tiers::batches, task-progress, retask and run_booking.",
+     "class": "within",
+     "why": "A filed defect in the same breakdown (eight bundle members showing no carry found, their tables running past their carries), fixed in the same file family. The GM approved bundling small tasks (2026-11-22, T141)."
+    },
+    {
+     "id": "T282-left",
+     "summary": "T282 stays at no carry found: the pool log holds no row naming it (its bundle's take reads 451 T299), and the log is not rewritten.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "No reader of that log can recover the fact for this one past record, because the data is not there. The same window shows bundle takes written with every member (451 T324,T345), so the record is historical and not a live writer defect. One past task in a 24-hour window does not defeat the GM's stated purpose ('it doesn't have to be 100% exact ... a broad understanding', 2026-11-25). If a take writer still drops bundle members, that is a separate defect and must be filed."
+    },
+    {
+     "id": "T336-not-moved",
+     "summary": "T336's 163.3 minutes do not move, against the brief's expectation: they are its builders' own runs, booked by their own lines.",
+     "class": "within",
+     "why": "This is a measured correction of the brief's expectation, not a defect left. The minutes are booked to the right task and category. Under the 2026-11-19 definition of a defect, a wrong expectation is fixed by restating the claim, which the section does."
+    },
+    {
+     "id": "order-before-T317",
+     "summary": "Lands after T332 and before T317 starts; T393 lands with it.",
+     "class": "within",
+     "why": "This is sequencing that T332's review made a condition, so that T317 reads correctly tasked pre-warm lines. It decides nothing the request left open."
+    },
+    {
+     "id": "tests-and-exits",
+     "summary": "Red-first report tests and held_tests unit tests; crate-scoped builder checks, then the full gate at the landing.",
+     "class": "within",
+     "why": "These tests enforce the requested breakdown's per-task attribution and do not add scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T392 (found by T383, `dev/measurements/2026-11-26/edit-hook/t383-results.md`: after T383's screen an Edit's `event-log-hooks` was still 78.3 / 107.8 ms of a pool worktree's 89.8 / 109.0 ms hook and 81.0 of the clone's 204.2, measured 2026-11-26 (T383's record), the read of the whole 41.9 MB log into one string, growing with the log)",
+    "### T392 Approach (checklist part A)",
+    "### T392 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T392 Approach: chunked byte read with memmem pre-screen",
+     "summary": "The reversal tripwire streams the event log in CHUNK-sized reads, searches only whole lines, pre-screens with memmem on the rarer needle, and passes each hit to the unchanged candidate screen, parse and test; every line still read, nothing kept between hooks.",
+     "class": "within",
+     "why": "Performance work on every Edit's hook, which the GM asked to prioritize (2026-11-20, 'can we in general priotitize performance improvements going forward?', FR-013). It keeps the tripwire's catches: the differential against the full parse over all 34 real logs dropped 0 of 8,958 Edit lines and 0 of 1,878 paths' lists differed (measured 2026-11-27, t392-differential.tsv). No requested behavior is narrowed."
+    },
+    {
+     "id": "DECISION: the side file and the kept offset are not built here",
+     "summary": "The faster options (a writer-kept side file of Edit lines, a kept offset) are declined because a missing line in a second copy is a missed reversal; a reader-derived index is filed as T443, ordered to land before T302.",
+     "class": "within",
+     "why": "The request asks for performance to come first, not for a particular mechanism or a particular figure. The task delivers its improvement (event-log-hooks median 83.9 to 29.4 ms in a worktree, 72.0 to 28.3 ms in the clone, measured 2026-11-27), and the remaining read cost is not a defect (no wrong outcome, per constitution XIV as quoted). The further step is filed with its id and order (FR-009's form), and as performance work it is scheduled first under FR-013, so nothing the GM asked is withheld. It also records a decision about what NOT to build, as the GM asked on 2026-11-25."
+    },
+    {
+     "id": "DECISION: a line that is not UTF-8 costs only itself",
+     "summary": "A non-UTF-8 line is skipped alone rather than the whole log read as empty; a partial I/O failure keeps the whole lines read before it; Interrupted is retried.",
+     "class": "within",
+     "why": "Fixes a latent wrong outcome (a missed reversal for a whole feature on one bad byte) found in passing, which the fix-as-we-go rule asks for; it can only find more of the lines the full parse uses, never fewer. Pinned red-first by its fixture."
+    },
+    {
+     "id": "CHUNK = 256 KiB, a GUESS knob",
+     "summary": "New chunk-size constant; 64, 256 and 1,024 KiB within one another's noise, any size reads the same lines.",
+     "class": "within",
+     "why": "An implementation parameter no verdict depends on, labeled GUESS; the every-chunk-size test shows the output does not depend on it."
+    },
+    {
+     "id": "Order: after T383, before T443",
+     "summary": "Keeps T383's screen word for word; precedes the derived index that would reuse candidate and Kept.",
+     "class": "within",
+     "why": "Sequencing inside the feature's own tasks; narrows nothing the request or spec asks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T394 (the GM's question of 2026-11-27 on the blocking minutes `make task-time` booked to the second tier, and the measurement it led to, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`), because the session worked a builder's end as commit, carry, resolve, check, land and only then briefed the next builder)",
+    "### T394 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "builder-done command",
+     "summary": "one make builder-done at a builder's end: commit, keep under a ref, release, print the next dispatch ahead of the carry; never carries, lands or pushes",
+     "class": "within",
+     "why": "the GM (2026-11-27) asked that 2 hours of second-tier blocking be got to the bottom of ASAP; the section's measured cause is the session briefing the next builder only after carry and land (105 idle tree-minutes while a landing ran, labeled 2026-11-27, tree-idle.py), and dispatch-before-carry removes that wait, which matches his 2026-11-26 rule that new tasks beginning do not block on the second tier. Running no check keeps the two-tier ruling."
+    },
+    {
+     "id": "refusals",
+     "summary": "refuse with nothing done and the tree held: no task or feature, bad subject, a tree not held or held as part of a bundle, unfinished git operation, unmerged path, nothing to commit, conflict markers, guard file without GUARD=, an uncarried done commit",
+     "class": "within",
+     "why": "each refusal protects the line's goal that no builder's commit is lost, or an existing project rule; none narrows what was asked"
+    },
+    {
+     "id": "DECISION commit kept by a ref",
+     "summary": "refs/l7r/done/<feature>-<task> keeps the commit until it is carried; a bundle gets one ref per task on one commit",
+     "class": "within",
+     "why": "serves 'no builder's commit is lost' after the release detaches the tree"
+    },
+    {
+     "id": "DECISION carried told by author time and subject - same-second miss",
+     "summary": "a done commit with the same second and subject as one in HEAD reads as carried",
+     "class": "within",
+     "why": "no real builder-done subject can reach it, because each subject names its task; it only showed up in a fixture whose commits were all named 'c'. Even if it were hit, a ref deleted early leaves the commit in the reflog and does not drop it at once. Not a wrong outcome on any real input."
+    },
+    {
+     "id": "DECISION carried detection - empty-pick miss (Found and left, T397)",
+     "summary": "a pick the carry skips as empty leaves its done ref listed, and through T398 holds that task's next handout until the ref is removed by hand",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a refusal of valid input) introduced by T398 built here, so it is ruled on its own. Legitimate for three reasons. (1) It fails safe: it keeps a commit rather than losing one, so the line's 'no builder's commit is lost' holds. The refusal also prints the one git update-ref -d that clears it. (2) Under the section's own constraint that a builder's commit reaches the clone only by make carry, a wholly empty pick needs the same work landed some other way, so the common path does not reach it. It does not gut the purpose of handing trees on. (3) It is deferred in the form FR-009 (GM-approved 2026-11-19) requires: why, the filed task (T397) and its order (before T313), next to the carry-end work T397's third part already holds."
+    },
+    {
+     "id": "DEVIATION guard-file rule asked in process (T396)",
+     "summary": "builder-done refuses a changed guard file with no GUARD=, using a copy of the guard's list because a gate crate may not read the guard crate",
+     "class": "within",
+     "why": "this keeps an existing rule (feature 170) that the hand commit already obeyed, and the GM asked that enforcement be real (2026-11-19). The copy is tested on all twenty paths. The drift risk is latent rather than a present wrong outcome, and it is filed as T396 before T313."
+    },
+    {
+     "id": "DEVIATION queue's next task left as a placeholder (T395)",
+     "summary": "the printed builder-brief carries a placeholder for the next task instead of the queue's next task the line names",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Purpose test: the GM's question is answered by the dispatch coming ahead of the carry, and the printed command still comes first. The session fills one argument from queue.md, which does not bring back the wait behind the landing. A next task that code guessed out of prose could also dispatch work out of the order the queue and FR-013 require, which would defeat the queue's purpose. The line's own Stop-hook part already puts machine-read queue work with T313. Filed as T395 before T313."
+    },
+    {
+     "id": "DECISION printed carry keeps FROM=",
+     "summary": "the printed make carry names the tree from the pool's log",
+     "class": "within",
+     "why": "an implementation convention, tested by the land crate's sequence test"
+    },
+    {
+     "id": "T398 and T397's second part built here",
+     "summary": "make builder-tree refuses a task's handout while its own done commit waits on its carry; make carry takes COMMIT= alone",
+     "class": "within",
+     "why": "filed holes of this same mechanism. T398 stops a closing half from starting without its build half's work, which a dispatch ahead of the carry would otherwise allow, so it enforces the request rather than adding behavior beyond it"
+    },
+    {
+     "id": "builder-trees lists waiting done commits",
+     "summary": "make builder-trees ends with each done commit HEAD does not hold and its carry",
+     "class": "within",
+     "why": "makes the 'no commit lost' goal visible while carries are deferred"
+    },
+    {
+     "id": "fixed in passing: task_unstart T01 test",
+     "summary": "the test asked for the quoted id instead of any T01",
+     "class": "within",
+     "why": "a known defect (a test failing on good work) fixed, and it matches the clone's own fix"
+    },
+    {
+     "id": "audit entry and 10% GUESS falsifier",
+     "summary": "dev/audits/builder-done.md with the falsifier: the tree-idle table re-measured still idle 10% or more, or a done commit lost",
+     "class": "within",
+     "why": "the 10% is the line's own GUESS and is labeled as one. Aside, not a finding: neither this falsifier nor T401 re-reads the figure the GM named, make task-time's second-tier blocking minutes. The section treats the tree-idle cause as the answer to 'measurements or process'; it does not state that the 123.3-minute booking itself was correct."
+    },
+    {
+     "id": "split: make land carrying by commit (T397)",
+     "summary": "T394 is ticked with make land still expecting a hand make carry per task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the line's words. It is legitimate because the GM endorsed keeping each builder's work small (2026-11-25, splitting the claims round off: 'sounds good please do that ASAP'; 2026-11-26 on the builder's cost of complexity). What is shipped already removes the measured wait: the dispatch comes ahead of the carry and land. Carrying inside make land saves one hand command and does not touch the idle cause. Filed as T397 with its order (before T313), as FR-009 requires."
+    },
+    {
+     "id": "split: Stop hook refusal while a tree is free (T313)",
+     "summary": "left to T313",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "implied by the line's own words: it asks for the Stop hook 'with 451 T313' (request.md, T394 section: 'the Stop hook's refusal with 451 T313')"
+    },
+    {
+     "id": "split: re-measure the tree-idle table (T401)",
+     "summary": "the re-measurement over a like window is left to T401",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "physically impossible here: an after-figure needs an eight-hour window of the session using the command, and the command's first use is this builder's own end. Filed as T401 before T313."
+    },
+    {
+     "id": "box copied into a tree that lacked it",
+     "summary": "T394's box was copied word for word from the clone's tasks.md, and the session takes this side at the carry",
+     "class": "within",
+     "why": "procedure; nothing of the request changes"
+    },
+    {
+     "id": "docs",
+     "summary": "builder-brief.md, efficiency-tooling.md, rust/gate/CLAUDE.md, make-targets.html",
+     "class": "within",
+     "why": "documents the command it adds"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T394 (the GM's question of 2026-11-27 on the blocking minutes `make task-time` booked to the second tier, and the measurement it led to, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`), because the session worked a builder's end as commit, carry, resolve, check, land and only then briefed the next builder)",
+    "### T394 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "builder-done command",
+     "summary": "one make builder-done at a builder's end: commit, keep under a ref, release, print the next dispatch ahead of the carry; never carries, lands or pushes",
+     "class": "within",
+     "why": "the GM (2026-11-27) asked that 2 hours of second-tier blocking be got to the bottom of ASAP; the section's measured cause is the session briefing the next builder only after carry and land (105 idle tree-minutes while a landing ran, labeled 2026-11-27, tree-idle.py), and dispatch-before-carry removes that wait, which matches his 2026-11-26 expectation that new tasks beginning should not block on the second tier. Running no check keeps the two-tier ruling."
+    },
+    {
+     "id": "refusals",
+     "summary": "refuse with nothing done and the tree held: no task or feature, bad subject, a tree not held or held as part of a bundle, unfinished git operation, unmerged path, nothing to commit, conflict markers, guard file without GUARD=, an uncarried done commit",
+     "class": "within",
+     "why": "each refusal protects the line's goal that no builder's commit is lost, or an existing project rule; none narrows what was asked"
+    },
+    {
+     "id": "DECISION commit kept by a ref",
+     "summary": "refs/l7r/done/<feature>-<task> keeps the commit until it is carried; a bundle gets one ref per task on one commit",
+     "class": "within",
+     "why": "serves 'no builder's commit is lost' after the release detaches the tree"
+    },
+    {
+     "id": "DECISION carried told by author time and subject - same-second miss",
+     "summary": "a done commit with the same second and subject as one in HEAD reads as carried",
+     "class": "within",
+     "why": "no real builder-done subject can reach it, because each subject names its task; it only showed up in a fixture whose commits were all named 'c'. Even if it were hit, a ref deleted early leaves the commit in the reflog and does not drop it at once. Not a wrong outcome on any real input."
+    },
+    {
+     "id": "DECISION carried detection - empty-pick miss (Found and left, T397)",
+     "summary": "a pick the carry skips as empty leaves its done ref listed, and through T398 holds that task's next handout until the ref is removed by hand",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is a defect: make builder-tree refuses valid input, a task whose work is already in HEAD. T398, built in this same section, introduces it. None of the three grounds holds. It is not impossible: the carry can delete the done ref when it skips a pick as empty or ends verified, in carry.rs, which item (b) of this section already edits. No words of the GM imply it. The literal reading does not defeat any purpose. The only reason the plan gives is that the fix belongs with T397's third part, which is a locality and size argument. The claim that a real flow does not reach it is not measured. The bundle shows the opposite: the clone landed this builder's own T01 fix by another route within hours (4f244987ac), and a small task whose whole commit is such a change gives an empty pick. Failing safe, with a printed remedy, keeps the commit but still blocks a handout, which is the cost the GM asked to have found and removed. Meeting FR-009's form does not decide whether a deferral is legitimate, and the GM's 'fix all known bugs in each step before moving on' (2026-11-18) and improvement 4's 'default to fixing in the task' (2026-11-19) point the other way. Fix: close the miss in this task, so that an empty or verified carry of a done commit removes its refs/l7r/done ref, with a red-first test. Then strike it from Found and left and from the second DECISION's known misses."
+    },
+    {
+     "id": "DEVIATION guard-file rule asked in process (T396)",
+     "summary": "builder-done refuses a changed guard file with no GUARD=, using a copy of the guard's list because a gate crate may not read the guard crate",
+     "class": "within",
+     "why": "this keeps an existing rule (feature 170) that the hand commit already obeyed, and the GM asked that enforcement be real (2026-11-19). The copy is tested on all twenty paths. The drift risk is latent rather than a present wrong outcome, and it is filed as T396 before T313."
+    },
+    {
+     "id": "DEVIATION queue's next task left as a placeholder (T395)",
+     "summary": "the printed builder-brief carries a placeholder for the next task instead of the queue's next task the line names",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Purpose test: the GM's question is answered by the dispatch coming ahead of the carry, and the printed command still comes first. The session fills one argument from queue.md, which does not bring back the wait behind the landing. A next task that code guessed out of prose could also dispatch work out of the order the queue and FR-013 require, which would defeat the queue's purpose. The line's own Stop-hook part already puts machine-read queue work with T313. Filed as T395 before T313."
+    },
+    {
+     "id": "DECISION printed carry keeps FROM=",
+     "summary": "the printed make carry names the tree from the pool's log",
+     "class": "within",
+     "why": "an implementation convention, tested by the land crate's sequence test"
+    },
+    {
+     "id": "T398 and T397's second part built here",
+     "summary": "make builder-tree refuses a task's handout while its own done commit waits on its carry; make carry takes COMMIT= alone",
+     "class": "within",
+     "why": "filed holes of this same mechanism. T398 stops a closing half from starting without its build half's work, which a dispatch ahead of the carry would otherwise allow, so it enforces the request rather than adding behavior beyond it"
+    },
+    {
+     "id": "builder-trees lists waiting done commits",
+     "summary": "make builder-trees ends with each done commit HEAD does not hold and its carry",
+     "class": "within",
+     "why": "makes the 'no commit lost' goal visible while carries are deferred"
+    },
+    {
+     "id": "fixed in passing: task_unstart T01 test",
+     "summary": "the test asked for the quoted id instead of any T01",
+     "class": "within",
+     "why": "a known defect (a test failing on good work) fixed, and it matches the clone's own fix"
+    },
+    {
+     "id": "audit entry and 10% GUESS falsifier",
+     "summary": "dev/audits/builder-done.md with the falsifier: the tree-idle table re-measured still idle 10% or more, or a done commit lost",
+     "class": "within",
+     "why": "the 10% is the line's own GUESS and is labeled as one. Aside, not a finding: neither this falsifier nor T401 re-reads the figure the GM named, make task-time's second-tier blocking minutes. The section treats the tree-idle cause as the answer to 'measurements or process'; it does not state that the 123.3-minute booking itself was correct."
+    },
+    {
+     "id": "split: make land carrying by commit (T397)",
+     "summary": "T394 is ticked with make land still expecting a hand make carry per task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the line's words, but that part of the line is the coordinating session's, not the GM's (request.md, T394 section: 'The rest of T394's line is the coordinating session's ... what the line asks beyond that command - make land carrying by commit'). What is left is not a defect: it costs one more hand command a task, and builder-trees lists any done commit still waiting. It does not reach the measured cause either, because the dispatch already comes ahead of the carry and land. Filed as T397 with its order (before T313), as FR-009 requires."
+    },
+    {
+     "id": "split: Stop hook refusal while a tree is free (T313)",
+     "summary": "left to T313",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "implied by the line's own words: it asks for the Stop hook 'with 451 T313' (request.md, T394 section: 'the Stop hook's refusal with 451 T313')"
+    },
+    {
+     "id": "split: re-measure the tree-idle table (T401)",
+     "summary": "the re-measurement over a like window is left to T401",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "physically impossible here: an after-figure needs an eight-hour window of the session using the command, and the command's first use is this builder's own end. Filed as T401 before T313."
+    },
+    {
+     "id": "box copied into a tree that lacked it",
+     "summary": "T394's box was copied word for word from the clone's tasks.md, and the session takes this side at the carry",
+     "class": "within",
+     "why": "procedure; nothing of the request changes"
+    },
+    {
+     "id": "docs",
+     "summary": "builder-brief.md, efficiency-tooling.md, rust/gate/CLAUDE.md, make-targets.html",
+     "class": "within",
+     "why": "documents the command it adds"
+    }
+   ],
+   "tasks": [
+    "T394"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T394 (the GM's question of 2026-11-27 on the blocking minutes `make task-time` booked to the second tier, and the measurement it led to, `dev/measurements/2026-11-27/tree-idle/results.md`: the three warm pool trees stood idle 336 of 1,440 tree-minutes (23%) from 2026-11-26T17:00Z to 2026-11-27T01:00Z with the queue never short, measured 2026-11-27 (`tree-idle.py`), because the session worked a builder's end as commit, carry, resolve, check, land and only then briefed the next builder)",
+    "### T394 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 one command at a builder's end",
+     "summary": "make builder-done commits the pool tree, keeps the commit under a ref, releases the tree and prints the next dispatch ahead of the carry; never carries, lands or pushes; refuses with nothing done on the listed cases",
+     "class": "within",
+     "why": "The GM asked (2026-11-27) that 2 hours of blocking on the second tier be got to the bottom of ASAP, 'either with our measurements or with our process'. The measurement found the process cause (trees idle while the session carried and landed before briefing), and a command that hands the tree on and prints the dispatch before the carry is a direct answer. Running no check keeps the GM's two-tier ruling (T308)."
+    },
+    {
+     "id": "D2 the commit is kept by a ref",
+     "summary": "refs/l7r/done/<feature>-<task> keeps the builder's commit until carried; one ref per task on a bundle's one commit",
+     "class": "within",
+     "why": "Mechanism that keeps the work from being lost once the tree moves on; serves the request and narrows nothing."
+    },
+    {
+     "id": "D3 carried is told by author time and subject",
+     "summary": "a done commit counts as carried when HEAD holds a commit with the same author time and subject; the carry deletes the ref at its verified end; one stated miss (same second and same subject)",
+     "class": "within",
+     "why": "Mechanism choice. The stated miss is not reached by a real builder-done subject, which names its task, so it is not a wrong outcome that is being left in place."
+    },
+    {
+     "id": "D4 guard-file rule asked in process, list copied (T396)",
+     "summary": "builder-done refuses a changed guard file with no GUARD= reason, using a copy of the guard's list because a gate crate may not read the guard crate; the single list is filed as T396, lands before T313",
+     "class": "within",
+     "why": "Adds enforcement of an existing rule (feature 170) that a binary-run commit would otherwise skip; this narrows nothing the GM asked. The drift risk of the copy is latent, not a current wrong outcome, and it is filed with its id and order as FR-009 requires."
+    },
+    {
+     "id": "D5 queue's next task left as a placeholder (T395)",
+     "summary": "the printed builder-brief carries a placeholder for the next task instead of reading queue.md; filed as T395, lands before T313",
+     "class": "within",
+     "why": "This departs only from the coordinating session's own task line, not from the GM's words or the spec. Its purpose, printing the dispatch before the carry, still holds. The session reads queue.md itself, which is the state the request was about anyway."
+    },
+    {
+     "id": "D6 printed carry keeps FROM=",
+     "summary": "the printed make carry names the tree from the pool log; any worktree of the clone resolves the commit",
+     "class": "within",
+     "why": "Mechanism detail, and the land crate's test pins it."
+    },
+    {
+     "id": "D7 T398 and T397 parts one and two built here",
+     "summary": "make builder-tree refuses a handout while the task's own done commit waits; make carry deletes the done ref at its verified end; make carry takes COMMIT= without FROM=",
+     "class": "within",
+     "why": "Each one makes the requested behavior work safely. T398 stops a closing half from starting without the work it closes. Without T397 part one, T398 would refuse valid input (a defect, fixed as we go). Part two is the carry 'the tree gone on' that the line describes. None of them adds behavior beyond what this command needs."
+    },
+    {
+     "id": "D8 task_unstart test fixed in passing",
+     "summary": "the test now matches the quoted id rather than T01 anywhere, which also matched timestamps",
+     "class": "within",
+     "why": "A check that refused good work is a defect, and fixing it is fix-as-we-go. The clone has already landed the same fix."
+    },
+    {
+     "id": "D9 audit entry with a 10% GUESS falsifier",
+     "summary": "dev/audits/builder-done.md (adopted); falsified by warm trees still idle 10% or more over a like window, or a lost done commit",
+     "class": "within",
+     "why": "The audit register the GM asked for on 2026-11-25 (T259) wants the logic, the measurements and a falsifier for each optimization. The 10% is labeled a GUESS knob."
+    },
+    {
+     "id": "D10 re-measurement deferred to T401",
+     "summary": "the tree-idle table is not re-measured in this task; T401, lands before T313",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Confirming that the fix removed the blocking is part of the GM's 'get to the bottom of that'. Here it is physically impossible: it needs an eight-hour window of the session actually using the command, and a builder's tree cannot supply that before the command exists. It is filed with its order and read against the audit falsifier, so the confirmation is scheduled, not dropped."
+    },
+    {
+     "id": "D11 make land carry-by-commit (T397 part three) and Stop-hook refusal (T313) left open",
+     "summary": "the landing still expects a hand make carry per task; the Stop hook does not refuse a turn's end while a tree is free; both filed with their order",
+     "class": "within",
+     "why": "These are further automation that the coordinating session's line proposes; the GM's words do not ask for them. The cause measured (briefing only after the carry and the landing) is removed by D1's order of steps. Splitting them into their own builders, filed with ids and order, leaves nothing the GM asked for undone."
+    },
+    {
+     "id": "D12 landing split: T394 and T398 ticked, the rest in filed tasks",
+     "summary": "T394 is ticked as the command; what the line asks beyond it lives in T397 (third part), T313 and T401, each open",
+     "class": "within",
+     "why": "This is bookkeeping. Every remaining ask has a named open task, so nothing is closed without a record."
+    },
+    {
+     "id": "D13 T394's own box copied in; the clone's stub conflict taken this side",
+     "summary": "the builder's tree predated the clone's T394 line; the box was copied word for word, and the carry's section conflict resolves to this side",
+     "class": "within",
+     "why": "Handling a tooling artifact; it narrows nothing."
+    },
+    {
+     "id": "D14 docs",
+     "summary": "builder-brief.md, efficiency-tooling.md, rust/gate/CLAUDE.md and make-targets.html updated",
+     "class": "within",
+     "why": "Documents the new command."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T388 to T396, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

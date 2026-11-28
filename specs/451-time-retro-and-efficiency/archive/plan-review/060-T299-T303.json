@@ -1,0 +1,687 @@
+{
+ "blocks": {
+  "### T299, T282 (bundle) (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; T282 is what T272's builder found in the same guard on 2026-11-26 - a report describing an ask's wording read as an ask, and each refused suite case a new guard message - built here whole, in the same files)": {
+   "sha256": "ce5f9e032c34eab1e4a5f756aa9a25dab92aba09ce41cdbd56ae2493673d7f6c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T299, T282 Approach (checklist part A)": {
+   "sha256": "971ea1b5a5acec844579b6cfcbdc9c0c7dc5576e5e09ea674c7d6e6ea7a96acb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)": {
+   "sha256": "35ca7bb5fce70daf0fcfbf9b5593a88568e91d1008dcfcc4ad06b0216ad6d086",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T300 Approach (checklist part A)": {
+   "sha256": "a9060ac4b1b74cbc86fd4ee491406361cec4a34a78e30a9e225aed2b062e8c1b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T300 part 2 (the six carries of 2026-11-26 that still stopped after part 1 - four on the generated target page, a registry row or help line both sides added words to and two blocks added at one place, two on a `.jsonl`; PART 2 of the task's carry part - the task stays open for its registry tables)": {
+   "sha256": "ffa3468e1f6514c0dde991f44ba6d64595e8a58c14bd5c7166eb5888726c7e5b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T300 part 2 Approach (checklist part A)": {
+   "sha256": "4cdcfe31c46b3e4d1806cb2dd5f6510057f8d7da4619bac0b02949c379ab152b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T302 (<why: the finding or measurement that files it>)": {
+   "sha256": "caa58e561d82ca7d8192d375a3e3b1b33923c2eab5d7d4cdbdeeb35290d0b503",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T303 (2026-11-26: 451 T281's builder ran `make closing-checks T=T281` with no F= in a pool tree; the run judged 0 of its 6 files, set all 6 apart as \"another task's\" and said GREEN over its own lint and format red, observed 2026-11-26, method: the run's own `split.txt`)": {
+   "sha256": "3d617e61f15239f453af0a024abf5dad52165355b011eee1c90ad7acbedb057d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  },
+  "### T303 Approach (checklist part A)": {
+   "sha256": "4b6b2fd1a0e11fc56982a910d19477e29debb56358b3b572140e8f3ea4387f1d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T299": {
+   "section_sha256": "4c7720d536f12d056884982b95c33857517f3eb98a22817caa6a38bd46e6ba32",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T282 rule (a) DESCRIBED",
+     "summary": "A quoted or backticked phrase that is the subject of 'does/did ask you' is blanked with its verb before spans are blanked; the session's own 'I do ask you' still fires.",
+     "class": "within",
+     "why": "T282: a report describing an ask's wording was read as an ask. Removing a statement the detector misread serves the GM's 2026-11-26 words ('I would prefer not to see these messages about false positives') and FR-002's narrow detector. The rule is bounded by the span, and the true-ask twin is pinned. Nothing FR-002 or amendment 1 owes the filter is exempted."
+    },
+    {
+     "id": "T299 rule (b) REPORTED",
+     "summary": "The '?' rule skips a last sentence running from 'asks:'/'asks whether'/'asks if' to its '?' with no you/your and no other '?' on the line.",
+     "class": "within",
+     "why": "It removes the check-described-by-its-question false firing from the corpus. Four twins that put something to him still fire and are pinned, including a reported question addressed to 'you' and a second question on the line. Only statements leave the detector's reach."
+    },
+    {
+     "id": "T299 rule (c) CHECKLIST",
+     "summary": "The '?' rule skips items of a 2+ item all-'?' list under a lead-in naming a checklist, or naming what something has/asks/holds/lists/poses/carries/answers, when the lead-in names neither the GM nor the session.",
+     "class": "within",
+     "why": "It removes the listed-checklist false firing. Lists put to him all still fire and are pinned: 'Two questions for you:', 'Open questions:', 'I have two questions...', a mixed list, a single item, no lead-in, and question-word items with suite case 9 kept. This is precision on statements and does not narrow FR-002's asks."
+    },
+    {
+     "id": "T299 rule (d) FIGURE",
+     "summary": "'waiting (on|for) you' is a measurement when a time count or share is the past-tense subject of was/were and the clause ends or goes on to another figure.",
+     "class": "within",
+     "why": "It removes the two time-breakdown figure firings. Work put to him ('Two hours of review are waiting on you', 'waiting on your budget answer', present tense, count of things) still fires and is pinned in the Rust test. It is bounded on both sides."
+    },
+    {
+     "id": "T299 rule (e) SET APART",
+     "summary": "'with waiting on you kept/counted/... separate/apart/...' names a breakdown category.",
+     "class": "within",
+     "why": "It removes the 'Blocking minutes, with waiting on you kept separate:' firing. The twins 'Two tasks are waiting on you, kept separate below.' and 'with waiting on you: the budget's words.' still fire. It reaches statements only."
+    },
+    {
+     "id": "T299 needs-your-word fix",
+     "summary": "STATED's 'needs your words' becomes 'words?' so 'What needs your word: ...' is caught; pinned in both suites.",
+     "class": "within",
+     "why": "This is a widening: a true ask HEAD's guard passed (a check passing bad work, a defect). Fixing it enforces FR-002 and narrows nothing. It was measured on both corpora: no T235 firing changes, and one already-firing message's quoted line moves."
+    },
+    {
+     "id": "T299 refusal sentence",
+     "summary": "Both refusals gain 'If the line puts nothing to him (offers him nothing), go on and say nothing of this to him.'; reviewed by message-check.",
+     "class": "within",
+     "why": "This sentence directly carries 'I just don't want to see the explanation of the false positives reach me'. FR-002's obligation attaches only to a message that asks or puts a decision to him, and amendment 1 adds offers. A line that puts nothing to him owed the filter nothing, so 'go on' restates FR-002's scope and is no carve-out from it. The GM's words take as given that sessions recognize false firings; what he struck is their explanation reaching him. Goal item 1 keeps every true ask refused until filtered. The new wording went to message-check (T170)."
+    },
+    {
+     "id": "T299 kept offer not built (T335)",
+     "summary": "The restated morning offer still fires; recognizing an ad-hoc escalation-check's kept verdict needs a new record and is filed as T335, landing before T302.",
+     "class": "within",
+     "why": "Under FR-002 the firing is arguably not false. The GM wrote after the 08:10Z ad-hoc check, so 'no escalation-check dispatched since his last message' holds. The restatement is an offer (amendment 1) in new words, and no gm-review.jsonl row records it as kept. Read most harshly as a residual false firing, it is one of 13, which 'I am okay with some number of false positives' covers. It is filed with an id, an order and the reason it is not fixed here (FR-009)."
+    },
+    {
+     "id": "T299 acceptable-range answer",
+     "summary": "The GM's question is answered with the measured rate, 33% before and 8% after on the 28 firings with no T lost, against 'under about one false firing in five'.",
+     "class": "within",
+     "why": "It answers 'it probably is worth asking whether the number of false positives is within ... an acceptable range' with numbers he can judge. The one-in-five threshold comes from the coordinating session's brief, not from the GM. The plan names it as 'the brief's aim' and does not attribute it to him, so the range stays his to accept. The plan also states that a firings-only corpus cannot show a newly dropped ask, and points to the pinned bounds instead."
+    },
+    {
+     "id": "T282 key mask",
+     "summary": "suite_tools::messages masks the quoted second line after a 'QUESTION UNFILTERED:'/'OFFER UNFILTERED:' head, so each refused suite case is not a new guard message.",
+     "class": "within",
+     "why": "T282's defect: each refused suite case created a new message key to review. The mask covers only the quoted user text under the two heads. The refusals' own wording is still keyed, so a change to it is still reviewed (451 T170), and no other message's key moves. A red-with-the-mask-off test pins it."
+    },
+    {
+     "id": "T299/T282 T336 found and left",
+     "summary": "A rust-lld link failure after the pool tree's pre-warm is filed as T336, landing before T302, to be reproduced first.",
+     "class": "within",
+     "why": "This build-tooling defect lies outside this section's request (T316's pre-warm). It is filed with an id, an order and the reason it is not fixed here, so nothing asked of T299 or T282 is left undone."
+    },
+    {
+     "id": "T299 no-ask-lost evidence",
+     "summary": "The plan shows no ask is lost with two firings-only corpora (the 28 of 2026-11-25/26 and T235's labeled 112) through the fixed guard, plus pinned true-ask twins for every rule, and does not run a fresh recall sample.",
+     "class": "within",
+     "why": "FR-002 (429) asks for a detector measured for hit rate, a sample of hits, and recall on an independently labeled sample. Rules (a)-(e) only remove firings; the needs-your-word change only adds them. So any ask the new rules drop would have fired on HEAD, and the two corpora cover HEAD's firings in their windows. All 12 T of the two-day corpus and all 74 T and 8 B of T235's independently labeled corpus still fire. Asks outside those windows are covered by the bounded twins pinned in both suites, and the block states that limit itself. On the two-day corpus the builder's labels are not independent. I relabeled the five F lines the block quotes from the line alone and agree each is a statement (a report of a hook's reading, a check described by its question, a checklist item listed, two time figures). The whole messages are not in the bundle. This keeps FR-002's measured-detector standard and does not narrow it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T300": {
+   "section_sha256": "33f3f7450d4a8a142f8326c120ab3f892da1f5c988d8c29819a0a4bc8e4e564c",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "part 1 (a)-(c), last line, found-and-left T399/T400",
+     "summary": "Part 1's spec-file rules (plan.md by section, tasks.md bare-box pin, request.md dated sections), unchanged from the text judged CLEAR (diffed line for line against earlier.md).",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; a [perf] task under FR-013 (the GM 2026-11-20, 'can we in general priotitize performance improvements going forward?'), removing the session's hand from builder-idle carries."
+    },
+    {
+     "id": "part 2 (d) generated page regenerated",
+     "summary": "docs/make-targets.html is never merged; it is regenerated in process from the merged Makefile after every other conflict is staged; a regeneration failure exits 2 with the pick standing and the three finishing commands named.",
+     "class": "within",
+     "why": "The exit-2 case departs from part 1's own all-or-none constraint, which is the session's design, not the GM's words or a spec requirement; it hides nothing, makes no choice between sides, and names the finish. The page is a generated file, so regeneration is its correct resolution; part 1 already named the generated page as this task's second job."
+    },
+    {
+     "id": "part 2 (e) prose hunks merged by words",
+     "summary": "A diff3 hunk whose every line on all three sides is prose of its file kind is merged token by token (\\S+|\\s+, SequenceMatcher opcodes); overlapping changes stop, identical changes made once, adjacent insertions both kept, clone first; code is never merged by words.",
+     "class": "within",
+     "why": "Serves the task's goal (carries resolved by rule) while keeping the constraint that no choice is made for the session; refusing code leaves the prior stop, not a defect. Mixed hunks (whole lines beside a reworded line) use the same rule and were checked on the real replayed hunks."
+    },
+    {
+     "id": "part 2 (f) two added blocks kept both",
+     "summary": "A base-less hunk: in a Makefile both targets' blocks kept, ours first, one blank line, a target added by both stops; in a .md bullets kept by part 1's block rule; in a .rs two added blocks stop.",
+     "class": "within",
+     "why": "The .rs stop leaves the earlier behavior (a named stop) where ordering can matter and no replayed carry needed it; that is a case left to the existing safe stop, not a defect and not a narrowing of anything the GM asked."
+    },
+    {
+     "id": "part 2 (g) .jsonl by record, T399 built here",
+     "summary": "A line-per-record file merged from its three sides: base records neither side removed, then the clone's appends, then the builder's; in-place edits or mid-file additions stop; identical appended lines are each kept, from reading the skip log's writer.",
+     "class": "within",
+     "why": "T399 was filed by part 1 as found-and-left; building it inside T300 is the bundling of small related tasks the GM asked for on 2026-11-22. The keep-each-identical-record decision is grounded in the writer's semantics (each line an event), and the replay shows the hand, not the rule, lost a record."
+    },
+    {
+     "id": "part 2 end's check (missing)",
+     "summary": "A non-spec file a rule resolved is accepted by the end-of-carry verification whatever its text (a page regenerated to the clone's own text, records the clone already held), where it previously exited 1.",
+     "class": "within",
+     "why": "Fixes a check that would refuse correct work, red-first test named; within the task."
+    },
+    {
+     "id": "part 2 order and found-and-left",
+     "summary": "After part 1, before the registry-table part and before T400; nothing new found and left; T400 stays open as part 1 filed it (reason and 'lands before T392' stated there).",
+     "class": "within",
+     "why": "Ordering inside the task; no deferred defect added, and the one carried forward already carries its why, task id and order per FR-009."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T303": {
+   "section_sha256": "cf1bfa6b8a81b71ecafac0ecc04c53e5c11fdcff9dd655cacd2e8520a1c10cfd",
+   "reviewed": "2026-11-26",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T303-D1",
+     "summary": "The task's feature is resolved from F=, then SPECIFY_FEATURE, then the pool registry's holder of this tree (only where it holds one of the named tasks), then this tree's own start mark; the split line names the feature and its source.",
+     "class": "within",
+     "why": "Fixes a defect (a closing run judged 0 of 6 files under the wrong feature and said GREEN - a check passing work it never judged). No GM words bear on this design (the section says so, and request.md holds none on closing-checks' feature resolution); the pool registry (T285) and start marks (T254) are read, not changed, and the order narrows nothing in the request."
+    },
+    {
+     "id": "T303-D2",
+     "summary": "Read the live start mark under task-marks/, and stop reading task-starts.jsonl; a pre-T254 tree with no SPECIFY_FEATURE is refused and told to give F=.",
+     "class": "within",
+     "why": "The kept rows were the defect's source (449's four-day-old T281/T303 row taken for 451's). Swapping an unreliable guess for a refusal that prints the command is not a wrong outcome and narrows no GM clause; the cost is stated, bounded to old trees, and has its way on. 'No longer read' is closing-checks.sh's reading only; the record itself, which SC-006 and T243's breakdown read, is not changed."
+    },
+    {
+     "id": "T303-D3",
+     "summary": "No source names the feature: refused with exit 2 before any check runs, printing make closing-checks T=<task> F=<feature>; no fallback to any feature's task of that number.",
+     "class": "within",
+     "why": "Removes the fallback that produced the wrong verdict; the refusal names the compliant command, as the project's guard rules require."
+    },
+    {
+     "id": "T303-D4",
+     "summary": "Where files are set apart and none of the uncommitted files is one the task's own edits name, the run is refused before the checks (exit 2), listing the set-apart files by task and feature and printing both F= and the bare make closing-checks.",
+     "class": "within",
+     "why": "Its reach is the defect case: a GREEN standing over a run that judged none of the task's files. It also newly refuses one case the old split judged (a task whose every change came from make-target writes, beside another task's files); that is labeled UNMEASURED and keeps a stated way on (the bare make closing-checks, which judges every file), so no work is refused outright. Nothing in request.md (the hook-output-length words are about hooks, not this script's lines) speaks to it; no GM clause is narrowed."
+    },
+    {
+     "id": "T303-D5",
+     "summary": "With T=, the GREEN and RED lines end with the files judged, how many its own edits name, and how many were set apart; the RED line's rerun names the resolved feature.",
+     "class": "within",
+     "why": "Makes the verdict say what it judged, which is the defect's other half (the split line said 0 but the verdict said only GREEN). Within the closing-checks task."
+    },
+    {
+     "id": "builder-checks-unchanged",
+     "summary": "make builder-checks (CRATE=, not T=) is left as it is.",
+     "class": "within",
+     "why": "It has no T= and no feature resolution, so it never had this defect; leaving it as it is narrows nothing."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "Two found defects (the suite did not unset SPECIFY_FEATURE; the refusal listed set-apart files by task number alone) are fixed in this task; nothing is deferred.",
+     "class": "within",
+     "why": "Each found defect is fixed in the task that found it, which is what fix-as-we-go asks; no known defect is carried on."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T299 (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; built with 451 T282's two parts, the described ask and the refusal's key)",
+    "### T299 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T299-rules-a-e",
+     "summary": "classify and stated_ask gain five bounded statement forms (described ask, reported check question, checklist under a non-addressing lead-in, a figure of waiting on you, a set-apart category); every earlier ask and offer kept, each bound pinned by a test",
+     "class": "within",
+     "why": "Fewer false firings mean fewer refusals whose explanation could reach the GM (2026-11-26: 'I would prefer not to see these messages about false positives'), and the 2026-11-25 amendment named stopping the false firings as the lever. Each form excludes lines naming you/your (and, for checklists, I/my/we) so a line put to him still fires, as feature 429 FR-002 requires; measured on both corpora (28 and 112) with no T lost. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T299-needs-your-word",
+     "summary": "STATED gains 'needs your word' (words?), a true ask HEAD's guard missed",
+     "class": "within",
+     "why": "A detector that passes a decision put to the GM is a defect against feature 429 FR-002; fixing it as found widens detection and narrows nothing."
+    },
+    {
+     "id": "T299-kept-offer-not-built",
+     "summary": "the restated kept offer still fires; recognising an ad-hoc escalation-check's verdict needs a new record, filed as T335, lands before T302",
+     "class": "within",
+     "why": "Under FR-002 as written the line is an offer with no escalation-check since the GM's last message, so the firing follows the rule and is not a wrong outcome; the GM accepted 'some number of false positives', and the new refusal sentence keeps its explanation from reaching him. The leftover is filed with id, reason and order as FR-009 asks. No requested behavior is cut."
+    },
+    {
+     "id": "T299-acceptable-range",
+     "summary": "the GM's range question answered: the brief's aim of under about one false firing in five with no true ask lost; 8% (1 of 13) measured on the two days, with the stated limit that a firings-only corpus cannot show a newly dropped ask",
+     "class": "within",
+     "why": "Answers the question he raised ('worth asking whether the number of false positives is within ... an acceptable range') with a measured rate, and attributes the threshold to the brief, not to him; it settles nothing in his name."
+    },
+    {
+     "id": "T299-refusal-sentence",
+     "summary": "both refusals gain one sentence telling the session that a line putting nothing to him ends with saying nothing of it to him; both wordings sent to message-check",
+     "class": "within",
+     "why": "Carries the request's central clause directly: 'I just don't want to see the explanation of the false positives reach me.' Review by message-check follows 451 T170."
+    },
+    {
+     "id": "T299-T282-key-mask",
+     "summary": "T282 built in the same landing: the quoted line of the two refusals masked in the message key, anchored on the two heads so no other key moves",
+     "class": "within",
+     "why": "Bundling small open tasks in the same files follows the GM's 2026-11-22 approval of bundling (T141); the mask is confined to these two refusals and changes no behavior asked for elsewhere."
+    },
+    {
+     "id": "T299-link-failure-left",
+     "summary": "a pre-warm incremental-dir link failure seen in the builder's tree is left, filed as T336, lands before T302",
+     "class": "within",
+     "why": "A defect in another task's mechanism (T316's pre-warm), outside this request; filed with reason, id and order per FR-009. It narrows nothing T299 was asked to do."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T299, T282 (bundle) (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; T282 is what T272's builder found in the same guard on 2026-11-26 - a report describing an ask's wording read as an ask, and each refused suite case a new guard message - built here whole, in the same files)",
+    "### T299, T282 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T282 rule (a) DESCRIBED",
+     "summary": "A quoted or backticked phrase that is the subject of 'does/did ask you' is blanked with its verb before spans are blanked; the session's own 'I do ask you' still fires.",
+     "class": "within",
+     "why": "T282: a report describing an ask's wording was read as an ask. Removing a statement the detector misread serves the GM's 2026-11-26 words ('I would prefer not to see these messages about false positives') and FR-002's narrow detector. The rule is bounded by the span, and the true-ask twin is pinned. Nothing FR-002 or amendment 1 owes the filter is exempted."
+    },
+    {
+     "id": "T299 rule (b) REPORTED",
+     "summary": "The '?' rule skips a last sentence running from 'asks:'/'asks whether'/'asks if' to its '?' with no you/your and no other '?' on the line.",
+     "class": "within",
+     "why": "It removes the check-described-by-its-question false firing from the corpus. Four twins that put something to him still fire and are pinned, including a reported question addressed to 'you' and a second question on the line. Only statements leave the detector's reach."
+    },
+    {
+     "id": "T299 rule (c) CHECKLIST",
+     "summary": "The '?' rule skips items of a 2+ item all-'?' list under a lead-in naming a checklist, or naming what something has/asks/holds/lists/poses/carries/answers, when the lead-in names neither the GM nor the session.",
+     "class": "within",
+     "why": "It removes the listed-checklist false firing. Lists put to him all still fire and are pinned: 'Two questions for you:', 'Open questions:', 'I have two questions...', a mixed list, a single item, no lead-in, and question-word items with suite case 9 kept. This is precision on statements and does not narrow FR-002's asks."
+    },
+    {
+     "id": "T299 rule (d) FIGURE",
+     "summary": "'waiting (on|for) you' is a measurement when a time count or share is the past-tense subject of was/were and the clause ends or goes on to another figure.",
+     "class": "within",
+     "why": "It removes the two time-breakdown figure firings. Work put to him ('Two hours of review are waiting on you', 'waiting on your budget answer', present tense, count of things) still fires and is pinned in the Rust test. It is bounded on both sides."
+    },
+    {
+     "id": "T299 rule (e) SET APART",
+     "summary": "'with waiting on you kept/counted/... separate/apart/...' names a breakdown category.",
+     "class": "within",
+     "why": "It removes the 'Blocking minutes, with waiting on you kept separate:' firing. The twins 'Two tasks are waiting on you, kept separate below.' and 'with waiting on you: the budget's words.' still fire. It reaches statements only."
+    },
+    {
+     "id": "T299 needs-your-word fix",
+     "summary": "STATED's 'needs your words' becomes 'words?' so 'What needs your word: ...' is caught; pinned in both suites.",
+     "class": "within",
+     "why": "This is a widening: a true ask HEAD's guard passed (a check passing bad work, a defect). Fixing it enforces FR-002 and narrows nothing. It was measured on both corpora: no T235 firing changes, and one already-firing message's quoted line moves."
+    },
+    {
+     "id": "T299 refusal sentence",
+     "summary": "Both refusals gain 'If the line puts nothing to him (offers him nothing), go on and say nothing of this to him.'; reviewed by message-check.",
+     "class": "within",
+     "why": "This sentence directly carries 'I just don't want to see the explanation of the false positives reach me'. FR-002's obligation attaches only to a message that asks or puts a decision to him, and amendment 1 adds offers. A line that puts nothing to him owed the filter nothing, so 'go on' restates FR-002's scope and is no carve-out from it. The GM's words take as given that sessions recognize false firings; what he struck is their explanation reaching him. Goal item 1 keeps every true ask refused until filtered. The new wording went to message-check (T170)."
+    },
+    {
+     "id": "T299 kept offer not built (T335)",
+     "summary": "The restated morning offer still fires; recognizing an ad-hoc escalation-check's kept verdict needs a new record and is filed as T335, landing before T302.",
+     "class": "within",
+     "why": "Under FR-002 the firing is arguably not false. The GM wrote after the 08:10Z ad-hoc check, so 'no escalation-check dispatched since his last message' holds. The restatement is an offer (amendment 1) in new words, and no gm-review.jsonl row records it as kept. Read most harshly as a residual false firing, it is one of 13, which 'I am okay with some number of false positives' covers. It is filed with an id, an order and the reason it is not fixed here (FR-009)."
+    },
+    {
+     "id": "T299 acceptable-range answer",
+     "summary": "The GM's question is answered with the measured rate, 33% before and 8% after on the 28 firings with no T lost, against 'under about one false firing in five'.",
+     "class": "within",
+     "why": "It answers 'it probably is worth asking whether the number of false positives is within ... an acceptable range' with numbers he can judge. The one-in-five threshold comes from the coordinating session's brief, not from the GM. The plan names it as 'the brief's aim' and does not attribute it to him, so the range stays his to accept. The plan also states that a firings-only corpus cannot show a newly dropped ask, and points to the pinned bounds instead."
+    },
+    {
+     "id": "T282 key mask",
+     "summary": "suite_tools::messages masks the quoted second line after a 'QUESTION UNFILTERED:'/'OFFER UNFILTERED:' head, so each refused suite case is not a new guard message.",
+     "class": "within",
+     "why": "T282's defect: each refused suite case created a new message key to review. The mask covers only the quoted user text under the two heads. The refusals' own wording is still keyed, so a change to it is still reviewed (451 T170), and no other message's key moves. A red-with-the-mask-off test pins it."
+    },
+    {
+     "id": "T299/T282 T336 found and left",
+     "summary": "A rust-lld link failure after the pool tree's pre-warm is filed as T336, landing before T302, to be reproduced first.",
+     "class": "within",
+     "why": "This build-tooling defect lies outside this section's request (T316's pre-warm). It is filed with an id, an order and the reason it is not fixed here, so nothing asked of T299 or T282 is left undone."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T299, T282 (bundle) (the Stop hook's question and offer detector read statements as asks: 12 firings on 2026-11-26, 7 of them statements, and 16 the day before, 9 of them statements; the GM, 2026-11-26: \"I would prefer not to see these messages about false positives\" and \"I am okay with some number of false positives. I just don't want to see the explanation of the false positives reach me. Though it probably is worth asking whether the number of false positives is within what we should consider an acceptable range.\"; T282 is what T272's builder found in the same guard on 2026-11-26 - a report describing an ask's wording read as an ask, and each refused suite case a new guard message - built here whole, in the same files)",
+    "### T299, T282 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T282 rule (a) DESCRIBED",
+     "summary": "A quoted or backticked phrase that is the subject of 'does/did ask you' is blanked with its verb before spans are blanked; the session's own 'I do ask you' still fires.",
+     "class": "within",
+     "why": "T282: a report describing an ask's wording was read as an ask. Removing a statement the detector misread serves the GM's 2026-11-26 words ('I would prefer not to see these messages about false positives') and FR-002's narrow detector. The rule is bounded by the span, and the true-ask twin is pinned. Nothing FR-002 or amendment 1 owes the filter is exempted."
+    },
+    {
+     "id": "T299 rule (b) REPORTED",
+     "summary": "The '?' rule skips a last sentence running from 'asks:'/'asks whether'/'asks if' to its '?' with no you/your and no other '?' on the line.",
+     "class": "within",
+     "why": "It removes the check-described-by-its-question false firing from the corpus. Four twins that put something to him still fire and are pinned, including a reported question addressed to 'you' and a second question on the line. Only statements leave the detector's reach."
+    },
+    {
+     "id": "T299 rule (c) CHECKLIST",
+     "summary": "The '?' rule skips items of a 2+ item all-'?' list under a lead-in naming a checklist, or naming what something has/asks/holds/lists/poses/carries/answers, when the lead-in names neither the GM nor the session.",
+     "class": "within",
+     "why": "It removes the listed-checklist false firing. Lists put to him all still fire and are pinned: 'Two questions for you:', 'Open questions:', 'I have two questions...', a mixed list, a single item, no lead-in, and question-word items with suite case 9 kept. This is precision on statements and does not narrow FR-002's asks."
+    },
+    {
+     "id": "T299 rule (d) FIGURE",
+     "summary": "'waiting (on|for) you' is a measurement when a time count or share is the past-tense subject of was/were and the clause ends or goes on to another figure.",
+     "class": "within",
+     "why": "It removes the two time-breakdown figure firings. Work put to him ('Two hours of review are waiting on you', 'waiting on your budget answer', present tense, count of things) still fires and is pinned in the Rust test. It is bounded on both sides."
+    },
+    {
+     "id": "T299 rule (e) SET APART",
+     "summary": "'with waiting on you kept/counted/... separate/apart/...' names a breakdown category.",
+     "class": "within",
+     "why": "It removes the 'Blocking minutes, with waiting on you kept separate:' firing. The twins 'Two tasks are waiting on you, kept separate below.' and 'with waiting on you: the budget's words.' still fire. It reaches statements only."
+    },
+    {
+     "id": "T299 needs-your-word fix",
+     "summary": "STATED's 'needs your words' becomes 'words?' so 'What needs your word: ...' is caught; pinned in both suites.",
+     "class": "within",
+     "why": "This is a widening: a true ask HEAD's guard passed (a check passing bad work, a defect). Fixing it enforces FR-002 and narrows nothing. It was measured on both corpora: no T235 firing changes, and one already-firing message's quoted line moves."
+    },
+    {
+     "id": "T299 refusal sentence",
+     "summary": "Both refusals gain 'If the line puts nothing to him (offers him nothing), go on and say nothing of this to him.'; reviewed by message-check.",
+     "class": "within",
+     "why": "This sentence directly carries 'I just don't want to see the explanation of the false positives reach me'. FR-002's obligation attaches only to a message that asks or puts a decision to him, and amendment 1 adds offers. A line that puts nothing to him owed the filter nothing, so 'go on' restates FR-002's scope and is no carve-out from it. The GM's words take as given that sessions recognize false firings; what he struck is their explanation reaching him. Goal item 1 keeps every true ask refused until filtered. The new wording went to message-check (T170)."
+    },
+    {
+     "id": "T299 kept offer not built (T335)",
+     "summary": "The restated morning offer still fires; recognizing an ad-hoc escalation-check's kept verdict needs a new record and is filed as T335, landing before T302.",
+     "class": "within",
+     "why": "Under FR-002 the firing is arguably not false. The GM wrote after the 08:10Z ad-hoc check, so 'no escalation-check dispatched since his last message' holds. The restatement is an offer (amendment 1) in new words, and no gm-review.jsonl row records it as kept. Read most harshly as a residual false firing, it is one of 13, which 'I am okay with some number of false positives' covers. It is filed with an id, an order and the reason it is not fixed here (FR-009)."
+    },
+    {
+     "id": "T299 acceptable-range answer",
+     "summary": "The GM's question is answered with the measured rate, 33% before and 8% after on the 28 firings with no T lost, against 'under about one false firing in five'.",
+     "class": "within",
+     "why": "It answers 'it probably is worth asking whether the number of false positives is within ... an acceptable range' with numbers he can judge. The one-in-five threshold comes from the coordinating session's brief, not from the GM. The plan names it as 'the brief's aim' and does not attribute it to him, so the range stays his to accept. The plan also states that a firings-only corpus cannot show a newly dropped ask, and points to the pinned bounds instead."
+    },
+    {
+     "id": "T282 key mask",
+     "summary": "suite_tools::messages masks the quoted second line after a 'QUESTION UNFILTERED:'/'OFFER UNFILTERED:' head, so each refused suite case is not a new guard message.",
+     "class": "within",
+     "why": "T282's defect: each refused suite case created a new message key to review. The mask covers only the quoted user text under the two heads. The refusals' own wording is still keyed, so a change to it is still reviewed (451 T170), and no other message's key moves. A red-with-the-mask-off test pins it."
+    },
+    {
+     "id": "T299/T282 T336 found and left",
+     "summary": "A rust-lld link failure after the pool tree's pre-warm is filed as T336, landing before T302, to be reproduced first.",
+     "class": "within",
+     "why": "This build-tooling defect lies outside this section's request (T316's pre-warm). It is filed with an id, an order and the reason it is not fixed here, so nothing asked of T299 or T282 is left undone."
+    },
+    {
+     "id": "T299 no-ask-lost evidence",
+     "summary": "The plan shows no ask is lost with two firings-only corpora (the 28 of 2026-11-25/26 and T235's labeled 112) through the fixed guard, plus pinned true-ask twins for every rule, and does not run a fresh recall sample.",
+     "class": "within",
+     "why": "FR-002 (429) asks for a detector measured for hit rate, a sample of hits, and recall on an independently labeled sample. Rules (a)-(e) only remove firings; the needs-your-word change only adds them. So any ask the new rules drop would have fired on HEAD, and the two corpora cover HEAD's firings in their windows. All 12 T of the two-day corpus and all 74 T and 8 B of T235's independently labeled corpus still fire. Asks outside those windows are covered by the bounded twins pinned in both suites, and the block states that limit itself. On the two-day corpus the builder's labels are not independent. I relabeled the five F lines the block quotes from the line alone and agree each is a statement (a report of a hook's reading, a check described by its question, a checklist item listed, two time figures). The whole messages are not in the bundle. This keeps FR-002's measured-detector standard and does not narrow it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)",
+    "### T300 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-plan-by-section",
+     "summary": "make carry merges a conflicted plan.md from its three whole sides by section (clone order kept, one-side changes taken, removals honored, builder's new sections appended), stopping where both sides changed one section, a side removed what the other changed, both changed the preamble, or one task's sections stand in two places; replaces T289's hunk rule for a plan",
+     "class": "within",
+     "why": "The carry's job is to land a builder's commit without the session's hand; every case it resolves has one side unchanged, and every case that would need a choice between sides stops with the files named, so no choice is made for the session. Replacing T289's rule for a plan is a mechanism choice inside the task, with T289's test kept."
+    },
+    {
+     "id": "a-resolve3-silent-cases-stop",
+     "summary": "the two cases the session's resolve3.py got wrong silently (a builder-changed section the clone no longer has; a builder-removed section the clone changed) become stops rather than being copied from the script",
+     "class": "within",
+     "why": "Taking the script as a specification by example but refusing its two silent losses keeps the rule from deciding between sides; stopping is the existing behavior for an undecidable carry, not a reduction of what the carry was asked to do."
+    },
+    {
+     "id": "b-bare-box-pin",
+     "summary": "after the merge, a bare open box that either side holds with lines under it takes them back (the clone's first), in a tasks.md the carry resolved and in one git merged cleanly beside a conflict",
+     "class": "within",
+     "why": "Serves the plan's constraint that an open box keeps the line under it; a bare box takes back the lines a side holds under it, the clone's first. Measured by replay (pin-lost=[] on all 24 carried trees, where 11 of the session's 30 hand commits had a bare box a side had lines under)."
+    },
+    {
+     "id": "b-joined-merge-dropped",
+     "summary": "joining a box and its lines into one line before merging was tried and dropped because it stopped three carries the line merge resolves; recorded in boxes.rs's header",
+     "class": "within",
+     "why": "A rejected probe, recorded so it is not retried; it removes nothing from what was asked."
+    },
+    {
+     "id": "c-request-dated-sections",
+     "summary": "a request.md hunk where both sides only added '## ' sections keeps both, the clone's first, one blank line between; one heading over different words stops",
+     "class": "within",
+     "why": "Both sides' added sections are the GM's recorded words and keeping both loses none of them; a heading both sides wrote differently is a choice and stops. Inside the carry's purpose."
+    },
+    {
+     "id": "last-line-names-rules",
+     "summary": "the carry's last line names each file resolved with its rule, where it said 'both sides kept in <paths>'",
+     "class": "within",
+     "why": "Reporting detail of the same mechanism; says what was done without changing it."
+    },
+    {
+     "id": "eight-differences-accepted",
+     "summary": "the 8 carried trees that differ from the session's hand commits (a research line restored in 7 tasks.md, a blank line in 2 request.md and 2 plan.md) are taken as the carry being right and the hand wrong",
+     "class": "within",
+     "why": "No exactness standard applies (the GM 2026-11-18): the carry need not reproduce the hand's bytes, and each difference is named and measured (git diff --stat against the session's commit, t300-job1.txt); the tasks.md ones are the lines the hand lost and later restored by hand in 39801a6844."
+    },
+    {
+     "id": "part-1-split",
+     "summary": "this section is part 1 of T300's carry part (the spec files); the task stays open for the generated and one-line files (4 of the 6 still-stopping replays) and its registry tables",
+     "class": "within",
+     "why": "Staging within one open task, not a cut: the remaining job stays in T300 and is ordered next ('Before the second job')."
+    },
+    {
+     "id": "left-T399-jsonl",
+     "summary": "a carry still stops on a line-per-record .jsonl both sides appended to or pruned (2 of 30 replays); left to T399, which lands before T400",
+     "class": "within",
+     "why": "A carry that stops with the files named is the carry's designed behavior, not a wrong outcome, so nothing defective is left; the item states why it is not fixed here, its filed task and its order, as FR-009 asks of a found-and-left item."
+    },
+    {
+     "id": "left-T400-clean-pick",
+     "summary": "a pick git merges wholly cleanly is committed before the box check runs, so a bare box (an earlier hand loss) that the builder's tree holds lines for stays bare there (0 of 30 replays); left to T400, which lands before T392",
+     "class": "within",
+     "why": "request.md and the spec are silent on the carry, so 'an open box keeps the line under it' is the plan's own constraint. The block states the lost lines were the hand's and persisted through git's clean merge: on a clean pick the carry fails to repair an earlier hand loss, it does not produce one, so it is not a defect this task leaves. Incidence 0 of 30 replays (the step beside a conflict caught the 1 that would have). The item carries FR-009's three parts: why not here (the pick made without committing changes the carry's whole flow), filed as T400, lands before T392."
+    },
+    {
+     "id": "perf-tag-and-order",
+     "summary": "the task is [perf] under FR-013 (a session's turns at a stopped carry are builder-idle time), with no engine checklist; ordered before its second job, T399 and T400",
+     "class": "within",
+     "why": "FR-013 names work that makes the landings or the builders' loop faster as performance work; the ordering is scheduling inside the feature."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T300 (the session resolved about fifteen stopped carries by hand on 2026-11-26, its turns at a carry builder-idle time; PART 1 of the task's carry part, the spec files - the task stays open for the generated and one-line files and for its registry tables)",
+    "### T300 Approach (checklist part A)",
+    "### T300 part 2 (the six carries of 2026-11-26 that still stopped after part 1 - four on the generated target page, a registry row or help line both sides added words to and two blocks added at one place, two on a `.jsonl`; PART 2 of the task's carry part - the task stays open for its registry tables)",
+    "### T300 part 2 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "part 1 (a)-(c), last line, found-and-left T399/T400",
+     "summary": "Part 1's spec-file rules (plan.md by section, tasks.md bare-box pin, request.md dated sections), unchanged from the text judged CLEAR (diffed line for line against earlier.md).",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; a [perf] task under FR-013 (the GM 2026-11-20, 'can we in general priotitize performance improvements going forward?'), removing the session's hand from builder-idle carries."
+    },
+    {
+     "id": "part 2 (d) generated page regenerated",
+     "summary": "docs/make-targets.html is never merged; it is regenerated in process from the merged Makefile after every other conflict is staged; a regeneration failure exits 2 with the pick standing and the three finishing commands named.",
+     "class": "within",
+     "why": "The exit-2 case departs from part 1's own all-or-none constraint, which is the session's design, not the GM's words or a spec requirement; it hides nothing, makes no choice between sides, and names the finish. The page is a generated file, so regeneration is its correct resolution; part 1 already named the generated page as this task's second job."
+    },
+    {
+     "id": "part 2 (e) prose hunks merged by words",
+     "summary": "A diff3 hunk whose every line on all three sides is prose of its file kind is merged token by token (\\S+|\\s+, SequenceMatcher opcodes); overlapping changes stop, identical changes made once, adjacent insertions both kept, clone first; code is never merged by words.",
+     "class": "within",
+     "why": "Serves the task's goal (carries resolved by rule) while keeping the constraint that no choice is made for the session; refusing code leaves the prior stop, not a defect. Mixed hunks (whole lines beside a reworded line) use the same rule and were checked on the real replayed hunks."
+    },
+    {
+     "id": "part 2 (f) two added blocks kept both",
+     "summary": "A base-less hunk: in a Makefile both targets' blocks kept, ours first, one blank line, a target added by both stops; in a .md bullets kept by part 1's block rule; in a .rs two added blocks stop.",
+     "class": "within",
+     "why": "The .rs stop leaves the earlier behavior (a named stop) where ordering can matter and no replayed carry needed it; that is a case left to the existing safe stop, not a defect and not a narrowing of anything the GM asked."
+    },
+    {
+     "id": "part 2 (g) .jsonl by record, T399 built here",
+     "summary": "A line-per-record file merged from its three sides: base records neither side removed, then the clone's appends, then the builder's; in-place edits or mid-file additions stop; identical appended lines are each kept, from reading the skip log's writer.",
+     "class": "within",
+     "why": "T399 was filed by part 1 as found-and-left; building it inside T300 is the bundling of small related tasks the GM asked for on 2026-11-22. The keep-each-identical-record decision is grounded in the writer's semantics (each line an event), and the replay shows the hand, not the rule, lost a record."
+    },
+    {
+     "id": "part 2 end's check (missing)",
+     "summary": "A non-spec file a rule resolved is accepted by the end-of-carry verification whatever its text (a page regenerated to the clone's own text, records the clone already held), where it previously exited 1.",
+     "class": "within",
+     "why": "Fixes a check that would refuse correct work, red-first test named; within the task."
+    },
+    {
+     "id": "part 2 order and found-and-left",
+     "summary": "After part 1, before the registry-table part and before T400; nothing new found and left; T400 stays open as part 1 filed it (reason and 'lands before T392' stated there).",
+     "class": "within",
+     "why": "Ordering inside the task; no deferred defect added, and the one carried forward already carries its why, task id and order per FR-009."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T303 (2026-11-26: 451 T281's builder ran `make closing-checks T=T281` with no F= in a pool tree; the run judged 0 of its 6 files, set all 6 apart as \"another task's\" and said GREEN over its own lint and format red, observed 2026-11-26, method: the run's own `split.txt`)",
+    "### T303 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T303-D1",
+     "summary": "The task's feature is resolved from F=, then SPECIFY_FEATURE, then the pool registry's holder of this tree (only where it holds one of the named tasks), then this tree's own start mark; the split line names the feature and its source.",
+     "class": "within",
+     "why": "Fixes a defect (a closing run judged 0 of 6 files under the wrong feature and said GREEN - a check passing work it never judged). The GM's 2026-11-21 closing-checks task and 2026-11-26 pool-worktree words (T285) are what the closing checks and the registry serve; the order narrows nothing he asked for, and T285/T254 are read, not changed."
+    },
+    {
+     "id": "T303-D2",
+     "summary": "Read the live start mark under task-marks/, and stop reading task-starts.jsonl; a pre-T254 tree with no SPECIFY_FEATURE is refused and told to give F=.",
+     "class": "within",
+     "why": "The kept rows were the defect's source (449's four-day-old T281/T303 row taken for 451's). Swapping an unreliable guess for a refusal that prints the command is not a wrong outcome and narrows no GM clause; the cost is stated, bounded to old trees, and has its way on."
+    },
+    {
+     "id": "T303-D3",
+     "summary": "No source names the feature: refused with exit 2 before any check runs, printing make closing-checks T=<task> F=<feature>; no fallback to any feature's task of that number.",
+     "class": "within",
+     "why": "Removes the fallback that produced the wrong verdict; the refusal names the compliant command, as the project's guard rules require."
+    },
+    {
+     "id": "T303-D4",
+     "summary": "Where files are set apart and none of the uncommitted files is one the task's own edits name, the run is refused before the checks (exit 2), listing the set-apart files by task and feature and printing both F= and the bare make closing-checks.",
+     "class": "within",
+     "why": "Its only reach is the defect case: a GREEN standing over a run that judged none of the task's files. The one extra case it also refuses (a task whose every change came from make-target writes, beside another task's files) is labeled UNMEASURED and keeps a stated way on (the bare command), so it refuses no work outright; no GM clause is narrowed."
+    },
+    {
+     "id": "T303-D5",
+     "summary": "With T=, the GREEN and RED lines end with the files judged, how many its own edits name, and how many were set apart; the RED line's rerun names the resolved feature.",
+     "class": "within",
+     "why": "Makes the verdict say what it judged, which is the defect's other half (the split line said 0 but the verdict said only GREEN). Within the closing-checks task."
+    },
+    {
+     "id": "builder-checks-unchanged",
+     "summary": "make builder-checks (CRATE=, not T=) is left as it is.",
+     "class": "within",
+     "why": "It has no T= and no feature resolution, so it never had this defect; leaving it as it is narrows nothing."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "Two found defects (the suite did not unset SPECIFY_FEATURE; the refusal listed set-apart files by task number alone) are fixed in this task; nothing is deferred.",
+     "class": "within",
+     "why": "Each found defect is fixed in the task that found it, which is what fix-as-we-go asks; no known defect is carried on."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-26",
+   "blocks": [
+    "### T303 (2026-11-26: 451 T281's builder ran `make closing-checks T=T281` with no F= in a pool tree; the run judged 0 of its 6 files, set all 6 apart as \"another task's\" and said GREEN over its own lint and format red, observed 2026-11-26, method: the run's own `split.txt`)",
+    "### T303 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T303-D1",
+     "summary": "The task's feature is resolved from F=, then SPECIFY_FEATURE, then the pool registry's holder of this tree (only where it holds one of the named tasks), then this tree's own start mark; the split line names the feature and its source.",
+     "class": "within",
+     "why": "Fixes a defect (a closing run judged 0 of 6 files under the wrong feature and said GREEN - a check passing work it never judged). No GM words bear on this design (the section says so, and request.md holds none on closing-checks' feature resolution); the pool registry (T285) and start marks (T254) are read, not changed, and the order narrows nothing in the request."
+    },
+    {
+     "id": "T303-D2",
+     "summary": "Read the live start mark under task-marks/, and stop reading task-starts.jsonl; a pre-T254 tree with no SPECIFY_FEATURE is refused and told to give F=.",
+     "class": "within",
+     "why": "The kept rows were the defect's source (449's four-day-old T281/T303 row taken for 451's). Swapping an unreliable guess for a refusal that prints the command is not a wrong outcome and narrows no GM clause; the cost is stated, bounded to old trees, and has its way on. 'No longer read' is closing-checks.sh's reading only; the record itself, which SC-006 and T243's breakdown read, is not changed."
+    },
+    {
+     "id": "T303-D3",
+     "summary": "No source names the feature: refused with exit 2 before any check runs, printing make closing-checks T=<task> F=<feature>; no fallback to any feature's task of that number.",
+     "class": "within",
+     "why": "Removes the fallback that produced the wrong verdict; the refusal names the compliant command, as the project's guard rules require."
+    },
+    {
+     "id": "T303-D4",
+     "summary": "Where files are set apart and none of the uncommitted files is one the task's own edits name, the run is refused before the checks (exit 2), listing the set-apart files by task and feature and printing both F= and the bare make closing-checks.",
+     "class": "within",
+     "why": "Its reach is the defect case: a GREEN standing over a run that judged none of the task's files. It also newly refuses one case the old split judged (a task whose every change came from make-target writes, beside another task's files); that is labeled UNMEASURED and keeps a stated way on (the bare make closing-checks, which judges every file), so no work is refused outright. Nothing in request.md (the hook-output-length words are about hooks, not this script's lines) speaks to it; no GM clause is narrowed."
+    },
+    {
+     "id": "T303-D5",
+     "summary": "With T=, the GREEN and RED lines end with the files judged, how many its own edits name, and how many were set apart; the RED line's rerun names the resolved feature.",
+     "class": "within",
+     "why": "Makes the verdict say what it judged, which is the defect's other half (the split line said 0 but the verdict said only GREEN). Within the closing-checks task."
+    },
+    {
+     "id": "builder-checks-unchanged",
+     "summary": "make builder-checks (CRATE=, not T=) is left as it is.",
+     "class": "within",
+     "why": "It has no T= and no feature resolution, so it never had this defect; leaving it as it is narrows nothing."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "Two found defects (the suite did not unset SPECIFY_FEATURE; the refusal listed set-apart files by task number alone) are fixed in this task; nothing is deferred.",
+     "class": "within",
+     "why": "Each found defect is fixed in the task that found it, which is what fix-as-we-go asks; no known defect is carried on."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T299 to T303, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

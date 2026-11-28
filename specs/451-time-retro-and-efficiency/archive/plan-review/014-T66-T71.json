@@ -1,0 +1,727 @@
+{
+ "blocks": {
+  "### T71 Approach (checklist part A)": {
+   "sha256": "77d504856d0b2b90292106442cb3e12eab94a3e0b8fa130c519ec69394c166ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T71 (the finding as filed, restated by its measurement: the 2 `phases.log` waits T61 left as \"an agent's own separate calls, no process between them\" each had a live producer, measured 2026-11-21 (each wait's launching transcript read for the Bash calls that write the file, with each call's `backgroundTaskId` and `timedOutAfterMs`): T178's a script run in the background, which T61's walk already reads alive, and T151 part B's the agent's own foreground call that the harness moved to the background at 180 s, which the walk read gone because the call OPENS with its assignment (`B=<dir>, ... | tee -a $B/phases.log`) after the quote of the harness's `eval '...'`, measured 2026-11-21 (the two producers replayed as stand-ins on the real `/proc`, `/tmp/t71/replay.sh` and `/tmp/t71/probe.sh`))": {
+   "sha256": "de6b77e5d919baf98d45802e43214f53c733318b9a5a4a204183b363f9e503b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T66": {
+   "section_sha256": "1dd4e0ba1c31ae69a7b1a9e3fab18cedf87b2328ef0ec18c3c0876d77ebcf55d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T66-check",
+     "summary": "A new text check, l7r-gate check guard-deps, run by make static after the conflict check, refusing a manifest that names l7r_guard and naming l7r_shared with its path and rust/guard/shared for guard-only pieces.",
+     "class": "within",
+     "why": "It is the task as filed (a check in make static, refusing a dependency on l7r_guard, naming l7r_shared). It is a guard whose only reach is the regression it pins, T58's one-crate rebuild, and it is performance work under FR-013."
+    },
+    {
+     "id": "T66-walk-rust",
+     "summary": "Walk every Cargo.toml under rust/ on disk (target and hidden directories and symlinks not walked), not git-listed, because the workspace's gate/crates/* glob builds untracked crates too.",
+     "class": "within",
+     "why": "The filed scope is manifests under rust/, which holds the workspace whose rebuild count T58 measured. Walking the disk rather than git's list widens the reach to untracked crates the glob builds, so nothing is narrowed. Item 4 records a grep showing no manifest under tests/ or scripts/ names the guard."
+    },
+    {
+     "id": "T66-exempt",
+     "summary": "Only the guard's own manifest is exempt.",
+     "class": "within",
+     "why": "The task line exempts the binaries that ship the guard. Item 4 records that l7r-guard.sh and hookbench build it with -p l7r_guard and no dependency, and cargo tree -i shows no dependent, so the guard's own manifest is the whole of that exemption. The exemption is exactly as large as the filed one, no larger."
+    },
+    {
+     "id": "T66-forms",
+     "summary": "Forms read: a key in any dependency table (normal, dev, build, target, workspace; - and _ alike; dotted or quoted keys), a [*dependencies.l7r_guard] table, a rename through package, and comments cut at #. A path-only dependency under another key is not read, because cargo refuses one (measured probe); the check looks at direct dependencies only.",
+     "class": "within",
+     "why": "The forms come from Cargo's manifest format. The one form left out cannot build: the probe records cargo refusing it ('no matching package named hooks'), so leaving it out is not a carve-out. Any transitive dependency needs some manifest under rust/ to name the guard directly, and the check refuses that manifest, so checking direct dependencies alone loses nothing of the purpose."
+    },
+    {
+     "id": "T66-registry",
+     "summary": "Record each run as check-guard-deps and add its entry to scripts/tool-registry.json, because check tool-signals went red without it.",
+     "class": "within",
+     "why": "This is the project's existing rule for a recorded tool, and the entry is needed for the requested check to pass hooks-test. It enforces the request and adds no behavior."
+    },
+    {
+     "id": "T66-closing-owed",
+     "summary": "The second make closing-checks run went red only at rust lint, on T65's in-flight set_down_hooks.rs. T65's file is left alone, guard-deps run alone passed, and one green make closing-checks is recorded as owed once T65's file lints clean.",
+     "class": "within",
+     "why": "This is sequencing, not scope: the green exit is still required and is recorded as owed, not waived, and the failing file belongs to another task in flight. No requirement of the request or of FR-013 is dropped."
+    },
+    {
+     "id": "T66-perf-class",
+     "summary": "Classed [perf] under FR-013, and not engine speed, so no performance-checklist answers.",
+     "class": "within",
+     "why": "FR-013 covers work that makes the builders' loop faster. A pin that keeps T58's hook-edit rebuild at 1 crate against 32 protects exactly that, and the GM asked for performance work in general to come first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T67": {
+   "section_sha256": "e000889eed060243da102ff9b5cec40ea5cd1ac71fad41dd7691d8ac9ee79f7d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T67-D1 destination, not text",
+     "summary": "The guard judges the write targets shared::tree::walk_judged resolves (standing in the event's cwd) instead of a regex over the whole command; a copy's source, a sed script, a heredoc's text and a mktemp scratch cd pass.",
+     "class": "within",
+     "why": "Unchanged since round 1. It is T67's line (the guard reads the destination, red first on that cp) and the root CLAUDE.md guard rule (match invocations, not mentions)."
+    },
+    {
+     "id": "T67-D2 Python programs",
+     "summary": "Triple-quoted text blanked, only write-verb lines read, their literals resolved by interp::program_names; a README joined onto a computed base still refused (fail closed).",
+     "class": "within",
+     "why": "Unchanged since round 1: the same destination rule applied to one route a README is written by, failing closed where the base is computed."
+    },
+    {
+     "id": "T67-D3 unresolved targets fail closed",
+     "summary": "A target the walk cannot resolve is judged by the old destination-position rule on its quote-blanked segment.",
+     "class": "within",
+     "why": "Unchanged since round 1: it keeps the old guard's refusals where the new mechanism cannot see."
+    },
+    {
+     "id": "T67-D4 file tools",
+     "summary": "A file tool's path takes the same tree rule (in_tree now, copies included); a relative path counts as the tree's.",
+     "class": "within",
+     "why": "The log's 3 file-tool refusals were in clones and are kept; the copy rule now reaches file tools too (pinned in section 6)."
+    },
+    {
+     "id": "T67-(a) new refusals: rm, mv, touch, chmod of a README in the tree",
+     "summary": "Every argument of rm/mv/touch/chmod is a write, so these are refused in the tree where the old guard passed them.",
+     "class": "within",
+     "why": "Unchanged since round 1: a widening that enforces constitution XVII, so it carries no ruling."
+    },
+    {
+     "id": "T67-(b)1 a README outside the tree in a non-project /tmp file or scratch repo",
+     "summary": "A README-named path in a /tmp scratch file, a scratch git init or a clone of another repository passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1. The false refusal T67 fixes is this case (/tmp/t58/readme.keep), and the purpose, the GM's own README, is not touched by a scratch file that never reaches the project. It is now bounded by the copy rule, so only a repository that is not this project's passes."
+    },
+    {
+     "id": "T67-(b)2 READMEs in other repositories",
+     "summary": "READMEs in other repositories (~/this-laptop, /julie-medical) pass the diagram guard.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1: constitution XVII governs this project's READMEs, and none of the guard log's firings was in another repository."
+    },
+    {
+     "id": "T67-(b)3 a checkout of this project outside the mirror and the clones",
+     "summary": "in_tree now counts a COPY of this project anywhere as the tree, known by what the directory is: its common git dir is the mirror's or a clone's, or its origin is this repository (by path, file://, or the mirror's own origin by any scheme). Measured: 17 of 1,289 git work trees under /tmp are copies, and the suite's section 6 and two crate tests pin it. The work-tree-making breadth and the hop bound are judged as their own decisions below.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE is resolved for a copy that is on disk. A README written in a builder's /tmp worktree or clone of this project is now refused, so constitution XVII's purpose holds for the agents most likely to break it. I re-read /tmp/t67/copies-guard2.txt (1,290 lines). It has 17 COPY lines, matching the block's list: 2 worktrees whose common git dir is the clone's, 13 clones by path, a file:// clone and a clone of that. It also has 138 passing lines whose printed origin is this repository, and all 138 have an empty common dir. Those are the unreadable stubs the block's item 7 explains: /tmp/t04/replay/clone and /tmp/t07-replay.ZmMH/c, the two that are not l7r- fixtures, each have an empty .git directory. So no repository git reads as this project's passes. The green logs are present (suite 75 passed, 0 failed; crate 421 passed)."
+    },
+    {
+     "id": "T67-(b)3a classify left unchanged; the wider check lives in readme_hooks' own in_tree",
+     "summary": "The brief said 'fix classify'. Instead shared::tree::classify stays as it is, and the README guard asks whether a path is a copy of this project in its own in_tree.",
+     "class": "within",
+     "why": "This deviation from the brief changes HOW the result is reached, not what was asked, so it carries no ruling. The brief is the session's words, not the GM's, and neither the request nor the accepted spec says where the check lives. The outcome round 1 required, a README in a copy of this project refused, holds and is pinned. Widening classify would have changed Target.class for every walk, so main_tree_hooks would move /tmp-copy writes that it calls the mirror's for no reason. That would be a wrong outcome in another guard, and keeping classify narrow avoids it."
+    },
+    {
+     "id": "T67-(b)3b the 2026-10-10 log entry re-classified",
+     "summary": "The 2026-10-10 command (rm -rf $d, mkdir, cd $d, git init, printf x > README, no remote added) is classified as not a copy of this project, so it passes under (b)1, its whole command pinned in section 6.",
+     "class": "within",
+     "why": "This applies the tree rule to the entry as round 1 asked. I read the whole 359-character command in the raw log (~/.claude/guard-log/20261010T193726533164100-438435.json). It has no remote, clone, fetch, worktree or origin, and its write targets are README and specs/399-live-test/spec.md in a directory it makes afresh and runs git init in. So it has its own common git dir and no origin, it is not this project's, and it passes under (b)1."
+    },
+    {
+     "id": "T67-(b)3c a command that makes a work tree of this project: every README it writes counts as the tree's",
+     "summary": "makes_ours: when a Bash command itself runs git worktree add of the tree or git clone of this repository, every README-named target that command writes is refused, wherever it lies. The block chose this breadth 'over reading which path lies in the new tree', and its own example is refused: `git worktree add /tmp/t58/wt && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep`.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This refuses T67's own case, a README-named scratch file outside the tree, whenever the same command also makes a work tree. Builders open their work that way (git worktree add /tmp/tNN/wt && ...). It is excepted from the block's goal A.1 (never refused for 'a /tmp scratch file') and from the brief's 'a path outside the tree passing', and the block's item 12 and 'Found and left? none' both say otherwise. The ground given is a choice, not impossibility: the walk already resolves where the new work tree goes, since it writes its probe touch there, so whether a target lies under that place is a path comparison on what the guard already holds. Nothing in the request implies it, and following the rule literally would not defeat its purpose, because a README under the new tree would still be refused. 'The old guard refused it too' and '0 corpus hits' did not save L1 in round 1 and do not save this. A check that refuses good work is a defect (XIV, 449 T196). Required, either of two: (a) judge whether each README-named target lies under the new work tree's resolved place, refusing one inside it and passing one outside it, failing closed where the place is unresolved, and pin in the suite and the crate, red first, that `git worktree add /tmp/t58/wt && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep` passes while `git worktree add /tmp/t58/wt && echo x > /tmp/t58/wt/README.md` (and a cd-into-it relative write) is refused; or (b) record it under Found and left with its why, a filed task id and 'lands before ...' as FR-009 requires, and correct item 12."
+    },
+    {
+     "id": "T67-(b)3d origin chains followed three hops",
+     "summary": "A local repository whose origin is itself a copy is followed at most three hops; a copy of this project four or more clones removed from the mirror or a clone passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This hook runs on every Bash call that names a README, and item 8's budget gives its disk reads a fixed bound: at most one .git, one commondir and two config files a hop, with no process started. Following origins needs some limit, because local origins can chain without end. The measured world is well inside this one: the census's deepest copy is one hop (/tmp/t40/sh2, a clone of the file:// clone /tmp/t40/sh1), and no chain of two or more exists among 1,289 work trees. So the bound removes no protection the guard actually gives, and the rule's purpose, refusing a README in a builder's worktree or clone, holds in full. This is a stated, measured bound, not a case carved out against the rule."
+    },
+    {
+     "id": "T67-L1 a README write held as a one-line string's text",
+     "summary": "without_held: a one-line string holding a quoted string of its own is blanked as program text (lexed as Python: # comments, backslash escapes, an open string kept), so write_text('(tmp / \"README.md\").write_text(1)') passes, while a string holding none (f\"{d}/README.md\", \"it's/README.md\") is still read and refused, pinned. T75 is moot, and Found and left? says none.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE is resolved by fixing it in T67, the first of the two options that verdict allowed. This is now the block's own goal, 'never for a name its command merely holds', applied, with red first (the one-line string refused before) and green after. Since the known defect is fixed, 'Found and left? none' is now accurate. The blanking only drops strings that themselves hold a quoted string, so a plain open('docs/README.md', 'w') still resolves and is refused."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T68": {
+   "section_sha256": "abe1c9434f74fb343e9af1540e8004f9245b11f344f79964cb949133fa3c5643",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the cap reads the builder's own last message iteration",
+     "summary": "usage_of reads input, cache read and cache creation from the last usage.iterations entry of type message, and context() (the cap's reader) goes through it, instead of the top-level sum that adds both of the builder's own iterations around an advisor call",
+     "class": "within",
+     "why": "FR-006 refuses a builder's call once ITS context is past the threshold. Item 4 measured that on every one of the 581 advisor rows the top level is the sum of the builder's two own iterations (about twice its context), that the advisor's iteration is a separate model's, and that the builder's next call read 152,979 after a 300,884 top level. Reading the doubled sum refused 33 builders at 151k to 290k, well under the 300k knob: that is a wrong outcome against FR-006 and request improvement 1 (keep builder contexts small, not stop them at half), so fixing the reader makes the requirement do what it says. No exception is made."
+    },
+    {
+     "id": "D2 top-level fallback",
+     "summary": "the top level is read only where the row has no iterations list, no message entry, or an own iteration of zero",
+     "class": "within",
+     "why": "Item 4 measured 6 rows with no list. On those, and on the single-iteration rows (27,506), the top level is the builder's own context, so the fallback keeps the existing correct reading where there is nothing else to read. It narrows nothing FR-006 asks."
+    },
+    {
+     "id": "D3 CONTEXT_CAP_TOKENS unmoved",
+     "summary": "the 300k constant stays; only how it is read changes",
+     "class": "within",
+     "why": "FR-006 sets the knob at 300k (GUESS, tuned from FR-004's data) and nothing in the request or spec asks to move it with this fix. Leaving it means a builder now meets the cap FR-006 actually states."
+    },
+    {
+     "id": "D4 the event log's ctx fixed by the same change",
+     "summary": "ctx calls context(), so it now records the builder's own context on an advisor row rather than the doubled sum",
+     "class": "within",
+     "why": "ctx is the per-call context figure FR-004/FR-005's readers and FR-006's tuning depend on ('the knob tuned from FR-004's data'). The same doubled read was a wrong figure; fixing it with the one shared reader serves the request's measurement half."
+    },
+    {
+     "id": "D5 tok keeps the billed top level",
+     "summary": "call_of, the event log's cost figure, keeps the top-level sum, because both of the builder's own iterations are billed; the parse is shared through message_of",
+     "class": "within",
+     "why": "FR-004 asks for an agent's token cost. Both own iterations are billed calls, so their sum is the builder's own cost. Leaving tok on the top level keeps that correct, rather than carrying the context fix into a figure where it would be wrong."
+    },
+    {
+     "id": "D6 the advisor's own tokens left out of tok, deferred to T69",
+     "summary": "tok omits the advisor_message iterations (81,317,939 input and 6,412,906 output over the session's subagent transcripts). Not fixed here because it is fields.rs, outside T68's edit list; filed as T69, lands before T22, the close",
+     "class": "within",
+     "why": "This is a separate defect from T68's (an undercount of cost, where T68 fixes an overcount of context), and T68 did not introduce it. It is not carved out of what the GM asked: FR-004's cost stays owed inside this feature, filed with an id and an order ahead of the close, as FR-009's found-and-left form asks. The feature as approved still delivers all of it, and T68's own scope (the cap) is fully met. It is a scheduling decision, not a narrowing of the request."
+    },
+    {
+     "id": "D7 classed [perf] under FR-013",
+     "summary": "T68 is performance work: it makes the builders' loop faster, since builders that call the advisor are no longer refused at about half the cap",
+     "class": "within",
+     "why": "FR-013 counts work that makes 'the builders' loop faster' as performance work, and request improvement 1 is about builder speed. 31 builders were stopped early (item 4), so the classification is the spec's own definition applied."
+    },
+    {
+     "id": "D8 the edit list and the order",
+     "summary": "edits context.rs and its tests, the context_cap_hooks tests, the docs/guards.md row and this section; leaves T59's fields.rs and T61's and T63's files alone; runs after T58 and T64, beside T61 and T63, before T22",
+     "class": "within",
+     "why": "This is how the work is sequenced among concurrent builders. It narrows no requirement, and the one thing it puts outside the list (tok's advisor tokens) is D6."
+    },
+    {
+     "id": "D9 the exit despite red closing-checks",
+     "summary": "item 6 sets closing-checks green as the green exit. Item 9 records two red runs: one on rust/browser's real-Chromium test (a 40ms wait_for_function timeout under three runs at once, cover clean on rerun) and one only in T61's uncommitted files in the same clone. Both are put down as not this task's",
+     "class": "within",
+     "why": "This is the plan's own exit, not a scope the GM set for T68. The red is in code T68 does not touch (the crate reads nothing of context.rs, and T61's files are another builder's work in progress), and T68's own tests and its crates' checks pass. That narrows nothing that was asked. An aside for the session: the Chromium timeout under load, if it recurs, is a test refusing good work and belongs as a filed item rather than a note."
+    },
+    {
+     "id": "D10 the reader's one-call lag left as it is",
+     "summary": "item 4 observes that at a PreToolUse the call's own row may not be on disk yet, so the cap reads the previous call's row; the plan changes nothing about this",
+     "class": "within",
+     "why": "This is a pre-existing property of where the guard runs, and T68 neither causes it nor was filed to change it. It affects FR-006 by at most one call's growth, not by the 2x the task fixes. The plan reports it and leaves it as found. It is not a carve-out from the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T69": {
+   "section_sha256": "52293704385aea8be791743fe57d76c7bd0778231ff396cce308fe5f9ea0cc7d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T69-1 sibling adv field",
+     "summary": "The advisor's own iterations are booked in a sibling `adv` field on the SubagentStop line (same four keys), not folded into `tok`; tok stays the builder's own calls as D6 wrote it.",
+     "class": "within",
+     "why": "FR-004 asks for an agent's token cost on its stop line; with adv beside tok the stop line now carries all of it, the advisor's share included, so the separate field adds to the cost rather than narrowing it. The task line asks for 'a separate figure'. Keeping tok's meaning leaves D6 and its readers as they are."
+    },
+    {
+     "id": "T69-2 zero vs absent",
+     "summary": "adv is written wherever tok is, zero where no advisor was called, so a stop from before T69 (no adv) reads as uncounted, not zero.",
+     "class": "within",
+     "why": "A representation choice that keeps old stops from reading as a false zero. It narrows nothing that was asked."
+    },
+    {
+     "id": "T69-3 reader shows advisor in/out",
+     "summary": "where-time's Tok gains adv: Option<Adv>; the task table, agent table and summary line show 'k advisor in' / 'k advisor out' beside the builder's tokens; feature-report gets the same through the shared columns_text renderer; Adv keeps input as one figure.",
+     "class": "within",
+     "why": "FR-005/D7 has where-time and feature-report read FR-004's lines through one function, and this does that. Folding cache into input rests on a measurement (none of the 2,722 advisor iterations read from or wrote to the cache, measured 2026-11-21), and the writer still records all four keys, so nothing is lost."
+    },
+    {
+     "id": "T69-4 first row vs last row",
+     "summary": "The writer reads an id's last row and the reader its first, accepted because every row of an advisor call carries the same advisor iteration.",
+     "class": "within",
+     "why": "Implementation detail backed by a measurement (588 calls, first equal to last on all, measured 2026-11-21). It narrows nothing."
+    },
+    {
+     "id": "T69-5 unchanged parts",
+     "summary": "tok, ctx, context.rs (T68), T59's wait and T68's reading are left unchanged.",
+     "class": "within",
+     "why": "The task asks only that the advisor's iterations be booked beside the builder's own. Leaving the other readers alone is the task's scope, not a cut to it."
+    },
+    {
+     "id": "T69-6 perf classification",
+     "summary": "Filed and ordered as a [perf] task under FR-013's measurement clause.",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 ('this kind of measurement task to be counted as a performance task') count work on the event log's data and where-time/feature-report's readers as performance work. That is exactly this task."
+    },
+    {
+     "id": "T69-7 fix code not claim",
+     "summary": "Item 12 treats the missing advisor tokens as a defect (a builder's cost reported short by 23.6M input / 2.3M output tokens over 451's window) and fixes the code.",
+     "class": "within",
+     "why": "A cost figure that leaves out tokens actually spent is a wrong outcome under XIV's definition of a defect, not a mere difference from what was expected, so fixing the code is correct."
+    },
+    {
+     "id": "T69-8 closing-checks overlap filed as T72",
+     "summary": "The found defect (two closing-checks runs in one clone share .git/closing-checks/ and read each other's verdicts) is not fixed here; it is filed as T72 [perf], lands before T22.",
+     "class": "within",
+     "why": "It is a defect in T55's closing step, outside this task's files and outside what T69 was asked to do. It is filed with its id, the reason it is not fixed here and its order (before T22, the close), as FR-009 requires, so it is fixed inside this feature before its close. No defect is carried past the step, and nothing T69 was asked for is narrowed."
+    },
+    {
+     "id": "T69-9 closing-checks red outside task files",
+     "summary": "The task's own closing-checks run went red only on make static's format of T54's uncommitted stale_terms/tests.rs (another builder's file in the same clone); the task records it, and on the final tree format and tests are green on its own crates.",
+     "class": "within",
+     "why": "This records evidence about the task's own exit, and narrows nothing in the GM's request or the spec. The red comes from another task's uncommitted file plus the T72 overlap, and the landing gate still runs over the whole tree."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T70": {
+   "section_sha256": "11f2a86d9b2d151778634f1b5eb9db14408eaafe8b9db0ee5fb552af3a6972c0",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T70-1 ceiling",
+     "summary": "The lit page's raster-wait ceiling moves from the test build's 40 ms to the shipped minute (READY_WAIT, the Python's timeout=60000) in every build.",
+     "class": "within",
+     "why": "Fixes a defect (the closing checks refusing correct code under load, a wrong outcome per constitution XIV) the GM asked to have filed as a performance task (2026-11-21: 'yes please file that as a performance task'); the shipped behavior is unchanged and a never-readying page is still refused."
+    },
+    {
+     "id": "T70-2 READY_CEILING thread-local",
+     "summary": "The test build reads the ceiling through a thread-local that only a_page_that_never_readies_or_throws_is_refused shortens to 40 ms.",
+     "class": "within",
+     "why": "Keeps the refusal test fast under 449 FR-008 while the refusal itself stays tested; narrows nothing asked."
+    },
+    {
+     "id": "T70-3 zoom settle",
+     "summary": "The zoom key's 1 ms test-build settle is left as it is.",
+     "class": "within",
+     "why": "A sleep, not a wait that can run out and fail; no wrong outcome, so nothing owed."
+    },
+    {
+     "id": "T70-4 lateready fake and test",
+     "summary": "testkit.rs gains lateready (raster answered at 50 ms) and a_page_slow_to_ready_is_waited_for pins the fix, red first on the old lit.rs.",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the fix; measured at 0.082 s, inside 449 FR-008."
+    },
+    {
+     "id": "T70-5 other short waits left",
+     "summary": "The 300 ms close wait (cdp.rs close) and the 2 s idle wait (serve.rs render) are left unchanged.",
+     "class": "within",
+     "why": "Read and found to fail nothing when they run out (process killed / bool not acted on); a difference that produces no wrong outcome is not a defect, so leaving it is within, not a narrowing."
+    },
+    {
+     "id": "T70-6 end-to-end exemption",
+     "summary": "The real-Chromium end-to-end test (0.957 s) is held exempt from the tenth-of-a-second bar.",
+     "class": "within",
+     "why": "449 FR-008's own text excepts the one end-to-end test against the real command; the new fake test is held to the bar."
+    },
+    {
+     "id": "T70-7 scope and order",
+     "summary": "Only rust/browser changes; T54's and T69's crates are left alone; ordered after T68, independent of T54/T69; one landing.",
+     "class": "within",
+     "why": "Scoping to the crate that holds the defect; nothing the request or spec asks is dropped."
+    },
+    {
+     "id": "T70-8 perf classification",
+     "summary": "Tagged [perf] under 451 FR-013: the builders' loop loses no closing run to a false red.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-21 that the closing-checks work be filed as a performance task, and FR-013 counts work that makes the builders' loop faster."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T71": {
+   "section_sha256": "88e80d57fe0d88ef5e51fac0726be737a72c91ed353160893292f17a3e34f141",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T71-D1",
+     "summary": "Fix the defect the measurement found: ASSIGN's leading class (finished_run_hooks/runs.rs) accepts a quote (' or \") so an assignment that opens the harness's eval '<command>' is read, and a live call writing through it reads alive",
+     "class": "within",
+     "why": "This fixes a wrong answer from a tool. The proof-of-life walk told a live run's wait 'the run that was producing it is gone', which is a defect under constitution XIV. The fix serves the feature 227 ruling the helper exists for and the builders' loop that FR-013 names. The dead side is pinned: a waiter and a reader with no run still read gone. Nothing in the GM's request or the spec is narrowed."
+    },
+    {
+     "id": "T71-D2",
+     "summary": "Build neither of the brief's two shapes (reading the waiter's own transcript as the writer; the no-poll guard refusing a wait on the session's own next write), because 0 of 114 traced waits with a writer watched a file only the agent's own calls write",
+     "class": "within",
+     "why": "The own-calls check was asked for only by T71's filed line, the session's own words from T61's found-and-left. It is not in the GM's request or the accepted spec, so leaving it unbuilt narrows nothing the GM or the spec asked for. The defect behind the line, the two false 'gone' phases.log waits, is accounted for by measurement. T178's wait already reads alive under T61's walk, and T151's is fixed by D1. What stays unbuilt is a case measured at zero occurrences, so no known defect is carried forward. The first option would also answer alive over a killed run in the 15 waits with a background writer beside the agent's own appends, which defeats the helper's purpose."
+    },
+    {
+     "id": "T71-D3",
+     "summary": "The ASSIGN fix also reaches files_named (feature 295's live runs and their output files), which now reads the same opening assignment",
+     "class": "within",
+     "why": "One shared reader has the defect, and fixing it fixes every copy that still lives (FIX AS WE GO). files_named gains no new behavior. It only reads an assignment it was already meant to read."
+    },
+    {
+     "id": "T71-D4",
+     "summary": "T71 is classed as a [perf] task under FR-013 (it makes the builders' loop faster: a wait over a live call no longer ends early, so no re-wait or stopping a run wrongly reported gone)",
+     "class": "within",
+     "why": "FR-013 counts as performance work a task that makes the builders' loop faster. Avoiding a false early end and the re-wait that follows fits that reading. The task makes no claim about engine speed."
+    },
+    {
+     "id": "T71-D5",
+     "summary": "T61's item 4 classing of the two phases.log waits ('an agent's own separate calls, no process between them') is restated here by its measured producers, while plan-done.md keeps T61's words",
+     "class": "within",
+     "why": "A claim the measurement contradicts is restated, and the record is kept. This changes no behavior and narrows nothing."
+    },
+    {
+     "id": "T71-D6",
+     "summary": "No constant moved (the 45 s belt, STALE, SCRIPT_BYTES stand); no map, no research claim changes",
+     "class": "within",
+     "why": "The plan leaves things as they are. Nothing the GM or the spec asked for is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T66 (the finding as filed, restated by its measurement: after T58 no manifest under `rust/` names `l7r_guard` but the guard's own, so a hook edit rebuilds 1 crate where it rebuilt 32 (measured 2026-11-21 by T58, `measure.sh`), and nothing refused a crate that named it again - `make static` read no manifest's dependencies, measured 2026-11-21 (its recipe read; the checks crate's and the rustc crate's sources grepped for a dependency rule: no check refuses a dependency - `rustc.rs`'s `features()`, `kept.rs` and `fmtfile.rs` read manifests, for features, `[package.metadata.l7r]` reads and a package's edition))",
+    "### T66 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T66-check",
+     "summary": "A new text check, l7r-gate check guard-deps, run by make static after the conflict check, refusing a manifest that names l7r_guard and naming l7r_shared with its path and rust/guard/shared for guard-only pieces.",
+     "class": "within",
+     "why": "It is the task as filed (a check in make static, refusing a dependency on l7r_guard, naming l7r_shared). It is a guard whose only reach is the regression it pins, T58's one-crate rebuild, and it is performance work under FR-013."
+    },
+    {
+     "id": "T66-walk-rust",
+     "summary": "Walk every Cargo.toml under rust/ on disk (target and hidden directories and symlinks not walked), not git-listed, because the workspace's gate/crates/* glob builds untracked crates too.",
+     "class": "within",
+     "why": "The filed scope is manifests under rust/, which holds the workspace whose rebuild count T58 measured. Walking the disk rather than git's list widens the reach to untracked crates the glob builds, so nothing is narrowed. Item 4 records a grep showing no manifest under tests/ or scripts/ names the guard."
+    },
+    {
+     "id": "T66-exempt",
+     "summary": "Only the guard's own manifest is exempt.",
+     "class": "within",
+     "why": "The task line exempts the binaries that ship the guard. Item 4 records that l7r-guard.sh and hookbench build it with -p l7r_guard and no dependency, and cargo tree -i shows no dependent, so the guard's own manifest is the whole of that exemption. The exemption is exactly as large as the filed one, no larger."
+    },
+    {
+     "id": "T66-forms",
+     "summary": "Forms read: a key in any dependency table (normal, dev, build, target, workspace; - and _ alike; dotted or quoted keys), a [*dependencies.l7r_guard] table, a rename through package, and comments cut at #. A path-only dependency under another key is not read, because cargo refuses one (measured probe); the check looks at direct dependencies only.",
+     "class": "within",
+     "why": "The forms come from Cargo's manifest format. The one form left out cannot build: the probe records cargo refusing it ('no matching package named hooks'), so leaving it out is not a carve-out. Any transitive dependency needs some manifest under rust/ to name the guard directly, and the check refuses that manifest, so checking direct dependencies alone loses nothing of the purpose."
+    },
+    {
+     "id": "T66-registry",
+     "summary": "Record each run as check-guard-deps and add its entry to scripts/tool-registry.json, because check tool-signals went red without it.",
+     "class": "within",
+     "why": "This is the project's existing rule for a recorded tool, and the entry is needed for the requested check to pass hooks-test. It enforces the request and adds no behavior."
+    },
+    {
+     "id": "T66-closing-owed",
+     "summary": "The second make closing-checks run went red only at rust lint, on T65's in-flight set_down_hooks.rs. T65's file is left alone, guard-deps run alone passed, and one green make closing-checks is recorded as owed once T65's file lints clean.",
+     "class": "within",
+     "why": "This is sequencing, not scope: the green exit is still required and is recorded as owed, not waived, and the failing file belongs to another task in flight. No requirement of the request or of FR-013 is dropped."
+    },
+    {
+     "id": "T66-perf-class",
+     "summary": "Classed [perf] under FR-013, and not engine speed, so no performance-checklist answers.",
+     "class": "within",
+     "why": "FR-013 covers work that makes the builders' loop faster. A pin that keeps T58's hook-edit rebuild at 1 crate against 32 protects exactly that, and the GM asked for performance work in general to come first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T68 (the finding as filed, restated by its measurement: a row carrying an advisor call holds the builder's own two iterations, before and after the call, summed in its top-level `usage` - twice its context - and the advisor's own iteration in neither; the cap read that sum, and 33 of its 34 refusals since T12 read such a row, every one of the 33 under the cap on the builder's own last iteration, measured 2026-11-21 (the guard log's context-cap rows against the builders' transcripts))",
+    "### T68 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the cap reads the builder's own last message iteration",
+     "summary": "usage_of reads input, cache read and cache creation from the last usage.iterations entry of type message, and context() (the cap's reader) goes through it, instead of the top-level sum that adds both of the builder's own iterations around an advisor call",
+     "class": "within",
+     "why": "FR-006 refuses a builder's call once ITS context is past the threshold. Item 4 measured that on every one of the 581 advisor rows the top level is the sum of the builder's two own iterations (about twice its context), that the advisor's iteration is a separate model's, and that the builder's next call read 152,979 after a 300,884 top level. Reading the doubled sum refused 33 builders at 151k to 290k, well under the 300k knob: that is a wrong outcome against FR-006 and request improvement 1 (keep builder contexts small, not stop them at half), so fixing the reader makes the requirement do what it says. No exception is made."
+    },
+    {
+     "id": "D2 top-level fallback",
+     "summary": "the top level is read only where the row has no iterations list, no message entry, or an own iteration of zero",
+     "class": "within",
+     "why": "Item 4 measured 6 rows with no list. On those, and on the single-iteration rows (27,506), the top level is the builder's own context, so the fallback keeps the existing correct reading where there is nothing else to read. It narrows nothing FR-006 asks."
+    },
+    {
+     "id": "D3 CONTEXT_CAP_TOKENS unmoved",
+     "summary": "the 300k constant stays; only how it is read changes",
+     "class": "within",
+     "why": "FR-006 sets the knob at 300k (GUESS, tuned from FR-004's data) and nothing in the request or spec asks to move it with this fix. Leaving it means a builder now meets the cap FR-006 actually states."
+    },
+    {
+     "id": "D4 the event log's ctx fixed by the same change",
+     "summary": "ctx calls context(), so it now records the builder's own context on an advisor row rather than the doubled sum",
+     "class": "within",
+     "why": "ctx is the per-call context figure FR-004/FR-005's readers and FR-006's tuning depend on ('the knob tuned from FR-004's data'). The same doubled read was a wrong figure; fixing it with the one shared reader serves the request's measurement half."
+    },
+    {
+     "id": "D5 tok keeps the billed top level",
+     "summary": "call_of, the event log's cost figure, keeps the top-level sum, because both of the builder's own iterations are billed; the parse is shared through message_of",
+     "class": "within",
+     "why": "FR-004 asks for an agent's token cost. Both own iterations are billed calls, so their sum is the builder's own cost. Leaving tok on the top level keeps that correct, rather than carrying the context fix into a figure where it would be wrong."
+    },
+    {
+     "id": "D6 the advisor's own tokens left out of tok, deferred to T69",
+     "summary": "tok omits the advisor_message iterations (81,317,939 input and 6,412,906 output over the session's subagent transcripts). Not fixed here because it is fields.rs, outside T68's edit list; filed as T69, lands before T22, the close",
+     "class": "within",
+     "why": "This is a separate defect from T68's (an undercount of cost, where T68 fixes an overcount of context), and T68 did not introduce it. It is not carved out of what the GM asked: FR-004's cost stays owed inside this feature, filed with an id and an order ahead of the close, as FR-009's found-and-left form asks. The feature as approved still delivers all of it, and T68's own scope (the cap) is fully met. It is a scheduling decision, not a narrowing of the request."
+    },
+    {
+     "id": "D7 classed [perf] under FR-013",
+     "summary": "T68 is performance work: it makes the builders' loop faster, since builders that call the advisor are no longer refused at about half the cap",
+     "class": "within",
+     "why": "FR-013 counts work that makes 'the builders' loop faster' as performance work, and request improvement 1 is about builder speed. 31 builders were stopped early (item 4), so the classification is the spec's own definition applied."
+    },
+    {
+     "id": "D8 the edit list and the order",
+     "summary": "edits context.rs and its tests, the context_cap_hooks tests, the docs/guards.md row and this section; leaves T59's fields.rs and T61's and T63's files alone; runs after T58 and T64, beside T61 and T63, before T22",
+     "class": "within",
+     "why": "This is how the work is sequenced among concurrent builders. It narrows no requirement, and the one thing it puts outside the list (tok's advisor tokens) is D6."
+    },
+    {
+     "id": "D9 the exit despite red closing-checks",
+     "summary": "item 6 sets closing-checks green as the green exit. Item 9 records two red runs: one on rust/browser's real-Chromium test (a 40ms wait_for_function timeout under three runs at once, cover clean on rerun) and one only in T61's uncommitted files in the same clone. Both are put down as not this task's",
+     "class": "within",
+     "why": "This is the plan's own exit, not a scope the GM set for T68. The red is in code T68 does not touch (the crate reads nothing of context.rs, and T61's files are another builder's work in progress), and T68's own tests and its crates' checks pass. That narrows nothing that was asked. An aside for the session: the Chromium timeout under load, if it recurs, is a test refusing good work and belongs as a filed item rather than a note."
+    },
+    {
+     "id": "D10 the reader's one-call lag left as it is",
+     "summary": "item 4 observes that at a PreToolUse the call's own row may not be on disk yet, so the cap reads the previous call's row; the plan changes nothing about this",
+     "class": "within",
+     "why": "This is a pre-existing property of where the guard runs, and T68 neither causes it nor was filed to change it. It affects FR-006 by at most one call's growth, not by the 2x the task fixes. The plan reports it and leaves it as found. It is not a carve-out from the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T69 (the finding as filed, restated by its measurement: a row carrying an advisor call holds `usage.iterations` of the builder's own call, the advisor's and the builder's own again, its top level the builder's two summed; the event log's `tok` and T10's transcript reader read the top level, so the advisor's own tokens - 82,254,728 input and 6,504,729 output over the session's subagent transcripts, 23,629,763 and 2,273,188 of them in the 223 agents of 451's window - were in no figure, measured 2026-11-21 (`/tmp/t69/rows.py` and `/tmp/t69/cross.py`, the `advisor_message` iterations summed one row per `message.id`))",
+    "### T69 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T69-1 sibling adv field",
+     "summary": "The advisor's own iterations are booked in a sibling `adv` field on the SubagentStop line (same four keys), not folded into `tok`; tok stays the builder's own calls as D6 wrote it.",
+     "class": "within",
+     "why": "FR-004 asks for an agent's token cost on its stop line; with adv beside tok the stop line now carries all of it, the advisor's share included, so the separate field adds to the cost rather than narrowing it. The task line asks for 'a separate figure'. Keeping tok's meaning leaves D6 and its readers as they are."
+    },
+    {
+     "id": "T69-2 zero vs absent",
+     "summary": "adv is written wherever tok is, zero where no advisor was called, so a stop from before T69 (no adv) reads as uncounted, not zero.",
+     "class": "within",
+     "why": "A representation choice that keeps old stops from reading as a false zero. It narrows nothing that was asked."
+    },
+    {
+     "id": "T69-3 reader shows advisor in/out",
+     "summary": "where-time's Tok gains adv: Option<Adv>; the task table, agent table and summary line show 'k advisor in' / 'k advisor out' beside the builder's tokens; feature-report gets the same through the shared columns_text renderer; Adv keeps input as one figure.",
+     "class": "within",
+     "why": "FR-005/D7 has where-time and feature-report read FR-004's lines through one function, and this does that. Folding cache into input rests on a measurement (none of the 2,722 advisor iterations read from or wrote to the cache, measured 2026-11-21), and the writer still records all four keys, so nothing is lost."
+    },
+    {
+     "id": "T69-4 first row vs last row",
+     "summary": "The writer reads an id's last row and the reader its first, accepted because every row of an advisor call carries the same advisor iteration.",
+     "class": "within",
+     "why": "Implementation detail backed by a measurement (588 calls, first equal to last on all, measured 2026-11-21). It narrows nothing."
+    },
+    {
+     "id": "T69-5 unchanged parts",
+     "summary": "tok, ctx, context.rs (T68), T59's wait and T68's reading are left unchanged.",
+     "class": "within",
+     "why": "The task asks only that the advisor's iterations be booked beside the builder's own. Leaving the other readers alone is the task's scope, not a cut to it."
+    },
+    {
+     "id": "T69-6 perf classification",
+     "summary": "Filed and ordered as a [perf] task under FR-013's measurement clause.",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 ('this kind of measurement task to be counted as a performance task') count work on the event log's data and where-time/feature-report's readers as performance work. That is exactly this task."
+    },
+    {
+     "id": "T69-7 fix code not claim",
+     "summary": "Item 12 treats the missing advisor tokens as a defect (a builder's cost reported short by 23.6M input / 2.3M output tokens over 451's window) and fixes the code.",
+     "class": "within",
+     "why": "A cost figure that leaves out tokens actually spent is a wrong outcome under XIV's definition of a defect, not a mere difference from what was expected, so fixing the code is correct."
+    },
+    {
+     "id": "T69-8 closing-checks overlap filed as T72",
+     "summary": "The found defect (two closing-checks runs in one clone share .git/closing-checks/ and read each other's verdicts) is not fixed here; it is filed as T72 [perf], lands before T22.",
+     "class": "within",
+     "why": "It is a defect in T55's closing step, outside this task's files and outside what T69 was asked to do. It is filed with its id, the reason it is not fixed here and its order (before T22, the close), as FR-009 requires, so it is fixed inside this feature before its close. No defect is carried past the step, and nothing T69 was asked for is narrowed."
+    },
+    {
+     "id": "T69-9 closing-checks red outside task files",
+     "summary": "The task's own closing-checks run went red only on make static's format of T54's uncommitted stale_terms/tests.rs (another builder's file in the same clone); the task records it, and on the final tree format and tests are green on its own crates.",
+     "class": "within",
+     "why": "This records evidence about the task's own exit, and narrows nothing in the GM's request or the spec. The red comes from another task's uncommitted file plus the T72 overlap, and the landing gate still runs over the whole tree."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T70 (rust/browser's end-to-end test, the one on the real Chromium, failed good work under load: `page.wait_for_function: Timeout 40ms exceeded.` in `make closing-checks`' cover run at 2026-11-21T08:46:27Z; the crate's cover run alone was clean 96 s after, measured 2026-11-21 (the event log's Phase lines))",
+    "### T70 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T70-1 ceiling",
+     "summary": "The lit page's raster-wait ceiling moves from the test build's 40 ms to the shipped minute (READY_WAIT, the Python's timeout=60000) in every build.",
+     "class": "within",
+     "why": "Fixes a defect (the closing checks refusing correct code under load, a wrong outcome per constitution XIV) the GM asked to have filed as a performance task (2026-11-21: 'yes please file that as a performance task'); the shipped behavior is unchanged and a never-readying page is still refused."
+    },
+    {
+     "id": "T70-2 READY_CEILING thread-local",
+     "summary": "The test build reads the ceiling through a thread-local that only a_page_that_never_readies_or_throws_is_refused shortens to 40 ms.",
+     "class": "within",
+     "why": "Keeps the refusal test fast under 449 FR-008 while the refusal itself stays tested; narrows nothing asked."
+    },
+    {
+     "id": "T70-3 zoom settle",
+     "summary": "The zoom key's 1 ms test-build settle is left as it is.",
+     "class": "within",
+     "why": "A sleep, not a wait that can run out and fail; no wrong outcome, so nothing owed."
+    },
+    {
+     "id": "T70-4 lateready fake and test",
+     "summary": "testkit.rs gains lateready (raster answered at 50 ms) and a_page_slow_to_ready_is_waited_for pins the fix, red first on the old lit.rs.",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the fix; measured at 0.082 s, inside 449 FR-008."
+    },
+    {
+     "id": "T70-5 other short waits left",
+     "summary": "The 300 ms close wait (cdp.rs close) and the 2 s idle wait (serve.rs render) are left unchanged.",
+     "class": "within",
+     "why": "Read and found to fail nothing when they run out (process killed / bool not acted on); a difference that produces no wrong outcome is not a defect, so leaving it is within, not a narrowing."
+    },
+    {
+     "id": "T70-6 end-to-end exemption",
+     "summary": "The real-Chromium end-to-end test (0.957 s) is held exempt from the tenth-of-a-second bar.",
+     "class": "within",
+     "why": "449 FR-008's own text excepts the one end-to-end test against the real command; the new fake test is held to the bar."
+    },
+    {
+     "id": "T70-7 scope and order",
+     "summary": "Only rust/browser changes; T54's and T69's crates are left alone; ordered after T68, independent of T54/T69; one landing.",
+     "class": "within",
+     "why": "Scoping to the crate that holds the defect; nothing the request or spec asks is dropped."
+    },
+    {
+     "id": "T70-8 perf classification",
+     "summary": "Tagged [perf] under 451 FR-013: the builders' loop loses no closing run to a false red.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-21 that the closing-checks work be filed as a performance task, and FR-013 counts work that makes the builders' loop faster."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T71 (the finding as filed, restated by its measurement: the 2 `phases.log` waits T61 left as \"an agent's own separate calls, no process between them\" each had a live producer, measured 2026-11-21 (each wait's launching transcript read for the Bash calls that write the file, with each call's `backgroundTaskId` and `timedOutAfterMs`): T178's a script run in the background, which T61's walk already reads alive, and T151 part B's the agent's own foreground call that the harness moved to the background at 180 s, which the walk read gone because the call OPENS with its assignment (`B=<dir>, ... | tee -a $B/phases.log`) after the quote of the harness's `eval '...'`, measured 2026-11-21 (the two producers replayed as stand-ins on the real `/proc`, `/tmp/t71/replay.sh` and `/tmp/t71/probe.sh`))",
+    "### T71 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T71-D1 neither brief shape built",
+     "summary": "Neither the waiter's-own-transcript-as-writer reading nor a no-poll refusal of a wait on the session's own next write is built; the false 'gone' is fixed at its measured cause instead.",
+     "class": "within",
+     "why": "Neither the GM's request nor the accepted spec (FR-008, FR-013 and the rest) asks for either shape; they were the session's own brief options, and T71's line made them conditional on a measurement first. Measured 2026-11-21: 0 of 114 traced waits watch a file only the agent's own calls write, and both phases.log cases had a live producer. The first shape would answer alive over a killed run in the 15 measured waits with a background writer beside the agent's own appends, which would defeat the proof of life the helper exists for (feature 227). The wrong outcome that prompted the task, a live run read as gone, is fixed (D2), so no defect is left behind."
+    },
+    {
+     "id": "T71-D2 ASSIGN takes a leading quote",
+     "summary": "ASSIGN's leading character class accepts ' or \" so that an assignment opening the harness's eval '<command>' is expanded and the live call is found by pid.",
+     "class": "within",
+     "why": "This fixes the measured defect (T151 part B's live moved call read as gone; 11 of 101 writers sit behind an opening assignment). It is red first, and a dead-side pin keeps a waiter or reader with no run reading as gone. That is a wrong outcome fixed at its cause, inside the task and Principle XIV."
+    },
+    {
+     "id": "T71-D3 files_named reads the same assignment",
+     "summary": "expanded also serves files_named (feature 295's live runs and their output files), which now reads the opening assignment too.",
+     "class": "within",
+     "why": "It is the same shared function and the same defect class, so the fix reaches every reader of it. This is not new behavior beyond the fix."
+    },
+    {
+     "id": "T71-D4 restate T61's item 4",
+     "summary": "T61's 'an agent's own separate calls, no process between them' is restated by its measured producers; plan-done.md keeps T61's words.",
+     "class": "within",
+     "why": "It corrects a claim to match a measurement, and no behavior is decided by it."
+    },
+    {
+     "id": "T71-D5 [perf] under FR-013",
+     "summary": "T71 is classed as performance work (the builders' loop faster: no false early end, re-wait or killed run).",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work. A false exit-3 'gone' costs a builder a re-wait or a stopped run. The block also notes, correctly, that it is not an engine-speed task."
+    },
+    {
+     "id": "T71-D6 order, exits, budget, no constant moved",
+     "summary": "After T61 and before T22, beside T73 and T74 without touching their files. The exits are the named suites and replays, one landing, and no constant moved.",
+     "class": "within",
+     "why": "These are scheduling and verification of the requested fix only. They narrow nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T71 (the finding as filed, restated by its measurement: the 2 `phases.log` waits T61 left as \"an agent's own separate calls, no process between them\" each had a live producer, measured 2026-11-21 (each wait's launching transcript read for the Bash calls that write the file, with each call's `backgroundTaskId` and `timedOutAfterMs`): T178's a script run in the background, which T61's walk already reads alive, and T151 part B's the agent's own foreground call that the harness moved to the background at 180 s, which the walk read gone because the call OPENS with its assignment (`B=<dir>, ... | tee -a $B/phases.log`) after the quote of the harness's `eval '...'`, measured 2026-11-21 (the two producers replayed as stand-ins on the real `/proc`, `/tmp/t71/replay.sh` and `/tmp/t71/probe.sh`))",
+    "### T71 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T71-D1",
+     "summary": "Fix the defect the measurement found: ASSIGN's leading class (finished_run_hooks/runs.rs) accepts a quote (' or \") so an assignment that opens the harness's eval '<command>' is read, and a live call writing through it reads alive",
+     "class": "within",
+     "why": "This fixes a wrong answer from a tool. The proof-of-life walk told a live run's wait 'the run that was producing it is gone', which is a defect under constitution XIV. The fix serves the feature 227 ruling the helper exists for and the builders' loop that FR-013 names. The dead side is pinned: a waiter and a reader with no run still read gone. Nothing in the GM's request or the spec is narrowed."
+    },
+    {
+     "id": "T71-D2",
+     "summary": "Build neither of the brief's two shapes (reading the waiter's own transcript as the writer; the no-poll guard refusing a wait on the session's own next write), because 0 of 114 traced waits with a writer watched a file only the agent's own calls write",
+     "class": "within",
+     "why": "The own-calls check was asked for only by T71's filed line, the session's own words from T61's found-and-left. It is not in the GM's request or the accepted spec, so leaving it unbuilt narrows nothing the GM or the spec asked for. The defect behind the line, the two false 'gone' phases.log waits, is accounted for by measurement. T178's wait already reads alive under T61's walk, and T151's is fixed by D1. What stays unbuilt is a case measured at zero occurrences, so no known defect is carried forward. The first option would also answer alive over a killed run in the 15 waits with a background writer beside the agent's own appends, which defeats the helper's purpose."
+    },
+    {
+     "id": "T71-D3",
+     "summary": "The ASSIGN fix also reaches files_named (feature 295's live runs and their output files), which now reads the same opening assignment",
+     "class": "within",
+     "why": "One shared reader has the defect, and fixing it fixes every copy that still lives (FIX AS WE GO). files_named gains no new behavior. It only reads an assignment it was already meant to read."
+    },
+    {
+     "id": "T71-D4",
+     "summary": "T71 is classed as a [perf] task under FR-013 (it makes the builders' loop faster: a wait over a live call no longer ends early, so no re-wait or stopping a run wrongly reported gone)",
+     "class": "within",
+     "why": "FR-013 counts as performance work a task that makes the builders' loop faster. Avoiding a false early end and the re-wait that follows fits that reading. The task makes no claim about engine speed."
+    },
+    {
+     "id": "T71-D5",
+     "summary": "T61's item 4 classing of the two phases.log waits ('an agent's own separate calls, no process between them') is restated here by its measured producers, while plan-done.md keeps T61's words",
+     "class": "within",
+     "why": "A claim the measurement contradicts is restated, and the record is kept. This changes no behavior and narrows nothing."
+    },
+    {
+     "id": "T71-D6",
+     "summary": "No constant moved (the 45 s belt, STALE, SCRIPT_BYTES stand); no map, no research claim changes",
+     "class": "within",
+     "why": "The plan leaves things as they are. Nothing the GM or the spec asked for is narrowed."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T66 to T71, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

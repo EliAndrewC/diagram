@@ -1,0 +1,739 @@
+{
+ "blocks": {
+  "### T243 (the GM 2026-11-25, tasks.md T243 and its amendments (a)-(g) and (i)-(l): a task time breakdown across features, each bucket's minutes and blocking minutes with both percentages, nothing hidden in \"other\")": {
+   "sha256": "4343388b944ea60941ff9d6d8e036557f35380b3fcd7375b04fdde114ab6fd56",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  },
+  "### T243 Approach (checklist part A)": {
+   "sha256": "1d9aa0395c464290302b40c92503c418dcbe30dbb3884d310ad3adb9e56501f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T243": {
+   "section_sha256": "37eb0d7943fa1a84b97dc7993fc09f5cd6bb271af558ac24ae11493f6ef1e2b3",
+   "reviewed": "2026-11-25",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "L1 blocking by dependency",
+     "summary": "Each piece of a main session's walked clock is booked to the task whose next step waited on it; round 4's project-wide reading and the round-3 page-session-yields rule withdrawn.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Amendment (l) verbatim: 'a minute should count as blocking. When something else is waiting on it to be done before it can be started', replacing (k)'s reading."
+    },
+    {
+     "id": "L2 the clue recorded with the data",
+     "summary": "'Blocks: <feature> T<n> | T<n> | none' in a dispatch prompt, page brief or builder brief's STOP POINT block, written as 'blocks' on the Agent call's event lines and on the page session's Phase line; 'L7R_BLOCKS=' read from a command's text; the line added to builder-brief.md and the research-record brief rules.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): (l): 'to the extent that we can pass that kind of context clues to our tooling when the data is collected, whether through environment variables or I don't even know what else'. Reading the variable from the command text because a hook cannot see the shell environment is the mechanism, not a narrowing; the templates carrying the line are what make future data carry it."
+    },
+    {
+     "id": "L3 GUESS defaults where no clue is given",
+     "summary": "Main session's own turns and waits block the task its lines carry; a builder's time blocks its own task, else its waiter's; a run or review agent blocks its waiter's task (a background run only from when it is waited on); a page session or research pass blocks nothing. Each labeled GUESS in book.rs's doc.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): (l): 'not something our tooling can inherently know ... it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'. Labeled defaults for the unclued case are the approximation (l) accepts; research defaulting to nothing is overridden by a Blocks: line, which (l)'s decide-between-implementations case is to carry."
+    },
+    {
+     "id": "L4a prefer task-blocking work over work blocking none",
+     "summary": "Among several in flight, what blocks a task is preferred to what blocks none.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): (l): work done in parallel that blocks nothing 'is really not blocking anything'; a piece is never taken from a blocked task by non-blocking work."
+    },
+    {
+     "id": "L4b each task its own piece (round 5's L4b, fixed)",
+     "summary": "Every task with blocking work in flight that second is booked its own piece, its own work's ends-last one (each_task); while a session or builder is in its own time - a turn or run, and a session's waits on the GM or idle hours too - its background work blocking ANOTHER task blocks that task beside it (beside); 'Waited on, blocking no task' only where no task-blocking work is in flight. Round 7 restatements: Blocking minutes reads 'each second once per task it blocks'; beside's reach through GM waits and idle hours is stated (the code did so already); the new test row names three Blocks: T4 passes of different ends (pinning the within-task ends-last pick) and two unclued passes waited on alone (the ends-last one apart, 8 s); the older blocking-by-dependency row states the page-session test's re-expectation (the review's 4 s to T1).",
+     "class": "within",
+     "why": "Within, as round 6 ruled, and the restatements keep it so. (a) 'each second once per task it blocks' now agrees with each_task instead of contradicting it. (b) beside through the session's GM waits and idle hours is (l) as written: research a task waits on 'would be blocking even if there was a different unrelated task happening' - a session waiting on the GM or idle is likewise unrelated to whether T4's next step waits on its research; it does not touch amendment (i), since the GM's own rows keep their time and only T4's booking, a working-time row, is added. Stated behavior the code already had, not a new decision. (d) the three-pass case pins that the ends-last pick stays within one task's work, and the two-unclued-passes case is L5's apart booking where no task-blocking work is in flight - both test rows of the ruled behavior, figures labeled measured 2026-11-25. (e) closes round 6's wording note. Wording only, not a finding: line 52's 'met after a shorter and before one' reads garbled (presumably 'before a longer one'), and it names 'an unclued pass' then 'the two unclued passes'."
+    },
+    {
+     "id": "L4c two paths to one task in one second each booked",
+     "summary": "Where one task's work is waited on directly and again inside a builder in the same second, each path is booked: a GUESS, an overstatement where it happens.",
+     "class": "within",
+     "why": "Within, unchanged in substance from round 6: an approximation inside one task's own blocking, labeled GUESS, of the kind (l) accepts ('it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'); erring toward counting a task's blocking drops nothing (l) asks for. Round 7 only drops 'the data has not shown' for 'where it happens', a wording change."
+    },
+    {
+     "id": "L5 work blocking no task named apart",
+     "summary": "Where only work blocking no task is in flight, the piece is booked to that work on the header's 'Waited on, blocking no task' line by category, never in the blocking columns.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): (l) says such work is not blocking; amendment (c) requires nothing silent, and a named line satisfies both."
+    },
+    {
+     "id": "L6 untracked page-session wait",
+     "summary": "'waiting: nothing in flight - a page session running, no monitor on it' blocks what the page session blocks: its brief's task, else nothing (apart).",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): The same dependency rule as L3 applied to an untracked wait; keeps the (j) class and books it by (l)."
+    },
+    {
+     "id": "L7 window blocking as the sum over tasks; denominators",
+     "summary": "The window's blocking is the sum over tasks, the landed tasks' sum beside it, the header saying it passes the clock; every blocking percentage is of that sum less the GM's rows (amendment (i)), never of the clock; the GM's rows show their share of the whole.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Checked against (i) by name: the GM's minutes stay out of every other percentage's denominator and his share is stated of the whole, as (i) asks ('those minutes should not be part of the denominator when calculating the other percentages'). Excluding work that blocks no task from a blocking denominator follows (l)'s definition of blocking; a denominator that is the sum over tasks keeps each table summing to 100 when that sum passes the clock, and the header names each column's denominator and that the sum passes the clock, so no percentage math is left to the GM. Consistent, and stays consistent once L4b is fixed."
+    },
+    {
+     "id": "W1 'Working at once' unstopped-span fix",
+     "summary": "A start no stop follows ends at the agent's last own call before its next start (flight.rs span_end), at the window's end only with no call at all; where-time's agent minutes move with the shared reader; a live long call understated by at most that call, labeled GUESS.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): A wrong outcome in the shared reader (three actors 'working' all day, 1,439.9 of 1,440 min at three or more) fixed in the one reader FR-005 requires both reports use; fixing a found defect is owed, and the residual approximation is labeled."
+    },
+    {
+     "id": "R1 second search's pool exclusion dropped",
+     "summary": "The 'event-log phase' search no longer excludes pool (which also skipped rust/gate/crates/pool); hits unchanged.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Widens the census toward 'everywhere that we're gathering these timings'."
+    },
+    {
+     "id": "R2 task-starts.jsonl as read-only input",
+     "summary": "Its one writer, make task-start, records which task started, not a timing; the breakdown only reads it to name a cut, so it carries no name.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): A writer that records no timing is not a timing gatherer under the GM's 'everywhere that we're gathering these timings'; the reason is stated."
+    },
+    {
+     "id": "R3 the reader's callers",
+     "summary": "where_time, task_time, feature_report with task_phases (its Makefile help names the breakdown), turn_time (module doc names it), the door and the reader named; fix_yield, tool_yield, stepback_bundle, spec.rs not gatherers, each with its reason; search command stated.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Carries the GM's 'makefile comments that describe the timing' and 'everywhere that we're gathering these timings', with its search space stated."
+    },
+    {
+     "id": "R4 the arbiter's ruling cited by trigger id",
+     "summary": "The BACK= knob's standing cites the round arbiter's CONTINUE on trigger round:spec-fidelity|plan:451-time-retro-and-efficiency#T243@4 and round 4's LEGITIMATE ruling.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): A citation correction; decides nothing new."
+    },
+    {
+     "id": "R5 the checklist's constraints",
+     "summary": "Constraints now list T243's amendments (a)-(g) and (i)-(l), (l) replacing (k)'s reading; Done-measured lists the three crates' counts.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Brings the checklist in line with the request; (h) is T235's by the settled item."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T243 (the GM 2026-11-25, tasks.md T243 and its amendments (a)-(g): a task time breakdown across features, each bucket's minutes and blocking minutes with both percentages, nothing hidden in \"other\")",
+    "### T243 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "new-command",
+     "summary": "A new command, make task-time, built on where-time's reader rather than a where-time mode.",
+     "class": "within",
+     "why": "The GM approved make task-time by name on where-time (request.md, 2026-11-25: 'that sounds great. Yes, let me know when that's ready.')."
+    },
+    {
+     "id": "one-table-across-features",
+     "summary": "Every clone's logs are read once, tasks keyed (feature, task), one table; F= optionally narrows.",
+     "class": "within",
+     "why": "'all of the tasks that have landed over the last 24 hours' is not limited to one feature; the default covers all of them."
+    },
+    {
+     "id": "landed-tasks-plus-rest",
+     "summary": "Tasks are those named by a landed:true end phase inside the window; the window's other time is one 'rest of the window' section.",
+     "class": "within",
+     "why": "Carries 'the tasks that have landed over the last 24 hours'; the rest section adds and removes nothing from that."
+    },
+    {
+     "id": "window-clipping",
+     "summary": "A landed task's time is only its time inside the window, clipped; its earlier days are 'another window's'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "In the GM's sentence the 24 hours chooses WHICH tasks ('tasks that have landed over the last 24 hours'); 'how they break down in terms of the time that was spent' is the tasks' time. Clipping cuts a task that landed early in the window down to its last hours, so its breakdown (writing vs compiling vs tests vs maps vs landing) is a fragment of what was spent on it. Whole-task time is not impossible, his words do not imply the clip, and it defeats no stated purpose; 'the window is what the GM asks about' completes his thought. Should say: a landed task's rows carry its whole time, including before the window (its in-window part may also be shown)."
+    },
+    {
+     "id": "minutes-and-blocking",
+     "summary": "Minutes are summed machine time (overlapping); blocking minutes walk each main session's clock once, booking waits to the thing in flight that ends last, descending into builders; both with percentages.",
+     "class": "within",
+     "why": "Carries 'the number of minutes ... and its associated percentage ... but then also separately the number of minutes that we spend blocking on that thing' and 'include percentages'."
+    },
+    {
+     "id": "model-turns-by-tool",
+     "summary": "A model turn is booked by the tool its next call is: Read/Grep/Glob reading code, Edit/Write writing code, Bash, Agent, others by name.",
+     "class": "within",
+     "why": "Carries 'writing code and reading code in order to know what to write'."
+    },
+    {
+     "id": "agents-by-kind",
+     "summary": "Each review agent's span books to its kind (plan review, claims round, record checks, arbiter, escalation-check, research/page sessions, map reviews, other review agents); every other kind is a builder.",
+     "class": "within",
+     "why": "Carries 'spec fidelity agents, reading and judging, to be in a separate category than the reading and writing of code'; the 'other review agents' row names its kinds."
+    },
+    {
+     "id": "review-commands-by-kind",
+     "summary": "Review bucket commands split by target into the same kinds, a commands row beside each agents row.",
+     "class": "within",
+     "why": "Serves the separate review category and the per-command breakdown; narrows nothing."
+    },
+    {
+     "id": "per-make-target-table",
+     "summary": "A table of every make target and program run with runs, minutes, blocking, both percentages and category, per landed task, the rest and the window.",
+     "class": "within",
+     "why": "Carries 'each makefile command that we run will have its own timing breakdown'."
+    },
+    {
+     "id": "maps-category-and-unbooked-targets",
+     "summary": "The categories are the guard's table (tests, compile, gate, land, review, docs), model-turn tools and agent kinds; targets the table does not book stay unbooked and are listed by name under 'Makefile targets the guard's table does not book' (found-and-left), and the cohort sweeps are a program class; 'no other row moves' because the guard's file is at its 1,000-line bar.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM named 'generating maps' as a category beside compiling, running tests and landing. The blocks give it no row: the run.sh cohort sweeps (make cohort several times) are a program class, and unbooked targets are scattered by name, so the maps category's minutes and percentage are never stated and he is left adding them up, the percentage math he asked not to do. Listing a target by name keeps it from hiding but does not put it in the category he asked for. The reason given is a file's line bar, a cost reason (not a fidelity reason and not measured). Judged per class: a target that belongs to a category he named (map generation such as cohort to a maps category; crate-checks to compile/tests by its phases) must book there; the research and page targets (source-pages, research-search, source-outcome, reserve) may stay listed by name. Should say: a 'generating maps' category exists and the map-generating targets and the cohort sweeps book to it, and each unbooked target that belongs to a named category books to that category."
+    },
+    {
+     "id": "page-session-not-main",
+     "summary": "A detached page session's own lines are its phases' minutes under research and page sessions, and its clock is nobody's blocking.",
+     "class": "within",
+     "why": "A correctness rule for the blocking numbers he asked for; it narrows nothing."
+    },
+    {
+     "id": "wait-loops",
+     "summary": "Wait loops' minutes are held-open time in their own row; their blocking goes to what they waited on.",
+     "class": "within",
+     "why": "Serves the minutes vs blocking distinction he asked for."
+    },
+    {
+     "id": "nothing-silent",
+     "summary": "What cannot be booked is named in its own row and footnote (nothing in flight, monitor alone, unaccounted builder time, commands no transcript holds, refused calls, untied phases).",
+     "class": "within",
+     "why": "Hides nothing; narrows nothing."
+    },
+    {
+     "id": "biggest-blocking-parallelism-proxy",
+     "summary": "The five biggest blocking categories listed first with the foreground share in their actor as a labeled proxy for what could run in parallel.",
+     "class": "within",
+     "why": "Answers 'some of these things end up running in parallel ... how will that be reflected'; labeled as a proxy. Amendment (d)'s own words are not in request.md, so judged against the quotes present only."
+    },
+    {
+     "id": "the-name-everywhere",
+     "summary": "'task time breakdown' goes in the root CLAUDE.md, the Makefile help of task-time and where-time, docs/efficiency-tooling.md, and a comment at four gatherers: event_log_hooks.rs BUCKETS, core/src/logs.rs, reviews/ledger.rs, land/phase.rs.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked for the name in CLAUDE.md, 'the makefile comments that describe the timing and such', and 'basically just everywhere that we're gathering these timings'. The section fixes 'everywhere' to four gatherers and two Makefile helps with no stated search that produced the list, so its reach cannot be checked. Within the bundle, the section itself reads the page sessions' Phase lines and the request (2026-11-22) has the hook suites measure their time, and no writer of either is named. Should say: the command that found the gatherers (the writers of timing and event lines, and the Makefile comments on timing), with the name put at each hit, or why a hit is not a gatherer."
+    },
+    {
+     "id": "amendment-h-to-T235",
+     "summary": "Amendment (h) concerns T235's tests and is written into T235's task line, not done here.",
+     "class": "within",
+     "why": "None of the GM's T243 words in request.md concern it; moving it out removes nothing he asked of this command."
+    }
+   ],
+   "tasks": [
+    "T243"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T243 (the GM 2026-11-25, tasks.md T243 and its amendments (a)-(g): a task time breakdown across features, each bucket's minutes and blocking minutes with both percentages, nothing hidden in \"other\")",
+    "### T243 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "approach-new-command",
+     "summary": "A new command, make task-time, built on where-time's reader",
+     "class": "within",
+     "why": "The GM approved make task-time on make where-time by name: 'that sounds great. Yes, let me know when that's ready.'"
+    },
+    {
+     "id": "one-table-across-features",
+     "summary": "Every clone's event log is read, and tasks are keyed by (feature, task)",
+     "class": "within",
+     "why": "The GM asked about 'all of the tasks that have landed over the last 24 hours', which is not one feature's."
+    },
+    {
+     "id": "which-tasks",
+     "summary": "Tasks landed in the window, F= to narrow, and 'the rest of the window' as one more section",
+     "class": "within",
+     "why": "This is the GM's 'tasks that have landed'. The rest section adds no scope: it makes the window's percentages reconcile, which serves the percentages he asked for."
+    },
+    {
+     "id": "whole-time-read-back-BACK-48h",
+     "summary": "A landed task's tables claim its WHOLE time, but the read-back stops BACK=48h before the window, a GUESS justified as 'two days covers most tasks' start'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Round 2 ruled that 'the time that was spent' on a landed task is its whole time, and the section now says so. Its mechanism reaches only 48h before the window, though. A landed task that started earlier loses that time, and the report says nothing about it: neither the 'Nothing silent' list nor the test table names a task whose start precedes the read-back. That contradicts amendment (c), every minute named or its remainder reported. The cut also rests on an unmeasured premise ('most tasks') and on cost (1.3 s an hour), and cost is no ground for an exception. Keeping BACK= as a GUESS knob is fine. Cure, either one: read back to each landed task's recorded start (task-starts.jsonl), or name in the report and its footnote every landed task whose start precedes the read-back, with the cut stated, and pin that case with a test. Also qualify 'Round 1's questions': its unqualified 'Window clipping: the window is the question asked' still reads as the position round 2 struck. It should say the clipping applies to the window's own tables only."
+    },
+    {
+     "id": "window-tables-clipped",
+     "summary": "The window's own tables (the rest and the whole window) stay clipped to the window, so their percentages sum to 100",
+     "class": "within",
+     "why": "The window chooses which tasks are counted, and the whole-window view is the window. The landed tasks' whole time is printed beside, with its in-window share."
+    },
+    {
+     "id": "minutes-and-blocking",
+     "summary": "Minutes are overlapping machine time. Blocking minutes are each main session's wall clock, walked to whatever in flight ends last, with the descent into builders",
+     "class": "within",
+     "why": "This is the GM's two numbers: 'the number of minutes ... and ... the number of minutes that we spend blocking on that thing', each with percentages."
+    },
+    {
+     "id": "model-turns-by-tool",
+     "summary": "Model-turn gaps are booked by the tool they end in: reading code, writing code, running a command, dispatching",
+     "class": "within",
+     "why": "It carries the GM's 'writing code and reading code in order to know what to write'."
+    },
+    {
+     "id": "agents-by-kind",
+     "summary": "Each review agent's span is booked to its kind (spec-fidelity and the rest), never pooled. Every other agent is a builder",
+     "class": "within",
+     "why": "The GM: 'spec fidelity agents, reading and judging, to be in a separate category than the reading and writing of code'. Amendment (f) adds never pooled."
+    },
+    {
+     "id": "review-by-kind",
+     "summary": "The review bucket's commands are split into plan review, claims round, record and pop-up checks, arbiter, and other, each beside its agents' row",
+     "class": "within",
+     "why": "This is amendment (e) as recorded in request.md."
+    },
+    {
+     "id": "per-make-target-and-programs",
+     "summary": "A per-target table (and per program for calls with no target) with runs, minutes, blocking and both percentages, and its category. Targets are read only by shared::make::invoked",
+     "class": "within",
+     "why": "The GM: 'each makefile command that we run will have its own timing breakdown'. Using the one detector makes the count correct and adds no scope."
+    },
+    {
+     "id": "page-session-not-main",
+     "summary": "A detached page session's lines are its phases' minutes, never main-session blocking",
+     "class": "within",
+     "why": "This is correctness of the blocking number the GM asked for."
+    },
+    {
+     "id": "generating-maps-category",
+     "summary": "One breakdown category, 'map generation', holds the map and sheet targets, the cohort targets, the map, cohort, seeds and reference phases, and run.sh sweeps. crate-checks books to tests. The guard's table and where-time keep their buckets",
+     "class": "within",
+     "why": "This cures round 2's finding. The GM named 'generating maps' beside compiling, tests and landing. The breakdown's own category does it without moving the guard's table, which the GM did not ask to change."
+    },
+    {
+     "id": "unbooked-research-targets-listed",
+     "summary": "Research and page targets the guard's table leaves unbooked are listed by name under 'Makefile targets the guard's table does not book'. Where-time's 'other' is left as it is",
+     "class": "within",
+     "why": "Nothing is hidden: each target is named with its figures, as amendment (c) asks. The GM's list ends 'and such', and he named no category for research. Where-time's own buckets are not part of this request."
+    },
+    {
+     "id": "wait-loops",
+     "summary": "Wait loops are named as held-open time, with blocking booked to what they waited on",
+     "class": "within",
+     "why": "This serves the blocking-versus-minutes distinction and amendment (c)."
+    },
+    {
+     "id": "nothing-silent",
+     "summary": "Unbookable time gets named rows and a footnote",
+     "class": "within",
+     "why": "This is amendment (c)."
+    },
+    {
+     "id": "biggest-blocking-parallelism-proxy",
+     "summary": "The five biggest blocking categories are listed first, each with its foreground and background share, as a labeled proxy",
+     "class": "within",
+     "why": "The GM: 'the things that take a larger percentage of our time seem like they are worth asking whether they can be parallelized'. The report surfaces that question per bucket and labels the proxy honestly."
+    },
+    {
+     "id": "name-docs-sites",
+     "summary": "'Task time breakdown' goes into the root CLAUDE.md, the Makefile help of task-time and where-time, and docs/efficiency-tooling.md section 6",
+     "class": "within",
+     "why": "The GM: 'maybe that could go into our CLAUDE.md ... And also into ... the makefile comments that describe the timing'."
+    },
+    {
+     "id": "name-at-gatherers-phase-writers",
+     "summary": "The Phase writer's callers, found by grep -rln \"phase_row(\" rust --include=*.rs, each carry the name",
+     "class": "within",
+     "why": "Derived from the waist, the one Phase writer, by a stated command. This part cures round 2's finding."
+    },
+    {
+     "id": "name-at-gatherers-rest",
+     "summary": "The other gatherers have no stated search: the shell door's callers were searched with grep -n \"event-log phase\" Makefile only, and core/src/logs.rs and reviews/ledger.rs are listed 'beside them' with no command",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked for the name 'everywhere that we're gathering these timings'. Round 2 blocked on gatherers named with no search, and this half is only partly cured. The shell door's search space is the Makefile alone, which visibly misses shell scripts, hooks and any other caller of 'event-log phase' outside the Makefile. The two 'beside them' entries, and the event log's non-Phase writer, carry no command that produced them, so the list cannot be checked for reach. Cure: give a command for every entry, search the door's callers across the whole tree (or state why nothing outside the Makefile can call it), and derive the other writers from their own waist (the event-log append and the run-record writer), not from recall."
+    },
+    {
+     "id": "amendment-h-to-T235",
+     "summary": "Amendment (h) is written into T235's task line, not built here",
+     "class": "within",
+     "why": "request.md carries no text of amendment (h), so this ruling cannot confirm the section's description of it as concerning T235's test cases. It is classed within only because it is moved to another task, not dropped. The bundle should carry (h)'s words for the next round."
+    },
+    {
+     "id": "found-and-left-where-time-other",
+     "summary": "The unbooked research targets stay unbooked in the guard's table and in where-time's 'other'",
+     "class": "within",
+     "why": "This is not a defect: the breakdown names each one, and changing the guard's table was not asked."
+    }
+   ],
+   "tasks": [
+    "T243"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T243 (the GM 2026-11-25, tasks.md T243 and its amendments (a)-(g) and (i)-(k): a task time breakdown across features, each bucket's minutes and blocking minutes with both percentages, nothing hidden in \"other\")",
+    "### T243 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "which-tasks/read-back-cut",
+     "summary": "Keep BACK= (default 48h, a GUESS knob); a landed task whose first task-starts.jsonl start precedes the read-back, or has none, is named in its heading and on a 'Cut at the read-back' line (none when nothing is cut), pinned by a_landed_task_started_before_the_read_back_is_named.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A narrowing: the GM asked for 'the time that was spent' on each landed task, and a task started before the read-back gets less than that, though nothing makes its whole time impossible to read (task-starts.jsonl gives the start). It is legitimate on two grounds from the GM's own purpose. (1) The feature's request asks for the data 'in ideally a relatively cheap way' (2026-11-19), and a bound on how far back is read serves that. (2) With the cut named on every run, in the task's own heading and on a report line, plus a knob to read further, the tool no longer gives a wrong answer: it gives a labeled partial one, so it is not a defect left, and amendment (c)'s 'never silent' holds. Note that rulings.md is empty, because the block cites the arbiter in prose and not as an ask: ruling. So 'the arbiter's ruling of round 4 letting the knob stand so named' is not shown in the bundle, and this ruling rests on the substance, not on that citation."
+    },
+    {
+     "id": "round-1/window-clipping",
+     "summary": "Window clipping restated: the window's own tables (the rest, the whole window) are clipped to it and sum to 100 over the working time; a landed task's tables carry its whole time.",
+     "class": "within",
+     "why": "This now agrees with the Which tasks item and with amendment (i). The round-3 item is settled."
+    },
+    {
+     "id": "gatherers/search",
+     "summary": "The name 'task time breakdown' goes at each gatherer, found by five commands: phase_row(, 'event-log phase' across the tree, event_log_hooks::append, write_dated(, ledger::cost::. Each command's hits are listed, with the name or the reason a hit is not a gatherer.",
+     "class": "within",
+     "why": "Round 3's item is met: every gatherer listed now has a command. Three gaps are left, none of them a narrowing that blocks, all to fix in the section. (a) The second command passes --exclude-dir=pool, saying 'the pool holds no code'. grep excludes by directory basename, so this also skips the pool CRATE that bullet 1 lists (pool/src/cache/phases.rs). Say so, or exclude by path. (b) The block now reads task-starts.jsonl, and D2 books by it, but no command searches that file's writer and no line says why it is not a gatherer. (c) The heading says 'written or computed through', but no command searches the reader's callers. make feature-report computes timing columns from the same lines (FR-005), and its Makefile help is one of 'the makefile comments that describe the timing' the GM named, yet only task-time's and where-time's help get the name."
+    },
+    {
+     "id": "amendment-i/working-denominator",
+     "summary": "'the GM' and 'the GM away' keep their minutes and show a share of the whole. Every other percentage (the category tables, the per-target table, the biggest-blocking list) is of the working time (the whole less the GM's). A 'working' row and a header line state the GM's minutes, their share, and which denominator each column uses.",
+     "class": "within",
+     "why": "This matches the GM's words: mention the minutes and their share of the total, and keep them out of 'the denominator when calculating the other percentages'. Folding 'the GM away' in is within: it is the same wait for him past a cap. Minutes denominators do not move because GM time is never machine time, which is correct."
+    },
+    {
+     "id": "amendment-j/nothing-in-flight-classes",
+     "summary": "'waiting: nothing in flight' becomes a family of classes read on every run from the event log (page session unmonitored; after the Stop's work had ended; until a notification woke it; until the session started again), plus a residual 'unexplained, then a <event> line'.",
+     "class": "within",
+     "why": "The GM asked that the row 'automatically gets broken down in the future'. This does it on every run. The residual names the event that ended each piece, so it is not a silent 'other'."
+    },
+    {
+     "id": "amendment-k/page-sessions-yield-others-critical-path",
+     "summary": "A page session takes a wait's piece only where nothing else is live; among builders, runs and agents the one that ends last keeps the piece (critical path); no 'several in flight' row.",
+     "class": "within",
+     "why": "The GM's sentence is about the research number only ('if they were running in parallel with other things ... that number would be misleading'). Making page sessions yield to anything else applies it to research as he said it. The rule that blocking happens only with nothing else in flight, applied to everything, is the coordinating session's reading, and request.md marks it 'not his words'. Keeping the existing critical-path rule for builders, runs and agents keeps behavior he did not ask to change, so it is no narrowing of what he asked, and it needs no ruling. The asymmetry also fits his purpose: research is a queue implementation need not wait for ('before we could proceed with implementation'), while a builder's, a run's or a review's end is what the waiter proceeds on."
+    },
+    {
+     "id": "amendment-k/its-waiter-scope",
+     "summary": "'Nothing else in flight' is read as nothing else THAT PAGE SESSION'S WAITER waits on. A main session waiting on page sessions alone books the wait as research blocking even while another main session (another clone) was implementing.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM: 'if they were running in parallel with other things, including running in parallel with other tasks which were not research-based, then that number would be misleading because it would essentially imply that we spent half of our wall clock time waiting for research to be done before we could proceed with implementation'. His words are 'other things' and 'other tasks', and 'we' is the project, with no limit to one waiter. The block says it applies 'nothing else in flight' 'literally to page sessions', but in its mechanism the words become 'nothing else its waiter waits on'. That is an unlabeled narrowing. Sessions do overlap: the block reads every clone's logs and sums every main session's clock, and the GM's '458 minutes ... 20% of the total time' puts the total near 2,290 min in a day of 1,440. So when one session waits only on page sessions while another implements, research still takes the blocking, and the number still implies implementation waited on research. That is the case his sentence names, and the fix's purpose fails there. The 'Working at once' header shows concurrency for the whole window, but it leaves the research number unchanged and does not say how much of it overlapped other work. Nothing makes the wider reading impossible: the walk already knows every actor at every instant (at_once()). Also, 'measured cause' carries no measurement, and no after-figure on real logs shows how much of the 949 the fix removes, so whether the narrowing matters rests on a premise nobody measured. What it should say: research blocking only where no other actor in ANY session read was working, the rest named in its own row or stated beside research's blocking as the share that overlapped other work, pinned by a test with two sessions. Or, if the session holds the waiter-only reading, it is the GM's to decide (through escalation), not this section's to assume."
+    },
+    {
+     "id": "amendment-k/working-at-once",
+     "summary": "The header adds 'Working at once': the window's minutes with none, one, two, three or more actors working together (at_once()).",
+     "class": "within",
+     "why": "A report line that serves (k) (showing what ran in parallel) and amendment (d)'s parallelism question. It changes no booking."
+    },
+    {
+     "id": "amendment-h/to-T235",
+     "summary": "Amendment (h) is written into T235's task line; its words are noted as the session's note, not the GM's.",
+     "class": "within",
+     "why": "Not a decision of this command. The relabeling of whose words they are is accurate: request.md does not carry them."
+    }
+   ],
+   "tasks": [
+    "T243"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T243 (the GM 2026-11-25, tasks.md T243 and its amendments (a)-(g) and (i)-(l): a task time breakdown across features, each bucket's minutes and blocking minutes with both percentages, nothing hidden in \"other\")",
+    "### T243 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "L1 blocking by dependency",
+     "summary": "Each piece of a main session's walked clock is booked to the task whose next step waited on it; round 4's project-wide reading and the round-3 page-session-yields rule withdrawn.",
+     "class": "within",
+     "why": "Amendment (l) verbatim: 'a minute should count as blocking. When something else is waiting on it to be done before it can be started', replacing (k)'s reading."
+    },
+    {
+     "id": "L2 the clue recorded with the data",
+     "summary": "'Blocks: <feature> T<n> | T<n> | none' in a dispatch prompt, page brief or builder brief's STOP POINT block, written as 'blocks' on the Agent call's event lines and on the page session's Phase line; 'L7R_BLOCKS=' read from a command's text; the line added to builder-brief.md and the research-record brief rules.",
+     "class": "within",
+     "why": "(l): 'to the extent that we can pass that kind of context clues to our tooling when the data is collected, whether through environment variables or I don't even know what else'. Reading the variable from the command text because a hook cannot see the shell environment is the mechanism, not a narrowing; the templates carrying the line are what make future data carry it."
+    },
+    {
+     "id": "L3 GUESS defaults where no clue is given",
+     "summary": "Main session's own turns and waits block the task its lines carry; a builder's time blocks its own task, else its waiter's; a run or review agent blocks its waiter's task (a background run only from when it is waited on); a page session or research pass blocks nothing. Each labeled GUESS in book.rs's doc.",
+     "class": "within",
+     "why": "(l): 'not something our tooling can inherently know ... it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'. Labeled defaults for the unclued case are the approximation (l) accepts; research defaulting to nothing is overridden by a Blocks: line, which (l)'s decide-between-implementations case is to carry."
+    },
+    {
+     "id": "L4a prefer task-blocking work over work blocking none",
+     "summary": "Among several in flight, what blocks a task is preferred to what blocks none.",
+     "class": "within",
+     "why": "(l): work done in parallel that blocks nothing 'is really not blocking anything'; a piece is never taken from a blocked task by non-blocking work."
+    },
+    {
+     "id": "L4b one owner per second across DIFFERENT tasks",
+     "summary": "The walk gives each second of a main session's clock ONE owner even when that second blocks different tasks. Two cases in the blocks: (1) 'Among several in flight': among everything that blocks a task - any task - the second goes to the one that ends last; (2) 'Blocking minutes' / the defaults: the session's own turns and calls are its own and block the task its lines carry. So a research pass carrying 'Blocks: T4' gets no blocking for T4 while a builder for unrelated T5 runs longer, nor while the main session is in its own turn on T5; and the booking tests pin tasks + apart = each session's clock.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This contradicts (l)'s one concrete example word for word: 'that research would be blocking even if there was a different unrelated task happening in a different subagent at the same time', and its standard, 'a different standard than whether or not a different unrelated piece of work is able to be done at the same time'. It contradicts the section itself: (l)'s lead item books a piece 'never ... by what else ran', and both cases book T4's second by what else ran for T5. It is not the imprecision (l)'s 90% tolerance accepts (missing context clues): the clue is present and the rule discards it. And it leaves 'the window's blocking is the sum over tasks, which passes the clock where tasks ran side by side' true only across clones, never for tasks one session ran side by side (builder slots, bundles). Not a reopening of a settled block: the ends-last (critical) pick is untouched WITHIN one task's work, where it is right; what is new and judged here is the (l) build using it, and the own-turn rule, to choose BETWEEN tasks. The test row 'blocking by dependency' points the same way: with 'Blocks: T7' the page session takes all 10 s and the review's 4 s of blocking is gone - one owner per second over two task-blocking items (whether those are the same task cannot be told from the bundle). Required outcome: a piece's blocking for the task it blocks does not depend on what runs, or what the session does, for another task - in a second where several tasks each have blocking work in flight (or one is in the session's own turn), each of those tasks is booked its own (critical) piece; 'Waited on, blocking no task' takes a second only when no task-blocking work is in flight; the identity the tests pin is restated to match (the per-task sum may pass a session's clock), with a test of two tasks' blocking work in flight in one session. The mechanism is the builder's."
+    },
+    {
+     "id": "L5 work blocking no task named apart",
+     "summary": "Where only work blocking no task is in flight, the piece is booked to that work on the header's 'Waited on, blocking no task' line by category, never in the blocking columns.",
+     "class": "within",
+     "why": "(l) says such work is not blocking; amendment (c) requires nothing silent, and a named line satisfies both."
+    },
+    {
+     "id": "L6 untracked page-session wait",
+     "summary": "'waiting: nothing in flight - a page session running, no monitor on it' blocks what the page session blocks: its brief's task, else nothing (apart).",
+     "class": "within",
+     "why": "The same dependency rule as L3 applied to an untracked wait; keeps the (j) class and books it by (l)."
+    },
+    {
+     "id": "L7 window blocking as the sum over tasks; denominators",
+     "summary": "The window's blocking is the sum over tasks, the landed tasks' sum beside it, the header saying it passes the clock; every blocking percentage is of that sum less the GM's rows (amendment (i)), never of the clock; the GM's rows show their share of the whole.",
+     "class": "within",
+     "why": "Checked against (i) by name: the GM's minutes stay out of every other percentage's denominator and his share is stated of the whole, as (i) asks ('those minutes should not be part of the denominator when calculating the other percentages'). Excluding work that blocks no task from a blocking denominator follows (l)'s definition of blocking; a denominator that is the sum over tasks keeps each table summing to 100 when that sum passes the clock, and the header names each column's denominator and that the sum passes the clock, so no percentage math is left to the GM. Consistent, and stays consistent once L4b is fixed."
+    },
+    {
+     "id": "W1 'Working at once' unstopped-span fix",
+     "summary": "A start no stop follows ends at the agent's last own call before its next start (flight.rs span_end), at the window's end only with no call at all; where-time's agent minutes move with the shared reader; a live long call understated by at most that call, labeled GUESS.",
+     "class": "within",
+     "why": "A wrong outcome in the shared reader (three actors 'working' all day, 1,439.9 of 1,440 min at three or more) fixed in the one reader FR-005 requires both reports use; fixing a found defect is owed, and the residual approximation is labeled."
+    },
+    {
+     "id": "R1 second search's pool exclusion dropped",
+     "summary": "The 'event-log phase' search no longer excludes pool (which also skipped rust/gate/crates/pool); hits unchanged.",
+     "class": "within",
+     "why": "Widens the census toward 'everywhere that we're gathering these timings'."
+    },
+    {
+     "id": "R2 task-starts.jsonl as read-only input",
+     "summary": "Its one writer, make task-start, records which task started, not a timing; the breakdown only reads it to name a cut, so it carries no name.",
+     "class": "within",
+     "why": "A writer that records no timing is not a timing gatherer under the GM's 'everywhere that we're gathering these timings'; the reason is stated."
+    },
+    {
+     "id": "R3 the reader's callers",
+     "summary": "where_time, task_time, feature_report with task_phases (its Makefile help names the breakdown), turn_time (module doc names it), the door and the reader named; fix_yield, tool_yield, stepback_bundle, spec.rs not gatherers, each with its reason; search command stated.",
+     "class": "within",
+     "why": "Carries the GM's 'makefile comments that describe the timing' and 'everywhere that we're gathering these timings', with its search space stated."
+    },
+    {
+     "id": "R4 the arbiter's ruling cited by trigger id",
+     "summary": "The BACK= knob's standing cites the round arbiter's CONTINUE on trigger round:spec-fidelity|plan:451-time-retro-and-efficiency#T243@4 and round 4's LEGITIMATE ruling.",
+     "class": "within",
+     "why": "A citation correction; decides nothing new."
+    },
+    {
+     "id": "R5 the checklist's constraints",
+     "summary": "Constraints now list T243's amendments (a)-(g) and (i)-(l), (l) replacing (k)'s reading; Done-measured lists the three crates' counts.",
+     "class": "within",
+     "why": "Brings the checklist in line with the request; (h) is T235's by the settled item."
+    }
+   ],
+   "tasks": [
+    "T243"
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T243 (the GM 2026-11-25, tasks.md T243 and its amendments (a)-(g) and (i)-(l): a task time breakdown across features, each bucket's minutes and blocking minutes with both percentages, nothing hidden in \"other\")",
+    "### T243 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "L1 blocking by dependency",
+     "summary": "Each piece of a main session's walked clock is booked to the task whose next step waited on it; round 4's project-wide reading and the round-3 page-session-yields rule withdrawn.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): Amendment (l) verbatim: 'a minute should count as blocking. When something else is waiting on it to be done before it can be started', replacing (k)'s reading."
+    },
+    {
+     "id": "L2 the clue recorded with the data",
+     "summary": "'Blocks: <feature> T<n> | T<n> | none' in a dispatch prompt, page brief or builder brief's STOP POINT block, written as 'blocks' on the Agent call's event lines and on the page session's Phase line; 'L7R_BLOCKS=' read from a command's text; the line added to builder-brief.md and the research-record brief rules.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): (l): 'to the extent that we can pass that kind of context clues to our tooling when the data is collected, whether through environment variables or I don't even know what else'. Reading the variable from the command text because a hook cannot see the shell environment is the mechanism, not a narrowing; the templates carrying the line are what make future data carry it."
+    },
+    {
+     "id": "L3 GUESS defaults where no clue is given",
+     "summary": "Main session's own turns and waits block the task its lines carry; a builder's time blocks its own task, else its waiter's; a run or review agent blocks its waiter's task (a background run only from when it is waited on); a page session or research pass blocks nothing. Each labeled GUESS in book.rs's doc.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): (l): 'not something our tooling can inherently know ... it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'. Labeled defaults for the unclued case are the approximation (l) accepts; research defaulting to nothing is overridden by a Blocks: line, which (l)'s decide-between-implementations case is to carry."
+    },
+    {
+     "id": "L4a prefer task-blocking work over work blocking none",
+     "summary": "Among several in flight, what blocks a task is preferred to what blocks none.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): (l): work done in parallel that blocks nothing 'is really not blocking anything'; a piece is never taken from a blocked task by non-blocking work."
+    },
+    {
+     "id": "L4b each task its own piece (round 5's L4b, fixed)",
+     "summary": "Among several in flight, every task with blocking work in flight that second is booked its own piece, its own work's ends-last one (each_task: the critical pick within one task's work, never between tasks); while a session or builder is in its own turn or run, its background work blocking ANOTHER task blocks that task beside it (beside); 'Waited on, blocking no task' takes a second only where no task-blocking work is in flight; the Blocking minutes item restates the identity as tasks' sum + blocking-no-task >= each session's clock (exactly the clock on the one-task fixture days), the window's sum passing the clock 'in one session or across clones', said in the header; test each_task_with_blocking_work_in_flight_gets_its_own_piece (T5 builder, research pass Blocks: T4, an unclued one: T5 10 s, T4 6 s, nothing apart, the same with the session in its own T5 turn; red on the committed code, T4 0 s) and a_page_session_blocks_only_the_task_its_brief_names re-expected (Blocks: T7: page session 10 s to T7, the review's 4 s to T1 beside it).",
+     "class": "within",
+     "why": "Meets all five of the arbiter's checks and (l) as written: 'that research would be blocking even if there was a different unrelated task happening in a different subagent at the same time'. T4's blocking no longer depends on what runs or what the session does for T5, which is (l)'s standard ('a different standard than whether or not a different unrelated piece of work is able to be done at the same time'). The fix restores the request; it narrows nothing. Wording only, not a finding: the earlier 'blocking by dependency' test row (line 49) still describes the page-session test's round-5 expectation ('the page session's 10 s block T7') without the review's 4 s to T1; the new row (line 52) states the re-expectation."
+    },
+    {
+     "id": "L4c two paths to one task in one second each booked",
+     "summary": "Where one task's work is waited on directly and again inside a builder in the same second, each path is booked: a GUESS, an overstatement the data has not shown.",
+     "class": "within",
+     "why": "An approximation inside one task's own blocking, labeled GUESS, of the kind (l) accepts ('it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'). It errs toward counting the task's blocking, never toward dropping blocking (l) asks for, so it carves nothing out of the request."
+    },
+    {
+     "id": "L5 work blocking no task named apart",
+     "summary": "Where only work blocking no task is in flight, the piece is booked to that work on the header's 'Waited on, blocking no task' line by category, never in the blocking columns.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): (l) says such work is not blocking; amendment (c) requires nothing silent, and a named line satisfies both."
+    },
+    {
+     "id": "L6 untracked page-session wait",
+     "summary": "'waiting: nothing in flight - a page session running, no monitor on it' blocks what the page session blocks: its brief's task, else nothing (apart).",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): The same dependency rule as L3 applied to an untracked wait; keeps the (j) class and books it by (l)."
+    },
+    {
+     "id": "L7 window blocking as the sum over tasks; denominators",
+     "summary": "The window's blocking is the sum over tasks, the landed tasks' sum beside it, the header saying it passes the clock; every blocking percentage is of that sum less the GM's rows (amendment (i)), never of the clock; the GM's rows show their share of the whole.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): Checked against (i) by name: the GM's minutes stay out of every other percentage's denominator and his share is stated of the whole, as (i) asks ('those minutes should not be part of the denominator when calculating the other percentages'). Excluding work that blocks no task from a blocking denominator follows (l)'s definition of blocking; a denominator that is the sum over tasks keeps each table summing to 100 when that sum passes the clock, and the header names each column's denominator and that the sum passes the clock, so no percentage math is left to the GM. Consistent, and stays consistent once L4b is fixed."
+    },
+    {
+     "id": "W1 'Working at once' unstopped-span fix",
+     "summary": "A start no stop follows ends at the agent's last own call before its next start (flight.rs span_end), at the window's end only with no call at all; where-time's agent minutes move with the shared reader; a live long call understated by at most that call, labeled GUESS.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): A wrong outcome in the shared reader (three actors 'working' all day, 1,439.9 of 1,440 min at three or more) fixed in the one reader FR-005 requires both reports use; fixing a found defect is owed, and the residual approximation is labeled."
+    },
+    {
+     "id": "R1 second search's pool exclusion dropped",
+     "summary": "The 'event-log phase' search no longer excludes pool (which also skipped rust/gate/crates/pool); hits unchanged.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): Widens the census toward 'everywhere that we're gathering these timings'."
+    },
+    {
+     "id": "R2 task-starts.jsonl as read-only input",
+     "summary": "Its one writer, make task-start, records which task started, not a timing; the breakdown only reads it to name a cut, so it carries no name.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): A writer that records no timing is not a timing gatherer under the GM's 'everywhere that we're gathering these timings'; the reason is stated."
+    },
+    {
+     "id": "R3 the reader's callers",
+     "summary": "where_time, task_time, feature_report with task_phases (its Makefile help names the breakdown), turn_time (module doc names it), the door and the reader named; fix_yield, tool_yield, stepback_bundle, spec.rs not gatherers, each with its reason; search command stated.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): Carries the GM's 'makefile comments that describe the timing' and 'everywhere that we're gathering these timings', with its search space stated."
+    },
+    {
+     "id": "R4 the arbiter's ruling cited by trigger id",
+     "summary": "The BACK= knob's standing cites the round arbiter's CONTINUE on trigger round:spec-fidelity|plan:451-time-retro-and-efficiency#T243@4 and round 4's LEGITIMATE ruling.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): A citation correction; decides nothing new."
+    },
+    {
+     "id": "R5 the checklist's constraints",
+     "summary": "Constraints now list T243's amendments (a)-(g) and (i)-(l), (l) replacing (k)'s reading; Done-measured lists the three crates' counts.",
+     "class": "within",
+     "why": "Carried from round 5 (not re-judged, the arbiter's scope for round 6): Brings the checklist in line with the request; (h) is T235's by the settled item."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-25",
+   "blocks": [
+    "### T243 (the GM 2026-11-25, tasks.md T243 and its amendments (a)-(g) and (i)-(l): a task time breakdown across features, each bucket's minutes and blocking minutes with both percentages, nothing hidden in \"other\")",
+    "### T243 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "L1 blocking by dependency",
+     "summary": "Each piece of a main session's walked clock is booked to the task whose next step waited on it; round 4's project-wide reading and the round-3 page-session-yields rule withdrawn.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Amendment (l) verbatim: 'a minute should count as blocking. When something else is waiting on it to be done before it can be started', replacing (k)'s reading."
+    },
+    {
+     "id": "L2 the clue recorded with the data",
+     "summary": "'Blocks: <feature> T<n> | T<n> | none' in a dispatch prompt, page brief or builder brief's STOP POINT block, written as 'blocks' on the Agent call's event lines and on the page session's Phase line; 'L7R_BLOCKS=' read from a command's text; the line added to builder-brief.md and the research-record brief rules.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): (l): 'to the extent that we can pass that kind of context clues to our tooling when the data is collected, whether through environment variables or I don't even know what else'. Reading the variable from the command text because a hook cannot see the shell environment is the mechanism, not a narrowing; the templates carrying the line are what make future data carry it."
+    },
+    {
+     "id": "L3 GUESS defaults where no clue is given",
+     "summary": "Main session's own turns and waits block the task its lines carry; a builder's time blocks its own task, else its waiter's; a run or review agent blocks its waiter's task (a background run only from when it is waited on); a page session or research pass blocks nothing. Each labeled GUESS in book.rs's doc.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): (l): 'not something our tooling can inherently know ... it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'. Labeled defaults for the unclued case are the approximation (l) accepts; research defaulting to nothing is overridden by a Blocks: line, which (l)'s decide-between-implementations case is to carry."
+    },
+    {
+     "id": "L4a prefer task-blocking work over work blocking none",
+     "summary": "Among several in flight, what blocks a task is preferred to what blocks none.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): (l): work done in parallel that blocks nothing 'is really not blocking anything'; a piece is never taken from a blocked task by non-blocking work."
+    },
+    {
+     "id": "L4b each task its own piece (round 5's L4b, fixed)",
+     "summary": "Every task with blocking work in flight that second is booked its own piece, its own work's ends-last one (each_task); while a session or builder is in its own time - a turn or run, and a session's waits on the GM or idle hours too - its background work blocking ANOTHER task blocks that task beside it (beside); 'Waited on, blocking no task' only where no task-blocking work is in flight. Round 7 restatements: Blocking minutes reads 'each second once per task it blocks'; beside's reach through GM waits and idle hours is stated (the code did so already); the new test row names three Blocks: T4 passes of different ends (pinning the within-task ends-last pick) and two unclued passes waited on alone (the ends-last one apart, 8 s); the older blocking-by-dependency row states the page-session test's re-expectation (the review's 4 s to T1).",
+     "class": "within",
+     "why": "Within, as round 6 ruled, and the restatements keep it so. (a) 'each second once per task it blocks' now agrees with each_task instead of contradicting it. (b) beside through the session's GM waits and idle hours is (l) as written: research a task waits on 'would be blocking even if there was a different unrelated task happening' - a session waiting on the GM or idle is likewise unrelated to whether T4's next step waits on its research; it does not touch amendment (i), since the GM's own rows keep their time and only T4's booking, a working-time row, is added. Stated behavior the code already had, not a new decision. (d) the three-pass case pins that the ends-last pick stays within one task's work, and the two-unclued-passes case is L5's apart booking where no task-blocking work is in flight - both test rows of the ruled behavior, figures labeled measured 2026-11-25. (e) closes round 6's wording note. Wording only, not a finding: line 52's 'met after a shorter and before one' reads garbled (presumably 'before a longer one'), and it names 'an unclued pass' then 'the two unclued passes'."
+    },
+    {
+     "id": "L4c two paths to one task in one second each booked",
+     "summary": "Where one task's work is waited on directly and again inside a builder in the same second, each path is booked: a GUESS, an overstatement where it happens.",
+     "class": "within",
+     "why": "Within, unchanged in substance from round 6: an approximation inside one task's own blocking, labeled GUESS, of the kind (l) accepts ('it doesn't have to be 100% exact ... only 90% of the time are we correct ... basically fine'); erring toward counting a task's blocking drops nothing (l) asks for. Round 7 only drops 'the data has not shown' for 'where it happens', a wording change."
+    },
+    {
+     "id": "L5 work blocking no task named apart",
+     "summary": "Where only work blocking no task is in flight, the piece is booked to that work on the header's 'Waited on, blocking no task' line by category, never in the blocking columns.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): (l) says such work is not blocking; amendment (c) requires nothing silent, and a named line satisfies both."
+    },
+    {
+     "id": "L6 untracked page-session wait",
+     "summary": "'waiting: nothing in flight - a page session running, no monitor on it' blocks what the page session blocks: its brief's task, else nothing (apart).",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): The same dependency rule as L3 applied to an untracked wait; keeps the (j) class and books it by (l)."
+    },
+    {
+     "id": "L7 window blocking as the sum over tasks; denominators",
+     "summary": "The window's blocking is the sum over tasks, the landed tasks' sum beside it, the header saying it passes the clock; every blocking percentage is of that sum less the GM's rows (amendment (i)), never of the clock; the GM's rows show their share of the whole.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Checked against (i) by name: the GM's minutes stay out of every other percentage's denominator and his share is stated of the whole, as (i) asks ('those minutes should not be part of the denominator when calculating the other percentages'). Excluding work that blocks no task from a blocking denominator follows (l)'s definition of blocking; a denominator that is the sum over tasks keeps each table summing to 100 when that sum passes the clock, and the header names each column's denominator and that the sum passes the clock, so no percentage math is left to the GM. Consistent, and stays consistent once L4b is fixed."
+    },
+    {
+     "id": "W1 'Working at once' unstopped-span fix",
+     "summary": "A start no stop follows ends at the agent's last own call before its next start (flight.rs span_end), at the window's end only with no call at all; where-time's agent minutes move with the shared reader; a live long call understated by at most that call, labeled GUESS.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): A wrong outcome in the shared reader (three actors 'working' all day, 1,439.9 of 1,440 min at three or more) fixed in the one reader FR-005 requires both reports use; fixing a found defect is owed, and the residual approximation is labeled."
+    },
+    {
+     "id": "R1 second search's pool exclusion dropped",
+     "summary": "The 'event-log phase' search no longer excludes pool (which also skipped rust/gate/crates/pool); hits unchanged.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Widens the census toward 'everywhere that we're gathering these timings'."
+    },
+    {
+     "id": "R2 task-starts.jsonl as read-only input",
+     "summary": "Its one writer, make task-start, records which task started, not a timing; the breakdown only reads it to name a cut, so it carries no name.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): A writer that records no timing is not a timing gatherer under the GM's 'everywhere that we're gathering these timings'; the reason is stated."
+    },
+    {
+     "id": "R3 the reader's callers",
+     "summary": "where_time, task_time, feature_report with task_phases (its Makefile help names the breakdown), turn_time (module doc names it), the door and the reader named; fix_yield, tool_yield, stepback_bundle, spec.rs not gatherers, each with its reason; search command stated.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Carries the GM's 'makefile comments that describe the timing' and 'everywhere that we're gathering these timings', with its search space stated."
+    },
+    {
+     "id": "R4 the arbiter's ruling cited by trigger id",
+     "summary": "The BACK= knob's standing cites the round arbiter's CONTINUE on trigger round:spec-fidelity|plan:451-time-retro-and-efficiency#T243@4 and round 4's LEGITIMATE ruling.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): A citation correction; decides nothing new."
+    },
+    {
+     "id": "R5 the checklist's constraints",
+     "summary": "Constraints now list T243's amendments (a)-(g) and (i)-(l), (l) replacing (k)'s reading; Done-measured lists the three crates' counts.",
+     "class": "within",
+     "why": "Carried from round 6's CLEAR (not re-judged; since then the section changed only by restatement): Brings the checklist in line with the request; (h) is T235's by the settled item."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T243 to T243, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

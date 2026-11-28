@@ -1,0 +1,760 @@
+{
+ "blocks": {},
+ "tasks": {
+  "T55": {
+   "section_sha256": "ca628a628dd66bbf01e9e6e616015b7bf87bc1215cb991a1ae645692f3eb8f48",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T55-target",
+     "summary": "make closing-checks starts make static, make hooks-test and make quick at once, one combined verdict, per-check logs, exit 1 if any red, TERM/INT stops all three; FRESH/REASON/HOOKS_ALL passed through",
+     "class": "within",
+     "why": "The performance task the GM asked to be filed on 2026-11-21 ('yes please file that as a performance task'), [perf] under FR-013."
+    },
+    {
+     "id": "T55-tail-25",
+     "summary": "the last 25 lines of each red check's log are printed (a GUESS)",
+     "class": "within",
+     "why": "An output detail of the requested target, labeled a GUESS."
+    },
+    {
+     "id": "T55-static-count",
+     "summary": "static_runs_hooks counts a make closing-checks as one make static run; STATIC_RUNS_A_TASK stays 2",
+     "class": "within",
+     "why": "Stops the new target being used to get round FR-007/D11's count. It enforces what was already asked and narrows nothing."
+    },
+    {
+     "id": "T55-bucket",
+     "summary": "the event log books make closing-checks to tests (BUCKETS)",
+     "class": "within",
+     "why": "FR-001's one shared table, extended to the new target."
+    },
+    {
+     "id": "T55-claude-md",
+     "summary": "the root CLAUDE.md's verification list states the order in one line",
+     "class": "within",
+     "why": "Documentation of the order. The refusal is the enforcement and this line carries none."
+    },
+    {
+     "id": "T55-decide-notice",
+     "summary": "the order at make decide (a decide after the caller's last code edit with no closing-checks started after it) is a NOTICE, not a refusal",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since the last round, which ruled it LEGITIMATE. A refusal at decide time cannot tell the closing tail from a decide in mid-build, because that depends on code edits that have not happened yet. The replay has 30 of 75 firings wrong (40%). Refusing anyway would force a closing-checks run on unfinished code, and that run counts toward FR-007's STATIC_RUNS_A_TASK=2, which defeats the performance purpose."
+    },
+    {
+     "id": "T55-foreground-refusal",
+     "summary": "a foreground make static, make hooks-test or make closing-checks (chained, piped, under timeout, the main session's) is REFUSED, red first, naming run_in_background and make closing-checks, recorded blocked; escaped by FOREGROUND_OK=\"<reason>\" (recorded escaped, a bare token refused); STATIC_OK does not stand it aside; judged on every command of a chain before the decide notice; both refusals heard at once",
+     "class": "within",
+     "why": "This is the fix the last round asked for. The rule is now real enforcement in D12's form, carries FR-012's red-first test (708 passed, 3 failed on a stub; the suite's case 9 at 26 passed, 8 failed; then green at 711 and 34/34), and has a recorded escape for the cases where it is wrong. For static and hooks-test, the separate replay the last round asked for was done and stated in words: 55 foreground calls (27+28), 5 on correct work (4+1), 50 right (34 after the last edit + 16 mid-build; 19+9+6 and 11+5). That is 9%, set against the decide rule's 40%, and no FR-007 collision, because a backgrounded run is the same one static run. The arithmetic checks. A refusal implements the requested order. It is not a narrowing of it. Refusing make closing-checks rests on the earlier ruling, which is acceptable because the log has no foreground call of it to replay."
+    },
+    {
+     "id": "T55-quick-not-refused",
+     "summary": "a foreground make quick, the third closing check, is not refused (implicit: the refusal names static, hooks-test and closing-checks only)",
+     "class": "within",
+     "why": "The block does not label this, but it is a decision. The finding's cost is the slow checks run in the foreground one after another, and quick takes 1 to 5 s (item 9's timings). By item 4's own counts, the 51 foreground closing-check calls after the last edit (35.0 min) less the replay's 34 static/hooks-test calls (31.2 min) leave about 17 calls and about 4 min for quick. Inside closing-checks, quick already runs beside the others. Not refusing it does not gut the purpose. The decide notice still tells the order, and the slow checks are enforced by refusal."
+    },
+    {
+     "id": "T55-closing-checks-unreplayed",
+     "summary": "the refusal of a foreground make closing-checks is not replayed (no PreToolUse line names it) and rests on the plan review's ruling",
+     "class": "within",
+     "why": "Nothing could be measured because the target did not exist in the log. The refusal is the stricter side of the request, and T22 reads its blocked and escaped rows."
+    },
+    {
+     "id": "T55-bash-write-miss",
+     "summary": "a code edit made by a Bash write (sed -i, heredoc) is not seen by the decide notice: it can miss, never wrongly fire",
+     "class": "within",
+     "why": "A stated limit of a notice that has already been ruled legitimate. It refuses nothing, and the foreground refusal does not depend on it."
+    },
+    {
+     "id": "T55-after-measure-T22",
+     "summary": "the closing tail's idle minutes on later tasks' transcripts, the notice's noticed rows, and the refusal's blocked and escaped rows are read on T22's measured day; the mechanism's own before/after (104 s in sequence vs 52 s at once) is measured now",
+     "class": "within",
+     "why": "The effect in the world can only be read from transcripts of tasks that do not exist yet. The mechanism's own before/after is measured in the block, and T22 is the close's measured day that FR-013 names. The line now covers the refusal's blocked and escaped rows as well. The same caveat applies as last round: T22's own text is not in this bundle, so the session has to confirm that T22 takes these rows."
+    },
+    {
+     "id": "T55-item4-recount",
+     "summary": "item 4's recount: 93 calls by 38 builders after their last code edit, 51 foreground (35.0 min), 39 background, 3 refused by other guards; 28 builders decided after their last edit, 21 before any check; the earlier 92/56/33 reading explained",
+     "class": "within",
+     "why": "A restated measurement, not a decision about scope. 51+39+3=93. The difference from the first reading is put down to the pre-T04 bg rule and to the log having grown."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T56": {
+   "section_sha256": "b4c3bb993f68fdfd515352e0baa380eb267b37d9bdd0e520ce43a396ae081d24",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T56-one-reader",
+     "summary": "The re-file deletes its own parse of task-starts.jsonl, its in_force and its started, and calls the writer's (filed.rs starts/in_force/started/Start, made public). The writer's behavior is unchanged.",
+     "class": "within",
+     "why": "The re-file and the writer filing a line by one rule is what makes make where-time book each line to the feature it served (FR-005, the tooling request: make the retrospective cheap to put together going forward). The 23 lines in 385's log, a feature with no T47, are a wrong outcome: 451's reading leaves out three of T47's reviews. So this is a defect fix, not a difference."
+    },
+    {
+     "id": "T56-time-bound",
+     "summary": "The re-file hands the writer's functions only the starts made by the line's time (with START_SLACK), and the line's t as now, so a start's age is measured as it was when the line was written.",
+     "class": "within",
+     "why": "It applies the writer's rule as the writer applied it when it wrote the line, which is how the two are made to agree. It narrows nothing that was asked."
+    },
+    {
+     "id": "T56-fallback",
+     "summary": "Shares the writer's next link too. Where no start in force names the task, the line goes to feature.json as it stood at the line's time, read as the feature of the clone's last start by then. It moves only where that feature has the task, and is marked \"fallback\": true as the writer marks it. This is a labeled CONVENTION, because feature.json keeps no history.",
+     "class": "within",
+     "why": "It was measured that sharing the stale-start rule alone moves none of the 23, so this is what the task's goal takes, not a carve-out from it. The convention's limit, that a make claim between two starts is not seen, comes from having no history to read, not from a choice to cover less. It is bounded by the has-the-task test. For the 23 the result is backed by an independent source, the dispatchers' descriptions. No requirement is narrowed."
+    },
+    {
+     "id": "T56-brief-not-rule",
+     "summary": "The dispatcher's brief is not made the re-file's rule, because the writer has no such step.",
+     "class": "within",
+     "why": "Keeping one rule for writer and re-file is the section's stated goal, and a rule only the re-file had would bring back the disagreement this task removes. It is a design choice inside what was asked."
+    },
+    {
+     "id": "T56-count-line",
+     "summary": "The run's summary counts fallback moves apart and prints that count only when it is nonzero.",
+     "class": "within",
+     "why": "A reporting detail of the re-file's own output. It serves reading what moved and why, and takes nothing from any FR."
+    },
+    {
+     "id": "T56-pub-use",
+     "summary": "One edit past the file list: event_log_hooks.rs's pub use widened to the four names, run through make guard-edit.",
+     "class": "within",
+     "why": "Only makes the shared rule visible, with no change in behavior. It is declared and went through the guard."
+    },
+    {
+     "id": "T56-found-and-left-fallback-mark",
+     "summary": "No reader reads the fallback mark, though T53's section says readers keep a marked line apart (grep, measured 2026-11-21). Left, raised with the coordinator.",
+     "class": "within",
+     "why": "No FR asks for a fallback mark or for readers to keep one apart. That line is T53's claim, so leaving it narrows no requirement or request clause. By the defect standard (constitution XIV v2.36.0) no wrong outcome is shown: the 23 are booked to the right task, and a wrong booking elsewhere is unshown. A claim the code does not match, where the behavior is fine, is fixed by restating the claim, and that is T53's text, not T56's files. Aside for the coordinator: T53's sentence wants restating, or a reader built if a mis-booking is ever shown."
+    },
+    {
+     "id": "T56-perf-class",
+     "summary": "T56 is classed as [perf] performance work under FR-013.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words count measurement work, the event log's data and make where-time's readers, as performance work for ordering. Filing each line in the right feature's log is that data's correctness."
+    },
+    {
+     "id": "T56-exits-order",
+     "summary": "Exits: the red case green with the earlier test unedited, crate checks, closing-checks, the dry run before and after. Red: recorded, set down, a can't-be-done claim taken to arbiter-ask. Order: after T53 and T58, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the feature's own scheme. No requirement is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T57": {
+   "section_sha256": "a4df9439173709ae59b731958eb997ef8de260738bb1c16df5365c73bf3294d7",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 restatement",
+     "summary": "make static is left unchanged because its Phase lines show it builds and runs no plain test; the double build is moved to where it actually happens, make rust-test after a green coverage pass, by widening T111's keep",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task line asked for static's plain build and test to be dropped. Measured Phase lines (dated, per target) show static has neither, so dropping one is impossible. The plan goes after the duplication the line was about (a crate's tests built in rust-test and again in coverage), which serves the GM's perf-first ordering (request.md 2026-11-20/21)."
+    },
+    {
+     "id": "D2 widen unit_tests_only",
+     "summary": "a binary is refused only where it holds a test, cfg(test) or mod x; a doc fence is refused only where it is not a text block; eleven crates join the keep",
+     "class": "within",
+     "why": "This is the mechanism by which the covered run answers for the plain run wherever it actually does, which is what the task line asked. The plan measures each new admission (binaries read, fences listed, no integration tests, examples or benches)."
+    },
+    {
+     "id": "D3 checks stays out",
+     "summary": "checks is excluded for its cfg(not(coverage)) test",
+     "class": "within",
+     "why": "The covered run genuinely does not run that test, so it does not answer for checks' plain run. The line's own scope is 'where the covered run answers'."
+    },
+    {
+     "id": "D4 rustc stays out",
+     "summary": "rustc is excluded because its tests contain cfg(coverage) as text, which the conservative predicate refuses",
+     "class": "within",
+     "why": "A forgone saving, not a wrong outcome. T111's premise (no code reading cfg(coverage)) is applied as written, and nothing passes untested. This is a difference from the most a change could save, not a defect under XIV, and it narrows nothing the GM asked for."
+    },
+    {
+     "id": "D5 rust-test doctest reading",
+     "summary": "make rust-test is unchanged but for has_doctests, which now shares unit_tests_only's reading (holds_doctest), so the five text-only crates skip a cargo test --doc pass that ran no test",
+     "class": "within",
+     "why": "The constraint 'rust-test's fast uninstrumented loop unchanged' exists to keep the loop fast and uninstrumented, and it still is: no test stops running (all 10 fences are text, measured), and only an empty pass goes. A single reading keeps the keep and the run in agreement. This speeds the builders' loop, which FR-013 and the GM's perf priority cover."
+    },
+    {
+     "id": "D6 counters-inert left plain",
+     "summary": "land's --all-features plain runs of pool, rust/mode_a and rust/phases are left",
+     "class": "within",
+     "why": "The coverage run (default features) does not answer for an --all-features cfg, so this falls outside 'where the covered run answers'."
+    },
+    {
+     "id": "D7a feature unification, T111's existing keep",
+     "summary": "crates T111 already kept (owed, claims, land, trials) have covered tests run under unified features",
+     "class": "within",
+     "why": "Not T57's decision. It is T111's standing keep, reported as found and left, and no wrong outcome is shown."
+    },
+    {
+     "id": "D7b feature unification, rust/gate newly kept",
+     "summary": "T57 adds rust/gate to the keep, though its covered tests may run with owed's testkit (which switches owed's entry_lines seam) while its own plain build lacks it",
+     "class": "within",
+     "why": "Here the covered run answers under unified features, not the crate's own. The bundle shows a difference but no wrong outcome: the gate (make done, the push) already rests on the coverage run alone for these crates, and the crate's lint runs on its own features. Under XIV, a difference with no wrong outcome is not a defect, so leaving it needs no ruling."
+    },
+    {
+     "id": "D8 environment exposure",
+     "summary": "no verdict key carries the environment; attributed to T93, not new with T57",
+     "class": "within",
+     "why": "The plain run's own key already has the same exposure, so the keep adds none. The tests T32 found were fixed. No new defect is left."
+    },
+    {
+     "id": "D9 T62 clone-claim backstop",
+     "summary": "the guard's refusal of the builder's Edit and Write in a kind:bg dispatcher's clone is filed as T62 rather than fixed here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a tool refusing valid work) that T57 leaves. The deferral meets FR-009: it says why it is not fixed here (the fix is in rust/guard's clone_sync_hooks, where T58 works in this clone, and a guard edit rebuilds the gate crates T58 is counting), names its filed id (T62) and gives its order (lands before T22, the close). So it is fixed within the feature, before the close."
+    },
+    {
+     "id": "D10 order, exits, budget",
+     "summary": "after T55, beside T58, before T22; green and red exits; one landing",
+     "class": "within",
+     "why": "Scheduling inside the feature, consistent with FR-013, and it touches nothing T58 owns."
+    },
+    {
+     "id": "D11 perf classification",
+     "summary": "T57 is a [perf] task under FR-013",
+     "class": "within",
+     "why": "The GM, 2026-11-21: 'yes please file that as a performance task'. It makes the builders' loop faster."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T58": {
+   "section_sha256": "a9969d6d9d24d1ef907029a230d2bc74e69dea1c1a10e63c82ac0e78943d049f",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 proceed past the task line's 'split only if hooks dominate'",
+     "summary": "The split was built although hooks did not dominate on either measure: 246 of 520 non-test edits (47%) and 40 of the 85 edit-caused rebuilds, against 45 for the shared set. The 105 gate-used-guard and pylex edits move into l7r_shared with it, so 274 of 520 edits still rebuild everything.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The condition is not in request.md or the accepted spec. It comes from the task line, which the bundle only restates (item 2), and the block does not flag it as a departure, it just says 'so the split was built'. Taken literally the condition is NOT met. It was a test of whether the split pays, and a literal reading defeats that purpose and the GM's 'prioritize performance improvements' (FR-013: 'makes ... the builders' loop faster'). Without the split, every one of the 520 edits rebuilds 32 crates. With it, the 246 hook edits (the largest category) rebuild 1 crate (1.1-1.2 s against 11.6-50.8 s) and make rust-test owes only the guard and checks. The cost is measured and small: 33 crates instead of 32 on a shared edit, plus a second compile of l7r_shared under test-env on shared edits, which was not timed. The ruling does not rest on the work already being done."
+    },
+    {
+     "id": "D2 the rebuild-count red first is a one-shot measurement, with no standing pin (T66 per the dispatch)",
+     "summary": "Item 9's 'red first' on the rebuild count is a before/after run of /tmp/t58/scripts/measure.sh, and nothing committed pins that a hook edit compiles one crate. The block does not mention the missing pin or T66.",
+     "class": "within",
+     "why": "The GM's request and the spec do not ask T58 for a standing pin. FR-012's red-first tests cover only the refusals of FR-006 to FR-009, FR-011 and FR-013. The task line's 'red first on the rebuild count' is met in its words by a measured red (32 crates) and a measured green (1). A missing regression pin is not a wrong outcome (a defect, constitution XIV), so leaving it is within. The section should still list it under Found-and-left with its task id and order for the record, because the dispatch says T66 exists and that cannot be checked from the bundle. This is a note, not a block."
+    },
+    {
+     "id": "D3 make-only's refusal of a read-only Python heredoc left to T63",
+     "summary": "A defect found during the task (the make-only guard refuses good work) is deferred to T63, which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a real defect (a check that refuses good work) and it is left, so it is a narrowing. The accepted spec's FR-009 sets the terms for a deferral, and the block meets all three: why it is not fixed here (it is make-only's reading of a heredoc, not the split, and needs its own measurement and red first), the filed id (T63), and the order ('lands before T22', the close). It is fixed inside this feature before the close, and it blocks nothing in the meantime because it passes under a recorded escape."
+    },
+    {
+     "id": "D4 test-env feature and its double compile judged 'not a defect'",
+     "summary": "The guard's tests reach l7r_shared's test seams through a dev-dependency-only feature. In crate-a-call builds l7r_shared compiles twice, and a --workspace call could, in principle, give a gate binary the test thread's map.",
+     "class": "within",
+     "why": "Against the wrong-outcome definition: no lane makes the one call that unifies test-env into a gate binary. Shipped binaries are built '--profile tool -p', and the tool fingerprint shows features [] (measured). The double compile is a cost on l7r_shared edits only, and nothing works wrongly because of it. No defect is left."
+    },
+    {
+     "id": "D5 the crate's shape: l7r_shared under rust/guard/shared, the five gate-used guards, protocol and pylex moved whole, three tangles cut out, old paths re-exported",
+     "summary": "This is how the split is done.",
+     "class": "within",
+     "why": "It carries out the task's own split. The gate crates now build on the shared crate and none of them names l7r_guard (measured with cargo tree)."
+    },
+    {
+     "id": "D6 the guard-file patterns follow the move (guard_file_hooks, make_only GUARD_FILE and SOURCE_NAMES)",
+     "summary": "The guards' protection is extended to rust/guard/shared/src/.",
+     "class": "within",
+     "why": "Without this the moved guard sources would lose their protection, which would be a defect the split introduced. It is pinned red-first by two tests."
+    },
+    {
+     "id": "D7 hookbench's baseline also finds a guard under rust/guard/shared/src/guards/",
+     "summary": "This fixes a break the split caused, pinned by a y-hooks case.",
+     "class": "within",
+     "why": "It fixes a defect the step itself introduced, as fix-as-we-go asks."
+    },
+    {
+     "id": "D8 edits outside the brief's listed surface: docs, research/blocked-domains.json, scripts/hooks/lib, tests/hooks, rust/mode_a, browser, embed",
+     "summary": "Every reader of a moved path is updated so that it keeps working.",
+     "class": "within",
+     "why": "Each one was judged on its own. docs and scripts/hooks/lib appear in the block's text: the guardlog.sh and failed-open-log.sh comments, and 'the docs follow the move'. rust/mode_a, browser and embed appear as dependents whose manifests and paths now name l7r_shared. tests/hooks and research/blocked-domains.json do not appear in the bundle, so they are classed on the dispatch's description (a moved path's reader) and are unverified. Updating a reader of a moved path widens the work to keep everything working and narrows nothing that was asked. A move that left those readers stale would be the defect."
+    },
+    {
+     "id": "D9 apply via git apply --3way after T57/T62 landed, conflict kept with T62's words; make format over 24 dependents",
+     "summary": "Integration and formatting only.",
+     "class": "within",
+     "why": "Nothing that was asked is changed. The rustfmt joins come from the shorter paths."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T59": {
+   "section_sha256": "533c5c9cb114a432463ad35da4b516fe51269816f227ad801042f0f10b0d30c9",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T59-wait",
+     "summary": "fields::agent_cost re-reads the growing transcript every 5 ms (REPLY_POLL) while the payload's last_assistant_message is not yet the last assistant row's text since the last user row, so tok counts the reply",
+     "class": "within",
+     "why": "Makes the stop line carry the agent's token cost as D6 defines it (the transcript's sum, each message.id once) - FR-004 and the 2026-11-19 approval's idea 4. The cause is measured (60 of 83 stops short by exactly the reply; the probe shows the reply lands 5.8-89.2 ms into the hook), and fixing the writer instead of restating the claim follows from the measurement that the reply is readable during the hook."
+    },
+    {
+     "id": "T59-bound",
+     "summary": "The wait is bounded at 1 s (REPLY_WAIT, ten times the probe's latest landing); past it the writer records what is on disk, as before",
+     "class": "within",
+     "why": "A Stop-hook writer that never refuses has to terminate; the bound covers every reply observed by a factor of ten, so FR-004's cost is recorded in every observed case, and the residue (a reply later than 1 s) is a design tolerance, not a case the plan excludes from what was asked. It also keeps the per-stop cost small, consistent with FR-013's priority on the builders' loop speed."
+    },
+    {
+     "id": "T59-ctx",
+     "summary": "ctx is read after the wait, so it is the reply's context rather than one call stale",
+     "class": "within",
+     "why": "D6 says ctx is the agent's last call's context; the stale ctx on the same 60 stops is the same defect, fixed together."
+    },
+    {
+     "id": "T59-no-transcript",
+     "summary": "A payload with no reply text or no readable transcript waits for nothing; a stop with no readable transcript still writes neither tok nor ctx, and the hook never refuses",
+     "class": "within",
+     "why": "Unchanged behavior, and the 4 such stops measured have no transcript anywhere, so there is nothing to sum; FR-004 is not narrowed by declining to invent a figure that cannot be read."
+    },
+    {
+     "id": "T59-history",
+     "summary": "The 10,370 stop lines written before the field existed are explained (they predate T07) and are not backfilled",
+     "class": "within",
+     "why": "T59's own question was why most stops lack tok; the measured answer is their date. FR-004 is about the stop line the writer records, and SC-002 asks for reproducibility for work done after the feature lands, so no backfill was requested."
+    },
+    {
+     "id": "T59-scope",
+     "summary": "Only fields.rs and its tests change; T56's refile.rs and T64's order.rs are left alone; where-time and feature-report readers unchanged because T10 already takes the transcript's sum first",
+     "class": "within",
+     "why": "Sequencing and file ownership, not a reduction of any requirement; the readers already satisfy FR-005 for cost, and the log's own record is the part fixed."
+    },
+    {
+     "id": "T59-exits",
+     "summary": "Red-first test, crate-scoped rust-test/lint/cover/format on rust/guard/shared, then make closing-checks; after landing, compare.py/gap.py check the next stops",
+     "class": "within",
+     "why": "Verification of FR-004 as asked, using the crate-scoped loop the GM approved (improvement 2); enforcement of the requested behavior, not added scope."
+    },
+    {
+     "id": "T59-perf",
+     "summary": "Filed and scheduled as a [perf] task",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data as performance work for ordering (the GM 2026-11-20: 'this kind of measurement task to be counted as a performance task')."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T55 (a builder's closing checks ran one after another and blocked its writing: measured 2026-11-21 over 39 builders' transcripts, after the last code edit 63 min of checks in the foreground and 101 min idle on its own background runs, beside 158 min of model time writing the plan section, decide and the report, which need no check's result)",
+    "### T55 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T55-target",
+     "summary": "make closing-checks starts make static, make hooks-test and make quick at once, one combined verdict, per-check logs, exit 1 if any red, TERM/INT stops all three; FRESH/REASON/HOOKS_ALL passed through",
+     "class": "within",
+     "why": "The performance task the GM asked to be filed on 2026-11-21 ('yes please file that as a performance task'), [perf] under FR-013."
+    },
+    {
+     "id": "T55-tail-25",
+     "summary": "the last 25 lines of each red check's log are printed (a GUESS)",
+     "class": "within",
+     "why": "An output detail of the requested target, labeled a GUESS."
+    },
+    {
+     "id": "T55-static-count",
+     "summary": "static_runs_hooks counts a make closing-checks as one make static run; STATIC_RUNS_A_TASK stays 2",
+     "class": "within",
+     "why": "Stops the new target being used to get round FR-007/D11's count. It enforces what was already asked and narrows nothing."
+    },
+    {
+     "id": "T55-bucket",
+     "summary": "the event log books make closing-checks to tests (BUCKETS)",
+     "class": "within",
+     "why": "FR-001's one shared table, extended to the new target."
+    },
+    {
+     "id": "T55-claude-md",
+     "summary": "the root CLAUDE.md's verification list states the order in one line",
+     "class": "within",
+     "why": "Documentation of the order. The refusal is the enforcement and this line carries none."
+    },
+    {
+     "id": "T55-decide-notice",
+     "summary": "the order at make decide (a decide after the caller's last code edit with no closing-checks started after it) is a NOTICE, not a refusal",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since the last round, which ruled it LEGITIMATE. A refusal at decide time cannot tell the closing tail from a decide in mid-build, because that depends on code edits that have not happened yet. The replay has 30 of 75 firings wrong (40%). Refusing anyway would force a closing-checks run on unfinished code, and that run counts toward FR-007's STATIC_RUNS_A_TASK=2, which defeats the performance purpose."
+    },
+    {
+     "id": "T55-foreground-refusal",
+     "summary": "a foreground make static, make hooks-test or make closing-checks (chained, piped, under timeout, the main session's) is REFUSED, red first, naming run_in_background and make closing-checks, recorded blocked; escaped by FOREGROUND_OK=\"<reason>\" (recorded escaped, a bare token refused); STATIC_OK does not stand it aside; judged on every command of a chain before the decide notice; both refusals heard at once",
+     "class": "within",
+     "why": "This is the fix the last round asked for. The rule is now real enforcement in D12's form, carries FR-012's red-first test (708 passed, 3 failed on a stub; the suite's case 9 at 26 passed, 8 failed; then green at 711 and 34/34), and has a recorded escape for the cases where it is wrong. For static and hooks-test, the separate replay the last round asked for was done and stated in words: 55 foreground calls (27+28), 5 on correct work (4+1), 50 right (34 after the last edit + 16 mid-build; 19+9+6 and 11+5). That is 9%, set against the decide rule's 40%, and no FR-007 collision, because a backgrounded run is the same one static run. The arithmetic checks. A refusal implements the requested order. It is not a narrowing of it. Refusing make closing-checks rests on the earlier ruling, which is acceptable because the log has no foreground call of it to replay."
+    },
+    {
+     "id": "T55-quick-not-refused",
+     "summary": "a foreground make quick, the third closing check, is not refused (implicit: the refusal names static, hooks-test and closing-checks only)",
+     "class": "within",
+     "why": "The block does not label this, but it is a decision. The finding's cost is the slow checks run in the foreground one after another, and quick takes 1 to 5 s (item 9's timings). By item 4's own counts, the 51 foreground closing-check calls after the last edit (35.0 min) less the replay's 34 static/hooks-test calls (31.2 min) leave about 17 calls and about 4 min for quick. Inside closing-checks, quick already runs beside the others. Not refusing it does not gut the purpose. The decide notice still tells the order, and the slow checks are enforced by refusal."
+    },
+    {
+     "id": "T55-closing-checks-unreplayed",
+     "summary": "the refusal of a foreground make closing-checks is not replayed (no PreToolUse line names it) and rests on the plan review's ruling",
+     "class": "within",
+     "why": "Nothing could be measured because the target did not exist in the log. The refusal is the stricter side of the request, and T22 reads its blocked and escaped rows."
+    },
+    {
+     "id": "T55-bash-write-miss",
+     "summary": "a code edit made by a Bash write (sed -i, heredoc) is not seen by the decide notice: it can miss, never wrongly fire",
+     "class": "within",
+     "why": "A stated limit of a notice that has already been ruled legitimate. It refuses nothing, and the foreground refusal does not depend on it."
+    },
+    {
+     "id": "T55-after-measure-T22",
+     "summary": "the closing tail's idle minutes on later tasks' transcripts, the notice's noticed rows, and the refusal's blocked and escaped rows are read on T22's measured day; the mechanism's own before/after (104 s in sequence vs 52 s at once) is measured now",
+     "class": "within",
+     "why": "The effect in the world can only be read from transcripts of tasks that do not exist yet. The mechanism's own before/after is measured in the block, and T22 is the close's measured day that FR-013 names. The line now covers the refusal's blocked and escaped rows as well. The same caveat applies as last round: T22's own text is not in this bundle, so the session has to confirm that T22 takes these rows."
+    },
+    {
+     "id": "T55-item4-recount",
+     "summary": "item 4's recount: 93 calls by 38 builders after their last code edit, 51 foreground (35.0 min), 39 background, 3 refused by other guards; 28 builders decided after their last edit, 21 before any check; the earlier 92/56/33 reading explained",
+     "class": "within",
+     "why": "A restated measurement, not a decision about scope. 51+39+3=93. The difference from the first reading is put down to the pre-T04 bg rule and to the log having grown."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T56 (T53's writer gives a start over 72 h old no feature, but `make events-refile` read its own copy of the start rule: 0 lines moved and 23 left in 385's log, measured 2026-11-21 (`make events-refile DRY=1` before the change, its last line))",
+    "### T56 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T56-one-reader",
+     "summary": "The re-file deletes its own parse of task-starts.jsonl, its in_force and its started, and calls the writer's (filed.rs starts/in_force/started/Start, made public). The writer's behavior is unchanged.",
+     "class": "within",
+     "why": "The re-file and the writer filing a line by one rule is what makes make where-time book each line to the feature it served (FR-005, the tooling request: make the retrospective cheap to put together going forward). The 23 lines in 385's log, a feature with no T47, are a wrong outcome: 451's reading leaves out three of T47's reviews. So this is a defect fix, not a difference."
+    },
+    {
+     "id": "T56-time-bound",
+     "summary": "The re-file hands the writer's functions only the starts made by the line's time (with START_SLACK), and the line's t as now, so a start's age is measured as it was when the line was written.",
+     "class": "within",
+     "why": "It applies the writer's rule as the writer applied it when it wrote the line, which is how the two are made to agree. It narrows nothing that was asked."
+    },
+    {
+     "id": "T56-fallback",
+     "summary": "Shares the writer's next link too. Where no start in force names the task, the line goes to feature.json as it stood at the line's time, read as the feature of the clone's last start by then. It moves only where that feature has the task, and is marked \"fallback\": true as the writer marks it. This is a labeled CONVENTION, because feature.json keeps no history.",
+     "class": "within",
+     "why": "It was measured that sharing the stale-start rule alone moves none of the 23, so this is what the task's goal takes, not a carve-out from it. The convention's limit, that a make claim between two starts is not seen, comes from having no history to read, not from a choice to cover less. It is bounded by the has-the-task test. For the 23 the result is backed by an independent source, the dispatchers' descriptions. No requirement is narrowed."
+    },
+    {
+     "id": "T56-brief-not-rule",
+     "summary": "The dispatcher's brief is not made the re-file's rule, because the writer has no such step.",
+     "class": "within",
+     "why": "Keeping one rule for writer and re-file is the section's stated goal, and a rule only the re-file had would bring back the disagreement this task removes. It is a design choice inside what was asked."
+    },
+    {
+     "id": "T56-count-line",
+     "summary": "The run's summary counts fallback moves apart and prints that count only when it is nonzero.",
+     "class": "within",
+     "why": "A reporting detail of the re-file's own output. It serves reading what moved and why, and takes nothing from any FR."
+    },
+    {
+     "id": "T56-pub-use",
+     "summary": "One edit past the file list: event_log_hooks.rs's pub use widened to the four names, run through make guard-edit.",
+     "class": "within",
+     "why": "Only makes the shared rule visible, with no change in behavior. It is declared and went through the guard."
+    },
+    {
+     "id": "T56-found-and-left-fallback-mark",
+     "summary": "No reader reads the fallback mark, though T53's section says readers keep a marked line apart (grep, measured 2026-11-21). Left, raised with the coordinator.",
+     "class": "within",
+     "why": "No FR asks for a fallback mark or for readers to keep one apart. That line is T53's claim, so leaving it narrows no requirement or request clause. By the defect standard (constitution XIV v2.36.0) no wrong outcome is shown: the 23 are booked to the right task, and a wrong booking elsewhere is unshown. A claim the code does not match, where the behavior is fine, is fixed by restating the claim, and that is T53's text, not T56's files. Aside for the coordinator: T53's sentence wants restating, or a reader built if a mis-booking is ever shown."
+    },
+    {
+     "id": "T56-perf-class",
+     "summary": "T56 is classed as [perf] performance work under FR-013.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words count measurement work, the event log's data and make where-time's readers, as performance work for ordering. Filing each line in the right feature's log is that data's correctness."
+    },
+    {
+     "id": "T56-exits-order",
+     "summary": "Exits: the red case green with the earlier test unedited, crate checks, closing-checks, the dry run before and after. Red: recorded, set down, a can't-be-done claim taken to arbiter-ask. Order: after T53 and T58, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the feature's own scheme. No requirement is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)",
+    "### T57 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T57-restated-premise",
+     "summary": "The task line's premise (a plain build and test inside make static to drop) was measured false - static runs lint, format, cover and dead only; the double build is make rust-test's plain run after a green coverage pass, so that is what the task removes.",
+     "class": "within",
+     "why": "The line's own instruction is to measure first and drop the plain run where the covered run answers; acting on where the plain run actually is serves the same goal (a crate's tests built and run once per state of its inputs) under the GM's 2026-11-21 'file that as a performance task'. Nothing the GM asked is cut."
+    },
+    {
+     "id": "T57-widen-unit_tests_only",
+     "summary": "unit_tests_only refuses a binary only where it holds a test, cfg(test) or mod x; and a doc fence only where it is not text; eleven crates join T111's keep.",
+     "class": "within",
+     "why": "This is the mechanism by which 'dropped where the covered run answers' reaches the crates where it answers; each widened case (test-free binaries, text-only fences) is backed by a read of every crate's binaries and fences, with search spaces stated."
+    },
+    {
+     "id": "T57-checks-and-rustc-out",
+     "summary": "checks (a cfg(not(coverage)) test) and rustc (cfg(coverage) text in its tests) stay out of the keep.",
+     "class": "within",
+     "why": "The covered run does not answer for them, so the task line itself excludes them; not a narrowing of anything asked."
+    },
+    {
+     "id": "T57-static-and-rust-test-unchanged",
+     "summary": "make static unchanged (no plain run to drop); make rust-test's uninstrumented loop and has_doctests reading unchanged; land's counters-inert --all-features plain runs left.",
+     "class": "within",
+     "why": "The task line requires rust-test's fast loop unchanged; the --all-features runs are a cfg the default-feature coverage pass does not answer, so keeping them is the line's own 'where the covered run answers'."
+    },
+    {
+     "id": "T57-feature-unification-left",
+     "summary": "A family's coverage build unifies features (testkit), so a kept result for claims, land, trials and rust/gate may stand on a run with features the crate's own build lacks; left as not a defect.",
+     "class": "within",
+     "why": "A difference, not a shown wrong outcome (constitution XIV, GM 2026-11-19): item-adding gates fail the crate's own-features lint, and the push gate already rests on the coverage pass alone (static runs no plain test), so the keep opens no path to main that does not exist today; it changes only when a builder's loop reruns. The plan's 'no plain red in the window traces to it' is weak support (the log holds no failure text), but no defect is left on the evidence."
+    },
+    {
+     "id": "T57-T62-filed",
+     "summary": "The clone-claim backstop refusing the builder's edits in a kind: bg dispatcher's clone is filed as T62, landing before T22, not fixed here because T58 holds rust/guard in this clone.",
+     "class": "within",
+     "why": "A defect outside T57's scope, not part of what T57 was asked; filed with its id, its order before the close and its reason (FR-009's form), so it is not carried past the feature's close."
+    },
+    {
+     "id": "T57-perf",
+     "summary": "T57 is [perf] under FR-013 (the builders' loop faster).",
+     "class": "within",
+     "why": "FR-013 names the builders' loop as performance work, and the GM filed this as a performance task (2026-11-21)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)",
+    "### T57 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 restatement",
+     "summary": "make static is left unchanged because its Phase lines show it builds and runs no plain test; the double build is moved to where it actually happens, make rust-test after a green coverage pass, by widening T111's keep",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task line asked for static's plain build and test to be dropped. Measured Phase lines (dated, per target) show static has neither, so dropping one is impossible. The plan goes after the duplication the line was about (a crate's tests built in rust-test and again in coverage), which serves the GM's perf-first ordering (request.md 2026-11-20/21)."
+    },
+    {
+     "id": "D2 widen unit_tests_only",
+     "summary": "a binary is refused only where it holds a test, cfg(test) or mod x; a doc fence is refused only where it is not a text block; eleven crates join the keep",
+     "class": "within",
+     "why": "This is the mechanism by which the covered run answers for the plain run wherever it actually does, which is what the task line asked. The plan measures each new admission (binaries read, fences listed, no integration tests, examples or benches)."
+    },
+    {
+     "id": "D3 checks stays out",
+     "summary": "checks is excluded for its cfg(not(coverage)) test",
+     "class": "within",
+     "why": "The covered run genuinely does not run that test, so it does not answer for checks' plain run. The line's own scope is 'where the covered run answers'."
+    },
+    {
+     "id": "D4 rustc stays out",
+     "summary": "rustc is excluded because its tests contain cfg(coverage) as text, which the conservative predicate refuses",
+     "class": "within",
+     "why": "A forgone saving, not a wrong outcome. T111's premise (no code reading cfg(coverage)) is applied as written, and nothing passes untested. This is a difference from the most a change could save, not a defect under XIV, and it narrows nothing the GM asked for."
+    },
+    {
+     "id": "D5 rust-test doctest reading",
+     "summary": "make rust-test is unchanged but for has_doctests, which now shares unit_tests_only's reading (holds_doctest), so the five text-only crates skip a cargo test --doc pass that ran no test",
+     "class": "within",
+     "why": "The constraint 'rust-test's fast uninstrumented loop unchanged' exists to keep the loop fast and uninstrumented, and it still is: no test stops running (all 10 fences are text, measured), and only an empty pass goes. A single reading keeps the keep and the run in agreement. This speeds the builders' loop, which FR-013 and the GM's perf priority cover."
+    },
+    {
+     "id": "D6 counters-inert left plain",
+     "summary": "land's --all-features plain runs of pool, rust/mode_a and rust/phases are left",
+     "class": "within",
+     "why": "The coverage run (default features) does not answer for an --all-features cfg, so this falls outside 'where the covered run answers'."
+    },
+    {
+     "id": "D7a feature unification, T111's existing keep",
+     "summary": "crates T111 already kept (owed, claims, land, trials) have covered tests run under unified features",
+     "class": "within",
+     "why": "Not T57's decision. It is T111's standing keep, reported as found and left, and no wrong outcome is shown."
+    },
+    {
+     "id": "D7b feature unification, rust/gate newly kept",
+     "summary": "T57 adds rust/gate to the keep, though its covered tests may run with owed's testkit (which switches owed's entry_lines seam) while its own plain build lacks it",
+     "class": "within",
+     "why": "Here the covered run answers under unified features, not the crate's own. The bundle shows a difference but no wrong outcome: the gate (make done, the push) already rests on the coverage run alone for these crates, and the crate's lint runs on its own features. Under XIV, a difference with no wrong outcome is not a defect, so leaving it needs no ruling."
+    },
+    {
+     "id": "D8 environment exposure",
+     "summary": "no verdict key carries the environment; attributed to T93, not new with T57",
+     "class": "within",
+     "why": "The plain run's own key already has the same exposure, so the keep adds none. The tests T32 found were fixed. No new defect is left."
+    },
+    {
+     "id": "D9 T62 clone-claim backstop",
+     "summary": "the guard's refusal of the builder's Edit and Write in a kind:bg dispatcher's clone is filed as T62 rather than fixed here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a tool refusing valid work) that T57 leaves. The deferral meets FR-009: it says why it is not fixed here (the fix is in rust/guard's clone_sync_hooks, where T58 works in this clone, and a guard edit rebuilds the gate crates T58 is counting), names its filed id (T62) and gives its order (lands before T22, the close). So it is fixed within the feature, before the close."
+    },
+    {
+     "id": "D10 order, exits, budget",
+     "summary": "after T55, beside T58, before T22; green and red exits; one landing",
+     "class": "within",
+     "why": "Scheduling inside the feature, consistent with FR-013, and it touches nothing T58 owns."
+    },
+    {
+     "id": "D11 perf classification",
+     "summary": "T57 is a [perf] task under FR-013",
+     "class": "within",
+     "why": "The GM, 2026-11-21: 'yes please file that as a performance task'. It makes the builders' loop faster."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T58 (the finding as filed, restated by its measurement: every gate crate, `rust/gate`, `rust/mode_a`, the browser and the embedder named `l7r_guard`, so touching one hook compiled 32 crates where its own tests' edit compiled 1, measured 2026-11-21 (`/tmp/t58/scripts/measure.sh`: the file touched, then a warm `cargo test --offline --workspace --exclude l7r_phases --no-run` in a private target, the detached worktree at 3a60ac40e1); hook edits are 246 of the 520 non-test guard edits since 2026-11-01, so the split was built)",
+    "### T58 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 proceed past the task line's 'split only if hooks dominate'",
+     "summary": "The split was built although hooks did not dominate on either measure: 246 of 520 non-test edits (47%) and 40 of the 85 edit-caused rebuilds, against 45 for the shared set. The 105 gate-used-guard and pylex edits move into l7r_shared with it, so 274 of 520 edits still rebuild everything.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The condition is not in request.md or the accepted spec. It comes from the task line, which the bundle only restates (item 2), and the block does not flag it as a departure, it just says 'so the split was built'. Taken literally the condition is NOT met. It was a test of whether the split pays, and a literal reading defeats that purpose and the GM's 'prioritize performance improvements' (FR-013: 'makes ... the builders' loop faster'). Without the split, every one of the 520 edits rebuilds 32 crates. With it, the 246 hook edits (the largest category) rebuild 1 crate (1.1-1.2 s against 11.6-50.8 s) and make rust-test owes only the guard and checks. The cost is measured and small: 33 crates instead of 32 on a shared edit, plus a second compile of l7r_shared under test-env on shared edits, which was not timed. The ruling does not rest on the work already being done."
+    },
+    {
+     "id": "D2 the rebuild-count red first is a one-shot measurement, with no standing pin (T66 per the dispatch)",
+     "summary": "Item 9's 'red first' on the rebuild count is a before/after run of /tmp/t58/scripts/measure.sh, and nothing committed pins that a hook edit compiles one crate. The block does not mention the missing pin or T66.",
+     "class": "within",
+     "why": "The GM's request and the spec do not ask T58 for a standing pin. FR-012's red-first tests cover only the refusals of FR-006 to FR-009, FR-011 and FR-013. The task line's 'red first on the rebuild count' is met in its words by a measured red (32 crates) and a measured green (1). A missing regression pin is not a wrong outcome (a defect, constitution XIV), so leaving it is within. The section should still list it under Found-and-left with its task id and order for the record, because the dispatch says T66 exists and that cannot be checked from the bundle. This is a note, not a block."
+    },
+    {
+     "id": "D3 make-only's refusal of a read-only Python heredoc left to T63",
+     "summary": "A defect found during the task (the make-only guard refuses good work) is deferred to T63, which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a real defect (a check that refuses good work) and it is left, so it is a narrowing. The accepted spec's FR-009 sets the terms for a deferral, and the block meets all three: why it is not fixed here (it is make-only's reading of a heredoc, not the split, and needs its own measurement and red first), the filed id (T63), and the order ('lands before T22', the close). It is fixed inside this feature before the close, and it blocks nothing in the meantime because it passes under a recorded escape."
+    },
+    {
+     "id": "D4 test-env feature and its double compile judged 'not a defect'",
+     "summary": "The guard's tests reach l7r_shared's test seams through a dev-dependency-only feature. In crate-a-call builds l7r_shared compiles twice, and a --workspace call could, in principle, give a gate binary the test thread's map.",
+     "class": "within",
+     "why": "Against the wrong-outcome definition: no lane makes the one call that unifies test-env into a gate binary. Shipped binaries are built '--profile tool -p', and the tool fingerprint shows features [] (measured). The double compile is a cost on l7r_shared edits only, and nothing works wrongly because of it. No defect is left."
+    },
+    {
+     "id": "D5 the crate's shape: l7r_shared under rust/guard/shared, the five gate-used guards, protocol and pylex moved whole, three tangles cut out, old paths re-exported",
+     "summary": "This is how the split is done.",
+     "class": "within",
+     "why": "It carries out the task's own split. The gate crates now build on the shared crate and none of them names l7r_guard (measured with cargo tree)."
+    },
+    {
+     "id": "D6 the guard-file patterns follow the move (guard_file_hooks, make_only GUARD_FILE and SOURCE_NAMES)",
+     "summary": "The guards' protection is extended to rust/guard/shared/src/.",
+     "class": "within",
+     "why": "Without this the moved guard sources would lose their protection, which would be a defect the split introduced. It is pinned red-first by two tests."
+    },
+    {
+     "id": "D7 hookbench's baseline also finds a guard under rust/guard/shared/src/guards/",
+     "summary": "This fixes a break the split caused, pinned by a y-hooks case.",
+     "class": "within",
+     "why": "It fixes a defect the step itself introduced, as fix-as-we-go asks."
+    },
+    {
+     "id": "D8 edits outside the brief's listed surface: docs, research/blocked-domains.json, scripts/hooks/lib, tests/hooks, rust/mode_a, browser, embed",
+     "summary": "Every reader of a moved path is updated so that it keeps working.",
+     "class": "within",
+     "why": "Each one was judged on its own. docs and scripts/hooks/lib appear in the block's text: the guardlog.sh and failed-open-log.sh comments, and 'the docs follow the move'. rust/mode_a, browser and embed appear as dependents whose manifests and paths now name l7r_shared. tests/hooks and research/blocked-domains.json do not appear in the bundle, so they are classed on the dispatch's description (a moved path's reader) and are unverified. Updating a reader of a moved path widens the work to keep everything working and narrows nothing that was asked. A move that left those readers stale would be the defect."
+    },
+    {
+     "id": "D9 apply via git apply --3way after T57/T62 landed, conflict kept with T62's words; make format over 24 dependents",
+     "summary": "Integration and formatting only.",
+     "class": "within",
+     "why": "Nothing that was asked is changed. The rustfmt joins come from the shorter paths."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T59 (the finding as filed, restated by its measurement: a `SubagentStop` line's `tok` leaves out the agent's reply, its last model call, on 62 of the 85 stops that carry one, because the reply's row is not yet on disk when the hook reads, and the stops with no `tok` are the 10,370 written before the field began and 4 with no transcript anywhere, measured 2026-11-21 (`/tmp/t59/compare.py` and `gap.py`: each stop of every clone's and the mirror's event log against its agent's transcript))",
+    "### T59 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T59-wait",
+     "summary": "fields::agent_cost re-reads the growing transcript every 5 ms (REPLY_POLL) while the payload's last_assistant_message is not yet the last assistant row's text since the last user row, so tok counts the reply",
+     "class": "within",
+     "why": "Makes the stop line carry the agent's token cost as D6 defines it (the transcript's sum, each message.id once) - FR-004 and the 2026-11-19 approval's idea 4. The cause is measured (60 of 83 stops short by exactly the reply; the probe shows the reply lands 5.8-89.2 ms into the hook), and fixing the writer instead of restating the claim follows from the measurement that the reply is readable during the hook."
+    },
+    {
+     "id": "T59-bound",
+     "summary": "The wait is bounded at 1 s (REPLY_WAIT, ten times the probe's latest landing); past it the writer records what is on disk, as before",
+     "class": "within",
+     "why": "A Stop-hook writer that never refuses has to terminate; the bound covers every reply observed by a factor of ten, so FR-004's cost is recorded in every observed case, and the residue (a reply later than 1 s) is a design tolerance, not a case the plan excludes from what was asked. It also keeps the per-stop cost small, consistent with FR-013's priority on the builders' loop speed."
+    },
+    {
+     "id": "T59-ctx",
+     "summary": "ctx is read after the wait, so it is the reply's context rather than one call stale",
+     "class": "within",
+     "why": "D6 says ctx is the agent's last call's context; the stale ctx on the same 60 stops is the same defect, fixed together."
+    },
+    {
+     "id": "T59-no-transcript",
+     "summary": "A payload with no reply text or no readable transcript waits for nothing; a stop with no readable transcript still writes neither tok nor ctx, and the hook never refuses",
+     "class": "within",
+     "why": "Unchanged behavior, and the 4 such stops measured have no transcript anywhere, so there is nothing to sum; FR-004 is not narrowed by declining to invent a figure that cannot be read."
+    },
+    {
+     "id": "T59-history",
+     "summary": "The 10,370 stop lines written before the field existed are explained (they predate T07) and are not backfilled",
+     "class": "within",
+     "why": "T59's own question was why most stops lack tok; the measured answer is their date. FR-004 is about the stop line the writer records, and SC-002 asks for reproducibility for work done after the feature lands, so no backfill was requested."
+    },
+    {
+     "id": "T59-scope",
+     "summary": "Only fields.rs and its tests change; T56's refile.rs and T64's order.rs are left alone; where-time and feature-report readers unchanged because T10 already takes the transcript's sum first",
+     "class": "within",
+     "why": "Sequencing and file ownership, not a reduction of any requirement; the readers already satisfy FR-005 for cost, and the log's own record is the part fixed."
+    },
+    {
+     "id": "T59-exits",
+     "summary": "Red-first test, crate-scoped rust-test/lint/cover/format on rust/guard/shared, then make closing-checks; after landing, compare.py/gap.py check the next stops",
+     "class": "within",
+     "why": "Verification of FR-004 as asked, using the crate-scoped loop the GM approved (improvement 2); enforcement of the requested behavior, not added scope."
+    },
+    {
+     "id": "T59-perf",
+     "summary": "Filed and scheduled as a [perf] task",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data as performance work for ordering (the GM 2026-11-20: 'this kind of measurement task to be counted as a performance task')."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T55 to T59, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

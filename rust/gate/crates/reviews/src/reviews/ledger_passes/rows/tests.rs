@@ -108,6 +108,15 @@ fn a_plan_reviews_record_answers_by_task_or_block() {
     assert!(!in_the_record(&p("feature 449-none task T1", None), &repo).unwrap());
     let unknown = "MODE 4: PLAN REVIEW of feature 449-x task T9";
     assert!(!in_the_record(&p(unknown, Some("2026-11-01")), &repo).unwrap());
+    // 462 T545: a closed task's verdict in the review's parts answers too
+    let cut = vec![(
+        "T9".to_owned(),
+        "T9".to_owned(),
+        vec!["T9".to_owned()],
+        r#"{"tasks": {"T9": {"reviewed": "2026-11-01"}}}"#.to_owned(),
+    )];
+    l7r_shared::speckit::archive::add_review(&repo.join("specs/449-x"), cut).unwrap();
+    assert!(in_the_record(&p(unknown, Some("2026-11-01")), &repo).unwrap());
     let record = |text: &str| put(&repo, "specs/449-x/plan-review.json", text);
     record("{");
     assert!(!in_the_record(&p(task, None), &repo).unwrap());

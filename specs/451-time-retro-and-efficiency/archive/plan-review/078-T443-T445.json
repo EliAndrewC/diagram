@@ -1,0 +1,716 @@
+{
+ "blocks": {
+  "### T443 (found by T392, `dev/measurements/2026-11-27/edit-hook/t392-results.md`: after T392's chunked byte read the reversal tripwire still read every byte of the feature's log on each Edit, `event-log-hooks` alone 29.4 ms (a pool worktree) and 28.3 ms (the clone) at the median, growing about 0.5 ms a MB, measured 2026-11-27 (T392's record))": {
+   "sha256": "9d94d7031d470151a55f577f7c6d15e2e5394bc7f8e99b01f68d56c9e2928a48",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T444 Approach (checklist part A)": {
+   "sha256": "908e92e2b8b59019b064a2a5792916962a380600f26347579b12ad8dfd66bf37",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T444 (found by 451 T143, measured 2026-11-27 read-only over `~/.claude/guard-log`: the test fixtures' rows T143 stopped adding are still on the live guard log, and `make audit` counted them as real firings - the plan gate read 48% escaped with them and 69.1% without)": {
+   "sha256": "eae81fdfca445eaa5bd6f93763139109352205550af190e45fe0a50c07e61ae6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T445 Approach (checklist part A)": {
+   "sha256": "1739d12c8d4273261124629c52c70b22fb666699dc8f7d6d4e19348dc0af8dad",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "990897d4211d3ec1a9020546b19df36aec29abf689c874ccf1a200862ef9a704",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  },
+  "### T445 (found by 451 T342, dev/measurements/2026-11-27/test-selection/results.md section 1: three pool test runs of the `rustc` crate hung, exit 101, 1,514 s together, 403 s, 600 s and 510 s on 2026-11-26, observed 2026-11-27, method: T342's `runs.py` over the event log's `Phase` lines - the line asks which test hung in each, from the builders' transcripts, before any change)": {
+   "sha256": "c3e3c0ae8e001b3b2fb8615d475f09ea304cad0d8d2dccfff7b55c4e90aeece0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T443": {
+   "section_sha256": "9d52919af2b15d73b5be4ed660213e9bfb9dac04eb91e9adc068ae23cbe1c267",
+   "reviewed": "2026-11-27",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T443-approach",
+     "summary": "A derived index of the log's PreToolUse Edit (path, old) rows, kept by the reader alone, answered with T392's chunked scan of the tail since it, from one open file via read_at; no guard message changes.",
+     "class": "within",
+     "why": "Performance work on every Edit's hook, which the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'); the tripwire's verdicts are held to the full read as the oracle (differential 0 of 1,937 cold, warm and grown) and no message changes."
+    },
+    {
+     "id": "T443-oracle-test-only",
+     "summary": "T383's screen and T392's full read become test-only code, the oracle the index is held to.",
+     "class": "within",
+     "why": "The full read is the behavior being replaced for speed; keeping it as the tests' oracle enforces that the replacement answers as it did. Nothing the GM asked for is removed."
+    },
+    {
+     "id": "T443-location",
+     "summary": "The index lives at <events dir>/reversal/<feature>.idx, a subdirectory so state-sync and measure/events.rs pass it over, named .idx so no jsonl filter takes it.",
+     "class": "within",
+     "why": "Where a derived file lives is a rendering choice inside the task; it keeps the index out of commits and out of the log readers, observed by reading both."
+    },
+    {
+     "id": "T443-format",
+     "summary": "One self-describing file: versioned header with dev, ino, covered and lengths, the two raw windows, then one row a line; any malformation is no index and a rebuild.",
+     "class": "within",
+     "why": "Format choice; every malformed form falls back to the full scan, so it cannot change a verdict."
+    },
+    {
+     "id": "T443-tie",
+     "summary": "The index is tied to the open file's fstat (same dev and inode, covered at most the length) and both windows re-read byte-equal; any mismatch rebuilds by a full scan.",
+     "class": "within",
+     "why": "The mechanism that keeps the index's answer equal to the full read's for every change a writer makes; within the task."
+    },
+    {
+     "id": "T443-accepted-limit-in-place",
+     "summary": "ACCEPTED LIMITATION, sub-case (a): the same file changed in place at the same or greater length with both 4 KiB windows equal and bytes between them changed; an index kept over it answers from the old rows and a reversal among the changed lines could be missed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the tripwire's guarantee from 'every reversal the full read caught' (feature 375's arbiter, the plan's constraint 2) to every reversal on logs written as the tooling writes them. Not legitimate on cost: the ground that holds is purpose-defeat. Any tie that sees an arbitrary same-length change to bytes it does not read must read every covered byte on every Edit (a whole-prefix digest is exactly that), which is T392's full read again and the 28 to 29 ms this performance task (FR-013, the GM 2026-11-20) exists to remove; so honoring it literally means not doing the task. And it does not gut the tripwire's purpose: the ruling rests on the block's writer census as stated (every file of rust/, scripts/ and the Makefile naming l7r-events, events_dir or L7R_EVENTS_DIR, 23 files, searched for append(true), fs::write, rename(, set_len, File::create, >>, mv, sed -i, each hit read, observed 2026-11-27), which finds no writer that rewrites a log in place: the append, state-sync's >> and cp, refile's append and temporary-file rename, and retask, which never changes path or old. A hand or hostile rewrite of the log could already defeat the full read by deleting the line, so the limit adds no evasion the old code lacked. It is said in index.rs' module doc and pinned by a test. Not re-run by this review (no repository read); the census's space covers rust/, scripts/ and the Makefile only, so a writer elsewhere (a Python tool, a hook script outside scripts/) would be outside it - and its verb list omits a truncating rewrite onto the same inode (shell >, cp or fs::copy onto an existing file); noted, not a finding, because any such writer reaches this case only by keeping every byte up to covered at its offset in both windows while changing a path or old between them, which no writer of an append-only log does."
+    },
+    {
+     "id": "T443-accepted-limit-recycled-inode",
+     "summary": "ACCEPTED LIMITATION, sub-case (b): the log replaced by a different file that is given the freed inode's number on the same device, at least covered long, with both windows byte-equal and bytes between them different.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from (a), since the inode check is what a recycled number defeats. The length and window checks still stand against each replacing writer the census names: refile's write_back drops or moves lines, which shifts the tail window for any change before covered (and a change wholly after covered leaves the indexed prefix true); state-sync cps only a log the clone lacks, so an index exists for it only if the log was first deleted, and the copy would then need another clone's bytes to equal this clone's at both windows while differing between them; a rotation or new file differs in its head window from the old log's first bytes at any length (this review's inference, not the block's observation, as is the deletion premise for state-sync's cp). What remains is a coincidence of inode reuse and two 4 KiB byte-equal windows with differing middles, which no writer is shown to produce; closing it fully needs the same every-byte read as (a), so the same purpose-defeat ground holds and the limit is stated in the block as covering this sub-case too."
+    },
+    {
+     "id": "T443-build-rule",
+     "summary": "The index keeps exactly the lines the full parse would match (UTF-8, holds \"Edit\", JSON after trim, ev PreToolUse, tool Edit, a path key, missing old as null); a string path compared as its one serde spelling at a row's start, any other parsed and compared as a value.",
+     "class": "within",
+     "why": "Equivalence to the oracle; the differential and the every-byte cut test hold it to the full parse."
+    },
+    {
+     "id": "T443-partial-line",
+     "summary": "covered always ends after a newline; an unterminated last line is answered for this call but never stored.",
+     "class": "within",
+     "why": "Keeps the answer equal to the full read's on a log mid-append; within."
+    },
+    {
+     "id": "T443-when-it-writes",
+     "summary": "The hook now writes the index on a rebuild and when the tail passes STALE, by a unique temporary file and a rename, removed on a failed rename; racing hooks lose at most one's work.",
+     "class": "within",
+     "why": "A derived index must be written by someone; the reader-kept choice follows T392's decision against a writer-kept side file, and no verdict depends on which racer wins."
+    },
+    {
+     "id": "T443-guess-knobs",
+     "summary": "WINDOW 4096 bytes and STALE 1 MiB, GUESS knobs no verdict depends on, only time.",
+     "class": "within",
+     "why": "Tuning inside the task; the verdict is held to the full parse whatever the index holds (the limit's acceptance does not rest on WINDOW's size)."
+    },
+    {
+     "id": "T443-deferral-T458",
+     "summary": "Found and left: a new, refiled or rotated log's first Edit rebuilds the index at 101.6 / 180.4 ms of event-log-hooks against 31 ms before; filed as T458, lands before T302.",
+     "class": "within",
+     "why": "Not a defect (constitution XIV, a defect is a wrong outcome), so within and no ruling owed: a time cost on one call per new log, not a wrong outcome (constitution XIV: no verdict, map or message changes, nothing crashes or answers wrongly), against a net win on every other Edit (event-log-hooks 31.2 to 11.8 ms in a worktree, measured 2026-11-27); it carries why it is not fixed here, its filed id and its order, as FR-009 asks, and lands before the next step."
+    },
+    {
+     "id": "T443-deferral-T459",
+     "summary": "Found and left: a hook killed between the temporary write and the rename leaves a .tmp file nothing removes; filed as T459, lands before T302.",
+     "class": "within",
+     "why": "Not a defect (a wrong outcome), so within and no ruling owed: disk left behind; the GM's principle of 2026-11-26 puts time saved above disk usage, and it carries why, its filed id and its order (lands before T302), so it is fixed before the next step."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T445 (found by 451 T342, dev/measurements/2026-11-27/test-selection/results.md section 1: three pool test runs of the `rustc` crate hung, exit 101, 1,514 s together, 403 s, 600 s and 510 s on 2026-11-26, observed 2026-11-27, method: T342's `runs.py` over the event log's `Phase` lines - the line asks which test hung in each, from the builders' transcripts, before any change)",
+    "### T445 Approach (checklist part A)",
+    "### T445 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T449 (<why: the finding or measurement that files it>)",
+    "### T449 Approach (checklist part A)",
+    "### T454 (<why: the finding or measurement that files it>)",
+    "### T454 Approach (checklist part A)",
+    "### T455 (<why: the finding or measurement that files it>)",
+    "### T455 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)",
+    "(removed) ### T445 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T445-measure-only",
+     "summary": "T445 is a read-only measurement: no source changed; its record is dev/measurements/2026-11-27/hung-test-runs/results.md, from the event log, sampler, transcripts, scratch logs and the code, plus one shell run of the stand-in cargo (no load generator).",
+     "class": "within",
+     "why": "T445's line asks which test hung in each run, from the builders' transcripts, before any change; FR-013 and the GM's 2026-11-20 words count a measurement task as performance work; feature 460 forbids a load generator."
+    },
+    {
+     "id": "T445-tests-named",
+     "summary": "Names the pre-warm test holding each of the three hangs T342 found, and a fourth T342's pool-only scan missed (session clone, 543.4 s); hang 3's test is INFERRED from the code (one of three panicking at line 135) and labeled as inferred.",
+     "class": "within",
+     "why": "Answers the task line's question for every run, and goes wider than T342's scan rather than narrower. Hang 3's inference is stated, not passed off as measured, and does not defeat the purpose: the cause is common to all three scoped tests and the fix filed (T454) covers all three."
+    },
+    {
+     "id": "T445-not-T364",
+     "summary": "Rules T364's pipe-hold fix out for all four on libtest's own 'finished in' times versus each phase's wall, the live test binaries, and run_in's uncapped child.wait().",
+     "class": "within",
+     "why": "Part of identifying what held each run; a measured finding, no change made."
+    },
+    {
+     "id": "T445-HEAD-bound",
+     "summary": "The HEAD case is derived from reading the code at aefcced086 (390a2914fa's 600-poll bound, 1783cf6eed's --version exemption), not reproduced; the remaining cost is bounded at about 45 to 90 s a red from a timed run of the stand-in (44.45 s at load1 25 to 31).",
+     "class": "within",
+     "why": "The code read at HEAD is an observation, labeled as derived from reading and not reproduced; the cost figure is measured with its method and load. Not reproducing a hang on HEAD is consistent with the task line's 'before any change' and the read-only scope."
+    },
+    {
+     "id": "T445-since-T364-scan",
+     "summary": "Counts every crate's test phases since T364's commit (121 phases, 3 far past, none a hang) with hangs.py's threshold max(60 s, 10x crate median).",
+     "class": "within",
+     "why": "Measures whether the class recurs; extends the measurement, narrows nothing."
+    },
+    {
+     "id": "T445-defer-fix-T454",
+     "summary": "The remaining bounded hold (a red assertion inside a scope before 'slow' is removed) is not fixed here: filed as T454 (a drop guard removing 'slow' and the scoped runs' ceiling at knobs(60_000)), lands before T435.",
+     "class": "within",
+     "why": "A defect (a tool that holds where it should fail at once), deferred in D15/FR-009's form to an open task ordered before T435; the task line itself puts the measurement before any change, so a measurement task that files the fix is what was asked, not a carve-out."
+    },
+    {
+     "id": "T445-file-T455",
+     "summary": "The land crate's test binary running 61 to 100 s green against a 4.04 s median, cause unmeasured, filed as T455, lands before T435.",
+     "class": "within",
+     "why": "Not this class and not a hang; filing it as a separate task with its figures widens the record and narrows nothing."
+    },
+    {
+     "id": "T445-phase-task-attribution",
+     "summary": "The Phase lines naming the clone's started task (T285, T292) rather than the tree's holder (T316, T336) is pointed at the already filed T332.",
+     "class": "within",
+     "why": "A known issue already filed; nothing left unaccounted."
+    },
+    {
+     "id": "T445-perf",
+     "summary": "T445 marked performance work, a measurement task that speeds nothing itself; its performance checklist answered (no after: nothing built; savings attributed to T454 and 390a2914fa).",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words: a measurement task counts as performance work for scheduling."
+    },
+    {
+     "id": "templates-T443-T449-T454-T455",
+     "summary": "T443, T449, T454 and T455 blocks are the unfilled template, deciding nothing yet.",
+     "class": "within",
+     "why": "No decision is made in a placeholder."
+    },
+    {
+     "id": "removed-T311-T392-T445-header",
+     "summary": "Removes the empty template blocks of T311 and T392 and T445's placeholder header block, the last replaced by T445's filled header.",
+     "class": "within",
+     "why": "The removed blocks were unfilled templates (earlier.md) holding no decision, so removing them drops nothing that was decided."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (<why: the finding or measurement that files it>)",
+    "### T443 Approach (checklist part A)",
+    "### T449 (found by the batch gate of 2026-11-27: its `make hooks-test` was red for a cause no suite named - from 05:47Z the clone's tool-profile build of `l7r_guard` failed to link, `guard.failed` was stamped, every hook ran the 05:03Z `l7r-guard.good`, and the print-fresh call named no binary, so `test-parts.3.sh` exec'd an empty path (14 FAIL, observed 2026-11-27, method: the session's repair of the clone) and `test-context-cap-hooks.sh` ran the old rules; moving the two crates' deps and fingerprints aside made it link in 40 s at 06:36Z, observed 2026-11-27, method: the session's repair of the clone)",
+    "### T449 Approach (checklist part A)",
+    "### T452 (<why: the finding or measurement that files it>)",
+    "### T452 Approach (checklist part A)",
+    "(removed) ### T311 (<why: the finding or measurement that files it>)",
+    "(removed) ### T392 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T449-heal-scope",
+     "summary": "On a failed guard build whose log shows a link failure, drop tool/deps, tool/.fingerprint and tool/incremental of l7r_guard and l7r_shared only, under cargo's tool/.cargo-lock, keeping every other crate's, and log one line to build.log",
+     "class": "within",
+     "why": "Fixes a wrong outcome measured on 2026-11-27: a stale rlib with a fresh fingerprint left every hook silently on the 05:03Z binary and failed a batch gate. Fixing known tooling defects as found is the standing rule, and the request asks for a faster gate and builders' loop (FR-013, the GM 2026-11-20). Dropping only the two crates whose rlib and fingerprint the evidence implicates widens nothing."
+    },
+    {
+     "id": "T449-one-rebuild-same-limit",
+     "summary": "The heal rebuilds once, within what is left of the same build limit, adding no second limit; a heal that links keeps the binary and stamps nothing",
+     "class": "within",
+     "why": "Keeps the existing hook-timeout bound and the dispatcher-timeout relation unchanged, and adds no new limit or default. It is the narrowest repair of the defect."
+    },
+    {
+     "id": "T449-cut-rebuild-not-stamped",
+     "summary": "A rebuild that fails to link again stamps guard.failed as before; one cut at the limit or with no time left is not stamped, and the next call carries it on; a compile error still takes one build",
+     "class": "within",
+     "why": "Keeps the wrapper's existing behavior for a build at its limit and for a compile error, and changes nothing the request settles."
+    },
+    {
+     "id": "T449-print-fresh-reason",
+     "summary": "A print-fresh call that names no binary writes one stderr line with the reason: the build log's first error line, the limit, or none built yet",
+     "class": "within",
+     "why": "Fixes the measured cause of the silent red: an empty name with no reason led test-parts.3.sh to exec an empty path and report 14 FAILs. A message is added and nothing is refused that was allowed before."
+    },
+    {
+     "id": "T449-hooks-test-stops",
+     "summary": "make hooks-test asks print-fresh first and, if it names no binary, stops on 'hooks-test: the guard does not build - <line>' and runs no suite; test-parts.3.sh refuses an empty BIN the same way",
+     "class": "within",
+     "why": "Suites run against no fresh guard test the old rules or an empty path, so their verdicts are false. Stopping on the named cause replaces a false red with a true one. No real coverage is lost: whenever the guard builds, the suites run as before."
+    },
+    {
+     "id": "T449-600s-first-call",
+     "summary": "hooks-test's first guard build gets 600 s (a GUESS knob, taken from the existing real-build case 7 figure), since that call is in no hook; no hook's limit moves",
+     "class": "within",
+     "why": "This is an existing figure reused for a call that runs in no hook. It moves no constant a requirement or a claim rests on, and it is labeled a GUESS knob."
+    },
+    {
+     "id": "T449-perf-class",
+     "summary": "T449 is classed [perf] under FR-013 (it makes the gate and the builders' loop faster)",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the builders' loop faster as performance work. The block gives its grounds: a red gate whose cause no line named cost a batch gate's 8 minutes and a hand repair, and without the heal a session ran 49 minutes on the old binary. That fits FR-013's own definition."
+    },
+    {
+     "id": "T449-defer-timeout-cut-to-T452",
+     "summary": "The wrapper cutting its own build with timeout (the likely writer of the bad rlib) is not fixed here: Not fixed here (a change to T004's bounding wants its own measurement on a loaded machine), filed as T452, lands before T365",
+     "class": "within",
+     "why": "FR-009 and D15 settle the deferral form (a reason, a filed id, and 'lands before'), and the item carries all three. The defect stays inside this feature and is fixed before T365. T449 already heals its visible effect whatever the cause, so the wrong outcome does not persist meanwhile. Whether T452 and T365 are open tasks is make decide's test under D15 and cannot be seen from the bundle."
+    },
+    {
+     "id": "T443-T452-templates-and-T311-T392-removed",
+     "summary": "T443's and T452's blocks are the unfilled template; the removed T311 and T392 blocks were the unfilled template when judged CLEAR",
+     "class": "within",
+     "why": "These blocks decide nothing. Removing an empty template removes no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (found by T392, `dev/measurements/2026-11-27/edit-hook/t392-results.md`: after T392's chunked byte read the reversal tripwire still read every byte of the feature's log on each Edit, `event-log-hooks` alone 29.4 ms (a pool worktree) and 28.3 ms (the clone) at the median, growing about 0.5 ms a MB, measured 2026-11-27 (T392's record))",
+    "### T443 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "approach: a derived index kept by the reader alone, the full read kept as the tests' oracle",
+     "summary": "The reversal tripwire answers from an index of PreToolUse Edit rows plus T392's chunked scan of the tail, read from one open file; T383's screen and T392's full read become test-only, as the oracle; no guard message changes.",
+     "class": "within",
+     "why": "Performance work on every Edit's hook, which the GM asked to be put first (2026-11-20, 'can we in general priotitize performance improvements going forward?'), and part of the refinements he told the session to do (2026-11-27). Keeping the old read as the oracle the index is held to enforces that the tripwire still answers as before. It narrows nothing."
+    },
+    {
+     "id": "DECISION, where it lives: <events dir>/reversal/<feature>.idx",
+     "summary": "A subdirectory of the events directory, named .idx, so state-sync's commit and merge_in and measure/events.rs' lines_of pass over it as they pass samples/.",
+     "class": "within",
+     "why": "Where the file lives is a rendering choice the request leaves open. The events directory already holds a subdirectory (samples/), so a reader that passes over a directory already passes over this one. Keeping the index out of the state-sync push follows from T392's reader-alone decision."
+    },
+    {
+     "id": "DECISION, the format",
+     "summary": "A self-describing header, both windows' raw bytes, then rows of path and old as JSON; any malformation means no index, and it is rebuilt.",
+     "class": "within",
+     "why": "A file format the request leaves open. A torn or wrong index fails safe to a rebuild, and the tests pin that."
+    },
+    {
+     "id": "DECISION, the tie to the log",
+     "summary": "Checked against the open file's fstat: the same device and inode, covered at most the log's length, both windows byte-equal; any mismatch means a rebuild.",
+     "class": "within",
+     "why": "How staleness is detected is the design's own choice. Every mismatch it sees falls back to the full answer. The one case it cannot see is a separate decision, ruled below."
+    },
+    {
+     "id": "DECISION, an ACCEPTED LIMITATION: the one change the tie cannot see",
+     "summary": "Same dev and inode number, at least covered long, both 4 KiB windows equal, bytes between them changed: an index kept over that change answers from the old rows, and a reversal among the changed lines could be missed.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This narrows what the tripwire catches compared with the full read it replaces. The block's own constraint 2 is that the tripwire must not miss a put-back, and the block says the builder chose this limit, so the GM's go-ahead is not his approval of it. Ruled by MODE 1. The impossibility leg holds, but only given T392's reader-alone design: with no writer keeping the index in step, a change between the windows cannot be seen without reading those bytes, which is the cost this task removes. The purpose leg, that no writer makes such a change, rests on a census with a visible seam. The same section (constraint 2) names three things that touch the log: 'No writer, refile or backfill'. The limitation's list of writers covers event_log_hooks write_line, state-sync merge_in, refile write_back and retask, but not backfill. It also does not say how that set of writers was found. Nothing in the bundle shows which mechanism backfill uses: append, replace by rename, a length change that moves the last window, or a change to the task alone. Ruling LEGITIMATE would mean supplying that premise myself. FIX: add one line saying how backfill writes the log and which of the argued mechanisms covers it, and state the search that found every writer of the events logs, labeled as an observation with its method. With that line, and nothing else changed, the limitation is LEGITIMATE on the reader-alone impossibility."
+    },
+    {
+     "id": "DECISION, the build rule is the full parse's test",
+     "summary": "indexed keeps exactly the lines the full parse would match; at the ask a string path is compared as its serde spelling at a row's start, any other path as a value.",
+     "class": "within",
+     "why": "Built to answer as the oracle does, and the differential over 34 real logs confirms it (0 of 1,937 path lists differ, cold, warm and grown). It keeps what was asked."
+    },
+    {
+     "id": "DECISION, the partial last line",
+     "summary": "covered always ends after a newline; an unterminated last line is answered for this call but never stored.",
+     "class": "within",
+     "why": "It keeps the full read's answer and is pinned by the test that cuts the log at every byte."
+    },
+    {
+     "id": "DECISION, when it writes",
+     "summary": "The index is written on a rebuild, and when the tail since covered passes STALE, by a temporary file and a rename; otherwise the hook only reads; two racing hooks lose at most one's work.",
+     "class": "within",
+     "why": "A choice of mechanism. Either candidate is a whole, true index, so no verdict depends on which hook wins the race."
+    },
+    {
+     "id": "Two GUESS knobs: WINDOW 4096, STALE 1 MiB",
+     "summary": "New knobs that affect only time.",
+     "class": "within",
+     "why": "No verdict depends on them, because the tail is always scanned and the oracle tests answer as the full parse whatever the index holds. WINDOW's bearing on the accepted limitation is covered by that decision's ruling."
+    },
+    {
+     "id": "Done, measured: two tests not run red; step 12's gate-crate listing read, not run",
+     "summary": "The race test's threads half and the unreadable-index test have no deterministic mutant. The gate crates that list l7r-events were read and found to tolerate a new reversal/ directory.",
+     "class": "within",
+     "why": "FR-012's red-first rule covers the refusals of FR-006 to FR-013, and this task adds no refusal. Both gaps are said openly. Step 12 is labeled an observation with its method, and the batch gate runs those crates."
+    },
+    {
+     "id": "Found and left: the cold rebuild's cost (T458)",
+     "summary": "The first Edit on a new, refiled or rotated log rebuilds the index: event-log-hooks takes 101.6 / 180.4 ms against 20.5 / 30.5 ms warm. Filed as T458, landing before T302.",
+     "class": "within",
+     "why": "This is a speed matter, not a wrong outcome: no verdict, message or map changes, so by the defect definition (constitution XIV) it is no defect, and leaving it for T458 narrows nothing. The deferral gives why, the filed task and its order (FR-009). Note: that one call is slower than the old full read (about 31 ms), which the block does not state as a comparison. Average Edits still get much faster."
+    },
+    {
+     "id": "Found and left: a leftover temporary file on a killed hook (T459)",
+     "summary": "A hook killed between the write and the rename leaves a .tmp file. Filed as T459, landing before T302.",
+     "class": "within",
+     "why": "It leaves disk behind, and the GM ranks time over disk (2026-11-26); none was seen in the runs. The deferral gives why, the filed task and its order (FR-009)."
+    }
+   ],
+   "tasks": [
+    "T443"
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (found by T392, `dev/measurements/2026-11-27/edit-hook/t392-results.md`: after T392's chunked byte read the reversal tripwire still read every byte of the feature's log on each Edit, `event-log-hooks` alone 29.4 ms (a pool worktree) and 28.3 ms (the clone) at the median, growing about 0.5 ms a MB, measured 2026-11-27 (T392's record))",
+    "### T443 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T443-approach",
+     "summary": "A derived index of the log's PreToolUse Edit (path, old) rows, kept by the reader alone, answered with T392's chunked scan of the tail since it, from one open file via read_at; no guard message changes.",
+     "class": "within",
+     "why": "Performance work on every Edit's hook, which the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'); the tripwire's verdicts are held to the full read as the oracle (differential 0 of 1,937 cold, warm and grown) and no message changes."
+    },
+    {
+     "id": "T443-oracle-test-only",
+     "summary": "T383's screen and T392's full read become test-only code, the oracle the index is held to.",
+     "class": "within",
+     "why": "The full read is the behavior being replaced for speed; keeping it as the tests' oracle enforces that the replacement answers as it did. Nothing the GM asked for is removed."
+    },
+    {
+     "id": "T443-location",
+     "summary": "The index lives at <events dir>/reversal/<feature>.idx, a subdirectory so state-sync and measure/events.rs pass it over, named .idx so no jsonl filter takes it.",
+     "class": "within",
+     "why": "Where a derived file lives is a rendering choice inside the task; it keeps the index out of commits and out of the log readers, observed by reading both."
+    },
+    {
+     "id": "T443-format",
+     "summary": "One self-describing file: versioned header with dev, ino, covered and lengths, the two raw windows, then one row a line; any malformation is no index and a rebuild.",
+     "class": "within",
+     "why": "Format choice; every malformed form falls back to the full scan, so it cannot change a verdict."
+    },
+    {
+     "id": "T443-tie",
+     "summary": "The index is tied to the open file's fstat (same dev and inode, covered at most the length) and both windows re-read byte-equal; any mismatch rebuilds by a full scan.",
+     "class": "within",
+     "why": "The mechanism that keeps the index's answer equal to the full read's for every change a writer makes; within the task."
+    },
+    {
+     "id": "T443-accepted-limit-in-place",
+     "summary": "ACCEPTED LIMITATION, sub-case (a): the same file changed in place at the same or greater length with both 4 KiB windows equal and bytes between them changed; an index kept over it answers from the old rows and a reversal among the changed lines could be missed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the tripwire's guarantee from 'every reversal the full read caught' (feature 375's arbiter, the plan's constraint 2) to every reversal on logs written as the tooling writes them. Not legitimate on cost: the ground that holds is purpose-defeat. Any tie that sees an arbitrary same-length change to bytes it does not read must read every covered byte on every Edit (a whole-prefix digest is exactly that), which is T392's full read again and the 28 to 29 ms this performance task (FR-013, the GM 2026-11-20) exists to remove; so honoring it literally means not doing the task. And it does not gut the tripwire's purpose: the ruling rests on the block's writer census as stated (every file of rust/, scripts/ and the Makefile naming l7r-events, events_dir or L7R_EVENTS_DIR, 23 files, searched for append(true), fs::write, rename(, set_len, File::create, >>, mv, sed -i, each hit read, observed 2026-11-27), which finds no writer that rewrites a log in place: the append, state-sync's >> and cp, refile's append and temporary-file rename, and retask, which never changes path or old. A hand or hostile rewrite of the log could already defeat the full read by deleting the line, so the limit adds no evasion the old code lacked. It is said in index.rs' module doc and pinned by a test. Not re-run by this review (no repository read); the census's space covers rust/, scripts/ and the Makefile only, so a writer elsewhere (a Python tool, a hook script outside scripts/) would be outside it - noted, not a finding, since such a writer would also have to overwrite in place at an offset to reach this case."
+    },
+    {
+     "id": "T443-accepted-limit-recycled-inode",
+     "summary": "ACCEPTED LIMITATION, sub-case (b): the log replaced by a different file that is given the freed inode's number on the same device, at least covered long, with both windows byte-equal and bytes between them different.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from (a), since the inode check is what a recycled number defeats. The length and window checks still stand against each replacing writer the census names: refile's write_back drops or moves lines, which shifts the tail window for any change before covered (and a change wholly after covered leaves the indexed prefix true); state-sync cps only a log the clone lacks, so an index exists for it only if the log was first deleted, and the copy would then need another clone's bytes to equal this clone's at both windows while differing between them; a rotation or new file starts short of covered. What remains is a coincidence of inode reuse and two 4 KiB byte-equal windows with differing middles, which no writer is shown to produce; closing it fully needs the same every-byte read as (a), so the same purpose-defeat ground holds and the limit is stated in the block as covering this sub-case too."
+    },
+    {
+     "id": "T443-build-rule",
+     "summary": "The index keeps exactly the lines the full parse would match (UTF-8, holds \"Edit\", JSON after trim, ev PreToolUse, tool Edit, a path key, missing old as null); a string path compared as its one serde spelling at a row's start, any other parsed and compared as a value.",
+     "class": "within",
+     "why": "Equivalence to the oracle; the differential and the every-byte cut test hold it to the full parse."
+    },
+    {
+     "id": "T443-partial-line",
+     "summary": "covered always ends after a newline; an unterminated last line is answered for this call but never stored.",
+     "class": "within",
+     "why": "Keeps the answer equal to the full read's on a log mid-append; within."
+    },
+    {
+     "id": "T443-when-it-writes",
+     "summary": "The hook now writes the index on a rebuild and when the tail passes STALE, by a unique temporary file and a rename, removed on a failed rename; racing hooks lose at most one's work.",
+     "class": "within",
+     "why": "A derived index must be written by someone; the reader-kept choice follows T392's decision against a writer-kept side file, and no verdict depends on which racer wins."
+    },
+    {
+     "id": "T443-guess-knobs",
+     "summary": "WINDOW 4096 bytes and STALE 1 MiB, GUESS knobs no verdict depends on, only time.",
+     "class": "within",
+     "why": "Tuning inside the task; the verdict is held to the full parse whatever the index holds (the limit's acceptance does not rest on WINDOW's size)."
+    },
+    {
+     "id": "T443-deferral-T458",
+     "summary": "Found and left: a new, refiled or rotated log's first Edit rebuilds the index at 101.6 / 180.4 ms of event-log-hooks against 31 ms before; filed as T458, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A time cost on one call per new log, not a wrong outcome (constitution XIV: no verdict, map or message changes, nothing crashes or answers wrongly), against a net win on every other Edit (event-log-hooks 31.2 to 11.8 ms in a worktree, measured 2026-11-27); it carries why it is not fixed here, its filed id and its order, as FR-009 asks, and lands before the next step."
+    },
+    {
+     "id": "T443-deferral-T459",
+     "summary": "Found and left: a hook killed between the temporary write and the rename leaves a .tmp file nothing removes; filed as T459, lands before T302.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Disk left behind, not a wrong outcome; the GM's principle of 2026-11-26 puts time saved above disk usage, and it carries why, its filed id and its order (lands before T302), so it is fixed before the next step."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T443 (found by T392, `dev/measurements/2026-11-27/edit-hook/t392-results.md`: after T392's chunked byte read the reversal tripwire still read every byte of the feature's log on each Edit, `event-log-hooks` alone 29.4 ms (a pool worktree) and 28.3 ms (the clone) at the median, growing about 0.5 ms a MB, measured 2026-11-27 (T392's record))",
+    "### T443 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T443-approach",
+     "summary": "A derived index of the log's PreToolUse Edit (path, old) rows, kept by the reader alone, answered with T392's chunked scan of the tail since it, from one open file via read_at; no guard message changes.",
+     "class": "within",
+     "why": "Performance work on every Edit's hook, which the GM asked to come first (2026-11-20, 'can we in general priotitize performance improvements going forward?'); the tripwire's verdicts are held to the full read as the oracle (differential 0 of 1,937 cold, warm and grown) and no message changes."
+    },
+    {
+     "id": "T443-oracle-test-only",
+     "summary": "T383's screen and T392's full read become test-only code, the oracle the index is held to.",
+     "class": "within",
+     "why": "The full read is the behavior being replaced for speed; keeping it as the tests' oracle enforces that the replacement answers as it did. Nothing the GM asked for is removed."
+    },
+    {
+     "id": "T443-location",
+     "summary": "The index lives at <events dir>/reversal/<feature>.idx, a subdirectory so state-sync and measure/events.rs pass it over, named .idx so no jsonl filter takes it.",
+     "class": "within",
+     "why": "Where a derived file lives is a rendering choice inside the task; it keeps the index out of commits and out of the log readers, observed by reading both."
+    },
+    {
+     "id": "T443-format",
+     "summary": "One self-describing file: versioned header with dev, ino, covered and lengths, the two raw windows, then one row a line; any malformation is no index and a rebuild.",
+     "class": "within",
+     "why": "Format choice; every malformed form falls back to the full scan, so it cannot change a verdict."
+    },
+    {
+     "id": "T443-tie",
+     "summary": "The index is tied to the open file's fstat (same dev and inode, covered at most the length) and both windows re-read byte-equal; any mismatch rebuilds by a full scan.",
+     "class": "within",
+     "why": "The mechanism that keeps the index's answer equal to the full read's for every change a writer makes; within the task."
+    },
+    {
+     "id": "T443-accepted-limit-in-place",
+     "summary": "ACCEPTED LIMITATION, sub-case (a): the same file changed in place at the same or greater length with both 4 KiB windows equal and bytes between them changed; an index kept over it answers from the old rows and a reversal among the changed lines could be missed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the tripwire's guarantee from 'every reversal the full read caught' (feature 375's arbiter, the plan's constraint 2) to every reversal on logs written as the tooling writes them. Not legitimate on cost: the ground that holds is purpose-defeat. Any tie that sees an arbitrary same-length change to bytes it does not read must read every covered byte on every Edit (a whole-prefix digest is exactly that), which is T392's full read again and the 28 to 29 ms this performance task (FR-013, the GM 2026-11-20) exists to remove; so honoring it literally means not doing the task. And it does not gut the tripwire's purpose: the ruling rests on the block's writer census as stated (every file of rust/, scripts/ and the Makefile naming l7r-events, events_dir or L7R_EVENTS_DIR, 23 files, searched for append(true), fs::write, rename(, set_len, File::create, >>, mv, sed -i, each hit read, observed 2026-11-27), which finds no writer that rewrites a log in place: the append, state-sync's >> and cp, refile's append and temporary-file rename, and retask, which never changes path or old. A hand or hostile rewrite of the log could already defeat the full read by deleting the line, so the limit adds no evasion the old code lacked. It is said in index.rs' module doc and pinned by a test. Not re-run by this review (no repository read); the census's space covers rust/, scripts/ and the Makefile only, so a writer elsewhere (a Python tool, a hook script outside scripts/) would be outside it - and its verb list omits a truncating rewrite onto the same inode (shell >, cp or fs::copy onto an existing file); noted, not a finding, because any such writer reaches this case only by keeping every byte up to covered at its offset in both windows while changing a path or old between them, which no writer of an append-only log does."
+    },
+    {
+     "id": "T443-accepted-limit-recycled-inode",
+     "summary": "ACCEPTED LIMITATION, sub-case (b): the log replaced by a different file that is given the freed inode's number on the same device, at least covered long, with both windows byte-equal and bytes between them different.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from (a), since the inode check is what a recycled number defeats. The length and window checks still stand against each replacing writer the census names: refile's write_back drops or moves lines, which shifts the tail window for any change before covered (and a change wholly after covered leaves the indexed prefix true); state-sync cps only a log the clone lacks, so an index exists for it only if the log was first deleted, and the copy would then need another clone's bytes to equal this clone's at both windows while differing between them; a rotation or new file differs in its head window from the old log's first bytes at any length (this review's inference, not the block's observation, as is the deletion premise for state-sync's cp). What remains is a coincidence of inode reuse and two 4 KiB byte-equal windows with differing middles, which no writer is shown to produce; closing it fully needs the same every-byte read as (a), so the same purpose-defeat ground holds and the limit is stated in the block as covering this sub-case too."
+    },
+    {
+     "id": "T443-build-rule",
+     "summary": "The index keeps exactly the lines the full parse would match (UTF-8, holds \"Edit\", JSON after trim, ev PreToolUse, tool Edit, a path key, missing old as null); a string path compared as its one serde spelling at a row's start, any other parsed and compared as a value.",
+     "class": "within",
+     "why": "Equivalence to the oracle; the differential and the every-byte cut test hold it to the full parse."
+    },
+    {
+     "id": "T443-partial-line",
+     "summary": "covered always ends after a newline; an unterminated last line is answered for this call but never stored.",
+     "class": "within",
+     "why": "Keeps the answer equal to the full read's on a log mid-append; within."
+    },
+    {
+     "id": "T443-when-it-writes",
+     "summary": "The hook now writes the index on a rebuild and when the tail passes STALE, by a unique temporary file and a rename, removed on a failed rename; racing hooks lose at most one's work.",
+     "class": "within",
+     "why": "A derived index must be written by someone; the reader-kept choice follows T392's decision against a writer-kept side file, and no verdict depends on which racer wins."
+    },
+    {
+     "id": "T443-guess-knobs",
+     "summary": "WINDOW 4096 bytes and STALE 1 MiB, GUESS knobs no verdict depends on, only time.",
+     "class": "within",
+     "why": "Tuning inside the task; the verdict is held to the full parse whatever the index holds (the limit's acceptance does not rest on WINDOW's size)."
+    },
+    {
+     "id": "T443-deferral-T458",
+     "summary": "Found and left: a new, refiled or rotated log's first Edit rebuilds the index at 101.6 / 180.4 ms of event-log-hooks against 31 ms before; filed as T458, lands before T302.",
+     "class": "within",
+     "why": "Not a defect (constitution XIV, a defect is a wrong outcome), so within and no ruling owed: a time cost on one call per new log, not a wrong outcome (constitution XIV: no verdict, map or message changes, nothing crashes or answers wrongly), against a net win on every other Edit (event-log-hooks 31.2 to 11.8 ms in a worktree, measured 2026-11-27); it carries why it is not fixed here, its filed id and its order, as FR-009 asks, and lands before the next step."
+    },
+    {
+     "id": "T443-deferral-T459",
+     "summary": "Found and left: a hook killed between the temporary write and the rename leaves a .tmp file nothing removes; filed as T459, lands before T302.",
+     "class": "within",
+     "why": "Not a defect (a wrong outcome), so within and no ruling owed: disk left behind; the GM's principle of 2026-11-26 puts time saved above disk usage, and it carries why, its filed id and its order (lands before T302), so it is fixed before the next step."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T444 (found by 451 T143, measured 2026-11-27 read-only over `~/.claude/guard-log`: the test fixtures' rows T143 stopped adding are still on the live guard log, and `make audit` counted them as real firings - the plan gate read 48% escaped with them and 69.1% without)",
+    "### T444 Approach (checklist part A)",
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T444 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T444-route-a",
+     "summary": "Filter fixture rows in make audit's guard section (route a); never write the live guard log (route b not taken)",
+     "class": "within",
+     "why": "Fixes the wrong rate the audit prints (constitution XIV: a tool answering wrongly) without touching live state; reversible by reverting code. Decides how, not whether, the defect is fixed."
+    },
+    {
+     "id": "T444-check-closed-class",
+     "summary": "Leave out checks/check-closed rows whose detail is exactly 'nothing to close here' (2,230); the 4 with a session's own reason stay counted",
+     "class": "within",
+     "why": "Measured on the copy by detail and date; no real row is dropped. Its false-positive surface (a real session using those words verbatim) is hypothetical and none of the four real rows matches."
+    },
+    {
+     "id": "T444-no-specs-class",
+     "summary": "Leave out plan-gate/task-add rows naming a <digits>-<slug> feature with no specs/ directory in the reading tree (997 + 9); no specs/ at all leaves out none",
+     "class": "within",
+     "why": "All 1,006 dropped rows on the copy carry -x fixture slugs (449-x, 600-x, 444-x, 9001-x); no real firing is dropped on the measurement. The stale-clone case is hypothetical, shows by name in the left-out line, and is a design choice of the rule, not a known wrong outcome. (The builder's own 'accepted' is not what clears it; the measurement is.)"
+    },
+    {
+     "id": "T444-escaped-449-x",
+     "summary": "The 15 escaped 449-x plan-gate rows with real-looking reasons are left out as fixture rows",
+     "class": "within",
+     "why": "Explained as a session's exported PLAN_REVIEW_OK read by a fixture (the T143 leak), with each real escape logged under its own feature; leaving them out does not drop a real firing."
+    },
+    {
+     "id": "T444-task-add-tenth-row",
+     "summary": "Of the line's 10 task-add rows, 9 (9001-x) left out; the 451 T37 row kept as real",
+     "class": "within",
+     "why": "Read whole and corroborated by a real QUICK_OK probe five seconds later; correcting the task line's count by measurement keeps the audit's figures of real firings."
+    },
+    {
+     "id": "T444-closing-owes-kept",
+     "summary": "The 1,017 sync-with-main closing-owes rows (2026-10-25 to 11-27), named as a fixture class, stay counted with a 'still counted' note; sync-with-main reads 8% escaped (87 of 1,104); 'Found and left? none'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is the defect T444 exists to fix, left in one guard. 1,104 - 1,017 = 87 and 87 escaped: every blocked sync-with-main row is in this class, so the printed 8% rests entirely on an unmeasured fixture/real split and could be anywhere up to 100% - a larger distortion than the plan gate's 48% vs 69% that items 1-2 call a defect. The audit register's purpose (the GM 2026-11-25: re-audit whether a process still makes sense or should be tweaked or eliminated) is defeated by a guard rate that is wrong. The impossibility shown is only that no CONTENT rule separates the rows; it does not show the rows cannot be separated another way, and it never addresses why they run to 11-27 when the heading says T143 stopped fixtures adding them (if a fixture still writes them, the leak is live). A disclosure line does not make the printed rate right. 'Found and left? none' records a known defect as no defect, bypassing FR-009's deferral form. Clears when either: the rows are separated or the writer stopped and the rate fixed here, with its before/after; or it is deferred by the form - 'Not fixed here: <why>. Filed as T<n>; lands before T<m>.' with the task filed (make task-add) and named under Found and left."
+    },
+    {
+     "id": "T444-freeze-ok-rows",
+     "summary": "2 checks freeze-ok 'a test escape' rows (2026-10-10) read and left counted",
+     "class": "within",
+     "why": "Measured: the rate is 100% escaped with or without them, so no outcome a reader sees is wrong - not a defect (constitution XIV)."
+    },
+    {
+     "id": "removed-T437",
+     "summary": "Removal of an empty T437 placeholder template",
+     "class": "within",
+     "why": "The removed block held only template placeholders; its removal decides nothing."
+    },
+    {
+     "id": "removed-T440",
+     "summary": "Removal of an empty T440 placeholder template",
+     "class": "within",
+     "why": "The removed block held only template placeholders; its removal decides nothing."
+    },
+    {
+     "id": "removed-T444-placeholder",
+     "summary": "Removal of T444's empty placeholder template, replaced by the filled T444 block",
+     "class": "within",
+     "why": "Template placeholders only; superseded by the filled block."
+    },
+    {
+     "id": "removed-T464",
+     "summary": "Removal of an empty T464 placeholder template",
+     "class": "within",
+     "why": "The removed block held only template placeholders; its removal decides nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-27",
+   "blocks": [
+    "### T444 (found by 451 T143, measured 2026-11-27 read-only over `~/.claude/guard-log`: the test fixtures' rows T143 stopped adding are still on the live guard log, and `make audit` counted them as real firings - the plan gate read 48% escaped with them and 69.1% without)",
+    "### T444 Approach (checklist part A)",
+    "(removed) ### T437 (<why: the finding or measurement that files it>)",
+    "(removed) ### T440 (<why: the finding or measurement that files it>)",
+    "(removed) ### T444 (<why: the finding or measurement that files it>)",
+    "(removed) ### T464 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T444-route-a",
+     "summary": "Fix the audit's count by filtering fixture rows inside make audit's guard section (route a); the live guard log is not rewritten (route b not taken).",
+     "class": "within",
+     "why": "The task line's own preferred route; it fixes the wrong outcome (guard rates counting test fixtures as real firings) and leaves the live log unwritten, as the brief requires."
+    },
+    {
+     "id": "T444-check-closed-class",
+     "summary": "Leave out checks/check-closed rows whose detail is exactly 'nothing to close here' (2,230 of 2,234); the four with a session's own reason stay counted.",
+     "class": "within",
+     "why": "A content rule matching the tests' fixed close reason; the measured real rows are not matched. Part of fixing the defect the task names."
+    },
+    {
+     "id": "T444-no-specs-class",
+     "summary": "Leave out plan-gate and task-add rows naming a <digits>-<slug> feature with no specs/ directory in the reading tree; none left out when the tree has no specs/ at all.",
+     "class": "within",
+     "why": "A content rule on the gates' own detail forms (plan.rs, task_add.rs) for a feature that does not exist in specs/. On the copy every slug it leaves out is a fixture's -x slug (449-x, 600-x, 444-x, 9001-x, as the block's left-out line measures), so it drops no filed feature's row. It is part of fixing the defect the task names: the audit counting the fixtures' rows as real firings."
+    },
+    {
+     "id": "T444-stale-clone-acceptance",
+     "summary": "Accepted by the builder: a plan-gate or task-add row of a feature filed in another clone, not yet in the reading tree's specs/, would be left out until that tree syncs. The alternative, also requiring the fixtures' -x slug, was not taken.",
+     "class": "within",
+     "why": "Adjudicated here, not taken on the builder's word. On the measured log the rule drops no filed feature's row: every left-out slug is a fixture's -x slug. The case the builder accepted has not been observed, would be transient (it lasts only until the tree syncs), and announces itself, since the left-out line names every slug with its count, so a wrong drop shows by name. Like the check-closed rule's exact-reason match, it is the false-positive margin of a content rule, not a wrong outcome that occurs. It does not narrow 'count real firings, not fixtures' on any row that exists (constitution XIV v2.36.0: a defect is a wrong outcome, not a gap no reader sees). If a filed feature's slug ever shows in the left-out line, that is a defect to fix then."
+    },
+    {
+     "id": "T444-task-add-tenth-row",
+     "summary": "The tenth task-add quick-red row (451 T37, 2026-11-20) is a real refusal and stays counted; 9 left out.",
+     "class": "within",
+     "why": "Measured as a real firing of a filed feature, followed by a real QUICK_OK probe. Counting it is the correct outcome, not something carved out."
+    },
+    {
+     "id": "T444-unnamed-and-freeze-ok-rows",
+     "summary": "The 685 plan-gate escapes naming no feature and the two checks freeze-ok 'a test escape' rows of 2026-10-10 stay counted.",
+     "class": "within",
+     "why": "The 685 were read by detail and are all sessions' own reasons. The two freeze-ok rows cannot change a 100% rate, so they are a difference no reader of the audit would see, not a defect (constitution XIV, GM 2026-11-19)."
+    },
+    {
+     "id": "T444-closing-owes-deferred-T468",
+     "summary": "The 1,017 sync-with-main closing-owes rows stay counted, with a printed 'still counted' line. Separating fixture rows from real ones is deferred to T468, which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The guard's 8% rate may be wrong: it could be anywhere from 8% to 100%. So this is a known defect that this task leaves unfixed, and the ruling rests on three things. First, the deferral meets FR-009 and the fix-as-we-go rule (GM 2026-11-18). The block states why: no field or content of the row tells a fixture's row from a real refusal, the pid pairs separate only 20 of 1,017 (measured), and a separate signal (the event or run log's push runs by time) needs a measurement of its own. It files T468. It orders T468 before T22, the same point T444 itself must land by, so the defect is not carried past the step. Second, the audit does not hide the rows: it prints them by name as still counted, with their reason. Third, the blocker in the earlier BLOCKED text, a found-and-left of 'none' while this defect stood, is what changed. This text is the only changed part besides the closing-owes paragraph."
+    },
+    {
+     "id": "removed-template-stubs",
+     "summary": "The empty template stubs for T437, T440, T444 and T464 are removed.",
+     "class": "within",
+     "why": "Each held only the unfilled section template, with no approach and no decision. Removing them decides nothing about scope, and T444's real section stands in its place."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T443 to T445, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

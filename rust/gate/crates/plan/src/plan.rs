@@ -21,6 +21,7 @@ mod record;
 pub use record::{feature_task, task_ids, Accepted};
 mod sections;
 mod show;
+mod split;
 mod status;
 mod task;
 pub mod template;
@@ -550,7 +551,7 @@ pub fn approach_refusal(spec_dir: &Path, root: &Path, task: &str) -> Option<Stri
 /// The plan's finished sections moved to plan-done.md; the task ids moved (feature 449 T131: the tick's archive, in process).
 #[must_use]
 pub fn archive_finished(dir: &Path) -> Vec<String> {
-    task::archive(dir, None)
+    task::archive(dir, None, false)
 }
 
 /// Does a task section declare wording only (feature 385 D137)? The tick's wording check asks it (feature 449 T131).
@@ -634,18 +635,9 @@ fn answer(
                 "slim" => slim(&dir),
                 // THE SPLIT (451 T537): the feature's plan-done.md and tasks-done.md cut into parts under archive/, rerunnable - a
                 // flat tail written since is folded in after the parts
-                "split" => match l7r_shared::speckit::archive::fold(&dir, true) {
-                    Ok(parts) => said(format!(
-                        "split: {} part(s) written under {}/archive/ (what is where: {}/{})\n",
-                        parts.len(),
-                        dir.display(),
-                        dir.display(),
-                        l7r_shared::speckit::archive::NOTE
-                    )),
-                    Err(why) => fail(format!("split: {why}\n"), 1),
-                },
+                "split" => split::split(&dir),
                 "archive" => {
-                    let ids = task::archive(&dir, None);
+                    let ids = task::archive(&dir, None, false);
                     let list = if ids.is_empty() {
                         "none finished".to_owned()
                     } else {

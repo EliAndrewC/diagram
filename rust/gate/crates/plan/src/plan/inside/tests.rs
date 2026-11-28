@@ -74,6 +74,22 @@ fn the_host_is_found_with_its_verdict_wherever_its_section_stands() {
     .unwrap();
     let host = built_inside(d, "T12").unwrap();
     assert!(host.clear && host.archived && host.task == "T10");
+    // 462 T545: the archived host's verdict moved to a review part by the split, the flat record live only, still read
+    let mut part = review_of(&done, "T10");
+    part["part"] = serde_json::json!("a part");
+    let cut = vec![(
+        "T10".to_owned(),
+        "T10".to_owned(),
+        vec!["T10".to_owned()],
+        part.to_string(),
+    )];
+    l7r_shared::speckit::archive::add_review(d, cut).unwrap();
+    std::fs::write(
+        d.join("plan-review.json"),
+        "{\"blocks\": {}, \"tasks\": {}}",
+    )
+    .unwrap();
+    assert!(built_inside(d, "T12").unwrap().clear);
 }
 
 #[test]

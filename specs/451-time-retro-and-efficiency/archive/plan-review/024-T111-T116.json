@@ -1,0 +1,863 @@
+{
+ "blocks": {
+  "### T116 (<why: the finding or measurement that files it>)": {
+   "sha256": "96e27dcbe3a4bf7bc4ae2f7479743b11f4b982d144de2acbc76a15ce175d9460",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T116 Approach (checklist part A)": {
+   "sha256": "28d3f88715f3b45e48f1ee075eaa3809f0f877fae894fddcc8f0c7301e68f2d2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T111": {
+   "section_sha256": "538b3030f3d5c037ff0adde64fc0ab2b6d272096946787324e260d2831c48b11",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T111-case4-waits",
+     "summary": "Case 4's fixed 1 s sleeps before checks that need an event (the loop's pid file, the hand-started loop's exit, the killed loop's /proc entry, the revived loop's pid) become deadline waits for those events, the checks after them unchanged; R2 added to PIDS for cleanup.",
+     "class": "within",
+     "why": "This is exactly the defect T111's line names (a check failing good work under load, constitution XIV). The red-first runs show the old form red and the new form green on a slowed run, start and revive, and the new form still red on a loop that never exits, so the checks keep their job."
+    },
+    {
+     "id": "T111-case3-wait",
+     "summary": "Case 3's fixed 0.5 s sleep before checking the old-form runner becomes a wait until the runner's own argv is in /proc/<pid>/cmdline.",
+     "class": "within",
+     "why": "This goes beyond the line's case 4, but it is in the same suite and is the same kind of fix. Under load the check read a pre-exec copy of the suite and passed whatever the hook did, which is a check passing bad work. Fixing a known defect in the file the task owns is within scope and adds no behavior."
+    },
+    {
+     "id": "T111-drop-line124",
+     "summary": "The second prompt's 1 s sleep (line 124) is dropped, not replaced.",
+     "class": "within",
+     "why": "Reading the hook's run and judge shows that no sleep could change that check's verdict: a second loop meets the held lock and exits without writing the pid. Removing a wait that does nothing narrows nothing the GM asked for."
+    },
+    {
+     "id": "T111-wording-at-once",
+     "summary": "The lock check's message loses 'at once' and becomes 'exits on the lock, where one that took it would loop'.",
+     "class": "within",
+     "why": "The words now describe what a deadline wait measures. The hang run shows the check is still red on a loop that never exits, so the check's job is unchanged and only its label moved."
+    },
+    {
+     "id": "T111-deadline-guess",
+     "summary": "Each deadline is 300 tries of 0.1 s, labeled a GUESS that only a red run pays.",
+     "class": "within",
+     "why": "It is a test-harness bound, not a research constant, and it is labeled GUESS as the project's rules require. A green run pays only its events' latency (measured median 0.027 to 0.200 s, max 0.394 s)."
+    },
+    {
+     "id": "T111-defer-T115",
+     "summary": "Eight fixed sleeps in four other hook suites, plus test-finished-run-hooks.sh's settle, wait for an event the next check needs, so a slow host fails good work there too. They are not fixed here: filed as T115, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "By the block's own words this is a defect left, so it is ruled, not waved through. Neither the GM's request nor the spec asks for these suites to be fixed. The accepted spec's FR-009, which the session derived from the GM's approval of improvement 4, is the spec's own form for deferring a defect: it needs a why, a filed task id and an order, and the block carries all three (the why, T115, 'lands before T22'). The ruling relies on the second half of the why: each suite owes its own red-first run (FR-012's discipline, as T111's runs here show), which is a separate measured job per suite, not an awkwardness. The first half (the launcher scoped T111 to this suite) is a session's scoping and is given no weight. The purpose of improvement 4 (fewer plan re-rounds through fixing in the task) is not gutted: the defect is filed with a fixed order, not left open-ended."
+    },
+    {
+     "id": "T111-vacuous-listed",
+     "summary": "Six lines whose checks assert that nothing happened, or whose sleep cannot change the verdict, are listed but not filed: idle-tests 73, 182, 191, 217 and closing-checks 112, 115.",
+     "class": "within",
+     "why": "Each line was ruled separately from its text in the block. 73: the timer is alive from its fork, so the check is true whatever the delay. 182: the sleep comes before reading a log that is already fully written, so it cannot change the verdict. 191 and 217: the checks assert no run and no end line; a bounded window is the only form an assertion that nothing happened can take, and the check still catches the behavior on any run where the host is not delayed past the window. 112 and 115: sleeps that order two runs whose checks each read their own run's output, so the order cannot change the verdict. None of the six refuses good work, and none reads the wrong process. Line 104 did read the wrong process: under load it inspected the pre-exec copy of the suite and could pass whatever the hook did. None of the six is a wrong outcome under XIV v2.36.0, so leaving them narrows nothing."
+    },
+    {
+     "id": "T111-time-only-sleeps",
+     "summary": "Three sleeps in idle-tests (96, 210, 211) that sit before a deadline wait are left; they cost only their time.",
+     "class": "within",
+     "why": "They fail no good work and pass no bad work. A sleep before a deadline wait is not a defect, and the request does not ask for it to be removed."
+    },
+    {
+     "id": "T111-perf-no",
+     "summary": "The 'Performance work?' answer is no: this is a test's correctness under load, and the suite's fall from 9.5 s to 2.4 s is a side effect.",
+     "class": "within",
+     "why": "This is a scheduling label that narrows no requested work, and the task is being done either way. FR-013's full text was not in the bundle (its index line is cut), so the label was not checked against FR-013's full meaning. None of the GM's words that count a task as performance work (measurement tasks, the closing checks) names this test fix."
+    },
+    {
+     "id": "T111-closing-static-red",
+     "summary": "The closing run's make static red (3 tests in guards::event_log_hooks::tests::renumbered in rust/guard/shared) is put down to another builder's uncommitted work that T111 does not touch.",
+     "class": "within",
+     "why": "This records the exit evidence and does not narrow the request. The timestamps show the files were written after the run started, and T111 changes no Rust. Whether the landing accepts that is for the land machinery, not a fidelity finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T112": {
+   "section_sha256": "c18f95bed0e97ea8ad33962a36f63f29b7ca4814c3b1ea8ab1d12806061aa59e",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T112-fix",
+     "summary": "Replace tree.rs's QUOTED and tree/program.rs's TRIPLE regexes with shape::quoted_spans and T113's shape::triple_quoted_spans (called, not rewritten); delete both patterns and the TRIPLE row of each_gate_passes_wherever_its_pattern_matches; nothing else of either file changed but comments.",
+     "class": "within",
+     "why": "Fixes a measured defect (guards and the event log hang on an unclosed quote before many escapes, probe-before.txt) as a builders'-loop perf task under FR-013, and constitution XIV says to fix a known defect in the step. It narrows nothing in the request or spec."
+    },
+    {
+     "id": "T112-perf-class",
+     "summary": "T112 is classed [perf] (builders' loop: a Bash call's hooks), so the performance checklist is answered in brief.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work. A hook that hangs a Bash call is that loop."
+    },
+    {
+     "id": "T112-pins-red-first",
+     "summary": "Two hang pins in T103's child-process form with T103's 10 s deadline (GUESS) kept as it stands, plus the builds row's count moving from 3 to 2, shown red against the unfixed code and green after.",
+     "class": "within",
+     "why": "Tests that fail only while the hang exists. They enforce the requested fix, and FR-012's red-first form fits them."
+    },
+    {
+     "id": "T112-differentials-replay",
+     "summary": "Differentials over exhaustive small texts hold each new scan's reading to the regex it replaced, and a 9,646-command replay shows every guard verdict unchanged.",
+     "class": "within",
+     "why": "The plan chose to keep the old readings and checks that it did. These are evidence that everything still works (XIII), not a standard imposed on the work, and they narrow nothing. A future difference in these readings would not by itself be a defect."
+    },
+    {
+     "id": "T112-scope-files",
+     "summary": "Edits limited to tree.rs, tree/program.rs and their tests. shape.rs and T113's and T106's files untouched. Lands after T113.",
+     "class": "within",
+     "why": "Ordering and file ownership between parallel tasks. Nothing requested is dropped."
+    },
+    {
+     "id": "T112-found-and-left-none",
+     "summary": "Found and left: none. A grep census of the class over rust/ found that only make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* remain, and they are left because their branches are disjoint and do not backtrack.",
+     "class": "within",
+     "why": "The census names its search space (both grep commands, every hit read), as FR-009 asks. The two patterns it leaves are argued not to be a defect, since they give no wrong outcome, so leaving them narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T113": {
+   "section_sha256": "eb6b7eb3d3749d7368a6622f84dca6c116b6871de02a3e8c012f89d98aba8a2d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T113-scope",
+     "summary": "Fix the three copies T108's Found and left named (make_only_hooks MASK_QUOTE, no_poll_hooks::pace SHELL_STRING, readme_hooks TRIPLE), the task as filed",
+     "class": "within",
+     "why": "Exactly the task line's scope; a guard hang stalls the builders' loop, which FR-013 counts as performance work (request: 'prioritize those remaining improvement fixes', 'priotitize performance improvements going forward')."
+    },
+    {
+     "id": "T113-linear-scans",
+     "summary": "Replace each backtracking pattern by a linear scan (mask_quotes over shape's quoted_spans with the lookbehind kept; shell_strings keeping SHELL_AT's non-backtracking head; triple_quoted_spans in shared::shape), the three patterns deleted, quoted_spans untouched",
+     "class": "within",
+     "why": "The mechanism of the fix; removes the exponential search rather than bounding it, so the defect is fixed, not deferred."
+    },
+    {
+     "id": "T113-shape-public",
+     "summary": "triple_quoted_spans made public in shared::shape, beside quoted_spans, for readme and for T112's tree::program",
+     "class": "within",
+     "why": "Placement of the fix's own code so the sibling copy's task can call it; adds no behavior the request or spec did not ask for."
+    },
+    {
+     "id": "T113-held-to-pattern",
+     "summary": "Each scan held by differential tests and the 9,646-row replay to the answers of the pattern it replaced",
+     "class": "within",
+     "why": "The author's own choice to keep every other answer as before; it is verification of the requested fix, not an exactness standard imposed on the work, and no reviewer asks for it."
+    },
+    {
+     "id": "T113-pins",
+     "summary": "One red-first hang pin per guard through its own entry plus shape's own pin, under T103's 10 s deadline (a GUESS)",
+     "class": "within",
+     "why": "FR-012's red-first test: enforcement of the fix, which serves the request."
+    },
+    {
+     "id": "T113-left-to-T112",
+     "summary": "The same core's two copies in shared::tree (tree.rs:70 QUOTED, tree/program.rs:64 TRIPLE) not fixed here, left to T112 (filed by T108, lands before T22, its builder already working in both files)",
+     "class": "within",
+     "why": "Those copies were never T113's: T108 filed them as T112, an open task actively in progress on those files; T113 touching them would collide with another task's uncommitted work. The Found and left gives the why, the filed id and the order FR-009 asks for, and the class search's method."
+    },
+    {
+     "id": "T113-not-the-class",
+     "summary": "interp.rs:27/:33, planhold.rs:28/:30, guard_file_hooks.rs:56 and tunables.rs:39 left as they are",
+     "class": "within",
+     "why": "Each read and shown to have branches that never read the same character, so they do not backtrack this way: not a defect, nothing left unfixed."
+    },
+    {
+     "id": "T113-closing-escape",
+     "summary": "Closing run 3 taken with STATIC_OK for run 2's red, which was T112's mid-edit tree.rs, a file judged no task's",
+     "class": "within",
+     "why": "A recorded escape of the guard's own designed form (FR-007/FR-012), for a red outside this task's files, followed by a green run; it narrows nothing the request asked for."
+    },
+    {
+     "id": "T113-perf-checklist-brief",
+     "summary": "Classed [perf] under FR-013 as builders'-loop work, performance checklist answered in brief since no engine speed is involved",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop' among performance work; the checklist's questions are each answered with a measurement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T114": {
+   "section_sha256": "9aebbf604cd100531f8719a3f330a9b54b21ab0fea1e7fa79fc116f7ab724915",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T114-route",
+     "summary": "Of the task's three routes, make format itself names each assert message it put on a line of its own (assertline.rs, called from rustc.rs format_crate and fmtfile.rs one()), with the rewrite and the fix, rather than rerunning cover after format or reordering make static",
+     "class": "within",
+     "why": "Picking one of the routes the task's own line offered, priced by measurement (0.16 s a file against a coverage build; static already stops at format --check, item 4 e). The goal - a landing's cover refusal caught where it is made - is the task's and serves FR-013's landings and builders' loop."
+    },
+    {
+     "id": "T114-red-exit",
+     "summary": "The run goes red (exit 1) naming file:line, macro, message and the fix, with the file still formatted, pinned by a red-first test",
+     "class": "within",
+     "why": "How the chosen route reports; FR-012-style red-first pin and the printed concrete fix. Formatting is still applied, so nothing the format pass did before is withdrawn."
+    },
+    {
+     "id": "T114-only-pass-made",
+     "summary": "Only lines the pass made are named: each changed file's text scanned before and after; an unchanged file skipped",
+     "class": "within",
+     "why": "The task is about lines make format creates after the builder's last cover; a line it did not make is not this task's."
+    },
+    {
+     "id": "T114-shapes",
+     "summary": "Only the shapes the fixture measured unrun are named (assert! message alone as inline capture, literal or worded format; any assert_eq! message alone; a format argument holding a call alone); assert!'s bare \"{}\" with a place argument, messages on the condition's line, one-line asserts, and unmeasured forms (debug_ forms, &x arguments) are not named, cover the backstop",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal rule ('any message on a line of its own') was measured (item 4 h) to name 94 lines the coverage run counts - refusing correct work, which is itself a defect (XIV) and would defeat the purpose of catching only what cover would refuse. The measured refusal record (item 4 a: 48 assert!, 15 assert_eq!, 6 format!, 1 unread; item 4 c: 3 assert!, 3 assert_eq!) contains no debug_ or borrow shape, so the shapes left unnamed leave no measured wrong outcome, and cover still catches any at landing - no defect is carried forward."
+    },
+    {
+     "id": "T114-closure",
+     "summary": "A closure no test calls (T108's fourth line, 306) is not named and is left to cover",
+     "class": "within",
+     "why": "Measured (item 4 f, cases c1, c2) to be unrun on one line or split, so no format pass makes it; it is outside a format-made-line check, and T108's fold removed it."
+    },
+    {
+     "id": "T114-not-scanned",
+     "summary": "Files under tests/ directories and items under #[cfg(feature = \"counters\")] are not scanned",
+     "class": "within",
+     "why": "Measured (item 4 g) absent from or lineless in the coverage reports, so cover never refuses them; naming them would refuse correct work."
+    },
+    {
+     "id": "T114-perf-brief",
+     "summary": "Classed [perf] under FR-013 (landings and builders' loop), the performance checklist answered in brief, saving stated as measured (1 of 57 landings, 274 s, 6 closing-check lines) not extrapolated",
+     "class": "within",
+     "why": "FR-013 names landings and the builders' loop as performance work; stating the measured saving and declining to count builders' own cover refusals as saving is accurate reporting, not a scope change."
+    },
+    {
+     "id": "T114-order",
+     "summary": "After T108's fold (9a11c3b6a4), beside T112 and T113, touching none of their files",
+     "class": "within",
+     "why": "Scheduling among performance tasks; no clause of the request or spec is affected."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T115": {
+   "section_sha256": "0c08b39ff229f68a0375736b838340525d33b34db7aed4f07975610026aa1d9c",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T115-D1 deadline waits",
+     "summary": "Each fixed sleep before a check that needs an event becomes a wait for that event to a deadline in case 3's loop form, the check after it unchanged; one knob per suite (WAIT_TRIES=300, SETTLE_S=30), a labeled GUESS only a red run pays.",
+     "class": "within",
+     "why": "This is the fix T115's own line names (fixed sleeps that let a slow host fail good work). The checks are kept, so a state that never comes still fails, and the hang runs show it does. That is FR-012's red first applied to a test fix."
+    },
+    {
+     "id": "T115-D2 argv0 wait in clone-sync and land-tooling",
+     "summary": "An exec -a make fixture is waited for until /proc/<pid>/cmdline argv0 reads make, the state own-make and running_gate read; land-tooling's case also ends its sleep 120 child with pkill -P, as clone-sync's does.",
+     "class": "within",
+     "why": "It waits on the exact state the check under test reads. The pkill -P cleanup is in the same case and stops a two-minute leftover. Neither touches anything outside the five suites the launcher's ground rules name."
+    },
+    {
+     "id": "T115-D3 idle-tests waits (76, 83, 202)",
+     "summary": "Each site waits for its check's own conditions: arming file gone and timer /proc entry gone, arming file gone, and the stopped session's timer exited by the pid read from the arming file.",
+     "class": "within",
+     "why": "The same fix as D1, at the sites T111's sweep found."
+    },
+    {
+     "id": "T115-D4 202's vacuous check fixed",
+     "summary": "Case 8 (line 202) read the timer pid through an eval'd string with literal quotes, so jq never opened the file and the check asked about /proc/999999, which is true of any timer. It now asks about the pid the stop recorded.",
+     "class": "within",
+     "why": "A check that cannot fail is a defect under constitution XIV and the GM's fix-as-we-go rule. It is found in the code being changed and fixed in the same task, and red first shows the old form green on a timer that never exits. This is enforcement of the work, not new behavior."
+    },
+    {
+     "id": "T115-D5 closing-checks 101 wait",
+     "summary": "The 0.3 s sleep becomes a wait until pgrep finds no check, the check's own question. Its other waits (25, 67, 98) were already deadline waits and stay.",
+     "class": "within",
+     "why": "The same fix as D1. It leaves alone the waits that already have the right form."
+    },
+    {
+     "id": "T115-D6 settle fails at its deadline",
+     "summary": "settle uses SETTLE_S for every call (the per-call 40 and 80 polls dropped), and at its deadline it prints a FAIL line and counts a failure, where before it returned 0 and the next check ran unready.",
+     "class": "within",
+     "why": "T115's line names settle running its check unready at a 1 or 2 s deadline. Measured, no good run reached the old deadline, so a good run turns no settle red. hangwaiter shows the new form catches a state the old one passed vacuously."
+    },
+    {
+     "id": "T115-D7 no-poll suite flake filed as T139",
+     "summary": "A failure of test-no-poll-hooks.sh under load, caused by a leftover tee from the case before it, is not fixed here. It is filed as T139, ordered to land before T22.",
+     "class": "within",
+     "why": "It is another class (a leftover writer, not a fixed sleep), in a suite outside the five that T115's line and the launcher name, so nothing T115 was asked to do is left undone. The defect is not carried forward: FR-009's three parts are present (why it is not fixed here, the filed id T139, and the order 'lands before T22'), which honors fix-as-we-go before the next step."
+    },
+    {
+     "id": "T115-D8 not performance work",
+     "summary": "T115 is classed as not performance work (a test's correctness under load), with suite timings recorded as a side effect.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 and 2026-11-21 words make performance and measurement tasks first. A fix to tests failing good work under load is neither, and the GM's closing-checks filing concerned a different task. The classification narrows nothing asked."
+    },
+    {
+     "id": "T115-D9 scope and timing",
+     "summary": "No map changes; only the five suites and this section are touched, nothing of T118, T89 or T129; the suites' timings are recorded old against new, within the load's spread.",
+     "class": "within",
+     "why": "Neither the boundaries of the ground rules nor the recorded timings narrow the request. Under the no-exactness rule a timing difference within the load's spread is not something to rule on."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T111 (the stall-watchdog suite's case 4 slept a fixed 1 s and then asked whether a loop started by hand had exited on the lock: red at T92's landing, \"expected no, got yes\" at a load near 28 beside three builders, green on 2 of 2 reruns in the same worktree, observed 2026-11-21 (T92's landing log, as T111's line records it))",
+    "### T111 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T111-case4-waits",
+     "summary": "Case 4's fixed 1 s sleeps before checks that need an event (the loop's pid file, the hand-started loop's exit, the killed loop's /proc entry, the revived loop's pid) become deadline waits for those events, the checks after them unchanged; R2 added to PIDS for cleanup.",
+     "class": "within",
+     "why": "This is exactly the defect T111's line names (a check failing good work under load, constitution XIV). The red-first runs show the old form red and the new form green on a slowed run, start and revive, and the new form still red on a loop that never exits, so the checks keep their job."
+    },
+    {
+     "id": "T111-case3-wait",
+     "summary": "Case 3's fixed 0.5 s sleep before checking the old-form runner becomes a wait until the runner's own argv is in /proc/<pid>/cmdline.",
+     "class": "within",
+     "why": "This goes beyond the line's case 4, but it is in the same suite and is the same kind of fix. Under load the check read a pre-exec copy of the suite and passed whatever the hook did, which is a check passing bad work. Fixing a known defect in the file the task owns is within scope and adds no behavior."
+    },
+    {
+     "id": "T111-drop-line124",
+     "summary": "The second prompt's 1 s sleep (line 124) is dropped, not replaced.",
+     "class": "within",
+     "why": "Reading the hook's run and judge shows that no sleep could change that check's verdict: a second loop meets the held lock and exits without writing the pid. Removing a wait that does nothing narrows nothing the GM asked for."
+    },
+    {
+     "id": "T111-wording-at-once",
+     "summary": "The lock check's message loses 'at once' and becomes 'exits on the lock, where one that took it would loop'.",
+     "class": "within",
+     "why": "The words now describe what a deadline wait measures. The hang run shows the check is still red on a loop that never exits, so the check's job is unchanged and only its label moved."
+    },
+    {
+     "id": "T111-deadline-guess",
+     "summary": "Each deadline is 300 tries of 0.1 s, labeled a GUESS that only a red run pays.",
+     "class": "within",
+     "why": "It is a test-harness bound, not a research constant, and it is labeled GUESS as the project's rules require. A green run pays only its events' latency (measured median 0.027 to 0.200 s, max 0.394 s)."
+    },
+    {
+     "id": "T111-defer-T115",
+     "summary": "Eight fixed sleeps in four other hook suites, plus test-finished-run-hooks.sh's settle, wait for an event the next check needs, so a slow host fails good work there too. They are not fixed here: filed as T115, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "By the block's own words this is a defect left, so it is ruled, not waved through. Neither the GM's request nor the spec asks for these suites to be fixed. The accepted spec's FR-009, which the session derived from the GM's approval of improvement 4, is the spec's own form for deferring a defect: it needs a why, a filed task id and an order, and the block carries all three (the why, T115, 'lands before T22'). The ruling relies on the second half of the why: each suite owes its own red-first run (FR-012's discipline, as T111's runs here show), which is a separate measured job per suite, not an awkwardness. The first half (the launcher scoped T111 to this suite) is a session's scoping and is given no weight. The purpose of improvement 4 (fewer plan re-rounds through fixing in the task) is not gutted: the defect is filed with a fixed order, not left open-ended."
+    },
+    {
+     "id": "T111-vacuous-listed",
+     "summary": "Six lines whose checks assert that nothing happened, or whose sleep cannot change the verdict, are listed but not filed: idle-tests 73, 182, 191, 217 and closing-checks 112, 115.",
+     "class": "within",
+     "why": "Each line was ruled separately from its text in the block. 73: the timer is alive from its fork, so the check is true whatever the delay. 182: the sleep comes before reading a log that is already fully written, so it cannot change the verdict. 191 and 217: the checks assert no run and no end line; a bounded window is the only form an assertion that nothing happened can take, and the check still catches the behavior on any run where the host is not delayed past the window. 112 and 115: sleeps that order two runs whose checks each read their own run's output, so the order cannot change the verdict. None of the six refuses good work, and none reads the wrong process. Line 104 did read the wrong process: under load it inspected the pre-exec copy of the suite and could pass whatever the hook did. None of the six is a wrong outcome under XIV v2.36.0, so leaving them narrows nothing."
+    },
+    {
+     "id": "T111-time-only-sleeps",
+     "summary": "Three sleeps in idle-tests (96, 210, 211) that sit before a deadline wait are left; they cost only their time.",
+     "class": "within",
+     "why": "They fail no good work and pass no bad work. A sleep before a deadline wait is not a defect, and the request does not ask for it to be removed."
+    },
+    {
+     "id": "T111-perf-no",
+     "summary": "The 'Performance work?' answer is no: this is a test's correctness under load, and the suite's fall from 9.5 s to 2.4 s is a side effect.",
+     "class": "within",
+     "why": "This is a scheduling label that narrows no requested work, and the task is being done either way. FR-013's full text was not in the bundle (its index line is cut), so the label was not checked against FR-013's full meaning. None of the GM's words that count a task as performance work (measurement tasks, the closing checks) names this test fix."
+    },
+    {
+     "id": "T111-closing-static-red",
+     "summary": "The closing run's make static red (3 tests in guards::event_log_hooks::tests::renumbered in rust/guard/shared) is put down to another builder's uncommitted work that T111 does not touch.",
+     "class": "within",
+     "why": "This records the exit evidence and does not narrow the request. The timestamps show the files were written after the run started, and T111 changes no Rust. Whether the landing accepts that is for the land machinery, not a fidelity finding."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T112 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also in two of T96's files, `tree.rs:70`'s `QUOTED` and the triple-quoted `TRIPLE` of `tree/program.rs:63`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes, and the house style guard none through `tree::walk` on `echo <a listed word> > f.md; echo it's` and forty escapes (`hs_plain`))",
+    "### T112 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T112-fix-quoted",
+     "summary": "tree::quotes_to_paths builds its text from shape::quoted_spans with the same three replacements (-c program carried out, plain word kept, else empty pair); the QUOTED pattern deleted",
+     "class": "within",
+     "why": "Fixes the measured exponential hang T108's Found and left filed as T112, keeping each answer; a defect fixed in the task (fix as we go), narrowing nothing in the request or FR-013."
+    },
+    {
+     "id": "T112-fix-triple",
+     "summary": "program::without_text blanks each shape::triple_quoted_spans span (T113's, called not rewritten) to an empty pair; TRIPLE deleted with its row of each_gate_passes_wherever_its_pattern_matches; the builds test counts 2 patterns, not 3",
+     "class": "within",
+     "why": "The second copy of the same defect, fixed in the same task; dropping the test row for a pattern that no longer exists, and recounting the builds, removes no check of a thing that still exists."
+    },
+    {
+     "id": "T112-pins",
+     "summary": "Two red-first hang pins in T103's child-process form with a 10 s deadline (GUESS), plus two exhaustive small-text differentials (137,257 and 37,449 texts) holding each scan to the pattern it replaced",
+     "class": "within",
+     "why": "Tests whose only effect is to prove the hang gone and the readers still working (FR-012's red first); the differentials are verification that the fix computes what the callers already rely on, not a bitwise standard imposed on a port or a refusal of a fix, and they serve the task's own goal."
+    },
+    {
+     "id": "T112-replay",
+     "summary": "Every-verdict-the-same replay of T93's 9,646 commands through each caller and twelve guard replies, run from a scratch repository so gate-write answers",
+     "class": "within",
+     "why": "Verification that everything works after the change (constitution XIII); it blocks nothing on its own and adds no behavior."
+    },
+    {
+     "id": "T112-scope",
+     "summary": "Edits confined to tree.rs, tree/program.rs and their tests; shape.rs and T113's and T106's files not touched; nothing committed by the builder",
+     "class": "within",
+     "why": "Bounds the task to the two copies filed; leaves no part of the filed defect undone, since every copy of the class is named and fixed by T112 or T113."
+    },
+    {
+     "id": "T112-order",
+     "summary": "Lands after T96 and T113 (it calls T113's triple_quoted_spans), beside T113 touching none of its files",
+     "class": "within",
+     "why": "Sequencing forced by a real dependency; no requirement narrowed."
+    },
+    {
+     "id": "T112-found-and-left-none",
+     "summary": "No further copy of the class left: grep over rust/ for the pattern's text, every hit read; make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* left as not of the class",
+     "class": "within",
+     "why": "Leaving interp.rs's patterns is not deferring a defect: their two branches are disjoint (one begins with a backslash, the other excludes it), so they cannot backtrack exponentially; the search method is stated as an observation (FR-009's class-of-defect line)."
+    },
+    {
+     "id": "T112-perf-class",
+     "summary": "Treated as [perf] performance work under FR-013 (the builders' loop: a Bash call's hooks no longer hang)",
+     "class": "within",
+     "why": "FR-013 names work that makes the builders' loop faster; a hook that held a Bash call until timeout and now answers in about 0.1 s is that, and the classification only orders the task earlier, as the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T112 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also in two of T96's files, `tree.rs:70`'s `QUOTED` and the triple-quoted `TRIPLE` of `tree/program.rs:63`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes, and the house style guard none through `tree::walk` on `echo <a listed word> > f.md; echo it's` and forty escapes (`hs_plain`))",
+    "### T112 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T112-fix",
+     "summary": "Replace tree.rs's QUOTED and tree/program.rs's TRIPLE regexes with shape::quoted_spans and T113's shape::triple_quoted_spans (called, not rewritten); delete both patterns and the TRIPLE row of each_gate_passes_wherever_its_pattern_matches; nothing else of either file changed but comments.",
+     "class": "within",
+     "why": "Fixes a measured defect (guards and the event log hang on an unclosed quote before many escapes, probe-before.txt) as a builders'-loop perf task under FR-013, and constitution XIV says to fix a known defect in the step. It narrows nothing in the request or spec."
+    },
+    {
+     "id": "T112-perf-class",
+     "summary": "T112 is classed [perf] (builders' loop: a Bash call's hooks), so the performance checklist is answered in brief.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work. A hook that hangs a Bash call is that loop."
+    },
+    {
+     "id": "T112-pins-red-first",
+     "summary": "Two hang pins in T103's child-process form with T103's 10 s deadline (GUESS) kept as it stands, plus the builds row's count moving from 3 to 2, shown red against the unfixed code and green after.",
+     "class": "within",
+     "why": "Tests that fail only while the hang exists. They enforce the requested fix, and FR-012's red-first form fits them."
+    },
+    {
+     "id": "T112-differentials-replay",
+     "summary": "Differentials over exhaustive small texts hold each new scan's reading to the regex it replaced, and a 9,646-command replay shows every guard verdict unchanged.",
+     "class": "within",
+     "why": "The plan chose to keep the old readings and checks that it did. These are evidence that everything still works (XIII), not a standard imposed on the work, and they narrow nothing. A future difference in these readings would not by itself be a defect."
+    },
+    {
+     "id": "T112-scope-files",
+     "summary": "Edits limited to tree.rs, tree/program.rs and their tests. shape.rs and T113's and T106's files untouched. Lands after T113.",
+     "class": "within",
+     "why": "Ordering and file ownership between parallel tasks. Nothing requested is dropped."
+    },
+    {
+     "id": "T112-found-and-left-none",
+     "summary": "Found and left: none. A grep census of the class over rust/ found that only make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* remain, and they are left because their branches are disjoint and do not backtrack.",
+     "class": "within",
+     "why": "The census names its search space (both grep commands, every hit read), as FR-009 asks. The two patterns it leaves are argued not to be a defect, since they give no wrong outcome, so leaving them narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T113-perf-class",
+     "summary": "T113 is run as a [perf] task under FR-013 (the builders' loop: a Bash call's hooks that hung now answer)",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the builders' loop faster as performance work; a guard that held a Bash call past 10 s and now answers in about 0.1 s is exactly that, and the GM asked (2026-11-20) that performance work go first."
+    },
+    {
+     "id": "T113-scope-three",
+     "summary": "Fix the three copies the task's line names (make_only_hooks MASK_QUOTE, no_poll_hooks/pace SHELL_STRING, readme_hooks TRIPLE), and nothing else",
+     "class": "within",
+     "why": "The task as filed (T108's Found and left) names these three; the hang is a wrong outcome (a tool that hangs), a defect under constitution XIV, and it is fixed here rather than carried."
+    },
+    {
+     "id": "T113-fix-linear-scans",
+     "summary": "Replace each backtracking pattern with a linear scan (mask_quotes over shape's quoted_spans with the -c lookbehind; pace::shell_strings with SHELL_AT plus quoted_spans; readme_hooks::triples by T103's closer-of-three rule), deleting the three patterns, shape.rs untouched",
+     "class": "within",
+     "why": "How the hang is removed is design, not fidelity; it removes the exponential work rather than moving it, and reuses the scan T103/T108 already landed."
+    },
+    {
+     "id": "T113-keep-readings",
+     "summary": "Each scan keeps the reading of the pattern it replaced, shown by differential tests against the old pattern on every short text and by a 9,646-command replay with 0 changed verdicts",
+     "class": "within",
+     "why": "This is the builder's way of showing the ported checks still do their job (constitution XIII, no known regression), not a standard imposed on differing outputs; it blocks nothing, narrows nothing, and the plan names no defect it preserves. Choosing to keep behavior here is allowed; it is not required by the exactness standard the GM struck."
+    },
+    {
+     "id": "T113-pins",
+     "summary": "One hang pin per guard through its own entry, run as a child under T103's 10 s deadline (a GUESS), red first then green",
+     "class": "within",
+     "why": "Enforcement of the fix (FR-012's red-first rule, the hang staying answered); a test that fails only when the requested thing is absent serves the request."
+    },
+    {
+     "id": "T113-leave-T96-copies",
+     "summary": "The same pattern in T96's tree.rs QUOTED and tree/program.rs TRIPLE is left to T112 (already filed by T108, lands before T22), because T96's builder holds live uncommitted work in those files",
+     "class": "within",
+     "why": "Not part of T113's line; the defect is not dropped but stays filed in this same feature as T112 with its reason, task id and order, as FR-009 requires, and it lands before T22, the next step; T113 narrows nothing it was asked to do."
+    },
+    {
+     "id": "T113-census",
+     "summary": "Every copy of the class is taken as the hits of two text searches over rust/ (grep -rnF '(?:\\\\.|(?!' and grep -rnE over '(?:\\\\.|'), every hit read",
+     "class": "within",
+     "why": "T113's line names the three sites and the plan fixes all three; FR-009's line saying how every instance was found is present, dated and with its method; no known copy is left unfiled (T112 carries T96's two). Its reach is rust/ only, by the pattern's text: a backtracking form written otherwise (a capturing group, other branch order) would not be hit; the bundle cannot show whether any exists, and none is known."
+    },
+    {
+     "id": "T113-interp-not-the-class",
+     "summary": "make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* are judged not of the class and left",
+     "class": "within",
+     "why": "Their two branches are disjoint (one needs a backslash, the other refuses one), so they cannot backtrack exponentially; no defect is left."
+    },
+    {
+     "id": "T113-ground-rules",
+     "summary": "Touch nothing of T96's or T108's files, commit nothing; exits: green on pins, differentials, replay, lint, cover and closing-checks; red set down and a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Process rules from the launcher and project, not a change to what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-linear-scans",
+     "summary": "MASK_QUOTE, SHELL_STRING and TRIPLE are replaced by linear scans (mask_quotes over shape's quoted_spans with the lookbehind kept, shell_strings keeping the SHELL_AT head, readme's own triples scan); shape.rs untouched; the three patterns deleted",
+     "class": "within",
+     "why": "The task line (T108's Found and left) names exactly these three sites and the exponential hang; replacing the backtracking read with a pass of the text is the fix the task asks for, and a hang in a Bash call's hooks is builders'-loop performance work under FR-013."
+    },
+    {
+     "id": "D2-held-to-pattern",
+     "summary": "Each scan is held to the pattern it replaced by exhaustive differentials (177,156 / 111,111 / 299,593 texts) and by a 9,646-command replay showing every guard verdict the same",
+     "class": "within",
+     "why": "This is not the exactness standard the GM struck: these are guards, and a ported check is shown to work by the sheets it passed still passing and its refusals still firing. It verifies that the fix changes nothing but the hang, and nothing in the section refuses a differing-but-working result. The text counts check out as sums of powers (11 pieces up to 5, 10 up to 5, 8 up to 6)."
+    },
+    {
+     "id": "D3-hang-pins",
+     "summary": "One red-first pin per guard through its own entry, run as a child under T103's 10 s deadline (a GUESS), plus the differentials; red 432/3, green 438/0",
+     "class": "within",
+     "why": "FR-012's red-first form. The tests only enforce the requested fix, and the 10 s deadline is labeled a GUESS and kept from T103 rather than moved."
+    },
+    {
+     "id": "D4-T112-left",
+     "summary": "The same pattern's two copies in T96's files (tree.rs QUOTED, tree/program.rs TRIPLE) are left to T112, which lands before T22, because T96's builder holds live uncommitted work in those files",
+     "class": "within",
+     "why": "T113's heading scopes it to the three named sites, and T112 was already filed by T108 for the other two, so the plan does not narrow T113. FR-009's form is met: it says why the defect is not fixed here (another builder's live uncommitted work in the same files), gives the filed id (T112) and its order ('lands before T22'), and states how every instance of the class was found (greps over rust/, observed 2026-11-21). The bundle cannot show what T22 is or whether it is the next step, so that is not asserted here."
+    },
+    {
+     "id": "D5-disjoint-branches-left",
+     "summary": "interp.rs:27/:33's (?:\\\\.|[^\"\\\\])* and planhold.rs, guard_file_hooks.rs and tunables.rs's (?:[^\"\\\\...]|\\\\.) are judged not to backtrack this way and are left",
+     "class": "within",
+     "why": "Their two branches never read the same character, so they have no exponential ambiguity and no defect, and leaving a pattern that works is not a narrowing."
+    },
+    {
+     "id": "D6-census-reach",
+     "summary": "The census of the class searches rust/ by several textual forms, every hit read",
+     "class": "within",
+     "why": "The search space is stated (commands and directory), which meets the enumeration rule. It does not search any kept Python copy, which fix-as-we-go also reaches, but T113's sites are Rust guards and the bundle cannot show whether a Python copy exists. Worth a sentence, not a ruling."
+    },
+    {
+     "id": "D7-checks-on-own-files",
+     "summary": "The lint and closing checks are judged on T113's seven files alone; T96's uncommitted event_log_hooks lint red and T106's format red on rust/guard/shared are reported apart",
+     "class": "within",
+     "why": "Those reds belong to other open tasks' files, which this task is told not to touch. Every check is still run on T113's own change, so nothing it was asked to do is narrowed."
+    },
+    {
+     "id": "D8-perf-booking",
+     "summary": "T113 is booked as a [perf] task under FR-013 (the builders' loop: a Bash call's hooks that hung now answer in about 0.1 s)",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work, and a hook that hangs for 10 s or more in place of answering is exactly that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T113-scope",
+     "summary": "Fix the three copies T108's Found and left named (make_only_hooks MASK_QUOTE, no_poll_hooks::pace SHELL_STRING, readme_hooks TRIPLE), the task as filed",
+     "class": "within",
+     "why": "Exactly the task line's scope; a guard hang stalls the builders' loop, which FR-013 counts as performance work (request: 'prioritize those remaining improvement fixes', 'priotitize performance improvements going forward')."
+    },
+    {
+     "id": "T113-linear-scans",
+     "summary": "Replace each backtracking pattern by a linear scan (mask_quotes over shape's quoted_spans with the lookbehind kept; shell_strings keeping SHELL_AT's non-backtracking head; triple_quoted_spans in shared::shape), the three patterns deleted, quoted_spans untouched",
+     "class": "within",
+     "why": "The mechanism of the fix; removes the exponential search rather than bounding it, so the defect is fixed, not deferred."
+    },
+    {
+     "id": "T113-shape-public",
+     "summary": "triple_quoted_spans made public in shared::shape, beside quoted_spans, for readme and for T112's tree::program",
+     "class": "within",
+     "why": "Placement of the fix's own code so the sibling copy's task can call it; adds no behavior the request or spec did not ask for."
+    },
+    {
+     "id": "T113-held-to-pattern",
+     "summary": "Each scan held by differential tests and the 9,646-row replay to the answers of the pattern it replaced",
+     "class": "within",
+     "why": "The author's own choice to keep every other answer as before; it is verification of the requested fix, not an exactness standard imposed on the work, and no reviewer asks for it."
+    },
+    {
+     "id": "T113-pins",
+     "summary": "One red-first hang pin per guard through its own entry plus shape's own pin, under T103's 10 s deadline (a GUESS)",
+     "class": "within",
+     "why": "FR-012's red-first test: enforcement of the fix, which serves the request."
+    },
+    {
+     "id": "T113-left-to-T112",
+     "summary": "The same core's two copies in shared::tree (tree.rs:70 QUOTED, tree/program.rs:64 TRIPLE) not fixed here, left to T112 (filed by T108, lands before T22, its builder already working in both files)",
+     "class": "within",
+     "why": "Those copies were never T113's: T108 filed them as T112, an open task actively in progress on those files; T113 touching them would collide with another task's uncommitted work. The Found and left gives the why, the filed id and the order FR-009 asks for, and the class search's method."
+    },
+    {
+     "id": "T113-not-the-class",
+     "summary": "interp.rs:27/:33, planhold.rs:28/:30, guard_file_hooks.rs:56 and tunables.rs:39 left as they are",
+     "class": "within",
+     "why": "Each read and shown to have branches that never read the same character, so they do not backtrack this way: not a defect, nothing left unfixed."
+    },
+    {
+     "id": "T113-closing-escape",
+     "summary": "Closing run 3 taken with STATIC_OK for run 2's red, which was T112's mid-edit tree.rs, a file judged no task's",
+     "class": "within",
+     "why": "A recorded escape of the guard's own designed form (FR-007/FR-012), for a red outside this task's files, followed by a green run; it narrows nothing the request asked for."
+    },
+    {
+     "id": "T113-perf-checklist-brief",
+     "summary": "Classed [perf] under FR-013 as builders'-loop work, performance checklist answered in brief since no engine speed is involved",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop' among performance work; the checklist's questions are each answered with a measurement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T114 (T108's landing: its builder's lint, tests and cover ran green, then `make format` split three asserts so each message stood on a line of its own, and the landing's cover refused them and a fourth line after 274 s, measured 2026-11-21 (`grep` of the feature's 57 landing logs under the coordinator's job directory): the only landing log of the 57 that named lines)",
+    "### T114 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T114-route",
+     "summary": "Of the task's three routes, make format itself names each assert message it put on a line of its own (assertline.rs, called from rustc.rs format_crate and fmtfile.rs one()), with the rewrite and the fix, rather than rerunning cover after format or reordering make static",
+     "class": "within",
+     "why": "Picking one of the routes the task's own line offered, priced by measurement (0.16 s a file against a coverage build; static already stops at format --check, item 4 e). The goal - a landing's cover refusal caught where it is made - is the task's and serves FR-013's landings and builders' loop."
+    },
+    {
+     "id": "T114-red-exit",
+     "summary": "The run goes red (exit 1) naming file:line, macro, message and the fix, with the file still formatted, pinned by a red-first test",
+     "class": "within",
+     "why": "How the chosen route reports; FR-012-style red-first pin and the printed concrete fix. Formatting is still applied, so nothing the format pass did before is withdrawn."
+    },
+    {
+     "id": "T114-only-pass-made",
+     "summary": "Only lines the pass made are named: each changed file's text scanned before and after; an unchanged file skipped",
+     "class": "within",
+     "why": "The task is about lines make format creates after the builder's last cover; a line it did not make is not this task's."
+    },
+    {
+     "id": "T114-shapes",
+     "summary": "Only the shapes the fixture measured unrun are named (assert! message alone as inline capture, literal or worded format; any assert_eq! message alone; a format argument holding a call alone); assert!'s bare \"{}\" with a place argument, messages on the condition's line, one-line asserts, and unmeasured forms (debug_ forms, &x arguments) are not named, cover the backstop",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal rule ('any message on a line of its own') was measured (item 4 h) to name 94 lines the coverage run counts - refusing correct work, which is itself a defect (XIV) and would defeat the purpose of catching only what cover would refuse. The measured refusal record (item 4 a: 48 assert!, 15 assert_eq!, 6 format!, 1 unread; item 4 c: 3 assert!, 3 assert_eq!) contains no debug_ or borrow shape, so the shapes left unnamed leave no measured wrong outcome, and cover still catches any at landing - no defect is carried forward."
+    },
+    {
+     "id": "T114-closure",
+     "summary": "A closure no test calls (T108's fourth line, 306) is not named and is left to cover",
+     "class": "within",
+     "why": "Measured (item 4 f, cases c1, c2) to be unrun on one line or split, so no format pass makes it; it is outside a format-made-line check, and T108's fold removed it."
+    },
+    {
+     "id": "T114-not-scanned",
+     "summary": "Files under tests/ directories and items under #[cfg(feature = \"counters\")] are not scanned",
+     "class": "within",
+     "why": "Measured (item 4 g) absent from or lineless in the coverage reports, so cover never refuses them; naming them would refuse correct work."
+    },
+    {
+     "id": "T114-perf-brief",
+     "summary": "Classed [perf] under FR-013 (landings and builders' loop), the performance checklist answered in brief, saving stated as measured (1 of 57 landings, 274 s, 6 closing-check lines) not extrapolated",
+     "class": "within",
+     "why": "FR-013 names landings and the builders' loop as performance work; stating the measured saving and declining to count builders' own cover refusals as saving is accurate reporting, not a scope change."
+    },
+    {
+     "id": "T114-order",
+     "summary": "After T108's fold (9a11c3b6a4), beside T112 and T113, touching none of their files",
+     "class": "within",
+     "why": "Scheduling among performance tasks; no clause of the request or spec is affected."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T115 (fixed sleeps in four hook suites waited 0.3 to 1.0 s for an event the next check reads, and `test-finished-run-hooks.sh`'s `settle` ran its check unready at a 1 or 2 s deadline, so a slow host could fail good work as the stall-watchdog suite's fixed 1 s did at T92's landing, observed 2026-11-21 (T111's sweep, as T115's line records it))",
+    "### T115 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 waits-for-events",
+     "summary": "Each fixed sleep before a check that needs an event in the clone-sync, land-tooling, idle-tests and closing-checks suites becomes a wait for that event to a deadline, in T111's case-3 form, with the check after it unchanged",
+     "class": "within",
+     "why": "Carries T115's own line (fixed sleeps failing good work under load); the checks are unchanged, so a state that never comes still fails, as the hang runs show. Nothing asked is dropped."
+    },
+    {
+     "id": "D2 deadline knobs",
+     "summary": "One knob per suite, WAIT_TRIES=300 (30 s) and SETTLE_S=30, labeled GUESS, paid only by a red run",
+     "class": "within",
+     "why": "A tuning choice inside the fix. It is labeled as a guess with the measured event shapes beside it, and it narrows nothing asked."
+    },
+    {
+     "id": "D3 settle fails at deadline",
+     "summary": "settle's per-call 1/2 s deadlines are replaced by SETTLE_S for every call, and at the deadline it prints FAIL and counts a failure where it used to return 0 and let the check run unready",
+     "class": "within",
+     "why": "Fixes a check that could fail good work (and pass unready work) on purpose, as constitution XIV and the fix-as-we-go rule ask. A measured run shows no good run's settle reached the old deadline."
+    },
+    {
+     "id": "D4 case 202 vacuous check fixed",
+     "summary": "Fixes idle-tests 202's check, which handed jq a quoted path and asked of /proc/999999 (true of any timer), so that it reads the pid the stop recorded",
+     "class": "within",
+     "why": "A defect found in the task's own site, a check that could not fail. Fixing it in this task is the default the GM approved (improvement 4, fix in the task) and constitution XIV. It widens what the check catches, so it narrows nothing."
+    },
+    {
+     "id": "D5 land-tooling child cleanup",
+     "summary": "Land-tooling's case also ends its sleep 120 child with pkill -P, as clone-sync's case does",
+     "class": "within",
+     "why": "A leftover process in the same case being fixed. It makes the suite do its job and narrows nothing."
+    },
+    {
+     "id": "D6 closing-checks other waits stay",
+     "summary": "closing-checks 101 waits on pgrep for the check's own question; its other waits (25, 67, 98) were deadline waits already and stay",
+     "class": "within",
+     "why": "Leaving waits that are already in the target form leaves no defect. The sites come from T111's sweep of every sleep, which is a census and not a sample."
+    },
+    {
+     "id": "D7 scope bounds",
+     "summary": "Touch the five suites and this section alone, nothing of T118, T89 or T129's files, nothing committed; order after T111, before T22",
+     "class": "within",
+     "why": "Coordination bounds that leave every site of T115's line covered (the sweep found none outside the five suites)."
+    },
+    {
+     "id": "D8 no-poll flake filed as T139",
+     "summary": "test-no-poll-hooks.sh's 'two waiters on one quiet file' failure under load, a leftover tee writer from the case before rather than a fixed sleep, is not fixed here and is filed as T139, landing before T22",
+     "class": "within",
+     "why": "This is not a fixed sleep, so it falls outside T115's scope, and the defect is not left: FR-009's own terms for a found-and-left defect are met (why it is not fixed here, the filed task id T139, its order 'lands before T22'). T22 is the same point T115 itself lands before, so it is fixed before the next step, as fix-as-we-go asks. The spec settles this case, and it narrows nothing the GM asked."
+    },
+    {
+     "id": "D9 not performance work",
+     "summary": "T115 is classed as not performance work for FR-013 scheduling",
+     "class": "within",
+     "why": "A test-correctness fix under load. It is not a performance improvement, and it is not a measurement task under the GM's 2026-11-20 widening. The suite timings are recorded only as a side effect."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T115 (fixed sleeps in four hook suites waited 0.3 to 1.0 s for an event the next check reads, and `test-finished-run-hooks.sh`'s `settle` ran its check unready at a 1 or 2 s deadline, so a slow host could fail good work as the stall-watchdog suite's fixed 1 s did at T92's landing, observed 2026-11-21 (T111's sweep, as T115's line records it))",
+    "### T115 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T115-D1 deadline waits",
+     "summary": "Each fixed sleep before a check that needs an event becomes a wait for that event to a deadline in case 3's loop form, the check after it unchanged; one knob per suite (WAIT_TRIES=300, SETTLE_S=30), a labeled GUESS only a red run pays.",
+     "class": "within",
+     "why": "This is the fix T115's own line names (fixed sleeps that let a slow host fail good work). The checks are kept, so a state that never comes still fails, and the hang runs show it does. That is FR-012's red first applied to a test fix."
+    },
+    {
+     "id": "T115-D2 argv0 wait in clone-sync and land-tooling",
+     "summary": "An exec -a make fixture is waited for until /proc/<pid>/cmdline argv0 reads make, the state own-make and running_gate read; land-tooling's case also ends its sleep 120 child with pkill -P, as clone-sync's does.",
+     "class": "within",
+     "why": "It waits on the exact state the check under test reads. The pkill -P cleanup is in the same case and stops a two-minute leftover. Neither touches anything outside the five suites the launcher's ground rules name."
+    },
+    {
+     "id": "T115-D3 idle-tests waits (76, 83, 202)",
+     "summary": "Each site waits for its check's own conditions: arming file gone and timer /proc entry gone, arming file gone, and the stopped session's timer exited by the pid read from the arming file.",
+     "class": "within",
+     "why": "The same fix as D1, at the sites T111's sweep found."
+    },
+    {
+     "id": "T115-D4 202's vacuous check fixed",
+     "summary": "Case 8 (line 202) read the timer pid through an eval'd string with literal quotes, so jq never opened the file and the check asked about /proc/999999, which is true of any timer. It now asks about the pid the stop recorded.",
+     "class": "within",
+     "why": "A check that cannot fail is a defect under constitution XIV and the GM's fix-as-we-go rule. It is found in the code being changed and fixed in the same task, and red first shows the old form green on a timer that never exits. This is enforcement of the work, not new behavior."
+    },
+    {
+     "id": "T115-D5 closing-checks 101 wait",
+     "summary": "The 0.3 s sleep becomes a wait until pgrep finds no check, the check's own question. Its other waits (25, 67, 98) were already deadline waits and stay.",
+     "class": "within",
+     "why": "The same fix as D1. It leaves alone the waits that already have the right form."
+    },
+    {
+     "id": "T115-D6 settle fails at its deadline",
+     "summary": "settle uses SETTLE_S for every call (the per-call 40 and 80 polls dropped), and at its deadline it prints a FAIL line and counts a failure, where before it returned 0 and the next check ran unready.",
+     "class": "within",
+     "why": "T115's line names settle running its check unready at a 1 or 2 s deadline. Measured, no good run reached the old deadline, so a good run turns no settle red. hangwaiter shows the new form catches a state the old one passed vacuously."
+    },
+    {
+     "id": "T115-D7 no-poll suite flake filed as T139",
+     "summary": "A failure of test-no-poll-hooks.sh under load, caused by a leftover tee from the case before it, is not fixed here. It is filed as T139, ordered to land before T22.",
+     "class": "within",
+     "why": "It is another class (a leftover writer, not a fixed sleep), in a suite outside the five that T115's line and the launcher name, so nothing T115 was asked to do is left undone. The defect is not carried forward: FR-009's three parts are present (why it is not fixed here, the filed id T139, and the order 'lands before T22'), which honors fix-as-we-go before the next step."
+    },
+    {
+     "id": "T115-D8 not performance work",
+     "summary": "T115 is classed as not performance work (a test's correctness under load), with suite timings recorded as a side effect.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 and 2026-11-21 words make performance and measurement tasks first. A fix to tests failing good work under load is neither, and the GM's closing-checks filing concerned a different task. The classification narrows nothing asked."
+    },
+    {
+     "id": "T115-D9 scope and timing",
+     "summary": "No map changes; only the five suites and this section are touched, nothing of T118, T89 or T129; the suites' timings are recorded old against new, within the load's spread.",
+     "class": "within",
+     "why": "Neither the boundaries of the ground rules nor the recorded timings narrow the request. Under the no-exactness rule a timing difference within the load's spread is not something to rule on."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T111 to T116, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}

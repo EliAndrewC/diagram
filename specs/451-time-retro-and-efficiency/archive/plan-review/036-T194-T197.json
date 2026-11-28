@@ -1,0 +1,579 @@
+{
+ "blocks": {
+  "### T194 (T184's split of 0009 to 0332 and 0059 to 0333, the cascade rules' first live test, re-owed 63 pop-up units (21 pop-ups) where 27 (9) follow from the rules: `/home/agent/.claude/jobs/c6fd72d1/tmp/t184-cascade.md`, a read-only re-run of the filter, 2026-11-23)": {
+   "sha256": "c1a5d87a999eebeb813b8d4eb9a17de70e35a5ed64a98107dbaf3b0d06c6fb5c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T194 Approach (checklist part A)": {
+   "sha256": "9adf0a442f2d185743aca2ead1fab4e541f08c133cb20a49e0c3133305d41e03",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T194 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "22aec1f39278853543c8b07bb48e032f1481b9606b490dae445904a4ecf53cf0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T195 (the gap audit of 2026-11-23, items 3 and 12a, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: both triage reply parsers and the EDIT parser read only the lines that matched them, so an unread line's pop-up was answered `triage: untouched`, its claim cleared, or its EDIT dropped, with no word said)": {
+   "sha256": "47c1420fec3e1e88908f6795d98f4c423632be1ee4fca203ddad30d946434a1c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T195 Approach (checklist part A)": {
+   "sha256": "86902947d938a493ced710337827ac0b4d6be6e3dc2c1c6df8113e4e12f431b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T196 (the gap audit 2026-11-23, items 5, 6 and 7, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: claims and later scoped rounds read only the page cited, not where T185's pointers moved its text; live case brook.rs's intake claims citing 0059, split by T184 to 0333)": {
+   "sha256": "c8a600469267a8fa4eff384625b2bc1127f4e5a5fe3b0d4ce9f6322716ade533",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T196 Approach (checklist part A)": {
+   "sha256": "b9f5c31898db96f1880d4a7ec4d731a3d898dc0dc9f6fa216fa9173b76f382b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T196 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "16b894e1f9e04919f7089bf5df32113ec690d58525c552f19a0a6936df0cf31d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T197 (the gap audit of 2026-11-23, item 9: `scripts/gates/l7r-gate.sh` builds from the clone's working tree, so triage and apply-edits answers were judged with other builders' uncommitted code and landed with no build id, T184's first two triage runs on T185/T186's unlanded code; the 81 stale TOUCHES marks on T184's 21 pop-ups stand under `ask:t184-stale-triage-marks`, and no withdrawal verb is built, `ask:t197-rejudge-verb`)": {
+   "sha256": "6da792c1712a8026c9dc16cc6f00249cb409a551bd9ff6016502f99f3ce7d112",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T197 Approach (checklist part A)": {
+   "sha256": "822173f6638d3c40bef788ffc6c5244435fc187180bb465940e3c050176b2645",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  }
+ },
+ "tasks": {
+  "T194": {
+   "section_sha256": "6d6e9fc77a7c6dfb3436aae15245cd9d53a0ac142242245a344d5ec46962ee51",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "keys-reached",
+     "summary": "change::page_change counts a note key as gone only where neither the page now nor any reached block holds it; the MANIFEST keys line follows and is relabeled",
+     "class": "within",
+     "why": "The GM 2026-11-23: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs', and the approved rule 'a split is a move'. A key that moved with its block is not a removal."
+    },
+    {
+     "id": "echo-nearest-sentence",
+     "summary": "change::echo looks for the nearest new sentence on the page and in the reached sentences, so a sentence moved with an edit is compared with its moved self; the echo rule's wording is unchanged",
+     "class": "within",
+     "why": "This applies the approved echo check (T186's first filter) under 'a split is a move' and 'only a claim-changing edit triggers review'. The edit itself is still compared, so a changed claim still owes its review."
+    },
+    {
+     "id": "replay-follows-pointers",
+     "summary": "replay_landing reads each pop-up's pages and their pointers' targets at the commit and its parent, and judges every changed page of that set through the same judged() the bundle uses",
+     "class": "within",
+     "why": "The landing replay now gives the same judgment as the bundle, the cascade rules applied the same way at both points. This narrows nothing."
+    },
+    {
+     "id": "moved-with-edits-manifest",
+     "summary": "Change.moved_edited pairs a removed block with its closest new block on a reached page at PAIR_RATIO. The block stays owed as the echo reads it but is printed under 'Moved with edits' with OLD/NEW/WORD DIFF. A pair whose claim words are equal (a marker edit) is cleared as a move",
+     "class": "within",
+     "why": "The GM's rules: 'a split is a move', 'only a claim-changing edit triggers review', 'labels are data and propagate by regeneration', 're-reviews scoped to the change'. A moved block with an edit is still owed, and is shown to the triage as an edit rather than a deletion. Only an edit that leaves the claim words equal is cleared."
+    },
+    {
+     "id": "reached-meaning",
+     "summary": "'Reached' means all the pages the unit reads (the pop-up's own pages and their pointers' targets, modals::followed), wider than the source page's pointer targets only where a key or sentence sits on another page of the pop-up's own Entry",
+     "class": "within",
+     "why": "The GM's split condition is sufficient, not exclusive. His approved rule 'only a claim-changing edit triggers review' already clears a verbatim move between two pages the pop-up itself reads, because the pop-up's sources still hold the claim. An edited move is still compared and owed. The width was measured, and it matches the set the moves already used. It drops no review of a changed claim."
+    },
+    {
+     "id": "claims-triage-pointer-set",
+     "summary": "The claims triage passes reached_by_pointers, so its echo widens to pointer targets alone; its 167 tests pass unchanged",
+     "class": "within",
+     "why": "This is the GM's split condition as he worded it ('the original page ... directs a reader to the other page'), applied to the claims triage. It narrows nothing."
+    },
+    {
+     "id": "gloss-edge-not-special-cased",
+     "summary": "A moved sentence whose one edit is an inserted gloss fires wherever the pop-up repeats the gloss's neighbors (weir_form--frame on '(seki)'). It is pinned by a test and not special-cased",
+     "class": "within",
+     "why": "This keeps the echo rule the GM approved as worded: an insertion's neighbors count as written. The result owes one review more, never one less, so it carves nothing out of what was asked. Whether the gloss changes a claim stays the triage agent's call, as the approved plan (echo check first, agent triage after) says."
+    },
+    {
+     "id": "contract-paragraph",
+     "summary": "The modal-triage contract's MANIFEST paragraph names the new 'Moved with edits' kind and the keys rule",
+     "class": "within",
+     "why": "The triage agent has to read the MANIFEST's new kind correctly for the approved filter to work. This is no new behavior."
+    },
+    {
+     "id": "order-and-exit",
+     "summary": "Lands after T185, T186 and T191 and before T184; green when the T184 re-run owes the 9 pop-ups the rules give, red recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "This is the GM's 'we have to fix that before we move forward' on the cascade, applied to the split that tests the rules first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T195": {
+   "section_sha256": "ca2d303437c743d5ec1b937b58ca7bb207186842819631f1b5c1ec11e8eb312a",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The pop-up triage (read_reply) reads the reply whole before record writes anything and refuses a line outside the form, a foreign uid, an empty reply, and NONE beside a TOUCHES line, naming the line and form.",
+     "class": "within",
+     "why": "Fixes the fail-open defect the task is filed for (an unread line answered 'triage: untouched' with no word said) in the triage machinery the GM approved on 2026-11-23 (the agent triage after the echo check). A wrong outcome, fixed in the task."
+    },
+    {
+     "id": "D2",
+     "summary": "The claims triage gets the same rules via `refused`, called by `claims triaged` before record_triage so save_index never runs on a refused reply; record_triage is left unchanged for its \"\" callers (observed, grep of its callers); its now-unreachable unknown-key message is removed.",
+     "class": "within",
+     "why": "Same defect on the claims side; leaving record_triage's internal-caller path alone is the scope of the fix, not a narrowing of it, since those callers pass no agent reply. Removing dead code follows from the fix."
+    },
+    {
+     "id": "D3",
+     "summary": "A claim key may hold spaces, so a non-ASCII dash with a later ' - ' reads as an unknown key and is refused.",
+     "class": "within",
+     "why": "A consequence of refusing unknown keys whole; it refuses, never records wrongly, so it cannot reintroduce the fail-open path."
+    },
+    {
+     "id": "D4",
+     "summary": "EDIT: unread_edits/EDIT_FORM finds a line shaped as an EDIT header (first word EDIT past bullet, quote or bold, not EDITS) or a <<< fence outside any parsed block; record apply-edits refuses on it before any block is applied or settled.",
+     "class": "within",
+     "why": "Fixes the dropped-EDIT defect (audit item 12a) at the point where a block is applied."
+    },
+    {
+     "id": "D5",
+     "summary": "Only record apply-edits refuses; the guard's own readers (round state rounds.rs:856, freeze.rs:88) and the bundles' displays keep the existing parse, on the observation (grep of reply::blocks|categorized( over rust/, each caller read) that apply-edits is the one reader that applies or settles a block.",
+     "class": "within",
+     "why": "The defect is an EDIT lost with no one told; every path by which an EDIT takes effect goes through apply-edits, which now refuses the whole reply, so a dropped line in a display or round count cannot become a lost EDIT. The reach is labeled with its search space. Not a narrowing of what was asked."
+    },
+    {
+     "id": "D6",
+     "summary": "Agent files: modal-triage.md asks for NONE when nothing is touched (an empty reply is now refused); claims-triage.md says a line outside the form is refused.",
+     "class": "within",
+     "why": "Keeps the agents' instructions in step with D1/D2 so a correct no-touch reply is not refused."
+    },
+    {
+     "id": "D7",
+     "summary": "Order: before T197's REJUDGE on T184's pop-ups; independent of T198-T200 and T192.",
+     "class": "within",
+     "why": "Sequencing only; a re-triage must not run on the fail-open readers."
+    },
+    {
+     "id": "D8",
+     "summary": "Performance work? no - it changes what the readers refuse, not how long anything takes.",
+     "class": "within",
+     "why": "Corrected from round 1: the task is neither performance nor measurement work under FR-013, so it does not claim the ordering's priority. The round-1 gloss on FR-013 is struck; item 2 now cites FR-013 only as the ordering constraint."
+    },
+    {
+     "id": "D9",
+     "summary": "Found and left: the empty pop-up reply clearing every unit, and an unknown uid or claim key exiting 0 and clearing the rest, both fixed here (observed, every reader of a triage reply read for its unmatched-line path).",
+     "class": "within",
+     "why": "Known defects found by the task are fixed in it, none deferred, as the GM's fix-as-we-go rule asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T196": {
+   "section_sha256": "d45b5817d7a78935cd0f4605f45c46784dcd446110c70b129799a4e061ed3744",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T196-follower",
+     "summary": "One shared follower change::follow (modals::followed now calls it), following a split's target split again, each page once; claims reach it through bundle::follow_names and bundle::read_pages",
+     "class": "within",
+     "why": "The GM 2026-11-23: a split is a move and the original page directs the reader to where the text now stands; following every level is what makes the moved text read where it stands. Reuse rather than a copy is implementation shape."
+    },
+    {
+     "id": "T196-claims-read-pages",
+     "summary": "read_pages (cited pages plus their pointers' targets) used wherever a claim's research is fingerprinted or snapshotted (index::current, report base comparison, record, triage page maps, bundle units.json and cited questions, impl_check); cited_pages alone kept for the two 'names no question file' refusals; a page with no pointer reads as itself so no unsplit claim moves",
+     "class": "within",
+     "why": "Serves 'a split is a move' and 're-reviews scoped to the change': a claim is judged against the text where it stands, so an edit on the target re-owes it. The refusals keep checking the citation as written, which is what they refuse on."
+    },
+    {
+     "id": "T196-pure-split-cleared",
+     "summary": "research_why reads a rest standing verbatim on a pointer-reached page as standing, so a pure split is owed triage that claims triage clears mechanically with no dispatch (feature 432's clear_page_moves), recording the target; only a claim-bearing edit left after the tool's clears reaches an agent",
+     "class": "within",
+     "why": "Directly the GM's 'nothing needs to cascade simply because a split occurs' and the approved rule 'only a claim-changing edit triggers review'."
+    },
+    {
+     "id": "T196-manifest-moved-with-edits",
+     "summary": "Moved::shown lists moved_edited blocks under 'Moved with edits' with OLD, NEW and word diff instead of as removed, rendering shared with the pop-ups'; claims-triage contract names the kind",
+     "class": "within",
+     "why": "A split is a move: a moved block shown as removed sent claims to impl-drift; showing it as a move with its edit scopes the review to the change, as approved."
+    },
+    {
+     "id": "T196-scoped-rounds-follow",
+     "summary": "marks::subject_files follows its files' pointers (a q: subject takes the target's notes and originals); earlier::pairs_since diffs a newly bundled target against the then-text of the pages pointing to it, no deletions shown, so a verbatim move is no change and a restatement pairs with its old self",
+     "class": "within",
+     "why": "The approved rule 're-reviews scoped to the change' and 'a split is a move': a later round sees only what changed on the page where it now stands."
+    },
+    {
+     "id": "T196-found-left-prefollow-row",
+     "summary": "Left: a claim whose index row predates the following, cited page unchanged, is forced through one triage/impl-drift run when a target it never snapshotted changes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a path where a non-claim edit can owe a review, against 'only a claim-changing edit triggers review'. But it is not a defect (no wrong outcome: a conservative extra review, nothing passed or refused wrongly), the case is closed - rows recorded from now on carry the followed pages - and measured empty on the live tree (make claims-owed 2026-11-23, 'no claim is owed', which a pre-following fingerprint on a pointed page would have tripped). Only a defect left is NOT LEGITIMATE."
+    },
+    {
+     "id": "T196-untouched-files",
+     "summary": "T184's and T193's files left untouched; ordered after T185, T191, T194 and beside T184",
+     "class": "within",
+     "why": "Coordination among the feature's own tasks; narrows nothing the GM asked."
+    },
+    {
+     "id": "T196-performance-work",
+     "summary": "Classed as performance work",
+     "class": "within",
+     "why": "The convergence work exists to stop reviews that change nothing (the GM 2026-11-23) and FR-013 puts performance work first; removing an impl-drift dispatch per pure split is that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T197": {
+   "section_sha256": "940429c1f67e050d34dffb12e6ad3c8c0c70b0f5afcbb0b1bd74a43f8cf0ab68",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T197-1a",
+     "summary": "Part (1): after each build the launcher writes $BIN.build.json {commit, dirty}. The dirty set covers only the binary's SOURCES, rust/guard, the Cargo files and .cargo/config.toml, untracked files included",
+     "class": "within",
+     "why": "This is gap-audit item 9's build id, which the arbiter confirmed is what item 9 asks for (ask:t197-rejudge-verb). The scoping only decides which files count as the build's input, so a busy clone's unrelated edits do not mark a clean build dirty. It narrows nothing that was asked."
+    },
+    {
+     "id": "T197-1b",
+     "summary": "Part (1): the id is written at build time, not on each run, and exported as L7R_GATE_BUILD (empty for a binary built before T197)",
+     "class": "within",
+     "why": "Mechanism. A per-run id would misname a binary run under L7R_GATE_STALE_OK or L7R_GATE_FRESH, so writing it at build time is the faithful choice."
+    },
+    {
+     "id": "T197-2a",
+     "summary": "Part (2): write_answer keeps builds {fingerprint: build}. A settled answer keeps its judge's build, a pending settle takes its answer's build, and an adopted sibling brings its own",
+     "class": "within",
+     "why": "It records the build that actually judged each answer, which is the section's goal. The found-and-left item gives its census method (every write_answer caller read), as FR-009 requires."
+    },
+    {
+     "id": "T197-2b",
+     "summary": "Part (2): a claims-triage clear records build only where the build was dirty; a clean build removes the stamp, so the tracked dev/claims-index.json moves only then",
+     "class": "within",
+     "why": "A clean build holds no uncommitted code, so it cannot be mixed in part (3)'s sense, and leaving its stamp out loses nothing the re-owe test reads. Step 2 gives the constraint behind it (the index is tracked)."
+    },
+    {
+     "id": "T197-3a",
+     "summary": "Part (3): under L7R_LAND_ALONE, unanswered_in and the claims owed re-owe an answer whose build held an uncommitted file whose blob differs from the landing's HEAD:<path>, naming the files. A file deleted then and absent now counts as landed",
+     "class": "within",
+     "why": "This is the gap's own fix, and the arbiter's ruling states it as item 9's ask: land-alone stops trusting answers from mixed trees. Counting deleted-and-absent as landed is simply what HEAD is."
+    },
+    {
+     "id": "T197-3b",
+     "summary": "Part (3) exception: an answer with no build (recorded before T197) stands as it always did",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically required: nothing is recorded to compare against HEAD, so the mixed test cannot be applied. Re-owing every such answer would refuse every landing in every clone, the cascade that changes nothing which the GM asked to stop (2026-11-23: 'a cascading set of reviews ... not fixing any real flaws'). That defeats the request's purpose, and the rule still governs every answer from T197 on. The round arbiter also ruled it explicitly (ask:t197-rejudge-verb item 4: 'so does 3b: answers with no build stand'). The seam with part (4) is gone now that part (4) is cut. Taken by class, the known-mixed T184 triage runs fall under ask:t184-stale-triage-marks, which the section's heading now cites: the 81 marks stand and T184 takes the batched modal-research route. Letting them stand is that ruling, not a carve-out."
+    },
+    {
+     "id": "T197-cut",
+     "summary": "Part (4), the REJUDGE withdrawal verb, is cut. The heading states the 81 marks stand under ask:t184-stale-triage-marks and that no withdrawal verb is built. The goal (step 1), step 3's R source, step 5, the red-first list (step 9) and step 12 are restated without the verb",
+     "class": "within",
+     "why": "This applies ask:t197-rejudge-verb option (b) as ruled. The verb's withdrawal of marks was what round 1 found NOT LEGITIMATE, and removing it restores the standing ruling ask:t184-stale-triage-marks ('No re-triage verb is built, in T184 or as a separate task'; 'The 81 marks stand as recorded'). I read the section through for leftovers and found none: no 'covers all 81 stale marks', no 'REJUDGE on T184's pop-ups', no 'sanctioned way out', and no rejudge test in the red-first list."
+    },
+    {
+     "id": "T197-3src",
+     "summary": "Step 3: the S source is restated as the session's task line (tasks.md T197, filed from the 2026-11-23 gap audit), not a GM quote, with the two arbiter rulings as R",
+     "class": "within",
+     "why": "An accurate statement of where the task came from narrows nothing. It also fixes round 1's point that the gap-audit ask is not in request.md. The scope the task keeps (build ids and the mixed-tree re-owe) is the scope the arbiter found item 9 asks for."
+    },
+    {
+     "id": "T197-5",
+     "summary": "Constraints and order: modals.rs and the registry are left alone (other builders' files); the task lands after T195 in the same landing; its exits run through closing-checks or arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and non-interference. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T197-6",
+     "summary": "Performance work? re-read as no: the task changes which answers a landing alone trusts, not how long anything takes",
+     "class": "within",
+     "why": "The arbiter asked for this re-reading (ask:t197-rejudge-verb item 2). With part (4) gone, part (3) only adds owed work, so 'no' is the faithful reading under FR-013, and the [perf] tag is dropped to match. A small leftover not worth a block: step 2 still lists 'FR-013: the landings faster' as a constraint. Read with 'no', that is a limit (do not slow the landings), not a claim of speed."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T194 (T184's split of 0009 to 0332 and 0059 to 0333, the cascade rules' first live test, re-owed 63 pop-up units (21 pop-ups) where 27 (9) follow from the rules: `/home/agent/.claude/jobs/c6fd72d1/tmp/t184-cascade.md`, a read-only re-run of the filter, 2026-11-23)",
+    "### T194 Approach (checklist part A)",
+    "### T194 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "keys-reached",
+     "summary": "change::page_change counts a note key as gone only where neither the page now nor any reached block holds it; the MANIFEST keys line follows and is relabeled",
+     "class": "within",
+     "why": "The GM 2026-11-23: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs', and the approved rule 'a split is a move'. A key that moved with its block is not a removal."
+    },
+    {
+     "id": "echo-nearest-sentence",
+     "summary": "change::echo looks for the nearest new sentence on the page and in the reached sentences, so a sentence moved with an edit is compared with its moved self; the echo rule's wording is unchanged",
+     "class": "within",
+     "why": "This applies the approved echo check (T186's first filter) under 'a split is a move' and 'only a claim-changing edit triggers review'. The edit itself is still compared, so a changed claim still owes its review."
+    },
+    {
+     "id": "replay-follows-pointers",
+     "summary": "replay_landing reads each pop-up's pages and their pointers' targets at the commit and its parent, and judges every changed page of that set through the same judged() the bundle uses",
+     "class": "within",
+     "why": "The landing replay now gives the same judgment as the bundle, the cascade rules applied the same way at both points. This narrows nothing."
+    },
+    {
+     "id": "moved-with-edits-manifest",
+     "summary": "Change.moved_edited pairs a removed block with its closest new block on a reached page at PAIR_RATIO. The block stays owed as the echo reads it but is printed under 'Moved with edits' with OLD/NEW/WORD DIFF. A pair whose claim words are equal (a marker edit) is cleared as a move",
+     "class": "within",
+     "why": "The GM's rules: 'a split is a move', 'only a claim-changing edit triggers review', 'labels are data and propagate by regeneration', 're-reviews scoped to the change'. A moved block with an edit is still owed, and is shown to the triage as an edit rather than a deletion. Only an edit that leaves the claim words equal is cleared."
+    },
+    {
+     "id": "reached-meaning",
+     "summary": "'Reached' means all the pages the unit reads (the pop-up's own pages and their pointers' targets, modals::followed), wider than the source page's pointer targets only where a key or sentence sits on another page of the pop-up's own Entry",
+     "class": "within",
+     "why": "The GM's split condition is sufficient, not exclusive. His approved rule 'only a claim-changing edit triggers review' already clears a verbatim move between two pages the pop-up itself reads, because the pop-up's sources still hold the claim. An edited move is still compared and owed. The width was measured, and it matches the set the moves already used. It drops no review of a changed claim."
+    },
+    {
+     "id": "claims-triage-pointer-set",
+     "summary": "The claims triage passes reached_by_pointers, so its echo widens to pointer targets alone; its 167 tests pass unchanged",
+     "class": "within",
+     "why": "This is the GM's split condition as he worded it ('the original page ... directs a reader to the other page'), applied to the claims triage. It narrows nothing."
+    },
+    {
+     "id": "gloss-edge-not-special-cased",
+     "summary": "A moved sentence whose one edit is an inserted gloss fires wherever the pop-up repeats the gloss's neighbors (weir_form--frame on '(seki)'). It is pinned by a test and not special-cased",
+     "class": "within",
+     "why": "This keeps the echo rule the GM approved as worded: an insertion's neighbors count as written. The result owes one review more, never one less, so it carves nothing out of what was asked. Whether the gloss changes a claim stays the triage agent's call, as the approved plan (echo check first, agent triage after) says."
+    },
+    {
+     "id": "contract-paragraph",
+     "summary": "The modal-triage contract's MANIFEST paragraph names the new 'Moved with edits' kind and the keys rule",
+     "class": "within",
+     "why": "The triage agent has to read the MANIFEST's new kind correctly for the approved filter to work. This is no new behavior."
+    },
+    {
+     "id": "order-and-exit",
+     "summary": "Lands after T185, T186 and T191 and before T184; green when the T184 re-run owes the 9 pop-ups the rules give, red recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "This is the GM's 'we have to fix that before we move forward' on the cascade, applied to the split that tests the rules first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T195 (the gap audit of 2026-11-23, items 3 and 12a, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: both triage reply parsers and the EDIT parser read only the lines that matched them, so an unread line's pop-up was answered `triage: untouched`, its claim cleared, or its EDIT dropped, with no word said)",
+    "### T195 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The pop-up triage (read_reply) reads the reply whole before record writes anything and refuses a line outside the form, a foreign uid, an empty reply, and NONE beside a TOUCHES line, naming the line and form.",
+     "class": "within",
+     "why": "Fixes the fail-open defect the task is filed for (an unread line answered 'triage: untouched' with no word said) in the triage machinery the GM approved on 2026-11-23 (the agent triage after the echo check). A wrong outcome, fixed in the task."
+    },
+    {
+     "id": "D2",
+     "summary": "The claims triage gets the same rules via `refused`, called by `claims triaged` before record_triage so save_index never runs on a refused reply; record_triage is left unchanged for its \"\" callers (observed, grep of its callers); its now-unreachable unknown-key message is removed.",
+     "class": "within",
+     "why": "Same defect on the claims side; leaving record_triage's internal-caller path alone is the scope of the fix, not a narrowing of it, since those callers pass no agent reply. Removing dead code follows from the fix."
+    },
+    {
+     "id": "D3",
+     "summary": "A claim key may hold spaces, so a non-ASCII dash with a later ' - ' reads as an unknown key and is refused.",
+     "class": "within",
+     "why": "A consequence of refusing unknown keys whole; it refuses, never records wrongly, so it cannot reintroduce the fail-open path."
+    },
+    {
+     "id": "D4",
+     "summary": "EDIT: unread_edits/EDIT_FORM finds a line shaped as an EDIT header (first word EDIT past bullet, quote or bold, not EDITS) or a <<< fence outside any parsed block; record apply-edits refuses on it before any block is applied or settled.",
+     "class": "within",
+     "why": "Fixes the dropped-EDIT defect (audit item 12a) at the point where a block is applied."
+    },
+    {
+     "id": "D5",
+     "summary": "Only record apply-edits refuses; the guard's own readers (round state rounds.rs:856, freeze.rs:88) and the bundles' displays keep the existing parse, on the observation (grep of reply::blocks|categorized( over rust/, each caller read) that apply-edits is the one reader that applies or settles a block.",
+     "class": "within",
+     "why": "The defect is an EDIT lost with no one told; every path by which an EDIT takes effect goes through apply-edits, which now refuses the whole reply, so a dropped line in a display or round count cannot become a lost EDIT. The reach is labeled with its search space. Not a narrowing of what was asked."
+    },
+    {
+     "id": "D6",
+     "summary": "Agent files: modal-triage.md asks for NONE when nothing is touched (an empty reply is now refused); claims-triage.md says a line outside the form is refused.",
+     "class": "within",
+     "why": "Keeps the agents' instructions in step with D1/D2 so a correct no-touch reply is not refused."
+    },
+    {
+     "id": "D7",
+     "summary": "Order: before T197's REJUDGE on T184's pop-ups; independent of T198-T200 and T192.",
+     "class": "within",
+     "why": "Sequencing only; a re-triage must not run on the fail-open readers."
+    },
+    {
+     "id": "D8",
+     "summary": "Performance work? no - it changes what the readers refuse, not how long anything takes.",
+     "class": "within",
+     "why": "Corrected from round 1: the task is neither performance nor measurement work under FR-013, so it does not claim the ordering's priority. The round-1 gloss on FR-013 is struck; item 2 now cites FR-013 only as the ordering constraint."
+    },
+    {
+     "id": "D9",
+     "summary": "Found and left: the empty pop-up reply clearing every unit, and an unknown uid or claim key exiting 0 and clearing the rest, both fixed here (observed, every reader of a triage reply read for its unmatched-line path).",
+     "class": "within",
+     "why": "Known defects found by the task are fixed in it, none deferred, as the GM's fix-as-we-go rule asks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T196 (the gap audit 2026-11-23, items 5, 6 and 7, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: claims and later scoped rounds read only the page cited, not where T185's pointers moved its text; live case brook.rs's intake claims citing 0059, split by T184 to 0333)",
+    "### T196 Approach (checklist part A)",
+    "### T196 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T196-follower",
+     "summary": "One shared follower change::follow (modals::followed now calls it), following a split's target split again, each page once; claims reach it through bundle::follow_names and bundle::read_pages",
+     "class": "within",
+     "why": "The GM 2026-11-23: a split is a move and the original page directs the reader to where the text now stands; following every level is what makes the moved text read where it stands. Reuse rather than a copy is implementation shape."
+    },
+    {
+     "id": "T196-claims-read-pages",
+     "summary": "read_pages (cited pages plus their pointers' targets) used wherever a claim's research is fingerprinted or snapshotted (index::current, report base comparison, record, triage page maps, bundle units.json and cited questions, impl_check); cited_pages alone kept for the two 'names no question file' refusals; a page with no pointer reads as itself so no unsplit claim moves",
+     "class": "within",
+     "why": "Serves 'a split is a move' and 're-reviews scoped to the change': a claim is judged against the text where it stands, so an edit on the target re-owes it. The refusals keep checking the citation as written, which is what they refuse on."
+    },
+    {
+     "id": "T196-pure-split-cleared",
+     "summary": "research_why reads a rest standing verbatim on a pointer-reached page as standing, so a pure split is owed triage that claims triage clears mechanically with no dispatch (feature 432's clear_page_moves), recording the target; only a claim-bearing edit left after the tool's clears reaches an agent",
+     "class": "within",
+     "why": "Directly the GM's 'nothing needs to cascade simply because a split occurs' and the approved rule 'only a claim-changing edit triggers review'."
+    },
+    {
+     "id": "T196-manifest-moved-with-edits",
+     "summary": "Moved::shown lists moved_edited blocks under 'Moved with edits' with OLD, NEW and word diff instead of as removed, rendering shared with the pop-ups'; claims-triage contract names the kind",
+     "class": "within",
+     "why": "A split is a move: a moved block shown as removed sent claims to impl-drift; showing it as a move with its edit scopes the review to the change, as approved."
+    },
+    {
+     "id": "T196-scoped-rounds-follow",
+     "summary": "marks::subject_files follows its files' pointers (a q: subject takes the target's notes and originals); earlier::pairs_since diffs a newly bundled target against the then-text of the pages pointing to it, no deletions shown, so a verbatim move is no change and a restatement pairs with its old self",
+     "class": "within",
+     "why": "The approved rule 're-reviews scoped to the change' and 'a split is a move': a later round sees only what changed on the page where it now stands."
+    },
+    {
+     "id": "T196-found-left-prefollow-row",
+     "summary": "Left: a claim whose index row predates the following, cited page unchanged, is forced through one triage/impl-drift run when a target it never snapshotted changes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a path where a non-claim edit can owe a review, against 'only a claim-changing edit triggers review'. But it is not a defect (no wrong outcome: a conservative extra review, nothing passed or refused wrongly), the case is closed - rows recorded from now on carry the followed pages - and measured empty on the live tree (make claims-owed 2026-11-23, 'no claim is owed', which a pre-following fingerprint on a pointed page would have tripped). Only a defect left is NOT LEGITIMATE."
+    },
+    {
+     "id": "T196-untouched-files",
+     "summary": "T184's and T193's files left untouched; ordered after T185, T191, T194 and beside T184",
+     "class": "within",
+     "why": "Coordination among the feature's own tasks; narrows nothing the GM asked."
+    },
+    {
+     "id": "T196-performance-work",
+     "summary": "Classed as performance work",
+     "class": "within",
+     "why": "The convergence work exists to stop reviews that change nothing (the GM 2026-11-23) and FR-013 puts performance work first; removing an impl-drift dispatch per pure split is that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T197 (the gap audit of 2026-11-23, item 9: `scripts/gates/l7r-gate.sh` builds from the clone's working tree, so triage and apply-edits answers were judged with other builders' uncommitted code and landed with no build id, T184's first two triage runs on T185/T186's unlanded code; the 81 stale TOUCHES marks on T184's 21 pop-ups stand under `ask:t184-stale-triage-marks`, and no withdrawal verb is built, `ask:t197-rejudge-verb`)",
+    "### T197 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T197-1a",
+     "summary": "Part (1): after each build the launcher writes $BIN.build.json {commit, dirty}. The dirty set covers only the binary's SOURCES, rust/guard, the Cargo files and .cargo/config.toml, untracked files included",
+     "class": "within",
+     "why": "This is gap-audit item 9's build id, which the arbiter confirmed is what item 9 asks for (ask:t197-rejudge-verb). The scoping only decides which files count as the build's input, so a busy clone's unrelated edits do not mark a clean build dirty. It narrows nothing that was asked."
+    },
+    {
+     "id": "T197-1b",
+     "summary": "Part (1): the id is written at build time, not on each run, and exported as L7R_GATE_BUILD (empty for a binary built before T197)",
+     "class": "within",
+     "why": "Mechanism. A per-run id would misname a binary run under L7R_GATE_STALE_OK or L7R_GATE_FRESH, so writing it at build time is the faithful choice."
+    },
+    {
+     "id": "T197-2a",
+     "summary": "Part (2): write_answer keeps builds {fingerprint: build}. A settled answer keeps its judge's build, a pending settle takes its answer's build, and an adopted sibling brings its own",
+     "class": "within",
+     "why": "It records the build that actually judged each answer, which is the section's goal. The found-and-left item gives its census method (every write_answer caller read), as FR-009 requires."
+    },
+    {
+     "id": "T197-2b",
+     "summary": "Part (2): a claims-triage clear records build only where the build was dirty; a clean build removes the stamp, so the tracked dev/claims-index.json moves only then",
+     "class": "within",
+     "why": "A clean build holds no uncommitted code, so it cannot be mixed in part (3)'s sense, and leaving its stamp out loses nothing the re-owe test reads. Step 2 gives the constraint behind it (the index is tracked)."
+    },
+    {
+     "id": "T197-3a",
+     "summary": "Part (3): under L7R_LAND_ALONE, unanswered_in and the claims owed re-owe an answer whose build held an uncommitted file whose blob differs from the landing's HEAD:<path>, naming the files. A file deleted then and absent now counts as landed",
+     "class": "within",
+     "why": "This is the gap's own fix, and the arbiter's ruling states it as item 9's ask: land-alone stops trusting answers from mixed trees. Counting deleted-and-absent as landed is simply what HEAD is."
+    },
+    {
+     "id": "T197-3b",
+     "summary": "Part (3) exception: an answer with no build (recorded before T197) stands as it always did",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically required: nothing is recorded to compare against HEAD, so the mixed test cannot be applied. Re-owing every such answer would refuse every landing in every clone, the cascade that changes nothing which the GM asked to stop (2026-11-23: 'a cascading set of reviews ... not fixing any real flaws'). That defeats the request's purpose, and the rule still governs every answer from T197 on. The round arbiter also ruled it explicitly (ask:t197-rejudge-verb item 4: 'so does 3b: answers with no build stand'). The seam with part (4) is gone now that part (4) is cut. Taken by class, the known-mixed T184 triage runs fall under ask:t184-stale-triage-marks, which the section's heading now cites: the 81 marks stand and T184 takes the batched modal-research route. Letting them stand is that ruling, not a carve-out."
+    },
+    {
+     "id": "T197-cut",
+     "summary": "Part (4), the REJUDGE withdrawal verb, is cut. The heading states the 81 marks stand under ask:t184-stale-triage-marks and that no withdrawal verb is built. The goal (step 1), step 3's R source, step 5, the red-first list (step 9) and step 12 are restated without the verb",
+     "class": "within",
+     "why": "This applies ask:t197-rejudge-verb option (b) as ruled. The verb's withdrawal of marks was what round 1 found NOT LEGITIMATE, and removing it restores the standing ruling ask:t184-stale-triage-marks ('No re-triage verb is built, in T184 or as a separate task'; 'The 81 marks stand as recorded'). I read the section through for leftovers and found none: no 'covers all 81 stale marks', no 'REJUDGE on T184's pop-ups', no 'sanctioned way out', and no rejudge test in the red-first list."
+    },
+    {
+     "id": "T197-3src",
+     "summary": "Step 3: the S source is restated as the session's task line (tasks.md T197, filed from the 2026-11-23 gap audit), not a GM quote, with the two arbiter rulings as R",
+     "class": "within",
+     "why": "An accurate statement of where the task came from narrows nothing. It also fixes round 1's point that the gap-audit ask is not in request.md. The scope the task keeps (build ids and the mixed-tree re-owe) is the scope the arbiter found item 9 asks for."
+    },
+    {
+     "id": "T197-5",
+     "summary": "Constraints and order: modals.rs and the registry are left alone (other builders' files); the task lands after T195 in the same landing; its exits run through closing-checks or arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and non-interference. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T197-6",
+     "summary": "Performance work? re-read as no: the task changes which answers a landing alone trusts, not how long anything takes",
+     "class": "within",
+     "why": "The arbiter asked for this re-reading (ask:t197-rejudge-verb item 2). With part (4) gone, part (3) only adds owed work, so 'no' is the faithful reading under FR-013, and the [perf] tag is dropped to match. A small leftover not worth a block: step 2 still lists 'FR-013: the landings faster' as a constraint. Read with 'no', that is a limit (do not slow the landings), not a claim of speed."
+    }
+   ]
+  }
+ ],
+ "part": "451-time-retro-and-efficiency - plan-review.json, the closed tasks' entries T194 to T197, cut by `make archive-split` (462 T545); what is where: archive/INDEX.md"
+}
