@@ -300,32 +300,67 @@ After the move two edits were made to satisfy the plan lint, neither changing a 
 
 
 
-### T107 (<why: the finding or measurement that files it>)
+### T107 (the bundle crate's `the_rare_paths_of_a_depiction_bundle` returned -1 where 0 was expected under load near 30, 2026-11-21 at 451 T102's landing; its -1 is the tests' 150 ms crop bound outlasted by the fake crop's `sh` start, measured 2026-11-27 (the bundle binary 30 at once))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: the defect is the TESTS' crop bound, not the bundle: `rust/gate/crates/bundle/src/record/bundle/depiction.rs`'s
+  `#[cfg(test)] CROP_TIMEOUT` goes from 150 ms to 30 s (a GUESS knob with its measured why beside it), a ceiling no green run waits
+  out - the fake crop of a page that is not slow ends in milliseconds and the 1 ms poll ends the wait at once - while the `slow`
+  page keeps its own 20 ms (`crop_timeout`), so the timeout test's time is unchanged. The production `CROP_TIMEOUT` (180 s, observed 2026-11-27, method: read
+  `depiction.rs`) and `glyph_crop` are untouched. `depiction/tests.rs`: each success assertion says `run.err` (on the assertion's own line), so a
+  future -1 names its cause where this one was thrown away (`let (code, _)`).
+- **Measured** (method for each figure: the bundle crate's test binary run whole, 30 or 20 at once, under `uptime`'s load on 22
+  cores, its failures' messages counted, 2026-11-27):
+  - What -1 is: `subprocess.TimeoutExpired: the crop of well timed out after 180 seconds` (the message names the production
+    bound; the test's is 150 ms) - 17 red of 90 at load 18-333, 18 failures, all three crop tests (the rare paths 5, the crop 5,
+    the cannot-crop 8), measured 2026-11-27 (the bundle binary 30x3). Not a signal and not the browser: the tests' crop is a `sh`
+    script, never `l7r-browser`.
+  - After: 0 red of 80 at load 437-469, measured 2026-11-27 (the bundle binary 20x4). At 30 at once a third round hit the
+    container's `pids.max` (2048): `failed to spawn thread`, EAGAIN, across the crate's tests, one in the rare-paths test, at load
+    259-606, measured 2026-11-27 (the bundle binary 30x3, its second run) - the machine's limit under the measurement's own load,
+    no test's defect.
+- **Decision 1 - fix the tests' bound, not the bundle.** No production crop failed: the -1 came from the test-only 150 ms bound (observed 2026-11-27, method: read `depiction.rs`),
+  which the history beside it set at "many times a start under load" twice (449 T108, T160) and load outran both times. A bound
+  that only a hung crop reaches stops that race for good; the slow page keeps its own 20 ms (observed 2026-11-27, method: read `depiction.rs`), so FR-008's tenth
+  of a second is not spent. So the rare paths are pinned with no load sensitivity the task line names: a crop that ends at all passes, however slow its start, and only one that never ends meets the ceiling, measured 2026-11-27 (the slowed fake crop and the 20x4 run). Label: the algorithmically easier route, the record silent (tooling, no research question).
+- **Decision 2 - fixed here, the merge-base test's stale-page case.** The same load run turned up
+  `the_candidates_at_the_merge_base_and_the_geometry` red 1 of 90 at load 12-340 (the first run after the bound's fix): it writes `g.svg` a statement after `g.html` and
+  expects "not stale" from `stale_page`'s one-second tolerance, which a slow second statement crossed. The drawing's time is now
+  set to the page's plus one second (the tolerance's edge), not left to the clock.
+- Red first, measured 2026-11-27 (make rust-test, ONLY the depiction module): the fake crop slowed 0.3 s for every page that is not
+  `slow` or `nocrop` (a scratch edit, removed after) against the old 150 ms bound, 8 passed and 2 failed with
+  `subprocess.TimeoutExpired` (`the_rare_paths_of_a_depiction_bundle` and `a_depiction_bundle_with_its_crop`), and against 30 s 10 of 10 passed, measured 2026-11-27 (make rust-test).
 
 ### T107 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The depiction bundle's tests are green at any load, and the crop's timeout is still proved by the
+   slow page's own test.
+2. **The constraints.** 449 T167's 20 ms slow-page bound, FR-008's tenth of a second a test and the production `CROP_TIMEOUT`
+   (180 s), observed 2026-11-27, method: read `depiction.rs` and its history comments, with the crate's own-tests coverage and an
+   assertion's message on its own line (451 T343).
+3. **Where each comes from.** R: tasks.md T107, the history comments beside `CROP_TIMEOUT` (449 T108, T160, T167). O: the load
+   runs above (2026-11-27).
+4. **Do they describe the world here?** Yes: the runs used the crate's own test binary, whole, 20 or 30 at once on the shared
+   machine at the loads named, and the cause was read from the failures' own messages, measured 2026-11-27 (the bundle binary 30x3
+   and 20x4).
+5. **The order.** Any; it touches only the bundle crate's depiction module.
+6. **The exits.** Green: the 20x4 run at load clean. Red: what failed recorded and the task set down, a claim that it cannot be
+   done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one test constant and one fixture's time.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 17 of 90 red before at load 18-333, 0 of 80 after at load 437-469, measured 2026-11-27 (the bundle binary
+   30x3 and 20x4).
+10. **Before moving a constant.** The test-only `CROP_TIMEOUT` was no claim's; now 30 s, a GUESS with its measured why. The
+    production 180 s unmoved (observed 2026-11-27, method: `git diff`).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a red batch gate's false red from these tests is gone; the bundle behaves as before.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- `the_candidates_at_the_merge_base_and_the_geometry`'s stale-page case read the clock (Decision 2): fixed here.
+- The container's `pids.max` of 2048 failed thread spawns at 30 test binaries at once and load 606, measured 2026-11-27 (the
+  bundle binary 30x3, `/sys/fs/cgroup/pids.max`): not a defect - the measurement's own load, no test's wrong outcome.
 
+**Performance work?** no
 
 ### T109 (<why: the finding or measurement that files it>)
 
@@ -1097,32 +1132,70 @@ After the move two edits were made to satisfy the plan lint, neither changing a 
 
 
 
-### T173 (<why: the finding or measurement that files it>)
+### T173 (tests/hooks/test-finished-run-hooks.sh section 6's five refusal cases failed twice chained after the rust/guard crate builds at load ~15, 2026-11-23 (451 T171's finisher), the cause the fixture's 12 s life, which one slow Stop call outlasts, measured 2026-11-27 (the suite with its first Stop slowed))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: the defect is the SUITE's fixture, not the guard: every live run the suite starts was `make sleeper`, `sleep 12`,
+  so all the checks of a section had to finish inside 12 s of its start (observed 2026-11-27, method: read the suite).
+  `tests/hooks/test-finished-run-hooks.sh` alone changes: the fixture sleeps `RUN_S` (600 s, a GUESS knob beside its measured why),
+  a ceiling no green run waits out since every section ends its runs itself, in section 6, 6b (the sleeper and 6d's `p2`, while
+  `p1`'s 3 s, the transition 6d waits for, is kept, observed 2026-11-27, method: read the suite), 6e's nested and sibling clones,
+  and so in 6c, 6g, 6f, 9, 10 and 11, which run the same Makefile. `endruns <clone>` (new) ends a clone's live makes and their
+  direct children (`pkill -P`, then `kill`) where each section killed only the make, which left its `sleep` to run out; `endone`
+  does it for 6f's one run, and the EXIT trap runs `endruns` over the three fixture clones, so a red run leaves no `RUN_S` sleeper
+  behind.
+- **Measured**:
+  - THE CAUSE: the first Stop call on the live clone slowed 13 s (a scratch wrapper hook sleeping once before the real one, a
+    marker directory saying it had) - on HEAD's text 79 passed and 5 failed, exactly section 6's five refusal cases ("stop refuses
+    a turn that would close over a live run", "...and says so", "...and what to do about it", "a token in a command cannot escape
+    a Stop hook", "the refusal is recorded with its own rule"), the run gone before they asked and nothing else red, measured
+    2026-11-27 (the first-Stop-slowed suite on HEAD's text). The line's shape: the five together, and green alone.
+  - What can slow a call that much: a stale guard binary (a guard source touched) makes the suite's first call rebuild it, and
+    the wrapper waits up to 45 s (`L7R_GUARD_BUILD_SECS`) on that build, observed 2026-11-27, method: read
+    `scripts/hooks/l7r-guard.sh`. It did NOT reproduce the line's failure here: one stale-binary run put its 15.2 s rebuild in
+    section 1's first call and left section 6 green, measured 2026-11-27 (each call timed by a scratch wrapper, load 189). The
+    2026-11-23 runs' logs are gone, so which call waited then is not measured, and the fix does not depend on it: any one Stop
+    call past the fixture's 12 s fails the five, measured 2026-11-27 (the first-Stop-slowed suite on HEAD's text).
+  - Unslowed under load: 20 of 20 green at load 52-71, measured 2026-11-27 (the suite 10 at once, 2 rounds) - a wait of 12 s is
+    rare, as the line's "passed alone" says.
+  - A shared state file: none - the said-once record (`<git dir>/l7r-said/`) and the told marker are in the suite's own temp
+    clone, a stale waiter is scoped by the per-run `NEVER` token, observed 2026-11-27, method: read `once::file`,
+    `common_git_dir` and the suite.
+- **Decision 1 - the fixture outlives the slow call; no hook change.** The guard's refusal is right whenever the run is live, and
+  the test's 12 s was the bound, measured 2026-11-27 (the first-Stop-slowed suite on both texts). A longer fixture costs a green
+  run nothing (each section ends its runs); the price is a sleeper that a killed suite would leave, which the EXIT trap and
+  `endruns`' child kill answer. Priced and declined: a fresh guard binary before the suite (the rebuild wait is one possible slow
+  call of several - load is another - and the suite is run by `make hooks-test` after the builds anyway). Label: the
+  algorithmically easier route, the record silent (tooling, no research question).
+- Red first: on HEAD's text the first Stop slowed 13 s fails the five (79 passed, 5 failed), and on the fixed text the same run
+  passes 84 of 84, measured 2026-11-27 (the first-Stop-slowed suite on both texts). Unslowed, 20 of 20 green at load 25-29 and
+  alone 84 of 84 in 8.0 s, with no `sleep 600` left after any run, measured 2026-11-27 (the suite 10x2, alone, and `pgrep` after
+  each).
 
 ### T173 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The finished-run suite's refusal cases hold however slow a hook call is, and still fail a guard
+   that lets a live run through.
+2. **The constraints.** 451 T115's `settle` (a state that never comes fails, its SETTLE_S 30 s, observed 2026-11-27, method: read
+   the suite), the per-run `NEVER` token (no cleanup reaches another clone's suite), and the guard's hook suite run as
+   `make hooks-test` runs it.
+3. **Where each comes from.** R: tasks.md T173, 451 T115's and T171's sections. O: the runs above (2026-11-27).
+4. **Do they describe the world here?** Yes: the suite was run whole through its own shim, alone, 10 at once, and with its first
+   Stop slowed, on the shared machine at the loads named, measured 2026-11-27 (the runs above).
+5. **The order.** Any; it touches the suite alone.
+6. **The exits.** Green: the first-Stop-slowed suite green on the fixed text and the 10-at-once runs clean. Red: what failed
+   recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one fixture's length and its cleanup.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The first Stop slowed 13 s: 5 red (section 6's five) before, 84 of 84 after, measured 2026-11-27 (the
+   first-Stop-slowed suite on both texts).
+10. **Before moving a constant.** The fixture's 12 s was no claim's, observed 2026-11-27, method: read the suite; now `RUN_S`,
+    600 s, a GUESS with its measured why.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a false red of the hook suites at a landing is gone; the guard behaves as before.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T178 (<why: the finding or measurement that files it>)
 

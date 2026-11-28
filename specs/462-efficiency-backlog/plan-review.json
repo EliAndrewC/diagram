@@ -246,6 +246,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T173 (tests/hooks/test-finished-run-hooks.sh section 6's five refusal cases failed twice chained after the rust/guard crate builds at load ~15, 2026-11-23 (451 T171's finisher), the cause the fixture's 12 s life, which one slow Stop call outlasts, measured 2026-11-27 (the suite with its first Stop slowed))": {
+   "sha256": "822776f56e5517709793160f85708348ac73b6e45e54e0442fc6a3e90ce9ad67",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T173 Approach (checklist part A)": {
+   "sha256": "5ec64a1615bb3a3b340b59cf5d185c1f66cd574ee0e49af88652d75df3c6da9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T107 (the bundle crate's `the_rare_paths_of_a_depiction_bundle` returned -1 where 0 was expected under load near 30, 2026-11-21 at 451 T102's landing; its -1 is the tests' 150 ms crop bound outlasted by the fake crop's `sh` start, measured 2026-11-27 (the bundle binary 30 at once))": {
+   "sha256": "4ff7e86f9a28658c27da56407a00f424c678d62d048d53a8ca07ab4d94df00c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T107 Approach (checklist part A)": {
+   "sha256": "6261c6b0ba8711824f3f4d346e2012016c82e5a10d660b487d7b9fb56e46c803",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1263,6 +1287,56 @@
      "why": "FR-013 counts work that keeps the builders' loop and the checks from stalling as performance work, and the classification follows that text. Landing it with T206 is ordering only, and the scope stays the same."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T173 (tests/hooks/test-finished-run-hooks.sh section 6's five refusal cases failed twice chained after the rust/guard crate builds at load ~15, 2026-11-23 (451 T171's finisher), the cause the fixture's 12 s life, which one slow Stop call outlasts, measured 2026-11-27 (the suite with its first Stop slowed))",
+    "### T173 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "Fix the suite's fixture (a live run that outlives one slow Stop call), not the guard; no hook change; a fresh guard binary before the suite priced and declined",
+     "class": "within",
+     "why": "T173 is a moved backlog task (FR-002) whose defect is section 6's five refusal cases failing when one Stop call outlasts the fixture's 12 s. The section measures that cause (first Stop slowed 13 s: the five red on HEAD, 84 of 84 on the fixed text), so the guard's refusal is not the defect and fixing the fixture fixes the whole defect. Declining a pre-built binary is a design choice among fixes, not a narrowing of what was asked; nothing in the GM's request bears on this suite."
+    },
+    {
+     "id": "RUN_S 600 s",
+     "summary": "The fixture sleeps RUN_S (600 s, a GUESS knob with its measured why) in place of sleep 12, across sections 6, 6b (sleeper and 6d's p2), 6c, 6e, 6f, 6g, 9, 10, 11; 6d's p1 3 s transition kept",
+     "class": "within",
+     "why": "The mechanism of Decision 1 applied to every live run that shares the Makefile; keeping p1's 3 s preserves the transition 6d tests rather than excepting a case from the fix."
+    },
+    {
+     "id": "endruns / endone / EXIT trap",
+     "summary": "New cleanup ends a clone's live makes and their direct children, and the EXIT trap runs it over the three fixture clones",
+     "class": "within",
+     "why": "Answers the price of the longer fixture (a killed or red suite leaving a 600 s sleeper); scoped to the suite's own temp clones and per-run NEVER token, so it adds no behavior outside the test."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T107 (the bundle crate's `the_rare_paths_of_a_depiction_bundle` returned -1 where 0 was expected under load near 30, 2026-11-21 at 451 T102's landing; its -1 is the tests' 150 ms crop bound outlasted by the fake crop's `sh` start, measured 2026-11-27 (the bundle binary 30 at once))",
+    "### T107 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "Fix the tests' crop bound, not the bundle: the test-only CROP_TIMEOUT goes from 150 ms to 30 s (a GUESS knob with its measured why); the slow page keeps its own 20 ms so the timeout path stays proved; production CROP_TIMEOUT (180 s) and glyph_crop untouched; success assertions carry run.err on their own line.",
+     "class": "within",
+     "why": "T107 is one of 451's open tasks moved here whole by FR-002 (the GM's go on the session's proposal: 'Move the rest'). The task is a false red of the crop tests under load; the block measures the cause as the test-only bound outrun by the fake crop's sh start and changes only that bound, leaving the timeout behavior still tested by the slow page and production behavior unchanged. Nothing the task or the request asks for is left undone or excepted; making a test stop refusing good work is the task itself."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "Also fix, in this task, the_candidates_at_the_merge_base_and_the_geometry's stale-page case: set the drawing's time to the page's plus one second instead of leaving it to the clock.",
+     "class": "within",
+     "why": "A defect found by this task's own measurement run (a test refusing good work under load, 1 of 90 red) in the same crate, fixed as found. Fixing a known defect a step turns up is the standing rule (constitution XIV, fix as we go), not unrequested scope, and it adds no behavior beyond making the existing test stop reading the clock. No part of the request is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1619,6 +1693,52 @@
      "summary": "Counted as performance work under 451 FR-013 (it keeps the checks and the builders' loop from stopping on a stale link) and landed in one landing with T206",
      "class": "within",
      "why": "FR-013 counts work that keeps the builders' loop and the checks from stalling as performance work, and the classification follows that text. Landing it with T206 is ordering only, and the scope stays the same."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T173": {
+   "section_sha256": "77f4efb5e05f7e45dba75534771acf4c9f9bf32a2ff7332141c32cf48244141f",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "Fix the suite's fixture (a live run that outlives one slow Stop call), not the guard; no hook change; a fresh guard binary before the suite priced and declined",
+     "class": "within",
+     "why": "T173 is a moved backlog task (FR-002) whose defect is section 6's five refusal cases failing when one Stop call outlasts the fixture's 12 s. The section measures that cause (first Stop slowed 13 s: the five red on HEAD, 84 of 84 on the fixed text), so the guard's refusal is not the defect and fixing the fixture fixes the whole defect. Declining a pre-built binary is a design choice among fixes, not a narrowing of what was asked; nothing in the GM's request bears on this suite."
+    },
+    {
+     "id": "RUN_S 600 s",
+     "summary": "The fixture sleeps RUN_S (600 s, a GUESS knob with its measured why) in place of sleep 12, across sections 6, 6b (sleeper and 6d's p2), 6c, 6e, 6f, 6g, 9, 10, 11; 6d's p1 3 s transition kept",
+     "class": "within",
+     "why": "The mechanism of Decision 1 applied to every live run that shares the Makefile; keeping p1's 3 s preserves the transition 6d tests rather than excepting a case from the fix."
+    },
+    {
+     "id": "endruns / endone / EXIT trap",
+     "summary": "New cleanup ends a clone's live makes and their direct children, and the EXIT trap runs it over the three fixture clones",
+     "class": "within",
+     "why": "Answers the price of the longer fixture (a killed or red suite leaving a 600 s sleeper); scoped to the suite's own temp clones and per-run NEVER token, so it adds no behavior outside the test."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T107": {
+   "section_sha256": "9b7ee8a4f1aabd24dda8f68b23e6403db790d02dca734c5ed0fd6162b34f4dab",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "Fix the tests' crop bound, not the bundle: the test-only CROP_TIMEOUT goes from 150 ms to 30 s (a GUESS knob with its measured why); the slow page keeps its own 20 ms so the timeout path stays proved; production CROP_TIMEOUT (180 s) and glyph_crop untouched; success assertions carry run.err on their own line.",
+     "class": "within",
+     "why": "T107 is one of 451's open tasks moved here whole by FR-002 (the GM's go on the session's proposal: 'Move the rest'). The task is a false red of the crop tests under load; the block measures the cause as the test-only bound outrun by the fake crop's sh start and changes only that bound, leaving the timeout behavior still tested by the slow page and production behavior unchanged. Nothing the task or the request asks for is left undone or excepted; making a test stop refusing good work is the task itself."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "Also fix, in this task, the_candidates_at_the_merge_base_and_the_geometry's stale-page case: set the drawing's time to the page's plus one second instead of leaving it to the clock.",
+     "class": "within",
+     "why": "A defect found by this task's own measurement run (a test refusing good work under load, 1 of 90 red) in the same crate, fixed as found. Fixing a known defect a step turns up is the standing rule (constitution XIV, fix as we go), not unrequested scope, and it adds no behavior beyond making the existing test stop reading the clock. No part of the request is narrowed."
     }
    ],
    "verdict": "CLEAR"

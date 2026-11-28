@@ -59,8 +59,8 @@ fn a_depiction_bundle_with_its_crop() {
     put(&root, "pool/sheets/s1/s1.html", "<g>none</g>");
     put(&root, "pool/notes.txt", "a file among the trees");
     let o = root.join("out").to_string_lossy().into_owned();
-    let (code, _) = depiction(&root, &o);
-    assert_eq!(code, 0);
+    let (code, run) = depiction(&root, &o);
+    assert_eq!(code, 0, "{}", run.err);
     let glyph = std::fs::read_to_string(root.join("out/glyph.txt")).unwrap();
     assert!(
         glyph.contains("- `well` opens `hamlet/well`\n- `other` opens the `other` pop-up")
@@ -89,8 +89,8 @@ fn a_depiction_bundle_with_its_crop() {
 fn no_crop_a_stale_page_and_the_failures() {
     let root = scratch("modal-depiction-none");
     let o = root.join("out").to_string_lossy().into_owned();
-    let (code, _) = depiction(&root, &o);
-    assert_eq!(code, 0);
+    let (code, run) = depiction(&root, &o);
+    assert_eq!(code, 0, "{}", run.err);
     assert!(std::fs::read_to_string(root.join("out/glyph.txt"))
         .unwrap()
         .starts_with("no crop: the kind `well` is drawn on no pool page"));
@@ -102,8 +102,8 @@ fn a_page_the_browser_cannot_crop_is_said_so() {
     let root = scratch("modal-depiction-nocrop");
     let o = root.join("out").to_string_lossy().into_owned();
     put(&root, "pool/hamlets/nocrop/nocrop.html", POOL_PAGE);
-    let (code, _) = depiction(&root, &o);
-    assert_eq!(code, 0);
+    let (code, run) = depiction(&root, &o);
+    assert_eq!(code, 0, "{}", run.err);
     assert!(std::fs::read_to_string(root.join("out/glyph.txt"))
         .unwrap()
         .contains("the browser could not crop it from `pool/hamlets/nocrop/nocrop.html`"));
@@ -224,6 +224,18 @@ fn the_candidates_at_the_merge_base_and_the_geometry() {
     assert_eq!(html_escape("a&<>\"'"), "a&amp;&lt;&gt;&quot;&#x27;");
     assert_eq!(stale_page(&root.join("g.html"), &root), "");
     put(&root, "g.svg", "<svg/>");
+    // the drawing a second after its page, its time set, not left to the clock: written a statement later it was over a second
+    // later at a load of 340, and read stale (462 T107)
+    let page_time = std::fs::metadata(root.join("g.html"))
+        .unwrap()
+        .modified()
+        .unwrap();
+    std::fs::File::options()
+        .write(true)
+        .open(root.join("g.svg"))
+        .unwrap()
+        .set_modified(page_time + std::time::Duration::from_secs(1))
+        .unwrap();
     assert_eq!(stale_page(&root.join("g.html"), &root), "");
 }
 
@@ -243,9 +255,9 @@ fn the_rare_paths_of_a_depiction_bundle() {
     let locked = root.join("pool/hamlets/d/locked.html");
     std::fs::set_permissions(&locked, std::os::unix::fs::PermissionsExt::from_mode(0o000)).unwrap();
     let o = root.join("out").to_string_lossy().into_owned();
-    let (code, _) = depiction(&root, &o);
+    let (code, run) = depiction(&root, &o);
     std::fs::set_permissions(&locked, std::os::unix::fs::PermissionsExt::from_mode(0o644)).unwrap();
-    assert_eq!(code, 0);
+    assert_eq!(code, 0, "{}", run.err);
     let knobs = std::fs::read_to_string(root.join("out/knobs.md")).unwrap();
     assert_eq!(knobs.matches("let k").count(), 15);
     let glyph = std::fs::read_to_string(root.join("out/glyph.txt")).unwrap();

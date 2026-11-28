@@ -7,7 +7,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/finished-run-hooks.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d)
-trap 'rm -rf "$T"' EXIT
+trap 'endruns "$T/live-clone"; endruns "$T/live-clone/.clones/other"; endruns "$T/live-clone2"; rm -rf "$T"' EXIT
 # GUARD_EDIT_OK: a per-run token, so the pkill cleanups below never reach another clone's concurrent run of this suite
 NEVER="NEVER_APPEARS_${T##*/}"
 export GUARD_LOG_DIR="$T/guard-log"
@@ -25,6 +25,13 @@ say() { printf '{"session_id":"t","cwd":"%s"}' "$CLONE" | "$HOOK" "$1" 2>&1; }
 check() { if [ "$2" = "$3" ]; then printf 'ok    %s\n' "$1"; PASS=$((PASS+1));
           else printf 'FAIL  %s (expected %s, got %s)\n' "$1" "$2" "$3"; FAIL=$((FAIL+1)); fi; }
 has() { case "$1" in *"$2"*) echo yes ;; *) echo no ;; esac; }
+# GUARD_EDIT_OK: 462 T173 - A FIXTURE RUN LIVES UNTIL THE SUITE ENDS IT. Each live run was `sleep 12`, so every check of a section had to
+# finish inside 12 s of its start: a Stop call slowed 13 s (a guard rebuild's wait, or load) failed section 6's five refusal cases
+# exactly, the run gone before they asked, measured 2026-11-27. RUN_S (600 s, a GUESS no green run waits out) outlives any slow call;
+# endruns ends a clone's runs and their children (a killed make leaves its sleep), and the EXIT trap ends what a red run left.
+RUN_S=600
+endone() { [ -n "$1" ] && pkill -P "$1" 2>/dev/null; [ -n "$1" ] && kill "$1" 2>/dev/null; }
+endruns() { local p; for p in $("$HOOK" live "$1" 2>/dev/null | cut -d' ' -f1); do endone "$p"; done; }
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - a fixed settle sleep after starting or stopping a fixture's process
 # became a READINESS POLL: the condition the next check needs, asked every 0.05 s. The suite was 39 s of wall for 5 s of work;
 # the hook's own intervals are untouched.
@@ -81,9 +88,9 @@ echo "--- 6. a run STILL GOING holds the turn (GM 2026-09-12) ---"
 LV=$T/live-clone; mkdir -p "$LV"; git init -q "$LV"
 check "a clone with no make running reports nothing live" "" "$("$HOOK" live "$LV")"
 
-cat > "$LV/Makefile" <<'MK'
+cat > "$LV/Makefile" <<MK
 sleeper:
-	@sleep 12
+	@sleep $RUN_S
 MK
 ( cd "$LV" && make sleeper >/dev/null 2>&1 & ) ; settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper'
 check "a live make in the clone is found, with its target" yes "$(has "$("$HOOK" live "$LV")" sleeper)"
@@ -110,16 +117,16 @@ check "the refusal is recorded with its own rule" yes "$(has "$RULES" "'blocked'
 # line each, the refusal keys on the ROOT make so a phase child refuses nothing new, and only a detached run nobody
 # watches is refused. Every case drives a REAL process; nothing here is a pattern over a command line.
 echo "--- 6b. a run the HARNESS tracks is let through: an ancestor named claude (feature 246) ---"
-for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ]'; rm -f "$LV/.git/live-run.told"
-cat > "$LV/Makefile" <<'MK'
+endruns "$LV"; settle '[ -z "$("$HOOK" live "$LV")" ]'; rm -f "$LV/.git/live-run.told"
+cat > "$LV/Makefile" <<MK
 sleeper:
-	@sleep 12
+	@sleep $RUN_S
 phases:
-	@$(MAKE) --no-print-directory p1; $(MAKE) --no-print-directory p2
+	@\$(MAKE) --no-print-directory p1; \$(MAKE) --no-print-directory p2
 p1:
 	@sleep 3
 p2:
-	@sleep 9
+	@sleep $RUN_S
 MK
 mkdir -p "$T/tasks"; cp "$(command -v bash)" "$T/claude"
 # THE FIXTURES DETACH FOR REAL, AND THE STAND-IN HARNESS STAYS ALIVE - two shell facts the first run of this section
@@ -133,7 +140,7 @@ OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$LV" | "$HOOK" stop 2>"$T/fr.err")
 check "stop lets a tracked run through" 0 "$RC"
 check "...with one line of context saying the harness will wake the session" yes "$(has "$OUT" 'harness will wake this session')"
 check "...and no refusal text" no "$(has "$(cat "$T/fr.err")" 'STILL GOING')"
-for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; pkill -f "$T/claude" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
+endruns "$LV"; pkill -f "$T/claude" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
 
 echo "--- 6c. a detached run with a WAITER on its log is let through; one on another file is not ---"
 rm -f "$LV/.git/live-run.told"
@@ -152,7 +159,7 @@ check "the judge sees the run as watched, with its waiter" yes "$(has "$("$HOOK"
 OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$LV" | "$HOOK" stop 2>"$T/fr.err"); RC=$?
 check "stop lets a watched run through" 0 "$RC"
 check "...with one line naming the waiter" yes "$(has "$OUT" 'a waiter (pid')"
-pkill -f "$NEVER" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ] && ! pgrep -f "$NEVER" >/dev/null'
+pkill -f "$NEVER" 2>/dev/null; endruns "$LV"; settle '[ -z "$("$HOOK" live "$LV")" ] && ! pgrep -f "$NEVER" >/dev/null'
 
 echo "--- 6d. ONCE PER ROOT RUN: a phase child appearing does not refuse again (the R1 shape) ---"
 rm -f "$LV/.git/live-run.told"
@@ -165,7 +172,7 @@ settle '[ "$("$HOOK" live "$LV" | tr "\n" " ")" != "$FIRST" ] && [ -n "$("$HOOK"
 SECOND=$("$HOOK" live "$LV" | tr '\n' ' ')
 check "the live set has CHANGED (p2 is the child now)" no "$([ "$FIRST" = "$SECOND" ] && echo yes || echo no)"
 check "...and the same root does NOT refuse again" 0 "$(lstop; echo $?)"
-for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ]'
+endruns "$LV"; settle '[ -z "$("$HOOK" live "$LV")" ]'
 RULES3=$(jq -rs 'map("(" + ("\u0027" + .event + "\u0027, \u0027" + (.rule // "None") + "\u0027") + ")") | join(" ")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
 check "the tracked pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'tracked-run'")"
 check "the watched pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'waiter-armed'")"
@@ -179,22 +186,22 @@ setsid nohup bash -c "S=$T/v; until grep -q $NEVER \$S/maps.log; do sleep 3; don
 settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper && pgrep -f "maps.log; do sleep" >/dev/null'
 check "S=<dir>; ... \$S/maps.log: the judge sees the run as watched" yes "$(has "$("$HOOK" judge "$LV")" " sleeper watched ")"
 lstop; check "...and the turn closes" 0 "$?"
-pkill -f "$NEVER" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ] && ! pgrep -f "$NEVER" >/dev/null'
+pkill -f "$NEVER" 2>/dev/null; endruns "$LV"; settle '[ -z "$("$HOOK" live "$LV")" ] && ! pgrep -f "$NEVER" >/dev/null'
 rm -f "$LV/.git/live-run.told" "$T/v/b.log"
 ( setsid nohup bash -c "cd $LV && make sleeper > $T/v/a.log 2>&1; make sleeper > $T/v/b.log 2>&1; echo $NEVER-DONE >> $T/v/b.log" </dev/null >/dev/null 2>&1 & )
 setsid nohup bash -c "until grep -q $NEVER-DONE $T/v/b.log 2>/dev/null; do sleep 3; done" </dev/null >/dev/null 2>&1 &
 settle 'o=$("$HOOK" live "$LV") && seen o -q sleeper && pgrep -f "$NEVER-DONE $T/v/b.log" >/dev/null'
 check "a chain's first make, its waiter on the chain's last log (not there yet): watched" yes "$(has "$("$HOOK" judge "$LV")" " sleeper watched ")"
 lstop; check "...and the turn closes" 0 "$?"
-pkill -f "$NEVER" 2>/dev/null; for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ] && ! pgrep -f "$NEVER" >/dev/null'
+pkill -f "$NEVER" 2>/dev/null; endruns "$LV"; settle '[ -z "$("$HOOK" live "$LV")" ] && ! pgrep -f "$NEVER" >/dev/null'
 rm -f "$LV/.git/live-run.told"
 
 # GUARD_EDIT_OK: 2026-09-26 - A RUN BELONGS TO ITS NEAREST WORKING TREE. Ownership was `cwd.startswith(clone)`, so a
 # session whose cwd was the mirror (/diagram) saw every run in every clone under /diagram/.clones/ as its own and was
 # refused over other sessions' gates; and `x` owned the runs of a sibling `x2`. Real processes again.
 echo "--- 6e. another session's run is not this session's: nested clone, prefix sibling ---"
-NEST=$LV/.clones/other; mkdir -p "$NEST"; git init -q "$NEST"; printf 'sleeper:\n\t@sleep 12\n' > "$NEST/Makefile"
-SIB=${LV}2; mkdir -p "$SIB"; git init -q "$SIB"; printf 'sleeper:\n\t@sleep 12\n' > "$SIB/Makefile"
+NEST=$LV/.clones/other; mkdir -p "$NEST"; git init -q "$NEST"; printf 'sleeper:\n\t@sleep %s\n' "$RUN_S" > "$NEST/Makefile"
+SIB=${LV}2; mkdir -p "$SIB"; git init -q "$SIB"; printf 'sleeper:\n\t@sleep %s\n' "$RUN_S" > "$SIB/Makefile"
 ( setsid nohup bash -c "cd $NEST && exec make sleeper" </dev/null >"$T/nest.log" 2>&1 & )
 ( setsid nohup bash -c "cd $SIB && exec make sleeper" </dev/null >"$T/sib.log" 2>&1 & )
 settle 'o=$("$HOOK" live "$NEST") && seen o -q sleeper && o=$("$HOOK" live "$SIB") && seen o -q sleeper'
@@ -203,7 +210,7 @@ check "...nor judged here" "" "$("$HOOK" judge "$LV")"
 check "...but is live in its own clone" yes "$(has "$("$HOOK" live "$NEST")" sleeper)"
 check "a run in a PREFIX sibling (x vs x2) is not live here" "" "$("$HOOK" live "$LV" | grep -c . | grep -v '^0$')"
 rm -f "$LV/.git/live-run.told"; lstop; check "stop lets the turn close over other sessions' runs" 0 "$?"
-for d in "$NEST" "$SIB"; do for p in $("$HOOK" live "$d" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; done; settle '[ -z "$("$HOOK" live "$NEST")$("$HOOK" live "$SIB")" ]'
+endruns "$NEST"; endruns "$SIB"; settle '[ -z "$("$HOOK" live "$NEST")$("$HOOK" live "$SIB")" ]'
 
 # GUARD_EDIT_OK: 2026-09-26 - ONCE PER ROOT AS A SET. The told marker was compared for equality, so when one of two
 # refused runs finished the turn was refused again over the one it had already named.
@@ -214,10 +221,10 @@ rm -f "$LV/.git/live-run.told"
 settle '[ "$("$HOOK" live "$LV" | wc -l)" -eq 2 ]'
 lstop; check "two unwatched runs: refused once" 2 "$?"
 check "...naming each run's own log" yes "$(has "$(cat "$T/fr.err")" "$T/b.log")"
-kill "$("$HOOK" live "$LV" | head -1 | cut -d' ' -f1)" 2>/dev/null; settle '[ "$("$HOOK" live "$LV" | wc -l)" -eq 1 ]'
+endone "$("$HOOK" live "$LV" | head -1 | cut -d' ' -f1)"; settle '[ "$("$HOOK" live "$LV" | wc -l)" -eq 1 ]'
 check "one of them is gone" 1 "$("$HOOK" live "$LV" | wc -l)"
 lstop; check "...and the survivor, already told, lets the turn close" 0 "$?"
-for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ]'
+endruns "$LV"; settle '[ -z "$("$HOOK" live "$LV")" ]'
 
 # GUARD_EDIT_OK: GM 2026-09-12 - THE THIRD RULE: a waiter spinning on a DEAD PRODUCER. The GM found three in
 # their own status line, re-grepping every 15 s for EIGHT HOURS on logs from the OOM-killed runs of that
@@ -281,7 +288,7 @@ rm -f "$LV/.git/live-run.told"
 settle 'o=$("$HOOK" judge "$LV") && seen o -q "unwatched $T/verify-gate-1.log"'
 lstop; check "a detached verify gate: refused" 2 "$?"
 check "...and the refusal names make verify-wait, not a loop" yes "$(has "$(cat "$T/fr.err")" 'make verify-wait')"
-for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ]'
+endruns "$LV"; settle '[ -z "$("$HOOK" live "$LV")" ]'
 
 echo "--- 10. a harness named by its version tracks its run; a still-running builder's run waits on the builder (451 T85) ---"
 # GUARD_EDIT_OK: 451 T85 - new cases, nothing existing loosened. A background session's harness is named by its version (comm
@@ -306,7 +313,7 @@ vstop >/dev/null; check "...and once its builder has stopped, the run is refused
 check "...naming its output" yes "$(has "$(cat "$T/fr.err")" "$TO; do sleep 20; done")"
 RULES3=$(jq -rs 'map(.event + "/" + (.rule // "None")) | join(" ")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
 check "the builder's run let through is recorded with its own rule" yes "$(has "$RULES3" "permitted/builder-running")"
-for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; pkill -f "$TO" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
+endruns "$LV"; pkill -f "$TO" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
 
 echo "--- 11. a run is its starter's to wait on: another session's, a builder's own sub-agent's; an unchanged refusal said once (451 T171) ---"
 # GUARD_EDIT_OK: 451 T171 - new cases, nothing existing loosened. A launch line whose sid is another session's is that session's run;
@@ -334,7 +341,7 @@ check "...in full" yes "$(has "$(cat "$T/fr.err")" "$TO; do sleep 20; done")"
 rm -f "$LV/.git/live-run.told"
 vstop >/dev/null; check "the same refusal again (told cleared) is still a refusal" 2 "$?"
 check "...said in one line" yes "$(grep -qx 'still: A MAKE RUN THIS SESSION STARTED IS STILL - unchanged since [0-2][0-9]:[0-5][0-9]' "$T/fr.err" && echo yes)"
-for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; pkill -f "$TO" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
+endruns "$LV"; pkill -f "$TO" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
 
 echo "-----"
 printf 'test-finished-run-hooks: passed %s, failed %s\n' "$PASS" "$FAIL"
