@@ -422,9 +422,12 @@ fn the_detached_runner_sleeps_between_polls_until_its_stop_request() {
     let env = |k: &str| Some(if k == "LANE_IDLE_S" { "60" } else { "0.01" }.to_owned());
     let asked = std::thread::scope(|s| {
         s.spawn(|| {
-            while log::read(&common).is_empty() {
+            // the runner's first line awaited, the sleep before each look, so every line of the wait runs whenever it is reached
+            // at most 3,000 looks of 20 ms, the test's 60 s idle
+            let _ = (0..3000).find(|_| {
                 std::thread::sleep(std::time::Duration::from_millis(20));
-            }
+                !log::read(&common).is_empty()
+            });
             std::thread::sleep(std::time::Duration::from_millis(300));
             std::fs::write(stop_path(&common), std::process::id().to_string()).unwrap();
         });
