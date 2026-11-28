@@ -23,6 +23,7 @@ fn formed(hand_ins: &[HandIn], lane: &[serde_json::Value], max: usize) -> Vec<St
     let batches = log::batches(lane);
     let w = World {
         hand_ins,
+        all: hand_ins,
         on_main: &on_main,
         log: lane,
         batches: &batches,

@@ -1176,32 +1176,76 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 **Performance work?** no
 
-### T63 (<why: the finding or measurement that files it>)
+### T63 (461 T21's found-and-left: the lane's states read twice, in the lane crate's `log.rs` and the Stop rule's `l7r_shared::lane_wake`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the lane's computed states move whole into a new `l7r_shared` module, `rust/guard/shared/src/lane_log.rs` (its tests
+  `lane_log/tests.rs`, the six reader tests moved from `rust/gate/crates/lane/src/log/tests.rs` and one new): `lines_of`, `HandIn`,
+  `hand_ins`, `on_lane`, `names` (now `pub`), `mentions`, `BatchState`, `Batch`, `state_of`, `batches`, `HandInState`, `World`,
+  `state`, both `Display`s, and the new `waiting_unasked`. `log.rs` keeps the log's path, `EVENTS`, `append`, `read` and
+  `repairs_open`, and re-exports the rest under their old names, so every `log::X` path of the crate stands. `lane_wake.rs` loses
+  its copy (`MOVES`, `open_batches`, `names`, `listed`, `mentions`, `waiting`, `lines`): `holds_at` asks `lane_log::batches` for
+  the open batch and `lane_log::waiting_unasked` for the waiting hand-in. `wake::waiting_on` asks `waiting_unasked` too, then
+  `held_by`. `World` gains `all` (every hand-in of the pool's log): four constructions (`lane.rs`, `runner/run.rs`,
+  `batch/tests.rs`, `waiting_unasked`). Docs: `log.rs`'s and `lane_wake.rs`'s, `rust/gate/CLAUDE.md`'s lane row,
+  `rust/guard/CLAUDE.md`'s `shared/` list.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate and guard tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **One reading, in `l7r_shared`, re-exported by the lane crate.** The guard reaches no gate crate (`checks`' `guard_deps`), and
+   the lane crate already depends on `l7r_shared` (T65), so the readers go down to it, not the Stop rule up. Nothing that cannot
+   move was found: every moved function is pure but `lines_of`, a file read the two copies wrote twice. Label: the route T21's
+   Decision 1 filed.
+2. **The one disagreement: `superseded` is read over EVERY hand-in of the pool's log, the lane's or not** (`World::all`). The lane
+   crate read the on-lane list alone; the Stop rule's copy read the whole pool log. Which is right was settled by every route
+   that takes a done ref away: a carry's verified end (`land/carry.rs`), `make builder-done`'s cleanup of refs whose commit the
+   clone holds (`builder_done.rs`, `kept_in`), the runner's landing (`runner/run.rs`), or a later hand-in of the task overwriting
+   it - so a later hand-in off the lane has landed or been superseded itself, and the earlier one's work rode in it (D14's
+   handout half); data-model.md's words are "a later hand-in of the same task exists", with no "on the lane". The lane crate's
+   reading left an earlier hand-in, kept on the lane by a stopped batch's line, `waiting` after its successor was carried by hand -
+   `batch::form` would have carried it again. Label: data-model.md's words; the Stop rule's reading kept, shown red first below.
+3. **One assembly of "waiting, `origin/main` not asked"** (`lane_log::waiting_unasked`): the Stop rule asks no git walk a turn,
+   and `wake::waiting_on` asks `held_by` of its result alone, as before. Label: the easier route.
+4. **`holds_at`'s "no hand-in ever" test reads the parsed hand-ins**, not any line with `"handed_in": true`: a malformed done
+   line no longer spawns the `for-each-ref`; no verdict changes (it was never a hand-in). Label: the easier route.
+5. **The runner's lock stays where it is**: `lane_wake::RUNNER_LOCK` and `runner_lives` beside `runner::LOCK` and `runner::held`
+   probe one file the same way, a lock rather than a state reading, outside this task's states. Label: the easier route; no
+   wrong outcome, so not filed.
+
+- Red first (2026-11-27): the lane crate's `wake::tests::a_later_hand_in_off_the_lane_still_supersedes_an_earlier_one_on_it`, on
+  the old code 0 passed, 1 failed (its second assertion: `waiting_on` named the earlier hand-in); after, it passes. The Stop
+  rule's side already pinned the reading kept (`lane_wake::holds_tests`, `a_waiting_hand_in_is_held_only_while_the_runner_lives`,
+  its last case) and passes unchanged over the one reader. After: `l7r_shared` `lane_log` and `lane_wake` 16 of 16;
+  `make builder-checks CRATE="rust/guard/shared rust/gate/crates/lane rust/guard"`: 633, 83 and
+  636 tests, lint and format clean; `tests/hooks/test-pool-idle-hooks.sh` 42 of 42, observed 2026-11-27, method: those runs' logs.
 
 ### T63 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The Stop rule and the lane say the same state of every hand-in and batch, from one function, so a
+   change to either state moves the Stop rule with it.
+2. **The constraints.** D8 (the states computed from the logs), D9 (the Stop rule), data-model.md's "A hand-in" and "A batch",
+   T21's Decisions 1-2, T53's order, T56/T64's `origin_base`, the guard's `guard_deps` (no gate crate under the guard).
+3. **Where each comes from.** G: FR-005's words through D9. R: plan.md D8, D9, D14; data-model.md; T21's, T56's, T65's sections.
+   O: the red-first count above.
+4. **Do they describe the world here?** On fixtures: a scratch repository with done refs, the pool's log and the lane's log. Not
+   on the real clone's lane, which has run no real batch (T23 runs it).
+5. **The order.** After T21, T56, T64, T65; before T26.
+6. **The exits.** Green: the changed crates' tests, `make builder-checks`, the pool-idle suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the copies' supersede rule differed (Decision 2), found by reading `waiting`'s `ins[i + 1..]`
+   against `state`'s `w.hand_ins`.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a: no constant moved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The lane's `make lane` and `make lane-wait` named, and its runner would have batched, a hand-in whose
+   successor was already carried by hand; the move itself changes no other verdict.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 <!-- plan-archive: T64 to T21 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T70 to T33 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->

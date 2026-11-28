@@ -90,7 +90,8 @@ fn status(cwd: &Path) -> Reply {
         .lines()
         .map(str::to_owned)
         .collect();
-    let hand_ins = log::on_lane(log::hand_ins(&pool), &refs, &lane);
+    let all = log::hand_ins(&pool);
+    let hand_ins = log::on_lane(all.clone(), &refs, &lane);
     let commits: Vec<String> = hand_ins.iter().map(|h| h.commit.clone()).collect();
     let on_main = held_by(cwd, "origin/main", &commits);
     let mut args = vec!["log", "--no-walk", "--ignore-missing", "--format=%H%x09%s"];
@@ -104,6 +105,7 @@ fn status(cwd: &Path) -> Reply {
     let batches = log::batches(&lane);
     let world = World {
         hand_ins: &hand_ins,
+        all: &all,
         on_main: &on_main,
         log: &lane,
         batches: &batches,

@@ -485,3 +485,44 @@ fn the_command_from_phase_2_s_base_says_a_real_hand_in_no_runner_serves() {
     log::append(&common, "2026-11-28T05:00:00Z", "landed", &landed).unwrap();
     assert!(waiting_on(&common).is_empty());
 }
+
+/// 461 T63: a later hand-in of the task supersedes an earlier one though it has left the lane - its done ref is deleted only when it
+/// is carried or landed, or overwritten by a later hand-in still - so the earlier one, kept on the lane by a stopped batch's line,
+/// waits for nothing: the Stop rule's reading (`l7r_shared::lane_wake`), which this crate's did not share.
+#[test]
+fn a_later_hand_in_off_the_lane_still_supersedes_an_earlier_one_on_it() {
+    let t = TempDir::new("lane-wake-superseded-off-lane");
+    git(t.path(), &["init", "-q"]);
+    for s in ["461 T12: one", "461 T12: two"] {
+        git(t.path(), &["commit", "-q", "--allow-empty", "-m", s]);
+    }
+    let (one, two) = (
+        git(t.path(), &["rev-parse", "HEAD~1"]),
+        git(t.path(), &["rev-parse", "HEAD"]),
+    );
+    let common = t.path().join(".git");
+    let done = |sha: &str, at: &str| json!({"event": "done", "handed_in": true, "detail": "461 T12", "commit": sha, "utc": at});
+    let pool = format!("{}\n{}\n", done(&one, "u1"), done(&two, "u2"));
+    std::fs::write(common.join("builder-pool.log"), pool).unwrap();
+    log::append(
+        &common,
+        "u3",
+        "batch",
+        &json!({"batch": "461-1", "changes": [one]}),
+    )
+    .unwrap();
+    log::append(
+        &common,
+        "u4",
+        "stop",
+        &json!({"batch": "461-1", "why": "arbiter"}),
+    )
+    .unwrap();
+    // the later one's ref stands: it waits, the earlier superseded
+    git(t.path(), &["update-ref", "refs/l7r/done/461-T12", &two]);
+    let waits: Vec<String> = waiting_on(&common).into_iter().map(|h| h.commit).collect();
+    assert_eq!(waits, [two]);
+    // carried by hand, its ref gone: off the lane, and the earlier one still superseded by it
+    git(t.path(), &["update-ref", "-d", "refs/l7r/done/461-T12"]);
+    assert!(waiting_on(&common).is_empty());
+}

@@ -848,7 +848,7 @@
    "declared": "spec-fidelity"
   },
   "### T63 Approach (checklist part A)": {
-   "sha256": "14710c3835218bae042444fcabeff4335f51bb11119041969cf484892025064a",
+   "sha256": "40ebcb26cf9a7b3a7c65abd5cd23ca84ebd1083720e47571daa42e86521df45a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
@@ -897,6 +897,12 @@
   },
   "### T74 Approach (checklist part A)": {
    "sha256": "92fd1c3834ec44097f67ab6f6623e4d7a83c24c31287cabb53b26553262fefe4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T63 (461 T21's found-and-left: the lane's states read twice, in the lane crate's `log.rs` and the Stop rule's `l7r_shared::lane_wake`)": {
+   "sha256": "9f99098e64da34c16d48ce5cba42a278bed868f3dcd5d8524fb646f9bf9b0a08",
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
@@ -5548,6 +5554,46 @@
      "summary": "A section the clone archived and the builder changed still stops, and one the builder left alone is dropped, both as before; a section the builder removed now hands the clone's markers in it to the text before it.",
      "class": "within",
      "why": "The two arms kept as before are the existing section rule (451 T300, T419), each stop kept; a builder editing a finished, archived section is a real conflict and a judgment case, as the request provides. Handing a removed section's markers on is new and keeps the landing's archive record (FR-044's generated line) without dropping anything."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T63 (461 T21's found-and-left: the lane's states read twice, in the lane crate's `log.rs` and the Stop rule's `l7r_shared::lane_wake`)",
+    "### T63 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T63 D1",
+     "summary": "One reading of the lane's states, moved into l7r_shared (lane_log.rs) and re-exported by the lane crate's log.rs; lane_wake's copy deleted",
+     "class": "within",
+     "why": "D8 says the states are computed from the logs and D9's Stop rule reads them; one function for both is the plain way to have one set of states. The direction (down to l7r_shared, not the guard up to a gate crate) is forced by guard_deps. Tests move, none dropped (FR-008)."
+    },
+    {
+     "id": "T63 D2",
+     "summary": "superseded is read over every hand-in of the pool's log (World::all), the Stop rule's reading, not the lane crate's on-lane-only one",
+     "class": "within",
+     "why": "It does not narrow anything asked. It matches data-model.md's words as quoted ('a later hand-in of the same task exists') and D14 (the successor's hand-in supersedes the earlier ref). The lane crate's reading left a hand-in 'waiting' after its successor was carried, so batch::form could carry it again. That is a wrong outcome (a defect), fixed and shown red first."
+    },
+    {
+     "id": "T63 D3",
+     "summary": "One shared assembly of waiting-with-origin/main-not-asked (waiting_unasked); wake::waiting_on applies held_by on top as before",
+     "class": "within",
+     "why": "An implementation choice inside D9. The Stop rule's cost per turn and the coordinator wake behavior are unchanged."
+    },
+    {
+     "id": "T63 D4",
+     "summary": "holds_at's 'no hand-in ever' test reads parsed hand-ins, so a malformed done line no longer starts the for-each-ref",
+     "class": "within",
+     "why": "No verdict changes, because a malformed line was never a hand-in. This only removes a needless git call. It touches nothing FR-005 or D9 require."
+    },
+    {
+     "id": "T63 D5",
+     "summary": "The runner lock probe (lane_wake::RUNNER_LOCK/runner_lives beside runner::LOCK/held) stays duplicated",
+     "class": "within",
+     "why": "T63's subject is the lane's computed states (D8). The lock probe is not a state reading, and the plan records no wrong outcome from the two probes of one file. A difference with no wrong outcome is not a defect (constitution XIV), so leaving it narrows nothing that was asked."
     }
    ]
   }

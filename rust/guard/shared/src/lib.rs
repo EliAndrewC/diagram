@@ -19,6 +19,8 @@ pub mod env;
 pub mod escape;
 pub mod html_text;
 pub mod iso;
+// GUARD_EDIT_OK: feature 461 T63 - the lane's computed states, one reading the lane crate and the Stop rule share
+pub mod lane_log;
 // GUARD_EDIT_OK: feature 461 T20 - adding an operation, the lane's read mark (make lane-wait and the prompt hook)
 pub mod lane_wake;
 pub mod ledger;

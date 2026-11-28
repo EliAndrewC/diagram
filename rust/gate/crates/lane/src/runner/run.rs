@@ -155,11 +155,13 @@ pub fn step(l: &Lane) -> Result<bool, String> {
         return Ok(filed);
     }
     let refs: BTreeSet<String> = done_refs(l.common).into_iter().map(|(_, s)| s).collect();
-    let hand_ins = log::on_lane(all_hand_ins(l.common), &refs, &lane);
+    let all = all_hand_ins(l.common);
+    let hand_ins = log::on_lane(all.clone(), &refs, &lane);
     let commits: Vec<String> = hand_ins.iter().map(|h| h.commit.clone()).collect();
     let on_main = held_by(&l.clone_dir(), "origin/main", &commits);
     let w = World {
         hand_ins: &hand_ins,
+        all: &all,
         on_main: &on_main,
         log: &lane,
         batches: &batches,

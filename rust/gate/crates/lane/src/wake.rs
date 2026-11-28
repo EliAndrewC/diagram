@@ -36,7 +36,7 @@ use l7r_gate_task::builder_done::{held_by, REFS};
 use l7r_shared::lane_wake::take_unread;
 use serde_json::json;
 
-use crate::log::{self, Batch, HandIn, HandInState, World};
+use crate::log::{self, Batch, HandIn};
 use crate::runner;
 
 /// GUESS knob (`LANE_WAIT_POLL_S`): the wait's period. A line waits at most this long to wake the coordinator, against a gate of
@@ -189,22 +189,8 @@ pub fn waiting_on(common: &Path) -> Vec<HandIn> {
             .lines()
             .map(str::to_owned)
             .collect();
-    let lane = log::read(common);
-    let hand_ins = log::on_lane(all, &refs, &lane);
-    let batches = log::batches(&lane);
-    // `origin/main` not yet asked: a hand-in it holds reads as waiting here, and is dropped below
-    let none = BTreeSet::new();
-    let world = World {
-        hand_ins: &hand_ins,
-        on_main: &none,
-        log: &lane,
-        batches: &batches,
-    };
-    let waiting: Vec<HandIn> = hand_ins
-        .iter()
-        .filter(|h| log::state(h, &world) == HandInState::Waiting)
-        .cloned()
-        .collect();
+    // `origin/main` not yet asked: a hand-in it holds reads as waiting here, and is dropped below (the Stop rule's assembly, 461 T63)
+    let waiting = l7r_shared::lane_log::waiting_unasked(&all, &refs, &log::read(common));
     if waiting.is_empty() {
         return waiting;
     }

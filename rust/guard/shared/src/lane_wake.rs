@@ -18,6 +18,7 @@ use std::path::{Path, PathBuf};
 use serde_json::Value;
 
 use crate::builder_queue::{DONE_REFS, LOG as POOL_LOG};
+use crate::lane_log::{batches, hand_ins, lines_of, waiting_unasked, Batch};
 use crate::tool::{flock, flock_within};
 
 /// The lane's directory, in the git common directory.
@@ -99,9 +100,9 @@ fn owed(bytes: &[u8]) -> Vec<String> {
 
 // WHAT THE LANE HOLDS FOR ITS COORDINATOR (feature 461 T21, D9's Stop rule, read by `pool-idle-hooks`): an open batch, or a waiting
 // hand-in while the runner lives - the cases in which a line owed to the coordinator will come, so its `make lane-wait` must run.
-// A READING PARALLEL TO THE LANE CRATE'S `log.rs` (`batches`/`state_of`, `hand_ins`/`on_lane`/`state`), which the guard cannot
-// reach (the checks' `guard_deps`): the easier route, its unification filed as its own task. Two of its parts are read the
-// easier way, each labeled:
+// THE ONE READING OF THE LANE'S STATES (`crate::lane_log`, 461 T63), which the lane crate's `log.rs` re-exports: an open batch is
+// `lane_log::batches`' open one, a waiting hand-in `lane_log::state`'s `waiting` (`lane_log::waiting_unasked`), so a change to a
+// batch's or a hand-in's state moves this rule with it. Two of its parts are read the easier way, each labeled:
 // - "landed" is a `landed` line listing the hand-in, or its done ref gone; `origin/main` holding it (the lane's `held_by`) is not
 //   asked, a git walk a Stop hook would pay every turn. Cost: a hand-in landed on `origin/main` by hand while its done ref still
 //   stands reads as waiting - which `make carry` (the ref deleted at its end) does not leave.
@@ -114,18 +115,6 @@ fn owed(bytes: &[u8]) -> Vec<String> {
 /// The runner's lock, in [`DIR`] (the lane crate's `runner::LOCK`): held by `flock` while a runner lives.
 pub const RUNNER_LOCK: &str = "lane.lock";
 
-/// The events that move a batch's state (the lane crate's `state_of`); every other line of a batch changes nothing.
-const MOVES: [&str; 8] = [
-    "batch",
-    "carry",
-    "eject",
-    "run",
-    "attribute",
-    "push",
-    "landed",
-    "stop",
-];
-
 /// Whether a runner holds the lane's lock: the file opened (never made) and the lock asked for at once, let go at once.
 #[must_use]
 pub fn runner_lives(common: &Path) -> bool {
@@ -135,91 +124,6 @@ pub fn runner_lives(common: &Path) -> bool {
         let _ = free && flock(&f, "-u");
         !free
     })
-}
-
-/// The open batches' ids, in the order formed: a batch whose last state-moving line is neither `landed` nor `stop`, its lines
-/// those carrying its id from its `batch` line on, as the lane crate's `batches` routes them.
-fn open_batches(lane: &[Value]) -> Vec<String> {
-    let mut last: Vec<(String, String)> = Vec::new();
-    for l in lane {
-        let (Some(id), Some(event)) = (l["batch"].as_str(), l["event"].as_str()) else {
-            continue;
-        };
-        if event == "batch" {
-            last.push((id.to_owned(), event.to_owned()));
-        } else if let Some(b) = last.iter_mut().rev().find(|b| b.0 == id) {
-            if MOVES.contains(&event) {
-                event.clone_into(&mut b.1);
-            }
-        }
-    }
-    last.into_iter()
-        .filter(|(_, e)| e != "landed" && e != "stop")
-        .map(|(id, _)| id)
-        .collect()
-}
-
-/// Whether `named` (a commit as a line writes it, whole or short) is `sha`: the shorter a prefix of the longer, at least seven.
-fn names(sha: &str, named: &str) -> bool {
-    let short = sha.len().min(named.len());
-    short >= 7 && sha.get(..short) == named.get(..short)
-}
-
-/// The commits a line lists under `key`.
-fn listed<'a>(line: &'a Value, key: &str) -> impl Iterator<Item = &'a str> {
-    line[key]
-        .as_array()
-        .into_iter()
-        .flatten()
-        .filter_map(Value::as_str)
-}
-
-/// Whether a line names `commit`: a batch's `changes`, a `set`, a `landed` line's lists, an ejection's `change`.
-fn mentions(line: &Value, commit: &str) -> bool {
-    let mut all = ["changes", "set", "landed", "ejected"]
-        .into_iter()
-        .flat_map(|k| listed(line, k))
-        .chain(line["change"].as_str());
-    all.any(|s| names(commit, s))
-}
-
-/// The hand-ins waiting, with no batch open, each as `<feature> <tasks> (<sha>)`: the pool log's `handed_in` done lines (a commit's
-/// first), still the lane's (a done ref names it, or a lane line does), neither landed by a `landed` line, ejected (the last line
-/// naming it an `eject`, or a `landed` line listing it ejected) nor superseded (a later hand-in of its feature shares a task).
-fn waiting(pool: &[Value], refs: &BTreeSet<String>, lane: &[Value]) -> Vec<String> {
-    let mut seen = BTreeSet::new();
-    let ins: Vec<(&str, Vec<&str>, &str)> = pool
-        .iter()
-        .filter(|l| l["event"] == "done" && l["handed_in"] == true)
-        .filter_map(|l| {
-            let (feature, tasks) = l["detail"].as_str()?.split_once(' ')?;
-            Some((feature, tasks.split(',').collect(), l["commit"].as_str()?))
-        })
-        .filter(|h| seen.insert(h.2))
-        .collect();
-    let on_lane = |c: &str| refs.contains(c) || lane.iter().any(|l| mentions(l, c));
-    ins.iter()
-        .enumerate()
-        .filter(|(_, (_, _, c))| on_lane(c))
-        .filter(|(_, (_, _, c))| {
-            !lane
-                .iter()
-                .any(|l| l["event"] == "landed" && listed(l, "landed").any(|s| names(c, s)))
-        })
-        .filter(|(_, (_, _, c))| {
-            let last = lane.iter().rev().find(|l| mentions(l, c));
-            !last.is_some_and(|l| {
-                l["event"] == "eject"
-                    || l["event"] == "landed" && listed(l, "ejected").any(|s| names(c, s))
-            })
-        })
-        .filter(|(i, (f, tasks, _))| {
-            !ins[i + 1..]
-                .iter()
-                .any(|o| o.0 == *f && o.1.iter().any(|t| tasks.contains(t)))
-        })
-        .map(|(_, (f, tasks, c))| format!("{f} {} ({})", tasks.join(","), c.get(..10).unwrap_or(c)))
-        .collect()
 }
 
 /// THE PHASE-2 BASE, ASKED IN ONE PLACE (461 T56, T64): whether `knob`, `HAND_IN_BASE`'s value, puts hand-ins on `origin/main`,
@@ -249,16 +153,17 @@ pub fn holds(common: &Path) -> Option<String> {
 /// hand-in whose runner never started may have left none, so the hand-ins are read all the same.
 #[must_use]
 pub fn holds_at(common: &Path, origin: bool) -> Option<String> {
-    let lane = lines(&dir(common).join(FILE));
-    if let Some(b) = open_batches(&lane).first() {
-        return Some(format!("batch {b} is open"));
+    // GUARD_EDIT_OK: 461 T63 - the lane's states read through `lane_log`, the one reading the lane crate re-exports
+    let lane = lines_of(&dir(common).join(FILE));
+    if let Some(b) = batches(&lane).into_iter().find(Batch::open) {
+        return Some(format!("batch {} is open", b.id));
     }
     if !origin && (lane.is_empty() || !runner_lives(common)) {
         return None;
     }
-    let pool = lines(&common.join(POOL_LOG));
+    let all = hand_ins(&lines_of(&common.join(POOL_LOG)));
     // no hand-in ever: no git spawned, a Stop of every phase-2 coordinator asks this
-    if !pool.iter().any(|l| l["handed_in"] == true) {
+    if all.is_empty() {
         return None;
     }
     let refs = std::process::Command::new("git")
@@ -269,19 +174,14 @@ pub fn holds_at(common: &Path, origin: bool) -> Option<String> {
         .map(|o| String::from_utf8_lossy(&o.stdout).into_owned())
         .unwrap_or_default();
     let refs: BTreeSet<String> = refs.lines().map(str::to_owned).collect();
-    waiting(&pool, &refs, &lane)
-        .first()
-        .map(|h| format!("hand-in {h} waiting"))
-}
-
-/// A JSON-lines file's objects; none for a missing file, a line that does not parse skipped.
-fn lines(file: &Path) -> Vec<Value> {
-    std::fs::read_to_string(file)
-        .unwrap_or_default()
-        .lines()
-        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
-        .filter(Value::is_object)
-        .collect()
+    waiting_unasked(&all, &refs, &lane).first().map(|h| {
+        let short = h.commit.get(..10).unwrap_or(&h.commit);
+        format!(
+            "hand-in {} {} ({short}) waiting",
+            h.feature,
+            h.tasks.join(",")
+        )
+    })
 }
 
 #[cfg(test)]
