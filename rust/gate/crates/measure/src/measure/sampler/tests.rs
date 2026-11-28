@@ -7,11 +7,18 @@ use l7r_shared::builder_pool::{self, Tree};
 use l7r_shared::tempdir::TempDir;
 use serde_json::json;
 
-use super::{began, cli, sample, verb, work, Env, DIR, FILE, KEPT, PID};
+use super::{began, cli, exec_live, sample, verb, work, Env, DIR, FILE, KEPT, PID};
 
 fn put(path: &Path, text: &str) {
     std::fs::create_dir_all(path.parent().unwrap()).unwrap();
     std::fs::write(path, text).unwrap();
+}
+
+/// The tests' re-run: each argv it is asked for a line of `exec-argv` in the `--common` directory it names, and the re-run failed.
+fn told(argv: &[String]) -> std::io::Error {
+    let common = argv.iter().skip_while(|a| *a != "--common").nth(1).unwrap();
+    super::append(&Path::new(common).join("exec-argv"), &argv.join(" "));
+    std::io::Error::other("told")
 }
 
 fn words(a: &[&str]) -> Vec<String> {
@@ -77,6 +84,9 @@ fn world(tag: &str) -> (TempDir, Env) {
         margin_gib: 7.0,
         worker: Vec::new(),
         wait_tenths: 30,
+        exe: None,
+        first: None,
+        exec: told,
     };
     (dir, env)
 }
@@ -478,5 +488,101 @@ fn a_counter_that_fell_is_a_gap_and_its_pair_is_booked_to_no_row() {
     assert_eq!(got[3], "     2 |       3 | 2.00 / 2.00 / 2.00 | 20% | 0 | 2.0 / 1.0 | 4.0 | 1.0 / 1.0 / 1.0 | 0.0x | 2 | 0");
     assert!(
         got[5].starts_with("  gaps: 1 (two samples more than 120 s apart, or a counter that fell")
+    );
+}
+
+/// A world whose sampler runs `bin`: this process's `proc/self/exe` is the same file (a hard link, as the kernel's link is).
+fn built(tag: &str) -> (TempDir, Env, PathBuf) {
+    let (dir, mut env) = world(tag);
+    let bin = dir.join("bin/l7r-gate");
+    put(&bin, "the old build");
+    std::fs::hard_link(&bin, env.proc.join("self/exe")).unwrap();
+    env.exe = Some(bin.clone());
+    (dir, env, bin)
+}
+
+#[test]
+fn a_rebuilt_binary_is_run_again_from_its_first_start_and_a_run_that_fails_samples_on() {
+    let (_dir, mut env, bin) = built("rebuilt");
+    env.max_s = 40;
+    // the binary is rebuilt during the first nap: the samples at :20 and :30 each ask for the re-run, which fails, and sample on
+    let mut naps = 0;
+    let why = looped(&env, &mut |_| {
+        naps += 1;
+        if naps == 1 {
+            std::fs::remove_file(&bin).unwrap();
+            put(&bin, "the new build");
+        }
+    });
+    assert_eq!(why, "its hours are up (L7R_SAMPLE_MAX_H)");
+    assert_eq!(lines(&env.samples()).len(), 3);
+    let argv = format!(
+        "{} measure sampler run --common {} --first 1795694400",
+        bin.display(),
+        env.common.display()
+    );
+    assert_eq!(lines(&env.common.join("exec-argv")), [argv.clone(), argv]);
+    // a binary half written (its path not there yet) is no rebuild: nothing asked, the samples go on
+    let (_dir, env, bin) = built("building");
+    std::fs::remove_file(&bin).unwrap();
+    looped(&env, &mut |_| ());
+    assert!(!env.common.join("exec-argv").exists());
+    assert_eq!(lines(&env.samples()).len(), 359);
+}
+
+#[test]
+fn a_run_again_says_so_and_counts_its_hours_from_the_first_start() {
+    let (_dir, mut env) = world("again");
+    env.max_s = 3600;
+    env.first = Some(1_795_694_400 - 3570);
+    let pid = env.common.join(PID);
+    let mut held = Vec::new();
+    let why = looped(&env, &mut |_| held.push(super::read(&pid)));
+    assert_eq!(why, "its hours are up (L7R_SAMPLE_MAX_H)");
+    // thirty seconds left of its hour: two samples, its pid file its own throughout
+    assert_eq!(
+        (lines(&env.samples()).len(), held),
+        (2, vec!["77 4242\n".to_owned(); 2])
+    );
+    assert_eq!(
+        lines(&env.common.join(DIR).join("sampler.log"))[0],
+        "2026-11-26T12:00:00Z pid 77 runs its rebuilt binary, a sample every 10 s (its hours from 2026-11-26T11:00:30Z)"
+    );
+}
+
+#[test]
+fn the_door_takes_the_first_start_and_the_real_re_run_says_why_it_failed() {
+    let (_dir, env) = world("door-first");
+    // first started at the epoch: its hours are up at once, on the live clock and this test's own binary (a door that dropped
+    // `--first` would sample for twelve hours: the pid file taken away after a second ends it at its next sample instead)
+    let pid = env.common.join(PID);
+    let ender = std::thread::spawn(move || {
+        std::thread::sleep(std::time::Duration::from_secs(1));
+        let _ = std::fs::remove_file(pid);
+    });
+    let r = cli(
+        &words(&[
+            "run",
+            "--common",
+            &env.common.to_string_lossy(),
+            "--first",
+            "0",
+        ]),
+        Path::new("/"),
+    );
+    ender.join().unwrap();
+    assert_eq!(
+        r.stderr,
+        "sampler: ended - its hours are up (L7R_SAMPLE_MAX_H)\n"
+    );
+    let log = super::read(&env.common.join(DIR).join("sampler.log"));
+    assert!(
+        log.contains("runs its rebuilt binary, a sample every"),
+        "{log}"
+    );
+    assert_eq!(exec_live(&[]).to_string(), "no program");
+    assert_eq!(
+        exec_live(&words(&["/no/such/program"])).kind(),
+        std::io::ErrorKind::NotFound
     );
 }

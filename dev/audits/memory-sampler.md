@@ -34,6 +34,15 @@ a start that finds the file past the bound moves it to `mem-samples.1.jsonl` and
 good at the bound and a clone keeps at most 8 MiB. The margin (`L7R_MEM_MARGIN_GIB`, 7) is a GUESS knob: 3 GiB under the limit,
 the figure the 2026-11-26 runs were read against. The gap (120 s) is a GUESS: twelve of the default interval.
 
+**A rebuilt binary is run again** (461 T61). Before each sample the sampler asks whether the file at its program's path is the
+one it runs (the device and inode of `/proc/self/exe` against the path's: two `stat`s, the cheap stand-in for a content id), and
+where a build has replaced it, `exec`s the new one as `run --common <dir> --first <its first start>` - the same pid and start
+time, so its pid file still names it and no second sampler starts; the hours count from the first start; `sampler.log` says
+`runs its rebuilt binary`. A path not there (a build mid-link) is no rebuild, and a re-run that fails samples on in the old code
+and asks again next sample. So a sample is current with the BUILT binary within one interval, not with the source: the launcher
+builds only at its next call. Why not a binary id in each sample for readers to drop stale ones: that leaves a hole in the
+window (21:08:12Z to 21:43:55Z on 2026-11-27, pid 3387947 listing `lane` after 461 T13) and puts a filter in every reader.
+
 **Where the samples are.** `<git common dir>/l7r-events/samples/mem-samples.jsonl`, a folder of its own under the event logs'
 directory and not a file beside them: every reader of `l7r-events/` takes a `.jsonl` there for a feature's event log (the
 hook's launch lookup scans the most recently written first, `make task-time` and the step-back bundle read each, and

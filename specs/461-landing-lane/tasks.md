@@ -143,3 +143,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T67 Phase 2: a repair entry of why arbiter (T18) briefed with its ruling - rust/guard/shared/src/builder_queue/repairs.rs reads every entry's attempt as the gate's output file, and make builder-brief REPAIR= names it so; T18's arbiter entry's attempt is the trigger (ask:lane-<task>) and its units the ruling, so the brief should name the ruling row in the clone's specs/<spec>/arbiter.jsonl and the two attempt files of the stop line (its attempts), not a file path that does not exist
       research: rendering
+- [ ] T68 The plan review bundle's spec-cited.md resolves a decision named with another feature's task ("451 T274's D3, D13, D5" in 461 T61's section) to the plan's own feature's D3 (451's 'A background run's end'), and drops D13 and D5: the reviewer judged T61's D2 on the plan's own wording (observed 2026-11-27, method: the T61 blocks review's report on /tmp/l7r-check/plan-461-landing-lane-blocks-T61-fd4d36b2/spec-cited.md; rust/gate/crates/plan, the bundle's citation reader)
+      research: rendering

@@ -720,6 +720,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T61 (the memory sampler runs the code it started with for its whole `L7R_SAMPLE_MAX_H`; found by T59)": {
+   "sha256": "d9917ad3ba2b1ee9bc1a062a53ec7b7c089fcf3ba8034d81520c242207f9e571",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T61 Approach (checklist part A)": {
+   "sha256": "7de1334568c8a062c1d8a46f2016b24407c9c3c0ef02e802ac6afed8f7f9d855",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4614,6 +4626,110 @@
      "why": "A known defect fixed on the way, as the fix-as-we-go rule asks. The old tests are unchanged."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T61 (the memory sampler runs the code it started with for its whole `L7R_SAMPLE_MAX_H`; found by T59)",
+    "### T61 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T61 scope",
+     "summary": "Fix the memory sampler so it does not keep running pre-landing code for its whole L7R_SAMPLE_MAX_H (215 samples listing `lane` as held from code T13 replaced).",
+     "class": "within",
+     "why": "A wrong outcome in a measurement tool (samples computed by replaced code) whose output feeds T31's like window, i.e. the FR-010 / SC-005 before-and-after comparison the GM asked be read honestly (his seventh process-reviewer message). Fixing a known defect found by T59 before T31 reads the window is fix-as-we-go, not added scope."
+    },
+    {
+     "id": "D1",
+     "summary": "Re-exec the sampler when <proc>/self/exe's device+inode differ from the path it was started from, instead of stamping a binary id on each sample for readers to filter.",
+     "class": "within",
+     "why": "A mechanism choice for the fix; it removes the defect rather than leaving a hole in the window and a filter in every reader. Narrows nothing asked."
+    },
+    {
+     "id": "D2",
+     "summary": "The re-exec keeps pid and pid file; hours count from --first so L7R_SAMPLE_MAX_H still bounds the whole run; sampler.log records the re-run.",
+     "class": "within",
+     "why": "Preserves 451 T274's D3 (pid file names the sampler) and D13 (max hours bound a run) rather than relaxing them."
+    },
+    {
+     "id": "D3",
+     "summary": "A re-run that cannot exec (path missing, ETXTBSY mid-build) is ignored: that sample is taken in the old code and the re-run retried next sample, with no log line per failed try.",
+     "class": "within",
+     "why": "Failure handling that keeps sampling rather than stopping silently; the retry at the next sample still meets the stated goal of the rebuilt binary within about one interval. Not a carve-out from what was asked."
+    },
+    {
+     "id": "The claim (built binary, not source)",
+     "summary": "The fix's claim is stated as: samples read with the BUILT binary within one interval, not with the source, since l7r-gate.sh builds only at its next call after a landing.",
+     "class": "within",
+     "why": "An accurate statement of what the mechanism reaches, recorded in the module note and the audit; the goal in item 1 is stated against the rebuild, consistent with it. Nothing requested is dropped."
+    },
+    {
+     "id": "Live cut-over",
+     "summary": "After landing, the clone's running sampler (pre-fix code, cannot re-run itself) is stopped and started once, then its log is read for `runs its rebuilt binary` after the next landing.",
+     "class": "within",
+     "why": "The one-time step needed for the fix to take effect, plus a measured done-check."
+    },
+    {
+     "id": "Performance-work tag",
+     "summary": "T61 is counted as performance work under 451 FR-013 as a measurement tool.",
+     "class": "within",
+     "why": "FR-013 counts measurement tooling as performance work for ordering; the sampler is 451's measurement of the builders' resources. Scheduling classification, not a change to what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T61 (the memory sampler runs the code it started with for its whole `L7R_SAMPLE_MAX_H`; found by T59)",
+    "### T61 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Detect a rebuilt binary by comparing device+inode of /proc/self/exe with the start path, and exec the path again, rather than stamping a binary id on each sample for readers to filter.",
+     "class": "within",
+     "why": "A design choice inside a defect fix (samples computed by code a landing replaced, 215 such samples observed 2026-11-27). It removes the stale-sample hole rather than filtering it, so it serves FR-010's like-window readings (T31) without narrowing anything the GM asked; the 'content id' it stands in for is T59's brief, not the GM's words."
+    },
+    {
+     "id": "D2",
+     "summary": "The re-run is an exec of the same process: pid and pid file kept, hours counted from --first so L7R_SAMPLE_MAX_H still bounds the whole run, and the re-run logged.",
+     "class": "within",
+     "why": "Keeps 451 T274's D3 (pid file names the sampler) and D13 (the hours bound a run) intact; no existing guarantee is relaxed."
+    },
+    {
+     "id": "D3",
+     "summary": "A missing path is no rebuild and an exec that returns (ETXTBSY etc.) is ignored: sample in the old code and retry at the next sample, with no log line per failed try.",
+     "class": "within",
+     "why": "A failure-handling choice that keeps sampling rather than stopping silently; the transient cases it names (cargo mid-write) clear by the next interval. Nothing the request or spec asks is left out; the no-log choice is a design call, not a narrowing."
+    },
+    {
+     "id": "claim",
+     "summary": "The fix's claim is the BUILT binary at the sampler's path within one interval, not the source; scripts/gates/l7r-gate.sh builds only at its next call after a landing.",
+     "class": "within",
+     "why": "An honest statement of the fix's reach, recorded in the module note and the audit. The source-to-build lag is the build script's existing behavior, outside T61's filed defect (the sampler running its start-time code for its whole hours) and not something the GM's request speaks to."
+    },
+    {
+     "id": "order",
+     "summary": "After T59, before T31 (which reads the like window).",
+     "class": "within",
+     "why": "Sequencing so T31's FR-010 like window is not read from replaced code; serves the request."
+    },
+    {
+     "id": "live-restart",
+     "summary": "After landing, the clone's sampler is stopped and started once (pre-fix code cannot re-run itself), then a later landing must show 'runs its rebuilt binary' in sampler.log.",
+     "class": "within",
+     "why": "Operational step and a measured done-check; adds no scope."
+    },
+    {
+     "id": "perf-class",
+     "summary": "Counted as performance work under 451 FR-013 as a measurement tool.",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the builders' time goes; the sampler measures the builders' memory, which bears on how many builders the pool runs. A scheduling classification, not a change to what is built; it narrows nothing the GM asked. Noted: FR-013's words are 'where the time goes', so the classification rests on the sampler serving builder throughput."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5485,6 +5601,56 @@
      "summary": "Fixes a defect in the T15 tests: their stand-in Phase line had no newline, so a second red attempt's line was glued to the first. The new tests write it with its newline.",
      "class": "within",
      "why": "A known defect fixed on the way, as the fix-as-we-go rule asks. The old tests are unchanged."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T61": {
+   "section_sha256": "bbc0cce53ceab63b69434d3ac8cb9ff3c0f7bc5779aa820b6fc18d30f88ed3af",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Detect a rebuilt binary by comparing device+inode of /proc/self/exe with the start path, and exec the path again, rather than stamping a binary id on each sample for readers to filter.",
+     "class": "within",
+     "why": "A design choice inside a defect fix (samples computed by code a landing replaced, 215 such samples observed 2026-11-27). It removes the stale-sample hole rather than filtering it, so it serves FR-010's like-window readings (T31) without narrowing anything the GM asked; the 'content id' it stands in for is T59's brief, not the GM's words."
+    },
+    {
+     "id": "D2",
+     "summary": "The re-run is an exec of the same process: pid and pid file kept, hours counted from --first so L7R_SAMPLE_MAX_H still bounds the whole run, and the re-run logged.",
+     "class": "within",
+     "why": "Keeps 451 T274's D3 (pid file names the sampler) and D13 (the hours bound a run) intact; no existing guarantee is relaxed."
+    },
+    {
+     "id": "D3",
+     "summary": "A missing path is no rebuild and an exec that returns (ETXTBSY etc.) is ignored: sample in the old code and retry at the next sample, with no log line per failed try.",
+     "class": "within",
+     "why": "A failure-handling choice that keeps sampling rather than stopping silently; the transient cases it names (cargo mid-write) clear by the next interval. Nothing the request or spec asks is left out; the no-log choice is a design call, not a narrowing."
+    },
+    {
+     "id": "claim",
+     "summary": "The fix's claim is the BUILT binary at the sampler's path within one interval, not the source; scripts/gates/l7r-gate.sh builds only at its next call after a landing.",
+     "class": "within",
+     "why": "An honest statement of the fix's reach, recorded in the module note and the audit. The source-to-build lag is the build script's existing behavior, outside T61's filed defect (the sampler running its start-time code for its whole hours) and not something the GM's request speaks to."
+    },
+    {
+     "id": "order",
+     "summary": "After T59, before T31 (which reads the like window).",
+     "class": "within",
+     "why": "Sequencing so T31's FR-010 like window is not read from replaced code; serves the request."
+    },
+    {
+     "id": "live-restart",
+     "summary": "After landing, the clone's sampler is stopped and started once (pre-fix code cannot re-run itself), then a later landing must show 'runs its rebuilt binary' in sampler.log.",
+     "class": "within",
+     "why": "Operational step and a measured done-check; adds no scope."
+    },
+    {
+     "id": "perf-class",
+     "summary": "Counted as performance work under 451 FR-013 as a measurement tool.",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the builders' time goes; the sampler measures the builders' memory, which bears on how many builders the pool runs. A scheduling classification, not a change to what is built; it narrows nothing the GM asked. Noted: FR-013's words are 'where the time goes', so the classification rests on the sampler serving builder throughput."
     }
    ],
    "verdict": "CLEAR"

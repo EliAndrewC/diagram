@@ -2506,14 +2506,82 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 waiting on its closing half.
 
 
-### T61 (<why: the finding or measurement that files it>)
+### T61 (the memory sampler runs the code it started with for its whole `L7R_SAMPLE_MAX_H`; found by T59)
+
+- **Approach**: in pool tree `diagram-backlog-t271`. The sampler (`rust/gate/crates/measure/src/measure/sampler.rs`) re-runs itself
+  when a build replaces its binary.
+  - **Measured** (observed 2026-11-27, method: `sampler.log` and `mem-samples.jsonl` of the clone `diagram-backlog`, T59's section):
+    pid 3387947 started 09:44:04Z, before T13 landed (20:52Z), and listed `lane` as held in 215 samples, 21:08:12Z to 21:43:55Z,
+    until its hours ended at 21:44:05Z. The sampler running now, pid 3445329 (started 21:52:53Z), already runs a replaced binary:
+    its `/proc/<pid>/exe` reads `.../tool/l7r-gate (deleted)` (observed 2026-11-27, method: `ls -la` of that link) - cargo writes a
+    new file at the path, so the running inode is unlinked, not overwritten.
+  - **D1. Re-exec, not a binary id a sample. Label: design decision.** Before each sample `rebuilt` compares the device and inode
+    of `<proc>/self/exe` (the kernel's link, followed to the running file even once unlinked) with the path the sampler was
+    started from (`Env::exe`, `current_exe` at its start); where they differ it `exec`s the path as `measure sampler run --common
+    <dir> --first <its first start>`. Why not an id in each sample for the readers to drop stale ones: that leaves a hole in the
+    window (21:08:12Z to 21:43:55Z above, inside T31's like window, observed 2026-11-27, method: that sampler's log) and puts a filter in every reader (`sampler-report`,
+    `night-figures.py`, `slot-coincide.py`). Two `stat`s a sample, no stored state, and no race where the binary is replaced twice
+    around a re-run: the cheap stand-in for the brief's "content id".
+  - **D2. The re-run is the same process. Label: design decision.** `exec` keeps the pid and its start time, so the pid file is
+    left as it is and still names the sampler - no concurrent `start` sees none and starts a second; the hours count from
+    `--first`, so a sampler re-run at every landing still ends at its `L7R_SAMPLE_MAX_H`; `sampler.log` says `pid N runs its
+    rebuilt binary` with its interval and its first start, pinned by the test below.
+  - **D3. A re-run that fails samples on. Label: design decision.** The check can fire while cargo is still writing (the path
+    missing, or `ETXTBSY`): a path not there is no rebuild, and an `exec` that returns is ignored - the sample is taken in the old
+    code and the re-run asked again at the next sample; no log line a failed try. Ending there would stop sampling silently until
+    the next handout, worse than the defect.
+  - **The claim, exactly**: a sample reads with the BUILT binary at the sampler's path within one interval - not with the source:
+    `scripts/gates/l7r-gate.sh` builds only at its next call after a landing. Recorded in the module note and
+    `dev/audits/memory-sampler.md` ("A rebuilt binary is run again").
+  - **Red first** (observed 2026-11-27, method: the new `Env` fields `exe`, `first`, `exec` landed inert, then the tests, `make
+    rust-test CRATE=rust/gate/crates/measure ONLY="measure::sampler"`, its `test result` line): 11 passed, 3 failed -
+    `a_rebuilt_binary_is_run_again_from_its_first_start_and_a_run_that_fails_samples_on` (no re-run asked),
+    `a_run_again_says_so_and_counts_its_hours_from_the_first_start` (359 samples where 2), and
+    `the_door_takes_the_first_start_and_the_real_re_run_says_why_it_failed` (`--first` dropped: ended by the pid file, not its
+    hours). The door test's first version hung on the old code (a live loop of twelve hours) and was given a thread that takes the
+    pid file away after a second, so the old code ends red at its next sample.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a rebuilt binary is re-run with the first start; a path not there is no rebuild; a failed re-run samples on | pinned by `a_rebuilt_binary_is_run_again_from_its_first_start_and_a_run_that_fails_samples_on` (measure) | n/a: tooling | none | n/a |
+| a re-run logs itself and counts its hours from the first start, its pid file kept | pinned by `a_run_again_says_so_and_counts_its_hours_from_the_first_start` | n/a: tooling | none | n/a |
+| the door reads `--first`; the real `exec` returns its error | pinned by `the_door_takes_the_first_start_and_the_real_re_run_says_why_it_failed` | n/a: tooling | none | n/a |
+
+### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** A change to what the sampler reads reaches its samples within one interval of the binary's
+   rebuild, so no window (T31's like window first) is read from code a landing replaced.
+2. **The constraints.** T61's line in tasks.md; 451 T274's D3 (the pid file names the sampler), D13 (`L7R_SAMPLE_MAX_H` bounds a
+   run), D5 (detached, no inherited descriptor); T59's section, which filed it.
+3. **Where each comes from.** R: T59's and 451 T274's sections; O: the measurements above (2026-11-27).
+4. **Do they describe the world here?** Yes: the live sampler's own log and its `exe` link, read 2026-11-27.
+5. **The order.** After T59; before T31, which reads the like window.
+6. **The exits.** Green: the three new tests and the crate's suite green in `make builder-checks CRATE="rust/gate/crates/measure"`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The red above turned green: `make builder-checks CRATE="rust/gate/crates/measure"` test, lint and format
+   clean, the crate's 310 tests passed (observed 2026-11-27, method: its output; a first run's lint caught a binding named too
+   like another, renamed). Live, after landing: the clone's sampler stopped and started once (it runs pre-fix code and
+   cannot re-run itself), then its `sampler.log` shows `runs its rebuilt binary` after the next landing's build.
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a map defect: T31's like window, and any `make sampler-report` window after a landing, would read
+   samples computed by code the landing replaced - 215 samples listing `lane` on 2026-11-27: fixed here.
+
+**Found and left?** none.
+
+**Performance work?** yes - the sampler measures where the builders' memory goes (451 FR-013: a measurement tool counts); not an
+engine-speed task, so `docs/performance-checklist.md` does not apply.
+
+
+### T68 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T61 Approach (checklist part A)
+### T68 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

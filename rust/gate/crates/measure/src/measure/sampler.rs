@@ -12,7 +12,9 @@
 //!   JSON line to `<git common dir>/l7r-events/samples/mem-samples.jsonl`, read straight from the cgroup's files and `/proc` - no
 //!   `make`, no program started a sample. It ends when the pid file no longer names it (a stop, a second sampler, the clone
 //!   deleted), after `L7R_SAMPLE_MAX_H` hours (12), and when the file passes [`MAX_BYTES`]; each end is a line of `sampler.log`
-//!   beside the samples.
+//!   beside the samples. Where a build replaces its binary it `exec`s the new one (`run --common <dir> --first <its first
+//!   start>`, the same pid, its hours counted from the first start), so a sample reads with the built code within one interval
+//!   (461 T61); a re-run that fails samples on and asks again at the next sample.
 //! - `stop` (`make sampler-stop`): the pid file removed and the sampler sent `TERM`.
 //! - `status` (`make sampler`): running or not, the file's lines and size, the last line of `sampler.log`.
 //! - `report` (`make sampler-report`): [`report`].
@@ -86,6 +88,12 @@ pub struct Env {
     pub worker: Vec<String>,
     /// The tenths of a second a start waits for its sampler to name itself.
     pub wait_tenths: u32,
+    /// The program this sampler runs, where it re-runs itself once rebuilt (none: never).
+    pub exe: Option<PathBuf>,
+    /// When the first sampler of this run began, where this one is its re-run (`--first`).
+    pub first: Option<u64>,
+    /// Replaces this process by the program and arguments given; what it returns is why it could not.
+    pub exec: fn(&[String]) -> std::io::Error,
 }
 
 impl Env {
@@ -113,12 +121,24 @@ impl Env {
             .map(str::to_owned)
             .to_vec(),
             wait_tenths: 30,
+            exe: Some(exe),
+            first: None,
+            exec: exec_live,
         }
     }
 
     fn samples(&self) -> PathBuf {
         self.common.join(DIR).join(FILE)
     }
+}
+
+/// This process replaced by `argv`'s program, `exec(3)`: it returns only where that failed.
+fn exec_live(argv: &[String]) -> std::io::Error {
+    use std::os::unix::process::CommandExt as _;
+    let Some((program, words)) = argv.split_first() else {
+        return std::io::Error::other("no program");
+    };
+    Command::new(program).args(words).exec()
 }
 
 fn reply(stderr: String, code: i32) -> Reply {
@@ -252,8 +272,39 @@ fn size(path: &Path) -> u64 {
     path.metadata().map_or(0, |m| m.len())
 }
 
+/// The program at this sampler's path where it is no longer the one this process runs - a build replaced it (461 T61: pid
+/// 3387947 ran the code it started with for its twelve hours, listing the lane's tree in 215 samples after 461 T13 left it out).
+/// Two `stat`s, the cheap stand-in for a content id: `<proc>/self/exe` follows the kernel's link to the file this process runs,
+/// even once unlinked, and its device and inode are the path's until a build puts a new file there. A path not there (a build
+/// mid-link) is no rebuild.
+fn rebuilt(env: &Env) -> Option<&Path> {
+    use std::os::unix::fs::MetadataExt as _;
+    let exe = env.exe.as_deref()?;
+    let id = |p: &Path| p.metadata().ok().map(|m| (m.dev(), m.ino()));
+    let (running, there) = (id(&env.proc.join("self/exe"))?, id(exe)?);
+    (running != there).then_some(exe)
+}
+
+/// The re-run's words: the sampler's own `run`, its first start carried so its hours count from there.
+fn rerun(env: &Env, exe: &Path, first: u64) -> Vec<String> {
+    let common = env.common.to_string_lossy();
+    [
+        &*exe.to_string_lossy(),
+        "measure",
+        "sampler",
+        "run",
+        "--common",
+        &common,
+        "--first",
+        &first.to_string(),
+    ]
+    .map(str::to_owned)
+    .to_vec()
+}
+
 /// THE SAMPLER'S LOOP, as process `me` (its pid and start time): the pid file written, then a sample and a nap until the pid file
-/// names another, the hours pass or the file passes its bound. Why it ended, which `sampler.log` keeps too.
+/// names another, the hours pass or the file passes its bound - and, its binary rebuilt, the new one `exec`ed in its place, the
+/// same pid and start time, so the pid file still names it (461 T61). Why it ended, which `sampler.log` keeps too.
 pub fn work(
     env: &Env,
     me: (u32, u64),
@@ -265,12 +316,20 @@ pub fn work(
     let mine = format!("{} {}\n", me.0, me.1);
     let _ = std::fs::create_dir_all(&dir);
     let _ = std::fs::write(&pid, &mine);
-    let first = clock();
+    let at0 = clock();
+    let first = env.first.unwrap_or(at0);
+    let (said, from) = match env.first {
+        None => ("started", String::new()),
+        Some(f) => (
+            "runs its rebuilt binary",
+            format!(" (its hours from {})", utc(f)),
+        ),
+    };
     append(
         &dir.join(LOG),
         &format!(
-            "{} pid {} started, a sample every {} s",
-            utc(first),
+            "{} pid {} {said}, a sample every {} s{from}",
+            utc(at0),
             me.0,
             env.every_s
         ),
@@ -285,6 +344,10 @@ pub fn work(
         }
         if size(&env.samples()) >= env.max_bytes {
             break "the samples file is past its size bound - the next start begins a new one";
+        }
+        if let Some(exe) = rebuilt(env) {
+            // returns only where the re-run failed (a build mid-write): sample on in this code, and ask again at the next sample
+            let _ = (env.exec)(&rerun(env, exe, first));
         }
         append(&env.samples(), &sample(env, at).to_string());
         nap(env.every_s);
@@ -438,20 +501,24 @@ fn verb(args: &[String], env: &Env) -> Reply {
     }
 }
 
-/// `l7r-gate measure sampler <args>` from `cwd`: the clone is `--common <dir>`'s, else the one `cwd` is in.
+/// `l7r-gate measure sampler <args>` from `cwd`: the clone is `--common <dir>`'s, else the one `cwd` is in; `--first <secs>` is a
+/// re-run's first start.
 #[must_use]
 pub fn cli(args: &[String], cwd: &Path) -> Reply {
-    let given = args
-        .iter()
-        .position(|a| a == "--common")
-        .and_then(|i| args.get(i + 1))
-        .map(PathBuf::from);
-    let Some(common) =
-        given.or_else(|| l7r_shared::speckit::marks::places(cwd).map(|(common, _)| common))
+    let flag = |name: &str| {
+        args.iter()
+            .position(|a| a == name)
+            .and_then(|i| args.get(i + 1))
+    };
+    let Some(common) = flag("--common")
+        .map(PathBuf::from)
+        .or_else(|| l7r_shared::speckit::marks::places(cwd).map(|(common, _)| common))
     else {
         return reply("sampler: not in a git repository\n".to_owned(), 2);
     };
-    verb(args, &Env::live(&common))
+    let mut env = Env::live(&common);
+    env.first = flag("--first").and_then(|f| f.parse().ok());
+    verb(args, &env)
 }
 
 #[cfg(test)]
