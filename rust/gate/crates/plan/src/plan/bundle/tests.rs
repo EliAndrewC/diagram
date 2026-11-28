@@ -394,6 +394,29 @@ fn the_bundle_is_lean_and_shows_each_earlier_verdict() {
     assert!(read(none.parent().unwrap(), "earlier.md").contains("every block here is new"));
 }
 
+/// 461 T70: a reviewer copies a block's key from its comment into `make plan-verdict BLOCKS=1`, so the comment carries the heading
+/// as plan.md holds it - a double quote and a non-ASCII letter unescaped (T32,T33's first record was refused on a `\"`).
+#[test]
+fn a_block_s_key_comment_is_the_heading_as_plan_md_holds_it() {
+    let (_dir, dir) = feature();
+    let out = scratch("out-key");
+    let key = "### T32 (`make rust-test CRATE=\"<several>\"` failed, caf\u{e9})";
+    let earlier = [(key.to_owned(), "then".to_owned(), "BLOCKED".to_owned())];
+    let m = build(&dir, &out, "k", &under(&[(key, "body")]), &earlier, "h").unwrap();
+    let b = m.parent().unwrap();
+    let blocks = read(b, "blocks.md");
+    let copied = blocks
+        .strip_prefix("<!-- block \"")
+        .and_then(|rest| rest.split_once("\" sha256 "))
+        .map(|(k, _)| k);
+    assert_eq!(copied, Some(key));
+    let (was, want) = (
+        read(b, "earlier.md"),
+        format!("<!-- block \"{key}\" verdict BLOCKED -->\nthen"),
+    );
+    assert!(was.contains(&want));
+}
+
 #[test]
 fn a_feature_with_no_request_gets_no_bundle_and_a_long_name_is_cut() {
     let root = scratch("no-request");

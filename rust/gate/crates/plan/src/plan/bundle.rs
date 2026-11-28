@@ -497,11 +497,9 @@ pub(super) fn build(
         under
             .iter()
             .map(|(k, b)| {
-                format!(
-                    "<!-- block {} sha256 {} -->\n{b}\n",
-                    ascii_json(k),
-                    block_digest(b)
-                )
+                // ...ITS KEY AS PLAN.MD HOLDS IT (461 T70): the reviewer copies it into `make plan-verdict BLOCKS=1`; JSON-escaped, a
+                // heading's `"` read `\"` and T32,T33's first record was refused. The hold's reader anchors on the digest's tail.
+                format!("<!-- block \"{k}\" sha256 {} -->\n{b}\n", block_digest(b))
             })
             .collect(),
     );
@@ -509,8 +507,7 @@ pub(super) fn build(
         .iter()
         .map(|(k, t, v)| {
             format!(
-                "<!-- block {} verdict {} -->\n{t}\n",
-                ascii_json(k),
+                "<!-- block \"{k}\" verdict {} -->\n{t}\n",
                 if v.is_empty() {
                     "no verdict recorded"
                 } else {

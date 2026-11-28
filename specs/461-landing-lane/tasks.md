@@ -89,3 +89,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T70 make plan-delta's bundle blocks.md writes a block heading's double quotes escaped (\") in its key comment, so a reviewer copying the key into make plan-verdict BLOCKS=1 is refused once - T32,T33's review's first record refused so (observed 2026-11-28, method: the spec-fidelity reply for 461 T32,T33); the comment should carry the heading as plan.md holds it (rust/gate/crates/plan, the blocks bundle writer)
       research: rendering
+- [ ] T71 The plan review bundle's cited-forms reader (rust/gate/crates/plan/src/plan/bundle/cited/forms.rs, carried, from 461 T69's done commit 62e6b8e616, not yet carried into the clone) reads a template placeholder quote ("<words>", beginning with <) as a citation and writes a NOT FOUND line for it; skip a quote opening with <, with its test (found by 461 T69, briefed into T70, whose tree lacked forms.rs; waits on T69's carry)
+      research: rendering

@@ -1401,14 +1401,49 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 <!-- plan-archive: T65 to T16 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T67 to T18 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T69 to T65 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T70 (<why: the finding or measurement that files it>)
+
+### T70 (`make plan-delta`'s `blocks.md` wrote a heading's double quotes escaped in its key comment, so T32,T33's reviewer, copying the key into `make plan-verdict BLOCKS=1`, was refused once: found by that review, 2026-11-28)
+
+- **Approach**: `rust/gate/crates/plan/src/plan/bundle.rs`'s `build` writes each block's key comment in `blocks.md`, and each earlier block's in `earlier.md`, as plan.md holds the heading - `<!-- block "<heading>" sha256 <hex> -->` - where it was `ascii_json`'s JSON string (a `"` written `\"`, a non-ASCII letter `é`). The MANIFEST's `Record it` line keeps `ascii_json`: its key sits inside a JSON literal, where the escape is right. The comment has one other reader, the plan hold (`rust/guard/shared/src/checks/planhold.rs`, `BLOCK_KEY`), which read a quoted JSON string and unescaped it (`unescape_key`, a Python `unicode_escape` port that garbled a non-ASCII key): it now reads the key to the comment's fixed tail, ` sha256 <64 hex> -->` at the line's end, and takes it as written, `unescape_key` deleted - so a heading's `"` no longer ends the key and a non-ASCII heading is held under its own name. Red first: `plan::bundle::tests::a_block_s_key_comment_is_the_heading_as_plan_md_holds_it` failed on the old code, 1 of 31 `plan::bundle::tests` (the comment's key read `` ### T32 (`make rust-test CRATE=\"<several>\"` failed, café) ``), 2026-11-28; after, 31 of 31, and `checks::planhold`'s 13 of 13 with its fixture in the new form (a quote, a backslash and `é` held as written; a comment with no digest no key).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The comment carries the heading raw, the hold reads it to the digest's tail**: no reader of the comment unescapes, so the key a reviewer copies is the key plan-verdict matches. Label: the task's line ("the comment should carry the heading as plan.md holds it"); a heading is one line, so `(.*)` to the line's fixed end is unambiguous.
+2. **`earlier.md`'s comment takes the same form**: a reviewer may copy a key from either file. Label: design decision.
+3. **A bundle built before this lands, with an escaped quoted key, takes no hold on that block** for the rest of its review (half an hour at most, `HOLD_MAX_S`): the hold fails open, refusing nothing. Label: accepted limitation, the session's (the builder's) choice; the alternative, a reader of both forms, priced at a second pattern and its tests for a window of minutes.
+
+### T70 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan reviewer copies a block's key from `blocks.md` into the JSON `make plan-verdict BLOCKS=1` reads and is recorded at the first try, whatever the heading holds.
+2. **The constraints.** T70's line in tasks.md; the plan hold's (feature 385 T85) reading of the same comment.
+3. **Where each comes from.** O: T32,T33's blocks bundle (`/tmp/l7r-check/plan-461-landing-lane-blocks-T32-53dc889f/blocks.md`, its first comment's `CRATE=\"<several>\"`); the red test above.
+4. **Do they describe the world here?** Yes: `grep -rn '<!-- block'` over `rust`, `scripts` and `.claude` (2026-11-28) found the writer, its tests and the hold's reader alone.
+5. **The order.** After T32,T33's review; before T31.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/plan rust/guard/shared"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The red test passes, `checks::planhold` passes, and `make builder-checks CRATE="rust/gate/crates/plan rust/guard/shared"` is clean, measured 2026-11-28.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reviewer's first record was refused (`plan.md has no block ...`) for a key copied as the bundle wrote it; the hold dropped a heading holding a quote or a non-ASCII letter.
+
+**Found and left?**
+- The brief's second job, a template placeholder quote (one opening with a left angle bracket) read as a citation by `rust/gate/crates/plan/src/plan/bundle/cited/forms.rs`'s `carried` and given a NOT FOUND line, observed 2026-11-27 by 461 T69. Not fixed here: the file is T69's, in its done commit 62e6b8e616 not yet carried into the clone, so this tree has none and building it here would hand T69's code in under T70. Filed as T71; lands before T31.
+
+**Performance work?** no
+
+### T71 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T70 Approach (checklist part A)
+### T71 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

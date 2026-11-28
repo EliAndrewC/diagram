@@ -43,7 +43,10 @@ fn a_dispatch_takes_a_hold() {
     assert_eq!(root, json!(d.to_string_lossy()));
     let blocks = d.join("plan-900-a-blocks-x");
     std::fs::create_dir_all(&blocks).unwrap();
-    std::fs::write(blocks.join("blocks.md"), "<!-- block \"## A \\\"q\\\"\" sha256\nnot one\n<!-- block \"k\\\\z\\n\\t\\r\\a\\b\\f\\v\\'\\q\u{e9}\" sha256\n").unwrap();
+    // the key as plan.md holds it, a quote, a backslash and a non-ASCII letter kept (461 T70); a comment with no digest is no key
+    let sha = "0123abcd".repeat(8);
+    let text = format!("<!-- block \"## A \"q\"\" sha256 {sha} -->\nnot one\n<!-- block \"x\" sha256\n<!-- block \"k\\z caf\u{e9}\" sha256 {sha} -->\n");
+    std::fs::write(blocks.join("blocks.md"), text).unwrap();
     hold(
         &mut state,
         "t2",
@@ -53,10 +56,7 @@ fn a_dispatch_takes_a_hold() {
     );
     assert_eq!(
         state["plan_holds"]["t2"]["blocks"],
-        json!([
-            "## A \"q\"",
-            "k\\z\n\t\r\u{7}\u{8}\u{c}\u{b}'\\q\u{c3}\u{a9}"
-        ])
+        json!(["## A \"q\"", "k\\z caf\u{e9}"])
     );
     hold(
         &mut state,

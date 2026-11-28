@@ -792,6 +792,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T70 (`make plan-delta`'s `blocks.md` wrote a heading's double quotes escaped in its key comment, so T32,T33's reviewer, copying the key into `make plan-verdict BLOCKS=1`, was refused once: found by that review, 2026-11-28)": {
+   "sha256": "0798274864aa889cd8f2fbf97b33663fa3761e4c3aead445060ba38b36243fa2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T70 Approach (checklist part A)": {
+   "sha256": "e52f6f0c4a2ad4a1134fb5ca5a33dfc22060974a48a35b615ce7afcc9d520b41",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5133,6 +5145,40 @@
      "summary": "A bare `Decision <k>` with no task prefix is left uncarried, because it names the block's own section, which the bundle already carries.",
      "class": "within",
      "why": "The text is already in blocks.md, so nothing is missing for the reviewer. No narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T70 (`make plan-delta`'s `blocks.md` wrote a heading's double quotes escaped in its key comment, so T32,T33's reviewer, copying the key into `make plan-verdict BLOCKS=1`, was refused once: found by that review, 2026-11-28)",
+    "### T70 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T70 D1",
+     "summary": "blocks.md's key comment carries the heading as plan.md holds it; the plan hold reads the key to the comment's fixed ' sha256 <64 hex> -->' tail and takes it as written, unescape_key deleted; the MANIFEST's Record-it line keeps ascii_json inside its JSON literal",
+     "class": "within",
+     "why": "Fixes a defect in the review tooling (a tool refusing valid input: a reviewer's key copied as written was refused; the hold dropped headings holding a quote or non-ASCII letter) under fix-as-we-go. Narrows nothing in request.md or the spec; FR-008's checks are untouched. Red test recorded first with date and counts."
+    },
+    {
+     "id": "T70 D2",
+     "summary": "earlier.md's key comment takes the same raw form",
+     "class": "within",
+     "why": "Same defect in the second file a reviewer copies keys from; consistent completion of D1, no narrowing of anything asked."
+    },
+    {
+     "id": "T70 D3",
+     "summary": "a bundle built before T70 lands, with an escaped key, takes no hold on that block for the rest of its review (at most HOLD_MAX_S, half an hour); the hold fails open, no dual-form reader",
+     "class": "within",
+     "why": "The plan hold is not a requirement of request.md or the spec, and the window narrows no clause of either. It leaves no defect in the code: every bundle the fixed builder writes is read correctly, and the gap expires by itself within HOLD_MAX_S of landing, before T31; failing open refuses no good work. Not a known defect carried into the next step."
+    },
+    {
+     "id": "T70 part A, found-and-left",
+     "summary": "the template-placeholder quote read as a citation by cited/forms.rs carried (observed by T69) is not fixed under T70 but filed as T71, landing before T31",
+     "class": "within",
+     "why": "The defect is scheduled to be fixed before the next step (T31) begins, as fix-as-we-go requires; it is deferred only because the file is T69's code not yet in this tree. Nothing asked is narrowed."
     }
    ]
   }

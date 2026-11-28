@@ -31,43 +31,12 @@ static BUNDLE: LazyLock<Regex> = LazyLock::new(|| {
 static WRITE: LazyLock<Regex> = LazyLock::new(|| {
     re(r#"open\([^)]*['"][wa]['"]|write_text|\bsed\s+(?:-\S+\s+)*-i|>\s*['"]?\S*plan\.md|\btee\b"#)
 });
+/// A blocks bundle's key comment, `<!-- block "<the heading as plan.md holds it>" sha256 <hex> -->` (461 T70: it was JSON-escaped,
+/// so a reviewer copying it into `make plan-verdict` was refused on a `\"`), read to the digest's fixed tail, never to a quote.
 static BLOCK_KEY: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"(?m)^<!-- block "((?:[^"\\]|\\.)*)" sha256"#));
+    LazyLock::new(|| re(r#"(?m)^<!-- block "(.*)" sha256 [0-9a-f]{64} -->$"#));
 static QUOTED: LazyLock<Regex> =
     LazyLock::new(|| re(r#""((?:[^"\\\n]|\\.){12,})"|'([^'\n]{12,})'"#));
-
-/// `key.encode().decode("unicode_escape")`, as the Python decoded a held block's key: each backslash escape read, every other byte taken as one Latin-1 character (a non-ASCII key reads garbled, as it always did - and so matches no block, a bug the port keeps, FR-002).
-fn unescape_key(key: &str) -> String {
-    let bytes = key.as_bytes();
-    let mut out = String::with_capacity(key.len());
-    let mut i = 0;
-    while i < bytes.len() {
-        let escape = (bytes[i] == b'\\')
-            .then(|| bytes.get(i + 1).copied())
-            .flatten();
-        let simple = escape.and_then(|n| match n {
-            b'\\' => Some('\\'),
-            b'"' => Some('"'),
-            b'\'' => Some('\''),
-            b'n' => Some('\n'),
-            b't' => Some('\t'),
-            b'r' => Some('\r'),
-            b'a' => Some('\x07'),
-            b'b' => Some('\x08'),
-            b'f' => Some('\x0c'),
-            b'v' => Some('\x0b'),
-            _ => None,
-        });
-        if let Some(c) = simple {
-            out.push(c);
-            i += 2;
-        } else {
-            out.push(char::from(bytes[i]));
-            i += 1;
-        }
-    }
-    out
-}
 
 /// The tree a bundle's MANIFEST says it was built from (`Built from the tree`, 451 T257), or None where it names none.
 fn built_from(bundle: &str) -> Option<PathBuf> {
@@ -96,7 +65,7 @@ pub fn hold(state: &mut Value, tid: &str, prompt: &str, now: f64, root: Option<&
         BLOCK_KEY
             .captures_iter(&text)
             .map_while(Result::ok)
-            .map(|c| unescape_key(&c[1]))
+            .map(|c| c[1].to_owned())
             .collect()
     };
     let mut h = json!({"feature": feature, "task": task.unwrap_or_default(), "blocks": keys, "t": now, "state": "pending"});
