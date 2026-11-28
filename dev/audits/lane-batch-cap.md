@@ -12,6 +12,7 @@ cost: the gate minutes of each extra batch the cap forms (lane.jsonl's run lines
 last-audited: never
 cadence-days: 30
 covers: LANE_MAX
+covers: LANE_WAIT_S
 ---
 
 461 T14 (`rust/gate/crates/lane/src/batch.rs`). LANE_MAX = 6 is the plan's GUESS (D5), with LANE_WAIT_S = 0 (a batch starts as soon as

@@ -14,8 +14,11 @@
 //! - a red hook suite, named in the attempt's output by `make hooks-test`'s `HOOK TESTS FAILED: <job>` line, the job its guard's file
 //!   name (`agent-model-hooks.sh`) or a shard of it (`agent-model-hooks.sh.3`; `tests/hooks/hookrun.sh`'s id); D6's spelling
 //!   `test-<name>-hooks.sh` read too; one unit `hooks <guard file>`;
-//! - a first-pass refusal row, each line under `make land`'s `Every refusal:` (the first pass refused before anything ran), one unit
-//!   `first-pass <row>`.
+//! - a first-pass refusal row, each line under `make land`'s `Every refusal:` (the first pass refused before anything ran) two spaces
+//!   in, one unit `first-pass <row>`, with the lines after it indented deeper, which are the same refusal's (461 T76: `land.rs`'s
+//!   `rows` indents them so; batch 462-2's first pass, 2026-11-28, refused T278 over five lines - `T278: tick: refused - `, then its
+//!   two reasons, the plan gate's block list and its escape - and read a row a line, four named no change and the runner stopped
+//!   three times with the batch open, where the one refusal names T278 and ejects its change).
 //!
 //! WHICH CHANGE A UNIT NAMES (D6 step 2): a crate's (each crate's of a several-crate unit) every change whose delta has a path under its directory (`dir/`, the slash kept,
 //! so `rust/gate` is no prefix of `rust/gate2`; a crate's dependents are NOT counted - a change to `core` that reddens `lane`'s tests is
@@ -41,8 +44,11 @@ use serde_json::Value;
 pub const STEPS: [&str; 5] = ["test", "lint", "cover-build", "cover-run", "build"];
 /// `make hooks-test`'s line for a red suite (the Makefile's `hooks-test` recipe).
 const SUITE: &str = "HOOK TESTS FAILED: ";
-/// `make land`'s first pass, refused before anything ran: its rows follow, two spaces in (`land.rs`).
+/// `make land`'s first pass, refused before anything ran: its rows follow, [`ROW_INDENT`] in, and a row's own further lines deeper
+/// still (`land.rs`'s `rows`, 461 T76).
 const ROWS: &str = "Every refusal:";
+/// A first-pass row's indent; a line of the block indented deeper continues the row above it (461 T76).
+const ROW_INDENT: &str = "  ";
 /// A first-pass row's unit is cut to this many characters (the line `make lane-wait` prints stays one line).
 const ROW_CUT: usize = 120;
 /// A several-crate unit names this many of its crates and counts the rest, so the owed line stays one line (GUESS knob, a reading aid).
@@ -149,6 +155,15 @@ pub fn reds(events: &[Value], span: (&str, &str), tree: &Path, output: &str) -> 
     }
     let text = plain(output);
     let mut in_rows = false;
+    // the row being read, its continuation lines joined on (461 T76)
+    let mut open: Option<String> = None;
+    let row = |text: String| Red {
+        unit: format!(
+            "first-pass {}",
+            text.chars().take(ROW_CUT).collect::<String>()
+        ),
+        kind: Kind::Row(text),
+    };
     for line in text.lines() {
         if let Some(job) = line.split_once(SUITE).map(|(_, j)| j) {
             let guard = suite_of(job.split_whitespace().next().unwrap_or_default());
@@ -161,16 +176,27 @@ pub fn reds(events: &[Value], span: (&str, &str), tree: &Path, output: &str) -> 
             in_rows = true;
             continue;
         }
-        match line.strip_prefix("  ").map(str::trim) {
-            Some(row) if in_rows && !row.is_empty() => add(Red {
-                unit: format!(
-                    "first-pass {}",
-                    row.chars().take(ROW_CUT).collect::<String>()
-                ),
-                kind: Kind::Row(row.to_owned()),
-            }),
-            _ => in_rows = false,
+        let body = line.strip_prefix(ROW_INDENT).filter(|_| in_rows);
+        match (body, open.as_mut()) {
+            (Some(more), Some(text)) if more.starts_with(' ') && !more.trim().is_empty() => {
+                text.push(' ');
+                text.push_str(more.trim());
+            }
+            (Some(first), _) if !first.trim().is_empty() => {
+                if let Some(done) = open.replace(first.trim().to_owned()) {
+                    add(row(done));
+                }
+            }
+            _ => {
+                if let Some(done) = open.take() {
+                    add(row(done));
+                }
+                in_rows = false;
+            }
         }
+    }
+    if let Some(done) = open {
+        add(row(done));
     }
     out
 }

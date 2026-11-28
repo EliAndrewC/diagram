@@ -105,8 +105,9 @@ fn a_repair_is_closed_by_its_answer_or_a_later_hand_in_of_its_task() {
         // r1 answered by a done line naming it
         r#"{"utc": "2026-11-28T04:00:00Z", "event": "done", "detail": "461 T13", "commit": "fff", "repair_of": "r1"}"#,
         "\n",
-        // a hand-in of T14 BEFORE r2's ejection closes nothing; a done not handed in neither; another feature's T14 neither
-        r#"{"utc": "2026-11-28T03:00:00Z", "event": "done", "detail": "461 T14", "commit": "ggg", "handed_in": true}"#,
+        // a hand-in of T14 BEFORE r2's change's own (`bbb`, 02:00:01) closes nothing; a done not handed in neither; another
+        // feature's T14 neither
+        r#"{"utc": "2026-11-28T01:59:59Z", "event": "done", "detail": "461 T14", "commit": "ggg", "handed_in": true}"#,
         "\n",
         r#"{"utc": "2026-11-28T05:00:00Z", "event": "done", "detail": "461 T14", "commit": "hhh"}"#,
         "\n",
@@ -115,8 +116,9 @@ fn a_repair_is_closed_by_its_answer_or_a_later_hand_in_of_its_task() {
     );
     put(&log, &(DONES.to_owned() + more));
     assert_eq!(ids(&open(&common)), ["r2", "r3"]);
-    // a later hand-in of T14, briefed without REPAIR=: r2 superseded
-    let later = r#"{"utc": "2026-11-28T05:00:01Z", "event": "done", "detail": "461 T14,T20", "commit": "jjj", "handed_in": true}"#;
+    // a later hand-in of T14, briefed without REPAIR=: r2 superseded - though made while r2's batch was open, before its 03:00:06
+    // eject (461 T26, D14: it waited for that batch, then supersedes the ejected one)
+    let later = r#"{"utc": "2026-11-28T03:00:03Z", "event": "done", "detail": "461 T14,T20", "commit": "jjj", "handed_in": true}"#;
     put(&log, &(DONES.to_owned() + more + later + "\n"));
     assert_eq!(ids(&open(&common)), ["r3"]);
 }

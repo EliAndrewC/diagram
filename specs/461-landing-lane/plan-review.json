@@ -912,6 +912,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T26 (D5's knobs beside their rules, the batch's size and runs for trial 458, and D14's end of an open batch; phase 3)": {
+   "sha256": "5009c303264ada1ef87cd81ed81dc4dc2ddba37416b01eb86b834e46ab38ee07",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (checklist part A)": {
+   "sha256": "6873a0414651a14925a806f6ad3c71c985875c8ef5d074054c9e82095c205e0f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T76 (batch 462-2's first pass, refused on one task's refusal over five lines, read as five rows, four naming no change: the runner stopped three times with the batch open, observed 2026-11-28, method: the attempt file and lane.jsonl read)": {
+   "sha256": "972e7c1d9075ce6ecd955120e1038b87d59fdcbd5f777637f171425561628aac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T76 Approach (checklist part A)": {
+   "sha256": "c811864656dae16168b6a10a2a00579dfad2d6026e2832bb6383c863a9263353",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5812,6 +5836,54 @@
      "summary": "no attribute line inside a halving: each set's run line names its red units, the halving's ejections are their own repair entries",
      "class": "within",
      "why": "log shape only; data-model's attribute row is the first red's."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T26 (D5's knobs beside their rules, the batch's size and runs for trial 458, and D14's end of an open batch; phase 3)",
+    "### T26 Approach (checklist part A)",
+    "### T76 (batch 462-2's first pass, refused on one task's refusal over five lines, read as five rows, four naming no change: the runner stopped three times with the batch open, observed 2026-11-28, method: the attempt file and lane.jsonl read)",
+    "### T76 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T26 knobs",
+     "summary": "LANE_WAIT_S = 0 (GUESS, no constant) recorded beside LANE_MAX in batch.rs with its label and priced alternative, covers: line in lane-batch-cap.md; the comment names where each other knob lives; LANE_RETRY left to T24 beside its rule in halve.rs",
+     "class": "within",
+     "why": "D5 makes both LANE_WAIT_S and LANE_MAX GUESS knobs and FR-004 makes the batch's size and start a knob; recording them beside their rules moves no value. Leaving LANE_RETRY (D6 step 5) to the task that writes its rule divides the work and drops nothing."
+    },
+    {
+     "id": "T26 trial 458's reading",
+     "summary": "the batch's size is read from the existing batch line's change list and its runs from the landed line's runs/landed/ejected; no field added to run.rs",
+     "class": "within",
+     "why": "D5's Why says the lane log gives trial 458 the batch sizes it asks for; the log already carries them, so adding nothing still meets FR-004's seeding from trial 458."
+    },
+    {
+     "id": "T26 Decision 1",
+     "summary": "a repair entry of an ejected change is closed by a hand-in of the task later than the ejected change's own hand-in (fallback the last eject line), not only by one later than the eject, so a hand-in made while the batch ran supersedes the ejected one's repair",
+     "class": "within",
+     "why": "This is D14's ejected end literally: a later hand-in made while the earlier commit sits in an open batch waits, and if the batch ejected it 'the later one supersedes and the ejected one's repair entry closes as superseded'. The old eject-time rule left that entry open and offered a fresh builder work already replaced, so the change implements D14 rather than narrowing it. Hand-ins older than the change's own still close nothing."
+    },
+    {
+     "id": "T76 Decision 1",
+     "summary": "land.rs indents each refusal row's own further lines four spaces deeper than the two-space row separator, in both Every refusal: messages",
+     "class": "within",
+     "why": "Only how the refusal text is laid out changes. No check is dropped or changed (FR-008), and it lets D6 step 2's row-to-change mapping see a row's boundary."
+    },
+    {
+     "id": "T76 Decision 2",
+     "summary": "attribute.rs reads a line indented deeper than ROW_INDENT as a continuation of the row above, so batch 462-2's multi-line refusal is one row opening T278: and ejects T278's change as a repair",
+     "class": "within",
+     "why": "D6 step 2 / FR-004: 'attribute ... eject; land the rest; file the repair as a queue entry'. A single task's refusal read as five rows, four placed on no change, stopped the runner with the batch open, which is a wrong outcome against US4. Joining the rows makes the attribution FR-004 asks for happen."
+    },
+    {
+     "id": "T76 Decision 3",
+     "summary": "no general mention rule: a row that names T<n> only in its body is not placed on that task; the task line's literal rule (place any row naming T<n>) priced and not taken",
+     "class": "within",
+     "why": "What is declined is a task line written by a session, not the GM's request or a requirement of the spec. D6 step 2 places a row on the change it names, and T15's rule, already in the plan, says a hold stops the batch and ejects nothing. A mention rule would eject T278 under a hold that is no change's fault. With Decisions 1-2 every line naming T278 in the incident sits inside the row that opens T278:, so the incident is cleared with nothing the spec asks for left out. Even judged as a narrowing of the task line it would be LEGITIMATE: applied literally, the rule defeats D6's purpose of ejecting the change at fault."
     }
    ]
   }

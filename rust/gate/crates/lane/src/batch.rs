@@ -19,6 +19,13 @@ use crate::log::{self, HandIn, HandInState, World};
 /// (`docs/process-decisions.md`); the night's 63-task batch took 14 attempts where the smaller ones landed on the first or second.
 /// Trial 458's verdict resets it.
 pub const LANE_MAX: usize = 6;
+// GUESS knob (`LANE_WAIT_S` = 0, plan D5; `dev/audits/lane-batch-cap.md`): the wait before a batch forms - none, so no constant: the
+// runner's step forms as soon as no batch is open and a hand-in waits (`runner/run.rs`), the trial's "stronger version". Mergify's
+// default 30 s (CONVENTION) priced and not taken: with a gate of minutes, hand-ins gather behind a running batch anyway. A wait
+// added here adds the `forming` event that shows it (`log.rs`). Trial 458's verdict resets it with `LANE_MAX`; each batch's size
+// is its `batch` line's `changes` and its runs the `landed` line's `runs`, what the trial reads from `lane.jsonl`.
+// The phase-3 batch's other knobs, each beside its rule: `LANE_RETRY` = 0 (D6 step 5, `halve.rs`), `LANE_IDLE_S` (`runner.rs`),
+// `LANE_REPAIR_FIRST` (`l7r_shared::builder_queue::repairs::KNOB`), `HAND_IN_BASE` (`l7r_shared::builder_pool::HAND_IN_BASE`).
 
 /// Whether `h` is held behind an open batch (D14): an open batch carries a change of `h`'s feature that shares one of its tasks.
 fn held(h: &HandIn, w: &World) -> bool {

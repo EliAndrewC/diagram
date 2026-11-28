@@ -351,7 +351,7 @@ impl Land {
         if !unfinished.is_empty() {
             self.warn(&format!(
                 "land: refused before anything ran - nothing landed, nothing ticked. Every refusal:\n  {}",
-                unfinished.join("\n  ")
+                rows(&unfinished)
             ));
             return Ok(2);
         }
@@ -374,7 +374,7 @@ impl Land {
             let every: Vec<String> = stops.into_iter().chain(claims).collect();
             self.warn(&format!(
                 "land: refused before anything ran - nothing landed, nothing ticked. Every refusal:\n  {}",
-                every.join("\n  ")
+                rows(&every)
             ));
             return Ok(2);
         }
@@ -715,6 +715,17 @@ fn io<E: std::fmt::Display>(e: E) -> String {
 /// What `subprocess` raised on a program it could not start.
 fn spawn_error(program: &str, e: &std::io::Error) -> String {
     format!("FileNotFoundError: {e}: '{program}'")
+}
+
+/// The first pass's refusals, a row each, joined for `Every refusal:` - each row's own further lines indented four spaces deeper than
+/// the rows, so a reader tells a row from the lines of the one above it (461 T76): the lane's attribution reads a row a refusal
+/// (`lane/src/attribute.rs`), and a tick's refusal over five lines, every line two spaces in, read as five rows, four naming no change
+/// (batch 462-2's first pass, 2026-11-28), so the runner stopped with the batch open where the refusal named T278.
+fn rows(rows: &[String]) -> String {
+    rows.iter()
+        .map(|r| r.replace('\n', "\n    "))
+        .collect::<Vec<_>>()
+        .join("\n  ")
 }
 
 /// The first `n` characters (Python's `s[:n]`).

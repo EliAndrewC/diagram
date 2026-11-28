@@ -818,31 +818,60 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T26 (<why: the finding or measurement that files it>)
+### T26 (D5's knobs beside their rules, the batch's size and runs for trial 458, and D14's end of an open batch; phase 3)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: each knob found where it lives (2026-11-28, method: `grep -rn` for each name over `rust/`, `scripts/`, the Makefile,
+  `dev/audits/` and `docs/`) and the two ends of an open batch tested red-first. The knobs: `LANE_MAX` = 6 (GUESS) beside its rule in
+  `batch.rs` and `dev/audits/lane-batch-cap.md` (T14); `LANE_IDLE_S` beside its rule in `runner.rs` and `dev/audits/lane-runner.md`
+  (T12); `LANE_REPAIR_FIRST` = 1 (GUESS) beside its rule, `l7r_shared::builder_queue::repairs::KNOB` (T16); `HAND_IN_BASE` beside its
+  one reading, `l7r_shared::builder_pool::HAND_IN_BASE`, and `dev/audits/hand-in-base.md` (T22). Added here: `LANE_WAIT_S` = 0 (GUESS,
+  no constant - the step forms at once) written beside `LANE_MAX` in `batch.rs` with its label, the priced alternative and what a wait
+  would add, and `covers: LANE_WAIT_S` in `dev/audits/lane-batch-cap.md`; the same comment names where each other knob lives.
+  `LANE_RETRY` = 0 (D6 step 5) is the halving's, recorded beside its rule by T24 in `halve.rs` (T24's line names it; that file is
+  T24's builder's). The batch's size and runs for trial 458: each batch's `batch` line lists its changes and its `landed` line carries
+  `runs`, `landed` and `ejected` (`runner/run.rs`, T14) - the size read from the lists, so no field is added to `run.rs` (T24's file);
+  the comment beside `LANE_MAX` says where the trial reads them. 451 T415's box already reads "taken over by 461 T26".
+- **Decision 1 - D14's ejected end: a hand-in made while the batch was open supersedes the ejected one's repair.** The landed end
+  and the hand-in states already held (T14, T52, T53): a later hand-in of a task an open batch carries is held, then forms the next
+  batch (on top of a landed one; superseding an ejected one, `log::state` `superseded`). But the repair entry's close
+  (`l7r_shared::builder_queue::repairs::open`, rule 3, which `log::repairs_open` and `make builder-next` read) asked for a hand-in
+  later than the last `eject` line, so the later hand-in D14 names - made while the batch ran, before its eject - left the entry
+  open, offered to a fresh builder beside the work that replaced it. Now later than the ejected changes' own hand-ins (their done
+  lines; the last `eject` where none names them), the changes themselves excluded. A hand-in of the task made before the change's
+  own could not have been batched with it waiting (`log::state` reads the earlier `superseded`), so this is the case D14 means.
+  Label: the literal reading (D14, data-model.md's "the earlier one's repair entry then read as closed (`superseded`)").
+- Red first (2026-11-28): `batch::tests::an_open_batch_s_end_lands_a_later_hand_in_of_its_task_on_top_or_has_it_supersede_the_ejected`
+  - the open batch holding the later hand-in, the landed end forming it next, the ejected end reading the earlier `superseded` and
+  forming the later, and the repair entry closed by a hand-in at 03:02 before the 03:05 eject: on the old rule `ONLY="batch"` 30
+  passed, 1 failed (at the repair's close, every assertion before it green); after, `ONLY="batch log"` 37 of 37. The shared crate's
+  `a_repair_is_closed_by_its_answer_or_a_later_hand_in_of_its_task` pinned the old rule (a hand-in before the eject closing nothing);
+  its fixture now says D14's: a hand-in before the change's own closes nothing, one during the batch (03:00:03, before the 03:00:06
+  eject) closes it; `ONLY="builder_queue"` 25 of 25.
 
 ### T26 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every batch knob of D5 readable beside the rule it sets, with its label; trial 458 able to read each
+   batch's size and runs from the lane's log; a later hand-in of an open batch's task landing on top of a landed one, or replacing an
+   ejected one with its repair entry closed, so no fresh builder redoes work already handed in.
+2. **The constraints.** D5, D6 step 5, D14, data-model.md ("A repair entry", superseded), FR-004, the task line.
+3. **Where each comes from.** R: plan.md D5, D14; T14's archived section; data-model.md. O: the grep of each knob, 2026-11-28; the
+   red-first counts.
+4. **Do they describe the world here?** Yes, in the lane crate's scratch common directory: the hand-ins, the lane's lines and the
+   pool's done lines as the runner and the hand-in write them.
+5. **The order.** After T14, T16, T22; beside T24 (halve.rs and run.rs untouched); before T29.
+6. **The exits.** Green: the tests above and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the shared crate's test pinned the eject-time rule, written by T16 before D14's open-batch end was
+   built; restated to D14.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first counts above, 2026-11-28.
+10. **Before moving a constant.** n/a: no value moved, `LANE_WAIT_S` recorded at 0.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The wrong outcome: an ejected change's repair entry stayed open when the task's next hand-in arrived while
+   the batch ran, so `make builder-next` offered a fresh builder a repair of work already replaced.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - `LANE_RETRY` is T24's to record beside its rule in `halve.rs` (its own line says so), not a defect left.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T27 (<why: the finding or measurement that files it>)
@@ -1219,31 +1248,63 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T76 (<why: the finding or measurement that files it>)
+### T76 (batch 462-2's first pass, refused on one task's refusal over five lines, read as five rows, four naming no change: the runner stopped three times with the batch open, observed 2026-11-28, method: the attempt file and lane.jsonl read)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: the cause measured first, then fixed at both ends of the text. Measured 2026-11-28, method: the attempt file
+  `l7r-lane/attempts/462-2-1.log` and the batch's `run` and `owed` lines of `l7r-lane/lane.jsonl` read whole. The first pass printed
+  ONE refusal of T278 - `T278: tick: refused - `, then the tick's two reasons `(1)` and `(2)`, the plan gate's block list and its
+  escape line - every line two spaces in, because the tick's own text indents its reasons `\n  ` (`task/src/tick/refusal.rs`'s fold,
+  `plan/src/plan.rs`'s plan-gate text) and `land.rs` joined the rows by `\n  `. `attribute.rs`'s reader took a row a line, so the
+  run's `red` held five rows (observed 2026-11-28, method: the `run` line's `red` read); the first names T278 (`T278: ...`), the other four - `(1) tick: refused - 462-efficiency-backlog's plan
+  decisions ...`, `2 block(s) of plan.md changed ... ### T278 (...)`, `A case that is genuinely exempt: ...`, `(2) T278's Approach
+  block ...` - named no change, so `refusal` said `Unnamed` and the runner stopped (461 T15's no-change rule) at attempts 1, 2 and 3.
+  The task's line asked for a row naming T<n> to be placed on that task's change; measured against the log, that alone leaves rows
+  (1) and the escape line unnamed, so the batch still stops: the fix is the row's boundary.
+- **Decision 1 - a row's own further lines are indented deeper.** `land.rs`'s new `rows` joins the first pass's refusals as before,
+  `\n  ` between rows, and indents each row's own newlines four spaces further (`\n    `), in both `Every refusal:` messages (the
+  unfinished carry-over's and the first pass's). A reader of the terminal sees each refusal's lines under its first line. Label: the
+  easier route (the producer marks what only it knows; `lane` does not depend on `land`, so the indent is a convention named in both
+  files' docs).
+- **Decision 2 - the reader joins them.** `attribute.rs`'s `reds` reads a line of the block indented more than `ROW_INDENT` (two
+  spaces) as a continuation of the row above it, joined by a space; a row's unit is its whole text cut to `ROW_CUT`. So batch 462-2's
+  refusal is ONE row, `T278: tick: refused - (1) ...`, which `touches` places by its opening `T278:` - the first pass's own form for a
+  task's refusal - and `refusal` reads `Named([T278's change])`: ejected as a repair. Label: the easier route.
+- **Decision 3 - no general mention rule.** A row that names `T<n>` only in its body is NOT placed on that task: the hold's row reads
+  `held by <task> - and T278 cannot land beside it (451 T101): ...`, which names a task of the batch and is no change's fault (461
+  T15's round 1: a hold stops the batch, ejecting nothing); a mention rule would eject T278 under a hold. With Decision 1, every line
+  naming T278 in batch 462-2's refusal is inside the row that opens `T278:`, so nothing the incident needs is lost. Label: the easier
+  route, the task line's literal rule priced and not taken for the hold it misreads.
+- Red first, measured 2026-11-28 (`make rust-test`): `attribute::tests::a_row_s_continuation_lines_are_that_row_so_a_task_s_refusal_over_several_lines_names_its_change`
+  over batch 462-2's refusal as land prints it now, then with a hold after it (still `Unnamed`, the hold alone named), then the old
+  two-space attempt file (five rows, four unnamed - what the runner read): on the old reader `ONLY="attribute"` 6 passed, 1 failed (5
+  rows read where 1 was wanted); after, 7 of 7. `land::tests::every_cheap_refusal_is_said_together_and_nothing_runs_long` given a hold
+  of two lines, measured 2026-11-28 (`make rust-test`): on the old `land.rs` 0 passed, 1 failed; after, 1 of 1 and `ONLY="land::tests"` 24 of 24. `make builder-checks` over
+  lane (92 of 92), land (227 of 227) and the shared crate (626 of 626), lint and format clean.
 
 ### T76 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A first pass that refuses a batch's task on a refusal of several lines ejects that task's change as
+   a repair; one refusing on a hold, a lock or an owed round still stops the runner with the batch open.
+2. **The constraints.** D6 step 2 (a row maps to the change it names), 461 T15's rule (a row naming no change stops, nothing
+   ejected), the task's line.
+3. **Where each comes from.** R: plan.md D6; T15's plan section; the task line. O: the attempt file and lane.jsonl lines of batch
+   462-2, read 2026-11-28; the tick's and the plan gate's text in `tick/refusal.rs` and `plan.rs`; `cheap.rs`'s row order.
+4. **Do they describe the world here?** Yes: the test's fixture is the attempt file's text, re-indented as land now prints it.
+5. **The order.** Independent of T24 (halve.rs, run.rs untouched); before T29.
+6. **The exits.** Green: the tests above and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the task line's rule, measured against the log, did not clear the incident (rows (1) and the escape
+   line name no task) - the row's boundary was the defect.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first counts above, 2026-11-28.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The wrong outcome: a batch whose first pass refused one task stopped the runner three times with the batch
+   open, a task's repair never filed, until the coordinator intervened (batch 462-2, attempts 1-3).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the producer's indent (`land.rs`, outside the brief's fence of attribute.rs and batch.rs, but no file of
+T24's) fixed here, since the reader alone could not tell a row from its lines.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T77 (<why: the finding or measurement that files it>)

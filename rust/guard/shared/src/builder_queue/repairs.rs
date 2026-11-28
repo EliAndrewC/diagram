@@ -15,8 +15,10 @@
 //!    entry's `ejected` alone; its tasks are those changes' done lines' tasks (the entry's `tasks` where no done line names one).
 //! 2. ANSWERED - a `done` line of the pool's log names it in `repair_of` (`make builder-done` copies it from the `brief` line that
 //!    `make builder-brief REPAIR=` wrote): built.
-//! 3. SUPERSEDED - a hand-in (a `done` line with `"handed_in": true`) of its feature sharing one of its tasks, later than its last
-//!    `eject` line: data-model.md's "the earlier one's repair entry then read as closed (`superseded`)", the work handed in again
+//! 3. SUPERSEDED - a hand-in (a `done` line with `"handed_in": true`) of its feature sharing one of its tasks, later than its
+//!    changes' own hand-ins (their done lines; the last `eject` line where none names them), so one made while the batch was still
+//!    open, before the eject, counts (461 T26, plan D14: the later hand-in waits for the open batch, then supersedes the ejected
+//!    one; asked against the eject alone, the entry stayed open, offered to a fresh builder beside the work that replaced it): data-model.md's "the earlier one's repair entry then read as closed (`superseded`)", the work handed in again
 //!    by a builder briefed without `REPAIR=`. The lane's own `log::repairs_open` (`make lane`'s status) lists these same entries by id (461 T65); this offers.
 //!
 //! Of the open ones, [`offer`] passes over two kinds with a line, and the rest are READY:
@@ -260,10 +262,20 @@ pub fn open(common: &Path) -> Vec<Repair> {
         if tasks.is_empty() {
             tasks = strings(&e["tasks"]);
         }
-        let last = ejects.iter().filter_map(|l| l["utc"].as_str()).max();
+        // later than the ejected changes' own hand-ins, else than the last `eject` line where no done line names them (461 T26, D14):
+        // a hand-in of the task made while the batch was still open, before the eject, supersedes it as one made after does
+        let own = changes
+            .iter()
+            .filter_map(|c| dones.iter().find(|d| d["commit"] == c.as_str()))
+            .filter_map(|d| d["utc"].as_str())
+            .max();
+        let last = own.or_else(|| ejects.iter().filter_map(|l| l["utc"].as_str()).max());
         let later = |d: &&&Value| {
             d["handed_in"] == true
                 && d["utc"].as_str() > last
+                && !d["commit"]
+                    .as_str()
+                    .is_some_and(|c| changes.iter().any(|x| x == c))
                 && done_of(d)
                     .is_some_and(|(f, ts)| f == key && ts.iter().any(|t| tasks.contains(t)))
         };

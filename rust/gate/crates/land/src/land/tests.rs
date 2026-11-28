@@ -478,7 +478,8 @@ fn every_cheap_refusal_is_said_together_and_nothing_runs_long() {
     let mut fx = fx("land-refused");
     inner(&mut fx); // in the clone, uncommitted work sends the landing to land alone (451 T88)
     put(&fx.root, "untracked.txt", "x");
-    *fx.answers.holding.borrow_mut() = "T9 nine  <- the active task\n".to_owned();
+    *fx.answers.holding.borrow_mut() =
+        "T9 nine  <- the active task\n  its second line\n".to_owned();
     *fx.answers.ledger.borrow_mut() = "| ? | owed |\n".to_owned();
     fx.answer(&tool("gates/review-gate.sh"), "rc", "1");
     fx.answer(
@@ -492,6 +493,9 @@ fn every_cheap_refusal_is_said_together_and_nothing_runs_long() {
     assert!(err.contains("uncommitted changes in the clone, not this landing's: ?? untracked.txt"));
     assert!(err.contains("held by T9 nine"));
     assert!(err.contains("review passes with no ledger row"));
+    // a row's own further lines four spaces deeper than the rows, so the lane reads it one refusal (461 T76)
+    let row = "\n  held by T9 nine  <- the active task\n      its second line - and T1 cannot land";
+    assert!(err.contains(row));
     let asked = fx.answers.asked.borrow().join("\n");
     assert!(asked.contains("/dev/review-ledger.md --refuse --landing 449-x --tasks T1"));
     // the landing's own write takes its own tasks' plan reviews, an open task's being left to that task's landing (451 T231)

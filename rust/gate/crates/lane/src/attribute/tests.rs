@@ -4,7 +4,7 @@ use std::path::Path;
 
 use serde_json::{json, Value};
 
-use super::{attribute, reds, Change, Verdict};
+use super::{attribute, reds, refusal, Change, Refusal, Verdict};
 
 const SPAN: (&str, &str) = ("2026-11-28T03:00:00.000Z", "2026-11-28T03:10:00.000Z");
 
@@ -272,4 +272,51 @@ fn a_red_no_unit_or_no_single_change_places_is_unplaced() {
         attribute(&tx[1..], &[change(&["a"], &["T1x"])]),
         Verdict::Unplaced
     );
+}
+
+/// Batch 462-2's first pass (461 T76; `l7r-lane/attempts/462-2-1.log`, 2026-11-28): ONE refusal of T278's over five lines, as `make
+/// land` prints it since T76 - a row's own continuation lines four spaces deeper than the rows ([`super::ROWS`]).
+const T278: &str = "land: refused before anything ran - nothing landed, nothing ticked. Every refusal:
+  T278: tick: refused - 
+      (1) tick: refused - 462-efficiency-backlog's plan decisions have no current CLEAR review (feature 243).
+      2 block(s) of plan.md changed since their review by more than a typo (feature 375 FR-043): ### T278 (<why: the finding or measurement that files it>), ### T278 Approach (checklist part A) - `make plan-delta F=<n>` builds the review of those blocks alone
+      A case that is genuinely exempt: PLAN_REVIEW_OK=\"<reason>\", which is recorded.
+      (2) T278's Approach block leaves part A item(s) 12 unanswered (feature 385 D8)
+make: *** [Makefile:662: land] Error 2
+";
+
+#[test]
+fn a_row_s_continuation_lines_are_that_row_so_a_task_s_refusal_over_several_lines_names_its_change()
+{
+    let batch = [
+        change(&["specs/462-efficiency-backlog/plan.md"], &["T278"]),
+        change(&["rust/x.rs"], &["T279"]),
+    ];
+    let r = reds(&[], SPAN, Path::new("/lane"), T278);
+    assert_eq!(r.len(), 1);
+    assert!(r[0].unit.starts_with("first-pass T278: tick: refused - (1) tick: refused - 462-efficiency-backlog's plan decisions"));
+    assert_eq!(refusal(&r, &batch), Refusal::Named(vec![0]));
+    assert_eq!(
+        attribute(&r, &batch),
+        Verdict::Placed(vec![(0, vec![r[0].unit.clone()])])
+    );
+    // a hold after it is a row of its own, and names no change though it names T278: the runner stops, nothing ejected (461 T15)
+    let held = T278.replace(
+        "make: *** [Makefile:662: land] Error 2\n",
+        "  held by 462 T270 - and T278 cannot land beside it (451 T101): not started\n",
+    );
+    let r = reds(&[], SPAN, Path::new("/lane"), &held);
+    assert_eq!(r.len(), 2);
+    assert_eq!(
+        refusal(&r, &batch),
+        Refusal::Unnamed(vec![
+            "first-pass held by 462 T270 - and T278 cannot land beside it (451 T101): not started"
+                .to_owned()
+        ])
+    );
+    // the attempt file as the first pass wrote it before T76, every line two spaces in: four rows of five name no change
+    let before = T278.replace("\n      ", "\n  ");
+    let r = reds(&[], SPAN, Path::new("/lane"), &before);
+    assert_eq!(r.len(), 5);
+    assert!(matches!(refusal(&r, &batch), Refusal::Unnamed(rows) if rows.len() == 4));
 }
