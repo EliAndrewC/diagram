@@ -1,0 +1,28 @@
+
+running 650 tests
+....................................................................................... 87/650
+....................................................................................... 174/650
+....................................................................................... 261/650
+....................................................................................... 348/650
+....................................................................................... 435/650
+......... 444/650
+session::tests::the_name_sources_read_as_the_python_read_them --- FAILED
+....................................................................................... 532/650
+....................................................................................... 619/650
+...............................
+failures:
+
+---- session::tests::the_name_sources_read_as_the_python_read_them stdout ----
+
+thread 'session::tests::the_name_sources_read_as_the_python_read_them' panicked at guard/shared/src/session/tests.rs:253:5:
+assertion `left == right` failed
+  left: ""
+ right: "7"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    session::tests::the_name_sources_read_as_the_python_read_them
+
+test result: FAILED. 649 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.42s
+

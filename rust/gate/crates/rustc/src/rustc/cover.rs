@@ -6,7 +6,9 @@ use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
-use super::{crates, family, lcov_missed, leak_checked, own, re, run_in, stale, tail, Ran, World};
+use super::{
+    crates, family, lcov_missed, leak_checked, own, re, run_in, stale, tail, tests_tmp, Ran, World,
+};
 
 /// The flags `show-env` adds to RUSTFLAGS for coverage, every crate built with them. Only the last run's profiles are cleared and only
 /// the tests' binary is built: `llvm-cov clean` rebuilt the crate from scratch on every run (the GM 2026-11-07: "Are we recompiling
@@ -233,8 +235,8 @@ fn run_one(world: &World, job: &Job, lcov: &Path, tmp: &Path, said: &mut String)
     let _ =
         std::fs::hard_link(&job.exe, &linked).is_ok() || std::fs::copy(&job.exe, &linked).is_ok();
     let mut env = job.env.clone();
+    tests_tmp(&mut env, tmp);
     for (k, v) in [
-        ("TMPDIR", tmp.display().to_string()),
         (
             "LLVM_PROFILE_FILE",
             view.join("rust-%p-%22m.profraw").display().to_string(),

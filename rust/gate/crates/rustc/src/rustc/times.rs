@@ -16,7 +16,7 @@ use l7r_shared::tempdir::TempDir;
 
 use super::cover::package_name;
 use super::kept::test_targets;
-use super::{cargo_in, crates, own, run_in, rust_sources, Ran, World};
+use super::{cargo_in, crates, own, run_in, rust_sources, tests_tmp, Ran, World};
 use crate::Reply;
 
 /// FR-008's bar, in seconds.
@@ -98,7 +98,7 @@ fn time_binary(dir: &Path, exe: &str, env: &BTreeMap<String, String>, runs: usiz
                 // a fresh TMPDIR each run (T99's method), removed after it however the test ended
                 let tmp = TempDir::new("test-times");
                 let mut env = env.clone();
-                env.insert("TMPDIR".to_owned(), tmp.display().to_string());
+                tests_tmp(&mut env, &tmp);
                 let args = own(&["--exact", &name, "-q", "--test-threads=1"]);
                 let start = Instant::now();
                 let ran = run_in(Some(dir), exe, &args, &env);

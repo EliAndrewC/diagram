@@ -3114,42 +3114,70 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 
 <!-- plan-archive: T562 to T562 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T563 (<why: the finding or measurement that files it>)
+### T563 (462 T562's record: git in the tests' TMPDIRs was 67% of the IO-wait time and every journal commit was forced, measured 2026-11-28 (T562's `t562-dstate.py`, jbd2 info); trial lever A, git's fsyncs off, against lever B, a tmpfs TMPDIR, at load, and build the winner)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: both levers trialled at load on one workload, then lever A built. The record is
+  `dev/measurements/2026-11-28/t563-fsync-tmpfs/results.md`, measured 2026-11-28 12:00-12:40 UTC (`t563-driver.sh` over
+  `t563-trial.sh`). The workload: the shared, guard, lane and task suites' built binaries with `side.rs`'s environment, one arm a
+  window. Each window was `make under-load` with COPIES=4 and LOOPS=2, in the order default, A, B, AB, AB, B, A, default, with a
+  45 s ambient slice before each, observed 2026-11-28, method: `t563-driver.sh`'s arguments. Load was 30-60 at the windows' starts, peaking about 84; IO pressure ran 0.4-69.
+  - The suites' summed mean wall time: default 56.8 s, A 52.2 s, B 33.8 s, AB 39.2 s, 16 runs an arm, measured 2026-11-28 (`runs.tsv`).
+  - The forced commits did not follow the arm: 0.83-1.22 a second in the windows against 0.96-3.55 in the ambient slices, measured 2026-11-28 (`windows.tsv`, jbd2 `requested` deltas).
+  - B failed two tests on every run, observed 2026-11-28, method: `runs.tsv`'s exit column and `B-*-red.log`: they read file owners and sizes as the disk gives them. Its leak pin would read an empty
+    directory from outside the namespace. The tmpfs peaked at 4.9 MB a suite, measured 2026-11-28 (`runs.tsv`'s last column, `B-*-red.log`).
+  - **Built: A.** `tests_tmp` in `rust/gate/crates/rustc/src/rustc/run.rs` sets a test run's TMPDIR and `GIT_CONFIG_COUNT=1`,
+    `GIT_CONFIG_KEY_0=core.fsync`, `GIT_CONFIG_VALUE_0=none`. `cargo_call` (where a TMPDIR is given), `side.rs`, `cover.rs` and
+    `times.rs` call it in place of their own TMPDIR insert. Red first: `side.rs`'s stand-in binary prints `git config core.fsync`,
+    which was empty before and is `none` after.
+  - **A deviation from the brief's "build the one that saves more".** B saves more, about 40% against A's 8%, which is about the
+    noise's size, measured 2026-11-28 (`runs.tsv`). But B is a new mechanism: the runners' namespace wrap, the leak pin moved inside
+    it, a fallback where `unshare` fails, and two tests fixed, observed 2026-11-28, method: this trial's red logs and
+    `leak_checked`'s code. The builder-brief sizing rules make that two builders, not a `fix`, so it is filed as T565. A costs
+    nothing and removes T562's measured 26-32 forced commits a 40-fixture loop. Under B, A adds nothing (AB against B), so T565 may
+    leave A in place or drop it.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| levers A and B trialled at load; A built in the test runners | n/a: tooling, no map | n/a: tooling | none | n/a |
 
 ### T563 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The tests' throwaway git repositories cost the disk no fsyncs. The measured faster lever is priced and filed.
+2. **The constraints.** T563's line; the brief's limits: at most 4 copies, the load set through `make under-load`, no mount outside
+   a namespace the trial made. The GM's measure, time saved (T562's request.md, 2026-11-28). The sizing rules of
+   `scripts/container/builder-brief.md`: a new mechanism is two builders.
+3. **Where each comes from.** G: the GM's 2026-11-28 message relayed in T562's brief. R: T562's record; git's `core.fsync`
+   (`none` means no fsync). O: this trial's windows and runs.
+4. **Do they describe the world here?** Yes. The suites are four of the landing's suites, run at load 30-84 from their built
+   binaries with the runner's environment, measured 2026-11-28 (`runs.tsv`, `windows.tsv`).
+5. **The order.** After T562. Before T565 (B), whose wrap would sit on `tests_tmp`, and T568 (the hooks suites).
+6. **The exits.** Green: the rustc crate's tests with `side.rs`'s red-first case, its first tier and its coverage. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One probe was redone. The first B probe could not write into the tmpfs as the nested uid 1000, because
+   the mount's root was ns-root's 0755; `mode=1777` fixed it (`t563-ns-probe.sh`).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE=rust/gate/crates/rustc` green (172 tests), and its cover run names no line,
+   observed 2026-11-28, method: the two commands.
+10. **Before moving a constant.** n/a: no constant moved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map. No defect: slower tests, no wrong outcome (constitution XIV), a speed lever.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The task crate's lane-drop test, `builder_tree::tests::lane::the_lane_s_tree_goes_by_the_drop_once_no_runner_lives_and_no_batch_is_open`,
+  failed 2 of 16 default runs at load, a red landing gate with no defect in the change, observed 2026-11-28, method: this trial's
+  `runs.tsv` and `default-task-red.log`. Not fixed here: it is outside the four runners, and this brief is one job. Filed as T567;
+  lands before T565.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes, a `[perf]` task (451 FR-013): it makes the test phases of the checks and the landings cost less IO. It is no engine-speed task, so the checklist is answered for the record only.
 
 ### T563 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** IO waits in the test phases. T562 measured `land suite` at 1,077 s of its window, `builder-checks test` at 210 s and hooks-test at 155 s, measured 2026-11-28 (T562's `phases.txt`).
+2. **Removes work, or only moves it?** A removes work: the fsyncs of repositories that nobody reads after a crash. B would move
+   it into memory (T565).
+3. **What do you expect it to save, and why?** A: little in wall time at this load, about 8% of four suites, near the noise, and B about 40%, measured 2026-11-28 (`runs.tsv`).
+4. **How does the work grow with the settlement?** n/a: not engine work.
+5. **What did the before and after show, and under what conditions?** The table in `results.md`: two windows an arm at load 30-84, four copies.
+6. **Did any map move, and does it still keep the research?** n/a: no engine code.
 
 ### T560 (<why: the finding or measurement that files it>)
 
@@ -3202,4 +3230,107 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T565 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T565 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T565 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T567 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T567 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T568 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T568 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T568 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
+   time with the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 

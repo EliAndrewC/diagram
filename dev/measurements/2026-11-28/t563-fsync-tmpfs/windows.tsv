@@ -1,0 +1,17 @@
+kind	setting	seconds	forced	forced_per_s	load_start	psi_start
+ambient	-	45.1	160	3.55	44.75	56.58
+window	default	142.6	119	0.83	56.97	3.67
+ambient	-	45.0	65	1.44	80.95	68.66
+window	A	98.5	110	1.12	45.98	27.19
+ambient	-	45.0	51	1.13	67.05	61.78
+window	B	63.3	61	0.96	37.47	36.28
+ambient	-	45.0	59	1.31	51.50	0.39
+window	AB	81.4	84	1.03	30.64	2.50
+ambient	-	45.0	68	1.51	63.69	5.47
+window	AB	84.4	85	1.01	33.67	7.43
+ambient	-	45.0	43	0.96	59.59	0.07
+window	B	78.8	79	1.00	37.53	2.88
+ambient	-	45.0	48	1.07	73.49	9.69
+window	A	124.8	152	1.22	60.18	5.26
+ambient	-	45.0	76	1.69	83.98	5.91
+window	default	101.0	94	0.93	53.11	32.87

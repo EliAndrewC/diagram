@@ -113,10 +113,30 @@ pub(super) fn cargo_call(
         .unwrap_or_else(|| world.target.display().to_string());
     let mut env = BTreeMap::from([("CARGO_TARGET_DIR".to_owned(), target)]);
     if let Some(tmp) = tmp {
-        env.insert("TMPDIR".to_owned(), tmp.display().to_string());
+        tests_tmp(&mut env, tmp);
     }
     (all, env)
 }
+
+/// A test run's own environment: its `TMPDIR`, and git told not to fsync (`core.fsync=none`, through `GIT_CONFIG_*`), for the
+/// throwaway repositories its fixtures make there are never read after a crash. WHY (462 T563): over 25 minutes at load about 30 git
+/// in the tests' TMPDIRs was 67% of the container's IO-wait time though it wrote 0.06 GB (462 T562's record); at load 30-84 with four
+/// copies of the shared, guard, lane and task suites at once their summed wall time went 56.8 s to 52.2 s, two windows each, a gain
+/// about the noise's size, and a 40-fixture loop alone forced 2-3 journal commits against 26-32 (T562), measured 2026-11-28 (`dev/measurements/2026-11-28/t563-fsync-tmpfs/`). Every test runner sets it (`cargo_call`, `side.rs`,
+/// `cover.rs`, `times.rs`); a test of git's own durability would set its own.
+pub(super) fn tests_tmp(env: &mut BTreeMap<String, String>, tmp: &Path) {
+    env.insert("TMPDIR".to_owned(), tmp.display().to_string());
+    for (k, v) in UNSYNCED_GIT {
+        env.insert(k.to_owned(), v.to_owned());
+    }
+}
+
+/// The environment entries that turn git's fsyncs off (`tests_tmp`).
+pub(super) const UNSYNCED_GIT: [(&str, &str); 3] = [
+    ("GIT_CONFIG_COUNT", "1"),
+    ("GIT_CONFIG_KEY_0", "core.fsync"),
+    ("GIT_CONFIG_VALUE_0", "none"),
+];
 
 /// `cargo`, its tests' `TMPDIR` set to `tmp` where one is given (`leak_checked`).
 pub(super) fn cargo_in(

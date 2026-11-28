@@ -12,7 +12,7 @@ use std::path::{Path, PathBuf};
 
 use super::cover::{next, package_name, side_by_side};
 use super::kept::{has_doctests, Verdict};
-use super::{alive, cargo_in, leak_checked, own, run_seen, Ran, World};
+use super::{alive, cargo_in, leak_checked, own, run_seen, tests_tmp, Ran, World};
 
 /// Each owed crate's test run, by manifest: the crates whose kept result does not stand and whose binaries the key's build named, run
 /// side by side.
@@ -70,12 +70,11 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
             world.path_dir.display(),
             std::env::var("PATH").unwrap_or_default()
         );
-        let env = BTreeMap::from([
+        let mut env = BTreeMap::from([
             ("PATH".to_owned(), path),
             // libtest's per-test times are unstable words (`alive::TIMES`, 451 T470)
             ("RUSTC_BOOTSTRAP".to_owned(), "1".to_owned()),
             ("CARGO_TARGET_DIR".to_owned(), target),
-            ("TMPDIR".to_owned(), tmp.display().to_string()),
             ("CARGO".to_owned(), world.cargo.clone()),
             ("CARGO_MANIFEST_DIR".to_owned(), dir.display().to_string()),
             (
@@ -83,6 +82,7 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
                 package_name(manifest).unwrap_or_default(),
             ),
         ]);
+        tests_tmp(&mut env, tmp);
         let mut all = Ran {
             code: 0,
             stdout: String::new(),

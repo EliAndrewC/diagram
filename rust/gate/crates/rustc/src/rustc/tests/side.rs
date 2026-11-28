@@ -31,7 +31,7 @@ fn the_binaries_run_in_cargo_s_order_from_the_crate_with_cargo_s_variables() {
     let probe = world.target.join("a-lib");
     crate::write_executable(
         &probe,
-        "#!/bin/sh\necho \"exe a-lib $*\" >> \"$(dirname \"$0\")/calls\"\necho \"$PWD|$CARGO_MANIFEST_DIR|$CARGO_PKG_NAME|$CARGO|$CARGO_TARGET_DIR\" > \"$(dirname \"$0\")/env-a\"\ncase \"$TMPDIR\" in */l7r-rust-tests-a-p*) echo own-tmp >> \"$(dirname \"$0\")/env-a\";; esac\necho 'test result: ok. 7 passed'\n",
+        "#!/bin/sh\necho \"exe a-lib $*\" >> \"$(dirname \"$0\")/calls\"\necho \"$PWD|$CARGO_MANIFEST_DIR|$CARGO_PKG_NAME|$CARGO|$CARGO_TARGET_DIR\" > \"$(dirname \"$0\")/env-a\"\ncase \"$TMPDIR\" in */l7r-rust-tests-a-p*) echo own-tmp >> \"$(dirname \"$0\")/env-a\";; esac\necho \"$(git config core.fsync)\" >> \"$(dirname \"$0\")/env-a\"\necho 'test result: ok. 7 passed'\n",
     );
     let done = answer(&world, "test", &[], false);
     assert_eq!(done.code, 0, "{}", done.stderr);
@@ -63,7 +63,7 @@ fn the_binaries_run_in_cargo_s_order_from_the_crate_with_cargo_s_variables() {
     assert_eq!(
         env,
         format!(
-            "{dir}|{dir}|pkg-a|{}|{}\nown-tmp\n",
+            "{dir}|{dir}|pkg-a|{}|{}\nown-tmp\nnone\n",
             world.cargo,
             world.target.display()
         )

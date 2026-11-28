@@ -294,6 +294,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T563 (462 T562's record: git in the tests' TMPDIRs was 67% of the IO-wait time and every journal commit was forced, measured 2026-11-28 (T562's `t562-dstate.py`, jbd2 info); trial lever A, git's fsyncs off, against lever B, a tmpfs TMPDIR, at load, and build the winner)": {
+   "sha256": "06b61e71a61d41c356613c3d419288d6b83bcdc2f2454af23231b2153f689ce9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T563 Approach (checklist part A)": {
+   "sha256": "e80d1275a65aa530ba38cdfe53cc6142afa31bb178382a22d2c4acffde076154",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T563 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "a454d4a65cde0124d53613221d8183aa848120b3cf43cab56104071272fae60d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1471,6 +1489,65 @@
      "why": "Sequencing and exits within the task; the red exit routes a claim of impossibility to the arbiter rather than narrowing the task in place. Figures carry their date and method (2026-11-27, the named test, awk pass, the named make target and script)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T563 (462 T562's record: git in the tests' TMPDIRs was 67% of the IO-wait time and every journal commit was forced, measured 2026-11-28 (T562's `t562-dstate.py`, jbd2 info); trial lever A, git's fsyncs off, against lever B, a tmpfs TMPDIR, at load, and build the winner)",
+    "### T563 Approach (checklist part A)",
+    "### T563 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "trial-design",
+     "summary": "Both levers trialled at load on one workload (four suites' built binaries with side.rs's environment), make under-load COPIES=4 LOOPS=2, arms in a mirrored order with 45 s ambient slices",
+     "class": "within",
+     "why": "How to measure the levers the GM's 2026-11-28 messages raise (IO contention; a tmpfs for much-written files); it settles nothing the request or spec decided."
+    },
+    {
+     "id": "build-A",
+     "summary": "Build lever A (git core.fsync=none via GIT_CONFIG_* in the test runners' environment) although its saving (about 8%) is near the noise",
+     "class": "within",
+     "why": "Serves the GM's 'if looking into it speeds up your overnight work' at no cost to any requested behavior; whether its saving is large is a plan-quality question, not fidelity."
+    },
+    {
+     "id": "defer-B-to-T565",
+     "summary": "Do not build lever B (tmpfs TMPDIR) in T563 although it saves more (about 40%); file it as T565, ordered after T563 and T567",
+     "class": "within",
+     "why": "The 'build the winner' wording is the session's task line, not the GM's; no clause of request.md and no requirement of the spec is left unserved: the GM's tmpfs message is exploratory ('maybe ...?') and its memory worry is answered (4.9 MB a suite), and the lever is carried forward to be built, not dropped. This rests on the block's statement that T565 is filed and ordered, which this bundle cannot verify. Were T565 not filed, the tmpfs lever would be dropped and this would be a narrowing with cost as its only ground."
+    },
+    {
+     "id": "A-reach",
+     "summary": "A reaches the four rustc-crate runners (cargo_call where a TMPDIR is given, side.rs, cover.rs, times.rs) through tests_tmp; the hooks suites are left to T568",
+     "class": "within",
+     "why": "No GM clause or requirement names which test runners a speed lever must cover; the hooks suites are sequenced to a filed task, not excluded."
+    },
+    {
+     "id": "A-red-first",
+     "summary": "Red-first test: side.rs's stand-in binary prints git config core.fsync, empty before and none after",
+     "class": "within",
+     "why": "A test whose only effect is to make the built lever actually take effect; enforcement of the change, not new scope."
+    },
+    {
+     "id": "lane-drop-left-T567",
+     "summary": "The task crate's lane-drop test, which failed 2 of 16 default runs at load, is left unfixed in T563 and filed as T567, landing before T565",
+     "class": "within",
+     "why": "A gate that reds good work is a defect (constitution XIV's definition), not 'no defect' as the block puts it; but it is outside what T563 touches, T563 is not a port step under fix-as-we-go, no GM clause or requirement asks it fixed here, and it is filed and ordered ahead of the next lever's work."
+    },
+    {
+     "id": "ordering",
+     "summary": "After T562; before T565 and T568",
+     "class": "within",
+     "why": "Sequencing among tasks the request and spec do not order."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "Tagged [perf] under 451 FR-013, which puts it first in the schedule",
+     "class": "within",
+     "why": "FR-013 counts work that makes the checks and landings faster as performance work; the GM's 2026-11-27 orchestration-first order is about which feature's tasks fill builders, not this tag."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1873,6 +1950,62 @@
      "summary": "Also fix, in this task, the_candidates_at_the_merge_base_and_the_geometry's stale-page case: set the drawing's time to the page's plus one second instead of leaving it to the clock.",
      "class": "within",
      "why": "A defect found by this task's own measurement run (a test refusing good work under load, 1 of 90 red) in the same crate, fixed as found. Fixing a known defect a step turns up is the standing rule (constitution XIV, fix as we go), not unrequested scope, and it adds no behavior beyond making the existing test stop reading the clock. No part of the request is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T563": {
+   "section_sha256": "a66aeccd554372633a029156f117fc9c809584c52d67216c2604f58b93d9fbae",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "trial-design",
+     "summary": "Both levers trialled at load on one workload (four suites' built binaries with side.rs's environment), make under-load COPIES=4 LOOPS=2, arms in a mirrored order with 45 s ambient slices",
+     "class": "within",
+     "why": "How to measure the levers the GM's 2026-11-28 messages raise (IO contention; a tmpfs for much-written files); it settles nothing the request or spec decided."
+    },
+    {
+     "id": "build-A",
+     "summary": "Build lever A (git core.fsync=none via GIT_CONFIG_* in the test runners' environment) although its saving (about 8%) is near the noise",
+     "class": "within",
+     "why": "Serves the GM's 'if looking into it speeds up your overnight work' at no cost to any requested behavior; whether its saving is large is a plan-quality question, not fidelity."
+    },
+    {
+     "id": "defer-B-to-T565",
+     "summary": "Do not build lever B (tmpfs TMPDIR) in T563 although it saves more (about 40%); file it as T565, ordered after T563 and T567",
+     "class": "within",
+     "why": "The 'build the winner' wording is the session's task line, not the GM's; no clause of request.md and no requirement of the spec is left unserved: the GM's tmpfs message is exploratory ('maybe ...?') and its memory worry is answered (4.9 MB a suite), and the lever is carried forward to be built, not dropped. This rests on the block's statement that T565 is filed and ordered, which this bundle cannot verify. Were T565 not filed, the tmpfs lever would be dropped and this would be a narrowing with cost as its only ground."
+    },
+    {
+     "id": "A-reach",
+     "summary": "A reaches the four rustc-crate runners (cargo_call where a TMPDIR is given, side.rs, cover.rs, times.rs) through tests_tmp; the hooks suites are left to T568",
+     "class": "within",
+     "why": "No GM clause or requirement names which test runners a speed lever must cover; the hooks suites are sequenced to a filed task, not excluded."
+    },
+    {
+     "id": "A-red-first",
+     "summary": "Red-first test: side.rs's stand-in binary prints git config core.fsync, empty before and none after",
+     "class": "within",
+     "why": "A test whose only effect is to make the built lever actually take effect; enforcement of the change, not new scope."
+    },
+    {
+     "id": "lane-drop-left-T567",
+     "summary": "The task crate's lane-drop test, which failed 2 of 16 default runs at load, is left unfixed in T563 and filed as T567, landing before T565",
+     "class": "within",
+     "why": "A gate that reds good work is a defect (constitution XIV's definition), not 'no defect' as the block puts it; but it is outside what T563 touches, T563 is not a port step under fix-as-we-go, no GM clause or requirement asks it fixed here, and it is filed and ordered ahead of the next lever's work."
+    },
+    {
+     "id": "ordering",
+     "summary": "After T562; before T565 and T568",
+     "class": "within",
+     "why": "Sequencing among tasks the request and spec do not order."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "Tagged [perf] under 451 FR-013, which puts it first in the schedule",
+     "class": "within",
+     "why": "FR-013 counts work that makes the checks and landings faster as performance work; the GM's 2026-11-27 orchestration-first order is about which feature's tasks fill builders, not this tag."
     }
    ],
    "verdict": "CLEAR"

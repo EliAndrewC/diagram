@@ -1,0 +1,56 @@
+
+running 638 tests
+....................................................................................... 87/638
+....................................................................................... 174/638
+....................................................................................... 261/638
+....................................................................................... 348/638
+....................................................................................... 435/638
+....................................................................................... 522/638
+........... 533/638
+guards::scratch_sweep_hooks::disk::audit::tests::the_audit_names_every_place_its_size_owner_age_and_budget_and_the_disk_s_total --- FAILED
+....................................................................................... 621/638
+.................
+failures:
+
+---- guards::scratch_sweep_hooks::disk::audit::tests::the_audit_names_every_place_its_size_owner_age_and_budget_and_the_disk_s_total stdout ----
+
+thread 'guards::scratch_sweep_hooks::disk::audit::tests::the_audit_names_every_place_its_size_owner_age_and_budget_and_the_disk_s_total' panicked at guard/src/guards/scratch_sweep_hooks/disk/audit/tests.rs:93:9:
+"/diagram  (the mirror's: the guard's kept binary" in
+   0.0 GB of    0.0 GB  OVER by 0.0 GB   the build cache /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.cache/l7r-cargo-target (5 entries)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.cache/l7r-cargo-target/work  (the tree /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/diagram/.clones/work; last written 0.0 h ago)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.cache/l7r-cargo-target/wt  (the worktree /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp/t9/wt of /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/diagram/.clones/work; last written 0.0 h ago)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.cache/l7r-cargo-target/gone  (no tree of that name on disk (a landing tree between landings, or gone); last written 0.0 h ago)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.cache/l7r-cargo-target/clone  (the hooks suites' fixture clones; last written 0.0 h ago)
+   0.0 GB of   20.0 GB  within           Claude Code's scratch /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp/claude-4242 (2 entries)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp/claude-4242/-diagram/sess-1  (session sess-1; last written 0.0 h ago)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp/claude-4242/loose.txt  (loose; last written 0.0 h ago)
+   0.0 GB of   10.0 GB  within           this project's session transcripts /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.claude/projects/-tmp-l7r-tmp-t563-trial-NddBxz-guard-l7r-tmp-l7r-guard-disk-audit-p2122482-416-diagram* (0 entries)
+   0.0 GB of    1.0 GB  within           the guard log /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.claude/guard-log (1 entries)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.claude/guard-log  (every session's guard firings; last written 0.0 h ago)
+   0.0 GB of    5.0 GB  within           /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp/l7r-* (1 entries)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp/l7r-check  (a suite or a tool; last written 0.0 h ago)
+   0.0 GB of   10.0 GB  within           the rest of this user's /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp (2 entries)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp/t245  (a builder's scratch; last written 0.0 h ago)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/tmp/t9  (a builder's scratch; last written 0.0 h ago)
+   0.0 GB of   25.0 GB  within           the session clones /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/diagram/.clones (1 entries)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/diagram/.clones/work  (clone or worktree work; last written 0.0 h ago)
+   0.0 GB of   25.0 GB  within           the mirror /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/diagram outside the clones (1 entries)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/diagram/.git  (the mirror; last written 0.0 h ago)
+   0.0 GB of    5.0 GB  within           the rest of /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.cache (1 entries)
+     0.0 GB  /tmp/l7r-tmp/t563-trial.NddBxz/guard/l7r-tmp/l7r-guard-disk-audit-p2122482-416/home/.cache/pip  (cache pip; last written 0.0 h ago)
+   0.0 GB of    1.0 GB  within           the tasks' scratch in the git directories <tree>/.git/t<N>* (0 entries; within the clones and the mirror above, not added again)
+   0.0 GB of    0.5 GB  within           the handoff folders <tree>/.git/l7r-handoffs (0 entries; within the clones and the mirror above, not added again)
+   0.0 GB of    1.5 GB  within           the review snapshots <tree>/.git/review-snapshot (0 entries; within the clones and the mirror above, not added again)
+   0.0 GB of    1.0 GB  within           the generation caches <tree>/.gencache (0 entries; within the clones and the mirror above, not added again)
+disk: 9.0 GB used of 10.0 GB, 1.0 GB free (10%; the eviction starts below 20%, L7R_DISK_FREE_PCT); these places 0.0 GB, unaccounted 8.9 GB (the overlay's df counts the host's disk: the image, other containers, the host's own files)
+host-side, not counted: podman's image storage on the host (about 13 GB of unused layers, the host's measurement of 2026-11-25) - the host's to clean (podman image prune), unseen from this container
+now: disk under 20% free (L7R_DISK_FREE_PCT): the eviction found nothing it may take - every build directory in use or built within 12 h; make disk-audit lists what holds the disk
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    guards::scratch_sweep_hooks::disk::audit::tests::the_audit_names_every_place_its_size_owner_age_and_budget_and_the_disk_s_total
+
+test result: FAILED. 637 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.99s
+

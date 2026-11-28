@@ -1,0 +1,23 @@
+
+running 166 tests
+............................................ 44/166
+builder_tree::tests::lane::the_lane_s_tree_goes_by_the_drop_once_no_runner_lives_and_no_batch_is_open --- FAILED
+....................................................................................... 132/166
+..................................
+failures:
+
+---- builder_tree::tests::lane::the_lane_s_tree_goes_by_the_drop_once_no_runner_lives_and_no_batch_is_open stdout ----
+
+thread 'builder_tree::tests::lane::the_lane_s_tree_goes_by_the_drop_once_no_runner_lives_and_no_batch_is_open' panicked at gate/crates/task/src/builder_tree/tests/lane.rs:326:5:
+assertion `left == right` failed: builder-tree-drop: /tmp/l7r-tmp/t563-trial.SHoRRH/task/l7r-tmp/l7r-gate-ci-task-pool-lane-drop-p1797197-48/repo-land is the lane's tree and the lane's runner lives - make lane-stop first
+
+  left: 2
+ right: 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    builder_tree::tests::lane::the_lane_s_tree_goes_by_the_drop_once_no_runner_lives_and_no_batch_is_open
+
+test result: FAILED. 165 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.76s
+

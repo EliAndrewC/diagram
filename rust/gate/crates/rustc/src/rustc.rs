@@ -44,7 +44,8 @@ use kept::{
     kept_reads, undeclared, undeclared_refusal, unit_tests_only, Kept, Reads, Told, Verdict,
 };
 use run::{
-    cargo, cargo_call, cargo_in, cargo_small, leak_checked, run, run_in, run_seen, tested, Ran,
+    cargo, cargo_call, cargo_in, cargo_small, leak_checked, run, run_in, run_seen, tested,
+    tests_tmp, Ran,
 };
 
 /// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
