@@ -1980,31 +1980,43 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T321 (<why: the finding or measurement that files it>)
+### T321 (451 T104's and T304's builders each held the machine at a load of 240 to 400 for over an hour by hand on 2026-11-26, slowing two batch gates and failing a third suite; a reproduction under load had no bounded tool)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a new command, `make under-load CMD="<command>" COPIES=<n> LOOPS=<n> MAX_MINUTES=<m> [BURNERS=<n>]`, running `l7r-gate rust under-load` (`rust/gate/crates/rustc/src/rustc/under_load.rs` and `under_load/warden.rs`). Built by the task's build half (its handoff, `T321-build.md`); this section is the closing half's.
+  - **What it runs.** COPIES copies of CMD at once (`sh -c CMD`, each told `L7R_UNDER_LOAD_COPY` and `_LOOP`, its output to `c<copy>-l<loop>.log`), each LOOPS times one after another, beside BURNERS pure busy loops (default 0). Both kinds of load are offered because the task line names copies, loops and burners, and the hand runs of 2026-11-27 were 10 and 30 concurrent copies of the test itself (461 T58's "6x10" is COPIES=10 LOOPS=6). Label: the easier route, the record silent (tooling).
+  - **The bound, two layers.** The caller re-runs its own program as a WARDEN in a process group of its own, its stdin a pipe the caller holds and never writes. The warden spawns a SENTINEL first (`sh -c 'sleep "$0"; kill -s KILL 0'` for the bound plus twice GRACE_S) in a new group G, which every burner and copy then joins; the warden stays outside G. The warden polls every 0.5 s (a GUESS knob) - the 1-minute load, every copy done, the caller's pipe at EOF, the deadline - and at the end shuts a gate (no loop starts after it), sends TERM to G, waits up to GRACE_S (10 s, a GUESS knob) and sends KILL to G, reaping the burners and the sentinel last so G's id is never reused while it can be signalled. The warden alone would not survive a SIGKILL; the sentinel alone gives no early stop and no Phase line. A per-run `timeout` was rejected: `/usr/bin/timeout` here is uutils 0.8.0, and it leaves the group anyway.
+  - **What it prints and books.** Red (exit not 0, not cut), cut (exit not 0 with the gate shut, counted apart) and green; up to 10 red logs named; the load at start, peak and end with ISO times; why it ended; the logs' directory (`$TMPDIR/l7r-under-load-<stamp>-<pid>/`, green logs removed). Exit 1 where any run was red. ONE Phase line (`phase.rs` `wrote_with`: `src: rust`, `step: under-load`, make target `under-load`, fields `cmd copies loops burners max_minutes runs red cut load_start load_peak load_end ended group logs`). `columns::category()` gives it no category and `ran::kind()` counts it as no unit-test run, so it adds no false test count; its minutes go to `tests` by a new row of the guard's BUCKETS table (`make under-load`), and the inner `make rust-test` calls' own `build` and `test` lines book as ever. `cli` dispatches it ahead of the run lock, as the pre-warm is, so the copies' own `make rust-test` runs are the same run and overlap rather than queue. Rejected: reusing `(rust, test)` (a false unit-test count) and `src: quick` (a false source).
+  - **Caps** (GUESS knobs, `dev/audits/under-load.md`): MAX_MINUTES at most 60 (MAX_MINUTES_CAP), COPIES + BURNERS at most 3 a core (PER_CORE, a GUESS knob, so 66 on this 22-core machine), GRACE_S 10 s (a GUESS knob), so every process of a run is gone by MAX_MINUTES plus 20 s (twice GRACE_S, a GUESS knob).
+  - **Moved, unchanged.** `event_log_hooks.rs` stood at 1,000 lines and the BUCKETS row took it to 1,002, past the file-size bar (constitution X clause 13), so the category table (`BUCKETS`, its doc and `bucket_of`, 177 lines) moved to `event_log_hooks/buckets.rs`, re-exported, every old path resolving, observed 2026-11-27, method: the hand-in's first pass refusing the file at 1,002 lines and `wc -l` after the move (826).
+  - **The brief's clause.** "Runs ALONE in its batch" was already in `scripts/container/builder-brief.md` (`LOAD=1`; 451 T321; feature 460); nothing rebuilt, and the Makefile help says it again.
+  - **Measured 2026-11-27, pool tree `diagram-backlog-t269`, 22 cores.** A real run (`make under-load CMD='make rust-test CRATE=rust/gate/crates/rustc ONLY="rustc::tests::under_load::the_words"' COPIES=2 LOOPS=2 BURNERS=1 MAX_MINUTES=1`): 4 of 4 green in 3.0 s, its four inner `test` Phase lines under make target `under-load` overlapping in pairs, and one `under-load` line. The caller's group SIGKILLed mid-run: the load group of 10 processes empty 0.7 s later, `ended: the caller went away`, 3 runs, 3 cut, measured 2026-11-27 (`setsid make under-load CMD='sleep 60' COPIES=3 LOOPS=2 BURNERS=2 MAX_MINUTES=2`, then `kill -KILL -- -<pgid>`). The warden SIGKILLed with the caller: the group empty 25.9 s after the kills - the sentinel at 6 s plus 2 x 10 s, measured 2026-11-27 (MAX_MINUTES=0.1, `kill -KILL <warden>` and the caller's group).
+  - **Red-first**, measured 2026-11-27 (each mutation alone, `make rust-test ONLY=rustc::tests::under_load`, 10 tests): no sentinel kill 9 passed 1 failed; no caller watch 9/1; no TERM 9/1; no KILL 8/2; gate never shut 7/3; the warden in the caller's group 9/1; after, 10 of 10.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the command `make under-load` (`under_load.rs`, `warden.rs`, `phase.rs`, `rustc.rs`, the Makefile) | n/a: a new command, each part pinned by the six red-first mutations above | n/a: tooling | none | n/a |
+| the BUCKETS row and the table's move to `buckets.rs` | n/a: a booking, pinned by the guard crate's own tests | n/a: tooling | none | n/a |
 
 ### T321 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder that must reproduce a failure under load runs one command that loads the machine as asked and is gone by its bound whatever the builder does - killed, timed out at its context cap or forgotten - and the load's minutes appear in `make task-time`.
+2. **The constraints.** The task line (COPIES, LOOPS, MAX_MINUTES, burners, the red count, the load and its start and end, a Phase line, the brief's ALONE clause); the builder-brief's `LOAD=1` rule (451 T321, feature 460); the file-size bar (constitution X clause 13); a guard file edited through `make guard-edit`.
+3. **Where each comes from.** G: none beyond the task line as filed. O: the hand loads of 2026-11-26 (240 to 400 for over an hour, 451 T104, T304) and of 2026-11-27 (30 copies on 22 cores, a load of 38 to 86), and the build half's measurements above.
+4. **Do they describe the world here?** Yes: the three runs above were made in a pool tree on this machine, a real `make rust-test` among them, measured 2026-11-27 (the runs above).
+5. **The order.** After 451 T321's brief clause (landed); before any builder next loads the machine by hand.
+6. **The exits.** Green: the module's tests green, the first tier over the build half's crates green, and `l7r-gate.sh rust cover` over `rustc` and `guard/shared` naming no line, each measured at the closing half (`make builder-checks`, the cover run). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The killed-caller run's group empty 0.7 s after the kill and the killed-warden run's 25.9 s after (inside its bound plus 20 s), measured 2026-11-27 (above); the coverage run naming no line.
+10. **Before moving a constant.** n/a: MAX_MINUTES_CAP, PER_CORE and GRACE_S are new GUESS knobs, recorded in `dev/audits/under-load.md`.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed: a new command. No map changes; a builder's load run is bounded where it was not.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A CMD that starts its own process group (`setsid`, `timeout`, a cargo the pre-warm starts) leaves G, and only its own parent ends it; visible effect: such a process can outlive the bound. Not a defect (constitution XIV): an accepted limitation of the design, not filed: a `/proc` sweep by an environment mark was priced and not built, and the checks' own cargo calls stay in the group (`dev/audits/under-load.md`, the module doc; the build half's choice).
+- A kill at the bound can cut a rustc mid-write (`prewarm.rs`: 29 of 54); visible effect: one stale link on the next build, which `stale.rs` heals once. Not a defect (constitution XIV): an accepted cost, not filed, the help saying build first.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no: the task is not a `[perf]` task; it bounds a reproduction's load so that batch gates beside it are not slowed, and makes no step faster itself.
 
 
 ### T319 (<why: the finding or measurement that files it>)

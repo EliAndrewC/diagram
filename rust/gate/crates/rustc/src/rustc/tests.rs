@@ -33,6 +33,7 @@ mod side;
 mod slot;
 mod stale;
 mod times;
+mod under_load;
 
 /// `dirname` and `basename` as the shell's own functions: a fake's every `$(dirname "$0")` started the program, about a millisecond each,
 /// several a fake call and a dozen fake calls a test (feature 449 T167, FR-008's tenth of a second).

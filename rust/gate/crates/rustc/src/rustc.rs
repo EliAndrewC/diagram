@@ -36,6 +36,7 @@ mod side;
 mod slot;
 mod stale;
 mod times;
+mod under_load;
 use cover::uncovered_each;
 #[cfg(test)]
 use kept::{content_ids, declared_reads, relative, verdict_key};
@@ -835,6 +836,19 @@ pub fn cli(args: &[String]) -> Reply {
         return prewarm::run(&world, &args[1..], &prewarm::Knobs::of(&world));
     }
     let taker = runlock::Taker::here();
+    // a load run (feature 462 T321, `under_load.rs`) joins no run's lock either: its copies' own checks are runs of its make
+    if cmd == under_load::STEP {
+        let world = world_here(phase::run_target(&taker.run_what, cmd));
+        let warden = std::env::var_os(under_load::WARDEN).is_some();
+        let knobs = under_load::Knobs::here();
+        return under_load::entry(
+            &world,
+            &args[1..],
+            &knobs,
+            warden,
+            Box::new(std::io::stdin()),
+        );
+    }
     // the filter is read from the arguments alone, never the environment: make exports `ONLY=` to every recipe, and only
     // `make rust-test` hands it on (feature 451 T435)
     let world = World {

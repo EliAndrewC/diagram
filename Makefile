@@ -1296,6 +1296,11 @@ rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=
 	$(FRESH_ESCAPE)
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test $(if $(CRATE),--crate "$(CRATE)",) $(if $(ONLY),--only "$$ONLY",)
 
+# A FAILURE REPRODUCED UNDER LOAD, BOUNDED (462 T321): builders held the machine at a load of 240 to 400 for over an hour by hand
+# (451 T104, T304, 2026-11-26). CMD goes through the environment, as ONLY does, so its quotes and `$` reach the shell whole.
+under-load:      ## [tests] run CMD in COPIES copies at once, each LOOPS times, beside BURNERS busy loops, every process ended at MAX_MINUTES (at most 60) plus 20 s whatever the caller does - a sentinel in the run's process group kills it - and at once if the caller goes; prints the red count (a run cut by the bound counted apart), the load at its start, peak and end, and writes a Phase line (step under-load); build first (a kill at the bound can cut a rustc), give make rust-test ONLY= so each loop runs again, and run it ALONE in its batch (462 T321)   CMD="<command>" COPIES=<n> LOOPS=<n> MAX_MINUTES=<m> [BURNERS=<n>]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust under-load --cmd "$$CMD" --copies "$(COPIES)" --loops "$(LOOPS)" --max-minutes "$(MAX_MINUTES)" --burners "$(or $(BURNERS),0)"
+
 # THE EDIT LOOP OF A TASK'S CRATES IN ONE COMMAND (451 T170): static-runs' refusal (451 FR-007) names this with the delta's crates
 # said once, where it named four commands a crate and reached builders at up to 7,909 characters; each step runs every crate at once.
 crate-checks:    ## [static] a task's crate-scoped checks while iterating - test, lint, format --check and cover, each over every crate CRATE= names, all reported, red if any is - the edit loop in place of a third make static (451 FR-007, T170)   CRATE="<dir> ..."

@@ -144,6 +144,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T321 (451 T104's and T304's builders each held the machine at a load of 240 to 400 for over an hour by hand on 2026-11-26, slowing two batch gates and failing a third suite; a reproduction under load had no bounded tool)": {
+   "sha256": "821e9bcd3833f92745d2da2403b97a4ad413b7bf399f9bbc7d85d2f147091325",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T321 Approach (checklist part A)": {
+   "sha256": "c8ff5cedeee4e8f1b5c2f023cf95cd2ffabbb7a9d3fdb5334304e9401d5e9eeb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -600,6 +612,76 @@
      "why": "This is how the measurement was done, and it serves the task's goal. Nothing the GM asked for is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T321 (451 T104's and T304's builders each held the machine at a load of 240 to 400 for over an hour by hand on 2026-11-26, slowing two batch gates and failing a third suite; a reproduction under load had no bounded tool)",
+    "### T321 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 both load kinds",
+     "summary": "COPIES copies of CMD, each LOOPS times, beside BURNERS busy loops (default 0).",
+     "class": "within",
+     "why": "The block cites the task line as naming copies, loops and burners. T321 moved here unchanged under FR-002, and the GM's request does not narrow its content. Offering both kinds carries the line rather than narrowing it."
+    },
+    {
+     "id": "D2 two-layer bound",
+     "summary": "A warden in its own group plus a SIGKILL sentinel in load group G; per-run timeout rejected.",
+     "class": "within",
+     "why": "This is how the bound the task line asks for (MAX_MINUTES) is enforced, a design choice inside the task. Rejecting timeout is a choice of mechanism and narrows nothing."
+    },
+    {
+     "id": "D3 booking",
+     "summary": "One Phase line with step under-load, no category and no unit-test count, its minutes booked to tests by a new BUCKETS row; (rust,test) and src: quick rejected.",
+     "class": "within",
+     "why": "The task line asks for a Phase line, and the goal puts the load's minutes in make task-time. The rejected bookings would give a false count or a false source, so rejecting them serves the line."
+    },
+    {
+     "id": "D4 ahead of the run lock",
+     "summary": "cli dispatches under-load ahead of the run lock so the inner make rust-test copies overlap.",
+     "class": "within",
+     "why": "Copies that queued behind a lock would not load the machine concurrently, which defeats the command's purpose. This is mechanism, not scope."
+    },
+    {
+     "id": "D5 caps",
+     "summary": "MAX_MINUTES at most 60, COPIES+BURNERS at most 3 a core, GRACE_S 10 s, all GUESS knobs recorded in dev/audits/under-load.md.",
+     "class": "within",
+     "why": "Caps bound the load, which is the task's purpose. They are labeled GUESS knobs with a recorded home."
+    },
+    {
+     "id": "D6 exit and counts",
+     "summary": "Exit 1 on any red; cut runs counted apart from red; up to 10 red logs named; green logs removed.",
+     "class": "within",
+     "why": "The task line asks for the red count and the load at start and end. Counting cut runs apart keeps a run killed by the bound from reading as a failure of CMD."
+    },
+    {
+     "id": "D7 BUCKETS moved to buckets.rs",
+     "summary": "BUCKETS, its doc and bucket_of moved out of event_log_hooks.rs, re-exported, unchanged.",
+     "class": "within",
+     "why": "A mechanical move forced by the file-size bar (constitution X clause 13), observed by the hand-in's refusal at 1,002 lines and wc -l afterwards. No behavior changes."
+    },
+    {
+     "id": "D8 brief clause",
+     "summary": "The 'runs ALONE in its batch' clause already stands in builder-brief.md (LOAD=1); nothing rebuilt, the Makefile help repeats it.",
+     "class": "within",
+     "why": "The clause the task line names exists. Rebuilding it would add nothing, so nothing is dropped."
+    },
+    {
+     "id": "D9 found-and-left: processes that leave G",
+     "summary": "A CMD that starts its own process group (setsid, timeout, a cargo the pre-warm starts) leaves G and can outlive the bound; a /proc sweep was priced and not built.",
+     "class": "within",
+     "why": "Judged on the bundle's text alone. A non-defect left as it is counts as within, so the question is whether it is a wrong outcome (XIV v2.36.0); each escapee is judged separately. setsid in CMD is the builder's own choice to opt out of group signalling, so the bound still holds for everything the tool starts. timeout in CMD bounds itself. The pre-warm cargo is the seam, because the project's own tooling starts it: per the block it is one build that ends on its own, and it would outlive an ordinary make rust-test just the same. It is not the hour-long hand-held load at 240 to 400 that the task exists to end, so the purpose is not gutted. The block's kill measurements used CMD='sleep 60', not make rust-test, so the pre-warm tail is unmeasured. Were the canonical CMD shown to leave gate-slowing load past the bound, this would be a defect and would block. Wording only: the Caps line ('every process of a run is gone by MAX_MINUTES plus 20 s') and goal 1 ('whatever the builder does') overclaim against this bullet and should be restated as every process in G."
+    },
+    {
+     "id": "D10 found-and-left: rustc cut mid-write",
+     "summary": "A kill at the bound can cut a rustc mid-write, leaving one stale link that stale.rs heals once; the help says build first.",
+     "class": "within",
+     "why": "This is the consequence of the bound the task asks for. The block says it is healed automatically, so it is not a wrong outcome."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -687,6 +769,74 @@
      "summary": "Method: every build runs on a scratchpad copy and live caches are read by lstat only. Units compiled, not wall time, is the cost measure, because the machine's load varied from 14 to 57.",
      "class": "within",
      "why": "This is how the measurement was done, and it serves the task's goal. Nothing the GM asked for is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T321": {
+   "section_sha256": "a333ee632e0c83b4336f5f772a3cb1ae1b48931d19ffeccbeecda8807e954ec8",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 both load kinds",
+     "summary": "COPIES copies of CMD, each LOOPS times, beside BURNERS busy loops (default 0).",
+     "class": "within",
+     "why": "The block cites the task line as naming copies, loops and burners. T321 moved here unchanged under FR-002, and the GM's request does not narrow its content. Offering both kinds carries the line rather than narrowing it."
+    },
+    {
+     "id": "D2 two-layer bound",
+     "summary": "A warden in its own group plus a SIGKILL sentinel in load group G; per-run timeout rejected.",
+     "class": "within",
+     "why": "This is how the bound the task line asks for (MAX_MINUTES) is enforced, a design choice inside the task. Rejecting timeout is a choice of mechanism and narrows nothing."
+    },
+    {
+     "id": "D3 booking",
+     "summary": "One Phase line with step under-load, no category and no unit-test count, its minutes booked to tests by a new BUCKETS row; (rust,test) and src: quick rejected.",
+     "class": "within",
+     "why": "The task line asks for a Phase line, and the goal puts the load's minutes in make task-time. The rejected bookings would give a false count or a false source, so rejecting them serves the line."
+    },
+    {
+     "id": "D4 ahead of the run lock",
+     "summary": "cli dispatches under-load ahead of the run lock so the inner make rust-test copies overlap.",
+     "class": "within",
+     "why": "Copies that queued behind a lock would not load the machine concurrently, which defeats the command's purpose. This is mechanism, not scope."
+    },
+    {
+     "id": "D5 caps",
+     "summary": "MAX_MINUTES at most 60, COPIES+BURNERS at most 3 a core, GRACE_S 10 s, all GUESS knobs recorded in dev/audits/under-load.md.",
+     "class": "within",
+     "why": "Caps bound the load, which is the task's purpose. They are labeled GUESS knobs with a recorded home."
+    },
+    {
+     "id": "D6 exit and counts",
+     "summary": "Exit 1 on any red; cut runs counted apart from red; up to 10 red logs named; green logs removed.",
+     "class": "within",
+     "why": "The task line asks for the red count and the load at start and end. Counting cut runs apart keeps a run killed by the bound from reading as a failure of CMD."
+    },
+    {
+     "id": "D7 BUCKETS moved to buckets.rs",
+     "summary": "BUCKETS, its doc and bucket_of moved out of event_log_hooks.rs, re-exported, unchanged.",
+     "class": "within",
+     "why": "A mechanical move forced by the file-size bar (constitution X clause 13), observed by the hand-in's refusal at 1,002 lines and wc -l afterwards. No behavior changes."
+    },
+    {
+     "id": "D8 brief clause",
+     "summary": "The 'runs ALONE in its batch' clause already stands in builder-brief.md (LOAD=1); nothing rebuilt, the Makefile help repeats it.",
+     "class": "within",
+     "why": "The clause the task line names exists. Rebuilding it would add nothing, so nothing is dropped."
+    },
+    {
+     "id": "D9 found-and-left: processes that leave G",
+     "summary": "A CMD that starts its own process group (setsid, timeout, a cargo the pre-warm starts) leaves G and can outlive the bound; a /proc sweep was priced and not built.",
+     "class": "within",
+     "why": "Judged on the bundle's text alone. A non-defect left as it is counts as within, so the question is whether it is a wrong outcome (XIV v2.36.0); each escapee is judged separately. setsid in CMD is the builder's own choice to opt out of group signalling, so the bound still holds for everything the tool starts. timeout in CMD bounds itself. The pre-warm cargo is the seam, because the project's own tooling starts it: per the block it is one build that ends on its own, and it would outlive an ordinary make rust-test just the same. It is not the hour-long hand-held load at 240 to 400 that the task exists to end, so the purpose is not gutted. The block's kill measurements used CMD='sleep 60', not make rust-test, so the pre-warm tail is unmeasured. Were the canonical CMD shown to leave gate-slowing load past the bound, this would be a defect and would block. Wording only: the Caps line ('every process of a run is gone by MAX_MINUTES plus 20 s') and goal 1 ('whatever the builder does') overclaim against this bullet and should be restated as every process in G."
+    },
+    {
+     "id": "D10 found-and-left: rustc cut mid-write",
+     "summary": "A kill at the bound can cut a rustc mid-write, leaving one stale link that stale.rs heals once; the help says build first.",
+     "class": "within",
+     "why": "This is the consequence of the bound the task asks for. The block says it is healed automatically, so it is not a wrong outcome."
     }
    ],
    "verdict": "CLEAR"

@@ -127,6 +127,25 @@ pub(super) fn wrote_alive<P: AsRef<Path>>(
     write(world, step, manifests, (began, code), alive, None);
 }
 
+/// One step's line with its own fields beside the common ones (feature 462 T321, `under_load.rs`: its runs, red count and loads).
+pub(super) fn wrote_with(
+    world: &World,
+    step: &str,
+    (began, code): (SystemTime, i32),
+    fields: serde_json::Map<String, Value>,
+) {
+    let mut row = phase_row(
+        "rust",
+        step,
+        (began, SystemTime::now()),
+        code,
+        &world.make,
+        &world.root,
+    );
+    row.extend(fields);
+    let _ = append_row_with(&world.root, None, row, world.root.reader());
+}
+
 fn write<P: AsRef<Path>>(
     world: &World,
     step: &str,

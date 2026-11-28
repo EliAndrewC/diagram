@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 226 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 227 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -44,6 +44,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make preflight</td><td class=a>&ndash;</td><td>the gate&#x27;s first phase, in seconds: the derived files regenerated, the record and its pointers, make quick - and, here only (not in the gate, 405 T47), the changed engine lines a quick test runs (feature 375)</td></tr>
 <tr><td class=n>make quick</td><td class=a>&ndash;</td><td>tier 2: the fast tree checks (no Python test remains since feature 449 T211; pytest is gone since T213, ruff since T158)</td></tr>
 <tr><td class=n>make rust-tooling</td><td class=a>&ndash;</td><td>every check, hook, gate and make target that reads Python&#x27;s syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)</td></tr>
+<tr><td class=n>make under-load</td><td class=a>BURNERS CMD COPIES LOOPS MAX_MINUTES ONLY</td><td>run CMD in COPIES copies at once, each LOOPS times, beside BURNERS busy loops, every process ended at MAX_MINUTES (at most 60) plus 20 s whatever the caller does - a sentinel in the run&#x27;s process group kills it - and at once if the caller goes; prints the red count (a run cut by the bound counted apart), the load at its start, peak and end, and writes a Phase line (step under-load); build first (a kill at the bound can cut a rustc), give make rust-test ONLY= so each loop runs again, and run it ALONE in its batch (462 T321)</td></tr>
 <tr><td class=n>make verify</td><td class=a><div class=ad><span class=an>T=&lt;task(s)&gt;</span><span class=aw>the bundle whose work is reviewed: the files lines filed under its tasks name go into the review commit</span></div><div class=ad><span class=an>F=&lt;feature&gt;</span><span class=aw>the tasks&#x27; feature (default: $SPECIFY_FEATURE)</span></div><div class=ad><span class=an>FILES=&quot;&lt;paths&gt;&quot;</span><span class=aw>the bundle&#x27;s files no task&#x27;s line names (a make target&#x27;s write), taken in too</span></div><div class=ad><span class=an>REVIEW_TREE_OK</span></div></td><td>THE PAIRED RUN: the gate and the review snapshot built together in the review tree, a worktree at a commit of the bundle&#x27;s own files (feature 151; 451 T164)</td></tr>
 <tr><td class=n>make verify-wait</td><td class=a>&ndash;</td><td>wait for the gate `make verify` started, on ITS OWN log, and print its verdict - run it with run_in_background (exit 0 green, 1 red, 3 no log, 4 timed out, 5 the gate died)</td></tr>
 </table></div>
