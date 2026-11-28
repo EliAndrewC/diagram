@@ -526,4 +526,9 @@ fn a_red_gate_ruling_for_a_landing_owes_its_open_tasks_alone() {
     // no checklist: nothing owed
     std::fs::remove_file(root.join("docs/approach-checklist.md")).unwrap();
     assert_eq!(ruled_for(&root, "red-gate@4", &landing, &named, None), None);
+    // the crate's door for the arbiter (`plan::approach_ruled_for`) asks the same
+    assert_eq!(
+        crate::plan::approach_ruled_for(&root, "red-gate@4", &landing, &named),
+        None
+    );
 }

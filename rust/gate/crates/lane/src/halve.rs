@@ -142,14 +142,14 @@ impl Halving {
             self.sets.push_front((set, Known::Ran(n)));
         }
         let at = usize::from(!green);
-        if let Some((_, k)) = self.sets.get_mut(at) {
-            if let Known::Sibling(m) = *k {
-                *k = if green {
-                    Known::Inferred(m)
-                } else {
-                    Known::Unknown
-                };
-            }
+        // the set beside a finished run is its sibling or none (every bad subset of n = 1 to 6 driven, 2026-11-28): one test of both
+        if let Some((_, Known::Sibling(m))) = self.sets.get(at) {
+            let m = *m;
+            self.sets[at].1 = if green {
+                Known::Inferred(m)
+            } else {
+                Known::Unknown
+            };
         }
     }
 }

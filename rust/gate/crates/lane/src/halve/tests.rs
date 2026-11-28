@@ -124,3 +124,19 @@ fn a_result_recorded_with_nothing_run_changes_nothing() {
         ("red", "inferred")
     );
 }
+
+/// Every set of bad changes of n = 1 to 6 (each non-empty subset: a halving starts from a batch already red, so at least one is bad):
+/// each ends with exactly its bad changes ejected, each once - the sets beside a finished run in every state they can be in, not only
+/// a halving's sibling.
+#[test]
+fn every_set_of_bad_changes_of_n_1_to_6_ejects_exactly_those() {
+    for n in 1..=6_usize {
+        for mask in 1..(1_u32 << n) {
+            let bad: Vec<usize> = (0..n).filter(|&c| mask & (1 << c) != 0).collect();
+            let (_, out) = drive(n, &bad, 0, &mut never);
+            let mut ejected: Vec<usize> = out.iter().map(|&(c, _, _)| c).collect();
+            ejected.sort_unstable();
+            assert_eq!(ejected, bad);
+        }
+    }
+}
