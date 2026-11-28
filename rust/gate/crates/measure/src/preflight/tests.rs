@@ -500,3 +500,66 @@ fn the_phase_runs_its_steps_and_ends_clean() {
             && ran.contains("quick FROM_PREFLIGHT=1")
     );
 }
+
+/// 461 T28 (451 T405's option (C), plan D10, FR-001): every landing is gated in the lane's tree at its commit, so what the coordinator
+/// writes in its clone while that gate runs - `make task-add`'s plan stub, a measurement record committed, a fetch log appended, even an
+/// engine file edited - neither voids the gate's tree check nor moves the green-gate stamp's key; the same writes in the gated tree do
+/// both, which is why options (A) and (B) are not built: nothing but the landing writes there.
+#[test]
+fn the_clone_s_writes_never_void_the_lane_tree_s_gate() {
+    const PLAN: &str = "specs/461-x/plan.md";
+    const FETCHED: &str = "research/source-attempts.jsonl";
+    const RECORD: &str = "dev/measurements/2026-11-27/x/results.md";
+    let clone = repo("pf-lane-clone");
+    for (path, text) in [(PLAN, "# plan\n"), (FETCHED, "{\"a\": 1}\n")] {
+        std::fs::create_dir_all(clone.join(path).parent().unwrap()).unwrap();
+        std::fs::write(clone.join(path), text).unwrap();
+    }
+    git(&clone, &["add", "-A"]);
+    git(&clone, &["commit", "-qm", "the clone's records"]);
+    let lane = crate::checks::scratch("pf-lane-tree");
+    git(
+        &clone,
+        &[
+            "worktree",
+            "add",
+            "-q",
+            "--detach",
+            &lane.display().to_string(),
+        ],
+    );
+    // (an empty directory git does not carry, where the stand-in launcher goes)
+    std::fs::create_dir_all(lane.join("scripts/gates")).unwrap();
+    let t = tools(&lane, "");
+    let key = || crate::stamp::area_key_named(&lane, "diagram").unwrap();
+    let writes = |root: &Path| {
+        let append = |path: &str, more: &str| {
+            let was = std::fs::read_to_string(root.join(path)).unwrap();
+            std::fs::write(root.join(path), was + more).unwrap();
+        };
+        append(PLAN, "### T99 (<why>)\n");
+        append(FETCHED, "{\"b\": 2}\n");
+        append(A, "z = 3\n");
+        std::fs::create_dir_all(root.join(RECORD).parent().unwrap()).unwrap();
+        std::fs::write(root.join(RECORD), "measured\n").unwrap();
+        git(root, &["add", RECORD]);
+        git(root, &["commit", "-qm", "a measurement record"]);
+    };
+    let (check, before) = (
+        Asked {
+            tree_check: snap_of(&lane, &t),
+            ..asked(&lane)
+        },
+        key(),
+    );
+    writes(&clone);
+    assert_eq!(go(&check, &t), (0, String::new()));
+    assert_eq!(key(), before);
+    writes(&lane);
+    let (code, out) = go(&check, &t);
+    assert_eq!(code, 1);
+    for named in [PLAN, FETCHED, A, RECORD] {
+        assert!(out.contains(named), "{named}: {out}");
+    }
+    assert_ne!(key(), before);
+}

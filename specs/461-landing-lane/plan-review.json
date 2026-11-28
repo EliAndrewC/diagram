@@ -278,9 +278,9 @@
    "declared": "spec-fidelity"
   },
   "### T38 (T34's builder, 2026-11-27: the first pass's in-process claims calls never see the hand-in base; T40 built here)": {
-   "sha256": "ab7ec32aabda020b99aeaf49c0a1112def57a116f9cb4cc29ac41fdb70661aa1",
+   "sha256": "6e7ef1130a1cca25a741c91c4a96fe8c9a162ec3576068c323167867ea75fcf5",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
+   "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
   },
   "### T38 Approach (checklist part A)": {
@@ -337,16 +337,10 @@
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
   },
-  "### T40 (<why: the finding or measurement that files it>)": {
-   "sha256": "6b99a98460c15bc52318b7cc85daacaca1b18bcb79c24ec8f7c75b57db92f0e1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
-   "declared": "spec-fidelity"
-  },
   "### T40 Approach (checklist part A)": {
-   "sha256": "55703653b9494ecda76517f1744c838c8461cef0bdd8155ffa5a3bd5fdc7fadf",
+   "sha256": "65c6e9a68f9f65504de6c667097094a0945b0912bd7982d5f49efaee69aa0987",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-27",
+   "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
   },
   "### T43 (phase 1: the builder runs its own hand-in, US2; found by T08's builder)": {
@@ -969,6 +963,24 @@
   },
   "### T27 Approach (checklist part A)": {
    "sha256": "d11eae5076ccdda8ce9ed451e2dc78976df9ac31ee420193e139c359708b37ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T28 (451 T405, taken over: the gate's tree check voided a gate for the clone's writes it never read; option (C), plan D10)": {
+   "sha256": "23db0f211e8b1512e46d23d9426f64153fceaff9453c3d4890c1b07a9a1cd7f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Approach (checklist part A)": {
+   "sha256": "bd451fde15d0bde8e596dfe5a3970dd736af201883c8c786b5e5c21fdfdd3679",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T40 (T34's builder, 2026-11-27: the claims gate's owed-with-no-flight refusal reads no base at hand-in; spec-fidelity's MODE 1 ruling, three bounds)": {
+   "sha256": "c35c0334a8bf2818927b31a86313e7715a414773635bd0f86e07b224af3687cb",
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
@@ -6029,6 +6041,69 @@
      "summary": "After T26; lands with T75 in one hand-in; green = unit test, suite and make builder-checks; red = recorded and set down, an impossibility claim goes through make arbiter-ask.",
      "class": "within",
      "why": "Sequencing and exit criteria only. They settle nothing the request or the spec leaves open in a way that narrows it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T28 (451 T405, taken over: the gate's tree check voided a gate for the clone's writes it never read; option (C), plan D10)",
+    "### T28 Approach (checklist part A)",
+    "### T38 (T34's builder, 2026-11-27: the first pass's in-process claims calls never see the hand-in base; T40 built here)",
+    "### T40 (T34's builder, 2026-11-27: the claims gate's owed-with-no-flight refusal reads no base at hand-in; spec-fidelity's MODE 1 ruling, three bounds)",
+    "### T40 Approach (checklist part A)",
+    "(removed) ### T40 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T28-1",
+     "summary": "Option (C) of 451 T405 closed by a test only: the lane tree's gate (tree snapshot and stamp key) is not voided by the clone's plan stub, measurement-record commit, fetch-log append or engine edit; the same writes in the lane tree still void it.",
+     "class": "within",
+     "why": "D10 decides exactly this: T405 closes by option (C) with a test that the lane's gate is not voided by the clone's writes. The extra engine-file write strengthens the pin. Serves FR-001 (the coordinator's tree is never the gated tree)."
+    },
+    {
+     "id": "T28-2",
+     "summary": "Options (A) and (B) of T405 not built.",
+     "class": "within",
+     "why": "D10 already settles this: 'Its options (A) and (B) are not built: neither is needed when nothing but the landing writes in the gated tree.'"
+    },
+    {
+     "id": "T28-3",
+     "summary": "The tree check and the stamp are left unchanged (a write in the gated tree still voids it); the gate-write guard fixture is T27's, make land's one route is T29's.",
+     "class": "within",
+     "why": "Preserves the existing check (FR-008). Splitting the guard fixture and the route into sibling tasks drops nothing of D10/D11; it only places the work."
+    },
+    {
+     "id": "T38-1",
+     "summary": "T38's section restates its T40 line as a pointer: T40's mechanism was built in T38, T38 landed without T40's box, and T40 is decided in its own section.",
+     "class": "within",
+     "why": "Bookkeeping restatement of an already CLEAR block; no behavior changes. The mechanism it names (owed-with-no-flight refusal at hand-in scoped to claims the builder's delta touches, adds or moves; a landing still asks every owed claim) is unchanged from the text judged CLEAR."
+    },
+    {
+     "id": "T38-2",
+     "summary": "(Carried, unchanged) At hand-in the claims gate's owed-with-no-flight refusal is scoped to the builder's own claims; claims owed only by other staged work below the hand-in base are said as the landing's to ask; at a landing every owed claim is asked; where in doubt it refuses.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows D4's left-column row ('claims-gate.sh, with an owed claim with no check in flight a refusal'). Re-judged against the request: the GM-approved sketch's item 2 has builders fix at hand-in what they have the context for, and D4's own stated principle is 'what a builder can answer is asked; what is the lane's is not'. An owed claim created by another task's staged batch is not the builder's to answer. Nothing is dropped from landing (FR-008): the landing passes an empty base and asks every owed claim, a scoped pass is never stored for the landing to skip on, and doubt (no base row, any differing field, no named base) refuses. Matches the earlier MODE 1 ruling (LEGITIMATE, three bounds)."
+    },
+    {
+     "id": "T40-1",
+     "summary": "Nothing of the mechanism rebuilt; T40 adds a field-by-field pin of bound 1 (code, claim text, research, constant reads, siblings, index row) after a mutation sweep showed five conjuncts unpinned.",
+     "class": "within",
+     "why": "A test whose only effect is to make the ruled bound 1 actually hold: enforcement of what was asked, not scope. It narrows nothing."
+    },
+    {
+     "id": "T40-2",
+     "summary": "scripts/gates/claims-gate.sh left unchanged: its child reads L7R_DELTA_BASE, which gate_refusals hands it (the hand-in base at hand-in, empty at a landing).",
+     "class": "within",
+     "why": "A read-confirmed no-change; the hand-in and landing behavior stay as D4 and the ruling describe. Labeled observed with its method."
+    },
+    {
+     "id": "T40-removed",
+     "summary": "The empty template stub '### T40 (<why...>)' removed, replaced by the filled T40 section.",
+     "class": "within",
+     "why": "The stub held no decision; its replacement is the T40 section judged above."
     }
    ]
   }

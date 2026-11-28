@@ -195,3 +195,95 @@ fn a_claim_owed_because_the_engine_moved_is_the_builder_s_only_where_the_work_mo
         (due(), Vec::new())
     );
 }
+
+const BOUND_ONE: &str = "rust/phases/src/lib.rs::reach#reach";
+
+/// What a case of bound 1 changes of the claim's row and its unit.
+type Edit = fn(&mut crate::claims::index::Row, &mut Unit);
+
+/// The claim of [`a_claim_the_work_moves_in_any_one_thing_an_owed_reason_reads_is_the_builder_s`] as the base held it, `edit` applied.
+fn reach_row(edit: Edit) -> crate::claims::index::Row {
+    use crate::claims::grammar::parse_claim;
+
+    let claim = parse_claim("reach - GUESS: within the gap").unwrap();
+    let mut unit = Unit {
+        path: "rust/phases/src/lib.rs".into(),
+        qualname: "reach".into(),
+        kind: "function".into(),
+        lineno: 1,
+        end_lineno: 2,
+        claims: vec![claim.clone()],
+        inherited: false,
+        core: "core".into(),
+        errors: Vec::new(),
+        names: Vec::new(),
+        blocks: Vec::new(),
+        reads: "GAP".into(),
+    };
+    let mut row = crate::claims::index::Row {
+        key: BOUND_ONE.into(),
+        code: "code".into(),
+        unit: std::rc::Rc::new(unit.clone()),
+        claim,
+        research: "research".into(),
+    };
+    edit(&mut row, &mut unit);
+    row.unit = std::rc::Rc::new(unit);
+    row
+}
+
+/// Bound 1, field by field (461 T40): a claim owed at the base is the landing's only where the work leaves it as the base held it in
+/// everything an owed reason reads - its code, its claim's text, its research, its unit's constant reads, its unit's other claims and
+/// its index row; the work moving any one of them makes it the builder's.
+#[test]
+fn a_claim_the_work_moves_in_any_one_thing_an_owed_reason_reads_is_the_builder_s() {
+    use super::{split, Base};
+    use crate::claims::grammar::parse_claim;
+    use crate::claims::index::{Cur, Index, Row};
+
+    let one = |r: Row| {
+        let mut cur = Cur::default();
+        cur.insert(r);
+        cur
+    };
+    let indexed = |code: &str| {
+        let mut index = Index::new();
+        index.insert(BOUND_ONE.into(), serde_json::json!({ "code": code }));
+        index
+    };
+    let (at_base, base_index) = (one(reach_row(|_, _| {})), indexed("code"));
+    let nowhere = Path::new("/nonexistent");
+    let base = Base {
+        rows: &at_base,
+        index: &base_index,
+        tree: nowhere,
+    };
+    let due = vec![(BOUND_ONE.to_owned(), "code triage".to_owned())];
+    let builders = (due.clone(), Vec::new());
+    let moved: [(&str, Edit); 5] = [
+        ("code", |r, _| r.code = "code moved".into()),
+        ("claim text", |r, _| {
+            r.claim = parse_claim("reach - GUESS: past the gap").unwrap();
+        }),
+        ("research", |r, _| r.research = "research moved".into()),
+        ("constant reads", |_, u| u.reads = "GAP, FAR".into()),
+        ("other claims", |_, u| {
+            u.claims.push(parse_claim("far - GUESS: one").unwrap());
+        }),
+    ];
+    for (what, edit) in moved {
+        let now = one(reach_row(edit));
+        let got = split(nowhere, due.clone(), &now, &base_index, &base);
+        assert_eq!(got, builders, "{what}");
+    }
+    let now = one(reach_row(|_, _| {}));
+    let answered = indexed("answered");
+    assert_eq!(
+        split(nowhere, due.clone(), &now, &answered, &base),
+        builders
+    );
+    assert_eq!(
+        split(nowhere, due.clone(), &now, &base_index, &base),
+        (Vec::new(), due)
+    );
+}

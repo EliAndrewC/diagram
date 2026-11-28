@@ -919,31 +919,52 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** no
 
 
-### T28 (<why: the finding or measurement that files it>)
+### T28 (451 T405, taken over: the gate's tree check voided a gate for the clone's writes it never read; option (C), plan D10)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: in pool tree `diagram-backlog-t269` on main's 674dae31f3. A test only: option (C) holds by construction once every
+  landing is gated in the lane's tree (D11; the lane runs `make land` with the lane's tree as its working directory, `lane` `run.rs`).
+  - **Where it is** (`rust/gate/crates/measure/src/preflight/tests.rs`, `the_clone_s_writes_never_void_the_lane_tree_s_gate`; the
+    task line's `measure/src/measure/preflight*` is `measure/src/preflight/`): a clone with a linked worktree added `--detach`, as
+    `builder-tree lane` adds the lane's; the gate's tree snapshot taken in the lane tree (`--tree-snap`, as `make done` starts) and the
+    green-gate stamp's `diagram` key read there. Then the clone's writes T405 measured: `make task-add`'s plan stub appended
+    (`specs/<f>/plan.md`, uncommitted), a measurement record committed (`dev/measurements/...`, the clone's HEAD moved), the fetch
+    log appended (`research/source-attempts.jsonl`), and an engine file edited (`l7r/diagram/a.py`, for the stamp). The lane's
+    `--tree-check` stays 0 and silent, and its stamp key unchanged. The same writes in the lane tree: `GATE NOT GREEN` naming each of
+    the four paths, and the key moved - the void T405 measured where the gate runs in the tree being written, so options (A) (a moved
+    path outside every stamp area unseen) and (B) (the landing committing the append-only logs first) are not built: nothing but the
+    landing writes in the lane's tree (D10).
+  - **Red first: the behavior already holds, so a pin and its evidence** (observed 2026-11-27, method: `make rust-test
+    CRATE=rust/gate/crates/measure ONLY="preflight::tests"`): the clone's writes aimed at the gated tree instead (the phase-1 route,
+    a landing gated in the clone it writes in) - 19 passed, 1 failed, this test, at its first assertion: exit 1 naming
+    `dev/measurements/2026-11-27/x/results.md`, `l7r/diagram/a.py`, `research/source-attempts.jsonl` and `specs/461-x/plan.md`;
+    restored, 20 passed, 0 failed.
+  - Not touched: `rust/guard`'s gate-write guard (T27's, D10's fixture over two trees) and `make land`'s one route (T29).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the lane tree's gate pinned unvoided by the clone's writes | n/a - no map | n/a | none | n/a |
 
 ### T28 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The coordinator writes freely in its clone - a filed task, a measurement record, a fetch - while the
+   lane gates a batch, and no such write costs the batch its green gate.
+2. **The constraints.** FR-001, D10 (option (C) only), D11, 451 T405's priced options; constitution XIII (the tree check itself
+   unchanged: a write in the gated tree still voids it).
+3. **Where each comes from.** G: FR-001's request (spec.md); R: D10, 451 T405's box and T307's priced table; O: the test above.
+4. **Do they describe the world here?** Yes: a linked worktree added `--detach` off the clone shares its object store and refs and
+   has its own HEAD and index, as the lane's tree does.
+5. **The order.** After T26 (the task line); beside T27, before T29.
+6. **The exits.** Green: the measure crate's tests and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red-first above; `make builder-checks CRATE="rust/gate/crates/claims rust/gate/crates/measure"` green: tests, lint and format clean on both, the claims crate 211 passed, 0 failed (observed 2026-11-27, method: that command, its log).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** none - a pin; the tree check and the stamp unchanged.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T29 (<why: the finding or measurement that files it>)
@@ -1090,7 +1111,7 @@ engine speed, so the performance checklist does not apply.
     - A scoped pass is never stored for the landing to skip on: `push-gate pass claims` stores none while a judged path is
       uncommitted, and at a phase-1 hand-in every path the gate judges is (observed 2026-11-27, method: reading `cohort`
       `push.rs` `record_pass`).
-  - Built here: T40 - the hand-in's owed-with-no-flight refusal scoped to the claims the builder's delta touches, adds or moves (`claims/hand_in.rs`, `carry.rs` `classified`).
+  - T40's work was built here - the hand-in's owed-with-no-flight refusal scoped to the claims the builder's delta touches, adds or moves (`claims/hand_in.rs`, `carry.rs` `classified`); T38 landed without T40, which is decided in its own section (a pin of bound 1, field by field).
   - **Red first** (observed 2026-11-27, method: `make rust-test CRATE=<crate> ONLY=<module>` with each line below broken in turn and
     restored, by `t38-mutate.py` in the scratchpad):
 
@@ -1169,31 +1190,52 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T40 (<why: the finding or measurement that files it>)
+### T40 (T34's builder, 2026-11-27: the claims gate's owed-with-no-flight refusal reads no base at hand-in; spec-fidelity's MODE 1 ruling, three bounds)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: in pool tree `diagram-backlog-t269` on main's 674dae31f3.
+  - **Built in T38, already landed** (4e068dafa8, ticked in 3ad56a644d): `claims/hand_in.rs` `split` and `kept`, called by
+    `carry.rs` `classified` only where `delta_base::named` gives a base; the landing's claims said as `owed below the hand-in base,
+    the landing's to ask (461 T40; <why>)`, never as `owed (`. T38's section named it built there, but T38 landed without T40, so
+    T40's box stayed open. Nothing of the mechanism is rebuilt here. Its line in T38's section is restated as a pointer, since this
+    section now decides T40 on its own (the tick's refusal of a filled section built inside another names that route).
+  - **`scripts/gates/claims-gate.sh` unchanged** (observed 2026-11-27, method: reading it, `core` `delta_base.rs` and `land`
+    `cheap.rs`): the script runs `l7r-gate claims --root "$ROOT" gate`, a child that reads `L7R_DELTA_BASE` from its environment
+    (`delta_base::named`, outside a test build), which `gate_refusals` hands it - the hand-in base at hand-in, empty at a landing.
+  - **What was left: bound 1 was pinned for the code alone.** A mutation sweep over `kept` (observed 2026-11-27, method: each conjunct deleted in turn, then
+    restored, by `t40-mutate.sh` in the scratchpad; `make rust-test CRATE=rust/gate/crates/claims ONLY="claims::hand_in"`): the code
+    conjunct, the engine conjunct and the no-base-row arm each turned a T38 test red, but deleting the claim-text, research, constant
+    reads, siblings or index-row conjunct left all 4 tests green - a hand-in whose work rewrote an owed claim's text or moved its cited
+    page would have excused it as the landing's with nothing failing. Bound 1 names the claim text and the cited research page.
+  - **The pin** (`claims/hand_in/tests.rs`,
+    `a_claim_the_work_moves_in_any_one_thing_an_owed_reason_reads_is_the_builder_s`): one base row and its index row; a row now that
+    differs in exactly one of code, claim text, research, constant reads, the unit's other claims, or its index row is split the
+    builder's; the identical row the landing's. After: every one of the 8 mutants red (code 3 failed; claim, research, reads,
+    siblings, index 1 failed each, the new test; engine 1; no-base row 1), restored 5 passed, 0 failed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| bound 1 pinned field by field at hand-in | n/a - no map | n/a | none | n/a |
 
 ### T40 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** At a hand-in, an owed claim the builder's work touches in anything an owed reason reads refuses; one
+   only other staged work left owed is said as the landing's; a landing asks every owed claim.
+2. **The constraints.** spec-fidelity's MODE 1 ruling of 2026-11-27 and its three bounds (the task line), FR-002, FR-008, D3, D4.
+3. **Where each comes from.** G: FR-002's request (spec.md); R: the ruling's bounds, T34's and T38's sections; O: the mutation sweep.
+4. **Do they describe the world here?** Yes: T38's end-to-end fixtures stand as a hand-in tree of the first phase does; the new test drives
+   `split` itself, the one place the first bound is decided.
+5. **The order.** After T38 (landed), before T08 (landed, built on T38's code).
+6. **The exits.** Green: the claims crate's tests and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The sweep above, every mutant red; `make builder-checks CRATE="rust/gate/crates/claims rust/gate/crates/measure"` green: tests, lint and format clean on both, the claims crate 211 passed, 0 failed (observed 2026-11-27, method: that command, its log).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** none - a test only; the mechanism already holds every bound, now each conjunct pinned.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 <!-- plan-archive: T41 to T37 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
 <!-- plan-archive: T42 to T34 moved to plan-done.md, 2026-11-27 (feature 375 FR-044) -->
