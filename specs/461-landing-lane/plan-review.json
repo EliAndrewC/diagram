@@ -840,6 +840,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T63 (<why: the finding or measurement that files it>)": {
+   "sha256": "309d4f35a32638efcff9a0ebabb035007508decf8a88d710a05cf22488c47e9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T63 Approach (checklist part A)": {
+   "sha256": "14710c3835218bae042444fcabeff4335f51bb11119041969cf484892025064a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T72 (make lane-start could not start the runner while the lane's tree predated the lane crate: 'holds no lock' at the first phase-2 start (observed 2026-11-28T02:1xZ, method: the start's own stderr), the tree at diagram-backlog-land's efc35ccc4f)": {
+   "sha256": "60c5ecb97f8220c3bcb544a45f6b933a0580705cde04a092eddcc550dc9c6396",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T72 Approach (checklist part A)": {
+   "sha256": "0890287022008158c1f498462b9dc9de0acdbf49a4a0586525983ea72d6539d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T73 (a carry whose file's change is already on its base read NOT VERIFIED: met carrying 461 T21, 230b5c0c9d, 2026-11-27, and it stopped the lane's first real batch 462-1 at 1136054db4, 2026-11-28)": {
+   "sha256": "972b53355ec018dc2d77d1e5f335ed1832c9aa6c0f2c2b7f59f8a3a84aedb9ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T73 Approach (checklist part A)": {
+   "sha256": "47bd2f4ec02fc4986d4b2336efcb242b71258d53e64b5b76c558b48b5f3d8c97",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5321,6 +5357,89 @@
      "summary": "Unset HAND_IN_BASE is phase 2, as T22 reads it; tests name the base both ways and T21's phase-1 test names clone; the guard's own suites are unchanged.",
      "class": "within",
      "why": "Keeps one reading of the base consistent with T22 (T56 Decision 1); a test-fixture choice that enforces the requested behavior in both phases."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T63 (<why: the finding or measurement that files it>)",
+    "### T63 Approach (checklist part A)",
+    "### T72 (make lane-start could not start the runner while the lane's tree predated the lane crate: 'holds no lock' at the first phase-2 start (observed 2026-11-28T02:1xZ, method: the start's own stderr), the tree at diagram-backlog-land's efc35ccc4f)",
+    "### T72 Approach (checklist part A)",
+    "### T73 (a carry whose file's change is already on its base read NOT VERIFIED: met carrying 461 T21, 230b5c0c9d, 2026-11-27, and it stopped the lane's first real batch 462-1 at 1136054db4, 2026-11-28)",
+    "### T73 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T72 Decision 1",
+     "summary": "At the runner's start, bring the lane's own tree to origin/main (T55's builder_tree::cli([\"lane\"]) call, one seam reset_stopped) and keep running the lane tree's own launcher (the block cites T14's Decision 6, which the bundle could not resolve), rather than running the clone's launcher.",
+     "class": "within",
+     "why": "D1 already has the lane bring its tree to origin/main (land-alone.sh step 4's rule); this applies that rule at the start too. The block's own reasons for the lane tree's launcher over the clone's - the clone may hold the coordinator's uncommitted work, origin/main is what the lane lands on - stand without the unresolved T14 citation, and neither launcher option narrows FR-003 or D1. It makes the requested lane start at all from a stale idle tree."
+    },
+    {
+     "id": "T72 Decision 2",
+     "summary": "Only a tree strictly behind origin/main with no changed or unmerged tracked file is brought up; a tree at origin/main, off it (a landing alone's commits), dirty, or whose fetch fails is left as it is and the start goes on to the build's own words.",
+     "class": "within",
+     "why": "The goal T72 states is a start from an IDLE lane tree whatever commit it was left at; a tree carrying a landing alone's commits or a pick in progress is not idle, and a hard reset there would destroy work the tree still holds while it is shared with land-alone.sh (D1, T55's pinned pick). Leaving that case untouched narrows nothing the GM or the spec asked for and leaves no defect within the stated goal: the stale-idle-tree failure the task files is fixed and tested red-then-green."
+    },
+    {
+     "id": "T72 (unlabelled) - a failed bring does not stop the start",
+     "summary": "When the bring to origin/main fails, its refusal is said once and the start goes on to the build, whose own words then report any failure.",
+     "class": "within",
+     "why": "It drops no check and hides no failure: the build and the lock wait still run and still refuse a start that cannot come up, as before T72. Error-reporting shape inside the fix."
+    },
+    {
+     "id": "T72 (unlabelled) - a behind tree is reset hard and cleaned without asking about untracked files",
+     "summary": "builder-tree lane resets hard and cleans a behind tree; untracked files are not consulted (--untracked-files=no).",
+     "class": "within",
+     "why": "D1: the lane's tree is the tool's and nobody's work lives there; the tracked-file and in-progress-pick checks (Decision 2, T55) protect the only work the spec places in it, land-alone.sh's."
+    },
+    {
+     "id": "T73 Decision 1",
+     "summary": "carry.rs's missing() holds a non-spec path HEAD already holds the commit's change to (among other changes) by counting lines of parent, commit and HEAD (change_held / holds_change), not by reverse-applying the patch.",
+     "class": "within",
+     "why": "The verified end was refusing correct work - a carry whose every change HEAD holds, through a merge=union ledger - which stopped the lane's first real batch; a check that refuses good work is a defect fixed as found (constitution XIV), not a check dropped under FR-008. The end still refuses a path HEAD truly lacks (the existing test passes unchanged and the new test refuses rust/held.rs beside the held ledger). The reverse-apply alternative was measured to fail on this very hunk. Method choice, not scope."
+    },
+    {
+     "id": "T73 Decision 2",
+     "summary": "Counts, not membership: HEAD must hold each added line at least as often as the commit's file and each removed line at most as often, with at least one count changed. Separately: a reorder-only commit is held by none of this and falls to the three earlier rules.",
+     "class": "within",
+     "why": "Two parts, ruled each. (a) Counts over membership tightens the new rule: a common line alone ('}', a blank) cannot satisfy it, so nothing the end refused for a real absence becomes accepted on a trivial match. (b) The reorder-only case is not reached by the fix and keeps the earlier fail-closed behavior; it is not a known wrong outcome carried forward - no reorder-only carry was observed refused (the observed stop, 462-1, is a union-merged addition, which the fix holds), so 'Found and left? none' is accurate and no defect is left. Both within T73's fix of the verified end."
+    },
+    {
+     "id": "T73 Decision 3",
+     "summary": "The counting rule applies in both forms: the commit form reads HEAD, the no-commit hand-in apply (carry/apply.rs, D3) reads the working tree, as missing()'s blob reading already does.",
+     "class": "within",
+     "why": "D3 asks the no-commit form to end verified like the carry; applying the same fix to the same end in both forms follows D3 and adds nothing beyond it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T73 (a carry whose file's change is already on its base read NOT VERIFIED: met carrying 461 T21, 230b5c0c9d, 2026-11-27, and it stopped the lane's first real batch 462-1 at 1136054db4, 2026-11-28)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T73 Decision 1",
+     "summary": "missing() holds a non-spec path whose commit's CHANGE HEAD already holds, judged by per-line counts (parent, commit, HEAD) rather than by git apply -R --check",
+     "class": "within",
+     "why": "Fixes a check that refused correct work (a merge=union ledger already holding the carried rows read NOT VERIFIED and stopped the lane's first batch); the landing lane's carry must land correct hand-ins (FR-003) and still runs every existing check (FR-008). Choosing counting over a reversed patch that was measured not to apply is a means decision inside what was asked; a path HEAD truly lacks is still refused and pinned by the unchanged test."
+    },
+    {
+     "id": "T73 Decision 2",
+     "summary": "line counts, not membership; a commit that only reorders lines is not held by this rule and falls to the three earlier rules",
+     "class": "within",
+     "why": "Makes the new acceptance stricter than membership (a common line alone cannot satisfy it); leaving pure reorders to the existing rules removes nothing the carry checked before. A means decision, no narrowing of the request or spec."
+    },
+    {
+     "id": "T73 Decision 3",
+     "summary": "the same reading in both forms: the working tree in the no-commit apply (carry/apply.rs hand-in onto origin/main) as missing()'s blob reading already does",
+     "class": "within",
+     "why": "Applies the fix uniformly to both paths missing() ends, following missing()'s existing convention; leaving one form broken would leave the defect in a live copy. Inside what was asked."
     }
    ]
   }

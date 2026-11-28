@@ -282,6 +282,84 @@ fn a_pick_in_progress_with_no_stopped_carry_open_is_left_as_it_is_and_the_build_
     assert!(w.picking());
 }
 
+/// 461 T72's stand-in for a launcher from before the lane crate: it "builds" fine, but run as the runner it knows no `lane`
+/// subcommand and ends, taking no lock - as diagram-backlog-land's efc35ccc4f did at the first phase-2 start (2026-11-28).
+const NO_LANE: &str = "#!/bin/sh\n\
+    [ -n \"$L7R_GATE_PRINT_FRESH\" ] && { echo \"$0\"; exit 0; }\n\
+    echo \"l7r-gate: unknown subcommand $1\" >&2; exit 2\n";
+
+/// The stopped world with no pick standing, origin/main given the old launcher and then the lane's one back, and the lane's tree
+/// at the old: behind origin/main, as a tree left since before the lane crate; `ahead` one more commit on it (off origin/main, a
+/// landing alone's in this shared tree).
+fn stale_world(tag: &str, ahead: bool) -> Stopped {
+    use l7r_gate_core::ci::fixtures::git;
+    let w = stopped_world(tag);
+    git(&w.land, &["cherry-pick", "--abort"]);
+    let script = w.clone.join("scripts/gates/l7r-gate.sh");
+    l7r_gate_core::write_executable(&script, NO_LANE);
+    git(
+        &w.clone,
+        &["commit", "-qam", "the launcher before the lane crate"],
+    );
+    let old = git(&w.clone, &["rev-parse", "HEAD"]);
+    l7r_gate_core::write_executable(&script, BUILDS_FROM_RUST);
+    git(&w.clone, &["commit", "-qam", "the lane crate"]);
+    git(&w.clone, &["push", "-q", "origin", "main"]);
+    git(&w.land, &["checkout", "-q", "--detach", &old]);
+    if ahead {
+        l7r_gate_core::ci::fixtures::put(&w.land, "rust/y.rs", "a landing's\n");
+        git(&w.land, &["add", "-A"]);
+        git(&w.land, &["commit", "-qm", "a landing alone's commit"]);
+    }
+    w
+}
+
+#[test]
+fn a_lane_tree_behind_origin_main_is_brought_to_it_before_the_build_so_its_launcher_knows_the_lane()
+{
+    let w = stale_world("lane-start-stale-tree", false);
+    let old = l7r_gate_core::ci::fixtures::git(&w.land, &["rev-parse", "HEAD"]);
+    let started = w.start();
+    let pid = holder(&w.common);
+    reap(&w.common);
+    assert_eq!(started.stderr, "");
+    assert_eq!(started.code, 0);
+    assert_eq!(
+        started.stdout,
+        format!(
+            "lane: the lane's tree {} was at {}, behind origin/main (its launcher may predate the runner): brought to origin/main before the build\nlane: the runner started (pid {})\n",
+            w.land.display(),
+            old.get(..10).unwrap(),
+            pid.unwrap()
+        )
+    );
+    // at origin/main now: the next start brings nothing and says nothing of the tree
+    let again = w.start();
+    let pid = holder(&w.common);
+    reap(&w.common);
+    assert_eq!(
+        (again.stdout, again.code),
+        (
+            format!("lane: the runner started (pid {})\n", pid.unwrap()),
+            0
+        )
+    );
+}
+
+#[test]
+fn a_lane_tree_off_origin_main_is_left_as_it_is() {
+    let w = stale_world("lane-start-tree-ahead", true);
+    let head = l7r_gate_core::ci::fixtures::git(&w.land, &["rev-parse", "HEAD"]);
+    let left = w.start();
+    reap(&w.common);
+    assert_eq!(left.code, 1);
+    assert!(left.stderr.contains("holds no lock after"));
+    assert_eq!(
+        l7r_gate_core::ci::fixtures::git(&w.land, &["rev-parse", "HEAD"]),
+        head
+    );
+}
+
 #[test]
 fn a_reset_that_fails_starts_nothing_and_says_both_why() {
     let w = stopped_world("lane-start-reset-fails");

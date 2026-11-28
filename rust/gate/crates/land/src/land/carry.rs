@@ -39,7 +39,8 @@
 //! Any other conflict - another file, code, or words both sides changed - stops: nothing is resolved, the files and the next command are
 //! printed, the pick is left standing, and `make land` refuses until it is finished. The carry ENDS by verifying: nothing in
 //! progress, nothing unmerged, nothing staged, and each non-spec file of the carried commit in HEAD - changed by the carry (HEAD
-//! against the commit before it names the path) or already holding the carried commit's content. Its last line says so, and names
+//! against the commit before it names the path), already holding the carried commit's content, or holding its change among others
+//! (its lines counted, 461 T73). Its last line says so, and names
 //! each file it resolved with the rule that resolved it.
 //!
 //! A commit whose changes HEAD already holds - carried before under another sha, or its lines kept from both sides equal to ours -
@@ -53,6 +54,7 @@
 //! `--no-commit` (461 T05) is the NO-COMMIT form, [`apply`]: the same rules, the commit applied onto HEAD and left uncommitted, with
 //! its own verified end - the hand-in's apply (461 D3).
 
+use std::collections::HashMap;
 use std::path::Path;
 
 use l7r_gate_core::Reply;
@@ -416,7 +418,8 @@ pub(super) fn resolve_all(
     Ok(Ok(done))
 }
 
-/// The carried commit's files outside `specs/` that HEAD does not hold: neither changed since `before` nor at the commit's content.
+/// The carried commit's files outside `specs/` that HEAD does not hold: neither changed since `before`, nor at the commit's content,
+/// nor holding the commit's change among others ([`holds_change`], 461 T73: a ledger whose rows the base already held).
 ///
 /// A file a RULE resolved is held whatever its text: the rule's result can be the clone's own (a page regenerated to what the clone
 /// had, records the clone already held), which the pick's commit then does not touch.
@@ -461,11 +464,63 @@ fn missing(
             Form::NoCommit => (1, String::new()),
         };
         let ruled = kept.iter().any(|k| k.starts_with(&format!("{path} (")));
-        if !ruled && !moved.contains(path) && held != blob(sha)? {
+        if !ruled
+            && !moved.contains(path)
+            && held != blob(sha)?
+            && !change_held(root, sha, path, form)?
+        {
             lacks.push(path.clone());
         }
     }
     Ok((own.len(), lacks))
+}
+
+/// `path` as `rev` holds it, absent read as empty.
+fn text_at(root: &Path, rev: &str, path: &str) -> Result<String, String> {
+    let (rc, out) = git(root, &["show", &format!("{rev}:{path}")])?;
+    Ok(if rc == 0 { out } else { String::new() })
+}
+
+/// Whether HEAD (the working tree in the no-commit form) already holds the commit's change to `path` among other changes (461 T73):
+/// [`holds_change`] over the commit's parent, the commit and HEAD's text.
+fn change_held(root: &Path, sha: &str, path: &str, form: Form) -> Result<bool, String> {
+    let held = match form {
+        Form::Commit => text_at(root, "HEAD", path)?,
+        Form::NoCommit => {
+            String::from_utf8_lossy(&std::fs::read(root.join(path)).unwrap_or_default())
+                .into_owned()
+        }
+    };
+    let parent = text_at(root, &format!("{sha}^"), path)?;
+    Ok(holds_change(&parent, &text_at(root, sha, path)?, &held))
+}
+
+/// THE CHANGE ALREADY HELD (461 T73), by its lines counted: every line the commit made more frequent than its parent had it is in
+/// `held` at least as often as in the commit, every line it made less frequent at most as often, and at least one line's count
+/// changed (a commit that only reorders lines is held by no count). WHY COUNTS, NOT THE PATCH REVERSED: a review ledger whose added
+/// rows the base holds with another row after them (`merge=union`, the pick merging to HEAD's own text) is held, though the
+/// patch's context no longer matches - measured 2026-11-28, `git apply -R --check` of 1136054db4's `dev/review-ledger.md` hunk
+/// failed against af774303de and origin/main both, the stop of the lane's batch 462-1. WHY COUNTS, NOT MEMBERSHIP: a commit adding a
+/// common line (`}`, a blank) is held only where HEAD has as many of it as the commit's file. Label: the easier route.
+fn holds_change(parent: &str, commit: &str, held: &str) -> bool {
+    fn counts(text: &str) -> HashMap<&str, usize> {
+        let mut m = HashMap::new();
+        for l in text.lines() {
+            *m.entry(l).or_default() += 1;
+        }
+        m
+    }
+    let (was, is, has) = (counts(parent), counts(commit), counts(held));
+    let n = |m: &HashMap<&str, usize>, l: &str| m.get(l).copied().unwrap_or(0);
+    let mut changed = false;
+    for l in is.keys().chain(was.keys()) {
+        let (before, after, now) = (n(&was, l), n(&is, l), n(&has, l));
+        changed |= before != after;
+        if (after > before && now < after) || (after < before && now > after) {
+            return false;
+        }
+    }
+    changed
 }
 
 /// A pick that came out EMPTY - `CHERRY_PICK_HEAD` standing, nothing unmerged, nothing staged: every change of the commit is already

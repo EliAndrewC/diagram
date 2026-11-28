@@ -283,19 +283,45 @@ fn stopped_carry(common: &Path) -> Option<(String, PathBuf)> {
 /// `origin/main` again (`builder-tree lane`), so every later start failed the same way. With no runner (the lock asked first), the
 /// start makes that same call itself; the resume makes it again. Its stdout line says so; a reset that fails is its stderr, and
 /// the start goes on, so the build's own words follow it.
+///
+/// AND THE STALE TREE (461 T72): a lane's tree [`behind`] origin/main is brought there the same way, so the launcher spawned is
+/// origin/main's - a tree left at diagram-backlog-land's efc35ccc4f (2026-11-26), whose launcher had no `lane` subcommand, ran and
+/// ended at the first phase-2 start, "holds no lock after 5 s" (2026-11-28T02:1xZ), and only the batch step, after the runner is
+/// up, brought it to origin/main. The lane tree's own launcher kept (T14's Decision 6), not the clone's: the clone's sources may
+/// hold the coordinator's uncommitted work, origin/main's are what the lane lands on.
 fn reset_stopped(common: &Path) -> (String, String) {
-    let Some((id, tree)) = stopped_carry(common) else {
-        return (String::new(), String::new());
+    let said = match (stopped_carry(common), behind(common)) {
+        (Some((id, tree)), _) => format!("lane: the lane's tree {} held batch {id}'s stopped carry (a cherry-pick in progress): brought to origin/main before the build, as the runner's resume brings it\n", tree.display()),
+        (None, Some((tree, at))) => format!("lane: the lane's tree {} was at {at}, behind origin/main (its launcher may predate the runner): brought to origin/main before the build\n", tree.display()),
+        (None, None) => return (String::new(), String::new()),
     };
     let clone = common.parent().unwrap_or(common);
     let brought = l7r_gate_task::builder_tree::cli(&["lane".to_owned()], clone);
     if brought.code != 0 {
         return (String::new(), brought.stderr);
     }
-    (
-        format!("lane: the lane's tree {} held batch {id}'s stopped carry (a cherry-pick in progress): brought to origin/main before the build, as the runner's resume brings it\n", tree.display()),
-        String::new(),
-    )
+    (said, String::new())
+}
+
+/// The registry's lane tree with its HEAD's short sha, where that HEAD is a strict ancestor of `origin/main` (fetched first) and
+/// no tracked file is changed or unmerged there: a tree nothing lives in, only left behind. A tree at origin/main, off it (a
+/// landing alone's commits: `land-alone.sh` shares the tree) or holding changes is left as it is, and so is one whose fetch fails.
+fn behind(common: &Path) -> Option<(PathBuf, String)> {
+    let tree = l7r_shared::builder_pool::read_all(common)
+        .into_iter()
+        .find(l7r_shared::builder_pool::Tree::lane)?
+        .tree;
+    let git = |args: &[&str]| crate::lane::git(&tree, args);
+    git(&["fetch", "-q", "origin", "main"])?;
+    let head = git(&["rev-parse", "HEAD"])?.trim().to_owned();
+    let main = git(&["rev-parse", "refs/remotes/origin/main"])?
+        .trim()
+        .to_owned();
+    let clean = git(&["status", "--porcelain", "--untracked-files=no"])?.is_empty();
+    let stale =
+        clean && head != main && git(&["merge-base", "--is-ancestor", &head, &main]).is_some();
+    let short = head.chars().take(10).collect();
+    stale.then_some((tree, short))
 }
 
 /// `make lane-start`: the runner of `common` started detached through `launcher`, or the one running named. Exit 0 either way; 1

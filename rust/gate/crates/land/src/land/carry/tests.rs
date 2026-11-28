@@ -686,6 +686,7 @@ fn the_arguments_are_checked() {
 }
 
 mod files;
+mod held;
 mod no_commit;
 mod record;
 mod spec;
