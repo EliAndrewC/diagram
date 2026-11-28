@@ -282,6 +282,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T120 (the plan hold's refusal judges a split task section by its joined text, which stands nowhere in the plan: found by 451 T80 on 2026-11-21, a Write of 444's plan unchanged refused under a live T22 hold and passed under T25's)": {
+   "sha256": "f670f62f90ee9c2b021e8dd3b7f32c666f65eefc04b68cac2c0da69b57cf70f0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T120 Approach (checklist part A)": {
+   "sha256": "6e4951cad242c25731617621a01415798abc0eccd13c3785f7a561ad363e0221",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1411,6 +1423,52 @@
      "summary": "Test-only READS counter with the red test first; the task tagged [perf] under 451 FR-013.",
      "class": "within",
      "why": "Enforcement of the task's own aim and the ordering FR-013 asks for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T120 (the plan hold's refusal judges a split task section by its joined text, which stands nowhere in the plan: found by 451 T80 on 2026-11-21, a Write of 444's plan unchanged refused under a live T22 hold and passed under T25's)",
+    "### T120 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T120-held-spans",
+     "summary": "held returns the plan body and each place's byte span instead of the places joined; a Write is refused only where a place's text is missing from the content",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a Write of the plan unchanged refused, voiding a review's verdict) so a split section is judged as a single-place section already is; it is the task's own line, and the backlog's work moved here under FR-002. It narrows nothing that was asked."
+    },
+    {
+     "id": "T120-edit-overlap",
+     "summary": "edit_hits tests overlap against each span (both ends exclusive, T77's rule), and old_string inside a place for replace_all",
+     "class": "within",
+     "why": "Restores the guard's coverage of edits that cross a place's edge, which the joined text let through; it widens enforcement back to the rule as it already stands for one-place sections."
+    },
+    {
+     "id": "T120-outside-cut",
+     "summary": "outside cuts each span out of the body end first, a NUL in each place, so T78's shared-text rule applies to split sections and a place's later heading is a head",
+     "class": "within",
+     "why": "Applies T78's existing rule to split sections where it was not applied (a correct foreground write refused, a sed on the far heading passed). The spans-in-order, non-overlapping premise is stated with its source (section_places, plan_text::blocks), and the red-first test exercises it."
+    },
+    {
+     "id": "T120-T78-pin-flips",
+     "summary": "T78's pinned case (a split section's shared text refused) flips to passing",
+     "class": "within",
+     "why": "The pin recorded the defect's consequence, the joined text standing nowhere; fixing a check that refused good work changes its verdict as fixed (fix as we go), not a regression and not a narrowing."
+    },
+    {
+     "id": "T120-read-once",
+     "summary": "the plan is read once per hold rather than again in edit_hits and outside",
+     "class": "within",
+     "why": "An implementation detail of the same fix, with no change to what is refused or allowed beyond the fix itself."
+    },
+    {
+     "id": "T120-order-exits",
+     "summary": "ordered after 451 T80 and 461 T70; red exit records the failure and takes a cannot-be-done claim to make arbiter-ask; done measured by the red-first test, the shared crate's suite and the hook test script",
+     "class": "within",
+     "why": "Sequencing and exits within the task; the red exit routes a claim of impossibility to the arbiter rather than narrowing the task in place. Figures carry their date and method (2026-11-27, the named test, awk pass, the named make target and script)."
     }
    ]
   }

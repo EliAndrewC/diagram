@@ -382,31 +382,63 @@ After the move two edits were made to satisfy the plan lint, neither changing a 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T120 (<why: the finding or measurement that files it>)
+### T120 (the plan hold's refusal judges a split task section by its joined text, which stands nowhere in the plan: found by 451 T80 on 2026-11-21, a Write of 444's plan unchanged refused under a live T22 hold and passed under T25's)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `refusal` (rust/guard/shared/src/checks/planhold.rs) judged a write against `held`, which joined a task's places
+  (`places.concat()`) wherever the section stood in two or more. The joined text stands nowhere in the plan, so every judgment that
+  looks the text up in the plan went wrong for such a section:
+  - a Write: `!content.contains(joined)` was always true, so a Write of the plan unchanged was refused;
+  - an Edit: `edit_hits` found the joined text nowhere, so an edit running across a place's edge (from the gap before the far place
+    into its heading, or from the near place's end into the next task's heading) went unseen; only an `old_string` wholly inside
+    the joined text was caught;
+  - a shell write: `outside` returned None (a held text not in the plan), so a live foreground write on text every section shares
+    was refused, T78's rule not applied; and a place's own heading past the first was no head, so `sed` on `## T01 part B` passed.
+  - THE FIX: `held` returns the plan's body and the byte spans of each place (`places`, which the write-back already reads, 451
+    T80); a Write is refused where a place's text is missing from the content, `edit_hits` tests overlap against each span (and
+    `old` inside a place, for a `replace_all`), and `outside` cuts each span out of the body, end first, a NUL in each place. Spans
+    are in document order and never overlap (`section_places` joins adjacent spans; `plan_text::blocks` are heading to next
+    heading), so the end-first cut stays in bounds. The plan is read once a hold, where `edit_hits` and `outside` each read it again.
+  - MEASURED 2026-11-27, red-first: `a_split_section_is_judged_in_each_place`, ten cases on a split T01, misjudged 5 of 10 on HEAD
+    (`[0, 3, 4, 7, 9]`: the unchanged Write, both edge-crossing Edits, the shared-text foreground shell write, the far heading's
+    `sed`), 0 with the fix. T78's pin in `a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back` (a split
+    section's shared text refused) flips to passing, the reason it was pinned so - the joined text standing nowhere - gone.
+  - SCOPE, measured 2026-11-27 (an awk pass over every `specs/*/plan.md`, a task id whose `#` heading recurs after another task's,
+    an approximation that also counts a heading naming another task): 16 split task ids in 3 plans of 70 ids with such headings
+    (417: 4, 444: 4, 452: 8); 444's T22 stands at lines 227 and 482, T25 at 316 alone - T80's pair as found.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| refusal judged per place, red-first | n/a - no map | n/a | none | n/a |
 
 ### T120 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A plan review's hold on a task section that stands in several places refuses a
+   write exactly where it would change one of those places, as it does for a section standing in one: a Write of the plan
+   unchanged passes, an Edit crossing a place's edge is refused, and a live foreground shell write on text the rest of the plan
+   holds too passes (T78's rule).
+2. **The constraints.** T120's line (the refusal reads each place, `held_places`' places, red first); T78's rule (a live hold's
+   foreground shell write refused only on text standing in the held text alone); T77's overlap rule (both ends exclusive); T123's
+   tree rule unchanged; 100% line coverage of new code by its own tests.
+3. **Where each comes from.** O: the red run and the scope count, both 2026-11-27 (Approach); R: T120's line, T80's finding as
+   it records it, T78's and T77's rules in planhold.rs's comments; G: none.
+4. **Do they describe the world here?** The test's plan is SPLIT, the shape of 444's T22 (a section's heading and Approach, another
+   task, then a part B), and the count found three live plans of that shape, measured 2026-11-27.
+5. **The order.** After 451 T80 (the write-back per place, whose `places` it reads) and 461 T70 (the block-key reader, untouched).
+6. **The exits.** Green: the red-first test's cases all judged right and the guard's suites green. Red: what failed recorded and the task set
+   down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - one function's input changed, its three users each reading spans.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `a_split_section_is_judged_in_each_place` 0 of 10 misjudged; `make builder-checks CRATE=rust/guard/shared`
+   627 passed, lint and format clean; `tests/hooks/test-record-edit-hooks.sh` 14 passed, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome: a session's Write of a plan under review was refused although it changed nothing held,
+    and an Edit that changed held text across a place's edge was let through, so the review's verdict was voided by `make
+    plan-verdict` and the review run again.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T121 (<why: the finding or measurement that files it>)

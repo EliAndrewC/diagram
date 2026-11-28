@@ -428,23 +428,19 @@ fn a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back() {
         })
         .collect();
     assert_eq!(misjudged, Vec::<usize>::new());
-    // a task's own headings apart in the plan: its joined section stands nowhere whole, so nothing is read as outside it - refused
+    // a task's own headings apart in the plan: each place it stands is cut out, so text the rest holds too passes (451 T120; T78
+    // pinned it refused, the joined section standing nowhere)
     std::fs::write(
         root.join("specs/900-a/plan.md"),
         format!("# plan\n\n## T01 the bath\n\nheld body\n\n{budget}\n\n## T02 other\n\n{budget}\n\n## T01 notes\n\nmore\n"),
     )
     .unwrap();
     let state = json!({"plan_holds": {"h": running("T01", &[], 900.0)}});
-    assert!(!refusal(
-        &state,
-        Some(&root),
-        "Bash",
-        &json!({"command": shared}),
-        1000.0,
-    )
-    .is_empty());
+    let ti = json!({"command": shared});
+    assert_eq!(refusal(&state, Some(&root), "Bash", &ti, 1000.0), "");
+    // a plan gone holds nothing to judge
     std::fs::remove_file(root.join("specs/900-a/plan.md")).unwrap();
-    assert!(super::outside(&root.join("specs/900-a/plan.md"), &[]).is_none());
+    assert_eq!(refusal(&state, Some(&root), "Bash", &ti, 1000.0), "");
 }
 
 /// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
@@ -524,6 +520,70 @@ fn a_split_section_is_written_back_in_each_place() {
     assert_eq!(plan, SPLIT, "{msg}");
     let named = msg.contains("in `## T01 the bath`") && msg.contains("1 of its 2 places");
     assert!(named, "{msg}");
+}
+
+/// A write is judged against each place a split section stands, not their joined text, which stands nowhere in the plan (451 T120,
+/// found by T80 on 2026-11-21: a Write of 444's plan unchanged was refused under a live T22 hold, an Edit running into the far place
+/// went unseen, and a live foreground shell write on text every section shares was refused for such a section alone).
+#[test]
+fn a_split_section_is_judged_in_each_place() {
+    let root = clone_at("split-refusal");
+    std::fs::create_dir_all(root.join("specs/900-a")).unwrap();
+    let budget = "8. **The budget.** One landing.";
+    let body = SPLIT.replace("other text\n", &format!("other text\n\n{budget}\n"))
+        + &format!("\n{budget}\n");
+    let path = root.join("specs/900-a/plan.md");
+    std::fs::write(&path, &body).unwrap();
+    let plan = path.to_string_lossy().into_owned();
+    let state = json!({"plan_holds": {"h": running("T01", &[], 900.0)}});
+    let shared = format!("printf '%s\\n' '{budget}' | tee -a specs/900-a/plan.md");
+    let far = body.replace("the far part", "CHANGED far part");
+    let near = body.replace("the approach held", "CHANGED approach");
+    // (tool, input, refused)
+    let cases = [
+        ("Write", json!({"file_path": plan, "content": body}), false),
+        ("Write", json!({"file_path": plan, "content": far}), true),
+        ("Write", json!({"file_path": plan, "content": near}), true),
+        (
+            "Edit",
+            json!({"file_path": plan, "old_string": "other text\n\n8. **The budget.** One landing.\n\n## T01 part B"}),
+            true,
+        ),
+        (
+            "Edit",
+            json!({"file_path": plan, "old_string": "approach held too\n\n## T02 other"}),
+            true,
+        ),
+        (
+            "Edit",
+            json!({"file_path": plan, "old_string": "the far part"}),
+            true,
+        ),
+        (
+            "Edit",
+            json!({"file_path": plan, "old_string": "other text"}),
+            false,
+        ),
+        ("Bash", json!({"command": shared}), false),
+        (
+            "Bash",
+            json!({"command": shared, "run_in_background": true}),
+            true,
+        ),
+        (
+            "Bash",
+            json!({"command": "sed -i 's/## T01 part B/x/' specs/900-a/plan.md"}),
+            true,
+        ),
+    ];
+    // the cases misjudged, by their place in `cases`
+    let misjudged: Vec<usize> = (0..cases.len())
+        .filter(|&i| {
+            let (tool, ti, refused) = &cases[i];
+            refusal(&state, Some(&root), tool, ti, 1000.0).is_empty() == *refused
+        })
+        .collect();
+    assert_eq!(misjudged, Vec::<usize>::new());
 }
 
 /// The first held heading gone leaves the text under it outside the section, and the next heading heads the place: writing the old
