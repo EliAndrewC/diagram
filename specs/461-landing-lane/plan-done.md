@@ -3031,3 +3031,67 @@ engine-speed task, so `docs/performance-checklist.md` does not apply.
 
 **Performance work?** no
 
+<!-- plan-archive: archived 2026-11-28 -->
+### T73 (a carry whose file's change is already on its base read NOT VERIFIED: met carrying 461 T21, 230b5c0c9d, 2026-11-27, and it stopped the lane's first real batch 462-1 at 1136054db4, 2026-11-28)
+
+- **Approach**: `rust/gate/crates/land/src/land/carry.rs`'s `missing()` holds a non-spec path, past its three rules (moved since `before`, HEAD's blob the commit's, a rule resolved it), where HEAD - the working tree in the no-commit form - already holds the commit's CHANGE to it among other changes: `change_held` reads the commit's parent's, the commit's and HEAD's text, and `holds_change` counts their lines. The cause, observed 2026-11-28, method: a scratch clone (`git checkout af774303de; git cherry-pick 1136054db4`): `dev/review-ledger.md` is `merge=union` (`.gitattributes` line 9), HEAD held the commit's two rows with another row after them, so the pick merged the ledger to HEAD's own text and left it unstaged and untouched - not moved, its blob not the commit's, no rule - and the end said "HEAD does not hold the carried commit's dev/review-ledger.md" though it did.
+- **Decision 1 - the change held by its lines counted, not by the patch reversed.** Every line the commit made more frequent than its parent had it is in HEAD's file at least as often as in the commit's, every line it made less frequent at most as often, and at least one line's count changed. Why not the brief's first suggestion, `git apply -R --check`: measured 2026-11-28, the reversed `dev/review-ledger.md` hunk of 1136054db4 failed (`patch does not apply`) against both af774303de and origin/main - its context ends at the file's end, and HEAD has rows after the added ones. Label: the easier route (the brief's second suggestion, made exact by counts).
+- **Decision 2 - counts, not membership; a reorder held by no count.** Membership alone would hold a commit that adds only a common line (`}`, a blank) wherever HEAD has one; counted, HEAD must have as many as the commit's file. A commit that changes no count (lines only reordered) is held by none of this and falls to the three earlier rules. Label: the easier route.
+- **Decision 3 - both forms.** `missing()` also ends the no-commit apply (`carry/apply.rs`, the hand-in onto origin/main), so `change_held` reads the working tree there, as `missing()`'s blob reading does. Label: convention (`missing()`'s own reading by form).
+- A path HEAD truly lacks is still refused: the existing `the_end_refuses_a_carry_whose_files_head_does_not_hold` passes unchanged, and the new test refuses the fixture's Rust file beside the held ledger, and the ledger once HEAD's rows are taken out again.
+- Red first (2026-11-28): `carry/tests/held.rs`'s two world tests on the old code, 0 passed, 2 failed - the carry `(1, "carry: NOT VERIFIED - ... HEAD does not hold the carried commit's dev/review-ledger.md")`, `missing()` the ledger and the fixture's Rust file where the Rust file alone was owed; after, 3 of 3 with the counting rule's own test (`a_change_is_held_by_its_lines_counted_never_by_a_reorder_or_a_common_line_alone`), `ONLY="land::carry"` 59 of 59, the land crate 227 of 227 at `make builder-checks`. Not run red: the counting rule's unit test (`holds_change` did not exist).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the carry's end | n/a: tooling, no map | n/a | none | n/a |
+
+### T73 Approach (checklist part A)
+
+1. **The goal, in the world.** A carry whose files HEAD holds - by its own pick or by another route - ends verified; one whose file HEAD lacks still ends NOT VERIFIED.
+2. **The constraints.** 451 T292's verified end (never assumed); 461 D3's no-commit form ending the same way.
+3. **Where each comes from.** O: the stop of batch 462-1 (2026-11-28) and the scratch reproduction above; O: the reverse-apply probe.
+4. **Do they describe the world here?** Yes: the fixture reproduces the real pick's union merge (a scratch repository first, 2026-11-28: `merge=union`, the clone at a, b, x, y, w, the builder adding x, y - the pick left the ledger untouched).
+5. **The order.** Before T23 (the lane's batches carry through this end).
+6. **The exits.** Green: the red tests green and the land crate whole. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/land ONLY="land::carry::tests::held"`: 3 of 3; the batch 462-1's carry of 1136054db4 verified at its next run.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A carry that stops a landing (and the lane's batch) with HEAD holding its every change - a wrong outcome (constitution XIV), not a difference.
+
+**Found and left?** none
+
+**Performance work?** no
+<!-- plan-archive: archived 2026-11-28 -->
+### T72 (make lane-start could not start the runner while the lane's tree predated the lane crate: 'holds no lock' at the first phase-2 start (observed 2026-11-28T02:1xZ, method: the start's own stderr), the tree at diagram-backlog-land's efc35ccc4f)
+
+- **Approach**: `rust/gate/crates/lane/src/runner.rs`'s start, before the build and the spawn, brings the lane's tree to `origin/main` where it is BEHIND there (`behind`: the registry's lane tree, fetched, its HEAD a strict ancestor of `refs/remotes/origin/main`, no tracked file changed or unmerged), by the same `builder_tree::cli(["lane"])` call T55's stopped-carry reset makes - one seam, `reset_stopped`, so a failed bring says its refusal once and the start goes on to the build's own words. The cause: the start runs the lane tree's own `scripts/gates/l7r-gate.sh lane --work` (T14's Decision 6), and only the batch step, after the runner is up, brought the tree to `origin/main`; a tree left since before the lane crate ran a launcher with no `lane` subcommand, which ended without the lock.
+- **Decision 1 - the lane tree brought up, not the clone's launcher run.** The brief offered both. The lane tree's own launcher is kept (T14's Decision 6): the clone's sources may hold the coordinator's uncommitted work, origin/main's are what the lane lands on, and the stall watchdog's `runs_lane` argv is unchanged. Label: the easier route (T55's call reused).
+- **Decision 2 - only a tree that is behind, clean.** `builder-tree lane` resets hard and cleans; the tree is shared with `land-alone.sh`, and T55's `a_pick_in_progress_with_no_stopped_carry_open_is_left_as_it_is...` pins a pick that is not the lane's left standing. So a tree at origin/main, off it (a landing alone's commits), with a changed or unmerged tracked file, or whose fetch fails is left as it is; untracked files are not asked (`--untracked-files=no`), the tree being nobody's once behind. Label: the easier route; the safety pinned by `a_lane_tree_off_origin_main_is_left_as_it_is` and T55's tests, unchanged.
+- Red first, measured 2026-11-28 (make rust-test ONLY=, the old code beside the new tests): `runner::start_tests` on the old code with the two new tests, 6 passed, 1 failed - `a_lane_tree_behind_origin_main_is_brought_to_it_before_the_build_so_its_launcher_knows_the_lane`, its stderr the production's "lane: started `.../repo-land/scripts/gates/l7r-gate.sh lane --work ...`, but it holds no lock after 3 s"; the fixture's old launcher "builds" under `L7R_GATE_PRINT_FRESH` and, run as the runner, knows no `lane` and exits 2, as efc35ccc4f's did. After, 7 of 7, `ONLY="runner"` 56 of 56, the lane crate 90 of 90 at `make builder-checks`. Not run red: `a_lane_tree_off_origin_main_is_left_as_it_is` (it pins what the old code already did).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the lane's start | n/a: tooling, no map | n/a | none | n/a |
+
+### T72 Approach (checklist part A)
+
+1. **The goal, in the world.** `make lane-start` (and a hand-in's start) starts the runner from origin/main's launcher whatever commit the idle lane tree was left at.
+2. **The constraints.** 461 D1 (the lane's tree, nobody's work in it), T14's Decision 6 (its own launcher), T55 (a pick not the lane's left alone).
+3. **Where each comes from.** O: the first phase-2 start's failure (2026-11-28T02:1xZ), started once the tree was moved by hand to af774303de.
+4. **Do they describe the world here?** Yes: the fixture's tree sits at an ancestor of origin/main whose launcher has no lane subcommand, as the real tree did.
+5. **The order.** Before T23.
+6. **The exits.** Green: the red test green, the lane crate whole. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/lane ONLY="runner::start_tests"`: 7 of 7.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A start that can never bring the runner up from a stale idle tree - a wrong outcome (constitution XIV).
+
+**Found and left?** none
+
+**Performance work?** no
+
+<!-- plan-archive: T73 to T21 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
