@@ -947,6 +947,8 @@ fn an_arbiter_repair_is_briefed_with_its_ruling_s_row_and_the_two_red_attempts()
         .chars()
         .count();
     assert!(n < 2000, "{n}");
+}
+
 #[test]
 fn from_phase_two_s_base_builder_trees_lists_what_waits_on_the_lane() {
     // 461 T22, plan D8: carried is asked of origin/main, where the lane lands, not of the clone's HEAD
