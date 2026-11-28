@@ -70,12 +70,10 @@ impl Repair {
         let mut out: Vec<String> = Vec::new();
         for u in &self.units {
             let words: Vec<&str> = u.split_whitespace().collect();
-            let Some((step, dirs)) = words.split_last() else {
+            // an empty unit and a unit whose last word is no step (a suite, a row) name no crate alike
+            let Some((_, dirs)) = words.split_last().filter(|(s, _)| STEPS.contains(s)) else {
                 continue;
             };
-            if !STEPS.contains(step) {
-                continue;
-            }
             for d in dirs.iter().take_while(|d| !d.starts_with('(')) {
                 if !out.iter().any(|o| o == d) {
                     out.push((*d).to_owned());

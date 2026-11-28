@@ -191,15 +191,12 @@ fn a_free_tree_is_idle_over_an_open_repair_before_a_ready_queue_entry() {
     assert_eq!(idle(&clone, 3), Verdict::Idle(want));
     // the knob at 0: the queue's READY entry first
     crate::env::set(KNOB, "0");
-    let Verdict::Idle(q) = idle(&clone, 3) else {
-        panic!("not idle")
-    };
-    assert_eq!(q.tasks, "451 T3");
+    assert!(matches!(idle(&clone, 3), Verdict::Idle(q) if q.tasks == "451 T3"));
     // with no queue entry READY, the repair still
     std::fs::remove_file(clone.join("specs/451-x/queue.txt")).unwrap();
-    let Verdict::Idle(r) = idle(&clone, 3) else {
-        panic!("not idle")
-    };
-    assert_eq!(r.tasks, "461 T13 (repair r1), a FRESH builder");
+    assert!(matches!(
+        idle(&clone, 3),
+        Verdict::Idle(r) if r.tasks == "461 T13 (repair r1), a FRESH builder"
+    ));
     crate::env::unset(KNOB);
 }

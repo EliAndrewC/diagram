@@ -524,12 +524,9 @@ fn an_open_repair_entry_is_named_before_the_queue_s_next_entry() {
     let next = ask("builder-next", &["9001"], &root).stdout;
     assert!(next.starts_with(&format!("builder-next: the lane's open repair entry:\n  {r1}\n{rest}builder-next: 9001 T03 (line 1")), "{next}");
     let listed = ask("queue", &["9001"], &root).stdout;
-    assert!(
-        listed.starts_with(&format!(
-            "queue: the lane's open repair, READY:\n  {r1}\n{rest}queue: specs/9001-x/queue.txt"
-        )),
-        "{listed}"
-    );
+    assert!(listed.starts_with(&format!(
+        "queue: the lane's open repair, READY:\n  {r1}\n{rest}queue: specs/9001-x/queue.txt"
+    )));
     // the knob at 0: after the queue's
     let late = super::run_with("builder-next", &words(&["9001"]), &root, "", 3, false).stdout;
     let said = format!("\nbuilder-next: the lane's open repair entry:\n  {r1}\n");
