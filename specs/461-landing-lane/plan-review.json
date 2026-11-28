@@ -816,6 +816,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T56 (D9, FR-005: from phase 2's base a waiting hand-in no runner serves is said once by `make lane-wait`; found at T20's closing half)": {
+   "sha256": "52498d147ebe07eb29de12eb002adf41801e25f77886fbf8af2ecddc9154271b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T56 Approach (checklist part A)": {
+   "sha256": "fe0129ab861bb1722809cbd7af83ccc819105894fdb66d83d6e4ca034f9d68e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T64 (D9: from phase 2's base the Stop rule counts a waiting hand-in no runner serves; filed by T21's Decision 2)": {
+   "sha256": "9c63882f884d1c44a92fa8bf6a6f8db3024bfb0d249ed648add291d4f338190c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T64 Approach (checklist part A)": {
+   "sha256": "cc1b080e366bce5c6d29e43cbe2eb2f6b7a89645847b19bb07d1b42e3ddae940",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5237,6 +5261,66 @@
      "summary": "The hand-in tests that are phase 1's pass 'clone' explicitly; the pool's test env() keeps origin: false because its fixture clones are ahead of origin/main.",
      "class": "within",
      "why": "Test fixtures pinned to the base they test after the default moves. FR-008's checks are not reduced, and the new phase 2 tests were red first and are green."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T56 (D9, FR-005: from phase 2's base a waiting hand-in no runner serves is said once by `make lane-wait`; found at T20's closing half)",
+    "### T56 Approach (checklist part A)",
+    "### T64 (D9: from phase 2's base the Stop rule counts a waiting hand-in no runner serves; filed by T21's Decision 2)",
+    "### T64 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T56 Decision 1",
+     "summary": "The hand-in base is read in code through one function (origin_base) carrying T22's hand_in_base meaning (unset/empty/origin = phase 2, clone = phase 1, other words refused and not phase 2); T56, T64 and T22 land together so the phase-2 reading never runs before T22's base.",
+     "class": "within",
+     "why": "How the lane knows which phase it is in is a mechanism choice the spec leaves open; it serves FR-005's runner-dead wake (D9) and changes no requested behavior."
+    },
+    {
+     "id": "T56 Decision 2",
+     "summary": "The unserved line is said once per hand-in (keyed by a why:runner line since the last start that lists it), not once per runner death, because a failed start writes no start line; a new death after a later start says it again.",
+     "class": "within",
+     "why": "FR-005 allows a wake for a US5 case (the runner dead) and no other; keying the line so a second failed start is not hidden and each real death wakes once implements that case, neither adding wakes FR-005 does not list nor dropping one it does."
+    },
+    {
+     "id": "T56 Decision 3",
+     "summary": "No unserved line while a batch is open (dead's line already says it: one stop, one wake), nor over a hand-in whose last runner stop was a deliberate make lane-stop / NOW=1; a hand-in after the stop, and an idle end over a waiting hand-in, are said.",
+     "class": "within",
+     "why": "FR-005 limits wakes to once per landed batch and US5's cases. An open batch's death is already woken by dead's line, so a second line would be a duplicate wake; a runner the coordinator stopped on purpose is not a runner death and the coordinator already knows of it, so waking it is a wake FR-005 does not list. Every unplanned no-runner case (failed start, idle end with work waiting) is still said, so the runner-dead case is not cut back."
+    },
+    {
+     "id": "T56 Decision 4",
+     "summary": "The wait reads hand-ins only with no runner and from phase 2's base, pool log first, then done refs and lane log, asking origin/main only of those still waiting: at most one for-each-ref and one git log per poll; WAIT_POLL_S unchanged.",
+     "class": "within",
+     "why": "Cost ordering of reads with the same result; it narrows nothing FR-005 asks for and moves no constant."
+    },
+    {
+     "id": "T56 order/exits (Approach items 5-6)",
+     "summary": "Lands with T22 and T64 in one landing, before T23; a claim it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing only; it keeps T21 Decision 2's condition that T64 lands no later than T22."
+    },
+    {
+     "id": "T64 Decision 1",
+     "summary": "From phase 2's base a waiting hand-in holds the coordinator's Stop whether a runner lives or not, including with no lane log; ends T21 Decision 2's phase-1 deviation at T22's base.",
+     "class": "within",
+     "why": "Restores D9's literal 'a waiting hand-in' rather than narrowing it, so the runner-dead wake FR-005 allows is armed; it widens back to what was asked."
+    },
+    {
+     "id": "T64 Decision 2",
+     "summary": "holds_at returns before git for-each-ref where the pool's log has no handed_in line.",
+     "class": "within",
+     "why": "Same answer (nothing handed in means nothing waiting) at less cost; no behavior is narrowed."
+    },
+    {
+     "id": "T64 Decision 3",
+     "summary": "Unset HAND_IN_BASE is phase 2, as T22 reads it; tests name the base both ways and T21's phase-1 test names clone; the guard's own suites are unchanged.",
+     "class": "within",
+     "why": "Keeps one reading of the base consistent with T22 (T56 Decision 1); a test-fixture choice that enforces the requested behavior in both phases."
     }
    ]
   }

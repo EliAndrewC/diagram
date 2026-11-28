@@ -1326,31 +1326,66 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 <!-- plan-archive: T53 to T14 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T54 to T51 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T55 to T54 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T56 (<why: the finding or measurement that files it>)
+### T56 (D9, FR-005: from phase 2's base a waiting hand-in no runner serves is said once by `make lane-wait`; found at T20's closing half)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/gate/crates/lane/src/wake.rs` gains `unserved` (which waiting hand-ins the wait owes a line for), `unserved_line`
+  (its words) and `waiting_on` (the hand-ins waiting, read as `make lane`'s `status` reads them); `Wait` gains the seam `waiting`,
+  `Some` only from phase 2's base, which `wait_cli` reads as `l7r_shared::lane_wake::origin_base(HAND_IN_BASE)` (T64's one reading).
+  The module doc says the phase-2 case. Tests: `wake/tests.rs`, three new. `dev/audits/hand-in-base.md`'s cost line names the new
+  readers. `runner.rs` and `runner/run.rs` untouched (T18's).
+- **Decision 1 - the base is read where T22 will read it, through one function.** T22 (handed in, not in this base) adds
+  `l7r_shared::builder_pool::hand_in_base(Option<&str>) -> Result<Base, String>`: unset, empty or `origin` is phase 2, `clone`
+  phase 1, any other word refused. This task's one function, `l7r_shared::lane_wake::origin_base(Option<&str>) -> bool`
+  (`rust/guard/shared/src/lane_wake.rs`), takes the same value with that meaning (a refused word is not phase 2: its hand-in starts
+  nothing), so the session points it at `matches!(hand_in_base(knob), Ok(Base::Origin))` when the three are carried together. In
+  code, not a make default: the Stop hook and `make lane-wait` never see a `HAND_IN_BASE=` given on `make builder-done`'s command
+  line. T56, T64 and T22 land in one landing, so the phase-2 reading never runs before T22's base. Label: convention (T22's
+  meaning, the session's instruction of 2026-11-27).
+- **Decision 2 - said once a hand-in, not once a death.** A start that fails past `START_WAIT_S` writes no `start` line (the runner
+  writes it, `runner::work`), so T20's key - a `why: "runner"` line since the last `start` - would leave a second hand-in whose start
+  failed too silent for ever. So the line lists the hand-ins' commits under `unserved` (a key `log::mentions` does not read, so the
+  line moves no hand-in's state and keeps none on the lane), and a hand-in is told where a `why: "runner"` line since the last
+  `start` lists it. A runner started since and gone again over it says it again: a new death. Label: the easier route.
+- **Decision 3 - quiet while a batch is open, and over a `make lane-stop`.** An open batch with no runner is `dead`'s line, so
+  `unserved` says nothing then (one stop, one wake). A hand-in handed in before a `make lane-stop` (or `NOW=1`) that is the runner's
+  last stop since its start is quiet: the coordinator stopped the runner over it on purpose, a wake FR-005 does not list; one
+  handed in after the stop started a runner of its own, and that start's failure is said. An `idle` end over a waiting hand-in is
+  said: nothing else will come. Label: the easier route.
+- **Decision 4 - the cheap reading first.** The wait polls every `WAIT_POLL_S` (5 s, a GUESS knob, T20) with no ceiling, and reads hand-ins only with
+  no runner and from phase 2's base. `waiting_on` reads the pool's log first (no hand-in: no git), then the done refs and the lane's
+  log, computes each state with `origin/main` not yet asked, and asks `held_by(origin/main)` only of those still waiting (a hand-in
+  it holds has landed): at most one `git for-each-ref` and one `git log` a poll. Label: the easier route.
+- Red first (2026-11-27): the lane crate's `wake::tests` against stubs (`unserved` and `waiting_on` empty, `unserved_line` blank),
+  8 passed, 3 failed (`a_waiting_hand_in_no_runner_serves_is_said_once_from_phase_2_s_base`,
+  `an_open_batch_or_a_make_lane_stop_over_the_hand_in_says_no_unserved_line`,
+  `the_command_from_phase_2_s_base_says_a_real_hand_in_no_runner_serves`); after, 11 of 11. The first stub run HUNG (a wait that
+  says nothing loops on the fake clock); the tests were rewritten to fail instead (a sleep past 50 asserts, a thread writes a late
+  line), observed 2026-11-27, method: that run, killed after 24 minutes. `make builder-checks CRATE="rust/gate/crates/lane
+  rust/guard/shared"`: 77 and 619 tests, lint and format clean, observed 2026-11-27, method: that run's log.
 
 ### T56 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** From phase 2's base, a coordinator whose wait the Stop rule keeps armed over a hand-in no runner
+   serves is woken once, told the runner is not running and `make lane-start`; phase 1's hand-ins wake no one.
+2. **The constraints.** D9 (the runner dead, a US5 case), FR-005 (no wake it does not list), T20 Decisions 3 and 6 (said once, one
+   stop one wake), T12 Decision 6 (a hand-in starts the runner from phase 2's base), T21 Decision 2 and T64 (the Stop rule).
+3. **Where each comes from.** G: FR-005's words. R: plan.md D9; T12, T20, T21 sections; data-model.md ("The log line"). O: the
+   red-first counts above.
+4. **Do they describe the world here?** On fixtures: a scratch repository with a done ref and the pool's line, a real `wait_cli`
+   with `HAND_IN_BASE` set both ways. Not on the real clone's lane: T23 runs the real batch.
+5. **The order.** Lands with T22 and T64, in one landing; before T23.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: a failed start writes no `start` line, so T20's death key would hide a second failure (Decision 2).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a: no constant moved; `DEAD_GRACE_S` and `WAIT_POLL_S` serve the new case as they stand.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Without it, from phase 2's base, a coordinator waits for ever over a hand-in whose runner start failed,
+   woken by nothing until the GM prompts it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 
@@ -1417,31 +1452,48 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T64 (<why: the finding or measurement that files it>)
+### T64 (D9: from phase 2's base the Stop rule counts a waiting hand-in no runner serves; filed by T21's Decision 2)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+- **Approach**: `rust/guard/shared/src/lane_wake.rs`: `origin_base` (the phase-2 base, T56 Decision 1), `holds` reading
+  `HAND_IN_BASE` through `crate::env::opt` and asking `holds_at(common, origin)`, which skips the runner's lock and the empty-log
+  return from phase 2's base; the block comment restated. Tests: `lane_wake/holds_tests.rs`, two new, the phase-1 test now naming
+  `HAND_IN_BASE=clone`. The guard crate (`pool_idle_hooks.rs`) and its message are unchanged: `holds`' words are the same.
+- **Decision 1 - from phase 2's base a waiting hand-in holds the stop whether the runner lives or not.** T21 Decision 2's phase-1
+  deviation ends at T22's base: there every hand-in starts the runner, so one no runner serves is a start that failed, and the
+  wait this rule arms is the one T56 makes say it. A lane with no log holds too from phase 2's base: a start that failed may have
+  left none. Label: D9's literal "a waiting hand-in", restored from phase 2's base, as T21 Decision 2 ruled it LEGITIMATE only with
+  T64 landing no later than T22.
+- **Decision 2 - no git where nothing was ever handed in.** From phase 2's base every coordinator Stop with no open batch reads the
+  hand-ins; `holds_at` returns before `git for-each-ref` where the pool's log has no `handed_in` line. Label: the easier route.
+- **Decision 3 - unset is phase 2, as T22 reads it.** So a test names the base both ways (`crate::env::set`), and the phase-1 test
+  of T21 names `clone`. In the guard's own suites nothing changes: no case of `pool_idle_hooks/tests.rs` or
+  `tests/hooks/test-pool-idle-hooks.sh` writes a hand-in (their lane cases are open batches). Label: the session's instruction.
+- Red first (2026-11-27): `l7r_shared` `lane_wake::holds_tests` against a stub `holds_at` ignoring the base, 3 passed, 1 failed
+  (`from_phase_2_s_base_a_waiting_hand_in_holds_with_no_runner_and_no_lane_log`); after, `lane_wake` 9 of 9. `make builder-checks`
+  as T56's.
 
 ### T64 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** From phase 2's base a coordinator cannot end its turn over a waiting hand-in with no `make
+   lane-wait` running, whether a runner serves it or not; phase 1 unchanged until T22 lands.
+2. **The constraints.** D9 (the Stop rule), T21 Decisions 1-2, T56 Decision 1 (the one reading of the base), FR-005.
+3. **Where each comes from.** G: FR-005's words. R: plan.md D9; T21's section; the session's account of T22's `hand_in_base`. O:
+   the red-first counts above.
+4. **Do they describe the world here?** On fixtures: a scratch repository with a done ref and the pool's line, no lane log, then an
+   idled-out runner's lines.
+5. **The order.** Lands with T22 and T56, in one landing; before T23.
+6. **The exits.** Green: the shared crate's tests, `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green, 2026-11-27.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Without it, from phase 2's base, a hand-in whose runner start failed holds no stop, and nothing arms the
+   wait that says the death.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 <!-- plan-archive: T65 to T16 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->

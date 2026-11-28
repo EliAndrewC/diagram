@@ -105,10 +105,11 @@ fn owed(bytes: &[u8]) -> Vec<String> {
 // - "landed" is a `landed` line listing the hand-in, or its done ref gone; `origin/main` holding it (the lane's `held_by`) is not
 //   asked, a git walk a Stop hook would pay every turn. Cost: a hand-in landed on `origin/main` by hand while its done ref still
 //   stands reads as waiting - which `make carry` (the ref deleted at its end) does not leave.
-// - a waiting hand-in counts ONLY WHILE THE RUNNER LIVES (a deliberate deviation from D9's literal "a waiting hand-in", for phase
-//   1): before T22 flips `HAND_IN_BASE` no hand-in starts the runner (T12 Decision 6), the coordinator lands each by hand, and a wait
-//   over it could never wake (`wake::dead` is quiet there on purpose). So no second reading of the knob is made here; from T22's
-//   base, a waiting hand-in no runner serves is T56's case.
+// - in PHASE 1 a waiting hand-in counts ONLY WHILE THE RUNNER LIVES (a deliberate deviation from D9's literal "a waiting hand-in"):
+//   before T22 flips `HAND_IN_BASE` no hand-in starts the runner (T12 Decision 6), the coordinator lands each by hand, and a wait
+//   over it could never wake (`wake::unserved` is quiet there on purpose). From PHASE 2'S BASE ([`origin_base`], 461 T64) it counts
+//   whether the runner lives or not: every hand-in starts the runner there, so one no runner serves is a start that failed, and the
+//   wait this rule keeps armed says that death once (`wake::unserved`, 461 T56).
 
 /// The runner's lock, in [`DIR`] (the lane crate's `runner::LOCK`): held by `flock` while a runner lives.
 pub const RUNNER_LOCK: &str = "lane.lock";
@@ -221,21 +222,44 @@ fn waiting(pool: &[Value], refs: &BTreeSet<String>, lane: &[Value]) -> Vec<Strin
         .collect()
 }
 
+/// THE PHASE-2 BASE, ASKED IN ONE PLACE (461 T56, T64): whether `knob`, `HAND_IN_BASE`'s value, puts hand-ins on `origin/main`,
+/// where every hand-in starts the runner (T12 Decision 6). T22's meaning: unset, empty or `origin` is phase 2; `clone` (and any word
+/// T22's `l7r_shared::builder_pool::hand_in_base` refuses, whose hand-in starts nothing) is not. The Stop rule ([`holds`]) and
+/// `make lane-wait` (the lane crate's `wake.rs`) both ask it, here because the guard reaches no gate crate; carried with T22, it
+/// becomes `matches!(hand_in_base(knob), Ok(Base::Origin))`, so one reading says the base everywhere. In code, not a make default:
+/// the Stop hook and `make lane-wait` never see a `HAND_IN_BASE=` given on `make builder-done`'s command line.
+#[must_use]
+pub fn origin_base(knob: Option<&str>) -> bool {
+    matches!(knob, None | Some("" | "origin"))
+}
+
 /// What the lane under the git common directory `common` holds for its coordinator, said in a few words: its first open batch, else
-/// (while the runner lives) its first waiting hand-in; none where the lane has no log or holds neither.
+/// its first waiting hand-in - in phase 1 only while the runner lives, from phase 2's base whether it lives or not ([`holds_at`]);
+/// none where it holds neither. The base is this process's `HAND_IN_BASE`, read by [`origin_base`].
 #[must_use]
 pub fn holds(common: &Path) -> Option<String> {
+    holds_at(
+        common,
+        origin_base(crate::env::opt("HAND_IN_BASE").as_deref()),
+    )
+}
+
+/// [`holds`] on the base given, `origin` true from phase 2's base. In phase 1 a lane with no log holds nothing; from phase 2's a
+/// hand-in whose runner never started may have left none, so the hand-ins are read all the same.
+#[must_use]
+pub fn holds_at(common: &Path, origin: bool) -> Option<String> {
     let lane = lines(&dir(common).join(FILE));
-    if lane.is_empty() {
-        return None;
-    }
     if let Some(b) = open_batches(&lane).first() {
         return Some(format!("batch {b} is open"));
     }
-    if !runner_lives(common) {
+    if !origin && (lane.is_empty() || !runner_lives(common)) {
         return None;
     }
     let pool = lines(&common.join(POOL_LOG));
+    // no hand-in ever: no git spawned, a Stop of every phase-2 coordinator asks this
+    if !pool.iter().any(|l| l["handed_in"] == true) {
+        return None;
+    }
     let refs = std::process::Command::new("git")
         .arg("-C")
         .arg(common)

@@ -7,7 +7,7 @@ use std::process::Command;
 
 use serde_json::json;
 
-use super::{dir, holds, FILE, RUNNER_LOCK};
+use super::{dir, holds, holds_at, origin_base, FILE, RUNNER_LOCK};
 use crate::tempdir::TempDir;
 use crate::tool::flock;
 
@@ -71,6 +71,8 @@ fn an_open_batch_is_held_until_it_lands_or_stops_and_a_resumed_one_again() {
 
 #[test]
 fn a_waiting_hand_in_is_held_only_while_the_runner_lives() {
+    // phase 1's base, named (461 T64: unset is phase 2's)
+    crate::env::set("HAND_IN_BASE", "clone");
     let t = TempDir::new("lane-holds-hand-in");
     let shas = repo(&t, &["one", "two"]);
     let common = t.path().join(".git");
@@ -119,4 +121,45 @@ fn a_waiting_hand_in_is_held_only_while_the_runner_lives() {
     git(t.path(), &["update-ref", "-d", "refs/l7r/done/461-T12"]);
     assert_eq!(holds(&common), None);
     assert!(flock(&lock, "-u"));
+}
+
+/// 461 T64: from phase 2's base every hand-in starts the runner, so a waiting hand-in no runner serves - its start failed, perhaps
+/// before the lane wrote any line - holds the stop, which keeps armed the wait that says the death (461 T56); phase 1's is quiet.
+#[test]
+fn from_phase_2_s_base_a_waiting_hand_in_holds_with_no_runner_and_no_lane_log() {
+    let t = TempDir::new("lane-holds-origin");
+    let shas = repo(&t, &["one"]);
+    let common = t.path().join(".git");
+    git(t.path(), &["update-ref", "refs/l7r/done/461-T12", &shas[0]]);
+    // no hand-in on the pool's log yet: nothing held
+    assert_eq!(holds_at(&common, true), None);
+    std::fs::write(common.join("builder-pool.log"), done(&shas[0], "461 T12")).unwrap();
+    let want = format!("hand-in 461 T12 ({}) waiting", &shas[0][..10]);
+    crate::env::set("HAND_IN_BASE", "origin");
+    assert_eq!(holds(&common), Some(want.clone()));
+    crate::env::set("HAND_IN_BASE", "clone");
+    assert_eq!(holds(&common), None);
+    assert_eq!(holds_at(&common, true), Some(want.clone()));
+    assert_eq!(holds_at(&common, false), None);
+    // with the lane's log, a runner that idled out: the same
+    let idle = [
+        json!({"event": "start"}),
+        json!({"event": "stop", "why": "idle"}),
+    ];
+    lane(&common, &idle);
+    assert_eq!(holds_at(&common, true), Some(want));
+    assert_eq!(holds_at(&common, false), None);
+    // landed by the lane: nothing held on either base
+    let landed = json!({"event": "landed", "batch": "461-1", "landed": [shas[0]]});
+    lane(&common, &[landed]);
+    assert_eq!(holds_at(&common, true), None);
+}
+
+#[test]
+fn the_phase_2_base_is_unset_empty_or_origin_as_t22_reads_it() {
+    assert!(origin_base(Some("origin")));
+    assert!(origin_base(Some("")));
+    assert!(origin_base(None));
+    assert!(!origin_base(Some("clone")));
+    assert!(!origin_base(Some("soon")));
 }

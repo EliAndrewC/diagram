@@ -7,7 +7,7 @@ measurement: none yet - 461 T10 hands in this feature's next task through make b
 command: make rust-test CRATE=rust/gate/crates/land ONLY="land::hand_in::tests"
 falsifier: in phase 1, a hand-in applied onto the clone's HEAD that a later make land in the clone still meets a carry conflict on (the base was not where work lands); from phase 2, one applied onto origin/main that the lane's batch meets a conflict on
 threshold: one such conflict a week (it reopens the knob)
-cost: for origin, one git fetch a hand-in (none for clone); the knob read once a hand-in
+cost: for origin, one git fetch a hand-in (none for clone); the knob read once a hand-in, and by the coordinator's Stop rule and make lane-wait (l7r_shared::lane_wake::origin_base, 461 T56 and T64) - from origin, a waiting hand-in no runner serves holds the stop and is said once by the wait, at most one git for-each-ref a Stop and a 5 s poll with no runner
 last-audited: 2026-11-27
 cadence-days: 30
 covers: HAND_IN_BASE

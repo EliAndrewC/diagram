@@ -8,8 +8,8 @@ use std::path::Path;
 use l7r_shared::tempdir::TempDir;
 use serde_json::{json, Value};
 
-use super::{dead, wait, wait_cli, Wait, DEAD};
-use crate::log;
+use super::{dead, unserved, wait, wait_cli, waiting_on, Wait, DEAD};
+use crate::log::{self, HandIn};
 
 fn line(common: &Path, event: &str, fields: &Value) {
     log::append(common, "2026-11-28T03:00:00Z", event, fields).unwrap();
@@ -24,6 +24,16 @@ fn owed(common: &Path, text: &str) {
 fn run(
     common: &Path,
     alive: bool,
+    at_sleep: &dyn Fn(usize),
+) -> (Result<Vec<String>, String>, usize) {
+    run_on(common, alive, None, at_sleep)
+}
+
+/// [`run`] with the hand-ins waiting given, as from phase 2's base (461 T56).
+fn run_on(
+    common: &Path,
+    alive: bool,
+    waiting: Option<&dyn Fn() -> Vec<HandIn>>,
     at_sleep: &dyn Fn(usize),
 ) -> (Result<Vec<String>, String>, usize) {
     let clock = Cell::new(1000.0);
@@ -42,6 +52,7 @@ fn run(
         now: &now,
         sleep: &sleep,
         alive: &alive,
+        waiting,
     };
     (wait(&w), sleeps.get())
 }
@@ -246,6 +257,7 @@ fn a_runner_seen_inside_the_grace_starts_it_again() {
         now: &now,
         sleep: &sleep,
         alive: &alive,
+        waiting: None,
     };
     assert!(wait(&w).unwrap()[0].contains("batch 461-1 is open"));
     assert!((clock.get() - 60.0).abs() < 1e-9);
@@ -296,4 +308,180 @@ fn a_dead_line_that_cannot_be_written_is_an_error() {
     std::fs::set_permissions(&file, std::fs::Permissions::from_mode(0o644)).unwrap();
     assert_eq!(got.code, 1);
     assert!(got.stderr.contains("lane.jsonl"));
+}
+
+fn hand_in(tasks: &str, commit: &str, at: &str) -> HandIn {
+    HandIn {
+        feature: "461".to_owned(),
+        tasks: tasks.split(',').map(str::to_owned).collect(),
+        commit: commit.to_owned(),
+        at: at.to_owned(),
+        repair_of: None,
+    }
+}
+
+/// 461 T56: from phase 2's base every hand-in starts the runner, so a waiting hand-in no runner serves (its start failed) is said
+/// once a hand-in after the grace - a later hand-in whose start fails too said itself - and phase 1's is quiet.
+#[test]
+fn a_waiting_hand_in_no_runner_serves_is_said_once_from_phase_2_s_base() {
+    let t = TempDir::new("lane-wake-unserved");
+    let c = t.path();
+    let one = hand_in("T12", "a1b2c3d4e5f6", "2026-11-28T04:00:00Z");
+    let ins = RefCell::new(vec![one.clone()]);
+    let waiting = || ins.borrow().clone();
+    // phase 1 (no seam): quiet far past the grace
+    let (got, _) = run_on(c, false, None, &|n| {
+        if n == 20 {
+            owed(c, "lane: phase 1");
+        }
+    });
+    assert_eq!(got.unwrap(), ["lane: phase 1"]);
+    // phase 2, no lane line at all: said after the grace, naming the hand-in
+    let (got, sleeps) = run_on(c, false, Some(&waiting), &|n| assert!(n < 50));
+    assert_eq!(
+        got.unwrap(),
+        ["lane: the runner is not running and 1 hand-in(s) wait with no batch formed (461 T12 (a1b2c3d4e5); no runner has started) - make lane-start starts it"]
+    );
+    assert_eq!(sleeps, 6);
+    let last = log::read(c).pop().unwrap();
+    assert_eq!(
+        (last["why"].as_str(), &last["unserved"]),
+        (Some(DEAD), &json!(["a1b2c3d4e5f6"]))
+    );
+    // said once: the re-armed wait blocks until another line
+    let (got, _) = run_on(c, false, Some(&waiting), &|n| {
+        if n == 20 {
+            owed(c, "lane: next");
+        }
+    });
+    assert_eq!(got.unwrap(), ["lane: next"]);
+    // a second hand-in whose start failed too, after an idle runner's lines: said itself, the first not again
+    line(c, "start", &json!({"pid": 9, "why": "make lane-start"}));
+    line(c, "stop", &json!({"pid": 9, "why": "idle"}));
+    line(
+        c,
+        "owed",
+        &json!({"why": DEAD, "unserved": ["a1b2c3d4e5f6"], "line": "x"}),
+    );
+    assert_eq!(run(c, false, &nothing).0.unwrap(), ["x"]);
+    let two = hand_in("T14", "f6e5d4c3b2a1", "2026-11-28T05:00:00Z");
+    ins.borrow_mut().push(two);
+    let (got, _) = run_on(c, false, Some(&waiting), &|n| assert!(n < 50));
+    assert_eq!(
+        got.unwrap(),
+        ["lane: the runner is not running and 1 hand-in(s) wait with no batch formed (461 T14 (f6e5d4c3b2); it stopped: idle) - make lane-start starts it"]
+    );
+    // a live runner serves them: quiet
+    let (got, _) = run_on(c, true, Some(&waiting), &|n| {
+        if n == 20 {
+            owed(c, "lane: live");
+        }
+    });
+    assert_eq!(got.unwrap(), ["lane: live"]);
+}
+
+#[test]
+fn an_open_batch_or_a_make_lane_stop_over_the_hand_in_says_no_unserved_line() {
+    let one = hand_in("T12", "a1b2c3d4e5f6", "2026-11-28T04:00:00Z");
+    let later = hand_in("T14", "f6e5d4c3b2a1", "2026-11-28T06:00:00Z");
+    let start = json!({"event": "start", "utc": "2026-11-28T03:00:00Z"});
+    let stop =
+        json!({"event": "stop", "why": "make lane-stop NOW=1", "utc": "2026-11-28T05:00:00Z"});
+    // the coordinator stopped the runner over the first on purpose: only the one handed in after is said
+    let got = unserved(
+        &[start.clone(), stop.clone()],
+        &[one.clone(), later.clone()],
+    );
+    assert_eq!(got, [later.clone()]);
+    // a start after that stop: both again
+    let restart = json!({"event": "start", "utc": "2026-11-28T07:00:00Z"});
+    let both = unserved(&[start.clone(), stop, restart], &[one.clone(), later]);
+    assert_eq!(both.len(), 2);
+    assert!(super::unserved_line(&[start.clone()], &[one.clone()])
+        .ends_with("(killed)) - make lane-start starts it"));
+    // a batch open: its own death line says it
+    let batch = json!({"event": "batch", "batch": "461-1", "changes": ["a1b2c3d4e5f6"]});
+    assert!(unserved(&[start, batch], &[one]).is_empty());
+}
+
+fn git(repo: &Path, args: &[&str]) -> String {
+    let out = std::process::Command::new("git")
+        .arg("-C")
+        .arg(repo)
+        .args(["-c", "user.name=t", "-c", "user.email=t@t"])
+        .args(args)
+        .output()
+        .unwrap();
+    String::from_utf8_lossy(&out.stdout).trim().to_owned()
+}
+
+/// The command on a real repository: a done ref and its pool line, `HAND_IN_BASE=origin`, no runner - the hand-in said; read as
+/// `make lane` reads it: none once the lane landed it or `origin/main` holds it, none with no pool log.
+#[test]
+fn the_command_from_phase_2_s_base_says_a_real_hand_in_no_runner_serves() {
+    let t = TempDir::new("lane-wake-unserved-cli");
+    git(t.path(), &["init", "-q"]);
+    git(
+        t.path(),
+        &["commit", "-q", "--allow-empty", "-m", "461 T12: one"],
+    );
+    let sha = git(t.path(), &["rev-parse", "HEAD"]);
+    let common = t.path().join(".git");
+    assert!(waiting_on(&common).is_empty());
+    git(t.path(), &["update-ref", "refs/l7r/done/461-T12", &sha]);
+    let done = json!({"event": "done", "handed_in": true, "detail": "461 T12", "commit": sha, "utc": "2026-11-28T04:00:00Z"});
+    std::fs::write(common.join("builder-pool.log"), format!("{done}\n")).unwrap();
+    assert_eq!(waiting_on(&common).len(), 1);
+    let env = |k: &str| match k {
+        "HAND_IN_BASE" => Some("origin".to_owned()),
+        _ => Some("0".to_owned()),
+    };
+    // phase 1's base, named: no death line, the wait ended by the next line a thread writes
+    let writer = {
+        let c = common.clone();
+        std::thread::spawn(move || {
+            std::thread::sleep(std::time::Duration::from_millis(50));
+            log::append(
+                &c,
+                "2026-11-28T04:30:00Z",
+                "owed",
+                &json!({"line": "lane: phase 1"}),
+            )
+            .unwrap();
+        })
+    };
+    let quiet = wait_cli(&common, &|k| {
+        (k == "HAND_IN_BASE")
+            .then(|| "clone".to_owned())
+            .or(Some("0.01".to_owned()))
+    });
+    writer.join().unwrap();
+    assert_eq!(quiet.stdout, "lane: phase 1\n");
+    assert!(!log::read(&common).iter().any(|l| l["why"] == DEAD));
+    // the death owed at once (grace 0); a wait that says none is ended by a line two seconds on, a red rather than a hang
+    let late = {
+        let c = common.clone();
+        std::thread::spawn(move || {
+            std::thread::sleep(std::time::Duration::from_secs(2));
+            log::append(
+                &c,
+                "2026-11-28T04:40:00Z",
+                "owed",
+                &json!({"line": "lane: late"}),
+            )
+            .unwrap();
+        })
+    };
+    let got = wait_cli(&common, &env);
+    late.join().unwrap();
+    assert_eq!(got.code, 0);
+    assert!(got.stdout.contains(&format!("461 T12 ({})", &sha[..10])));
+    // origin/main holds it: landed, nothing waits
+    git(t.path(), &["update-ref", "refs/remotes/origin/main", &sha]);
+    assert!(waiting_on(&common).is_empty());
+    git(t.path(), &["update-ref", "-d", "refs/remotes/origin/main"]);
+    // the lane landed it: nothing waits, and origin/main is not asked
+    let landed = json!({"batch": "461-1", "landed": [sha]});
+    log::append(&common, "2026-11-28T05:00:00Z", "landed", &landed).unwrap();
+    assert!(waiting_on(&common).is_empty());
 }
