@@ -180,6 +180,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T562 (the GM's host freezes and IO pressure stood high at 2026-11-28T04:38Z with four pool trees and the lane busy, as T562's line records: measure who writes and price the levers)": {
+   "sha256": "e54f1592935a7ddd247b05d6d02cd8f50f368d166a2067b43307d3326626c38d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T562 Approach (checklist part A)": {
+   "sha256": "59f249bc23e645d2314404d612bb110e667e471d1080218aa2a6ea1e0361578b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T562 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "17e878d611c5152c8d774c708206a8f25fb8306d3ce304a5139208cce40ea493",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -808,6 +826,141 @@
      "why": "Sequencing. Consistent with T545's order and the ruling's 'after T548'."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T562 (the GM's host freezes and IO pressure stood high at 2026-11-28T04:38Z with four pool trees and the lane busy, as T562's line records: measure who writes and price the levers)",
+    "### T562 Approach (checklist part A)",
+    "### T562 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1 measurement only",
+     "summary": "T562 is a measurement: no source file changes; levers A/B'd on a git archive copy or the builder's own tree",
+     "class": "within",
+     "why": "T562's line asks to measure who writes and price the levers; nothing in it asks for a change to be made."
+    },
+    {
+     "id": "D2 leaves as the attribution",
+     "summary": "Per-kind bytes are counted from leaf processes (a lower bound, 16.4 of 29.6 GB), and bytes by path come from the file census, because /proc/<pid>/io includes reaped children",
+     "class": "within",
+     "why": "This is a method choice inside the measurement. The limit is stated, observed and labeled, and the claim is put as a lower bound ('at least 51%')."
+    },
+    {
+     "id": "D3 fsync callers and IO delay left unmeasured",
+     "summary": "Fsync callers by name and per-process IO delay are not measured; the host-side perf trace and bpftrace commands are handed to the GM",
+     "class": "within",
+     "why": "It cannot be done in the container (no tracefs, perf_event_paranoid 4, ptrace refused, task_delayacct off), and the brief forbids anything outside the repository. Handing the commands to the GM leaves the question open for him rather than closing it."
+    },
+    {
+     "id": "D4 lever A to T563",
+     "summary": "Lever A (core.fsync=none for the tests) is measured at load 23-25 and below load 14, and is filed as T563 for a trial at load rather than applied",
+     "class": "within",
+     "why": "The task is a measurement with no source change, so applying the lever belongs to a task of its own. The figures are stated as a signal, not a price. Filing the found lever is what Approach item 12 and the Found-and-left entry require."
+    },
+    {
+     "id": "D5 levers B and G for the GM",
+     "summary": "A tmpfs for the tests' TMPDIRs (B) and a larger memory cap (G) are host-level and go to the GM",
+     "class": "within",
+     "why": "The brief forbids mounts and anything outside the repository, so these are the GM's to decide. The plan sends them to him instead of deciding them."
+    },
+    {
+     "id": "D6 lever C rejected",
+     "summary": "A tmpfs for cargo's small files: 0.14 GB live, 'so it fits, but it removes no forced commit: rejected'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is the lever the GM himself asked about on 2026-11-28 (Approach item 2, as the block relays it). The task is to price the levers, and the GM's measure is time saved. Lever C is the only lever closed by an unmeasured premise. 'Removes no forced commit' carries no measurement label, and the same block says the fsync callers by name could not be measured (no tracefs, ptrace refused). Its one measured figure, 0.14 GB live, shows the lever is possible, not that it saves no time. No time figure was taken at all, although the block puts journal waits at 45% of IO-wait time with a 1,975 ms moving-average commit. It is also host-level like B and G, which go to the GM, yet here the session closes the GM's own question itself. None of the three tests is met: the lever is not impossible, the GM's words do not exclude it, and pricing it would not defeat the task's purpose. Fix: either record a measurement behind the premise (for example, jbd2 forced-commit counts while a cargo build runs alone), or list C beside B and G as host-level for the GM with its measured fit and the effect stated as unmeasured."
+    },
+    {
+     "id": "D7 levers D, E, F rejected",
+     "summary": "D: incremental is 118 GB live and does not fit a tmpfs. E: CARGO_INCREMENTAL=0 for coverage saves 0.2 GB cold and costs 13-22 s per warm rebuild. F: batched appends are under 0.5% of the bytes",
+     "class": "within",
+     "why": "Each is priced by a measured figure of the quantity that decides it: D is impossible, E costs measured time, F is negligible by measured bytes. That is what the task's 'price the levers' asks."
+    },
+    {
+     "id": "D8 fixture fsync not a defect",
+     "summary": "Fixture git repos running with default fsync are classed not a defect (constitution XIV): slower tests, no wrong outcome; filed as T563",
+     "class": "within",
+     "why": "It matches XIV's definition of a defect as a wrong outcome; slowness is a speed lever. It is filed, not dropped."
+    },
+    {
+     "id": "D9 perf classification and order",
+     "summary": "T562 is a [perf] measurement under 451 FR-013, ordered after T520 and before T563",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the time goes as performance work for ordering. T563 depends on lever A's figures, so it comes after."
+    }
+   ],
+   "tasks": [
+    "T562"
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T562 (the GM's host freezes and IO pressure stood high at 2026-11-28T04:38Z with four pool trees and the lane busy, as T562's line records: measure who writes and price the levers)",
+    "### T562 Approach (checklist part A)",
+    "### T562 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T562-measure-only",
+     "summary": "T562 is a measurement with no source change: the record is results.md, and the levers are A/B'd on git-archive copies or the builder's own tree, never the live caches.",
+     "class": "within",
+     "why": "The GM's words were 'if looking into it speeds up your overnight work then it might be helpful' (2026-11-28). Looking into it means measuring and pricing. A no-source-change measurement does exactly that and narrows nothing he asked."
+    },
+    {
+     "id": "T562-lever-A-to-T563",
+     "summary": "Lever A (git core.fsync=none for the test fixtures) is priced but not applied, and its trial at load is filed as T563.",
+     "class": "within",
+     "why": "The request asks for the contention to be looked into and does not say T562 itself must apply a lever. Filing the trial as T563 carries the lever forward and drops nothing."
+    },
+    {
+     "id": "T562-levers-B-G-host",
+     "summary": "Lever B (a tmpfs for the tests' TMPDIRs) and lever G (a larger memory cap) are host-level, so they are listed for the GM, not applied.",
+     "class": "within",
+     "why": "Mounts and the memory cap are on the GM's host, which the brief leaves to him. Naming them for the GM puts the decision where it belongs."
+    },
+    {
+     "id": "T562-lever-C-answer",
+     "summary": "The GM's question about a tmpfs for cargo's much-written small files gets a measured answer. The files fit (0.14 GB live) and are 2,256 of the 20,042 files written. A cold cargo build forced no more journal commits than the minutes around it, so the lever is listed for the GM, not recommended, and its time saved is left unmeasured because it needs a mount.",
+     "class": "within",
+     "why": "This answers both halves of his question: whether it would eat too much memory (no, 0.14 GB) and whether it would massively reduce journal writes (forced commits did not rise during a cargo build). The decision stays his, as his message implies. Leaving the time unmeasured is forced by the no-mount limit and is stated openly."
+    },
+    {
+     "id": "T562-levers-D-E-F-rejected",
+     "summary": "Lever D (a tmpfs for incremental/, 118 GB, does not fit), lever E (CARGO_INCREMENTAL=0 for coverage, 13-22 s slower warm) and lever F (batched appends, under 0.5% of the bytes) are rejected on their measured prices.",
+     "class": "within",
+     "why": "Pricing levers and rejecting the ones that lose time is what the measurement is for. Each rejection rests on a figure the block records."
+    },
+    {
+     "id": "T562-fsync-callers-unmeasured",
+     "summary": "Which processes request the forced journal commits is not measured: there is no tracefs, perf_event_paranoid is 4, ptrace is refused and task_delayacct is off. The record gives the GM host-side perf trace and bpftrace commands instead, and the per-kind byte figures are a lower bound (leaves only).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "'Measure who writes' is answered by bytes (rustc at least 51%, incremental/ 78% of the bytes still present). Who forces the commits cannot be observed from inside this container, so the gap is physically impossible to close here, not just awkward. It is stated as a limit, partly bounded by the fixture A/B, and handed to the GM with the commands that would close it."
+    },
+    {
+     "id": "T562-fixture-fsync-not-defect",
+     "summary": "Fixture git repos running with git's default fsync are recorded as found and left: not a defect under constitution XIV (slower tests, no wrong outcome), filed as the T563 speed lever.",
+     "class": "within",
+     "why": "Under XIV a defect is a wrong outcome, and slower tests are not one, so nothing owed is left unfixed. The speed lever is carried by T563."
+    },
+    {
+     "id": "T562-perf-classification",
+     "summary": "T562 is classed as [perf] measurement work under 451 FR-013, and the performance checklist is answered for the record only.",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the time goes as performance work for scheduling."
+    },
+    {
+     "id": "T562-order-exits-budget",
+     "summary": "T562 runs after T520 and before T563, takes one landing, and has a green exit (results.md answers the five questions and prices every lever) and a red exit (set down, with any cannot-be-done claim ruled through make arbiter-ask).",
+     "class": "within",
+     "why": "These are sequencing and exit mechanics, and none of them narrows what the GM asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -966,6 +1119,69 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T562": {
+   "section_sha256": "55c3819572b9058a59f4996a7869bc7bd16a746f5cae0459b1bc685a3446c297",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 measurement only",
+     "summary": "T562 is a measurement: no source file changes; levers A/B'd on a git archive copy or the builder's own tree",
+     "class": "within",
+     "why": "T562's line asks to measure who writes and price the levers; nothing in it asks for a change to be made."
+    },
+    {
+     "id": "D2 leaves as the attribution",
+     "summary": "Per-kind bytes are counted from leaf processes (a lower bound, 16.4 of 29.6 GB), and bytes by path come from the file census, because /proc/<pid>/io includes reaped children",
+     "class": "within",
+     "why": "This is a method choice inside the measurement. The limit is stated, observed and labeled, and the claim is put as a lower bound ('at least 51%')."
+    },
+    {
+     "id": "D3 fsync callers and IO delay left unmeasured",
+     "summary": "Fsync callers by name and per-process IO delay are not measured; the host-side perf trace and bpftrace commands are handed to the GM",
+     "class": "within",
+     "why": "It cannot be done in the container (no tracefs, perf_event_paranoid 4, ptrace refused, task_delayacct off), and the brief forbids anything outside the repository. Handing the commands to the GM leaves the question open for him rather than closing it."
+    },
+    {
+     "id": "D4 lever A to T563",
+     "summary": "Lever A (core.fsync=none for the tests) is measured at load 23-25 and below load 14, and is filed as T563 for a trial at load rather than applied",
+     "class": "within",
+     "why": "The task is a measurement with no source change, so applying the lever belongs to a task of its own. The figures are stated as a signal, not a price. Filing the found lever is what Approach item 12 and the Found-and-left entry require."
+    },
+    {
+     "id": "D5 levers B and G for the GM",
+     "summary": "A tmpfs for the tests' TMPDIRs (B) and a larger memory cap (G) are host-level and go to the GM",
+     "class": "within",
+     "why": "The brief forbids mounts and anything outside the repository, so these are the GM's to decide. The plan sends them to him instead of deciding them."
+    },
+    {
+     "id": "D6 lever C rejected",
+     "summary": "A tmpfs for cargo's small files: 0.14 GB live, 'so it fits, but it removes no forced commit: rejected'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is the lever the GM himself asked about on 2026-11-28 (Approach item 2, as the block relays it). The task is to price the levers, and the GM's measure is time saved. Lever C is the only lever closed by an unmeasured premise. 'Removes no forced commit' carries no measurement label, and the same block says the fsync callers by name could not be measured (no tracefs, ptrace refused). Its one measured figure, 0.14 GB live, shows the lever is possible, not that it saves no time. No time figure was taken at all, although the block puts journal waits at 45% of IO-wait time with a 1,975 ms moving-average commit. It is also host-level like B and G, which go to the GM, yet here the session closes the GM's own question itself. None of the three tests is met: the lever is not impossible, the GM's words do not exclude it, and pricing it would not defeat the task's purpose. Fix: either record a measurement behind the premise (for example, jbd2 forced-commit counts while a cargo build runs alone), or list C beside B and G as host-level for the GM with its measured fit and the effect stated as unmeasured."
+    },
+    {
+     "id": "D7 levers D, E, F rejected",
+     "summary": "D: incremental is 118 GB live and does not fit a tmpfs. E: CARGO_INCREMENTAL=0 for coverage saves 0.2 GB cold and costs 13-22 s per warm rebuild. F: batched appends are under 0.5% of the bytes",
+     "class": "within",
+     "why": "Each is priced by a measured figure of the quantity that decides it: D is impossible, E costs measured time, F is negligible by measured bytes. That is what the task's 'price the levers' asks."
+    },
+    {
+     "id": "D8 fixture fsync not a defect",
+     "summary": "Fixture git repos running with default fsync are classed not a defect (constitution XIV): slower tests, no wrong outcome; filed as T563",
+     "class": "within",
+     "why": "It matches XIV's definition of a defect as a wrong outcome; slowness is a speed lever. It is filed, not dropped."
+    },
+    {
+     "id": "D9 perf classification and order",
+     "summary": "T562 is a [perf] measurement under 451 FR-013, ordered after T520 and before T563",
+     "class": "within",
+     "why": "FR-013 counts work that measures where the time goes as performance work for ordering. T563 depends on lever A's figures, so it comes after."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

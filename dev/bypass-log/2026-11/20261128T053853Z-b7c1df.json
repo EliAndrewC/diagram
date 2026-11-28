@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-28T05:38:53Z",
+  "target": "plan-gate decide-defer 462-efficiency-backlog T562",
+  "commit": "976e2c2cb6",
+  "why": "a speed lever filed for its trial, not a defect, and no open task waits on it"
+}

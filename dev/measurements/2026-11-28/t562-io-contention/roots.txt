@@ -1,0 +1,55 @@
+ROOTS: write GB, read GB, syscw, cancelled GB, n
+make carry                                  4.366    2.477    466784   0.675 5
+make builder-checks                         0.900    0.882    180288   0.149 9
+make rust-test                              0.853    0.890     88571   0.018 3
+make format                                 0.787    0.130     82669   0.015 2
+git (direct)                                0.159    0.173     20421   0.000 11
+other: bash                                 0.022    0.061     21019   0.000 52
+make engine-key                             0.008    0.000        97   0.000 1
+make decide                                 0.000    0.000        47   0.000 2
+clone sampler                               0.000    0.000       298   0.000 1
+make plan-section                           0.000    0.003        23   0.000 1
+hook (l7r-guard)                            0.000    0.013      1050   0.000 149
+make land                                   0.000    0.000        68   0.000 3
+make render-sync                            0.000    0.006        52   0.000 1
+other: sleep                                0.000    0.000         0   0.000 12
+other: pulseaudio                           0.000    0.000    484321   0.000 1
+other: sh                                   0.000    0.000         0   0.000 280
+make task-add                               0.000    0.000         5   0.000 1
+make lane                                   0.000    0.000         5   0.000 1
+make map                                    0.000    0.000         5   0.000 1
+make plan-delta                             0.000    0.000        10   0.000 2
+make claims-triage                          0.000    0.000         5   0.000 1
+make sleeper                                0.000    0.000        26   0.000 6
+make phases                                 0.000    0.000         5   0.000 1
+make claims-owed                            0.000    0.000         5   0.000 1
+make done                                   0.000    0.000         0   0.000 2
+make builder-done                           0.000    0.000         5   0.000 1
+roots total write GB 7.095369728 read GB 4.63583232
+LEAVES (no child seen): write GB, read GB, syscw, cancelled GB, n
+rustc build                                10.783   11.321   1275717   0.063 520
+rustc cover                                 3.058    3.194    303222   0.006 90
+clippy-driver                               1.244    1.670    151740   0.000 127
+git                                         0.369    0.276     77247   0.027 2055
+tar                                         0.239    0.000     44910   0.000 9
+rust-lld                                    0.189    0.905         1   0.000 74
+cp                                          0.179    0.005     18950   0.000 29
+l7r-gate                                    0.135    1.139     68760   0.000 179
+test binary cover                           0.094    0.052     22561   0.068 30
+l7r-guard.good                              0.023    1.223     20686   0.012 217
+dd                                          0.021    0.006        24   0.000 1
+l7r-mode-a                                  0.019    0.034      1365   0.000 19
+chrome-headless                             0.008    0.047      1576   0.007 17
+git-receive-pac                             0.005    0.000      2236   0.000 180
+llvm-cov/profdata                           0.005    0.003      5097   0.000 29
+bash                                        0.004    0.776     18285   0.000 321
+make                                        0.001    0.000      1048   0.000 50
+sh                                          0.001    0.002     10553   0.000 67
+land-tooling.sh                             0.001    0.000      1024   0.000 6
+python3                                     0.001    0.030       643   0.000 297
+cargo                                       0.000    0.003      3627   0.000 32
+rm                                          0.000    0.015      2976   0.237 16
+l7r-rust                                    0.000    0.001      3280   0.000 6
+find                                        0.000    0.002      1399   0.000 25
+l7r-embed                                   0.000    0.768      1333   0.000 2
+leaves total write GB 16.378486784

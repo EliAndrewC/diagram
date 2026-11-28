@@ -1,0 +1,22 @@
+# files modified in the window (04:44:28Z-05:09:37Z) and still present at 05:10Z: find -newermt over the cargo targets, /tmp, the clones, ~/.claude
+total 14.56 GB in 20042 files; under 64 KiB: 12918 files, 221.5 MB
+class                                           GB  files  <64KiB <64KiB MB
+target incremental                           7.784   7885    5125     105.0
+target(cover) incremental                    3.588   7686    4192     103.7
+target rlib                                  1.035    231       0       0.0
+target(cover) test/bin exe                   0.476     35       0       0.0
+target test/bin exe                          0.465     35       0       0.0
+target other                                 0.350    131     106       0.0
+target(cover) rlib                           0.342     49       0       0.0
+target rmeta                                 0.195    333      65       0.5
+clone .git (index, objects, logs, state)     0.118    862     798       4.9
+clone worktree files                         0.065    252     184       3.3
+target(cover) other                          0.061     35       0       0.0
+target(cover) rmeta                          0.039     49       1       0.1
+scratchpad/tool output                       0.027     43      42       0.1
+~/.claude                                    0.011    108      97       0.1
+target deps .d                               0.002    392     392       2.2
+target fingerprint                           0.001   1444    1444       0.8
+target(cover) deps .d                        0.000     84      84       0.5
+target(cover) fingerprint                    0.000    336     336       0.2
+/tmp other                                   0.000     52      52       0.1

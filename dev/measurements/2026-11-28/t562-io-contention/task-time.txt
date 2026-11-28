@@ -1,0 +1,407 @@
+# The task time breakdown, 2026-11-28T04:44:28Z to 2026-11-28T05:09:37Z UTC (1 tasks landed)
+
+minutes 145.3 (machine, overlapping), blocking 46.3 (by task and dependency: each task's own turns and what its next step waited on, summed over tasks, so it passes the clock where tasks ran side by side, in one session or across clones; the landed tasks' 0.0)
+
+Waiting on the GM: 0.0 min blocking, 0.0% of the window's blocking. It is left out of every other percentage: the GM's rows are percentages of the whole (the task's, the window's), every other row's - minutes and blocking, of the task and of the window - of its own side's working time, the GM's less (451 T510: the two sides' denominators are apart): the tasks' side 130.7 min, 52.1 min blocking (8.6 of it a task waiting on a landing), the landings' side (every batch landing and every carry) 14.7 min, 2.8 min blocking.
+
+Waited on, blocking no task (a page session or research pass whose brief names none, work whose clue is `Blocks: none`): -0.0 min.
+
+Working at once (main sessions in their own turns and runs, agents, page sessions), minutes of the window: none 1.5, one 7.7, two 7.8, three or more 8.1.
+
+## The window: the tasks' side
+
+| category | minutes | % of the tasks' | blocking | % of the tasks' |
+|---|---|---|---|---|
+| python3 | 43.2 | 33.0% | 9.5 | 18.3% |
+| Makefile targets the guard's table does not book | 28.7 | 22.0% | 8.7 | 16.6% |
+| plan review: agents | 16.9 | 12.9% | 6.5 | 12.5% |
+| compile | 11.6 | 8.9% | 2.2 | 4.2% |
+| tests | 9.5 | 7.3% | 3.5 | 6.7% |
+| builders: running a command (the model's turn) | 8.2 | 6.3% | 3.8 | 7.3% |
+| main session: running a command (the model's turn) | 3.1 | 2.4% | 3.1 | 5.9% |
+| builders: writing code | 3.3 | 2.5% | 1.9 | 3.6% |
+| main session: writing its reply | 1.1 | 0.8% | 1.1 | 2.1% |
+| builders: writing its reply | 1.1 | 0.9% | 0.9 | 1.7% |
+| shell reads and file edits | 1.1 | 0.8% | 0.3 | 0.5% |
+| builders: dispatching an agent | 0.5 | 0.4% | 0.5 | 0.9% |
+| plan review: commands | 0.3 | 0.3% | 0.3 | 0.7% |
+| main session: writing code | 0.3 | 0.2% | 0.3 | 0.6% |
+| main session: other tools (SendMessage) | 0.2 | 0.2% | 0.2 | 0.5% |
+| wait loops (held open, no work) | 0.4 | 0.3% | 0.0 | 0.0% |
+| spec-kit step | 0.2 | 0.1% | 0.2 | 0.4% |
+| builders: other tools (Monitor) | 0.3 | 0.2% | 0.1 | 0.1% |
+| git | 0.2 | 0.2% | 0.1 | 0.2% |
+| builders: reading code | 0.1 | 0.1% | 0.1 | 0.2% |
+| claims round: commands | 0.1 | 0.1% | 0.1 | 0.2% |
+| map generation | 0.1 | 0.1% | 0.1 | 0.1% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.0 | 0.0% |
+| waiting on a build slot | 0.1 | 0.1% | 0.0 | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0 | 0.0% |
+| builders: stopped, waiting to be resumed | 0.0 | 0.0% | 0.0 | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0 | 0.0% |
+| a task waited on a landing (cross-blocking) | - | | 8.6 | 16.6% |
+| the tasks' side, working (all but waiting on the GM) | 130.7 | 100.0% | 52.1 | 100.0% |
+
+A task waited on a landing (cross-blocking): 8.6 min, in the tasks' side's blocking. Counted once a second, the larger of its two sources there: a free pool tree not handed out while a landing ran: 8.6 min (a tree free from a release to its next handout or the window's end, during a landing's span - its `land` end line's start to its end - while fewer than 3 trees were held, `L7R_BUILDERS`; the pool's log `builder-pool.log` and the event log); a handout refused while its task's done commit was not carried: 0.0 min (0 refused) (a main session's failed `make builder-tree` or `make builder-brief` whose task has a `done` row in the pool's log and no carry since, to its next handout or carry). Not in the records: whether the queue held a READY entry while a tree stood free (its states are never logged, so the first source is an upper bound: a free tree is taken to have had work waiting); a refusal's reason (only the transcript's tool result says it); a builder's resume held by a gate; and a builder's wait on a build slot a gate held, booked on the tasks' side already as `waiting on a build slot`, so not counted again (451 T510).
+
+## The window: the landings' side (the second tier)
+
+| category | minutes | % of the landings' | blocking | % of the landings' |
+|---|---|---|---|---|
+| carry into the clone | 2.8 | 18.9% | 2.8 | 100.0% |
+| gate | 3.7 | 25.0% | 0.0 | 0.0% |
+| hook suites | 2.3 | 16.0% | 0.0 | 0.0% |
+| waiting on a build slot | 2.0 | 13.9% | 0.0 | 0.0% |
+| compile | 1.5 | 10.2% | 0.0 | 0.0% |
+| landing | 1.3 | 9.0% | 0.0 | 0.0% |
+| tests | 0.8 | 5.5% | 0.0 | 0.0% |
+| map generation | 0.2 | 1.4% | 0.0 | 0.0% |
+| the landings' side, working | 14.7 | 100.0% | 2.8 | 100.0% |
+
+(every batch landing's time, booked to no task - its section is below - and every carry into the clone; its blocking is the session's clock, never a task's but where the line above counts one)
+
+Waiting on the GM, apart from both sides:
+
+| category | minutes | % of the whole | blocking | % of the whole |
+|---|---|---|---|---|
+| the whole (both sides and the GM) | 145.3 | | 46.3 | |
+
+## The landed tasks, one line each
+
+| task | landed | builders | builder minutes | minutes | blocking | its own table ends at |
+|---|---|---|---|---|---|---|
+| 462-efficiency-backlog T321 | 04:56 | 2 | 31.7 | 28.5 | 0.1 | its landing's start, 04:18 (no carry found) |
+
+(builder minutes are each builder's spans in the event log, each start to its stop, never its report's account - a resumed builder's every span, the time it was stopped between them left out, its lines that run on after a stop with no start line logged a span from the first of them, 451 T382; minutes and blocking are the task's whole time, read back before the window, to where its own table ends)
+
+## The landed tasks' size, counts, turns and tokens (451 T512: raw figures, a share only of tokens, for the process review to read beside the minutes, never a target)
+
+| task | commits | test lines | non-test lines | prose lines | unit-test runs | coverage runs | compiles | make runs | builder turns | review-agent turns | session turns | output | fresh input | cache read | cache write | tokens: builders / review agents / session |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 462-efficiency-backlog T321 | 0 | +0 -0 | +0 -0 | +0 -0 | 21, 0.2 min each | 0 | 29 (25 of 1.0 s or more), 0.1 min each | 24 | 120 | 4 | 3 | 101.3k (0.6%) | 0.3k (0.0%) | 17713.8k (97.5%) | 344.0k (1.9%) | 92.5% / 0.6% / 6.9% |
+
+(a share only of time and of tokens: each token kind's % is of the task's tokens, and the last column each actor's share of them; a count and a line class carry none (451 T521): unit-test runs, coverage runs and compiles carry the minutes each of their own lines' spans held (451 T522), a make target's runs its own row's minutes per run in the task's target table, lines and turns are counts alone) Sources: LINES from git, each commit whose subject names the task (`451 T510:`, a bundle's `451 T470 T363:` whole under each task it names, marked shared, never split; a coverage repair `451: T490's coverage repair`), a landing's tick commit left out; test = `tests/`, `tests.rs`, `*_tests.rs`, prose = `specs/` and `.md`, an inline `#[cfg(test)]` block counted non-test (its files counted in the task's section); a commit whose subject names no task is in no row. UNIT-TEST RUNS, COVERAGE RUNS and COMPILES are the `Phase` lines its runs held, tied as its minutes are, and its pool tree's pre-warm builds by their own task (451 T522, each listed under the task's tables): a unit-test run a `test` line, a coverage run a `cover-run` line, a compile every compiler invocation - a `build` or `cover-build` line (written only where the binary's key moved, so a kept result is none), each `lint` pass and each `prewarm` - and one that ran 1.0 s or more counted as having done work, a shorter one likely cargo finding every crate fresh (a GUESS from its span: the line does not say); a `make quick` or preflight line, which holds its own cargo calls' lines, is counted in none. A pool tree's line goes only to a run of its holder's tasks. MAKE RUNS are its `make` targets' runs. TURNS are model calls, each message id once: a builder's and a review agent's from its transcript over the read-back (the agent under the task its lines name), the main session's from its transcript, each call booked to the first task its own tool calls name (451 T513: its line's `names` - a command's `T=`, a done ref, a dispatch's description, marker or `Blocks:` line - else the same reading of the transcript's call), never the session's `make task-start` mark, a call after the task's carry the second tier's. TOKENS are those calls' usage, the advisor's own calls not in them. A BUNDLE's tasks (one pool tree handed out for several, 451 T514) each read the bundle's counts, make runs, turns and tokens whole, marked `(bundle ...)`, never split; its minutes and its listed lines stay where they were booked. The main session's calls booked to no task: 33, their tokens 22298.1k (output 16.9k, cache read 22247.3k); 8 replies with no tool call, 25 whose tool calls name no task, 0 naming a task with no line of theirs, 0 after their task's carry (the second tier's).
+
+## Tokens by model (451 T532: each call's `message.model`, the raw usage counts - never dollars, never weighted by a model's rate against the quota; (no model named) where a row names none)
+
+| task | actor | model | calls | output | fresh input | cache read | cache write | tokens (% of the task's) |
+|---|---|---|---|---|---|---|---|---|
+| 462-efficiency-backlog T321 | builders | claude-opus-5-5 | 120 | 92.7k | 0.3k | 16374.9k | 323.4k | 16791.2k (92.5%) |
+| 462-efficiency-backlog T321 | review agents | claude-opus-5-5 | 4 | 6.7k | 0.0k | 88.9k | 18.1k | 113.7k (0.6%) |
+| 462-efficiency-backlog T321 | session | claude-opus-5-5 | 3 | 1.9k | 0.0k | 1250.0k | 2.6k | 1254.5k (6.9%) |
+| the window | builders | <synthetic> | 4 | 0.0k | 0.0k | 0.0k | 0.0k | 0.0k (0.0%) |
+| the window | builders | claude-fable-5-2 | 4704 | 4951.0k | 10.1k | 741066.2k | 22490.0k | 768517.2k (25.1%) |
+| the window | builders | claude-opus-5-5 | 14390 | 9714.2k | 30.5k | 2111456.1k | 38884.8k | 2160085.6k (70.6%) |
+| the window | builders | claude-sonnet-5-5 | 142 | 131.0k | 0.3k | 11921.9k | 693.4k | 12746.5k (0.4%) |
+| the window | review agents | claude-opus-5-5 | 2918 | 3196.5k | 6.3k | 77127.1k | 14673.7k | 95003.6k (3.1%) |
+| the window | review agents | claude-sonnet-5-5 | 76 | 44.0k | 0.2k | 337.9k | 303.5k | 685.6k (0.0%) |
+| the window | session | claude-opus-5-5 | 33 | 16.9k | 0.1k | 22247.3k | 33.8k | 22298.1k (0.7%) |
+
+The window's model mix (451 T532): claude-opus-5-5 17341 calls, 2277387.3k tokens (74.4%); claude-fable-5-2 4704 calls, 768517.2k tokens (25.1%); claude-sonnet-5-5 218 calls, 13432.1k tokens (0.4%); <synthetic> 4 calls, 0.0k tokens (0.0%) - at 1.91 pool trees held, time-weighted over the window (461 FR-010's concurrency, from the pool's log), so a window is compared with one alike in both.
+
+## Each landed task's minutes by group, each its % of the task (451 T512)
+
+Grouped from the report's own categories: builder thinking = every `builders:` row but its reading and writing code; code read/write = `reading code` and `writing code` (builders' and the session's) and `shell reads and file edits`; tests = `tests` and `hook suites`; compile = `compile` and `waiting on a build slot`; review = the review agents' and their commands' rows (plan review, claims round, record and pop-up checks, the GM's filter, other review agents, map and building reviews, arbiter); session = every other `main session:` row; other = the rest (git, wait loops, programs, research and page sessions, docs, waits). The GM's rows and a carry are left out: each % is of the task's working minutes.
+
+Machine minutes (overlapping):
+
+| task | working minutes | builder thinking | code read/write | tests | compile | review | session | other |
+|---|---|---|---|---|---|---|---|---|
+| 462-efficiency-backlog T321 | 28.5 | 11.6 (40.7%) | 3.4 (11.8%) | 6.7 (23.3%) | 3.0 (10.4%) | 0.0 (0.0%) | 0.1 (0.4%) | 3.8 (13.3%) |
+| the window, the tasks' side | 130.7 | 10.2 (7.8%) | 4.7 (3.6%) | 9.5 (7.3%) | 11.7 (9.0%) | 17.3 (13.2%) | 4.4 (3.4%) | 72.8 (55.7%) |
+
+On its own path: each builder's own clock, each second booked once to what its next step waited on - its own turn, a foreground test or compile, a slot wait, a wait loop, a review agent it waited on - by the descent the main session's blocking takes; a run beside its turn (backgrounded, or a check a monitor watches while it reads or edits) counts in machine minutes only; a stretch its builder was stopped (its own work in flight, or waiting to be resumed) is in the stopped table below, not here: the path is the builder's spans, each second its own task's, summing to its builder minutes. The main session's own clock is its blocking, not in these rows (451 T512, the GM 2026-11-27).
+
+| task | own-path minutes | builder thinking | code read/write | tests | compile | review | session | other |
+|---|---|---|---|---|---|---|---|---|
+| 462-efficiency-backlog T321 | 31.7 | 14.0 (44.0%) | 4.9 (15.3%) | 5.5 (17.4%) | 1.9 (6.1%) | 0.2 (0.8%) | 0.0 (0.0%) | 5.2 (16.4%) |
+| the window, the tasks' side | 22.5 | 10.2 (45.3%) | 4.3 (19.3%) | 1.8 (8.0%) | 1.1 (4.7%) | 0.5 (2.0%) | 0.0 (0.0%) | 4.6 (20.6%) |
+
+Beside its own path, never in it: each builder's STOPPED stretches (its turn ended, outside its spans), each second booked by the same descent to what was in flight - its own background test, compile or review, a shell read - or to waiting to be resumed with nothing in flight. By the GM's blocking (request.md, 2026-11-25 (l)) a builder stopped on its own review is waiting on it; the report cannot tell whether its next step needed that work (451 T512's plan review).
+
+| task | stopped minutes | builder thinking | code read/write | tests | compile | review | session | other |
+|---|---|---|---|---|---|---|---|---|
+| 462-efficiency-backlog T321 | 8.2 | 0.0 (0.1%) | 0.0 (0.0%) | 1.4 (17.3%) | 2.4 (29.5%) | 0.0 (0.0%) | 0.0 (0.0%) | 4.4 (53.1%) |
+| the window, the tasks' side | 26.2 | 0.0 (0.1%) | 0.0 (0.0%) | 0.0 (0.0%) | 0.0 (0.0%) | 8.6 (32.9%) | 0.0 (0.0%) | 17.5 (67.0%) |
+
+## The second tier: each batch landing, booked to no task
+
+| batch | landed | gate runs | re-runs | gate minutes | failures and their repair | minutes | blocking |
+|---|---|---|---|---|---|---|---|
+| 462-efficiency-backlog T321 | 04:56 | 5 | 4 | 10.6 | red at 04:20 after 2.1 min, re-run 6.6 min later; red at 04:28 after 1.3 min, re-run 1.5 min later; red at 04:30 after 0.8 min, re-run 8.9 min later; red at 04:40 after 1.0 min, re-run 3.8 min later | 11.9 | 0.0 |
+| 462-efficiency-backlog T321 | not landed | 1 | 0 | 0.0 | red at 04:50 after 1.2 min, not re-run | 11.9 | 0.0 |
+
+The second tier's blocking: 0.0 min, 0.0% of the landings' side's working blocking (the rest of that side is the carries, booked to the tasks they carried, whose own tables end there). Expected near zero - no new task waits on the gate: a gate waited on beside a task's own work blocks nothing, and this counts a repair (the session's turns from a task's carry to the landing, and what they waited on), a gate the session waited on alone, and a gate run in the foreground - only the session's own work: its time stopped waiting on the GM is the GM's row (451 T403). A rise is not by itself a task's wait: what a task waited on a landing is the tasks' side's cross-blocking row.
+
+Its time by what it was, every batch together:
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| gate | 3.7 | 30.8% | 25.0% | 0.0 | - | 0.0% |
+| hook suites | 2.3 | 19.7% | 16.0% | 0.0 | - | 0.0% |
+| waiting on a build slot | 2.0 | 17.2% | 13.9% | 0.0 | - | 0.0% |
+| compile | 1.5 | 12.6% | 10.2% | 0.0 | - | 0.0% |
+| landing | 1.3 | 11.1% | 9.0% | 0.0 | - | 0.0% |
+| tests | 0.8 | 6.8% | 5.5% | 0.0 | - | 0.0% |
+| map generation | 0.2 | 1.8% | 1.4% | 0.0 | - | 0.0% |
+| all | 11.9 | | 8.2% | 0.0 | | 0.0% |
+| working (all but waiting on the GM) | 11.9 | | 81.1% | 0.0 | | 0.0% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window | minutes per run |
+|---|---|---|---|---|---|---|---|---|---|
+| make land | landing | 1 | 11.9 | 100.0% | 81.1% | 0.0 | - | 0.0% | 11.9 |
+
+## The biggest blocking on the tasks' side, and whether it could run in parallel
+
+- python3: 9.5 min blocking (18.3% of the tasks' side's working blocking) - 1.0% of it a foreground run its actor waited on, which could run in the background beside other work; the rest already in the background and waited on
+- Makefile targets the guard's table does not book: 8.7 min blocking (16.6% of the tasks' side's working blocking) - 44.9% of it a foreground run its actor waited on, which could run in the background beside other work; the rest already in the background and waited on
+- plan review: agents: 6.5 min blocking (12.5% of the tasks' side's working blocking) - serial in its actor (a model's turn, an agent's span or a wait): parallel only across more actors
+- builders: running a command (the model's turn): 3.8 min blocking (7.3% of the tasks' side's working blocking) - serial in its actor (a model's turn, an agent's span or a wait): parallel only across more actors
+- tests: 3.5 min blocking (6.7% of the tasks' side's working blocking) - 98.6% of it a foreground run its actor waited on, which could run in the background beside other work; the rest already in the background and waited on
+
+(the parallel reading is a proxy, measured: the share of a category's blocking that was a foreground run in its actor; the landings' side is in the second tier's section)
+
+## 462-efficiency-backlog T321 (landed 04:56; no start recorded: its time before 2026-11-26T04:44:28Z may be missing)
+
+Its whole time, from 2026-11-26T04:44:28Z: 28.5 min, 0.1 min blocking; inside the window 0.0 min (0.0% of it), 0.0 min blocking (0.0%); its % of window is its whole time against its side's totals, so it can pass 100%.
+
+Beside its minutes (451 T512): `tests` 6.7 min, `compile` 3.0 min; its counted lines (451 T522, listed under its tables): 21 unit-test runs, 0.2 min each, 0 coverage runs, 29 compiles (25 of 1.0 s or more), 0.1 min each - 21 builds, 0 coverage builds, 8 lint passes, 0 pre-warm builds; 24 make runs (each target's in the runs column below, with its minutes per run); 0 commits: test +0 -0, non-test +0 -0, prose +0 -0, 0 of its non-test `.rs` files holding an inline test block; turns: builders 120, review agents 4, session 3; tokens: output 101.3k (0.6%), fresh input 0.3k (0.0%), cache read 17713.8k (97.5%), cache write 344.0k (1.9%); by actor (builders / review agents / session) 92.5% / 0.6% / 6.9%.
+
+Its own path (451 T512): 31.7 min.
+
+| category | own-path minutes | % of its own path |
+|---|---|---|
+| builders: running a command (the model's turn) | 12.9 | 40.8% |
+| tests | 5.5 | 17.4% |
+| Makefile targets the guard's table does not book | 4.9 | 15.4% |
+| builders: writing code | 4.4 | 13.8% |
+| compile | 1.9 | 6.1% |
+| builders: writing its reply | 0.8 | 2.6% |
+| shell reads and file edits | 0.4 | 1.2% |
+| wait loops (held open, no work) | 0.2 | 0.5% |
+| claims round: commands | 0.1 | 0.4% |
+| builders: dispatching an agent | 0.1 | 0.3% |
+| plan review: commands | 0.1 | 0.3% |
+| builders: reading code | 0.1 | 0.3% |
+| builders: other tools (ToolSearch) | 0.1 | 0.2% |
+| git | 0.1 | 0.2% |
+| map generation | 0.1 | 0.2% |
+| the gate binary, called directly | 0.0 | 0.1% |
+| python3 | 0.0 | 0.0% |
+
+Beside its path, its builders stopped (451 T512): 8.2 min - wait loops (held open, no work) 4.4 - compile 2.4 - tests 1.4 - builders: stopped, waiting to be resumed 0.0.
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| builders: running a command (the model's turn) | 11.2 | 39.3% | 8.6% | 0.0 | 0.0% | 0.0% |
+| tests | 6.7 | 23.3% | 5.1% | 0.0 | 0.0% | 0.0% |
+| builders: writing code | 3.2 | 11.2% | 2.4% | 0.0 | 0.0% | 0.0% |
+| compile | 3.0 | 10.4% | 2.3% | 0.0 | 0.0% | 0.0% |
+| Makefile targets the guard's table does not book | 2.2 | 7.7% | 1.7% | 0.0 | 0.0% | 0.0% |
+| wait loops (held open, no work) | 1.5 | 5.3% | 1.2% | 0.0 | 0.0% | 0.0% |
+| builders: writing its reply | 0.4 | 1.2% | 0.3% | 0.0 | 0.0% | 0.0% |
+| main session: writing its reply | 0.1 | 0.4% | 0.1% | 0.1 | 96.4% | 0.2% |
+| shell reads and file edits | 0.2 | 0.6% | 0.1% | 0.0 | 0.0% | 0.0% |
+| git | 0.0 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: other tools (ToolSearch) | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| map generation | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: reading code | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% |
+| python3 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| main session: dispatching an agent | 0.0 | 0.0% | 0.0% | 0.0 | 3.6% | 0.0% |
+| all | 28.5 | | 19.6% | 0.1 | | 0.3% |
+| working (all but waiting on the GM) | 28.5 | | 21.8% | 0.1 | | 0.2% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window | minutes per run |
+|---|---|---|---|---|---|---|---|---|---|
+| make builder-checks | tests | 4 | 4.9 | 17.3% | 3.8% | 0.0 | 0.0% | 0.0% | 1.2 |
+| make rust-test | tests | 4 | 4.0 | 14.0% | 3.1% | 0.0 | 0.0% | 0.0% | 1.0 |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 3 | 1.5 | 5.3% | 1.2% | 0.0 | 0.0% | 0.0% | 0.5 |
+| make builder-done | Makefile targets the guard's table does not book | 3 | 1.3 | 4.7% | 1.0% | 0.0 | 0.0% | 0.0% | 0.4 |
+| make format | tests | 4 | 0.7 | 2.3% | 0.5% | 0.0 | 0.0% | 0.0% | 0.2 |
+| make under-load | Makefile targets the guard's table does not book | 4 | 0.6 | 2.2% | 0.5% | 0.0 | 0.0% | 0.0% | 0.2 |
+| make guard-edit | Makefile targets the guard's table does not book | 3 | 0.2 | 0.7% | 0.1% | 0.0 | 0.0% | 0.0% | 0.1 |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 33 | 0.2 | 0.6% | 0.1% | 0.0 | 0.0% | 0.0% | 0.0 |
+| make plan-section | Makefile targets the guard's table does not book | 2 | 0.1 | 0.3% | 0.1% | 0.0 | 0.0% | 0.0% | 0.0 |
+| git | git | 4 | 0.0 | 0.2% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+| l7r-gate.sh | the gate binary, called directly | 2 | 0.0 | 0.1% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+| python3 | python3 | 2 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+
+Its counted lines (451 T522), the runs behind its unit-test runs, coverage runs and compiles, by start:
+
+| start (UTC) | tree | make target | step | crates | seconds | counted as |
+|---|---|---|---|---|---|---|
+| 11-28T02:57:13 | diagram-backlog-t269 | rust-test | build | rust/gate/crates/rustc | 15.4 | compile |
+| 11-28T02:57:29 | diagram-backlog-t269 | rust-test | test | rust/gate/crates/rustc | 0.9 | unit-test run |
+| 11-28T02:57:49 | diagram-backlog-t269 | rust-test | build | rust/gate/crates/rustc | 1.6 | compile |
+| 11-28T02:57:51 | diagram-backlog-t269 | rust-test | test | rust/gate/crates/rustc | 0.9 | unit-test run |
+| 11-28T02:58:03 | diagram-backlog-t269 | rust-test | build | rust/gate/crates/rustc | 1.6 | compile |
+| 11-28T02:58:04 | diagram-backlog-t269 | rust-test | test | rust/gate/crates/rustc | 30.0 | unit-test run |
+| 11-28T02:58:39 | diagram-backlog-t269 | rust-test | build | rust/gate/crates/rustc | 5.2 | compile |
+| 11-28T02:58:44 | diagram-backlog-t269 | rust-test | test | rust/gate/crates/rustc | 60.0 | unit-test run |
+| 11-28T02:59:48 | diagram-backlog-t269 | rust-test | build | rust/gate/crates/rustc | 4.6 | compile |
+| 11-28T02:59:53 | diagram-backlog-t269 | rust-test | test | rust/gate/crates/rustc | 0.8 | unit-test run |
+| 11-28T02:59:56 | diagram-backlog-t269 | rust-test | build | rust/gate/crates/rustc | 1.7 | compile |
+| 11-28T02:59:57 | diagram-backlog-t269 | rust-test | test | rust/gate/crates/rustc | 61.0 | unit-test run |
+| 11-28T03:01:05 | diagram-backlog-t269 | rust-test | build | rust/gate/crates/rustc | 9.7 | compile |
+| 11-28T03:01:15 | diagram-backlog-t269 | rust-test | test | rust/gate/crates/rustc | 0.9 | unit-test run |
+| 11-28T03:01:20 | diagram-backlog-t269 | rust-test | build | rust/gate/crates/rustc | 10.6 | compile |
+| 11-28T03:01:31 | diagram-backlog-t269 | rust-test | test | rust/gate/crates/rustc | 0.8 | unit-test run |
+| 11-28T03:01:50 | diagram-backlog-t269 | under-load | build | rust/gate/crates/rustc | 1.2 | compile |
+| 11-28T03:01:50 | diagram-backlog-t269 | under-load | build | rust/gate/crates/rustc | 1.2 | compile, under 1.0 s |
+| 11-28T03:01:51 | diagram-backlog-t269 | under-load | test | rust/gate/crates/rustc | 0.1 | unit-test run |
+| 11-28T03:01:51 | diagram-backlog-t269 | under-load | test | rust/gate/crates/rustc | 0.1 | unit-test run |
+| 11-28T03:01:52 | diagram-backlog-t269 | under-load | build | rust/gate/crates/rustc | 0.1 | compile, under 1.0 s |
+| 11-28T03:01:52 | diagram-backlog-t269 | under-load | build | rust/gate/crates/rustc | 0.1 | compile, under 1.0 s |
+| 11-28T03:01:52 | diagram-backlog-t269 | under-load | test | rust/gate/crates/rustc | 0.2 | unit-test run |
+| 11-28T03:01:52 | diagram-backlog-t269 | under-load | test | rust/gate/crates/rustc | 0.2 | unit-test run |
+| 11-28T03:03:47 | diagram-backlog-t269 | builder-checks | build | rust/gate/crates/rustc | 6.4 | compile |
+| 11-28T03:03:53 | diagram-backlog-t269 | builder-checks | build | rust/guard/shared | 37.7 | compile |
+| 11-28T03:04:31 | diagram-backlog-t269 | builder-checks | test | rust/guard/shared | 5.8 | unit-test run |
+| 11-28T03:04:31 | diagram-backlog-t269 | builder-checks | test | rust/gate/crates/rustc | 13.3 | unit-test run |
+| 11-28T03:04:45 | diagram-backlog-t269 | builder-checks | lint | rust/gate/crates/rustc | 11.7 | compile |
+| 11-28T03:04:57 | diagram-backlog-t269 | builder-checks | lint | rust/guard/shared | 15.2 | compile |
+| 11-28T03:06:21 | diagram-backlog-t269 | builder-checks | build | rust/gate/crates/rustc | 9.4 | compile |
+| 11-28T03:06:31 | diagram-backlog-t269 | builder-checks | test | rust/gate/crates/rustc | 12.2 | unit-test run |
+| 11-28T03:06:44 | diagram-backlog-t269 | builder-checks | lint | rust/gate/crates/rustc | 3.8 | compile |
+| 11-28T03:07:00 | diagram-backlog-t269 | builder-checks | build | rust/gate/crates/rustc | 3.1 | compile |
+| 11-28T03:07:04 | diagram-backlog-t269 | builder-checks | test | rust/gate/crates/rustc | 15.1 | unit-test run |
+| 11-28T03:07:20 | diagram-backlog-t269 | builder-checks | lint | rust/gate/crates/rustc | 2.8 | compile |
+| 11-28T03:10:04 | diagram-backlog-t269 | rust-test | build | rust/guard/shared | 20.3 | compile |
+| 11-28T03:10:25 | diagram-backlog-t269 | rust-test | test | rust/guard/shared | 3.1 | unit-test run |
+| 11-28T03:10:35 | diagram-backlog-t269 | builder-checks | build | rust/gate/crates/rustc | 8.2 | compile |
+| 11-28T03:10:44 | diagram-backlog-t269 | builder-checks | build | rust/guard/shared | 0.1 | compile, under 1.0 s |
+| 11-28T03:10:44 | diagram-backlog-t269 | builder-checks | build | rust/guard | 17.0 | compile |
+| 11-28T03:11:01 | diagram-backlog-t269 | builder-checks | build | rust/gate/crates/measure | 24.9 | compile |
+| 11-28T03:11:26 | diagram-backlog-t269 | builder-checks | test | rust/gate/crates/measure | 2.2 | unit-test run |
+| 11-28T03:11:26 | diagram-backlog-t269 | builder-checks | test | rust/guard | 5.0 | unit-test run |
+| 11-28T03:11:26 | diagram-backlog-t269 | builder-checks | test | rust/guard/shared | 5.6 | unit-test run |
+| 11-28T03:11:26 | diagram-backlog-t269 | builder-checks | test | rust/gate/crates/rustc | 13.2 | unit-test run |
+| 11-28T03:11:40 | diagram-backlog-t269 | builder-checks | lint | rust/gate/crates/rustc | 5.9 | compile |
+| 11-28T03:11:46 | diagram-backlog-t269 | builder-checks | lint | rust/guard/shared | 12.8 | compile |
+| 11-28T03:11:59 | diagram-backlog-t269 | builder-checks | lint | rust/guard | 13.8 | compile |
+| 11-28T03:12:12 | diagram-backlog-t269 | builder-checks | lint | rust/gate/crates/measure | 12.0 | compile |
+
+## The rest of the window: tasks not landed in it, and time under no task (`-`); the second tier's is in its own section
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| python3 | 43.2 | 32.4% | 33.0% | 9.5 | 20.6% | 18.3% |
+| Makefile targets the guard's table does not book | 28.7 | 21.5% | 22.0% | 8.7 | 18.8% | 16.6% |
+| plan review: agents | 16.9 | 12.7% | 12.9% | 6.5 | 14.1% | 12.5% |
+| compile | 11.6 | 8.7% | 8.9% | 2.2 | 4.7% | 4.2% |
+| tests | 9.5 | 7.1% | 7.3% | 3.5 | 7.6% | 6.7% |
+| builders: running a command (the model's turn) | 8.2 | 6.1% | 6.3% | 3.8 | 8.2% | 7.3% |
+| main session: running a command (the model's turn) | 3.1 | 2.3% | 2.4% | 3.1 | 6.7% | 5.9% |
+| carry into the clone | 2.8 | 2.1% | 18.9% | 2.8 | 6.0% | 100.0% |
+| builders: writing code | 3.3 | 2.4% | 2.5% | 1.9 | 4.0% | 3.6% |
+| main session: writing its reply | 1.1 | 0.8% | 0.8% | 1.1 | 2.3% | 2.1% |
+| builders: writing its reply | 1.1 | 0.9% | 0.9% | 0.9 | 1.9% | 1.7% |
+| shell reads and file edits | 1.1 | 0.8% | 0.8% | 0.3 | 0.6% | 0.5% |
+| builders: dispatching an agent | 0.5 | 0.4% | 0.4% | 0.5 | 1.0% | 0.9% |
+| plan review: commands | 0.3 | 0.3% | 0.3% | 0.3 | 0.8% | 0.7% |
+| main session: writing code | 0.3 | 0.2% | 0.2% | 0.3 | 0.6% | 0.6% |
+| main session: other tools (SendMessage) | 0.2 | 0.2% | 0.2% | 0.2 | 0.5% | 0.5% |
+| wait loops (held open, no work) | 0.4 | 0.3% | 0.3% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.2 | 0.1% | 0.1% | 0.2 | 0.4% | 0.4% |
+| builders: other tools (Monitor) | 0.3 | 0.2% | 0.2% | 0.1 | 0.1% | 0.1% |
+| git | 0.2 | 0.2% | 0.2% | 0.1 | 0.3% | 0.2% |
+| builders: reading code | 0.1 | 0.1% | 0.1% | 0.1 | 0.2% | 0.2% |
+| claims round: commands | 0.1 | 0.1% | 0.1% | 0.1 | 0.2% | 0.2% |
+| map generation | 0.1 | 0.1% | 0.1% | 0.1 | 0.2% | 0.1% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.1% | 0.0 | 0.1% | 0.0% |
+| waiting on a build slot | 0.1 | 0.1% | 0.1% | 0.0 | 0.0% | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: stopped, waiting to be resumed | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 133.4 | | 91.8% | 46.3 | | 100.0% |
+| working (all but waiting on the GM) | 133.4 | | 100.0% | 46.3 | | 83.4% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window | minutes per run |
+|---|---|---|---|---|---|---|---|---|---|
+| python3 | python3 | 11 | 43.2 | 32.4% | 33.0% | 9.5 | 20.6% | 18.3% | 3.9 |
+| make lane-wait | Makefile targets the guard's table does not book | 3 | 24.9 | 18.6% | 19.0% | 4.8 | 10.4% | 9.2% | 8.3 |
+| make rust-cover | tests | 6 | 14.7 | 11.0% | 11.3% | 0.2 | 0.5% | 0.4% | 2.5 |
+| make builder-done | Makefile targets the guard's table does not book | 2 | 3.5 | 2.6% | 2.7% | 3.5 | 7.5% | 6.7% | 1.7 |
+| make carry | carry into the clone | 3 | 2.8 | 2.1% | 18.9% | 2.8 | 6.0% | 100.0% | 0.9 |
+| make builder-checks | tests | 3 | 2.7 | 2.0% | 2.1% | 2.0 | 4.3% | 3.8% | 0.9 |
+| make rust-test | tests | 3 | 1.6 | 1.2% | 1.2% | 1.6 | 3.5% | 3.1% | 0.5 |
+| make format | tests | 6 | 1.6 | 1.2% | 1.2% | 1.6 | 3.4% | 3.0% | 0.3 |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 46 | 1.1 | 0.8% | 0.8% | 0.3 | 0.6% | 0.5% | 0.0 |
+| make task-add | spec-kit step | 1 | 0.4 | 0.3% | 0.3% | 0.4 | 0.9% | 0.8% | 0.4 |
+| make plan-section | Makefile targets the guard's table does not book | 2 | 0.4 | 0.3% | 0.3% | 0.4 | 0.9% | 0.8% | 0.2 |
+| make hooks-test | tests | 1 | 0.4 | 0.3% | 0.3% | 0.1 | 0.2% | 0.1% | 0.4 |
+| make decide | plan review: commands | 4 | 0.2 | 0.2% | 0.2% | 0.2 | 0.5% | 0.4% | 0.1 |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 2 | 0.4 | 0.3% | 0.3% | 0.0 | 0.0% | 0.0% | 0.2 |
+| git | git | 7 | 0.2 | 0.2% | 0.2% | 0.1 | 0.3% | 0.2% | 0.0 |
+| make plan-delta | plan review: commands | 2 | 0.1 | 0.1% | 0.1% | 0.1 | 0.3% | 0.3% | 0.1 |
+| make claims-triage | claims round: commands | 1 | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.1% | 0.1 |
+| make lane-stop | Makefile targets the guard's table does not book | 2 | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.1% | 0.0 |
+| make claims-owed | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+| cargo | cargo, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+| make lane | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+
+## The whole window, the tasks' side (a carry's rows of the landings' side, its % of window of that side's)
+
+| category | minutes | % of task | % of window | blocking | % of task | % of window |
+|---|---|---|---|---|---|---|
+| python3 | 43.2 | 32.4% | 33.0% | 9.5 | 20.6% | 18.3% |
+| Makefile targets the guard's table does not book | 28.7 | 21.5% | 22.0% | 8.7 | 18.8% | 16.6% |
+| plan review: agents | 16.9 | 12.7% | 12.9% | 6.5 | 14.1% | 12.5% |
+| compile | 11.6 | 8.7% | 8.9% | 2.2 | 4.7% | 4.2% |
+| tests | 9.5 | 7.1% | 7.3% | 3.5 | 7.6% | 6.7% |
+| builders: running a command (the model's turn) | 8.2 | 6.1% | 6.3% | 3.8 | 8.2% | 7.3% |
+| main session: running a command (the model's turn) | 3.1 | 2.3% | 2.4% | 3.1 | 6.7% | 5.9% |
+| carry into the clone | 2.8 | 2.1% | 18.9% | 2.8 | 6.0% | 100.0% |
+| builders: writing code | 3.3 | 2.4% | 2.5% | 1.9 | 4.0% | 3.6% |
+| main session: writing its reply | 1.1 | 0.8% | 0.8% | 1.1 | 2.3% | 2.1% |
+| builders: writing its reply | 1.1 | 0.9% | 0.9% | 0.9 | 1.9% | 1.7% |
+| shell reads and file edits | 1.1 | 0.8% | 0.8% | 0.3 | 0.6% | 0.5% |
+| builders: dispatching an agent | 0.5 | 0.4% | 0.4% | 0.5 | 1.0% | 0.9% |
+| plan review: commands | 0.3 | 0.3% | 0.3% | 0.3 | 0.8% | 0.7% |
+| main session: writing code | 0.3 | 0.2% | 0.2% | 0.3 | 0.6% | 0.6% |
+| main session: other tools (SendMessage) | 0.2 | 0.2% | 0.2% | 0.2 | 0.5% | 0.5% |
+| wait loops (held open, no work) | 0.4 | 0.3% | 0.3% | 0.0 | 0.0% | 0.0% |
+| spec-kit step | 0.2 | 0.1% | 0.1% | 0.2 | 0.4% | 0.4% |
+| builders: other tools (Monitor) | 0.3 | 0.2% | 0.2% | 0.1 | 0.1% | 0.1% |
+| git | 0.2 | 0.2% | 0.2% | 0.1 | 0.3% | 0.2% |
+| builders: reading code | 0.1 | 0.1% | 0.1% | 0.1 | 0.2% | 0.2% |
+| claims round: commands | 0.1 | 0.1% | 0.1% | 0.1 | 0.2% | 0.2% |
+| map generation | 0.1 | 0.1% | 0.1% | 0.1 | 0.2% | 0.1% |
+| builders: other tools (ToolSearch) | 0.1 | 0.1% | 0.1% | 0.0 | 0.1% | 0.0% |
+| waiting on a build slot | 0.1 | 0.1% | 0.1% | 0.0 | 0.0% | 0.0% |
+| cargo, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| builders: stopped, waiting to be resumed | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| the gate binary, called directly | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% |
+| all | 133.4 | | 91.8% | 46.3 | | 100.0% |
+| working (all but waiting on the GM) | 133.4 | | 100.0% | 46.3 | | 83.4% |
+
+| make target or program | books to | runs | minutes | % of task | % of window | blocking | % of task | % of window | minutes per run |
+|---|---|---|---|---|---|---|---|---|---|
+| python3 | python3 | 11 | 43.2 | 32.4% | 33.0% | 9.5 | 20.6% | 18.3% | 3.9 |
+| make lane-wait | Makefile targets the guard's table does not book | 3 | 24.9 | 18.6% | 19.0% | 4.8 | 10.4% | 9.2% | 8.3 |
+| make rust-cover | tests | 6 | 14.7 | 11.0% | 11.3% | 0.2 | 0.5% | 0.4% | 2.5 |
+| make builder-done | Makefile targets the guard's table does not book | 2 | 3.5 | 2.6% | 2.7% | 3.5 | 7.5% | 6.7% | 1.7 |
+| make carry | carry into the clone | 3 | 2.8 | 2.1% | 18.9% | 2.8 | 6.0% | 100.0% | 0.9 |
+| make builder-checks | tests | 3 | 2.7 | 2.0% | 2.1% | 2.0 | 4.3% | 3.8% | 0.9 |
+| make rust-test | tests | 3 | 1.6 | 1.2% | 1.2% | 1.6 | 3.5% | 3.1% | 0.5 |
+| make format | tests | 6 | 1.6 | 1.2% | 1.2% | 1.6 | 3.4% | 3.0% | 0.3 |
+| shell (grep, sed, cat, ls, ...) | shell reads and file edits | 46 | 1.1 | 0.8% | 0.8% | 0.3 | 0.6% | 0.5% | 0.0 |
+| make task-add | spec-kit step | 1 | 0.4 | 0.3% | 0.3% | 0.4 | 0.9% | 0.8% | 0.4 |
+| make plan-section | Makefile targets the guard's table does not book | 2 | 0.4 | 0.3% | 0.3% | 0.4 | 0.9% | 0.8% | 0.2 |
+| make hooks-test | tests | 1 | 0.4 | 0.3% | 0.3% | 0.1 | 0.2% | 0.1% | 0.4 |
+| make decide | plan review: commands | 4 | 0.2 | 0.2% | 0.2% | 0.2 | 0.5% | 0.4% | 0.1 |
+| a wait loop (until/while/sleep) | wait loops (held open, no work) | 2 | 0.4 | 0.3% | 0.3% | 0.0 | 0.0% | 0.0% | 0.2 |
+| git | git | 7 | 0.2 | 0.2% | 0.2% | 0.1 | 0.3% | 0.2% | 0.0 |
+| make plan-delta | plan review: commands | 2 | 0.1 | 0.1% | 0.1% | 0.1 | 0.3% | 0.3% | 0.1 |
+| make claims-triage | claims round: commands | 1 | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.1% | 0.1 |
+| make lane-stop | Makefile targets the guard's table does not book | 2 | 0.1 | 0.0% | 0.0% | 0.1 | 0.1% | 0.1% | 0.0 |
+| make claims-owed | claims round: commands | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+| cargo | cargo, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+| make lane | Makefile targets the guard's table does not book | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+| l7r-gate.sh | the gate binary, called directly | 1 | 0.0 | 0.0% | 0.0% | 0.0 | 0.0% | 0.0% | 0.0 |
+
+Cut at the read-back (2026-11-26T04:44:28Z, `BACK=` reads further): 462-efficiency-backlog T321 - a landed task started before it, or with no start in `task-starts.jsonl`, carries only its time from there.
+
+Unbooked, named: 341 Bash calls refused before running (no run); 3674 phases tied to no run (244.6 min, not in the minutes); a wait with nothing in flight is `waiting: nothing in flight - <class>`, its class what came just before and after it, one not yet classed `unexplained` with the line that followed it; with only a monitor and no page session `waiting: a monitor alone`; a builder's time inside its span no line of its accounts for `builders: inside its span, no line of its`; a command no transcript holds `commands no transcript holds`. Wait loops do no work: their minutes are the time they were held open, and their blocking is booked to what they waited on. (feature 451 T243, the task time breakdown)

@@ -1,0 +1,49 @@
+leaves wrote 16.38 GB of the cgroup's 29.57 GB; the rest is unlabeled (short-lived, ended threads, deleted files)
+
+## by target: GB written, processes
+make builder-checks                                            3.101 1259
+(no make)                                                      2.658 2867
+make carry                                                     1.944 181
+make static                                                    1.632 607
+make builder-done                                              1.240 134
+make render-sync                                               0.901 51
+make map                                                       0.614 51
+lane: lane                                                     0.603 43
+lane: make land                                                0.568 68
+make task-add                                                  0.521 45
+make plan-section                                              0.418 28
+make hooks-test                                                0.398 1083
+make counters-inert                                            0.346 18
+make /diagram/.clones/diagram-backlog-t269                     0.335 23
+make decide                                                    0.297 31
+make rust-test                                                 0.217 26
+
+## by tree: GB written, processes
+diagram-backlog                                                7.226 3204
+diagram-backlog-t269                                           5.953 1838
+diagram-backlog-land                                           1.366 122
+diagram                                                        0.960 52
+diagram-backlog-b1                                             0.870 91
+.sync.lock                                                     0.004 4
+c                                                              0.000 1
+git-clone                                                      0.000 2
+-                                                              0.000 1454
+diagram-backlog-t270                                           0.000 23
+
+## by kind in target: GB written, processes
+rustc build | make builder-checks                              2.577 113
+rustc cover | (no make)                                        2.320 60
+rustc build | make carry                                       1.905 96
+rustc build | make builder-done                                1.106 60
+rustc build | make render-sync                                 0.766 37
+clippy-driver | make static                                    0.763 91
+rustc cover | make static                                      0.738 30
+rustc build | make map                                         0.607 20
+rustc build | lane: lane                                       0.593 30
+rustc build | make task-add                                    0.521 32
+clippy-driver | make builder-checks                            0.481 36
+rustc build | lane: make land                                  0.474 26
+rustc build | make plan-section                                0.418 26
+rustc build | make counters-inert                              0.346 10
+rustc build | make /diagram/.clones/diagram-backlog-t269       0.335 22
+rustc build | make decide                                      0.297 24

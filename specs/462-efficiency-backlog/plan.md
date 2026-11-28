@@ -3297,14 +3297,72 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T562 (<why: the finding or measurement that files it>)
+### T562 (the GM's host freezes and IO pressure stood high at 2026-11-28T04:38Z with four pool trees and the lane busy, as T562's line records: measure who writes and price the levers)
+
+- **Approach**: a MEASUREMENT; no source file changes. The record is `dev/measurements/2026-11-28/t562-io-contention/results.md`,
+  its window 04:44:28Z-05:09:37Z at load about 30, measured 2026-11-28 (uptime at the window's start). Its method: per-process
+  `/proc/<pid>/io` every 0.5 s, D-state wait channels every 0.2 s, the jbd2, diskstats and cgroup series every 5 s and a
+  `find -newermt` census, measured 2026-11-28 (`t562-sampler.py`, `t562-dstate.py`). The levers were A/B'd ABAB on a `git archive`
+  copy or this builder's own tree.
+  - The disk wrote 32.1 GB and read 30.8 GB in 25 minutes, 97% of the reads page-cache refaults under the 10 GiB cap, measured 2026-11-28 (diskstats, cgroup memory.stat deltas).
+  - rustc writes at least 51% of the bytes and `incremental/` holds 78% of the bytes still present, measured 2026-11-28 (`t562-leaves.py`, `census-summary.txt`).
+  - All 1,951 journal commits were forced, none by the timer, and the journal's moving-average commit time reached 1,975 ms, measured 2026-11-28 (jbd2 info deltas).
+  - Journal waits are 45% of the IO-wait time and git in the tests' fixture TMPDIRs 67% of it while writing 0.06 GB, measured 2026-11-28 (`t562-dstate.py` by wait channel and cwd).
+  - Who requests most forced commits is not measured, measured 2026-11-28 (no tracefs, ptrace refused): the fixtures are one source (a 40-fixture loop forced 26-32 commits by default against 2-3 with `core.fsync=none`, measured 2026-11-28 (`t562-git-fsync-ab.sh`)), and the commit rate barely followed them (6.4 against 10.1 a 5 s slice without and with fixture git sampled, measured 2026-11-28 (`samples.json`)).
+  - Lever A, git `core.fsync=none` for the tests: the shared suite's tests 9.3 s to 4.2 s mean at load 23-25, measured 2026-11-28 (`t562-suite-ab.sh`, two rounds, noisy), no change below load 14, measured 2026-11-28 (the same) - filed as T563 for a trial at load.
+  - Lever B, a tmpfs for the tests' TMPDIRs (peak 17.6 MB live, measured 2026-11-28 (`t562-tmpdu.sh`)), and lever G, a larger memory cap: host-level, for the GM.
+  - Lever C, the GM's question, a tmpfs for cargo's small files: 0.14 GB live across every target, measured 2026-11-28 (`du`), so it fits, and those files took 3.7 MB and 2,256 of the 20,042 files written in the window, measured 2026-11-28 (`census-summary.txt`); a cold 96 s cargo build of the phases and guard crates, which writes those files, forced 0.42 commits a second against 0.57 in the minute before and after it, measured 2026-11-28 (`t562-cargo-commits.sh`, `cargo-commits2.tsv`), so moving them would remove no forced commit; its time saved is unmeasured (a mount, which the brief leaves to the GM) and expected small: listed for the GM beside B and G as his question's answer, not recommended.
+  - Lever D, a tmpfs for incremental: 118 GB live, measured 2026-11-28 (`du`), so it does not fit: rejected.
+  - Lever E, `CARGO_INCREMENTAL=0` for coverage: 0.2 GB less a cold build and 13-22 s more a warm rebuild, measured 2026-11-28 (`t562-incr-ab.sh`): rejected.
+  - Lever F, batched appends: under 0.5% of the bytes, measured 2026-11-28 (`census-summary.txt`): rejected.
+  - **The attribution's limit**, observed 2026-11-28, method: a shell's `/proc/self/io` before and after a 20 MiB `dd` child:
+    the counters include reaped children, so the per-kind figures are LEAVES (processes with no child seen), a lower bound -
+    16.4 of the cgroup's 29.6 GB written; the bytes by path come from the file census instead.
+  - **What could not be measured here**: the fsync callers by name (no tracefs, `perf_event_paranoid` 4, ptrace refused) and
+    per-process IO delay (`task_delayacct` off): the record gives the GM the host-side `perf trace` and `bpftrace` commands.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the five things measured and written up; levers A/B'd on scratch copies and this builder's own tree | n/a: a measurement, no source changed | n/a: tooling | none | n/a |
+
+### T562 Approach (checklist part A)
+
+1. **The goal, in the world.** The session and the GM know who writes to the disk, what the IO stall costs the builders, and which lever buys back the most time, with the host-level ones named for the GM.
+2. **The constraints.** T562's line; the brief's limits (no source change, no mount, sysctl or anything outside the repository, no lever measured on the clone's or the lane's live caches, at most 4 copies at once); the GM's measure of 2026-11-28, *"if looking into it speeds up your overnight work then it might be helpful"* (request.md), time saved, and his question of the same day on a tmpfs for cargo's much-written files (request.md, 2026-11-28).
+3. **Where each comes from.** G: the GM's two messages of 2026-11-28, relayed in the brief. R: `rust/guard/shared/src/tempdir.rs` (the tests' TMPDIR root honors `TMPDIR`), `rust/Cargo.toml`'s profiles, `scripts/gates/l7r-gate.sh`, T520's record. O: the window's samples and the A/Bs above.
+4. **Do they describe the world here?** Yes: the window was 25 minutes of the real overnight work at load about 30, read from `/proc` and the cgroup, measured 2026-11-28 (`t562-sampler.py`, uptime). The A/Bs ran real gate commands on a `git archive` copy of HEAD or this tree.
+5. **The order.** After T520 (the cache's working set). Before T563, whose trial sits on lever A's figures.
+6. **The exits.** Green: the record with the five things and every lever priced. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Three probes were redone. The first attribution subtracted a reaped child's window share where its parent takes the child's whole lifetime, putting 26 GB on claude, measured 2026-11-28 (`t562-analyze.py`), and the leaves are the fix. The first coverage A/B's "cold" removed `cover-*` under a `CARGO_TARGET_DIR` override that the cover build uses directly, so its cold row is the prime run. The lever A/Bs after the window ran at load 6-29, measured 2026-11-28 (each `.tsv` row's load column), mostly below the window's IO pressure, so lever A's wall figures are a signal for T563's trial, not its price.
+8. **The budget.** One landing.
+9. **Done, measured.** `results.md`'s tables answer (1)-(5), observed 2026-11-28, method: the scripts named beside each.
+10. **Before moving a constant.** n/a: no constant moved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; no defect is fixed in a measurement. The lever found is filed below.
+
+**Found and left?**
+- The tests' fixture git repos run with git's default fsync, which can force journal commits every writer on the partition waits on (a 40-fixture loop forced 26-32 commits by default against 2-3 with `core.fsync=none`), and git in `/tmp/l7r-tmp` is 67% of the container's IO-wait time, observed 2026-11-28, method: `t562-dstate.py`'s wait channels by cwd and `t562-git-fsync-ab.sh`; whether the fixtures are the main requester of the forced commits is not measured (no tracing); not a defect (constitution XIV): slower tests, no wrong outcome - a speed lever, filed as T563 for its trial at load.
+
+**Performance work?** yes, a `[perf]` measurement (451 FR-013): it measures where the builders' time goes to IO and prices the levers. It is no engine-speed task, so the checklist below is answered for the record only.
+
+### T562 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** IO waits: journal waits 45%, page or buffer waits 39%, a full device queue 13% of the D-state time, measured 2026-11-28 (`t562-dstate.py`), and the test phases ran at the highest IO pressure (`builder-checks test` 34.3%, `land suite` 30.7% mean), measured 2026-11-28 (`phases.txt`).
+2. **Removes work, or only moves it?** Lever A removes work (fsyncs nobody needs on throwaway repos); the tmpfs levers move it, and only lever B's fits.
+3. **What do you expect it to save, and why?** Lever A: up to about 12 phase-minutes per 25-minute busy window if fixture-heavy suites halve under pressure as shared did, measured 2026-11-28 (`phases.txt`: the test phases' 1,442 s - land suite 1,077, builder-checks test 210, hooks-test 155 - halved), an upper bound that T563's trial prices.
+4. **How does the work grow with the settlement?** n/a: not engine work.
+5. **What did the before and after show, and under what conditions?** `suite-ab.tsv`, `git-fsync-ab.tsv`, `incr-ab*.tsv`, each row with its load.
+6. **Did any map move, and does it still keep the research?** n/a: no source changed.
+
+
+### T563 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T562 Approach (checklist part A)
+### T563 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -3323,7 +3381,7 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T562 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+### T563 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
 1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
 2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,

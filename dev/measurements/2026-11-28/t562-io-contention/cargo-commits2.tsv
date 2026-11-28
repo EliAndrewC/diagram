@@ -1,0 +1,4 @@
+span	seconds	forced_commits	load_after
+before	60.1	34	6.34
+cargo-build	95.7	40	33.28
+after	60.2	34	31.57
