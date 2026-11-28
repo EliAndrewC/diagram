@@ -71,7 +71,7 @@ ejection pins nothing. At a task's second pin the lane files no repair: the batc
 
 `ejected` is always a list of full shas (461 T15): the one change the gate placed, or every change of an `unplaced` batch (or of an
 `integrate` set), so a reader takes one shape. `feature` is the spec directory's name. `why` is `red` (the gate placed it), `inferred` (the last left after the halving), `unplaced` (phase 2: a whole batch whose red
-the gate's record cannot place, ejected as one entry), `conflict` (the lane's carry stopped; `units` are the conflicting files),
+the gate's record cannot place, ejected as one entry), `conflict` (kind `integrate`: the lane's carry of the change stopped in conflict, 461 T25; `units` are the conflicting files, `attempt` the carry's output; the batch's other changes go on), `carry` (kind `integrate`: the change's carry stopped with no conflicting path but not on the lane's own tree, 461 T25 Decision 4; `units` the carry's own stop lines),
 `push` (kind `integrate`: a green batch whose push failed twice; `tasks` every change of the set, `attempt` the push's output), or
 `arbiter` (filed once the round arbiter's ruling on a task's second pin is recorded; `attempt` names the ruling). Every entry is
 taken by a fresh builder the coordinator dispatches (`plan.md` D7's table). The queue reads an entry as READY until a hand-in names it in `repair_of`, then as built; the queue's
@@ -94,7 +94,7 @@ naming several crates (a `cover-build` of a family) one unit over all of them, `
 | `start`, `stop` | the runner starts or ends | `pid`, `why` |
 | `stop` (of a batch) | the tripwire by task fires (461 T18) | `batch`, `why` `arbiter`, `trigger` (`ask:lane-<task>`, `-<n>` from a third pin), `spec`, `tasks`, `held` (the changes it holds), `attempts` |
 | `batch` | a batch is formed | `batch`, `changes` |
-| `carry` | the batch's carries end | `code`, `conflict` (files) |
+| `carry` | the batch's carries end | `code`, `conflict` (files): code 0 with files where a change's carry conflicted and it was ejected (461 T25, its `eject` line before), not 0 where a carry stopped on the lane's own tree (a `make` that could not start, or the carry's refusal of a tree holding unfinished work) and the batch stays open; a change's carry that failed otherwise is ejected `why` `carry` as a conflict is |
 | `run` | a gate attempt ends | `n`, `set`, `code`, `minutes`, `attempt`, `red` (the attributed units) |
 | `attribute` | a red is read | `candidates` (the changes it names), `how` (`record`, `none`) |
 | `push` | a set is pushed, or its push failed after a green gate | `set`, `code` (0, 3 merged, other); `failed: true` where the push failed (461 T19: the batch's first runs the set again on the new `origin/main`, its second files the `integrate` entry) |

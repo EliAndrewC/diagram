@@ -4,7 +4,7 @@
 //! lane is its one writer (the runner, under `l7r-lane/lane.lock`), so the next id is read and written without a lock of its own.
 //!
 //! THE LINE, data-model.md's: `utc`, `repair` (`r<n>`, n one past the file's highest), `feature` (the spec directory's name,
-//! `461-landing-lane`, as the example writes it - not the done ref's `461`), `tasks`, `kind` (`fix`, or `integrate` for a green set whose push failed twice, 461 T19),
+//! `461-landing-lane`, as the example writes it - not the done ref's `461`), `tasks`, `kind` (`fix`, or `integrate` for a green set whose push failed twice, 461 T19, or a change whose carry stopped in conflict, T25),
 //! `ejected`, `batch`, `why`, `units` and `attempt` (the attempt file's path). `ejected` is ALWAYS A LIST of the ejected done commits'
 //! full shas, one for a change placed by the record, every change of the batch for an `unplaced` one (data-model.md's example showed
 //! one sha as a string; a list is the one form both cases share, so T16 reads one shape - the data model's example amended to match).

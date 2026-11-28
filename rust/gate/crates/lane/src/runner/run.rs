@@ -45,9 +45,17 @@
 //! repair entry of kind `integrate`, `why` `push`, before its `eject` lines, and ends the batch with its `landed` line and ONE
 //! `owed` line, the entry's - never `stopped`.
 //!
-//! THE SEAMS LEFT: a carry that stops ends the step with an error after its line, and a `make` that cannot start (exit -1, no
-//! change's fault) or a first pass that refused with a row naming no change of the batch (461 T15's plan review) after its `owed` line, the batch left OPEN - the runner stops (`error: ...`) rather than form or run again every
-//! poll, and the next `make lane-start` resumes it as a new attempt. A carry conflict's repair entry is phase 3's (T25).
+//! A CARRY THAT STOPS IN CONFLICT (461 T25, D7's table): the lane's tree put back where that carry found it (the pick aborted, the
+//! tree reset to its HEAD before it), the change filed as ONE repair entry of kind `integrate`, `why` `conflict`, `units` the
+//! conflicting files, `attempt` the carry's own output (`attempts/<batch>-carry-<sha>.log`), then its `eject` line and one `owed`
+//! line, and the set's other changes carried and landed; a set whose every carry conflicts runs no landing. A change's carry that
+//! fails with no unmerged path, but not on the lane's own tree, is ejected the same way, `why` `carry`, `units` its stop lines. A
+//! halving whose set lost a change so ends, the rest run as one (`Run::conflicted`).
+//!
+//! THE SEAMS LEFT: a carry refused on the lane's own tree ([`CARRY_REFUSED`]) ends the step with an error after its line, and a `make` that cannot
+//! start (exit -1, no change's fault) or a first pass that refused with a row naming no change of the batch (461 T15's plan review)
+//! after its `owed` line, the batch left OPEN - the runner stops (`error: ...`) rather than form or run again every poll, and the
+//! next `make lane-start` resumes it as a new attempt.
 //!
 //! THE TRIPWIRE BY TASK (461 T18, `crate::tripwire`): an ejection that pins a task a second time files no repair - the change held by
 //! its `eject` line, the arbiter asked, the batch's `stop` line, the runner stopped ([`trip`]) - and each step first files the repair
@@ -328,10 +336,19 @@ fn run_batch(l: &Lane, id: &str, changes: &[HandIn]) -> Result<(), String> {
             .iter()
             .filter(|h| !on_main.contains(&h.commit))
             .collect();
+        if todo.is_empty() {
+            continue;
+        }
+        // a change whose carry stopped in conflict is ejected by the carry (461 T25); the rest goes on, and a halving whose set lost
+        // one ends - its knowledge of that set is moot - the rest run as one
+        let carried = carry(l, id, &tree, &todo)?;
+        if carried.len() < todo.len() {
+            b.conflicted(&todo, &carried);
+        }
+        let todo = carried;
         let Some(first) = todo.first() else {
             continue;
         };
-        carry(l, id, &tree, &todo)?;
         runs += 1;
         match land(l, id, &tree, &first.feature, &todo, runs, began)? {
             Attempt::Pushed => b.pushed(&todo, runs),
@@ -383,6 +400,18 @@ impl Run {
             }
         }
         Ok((!self.left.is_empty()).then(|| self.left.clone()))
+    }
+
+    /// A set some of whose carries stopped in conflict (461 T25): those of `todo` not `carried` leave the batch (ejected by the
+    /// carry), and a halving under way ends - the set it asked for no longer runs as asked, and a result recorded for the survivors
+    /// would be read as the whole set's - so the rest run as one, a red of theirs read afresh (the easier route).
+    fn conflicted(&mut self, todo: &[&HandIn], carried: &[&HandIn]) {
+        let gone = |h: &HandIn| {
+            todo.iter().any(|t| t.commit == h.commit)
+                && !carried.iter().any(|c| c.commit == h.commit)
+        };
+        self.left.retain(|h| !gone(h));
+        self.halving = None;
     }
 
     /// A pushed set: landed, and a halving told it was green.
@@ -492,37 +521,71 @@ fn ended(id: &str, on: &[&HandIn], ejected: usize, runs: usize, minutes: f64) ->
     }
 }
 
-/// Step 2: each of `todo` carried onto `tree`, oldest first, by `make carry COMMIT=`; one `carry` line.
-fn carry(l: &Lane, id: &str, tree: &Path, todo: &[&HandIn]) -> Result<(), String> {
+/// Step 2: each of `todo` carried onto `tree`, oldest first, by `make carry COMMIT=`; one `carry` line, its `conflict` the paths of
+/// every change ejected. A CARRY THAT STOPS IN CONFLICT (461 T25, D7's table): the tree put back where that carry found it, then the
+/// change ejected by [`conflicted`] and the next carried - the changes carried, returned; a carry that failed with no unmerged path
+/// (its verified end failed) is ejected the same way, `why` `carry`. One on the lane's own tree (a `make` that could not start, the
+/// carry's [`CARRY_REFUSED`]) names no change: the step's error after its line, the batch left open.
+fn carry<'h>(
+    l: &Lane,
+    id: &str,
+    tree: &Path,
+    todo: &[&'h HandIn],
+) -> Result<Vec<&'h HandIn>, String> {
+    let mut carried = Vec::new();
+    let mut conflicts: Vec<String> = Vec::new();
     for h in todo {
+        let before = git(tree, &["rev-parse", "HEAD"]).1.trim().to_owned();
         let arg = format!("COMMIT={}", h.commit);
-        let done = in_tree(tree, &["--no-print-directory", "carry", &arg], &[]).output();
         // a make that cannot be started is a carry that stopped (exit -1), its line written as any other's
-        let (code, stderr) = done.as_ref().map_or((-1, String::new()), |o| {
-            (
-                o.status.code().unwrap_or(-1),
-                String::from_utf8_lossy(&o.stderr).into_owned(),
-            )
-        });
-        if code != 0 {
-            let conflict: Vec<String> = git(tree, &["diff", "--name-only", "--diff-filter=U"])
-                .1
-                .lines()
-                .map(str::to_owned)
-                .collect();
-            l.append(
-                "carry",
-                &json!({"batch": id, "code": code, "conflict": conflict}),
-            )?;
+        let (code, out, err) =
+            outcome(in_tree(tree, &["--no-print-directory", "carry", &arg], &[]).output());
+        if code == 0 {
+            carried.push(*h);
+            continue;
+        }
+        let conflict: Vec<String> = git(tree, &["diff", "--name-only", "--diff-filter=U"])
+            .1
+            .lines()
+            .map(str::to_owned)
+            .collect();
+        let output = format!("{out}{err}");
+        // THE LANE'S OWN STOP (461 T25 Decision 4): a make that could not start, or the carry's refusal of a tree holding unfinished
+        // work before it picked anything, names no change - the runner stops with the batch open; any other failure of this one
+        // change's carry is its own and ejects it
+        if conflict.is_empty() && (code == -1 || output.contains(CARRY_REFUSED)) {
+            l.append("carry", &json!({"batch": id, "code": code, "conflict": []}))?;
             return Err(format!(
-                "lane: batch {id}: the carry of {} stopped (exit {code}; conflicting: {}) - the batch stays open, resumed at the next make lane-start; a carry conflict's repair entry is 461 phase 3's: {}",
+                "lane: batch {id}: the carry of {} stopped (exit {code}) on the lane's own tree, no change named - the batch stays open, resumed at the next make lane-start: {}",
                 short(&h.commit),
-                conflict.join(", "),
-                stderr.trim()
+                err.trim()
             ));
         }
+        // the tree put back BEFORE any line is written: a runner killed after it leaves no conflict markers for the next start's build
+        // (T55 resets only after a carry line with a code not 0, which this path never writes); the reset, not the abort alone, since
+        // the real carry resolves some paths by rule before it stops
+        let _ = git(tree, &["cherry-pick", "--abort"]);
+        let _ = git(tree, &["reset", "-q", "--hard", &before]);
+        conflicted(l, id, tree, h, &conflict, &output)?;
+        conflicts.extend(conflict);
     }
-    l.append("carry", &json!({"batch": id, "code": 0, "conflict": []}))
+    l.append(
+        "carry",
+        &json!({"batch": id, "code": 0, "conflict": conflicts}),
+    )?;
+    Ok(carried)
+}
+
+/// The feature's spec directory's name in `tree`, as a repair entry names its feature.
+fn spec_of(tree: &Path, id: &str, feature: &str) -> Result<String, String> {
+    l7r_gate_task::tick::spec_dir(tree, feature)
+        .and_then(|d| Some(d.file_name()?.to_string_lossy().into_owned()))
+        .ok_or_else(|| {
+            format!(
+                "lane: batch {id}: no single specs/{feature}-* directory in the lane's tree {}",
+                tree.display()
+            )
+        })
 }
 
 /// Whether `origin/main`, fetched, holds every one of `shas` (Recovery's rule): how a landing whose `make` did not end 0 is read -
@@ -532,6 +595,10 @@ fn on_origin(tree: &Path, shas: &[&str]) -> bool {
     let wanted: Vec<String> = shas.iter().map(|s| (*s).to_owned()).collect();
     held_by(tree, "refs/remotes/origin/main", &wanted).len() == wanted.len()
 }
+
+/// The carry's own line where the lane's tree held unfinished work before it picked anything (`land/carry.rs`'s `carry: refused -
+/// nothing carried; <tree> holds unfinished work`): the lane's stop, not the change's (461 T25 Decision 4).
+pub const CARRY_REFUSED: &str = "carry: refused - nothing carried";
 
 /// The landing's own line for a push that failed after a green gate (`land.rs`'s `land: the push failed (exit <rc>) - ...`), read
 /// from the attempt's output as the suites' and the first pass's lines are (461 T19).
@@ -602,14 +669,7 @@ fn land(
     n: usize,
     began: f64,
 ) -> Result<Attempt, String> {
-    let spec = l7r_gate_task::tick::spec_dir(tree, feature)
-        .and_then(|d| Some(d.file_name()?.to_string_lossy().into_owned()))
-        .ok_or_else(|| {
-            format!(
-                "lane: batch {id}: no single specs/{feature}-* directory in the lane's tree {}",
-                tree.display()
-            )
-        })?;
+    let spec = spec_of(tree, id, feature)?;
     let shas: Vec<&str> = todo.iter().map(|h| h.commit.as_str()).collect();
     let note = note_of(tree, id, &shas);
     let tasks: Vec<String> = todo.iter().flat_map(|h| h.tasks.clone()).collect();
@@ -737,9 +797,7 @@ fn change_of(tree: &Path, h: &HandIn) -> Change {
 }
 
 mod eject;
-#[cfg(test)]
-use eject::outcome;
-use eject::{eject, file_groups, integrate, Group};
+use eject::{conflicted, eject, file_groups, integrate, outcome, Group};
 
 #[cfg(test)]
 mod tests;

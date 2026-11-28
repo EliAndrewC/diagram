@@ -996,6 +996,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T25 (phase 3: a carry conflict becomes a repair entry - the lane stopped twice on carry conflicts on 2026-11-28, batch 461-1 at 461 T71 and batch 462-1 at T549's ledger, each needing the coordinator by hand; REBUILT 2026-11-28 on T24's halving, the first build 54f0c0b43f having conflicted with T24's rewrite of run.rs)": {
+   "sha256": "8a0b11b51fcfd26725afc5d0a0fcc1cd1322d8f5cf931c91018b772fb7c72118",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Approach (checklist part A)": {
+   "sha256": "5f352ee9db48ef7e57cd1eab3337c6ab34005865944760ca17065af511570094",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T36 (<why: the finding or measurement that files it>)": {
+   "sha256": "dc847b818b674c921f73c225ed0aaff49dc81e77696f7385e745860981bc66f4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T36 Approach (checklist part A)": {
+   "sha256": "1b399375d3c300561756bc4f365b80e1ef0e8dfe328c54e4950452858d32903a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T83 (<why: the finding or measurement that files it>)": {
+   "sha256": "5e5ea38b150b3ecceffc22ab437737801c697c4a2b214047efa4932fd87752ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T83 Approach (checklist part A)": {
+   "sha256": "7970e2b0ba876f79143f0835a916a6132768e4e42f8dae192ed12835f0b71ab1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6183,6 +6219,221 @@
      "why": "This is a live defect left: it would refuse 462 T22's tick (item 12 names it as the reason for the fix), so it is a narrowing of fix-as-we-go and is ruled. The stated reason, 'a new command, its own builder', is a cost argument and carries no weight here. The ground that does carry the ruling: T84's line ('file a red-gate ruling under the feature of the landing that tripped it') is forward-looking, and withdrawing an owing that has already been charged needs a new verb, which is new behavior beyond that line. The defect is not carried past the point where it does harm. It is assigned to T87 in this same plan, ordered ahead of the one tick it can refuse. The owing itself holds that tick until it is withdrawn, so it cannot slip through unnoticed. T87's filing and its ordering are asserted in the block and were not verified (the bundle does not contain them). The ruling stands on that ordering being real: if T87 is not filed ahead of 462 T22, this decision is NOT LEGITIMATE."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T25 (phase 3: a carry conflict becomes a repair entry - the lane stopped twice on carry conflicts on 2026-11-28, batch 461-1 at 461 T71 and batch 462-1 at T549's ledger, each needing the coordinator by hand; REBUILT 2026-11-28 on T24's halving, the first build 54f0c0b43f having conflicted with T24's rewrite of run.rs)",
+    "### T25 Approach (checklist part A)",
+    "### T36 (<why: the finding or measurement that files it>)",
+    "### T36 Approach (checklist part A)",
+    "### T83 (<why: the finding or measurement that files it>)",
+    "### T83 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T25 D1",
+     "summary": "A carry conflict is one repair entry of kind integrate, why conflict, units the conflicting files, pinning nothing",
+     "class": "within",
+     "why": "D7 (a conflict the lane's carry cannot merge is a repair entry for a fresh builder; the table's carry-conflict row), D6 step 4 (a conflict ejection is not a red and pins nothing) and data-model.md's conflict row as accepted; serves the GM's 'ejects the failing change. The rest of the batch lands' and 'conflicts ... fixed by the builder that has the context'."
+    },
+    {
+     "id": "T25 D2",
+     "summary": "The lane's tree reset to the HEAD read before the carry, before any line is written",
+     "class": "within",
+     "why": "Implementation of how the carry is undone; decides nothing the request or spec leaves open about outcomes."
+    },
+    {
+     "id": "T25 D3",
+     "summary": "The set's carry line keeps code 0 and lists the ejected changes' files in conflict",
+     "class": "within",
+     "why": "Log-format detail keeping code-not-0 meaning a stop with the batch open; no requested behavior changed."
+    },
+    {
+     "id": "T25 D4",
+     "summary": "A carry that stops with NO unmerged path still stops the runner with the batch open, ejecting nothing",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An exception to 'the lane never stops on a carry' stated in the block's goal, adjudicated separately: the GM's rule is to eject THE FAILING CHANGE; a make that could not start (exit -1) or a carry whose verification failed with no conflicting path names no failing change, so ejecting would send an innocent change to repair - the request's own words imply the exception, and it is the accepted 461 T15 Decision 6 rule (no ejection on no evidence), already ruled on in its plan review. It leaves pre-existing behavior for a case outside T25's subject (a conflict); it does not keep a carry CONFLICT stopping the lane, which is what was asked to change."
+    },
+    {
+     "id": "T25 D5",
+     "summary": "The carry's output kept as attempts/<batch>-carry-<sha10>.log, the entry's attempt; overwritten only by a resume re-carrying the same change",
+     "class": "within",
+     "why": "D7 says the repair names the carry's conflict for the fresh builder; D6 step 1's never-overwritten rule is for gate attempt files, and the only overwrite is the same carry of the same change, so no repair builder loses output it needs."
+    },
+    {
+     "id": "T25 D6",
+     "summary": "A conflict with an earlier change of the same batch ejects the later change, the earlier lands",
+     "class": "within",
+     "why": "D7's example ('main moved after the hand-in') is not a limit; the same rule read for every carry stop serves the GM's 'ejects the failing change. The rest of the batch lands' and FR-004, and leaves no carry conflict stopping the lane."
+    },
+    {
+     "id": "T25 D7",
+     "summary": "One owed line per conflict entry, the batch's end line after",
+     "class": "within",
+     "why": "FR-005 and the accepted T15 Decision 10 (one owed line a repair entry, one wake)."
+    },
+    {
+     "id": "T25 D8",
+     "summary": "A conflict inside a halving's set ends the halving; survivors land or go red as a plain attempt (a red unplaced starts a fresh halving), the rest runs as one",
+     "class": "within",
+     "why": "Still bisects, ejects the failing change and lands the rest (the GM's words, FR-004, SC-003). US4's bound in D6's table is stated for ONE bad change among a fixed set; a carry conflict mid-halving is a second, different fault that removes a change from the set, outside the bound's premise, and any fresh halving over the survivors keeps the bound. Recording survivors' results as the set's would misattribute a red - the reason given is correctness, not only cost - and every conflict ejects a change, so the loop ends."
+    },
+    {
+     "id": "T25 Found-and-left",
+     "summary": "integrate entries still briefed by hand (make builder-brief takes no integrate kind) - deferred as T95, lands before T29",
+     "class": "within",
+     "why": "D7's route (make builder-next, make builder-brief, a fresh builder) is re-sequenced, not dropped: the gap is in another crate and command, is the same one T19's push entries already carry, and is filed as an open task ordered before T29 in the template's deferral form. The work still goes to a fresh builder; only the brief is written by hand until T95."
+    },
+    {
+     "id": "T36, T83 blocks",
+     "summary": "Unfilled checklist templates (placeholders only)",
+     "class": "within",
+     "why": "They decide nothing; any filling changes their digests and owes this review again."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T25 (phase 3: a carry conflict becomes a repair entry - the lane stopped twice on carry conflicts on 2026-11-28, batch 461-1 at 461 T71 and batch 462-1 at T549's ledger, each needing the coordinator by hand; REBUILT 2026-11-28 on T24's halving, the first build 54f0c0b43f having conflicted with T24's rewrite of run.rs)",
+    "### T25 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "1",
+     "summary": "A carry conflict files one entry of kind integrate, why conflict, units the conflicting files, pinning nothing",
+     "class": "within",
+     "why": "The GM's request returns an ejected change to the queue as a repair entry; D7 makes a carry conflict a repair entry taken by a fresh builder and D6 step 4 says a conflict ejection pins nothing. The kind is the plan's to choose. Note for the author: D7's Decision paragraph names kind fix for every ejected change, the carry's conflict among its whys, so 'as written' rests on data-model.md's row, which carries 461 T25's own mark; the label should say the kind departs from D7's paragraph and why."
+    },
+    {
+     "id": "2",
+     "summary": "The tree is reset to the HEAD read before the carry (after cherry-pick --abort), before any line is written",
+     "class": "within",
+     "why": "Mechanism for leaving the lane's tree clean; narrows nothing asked."
+    },
+    {
+     "id": "3",
+     "summary": "The set's carry line keeps code 0 and lists the ejected changes' files under conflict",
+     "class": "within",
+     "why": "Log bookkeeping that keeps 'code not 0' meaning a stop; narrows nothing asked."
+    },
+    {
+     "id": "4a",
+     "summary": "A carry that exits -1 (make could not start, or was killed) stops the runner with the batch open, nothing ejected",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A make that never ran, or was killed, gives no evidence against the change being carried. Ejecting on it would send innocent changes to repair, which defeats the request's 'ejects the failing change. The rest of the batch lands'. This is T15 Decision 6's ruled case for make land's exit -1, applied to the carry."
+    },
+    {
+     "id": "4b",
+     "summary": "A carry that ran and failed on one named change with no unmerged path (Decision 4's 'a carry whose verified end failed') also stops the runner with the batch open, nothing ejected",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The ground given, 'no conflict names a change', is word-level. Each make carry COMMIT= is a carry of one named change, so a carry of it that ran and failed is evidence on that change in a way exit -1 is not. Stopping leaves the batch open and the next lane-start re-carries the same change and stops again. That is the wrong outcome the block's own item 12 says T25 removes ('every later start re-stopping on it ... a batch's innocent changes waited on the coordinator's hand'), and it goes against the GM's 'the rest of the batch lands' and FR-005/SC-001. T15 Decision 6, which the block cites, does the opposite for make land: only exit -1 and a refusal naming no change stop; every other non-zero exit is a red and ejects. The bundle does not say what the carry's 'verified end' checks, and the block gives no evidence that such a failure is the tooling's rather than the change's. Its pin is only a carry-fails stand-in. Fix: a carry of one change that exits non-zero, not -1, with no unmerged path ejects that change as a repair entry (integrate, its carry log as attempt, units none or the verified-end's output) and the batch goes on. Keep the stop only where the failure is shown to be the lane's own, for example the same failure on every carry of the set, and state that evidence in the label. Or restate the decision with the measured reason a verified-end failure cannot be the change's."
+    },
+    {
+     "id": "5",
+     "summary": "The carry's output is kept as attempts/<batch>-carry-<sha10>.log, the entry's attempt; a re-conflict on resume overwrites it",
+     "class": "within",
+     "why": "D6 step 1's never-overwritten rule is for gate attempt files <batch>-<n>.log. This is the same carry's output, read by the repair builder, and the tripwire reads no conflict pin. Narrows nothing asked."
+    },
+    {
+     "id": "6",
+     "summary": "A conflict with an earlier change of the same batch ejects the later change; the earlier lands",
+     "class": "within",
+     "why": "Both changes cannot land together. Hand-in order keeps the earlier one, which carried cleanly, and the later goes to a fresh builder: 'ejects the failing change, the rest lands'."
+    },
+    {
+     "id": "7",
+     "summary": "One owed line per conflict entry, then the batch's end line",
+     "class": "within",
+     "why": "T15 Decision 10 and FR-005's one wake per event."
+    },
+    {
+     "id": "8",
+     "summary": "A conflict inside a halving's set ends the halving; the survivors run as a plain attempt and the rest as one, with a fresh halving on an unplaced red",
+     "class": "within",
+     "why": "The request's bisect, eject and land-the-rest still hold. Survivors are gated exactly as they land (FR-008), and a later unplaced red is halved again. D6's US4 bound table is captioned for one bad change, and a conflict is a second ejection, so the bound is not given up. The extra runs are cost, not fidelity."
+    },
+    {
+     "id": "A1",
+     "summary": "run_batch's todo is rebound to the carried survivors; a set whose every carry conflicts runs no landing and the loop goes on",
+     "class": "within",
+     "why": "Keeps ejected changes out of land, eject, record and integrate. Running a gate on an empty set would gate nothing. Narrows nothing asked."
+    },
+    {
+     "id": "F1",
+     "summary": "Found and left: integrate entries are not briefable by make builder-brief, so each conflict repair costs the coordinator a hand brief until T95 (filed, lands before T29)",
+     "class": "within",
+     "why": "The work still goes to a fresh builder the coordinator dispatches, and his context takes the entry, not the conflict (SC-004). The gap is filed and ordered before T29, not dropped. The bundle cannot confirm T95 is filed in tasks.md; the author should make sure it is."
+    }
+   ],
+   "tasks": [
+    "T25"
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T25 (phase 3: a carry conflict becomes a repair entry - the lane stopped twice on carry conflicts on 2026-11-28, batch 461-1 at 461 T71 and batch 462-1 at T549's ledger, each needing the coordinator by hand; REBUILT 2026-11-28 on T24's halving, the first build 54f0c0b43f having conflicted with T24's rewrite of run.rs)",
+    "### T25 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "1",
+     "summary": "A carry-conflict repair entry is kind integrate, why conflict, units the conflicting files, pinning nothing; a labeled departure from D7's paragraph (kind fix).",
+     "class": "within",
+     "why": "The GM asked that the ejected task return to the queue as a repair entry, and that conflicts be fixed by a builder, not the coordinator. The entry's kind is an internal label the request does not set. D7's table names the carry conflict as a repair entry for a fresh builder without fixing its kind, and gives the analogous push failure kind integrate. The departure is from plan text, not from the request or the spec, and it is labeled. The interim cost, that the queue offers integrate entries as hand-briefed until T95, is a briefing step, not integration work in the coordinator's context. It is disclosed, filed as T95 and ordered before T29."
+    },
+    {
+     "id": "2",
+     "summary": "The tree is put back by cherry-pick --abort and then a hard reset to the HEAD read before the carry, before any line is written.",
+     "class": "within",
+     "why": "A mechanism choice that serves FR-003 and the request's 'the rest of the batch lands': the next change's carry needs a clean tree. It drops nothing that was asked."
+    },
+    {
+     "id": "3",
+     "summary": "The set's carry line keeps code 0, and its conflict field lists every ejected change's files.",
+     "class": "within",
+     "why": "Log encoding. A non-zero code keeps meaning a stop with the batch open. This is bookkeeping inside the spec's design, with data-model.md amended to match."
+    },
+    {
+     "id": "4",
+     "summary": "A carry that fails with no unmerged path ejects its change (why carry). Only the lane's own tree's stops still stop the runner with the batch open and nothing ejected: exit -1, and the carry's refusal of unfinished work in the lane's tree (CARRY_REFUSED).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request reads 'ejects the failing change. The rest of the batch lands'. Round 2 now ejects every carry failure that is evidence on the one named change: a commit not located, a pick that refused to start, a continue that failed, an end not verified. That answers round 1's 4b objection. Only two cases are kept as stops, and each was judged on its own. (a) Exit -1, where make could not start or was killed: no change is named, so there is no failing change to eject. Ejecting would remove an innocent change on no evidence, which defeats the rule's purpose of landing the innocent rest. (b) CARRY_REFUSED: the carry refuses unfinished work in the lane's own tree before it touches the change, so every change of the batch would be refused alike. Ejecting would empty the batch of innocent changes and would refuse their repairs too. In both, the rule 'eject the failing change' cannot be applied because no change failed. This is the same reading as T15's Decision 6 ruling (a stop only where no change is named), which was reached on that task's own plan-review rounds. The stop also does not persist past the cause: a non-zero carry code lets T55's start-time reset clean the tree on the next start."
+    },
+    {
+     "id": "5",
+     "summary": "The carry's output is kept as attempts/<batch>-carry-<sha10>.log, which is the entry's attempt. A resume that conflicts on the same change overwrites it.",
+     "class": "within",
+     "why": "This gives the fresh builder the conflict output, which is what D7 says the repair carries. The overwrite rule is about gate attempts (D6 step 1) and does not reach a carry log. A re-carry of the same sha in the same batch can only follow a kill between the entry and its eject line, and it gives the same carry's output."
+    },
+    {
+     "id": "6",
+     "summary": "A conflict with an earlier change of the same batch ejects the later change, and the earlier one lands. The owed line says 'stopped in conflict'.",
+     "class": "within",
+     "why": "This is the GM's 'ejects the failing change. The rest of the batch lands' applied directly: the change whose carry fails is ejected and the rest go on. Nothing is excepted."
+    },
+    {
+     "id": "7",
+     "summary": "One owed line for each conflict entry, with the batch's end line after it.",
+     "class": "within",
+     "why": "T15 Decision 10's rule. FR-005 allows a wake outside a landed batch for US5's cases, and D7's table lists a carry conflict as one of them."
+    },
+    {
+     "id": "8",
+     "summary": "A conflict inside a halving's set ends the halving. The survivors land or go red as a plain attempt (a red unplaced starts a fresh halving), and the rest of the batch runs as one.",
+     "class": "within",
+     "why": "The request's bisect, eject and land-the-rest all still happen: a red among the survivors starts a fresh halving, and the failing change is still ejected while the rest lands. US4's bound, which SC-003 cites, is stated for one bad change. A conflict ejection during a halving is a second faulty change that the bound does not describe. The extra runs are a cost, not a fidelity finding, and the decision drops nothing that was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7295,6 +7546,63 @@
      "summary": "After T26; lands with T75 in one hand-in; green = unit test, suite and make builder-checks; red = recorded and set down, an impossibility claim goes through make arbiter-ask.",
      "class": "within",
      "why": "Sequencing and exit criteria only. They settle nothing the request or the spec leaves open in a way that narrows it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T25": {
+   "section_sha256": "d09ccf643b0b4c121d6c5863cad55a33f4761a1b1ed58436559712d625a682be",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "1",
+     "summary": "A carry-conflict repair entry is kind integrate, why conflict, units the conflicting files, pinning nothing; a labeled departure from D7's paragraph (kind fix).",
+     "class": "within",
+     "why": "The GM asked that the ejected task return to the queue as a repair entry, and that conflicts be fixed by a builder, not the coordinator. The entry's kind is an internal label the request does not set. D7's table names the carry conflict as a repair entry for a fresh builder without fixing its kind, and gives the analogous push failure kind integrate. The departure is from plan text, not from the request or the spec, and it is labeled. The interim cost, that the queue offers integrate entries as hand-briefed until T95, is a briefing step, not integration work in the coordinator's context. It is disclosed, filed as T95 and ordered before T29."
+    },
+    {
+     "id": "2",
+     "summary": "The tree is put back by cherry-pick --abort and then a hard reset to the HEAD read before the carry, before any line is written.",
+     "class": "within",
+     "why": "A mechanism choice that serves FR-003 and the request's 'the rest of the batch lands': the next change's carry needs a clean tree. It drops nothing that was asked."
+    },
+    {
+     "id": "3",
+     "summary": "The set's carry line keeps code 0, and its conflict field lists every ejected change's files.",
+     "class": "within",
+     "why": "Log encoding. A non-zero code keeps meaning a stop with the batch open. This is bookkeeping inside the spec's design, with data-model.md amended to match."
+    },
+    {
+     "id": "4",
+     "summary": "A carry that fails with no unmerged path ejects its change (why carry). Only the lane's own tree's stops still stop the runner with the batch open and nothing ejected: exit -1, and the carry's refusal of unfinished work in the lane's tree (CARRY_REFUSED).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The request reads 'ejects the failing change. The rest of the batch lands'. Round 2 now ejects every carry failure that is evidence on the one named change: a commit not located, a pick that refused to start, a continue that failed, an end not verified. That answers round 1's 4b objection. Only two cases are kept as stops, and each was judged on its own. (a) Exit -1, where make could not start or was killed: no change is named, so there is no failing change to eject. Ejecting would remove an innocent change on no evidence, which defeats the rule's purpose of landing the innocent rest. (b) CARRY_REFUSED: the carry refuses unfinished work in the lane's own tree before it touches the change, so every change of the batch would be refused alike. Ejecting would empty the batch of innocent changes and would refuse their repairs too. In both, the rule 'eject the failing change' cannot be applied because no change failed. This is the same reading as T15's Decision 6 ruling (a stop only where no change is named), which was reached on that task's own plan-review rounds. The stop also does not persist past the cause: a non-zero carry code lets T55's start-time reset clean the tree on the next start."
+    },
+    {
+     "id": "5",
+     "summary": "The carry's output is kept as attempts/<batch>-carry-<sha10>.log, which is the entry's attempt. A resume that conflicts on the same change overwrites it.",
+     "class": "within",
+     "why": "This gives the fresh builder the conflict output, which is what D7 says the repair carries. The overwrite rule is about gate attempts (D6 step 1) and does not reach a carry log. A re-carry of the same sha in the same batch can only follow a kill between the entry and its eject line, and it gives the same carry's output."
+    },
+    {
+     "id": "6",
+     "summary": "A conflict with an earlier change of the same batch ejects the later change, and the earlier one lands. The owed line says 'stopped in conflict'.",
+     "class": "within",
+     "why": "This is the GM's 'ejects the failing change. The rest of the batch lands' applied directly: the change whose carry fails is ejected and the rest go on. Nothing is excepted."
+    },
+    {
+     "id": "7",
+     "summary": "One owed line for each conflict entry, with the batch's end line after it.",
+     "class": "within",
+     "why": "T15 Decision 10's rule. FR-005 allows a wake outside a landed batch for US5's cases, and D7's table lists a carry conflict as one of them."
+    },
+    {
+     "id": "8",
+     "summary": "A conflict inside a halving's set ends the halving. The survivors land or go red as a plain attempt (a red unplaced starts a fresh halving), and the rest of the batch runs as one.",
+     "class": "within",
+     "why": "The request's bisect, eject and land-the-rest all still happen: a red among the survivors starts a fresh halving, and the failing change is still ejected while the rest lands. US4's bound, which SC-003 cites, is stated for one bad change. A conflict ejection during a halving is a second faulty change that the bound does not describe. The extra runs are a cost, not a fidelity finding, and the decision drops nothing that was asked."
     }
    ],
    "verdict": "CLEAR"

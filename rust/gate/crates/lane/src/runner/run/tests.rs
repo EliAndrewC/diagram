@@ -1,7 +1,7 @@
 //! The batch run end to end (feature 461 T14) on a scratch world: a clone, a bare `origin`, the lane's tree in the pool's registry
 //! and two pool trees, the landing a stand-in `make land` in the clone's own Makefile that ticks and pushes as the real one does. Two
 //! hand-ins, one batch, one push, both ticked, both done refs deleted, one `owed` line; a killed runner's batch resumed as attempt 2;
-//! a resumed batch already on `origin/main` landed with no run; a carry that stops; the errors. T15's red path: a red the gate's
+//! a resumed batch already on `origin/main` landed with no run; a carry that stops (`conflict.rs`, 461 T25); the errors. T15's red path: a red the gate's
 //! record places ejected as a repair entry and the other change landed on the next run; a red it cannot place ejecting the whole
 //! batch as one entry; a killed `make` stopping the runner with the batch open. T19's failed push: twice, one `integrate` entry and
 //! one `owed` line; once, the set run again on the new `origin/main` and landed; a resumed batch's earlier failure counted.
@@ -46,7 +46,22 @@ const PUSH_LINES: &str = concat!(
     "\n"
 );
 
-const MAKEFILE: &str = "carry:\n\tgit cherry-pick $(COMMIT)\nland:\n@RED@\t@if [ -f \"$$(git rev-parse --git-common-dir)/red\" ]; then echo red; exit 1; fi\n\t@echo \"land F=$(F) T=$(T) NOTE=$(NOTE) batch=$$L7R_LANE_BATCH spec=$$SPECIFY_FEATURE alone=$$L7R_LAND_ALONE backup=$$SYNC_BACKUP\"\n\tfor t in $(T); do sed -i \"s/^- \\[ \\] $$t /- [x] $$t /\" specs/461-x/tasks.md; done\n\tgit commit -qam \"461-x: $(T) ticked (make land)\"\n@PUSH@\tgit push -q origin HEAD:main\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/merged\" ]; then exit 3; fi\n";
+/// A `carry-fails-<sha>` file in the common directory: that commit's carry stops with no conflicting path, as one whose end was not verified; a
+/// `carry-refused` file: the carry refuses the lane's tree before it picks anything, as the real one does a tree holding unfinished
+/// work; a
+/// `clash-<sha>` file holding a count: that commit's carries after that many stop in conflict (461 T25), its first file committed
+/// otherwise in the lane's tree just before the pick.
+const CARRY_LINES: &str = concat!(
+    "\t",
+    r#"@if [ -f "$$(git rev-parse --git-common-dir)/carry-fails-$(COMMIT)" ]; then echo 'land: the carry did not end verified' >&2; exit 1; fi"#,
+    "\n\t",
+    r#"@if [ -f "$$(git rev-parse --git-common-dir)/carry-refused" ]; then echo "carry: refused - nothing carried; $$(pwd) holds unfinished work:" >&2; exit 2; fi"#,
+    "\n\t",
+    r#"@c=$$(git rev-parse --git-common-dir); k="$$c/clash-$(COMMIT)"; if [ -f "$$k" ]; then n=$$(cat "$$k"); if [ "$$n" -gt 0 ]; then echo $$((n-1)) > "$$k"; else f=$$(git diff-tree --no-commit-id --name-only -r $(COMMIT) | head -1); echo clash > "$$f"; git add -A; git commit -qm clash; fi; fi"#,
+    "\n"
+);
+
+const MAKEFILE: &str = "carry:\n@CARRY@\tgit cherry-pick $(COMMIT)\nland:\n@RED@\t@if [ -f \"$$(git rev-parse --git-common-dir)/red\" ]; then echo red; exit 1; fi\n\t@echo \"land F=$(F) T=$(T) NOTE=$(NOTE) batch=$$L7R_LANE_BATCH spec=$$SPECIFY_FEATURE alone=$$L7R_LAND_ALONE backup=$$SYNC_BACKUP\"\n\tfor t in $(T); do sed -i \"s/^- \\[ \\] $$t /- [x] $$t /\" specs/461-x/tasks.md; done\n\tgit commit -qam \"461-x: $(T) ticked (make land)\"\n@PUSH@\tgit push -q origin HEAD:main\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/merged\" ]; then exit 3; fi\n";
 
 /// The round arbiter's ask (461 T18), as the lane runs it in its tree: its words kept in the common directory's `asked` file, the
 /// bundle named on stdout; with an `ask-fails` file there, refused; with an `ask-silent` file, done with no bundle named.
@@ -87,6 +102,7 @@ fn world(tag: &str) -> World {
         &(MAKEFILE
             .replace("@RED@", RED_LINES)
             .replace("@PUSH@", PUSH_LINES)
+            .replace("@CARRY@", CARRY_LINES)
             + ASK),
     );
     put(
@@ -637,21 +653,6 @@ fn a_resumed_batch_origin_main_already_holds_lands_with_no_run() {
 }
 
 #[test]
-fn a_carry_that_stops_names_its_conflict_and_leaves_the_batch_open() {
-    let w = world("lane-run-conflict");
-    w.hand_in("461", "T01", "a.txt", "one\n");
-    w.hand_in("461", "T02", "a.txt", "two\n");
-    let stopped = step(&lane_of(&w)).unwrap_err();
-    assert!(stopped.contains("the carry of"), "{stopped}");
-    assert!(stopped.contains("conflicting: a.txt"), "{stopped}");
-    let carry = w.lane().pop().unwrap();
-    assert_eq!(carry["event"], "carry");
-    assert_eq!(carry["conflict"], json!(["a.txt"]));
-    assert_ne!(carry["code"], 0);
-    assert!(open(&w).open());
-}
-
-#[test]
 fn a_batch_with_no_lane_s_tree_no_spec_directory_or_an_unknown_change_is_an_error() {
     let w = world("lane-run-errors");
     w.hand_in("999", "T01", "a.txt", "a\n");
@@ -898,5 +899,6 @@ fn a_resumed_batch_whose_push_had_failed_once_files_the_integrate_entry_at_its_n
         .ends_with("461-1-2.log"));
 }
 
+mod conflict;
 mod halving;
 mod tripwire;

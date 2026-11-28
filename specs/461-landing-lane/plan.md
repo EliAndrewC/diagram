@@ -791,35 +791,47 @@ engine speed, so the performance checklist does not apply.
 
 **Performance work?** no
 
-### T25 (<why: the finding or measurement that files it>)
+### T25 (phase 3: a carry conflict becomes a repair entry - the lane stopped twice on carry conflicts on 2026-11-28, batch 461-1 at 461 T71 and batch 462-1 at T549's ledger, each needing the coordinator by hand; REBUILT 2026-11-28 on T24's halving, the first build 54f0c0b43f having conflicted with T24's rewrite of run.rs)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/lane/src/runner/run.rs` and `run/eject.rs`. `carry()` now returns the changes it carried. Where one change's `make carry COMMIT=` stops with unmerged paths (`git diff --name-only --diff-filter=U` in the lane's tree), the tree is put back where that carry found it - `git cherry-pick --abort`, then `git reset -q --hard <the HEAD read before that carry>` - BEFORE any line is written, and `conflicted()` (new, in `eject.rs` beside the other ejections) files the change as ONE repair entry (kind `integrate`, `why` `conflict`, `units` the conflicting files, `ejected` its sha, `attempt` the carry's own stdout and stderr kept as `l7r-lane/attempts/<batch>-carry-<sha10>.log`), then its `eject` line (`why` `conflict`) and one `owed` line (`lane: batch <b>'s carry of <sha> stopped in conflict - <feature> <tasks> ejected as repair <r> (integrate, conflict: <files>) - make builder-next hands it to a fresh builder; the rest of the batch goes on: <file>`); the next change is carried. A change's carry that fails with NO unmerged path is ejected the same way, `why` `carry`, `units` the carry's own `carry:` and `land:` lines (Decision 4, round 2); only a carry on the lane's own tree - exit -1, or the carry's `carry: refused - nothing carried` (`CARRY_REFUSED`) - still stops the runner. The set's one `carry` line follows, code 0, its `conflict` every ejected change's files. In `run_batch` (T24's `Run` loop) the attempt's `todo` is rebound to the carried survivors, so `land`, the red's `eject`, the halving's `record` and a failed push's `integrate` never see an ejected change; where a carry ejected any, the new `Run::conflicted` drops those changes from `left` and ENDS a halving under way (Decision 8); where nothing was carried the loop goes on to the next set before `runs += 1`, so a set whose every carry conflicts runs no landing. `spec_of` (moved out of `land`, unchanged) names the entry's feature. Docs made true in the same change: run.rs's and eject.rs's module docs, `repairs.rs`'s `kind`, data-model.md's `conflict` and `carry` rows, rust/gate/CLAUDE.md's lane row. Measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests"`): red first, 6 of 32 failed on the old code - five by behavior (the newer-main conflict, the all-conflict batch, the same-batch conflict, the conflict inside a halving and a carry failing with no conflicting path each stopped the runner with the batch open: `step` returned `Err`), one by its error's wording only (a carry refused on the lane's own tree, now said so); after, 32 of 32. The tests moved to `run/tests/conflict.rs` (tests.rs was at 902 lines, measured 2026-11-28 (`wc -l`)), the stand-in `make carry` given a `carry-fails-<sha>` file, a `carry-refused` file and a `clash-<sha>` count (that commit's carries after that many stop in conflict) in `tests.rs`'s `CARRY_LINES`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **Kind `integrate`, `why` `conflict`, `units` the conflicting files, pinning nothing.** Label: D7's table and data-model.md's `conflict` row, a labeled departure from D7's Decision paragraph, which gives every ejected change kind `fix`: a carry's repair is a rebase onto the new `origin/main`, not a fix of the change's code, the same kind T19 gave a set whose push failed twice; `tripwire::PINS` already leaves `conflict` out, pinned by `a_change_conflicting_with_an_earlier_one_of_its_batch_is_ejected_and_the_earlier_lands` (`tripwire::pins` empty after the ejection).
+2. **The tree put back to the HEAD read before the carry, not by `cherry-pick --abort` alone, and before any line.** The real `make carry` resolves some paths by rule before it stops, so `--abort` alone is not trusted; and the reset comes first so a runner killed mid-ejection leaves no conflict markers - T55's start-time reset fires only after a `carry` line with a code not 0, which this path never writes. Label: the algorithmically easier route (one reset, no new state for T55's check to read).
+3. **The set's `carry` line keeps code 0, its `conflict` the ejected changes' files.** Code not 0 still means a stop with the batch open (T55's `stopped_carry`, the batch states). Label: the easier route; data-model.md's `carry` row amended to say both.
+4. **A carry that stops with NO unmerged path ejects its change, `why` `carry`, unless the stop is the lane's own tree's** (round 2, the plan review's 4b: each `make carry COMMIT=` carries one named change, so a carry that ran and failed is evidence on it, and a stop re-stops every later start on it). The lane's own, kept as a stop with the batch open and nothing ejected: exit -1 (a `make` that could not start or was killed) and the carry's `carry: refused - nothing carried; <tree> holds unfinished work`, which `land/carry.rs` prints before it picks anything (read 2026-11-28, method: every `Ok(2)` and `stopped` exit of `carry()` in `rust/gate/crates/land/src/land/carry.rs` - the refusal of unfinished work the one exit made before the change is touched; the others, a commit not located, a pick that refused to start, a continue that failed and an end not verified, are taken as the change's). Label: T15's Decision 6 rule read for the carry (a stop only where no change is named); the `why` `carry` is new beside `conflict` (data-model.md amended), pins nothing (`tripwire::PINS`), and no reader keys on `why` (`builder_queue`, `lane_log`, read 2026-11-28 by `grep`). Pinned by `a_carry_of_one_change_that_fails_with_no_conflicting_path_ejects_it_and_the_other_lands` and `a_carry_refused_on_the_lane_s_own_tree_leaves_the_batch_open`.
+5. **The carry's output kept as `attempts/<batch>-carry-<sha10>.log`, the entry's `attempt`.** The `eject` line carries no `attempt` (only the tripwire's hold line does; `tripwire::pins` reads it there first). A resume that conflicts on the same change again overwrites that file, where gate attempts are never overwritten: acceptable, the same carry's output. Label: GUESS, a reading aid for the fresh builder; data-model.md names `attempt` as an attempt file.
+6. **A conflict with an earlier change of the same batch is ejected the same way** (the later change, the earlier landing): the owed line says `stopped in conflict`, not `with origin/main`, since the lane's tree then holds both. Label: the task line's rule read for every carry stop that names a change (Decision 4); pinned by `a_change_conflicting_with_an_earlier_one_of_its_batch_is_ejected_and_the_earlier_lands`.
+7. **One `owed` line a conflict entry, the batch's end line after.** Label: T15's Decision 10 (one line a repair entry), the same wake rule.
+8. **A conflict inside a halving's set ENDS the halving; the batch's rest runs as one** (new in the rebuild: T24's halving landed after the first build). The halving asked for a set that no longer runs as asked; recording the survivors' result as the set's would misread it (a green survivor would mark the sibling red by inference), and recording nothing loops for ever - `Halving::advance` answers an unrecorded `Run` unchanged, and its set's ejected change is no longer carried. So `Run::conflicted` sets `halving` to none: the survivors carried in this attempt land or go red as a plain attempt (a red unplaced starts a fresh halving over them, a placed one ejects), and the changes left run as one after. Costs at most the halving's lost knowledge, a few runs, on a rare event (a halving's subset conflicts only where `origin/main` moved mid-batch or a change was built on another of its batch). Label: the algorithmically easier route, the plan silent; the alternative priced - dropping the ejected index from the halving's sets and recording on the survivors - needs a new `Halving` API and re-proving US4's bound (`halve::tests`' every-bad-subset sweep). Pinned by `a_conflict_in_a_halving_s_set_ends_the_halving_and_the_rest_runs_as_one` (three changes, T03 red unplaced, T02's carry conflicting from its second carry: T01 pushed by the halving, T02 ejected `conflict`, T03 run alone and ejected `red`, the lane's tree clean).
 
 ### T25 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A hand-in whose carry conflicts with a newer `origin/main` costs the coordinator one line - a repair entry for a fresh builder - and the rest of the batch lands without him; the lane never stops on a change's carry, in conflict or not, in a plain attempt or in a halving - only on its own tree's.
+2. **The constraints.** D7's table (a carry conflict: one `integrate` entry, `why` `conflict`, for a fresh builder, the batch's other changes going on), data-model.md's repair entry and `carry` row, T15's ejection order (entry before `eject`), T55's start-time reset, T19's `integrate` entry, T24's halving (D6 step 3, US4), FR-005 (one wake an event).
+3. **Where each comes from.** R: plan.md D7, D6; data-model.md; tasks.md T25. O: the red and green runs above; the coordinator's two hand-resolved stops of 2026-11-28 (the brief).
+4. **Do they describe the world here?** Yes: the tests run the real `run_batch` on a scratch world - a bare origin moved by another commit of the same file after the hand-in, a stand-in `make carry` that is a bare `git cherry-pick` left in conflict (or made to conflict at a chosen carry by a `clash-<sha>` count, to fail by a `carry-fails-<sha>` file, or to refuse the tree as the real one does by a `carry-refused` file), the lane's tree in the pool's registry. A real conflict in the lane is T23's to observe.
+5. **The order.** After T15, T19, T55 and T24 (landed 2026-11-28; this rebuild sits on its `Run` struct); beside T77/T79 (resume and the state readers, untouched: `runner::remaining` already drops every `eject` line's change, `why` `conflict` too).
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `runner::run::tests` 32 of 32 and the lane crate's builder checks clean, 2026-11-28.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome fixed: a carry conflict stopped the runner with the batch open, every later start re-stopping on it (T55's note), so a batch's innocent changes waited on the coordinator's hand.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- The queue offers an `integrate` entry as `no kind make builder-brief takes yet: brief its builder by hand` (`rust/guard/shared/src/builder_queue/repairs.rs`), as it does T19's push entries, so each conflict repair costs the coordinator a hand brief where D7 hands it to a fresh builder. Not fixed here: another crate and command (the queue and `make builder-brief`), the first build filed it as T85, which never reached main. Filed as T95; lands before T29.
+
+**Performance work?** no
 
 
-<!-- plan-archive: T26 to T26 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-<!-- plan-archive: T27 to T27 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 ### T28 (451 T405, taken over: the gate's tree check voided a gate for the clone's writes it never read; option (C), plan D10)
 
 - **Approach**: in pool tree `diagram-backlog-t269` on main's 674dae31f3. A test only: option (C) holds by construction once every
@@ -1400,6 +1412,32 @@ engine speed, so the performance checklist does not apply.
 |---|---|---|---|---|
 
 ### T96 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T95 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T95 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -1,12 +1,13 @@
 //! A batch's EJECTIONS (feature 461 T15, T18, T19, T24; split out of `run.rs` at the 1,000-line bar): a red's changes filed as
 //! repair entries before their `eject` lines (`file_groups`, which the halving's `red` and `inferred` ejections call too), the
-//! tripwire's hold ([`trip`]), and a green set whose push failed twice ([`integrate`]).
+//! tripwire's hold ([`trip`]), a green set whose push failed twice ([`integrate`]), and a change whose carry stopped in conflict
+//! ([`conflicted`], 461 T25).
 
 use std::path::Path;
 
 use serde_json::json;
 
-use super::{all_hand_ins, in_tree, stopped, HandIn, Lane, Redden};
+use super::{all_hand_ins, in_tree, short, spec_of, stopped, HandIn, Lane, Redden, ATTEMPTS};
 use crate::log;
 use crate::repairs;
 use crate::tripwire::{self, Trip};
@@ -159,6 +160,66 @@ fn said(group: &Group) -> String {
         units.join(", ")
     };
     format!("{why}: {named}")
+}
+
+/// A CARRY'S REPAIR (461 T25, D7's table; data-model.md, "A repair entry"): the change `h` as ONE repair entry of kind
+/// `integrate` - `why` `conflict`, `units` the `conflict`ing files, or, where its carry stopped with no conflicting path but not on
+/// the lane's own tree (Decision 4), `why` `carry`, `units` the carry's own stop lines - `attempt` the carry's own output kept as
+/// `attempts/<batch>-carry-<sha>.log`; then its `eject` line (neither `why` pins: `tripwire::PINS`) and one `owed` line. Never
+/// `stopped`: the fresh builder's hand-in supersedes the change, and the batch goes on.
+pub(super) fn conflicted(
+    l: &Lane,
+    id: &str,
+    tree: &Path,
+    h: &HandIn,
+    conflict: &[String],
+    output: &str,
+) -> Result<(), String> {
+    let spec = spec_of(tree, id, &h.feature)?;
+    let dir = l.common.join(log::DIR).join(ATTEMPTS);
+    let kept = dir.join(format!("{id}-carry-{}.log", short(&h.commit)));
+    let _ = std::fs::create_dir_all(&dir);
+    let _ = std::fs::write(&kept, output);
+    let attempt = kept.to_string_lossy().into_owned();
+    let (why, units) = if conflict.is_empty() {
+        ("carry", stop_lines(output))
+    } else {
+        ("conflict", conflict.to_vec())
+    };
+    let entry = repairs::Entry {
+        feature: spec,
+        tasks: h.tasks.clone(),
+        kind: "integrate".to_owned(),
+        ejected: vec![h.commit.clone()],
+        batch: id.to_owned(),
+        why: why.to_owned(),
+        units: units.clone(),
+        attempt: attempt.clone(),
+    };
+    let r = repairs::file(l.common, &l7r_gate_core::record::repo::utc_now(), &entry)?;
+    l.append(
+        "eject",
+        &json!({"batch": id, "change": h.commit, "repair": r, "why": why}),
+    )?;
+    let line = format!(
+        "lane: batch {id}'s carry of {} stopped{} - {} {} ejected as repair {r} (integrate, {why}: {}) - make builder-next hands it to a fresh builder; the rest of the batch goes on: {attempt}",
+        short(&h.commit),
+        if conflict.is_empty() { "" } else { " in conflict" },
+        h.feature,
+        h.tasks.join(" "),
+        units.join(", ")
+    );
+    l.append("owed", &json!({"batch": id, "line": line}))
+}
+
+/// The carry's own stop lines in its `output` (its `carry:` and `land:` lines; none where it said none).
+fn stop_lines(output: &str) -> Vec<String> {
+    output
+        .lines()
+        .map(str::trim)
+        .filter(|x| x.starts_with("carry:") || x.starts_with("land:"))
+        .map(str::to_owned)
+        .collect()
 }
 
 /// A command's exit, stdout and stderr; one that could not start is exit -1, its error the stderr.
