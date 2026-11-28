@@ -163,7 +163,11 @@ departs from it is refused with the policy's own pick. The case this story was f
     (451 FR-013, `shared::builder_queue` `next` and `perf_of`, and `set_down_hooks`' `next_performance`); the performance tasks no
     queue line names, named first (451 T313); the caller's own queue preferred (`make builder-next` and `make builder-done`'s
     `dispatch_with`, `queue::offer` with the caller's feature key); the queues read in name order where no caller names one (the
-    pool-idle Stop guard's `offer` over the sorted `queues()`); a queue's own order (462 T549's `#! order=queue`, as built); and
+    pool-idle Stop guard's `offer` over the sorted `queues()`); a queue's own order (462 T549's `#! order=queue`, as built), which
+    ranks BELOW the classes inside its own feature too - T549's putting 462's queue order ahead of 462's own performance work was a
+    session's reading of the GM's 2026-11-27 words ("a higher priority than most of the rest of that new feature"), which name no
+    performance work, against his standing performance-first rule (2026-11-20, 451 FR-013), "time continues to be more important
+    than disk space" (2026-11-27) and "priority over everything else regardless of what feature" (2026-11-28); and
     repairs first (`LANE_REPAIR_FIRST`, 461 T16), which no words of the GM's set - a repair ranks by its own task's class and
     feature, below the classes.
   - **A departure** is refused with the policy's pick. Its escape names its ground: the pick cannot be worked yet for a reason the
