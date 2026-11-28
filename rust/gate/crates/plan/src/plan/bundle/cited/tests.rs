@@ -82,6 +82,60 @@ fn a_decision_named_with_another_feature_s_task_is_that_task_s() {
     assert!(cited.contains("<!-- feature 451 -->\n- **FR-001**: NOT FOUND"));
 }
 
+/// A task's numbered decision, `T16's Decision 3` (`Decisions 2 and 5`, `451 T16's Decision 1`), is read from that task's `**Decisions**`
+/// list, never its Approach checklist's same number; a spec file's entry, `data-model.md, "A repair entry"` or `data-model.md's repair
+/// entry`, is its heading's section, a quoted phrase no heading holds its paragraph; each not found is a NOT FOUND line; request.md's
+/// quotes are the request's own words, carried beside (461 T69: 461 T65's bundle carried none of them).
+#[test]
+fn a_task_s_numbered_decision_and_a_spec_file_s_entry_are_carried() {
+    let root = repo();
+    let (dir, other) = (root.join("specs/461-x"), root.join("specs/451-y"));
+    for d in [&dir, &other] {
+        std::fs::create_dir_all(d).unwrap();
+    }
+    let plan = "# Plan\n\n### D7 - PLAN SEVEN\n\nx\n\n## Tasks\n\n### T16 (the queue)\n\n**Decisions** (each labeled):\n\n1. **SIXTEEN ONE.** x\n2. **SIXTEEN TWO.** x\n3. **SIXTEEN THREE.** Open is read.\n5. **SIXTEEN FIVE.** x\n\n### T16 Approach (checklist part A)\n\n3. **APPROACH THREE.** x\n\n### T17 (no list)\n\n- **Approach**: x\n";
+    std::fs::write(dir.join("plan.md"), plan).unwrap();
+    std::fs::write(dir.join("spec.md"), "- **FR-001**: Ours.\n").unwrap();
+    std::fs::write(dir.join("request.md"), "> words\n").unwrap();
+    std::fs::write(dir.join("data-model.md"), "# Data\n\n## A hand-in\n\nHAND IN.\n\n## A repair entry (`repairs.jsonl`)\n\nREPAIR BODY.\n\n### Its fields\n\nFIELDS.\n\n## The log line\n\nLOG. The earlier one's entry read as closed.\n\nNEXT.\n").unwrap();
+    std::fs::write(
+        other.join("plan.md"),
+        "### T16 (x)\n\n**Decisions**:\n\n1. **THEIRS ONE.** x\n",
+    )
+    .unwrap();
+    let out = scratch("out");
+    let body = "Label: data-model.md, \"A repair entry\", as T16's Decision 3 states it; T16's Decisions 2 and 5; 451 T16's Decision 1; data-model.md's repair entry; data-model.md, \"the earlier one's entry\"; T16's Decision 4; T17's Decision 1; T99's Decision 1; 999 T1's Decision 1; data-model.md, \"No such words\"; data-model.md's batch entry; research.md, \"A\"; request.md, \"words\".\n";
+    let m = build(&dir, &out, "T65", &under(&[("T65", body)]), &[], "h").unwrap();
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    for want in [
+        "<!-- feature 461 T16, Decision 3 -->\n3. **SIXTEEN THREE.** Open is read.\n",
+        "<!-- feature 461 T16, Decision 2 -->\n2. **SIXTEEN TWO.**",
+        "<!-- feature 461 T16, Decision 5 -->\n5. **SIXTEEN FIVE.**",
+        "<!-- feature 451 T16, Decision 1 -->\n1. **THEIRS ONE.**",
+        "<!-- data-model.md, \"A repair entry\" -->\n## A repair entry (`repairs.jsonl`)\n\nREPAIR BODY.\n\n### Its fields\n\nFIELDS.\n",
+        "<!-- data-model.md, \"the earlier one's entry\" -->\nLOG. The earlier one's entry read as closed.\n",
+        "- **T16's Decision 4**: NOT FOUND - T16's section in specs/461-x lists no decision 4",
+        "- **T17's Decision 1**: NOT FOUND - T17's section in specs/461-x lists no decision 1",
+        "- **T99's Decision 1**: NOT FOUND - specs/461-x has no T99 section",
+        "- **T1's Decision 1**: NOT FOUND - feature 999 has no directory under specs/",
+        "- **data-model.md, \"No such words\"**: NOT FOUND - specs/461-x/data-model.md holds no heading or paragraph with those words",
+        "- **data-model.md's batch entry**: NOT FOUND - specs/461-x/data-model.md holds no heading naming a batch entry",
+        "- **research.md, \"A\"**: NOT FOUND - specs/461-x has no research.md",
+    ] {
+        assert!(cited.contains(want), "{want}\n---\n{cited}");
+    }
+    assert_eq!(cited.matches("REPAIR BODY").count(), 1);
+    for wrong in [
+        "APPROACH THREE",
+        "NEXT.",
+        "HAND IN",
+        "SIXTEEN ONE",
+        "request.md",
+    ] {
+        assert!(!cited.contains(wrong), "{wrong}");
+    }
+}
+
 /// A clause after a task's run naming the run's own feature cuts nothing from it; a task named with no number is this feature's, read
 /// from its section; and a block's bare decision its task's other block defines is that section's own (461 T68, T68's plan review).
 #[test]

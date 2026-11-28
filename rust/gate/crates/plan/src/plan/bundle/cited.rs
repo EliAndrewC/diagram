@@ -100,38 +100,46 @@ fn in_task(dir: &Path, task: &str, rid: &str) -> String {
         )
 }
 
+/// Feature `no`'s one directory beside `spec_dir`, or why there is none.
+fn dir_of(spec_dir: &Path, no: &str) -> Result<PathBuf, String> {
+    let parent = spec_dir.parent().unwrap_or(Path::new("."));
+    let prefix = format!("{no}-");
+    let hits: Vec<PathBuf> = std::fs::read_dir(parent)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .filter(|e| e.file_name().to_string_lossy().starts_with(&prefix) && e.path().is_dir())
+        .map(|e| e.path())
+        .collect();
+    match hits.as_slice() {
+        [] => Err(format!("feature {no} has no directory under specs/")),
+        [hit] => Ok(hit.clone()),
+        many => Err(format!(
+            "feature {no} has {} directories under specs/",
+            many.len()
+        )),
+    }
+}
+
 /// Each (feature, id) another feature's requirement or decision, from that feature's one directory, under a line naming it; one not
 /// found there, or a feature with no one directory, is named as not found (451 T46: it was dropped without a word).
 fn foreign(spec_dir: &Path, others: &[(String, String)]) -> Vec<String> {
-    let parent = spec_dir.parent().unwrap_or(Path::new("."));
     let mut out = Vec::new();
     for (whose, rid) in others {
         // `451 T274`: that task's section of feature 451 (461 T68)
         let (no, task) = whose
             .split_once(' ')
             .map_or((whose.as_str(), None), |(n, t)| (n, Some(t)));
-        let prefix = format!("{no}-");
-        let hits: Vec<PathBuf> = std::fs::read_dir(parent)
-            .into_iter()
-            .flatten()
-            .flatten()
-            .filter(|e| e.file_name().to_string_lossy().starts_with(&prefix) && e.path().is_dir())
-            .map(|e| e.path())
-            .collect();
-        let text = match (hits.as_slice(), task) {
-            ([], _) => not_found(rid, &format!("feature {no} has no directory under specs/")),
-            ([hit], Some(t)) => in_task(hit, t, rid),
-            ([hit], None) => lookup(hit, rid).unwrap_or_else(|| {
+        let text = match (dir_of(spec_dir, no), task) {
+            (Err(why), _) => not_found(rid, &why),
+            (Ok(hit), Some(t)) => in_task(&hit, t, rid),
+            (Ok(hit), None) => lookup(&hit, rid).unwrap_or_else(|| {
                 let name = hit.file_name().unwrap_or_default().to_string_lossy();
                 not_found(
                     rid,
                     &format!("specs/{name} holds no {rid} in its spec.md, plan.md or plan-done.md"),
                 )
             }),
-            (many, _) => not_found(
-                rid,
-                &format!("feature {no} has {} directories under specs/", many.len()),
-            ),
         };
         out.push(format!("<!-- feature {whose} -->\n{text}"));
     }
@@ -355,6 +363,9 @@ pub(super) fn cited_text(
         })
         .collect();
     parts.extend(foreign(spec_dir, &others));
+    // a task's numbered decision and a spec file's entry, no FR, SC or D id (461 T69)
+    let bodies: Vec<&str> = under.iter().map(|(_, b)| b.as_str()).collect();
+    parts.extend(forms::carried(spec_dir, &own_no, &bodies));
     parts.extend(sources.iter().map(|(name, rid)| {
         format!(
             "<!-- {name} -->\n{}",
@@ -363,6 +374,8 @@ pub(super) fn cited_text(
     }));
     (parts, cited)
 }
+
+mod forms;
 
 #[cfg(test)]
 mod tests;

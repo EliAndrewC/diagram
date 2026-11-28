@@ -780,6 +780,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T69 (the plan review bundle carried nothing for 461 T65's \"T16's Decision 3\" and data-model.md's repair entry: found by T65's blocks review, 2026-11-27)": {
+   "sha256": "b8f3732f6100e340e8f0cc88ae1cbe4d7fb274ba50136457a065b36072973e51",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T69 Approach (checklist part A)": {
+   "sha256": "3d272246e40c1e5a6a3b4e0dd28264028fa06fc674defb6542ab343b8160195b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5087,6 +5099,40 @@
      "summary": "Both in one landing; T32 before T05's Verify re-run, T33 before T31; independent",
      "class": "within",
      "why": "Sequencing inside the feature's own tasks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T69 (the plan review bundle carried nothing for 461 T65's \"T16's Decision 3\" and data-model.md's repair entry: found by T65's blocks review, 2026-11-27)",
+    "### T69 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T69 Decision 1",
+     "summary": "A task's `Decision <k>` is item <k> of that task section's **Decisions** list, read to the list's next heading, never the Approach checklist's same number; no such list is a NOT FOUND line.",
+     "class": "within",
+     "why": "Says how to find the text a citation names so a plan reviewer gets the right decision. The rebuilt bundle shows it working: spec-cited.md carries T16's Decision 3, its item 3, not checklist item 3. Nothing in the GM's request or the spec is narrowed."
+    },
+    {
+     "id": "T69 Decision 2",
+     "summary": "A file's quoted entry is the heading section holding the words first, else the paragraph holding them; '<word> entry' names the heading holding it.",
+     "class": "within",
+     "why": "A way of resolving a citation. The heading section is the larger unit, so the reviewer gets more of the cited text, not less. data-model.md's 'A repair entry' and 'Recovery' are each carried once."
+    },
+    {
+     "id": "T69 Decision 3",
+     "summary": "Only files in the feature's own directory are read; request.md quotes and paths with a directory (docs/...) are left as the blocks' words.",
+     "class": "within",
+     "why": "request.md is already in every bundle in full, so skipping its quotes removes nothing. The task is to carry the two forms T65's review found missing, and the measured forms all name 461's own data-model.md. Leaving docs/ paths as words drops nothing a bundle carried before (FR-008), and neither the GM's request nor the spec names bundle citation coverage, so there is nothing for this to narrow."
+    },
+    {
+     "id": "T69 Decision 4",
+     "summary": "A bare `Decision <k>` with no task prefix is left uncarried, because it names the block's own section, which the bundle already carries.",
+     "class": "within",
+     "why": "The text is already in blocks.md, so nothing is missing for the reviewer. No narrowing."
     }
    ]
   }
