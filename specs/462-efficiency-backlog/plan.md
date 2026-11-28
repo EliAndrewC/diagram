@@ -3157,31 +3157,33 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** yes - a `[perf]` task (451 FR-013): it makes the gate's `make plan-delta` faster; not an engine-speed task.
 
 
-### T544 (<why: the finding or measurement that files it>)
+### T544 (make task-time took 61 s median over 31 real calls and 260 s a call on a copy, reading about 5.0 GB, observed 2026-11-27, method: 451 T536's record, dev/measurements/2026-11-27/t536-record-readers/results.md)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: what it re-reads, measured first: `make task-time` read 4,585,082,516 bytes of 7,138 files (observed 2026-11-28, method: T536's read-count shim over the 2026-11-27 02:00Z-14:29Z window, every path, each file's bytes against its size). Almost nothing is RE-read, 6,999 files once (observed 2026-11-28, method: T536's read-count shim over the 2026-11-27 02:00Z-14:29Z window). The re-reads are each main transcript twice, 857 MB for 429 MB (observed 2026-11-28, method: T536's read-count shim over the 2026-11-27 02:00Z-14:29Z window), since `columns::enqueued` and `columns::read_subagents` each read every `<sid>.jsonl`, and the pool log and `task-starts.jsonl` about 10 and 8 times, 2.3 MB together (observed 2026-11-28, method: T536's read-count shim over the 2026-11-27 02:00Z-14:29Z window), filed as T559. The bytes are the subagent transcripts read once, 3.58 GB, 4,460 files of them (2.57 GB) last written before the report's read-back start (observed 2026-11-28, method: T536's read-count shim over the 2026-11-27 02:00Z-14:29Z window, each file's mtime). So the fix is both: (1) `enqueued`'s rows read in `read_subagents`' one pass (`enqueue_rows`, the map `Subagents::enqueued`; `enqueued` removed, its three callers - task-time, where-time, the task progress view - reading the field), and (2) a transcript whose mtime is before the window's start less `SLACK_S` (an hour, a GUESS knob) is not read: every row it holds was written before it, so its usage rows are outside the window, and a run of the window has its `Bash` call, its notice and any `TaskStop` written at or after its start (the call seconds before its hook line); its agent or session is still entered with no calls (`tokens.read(path, "")`), so every map keeps its keys. An unbounded window (`stopped`, where-time with no readable `since`) skips nothing. After, 1,626,899,295 bytes of 2,722 files, transcripts 4.44 GB to 1.48 GB (observed 2026-11-28, method: T536's read-count shim over the 2026-11-27 02:00Z-14:29Z window). The output is byte-identical before and after on both windows, three pairs each, 1,131,096 and 1,830,443 bytes (observed 2026-11-28, method: `cmp` of each pair's outputs over 02:00Z-14:29Z and 2026-11-27T00:00Z-11-28T00:00Z), and the before binary is stable run to run (observed 2026-11-28, method: `cmp` of its first and third). Wall time on the night window is not resolved by the machine's noise, before median 106.3 s and after 115.6 s over eight alternated runs each at load 6 to 78 on 22 cores (observed 2026-11-28, method: `/usr/bin/time`, one binary's user time ranging 62 to 180 s). System time fell in every pair, 4.5-6.7 s to 1.8-3.8 s (observed 2026-11-28, method: `/usr/bin/time`). The quietest pair, at load 6-7, ran 85.0 s before and 64.0 s after (observed 2026-11-28, method: `/usr/bin/time`). The read phase was about 120 s of a 201 s run before, rchar flat from 123 s, so the rest is compute, T559's (observed 2026-11-28, method: `/proc/<pid>/io` rchar every 2 s).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| one pass and the mtime skip | `transcripts_tests.rs`: s.jsonl read 2 and the old subagent 1 on the old code, 1 and 0 after | n/a, no block | none: no map is drawn | n/a |
 
 ### T544 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make task-time` reads each transcript once and none that cannot hold a row of its window, printing the same report.
+2. **The constraints.** 462 FR-004 (read each record once); every figure the report prints stays the same (the brief).
+3. **Where each comes from.** O: the shim's counts above, the A/B diff of outputs; G: the brief's "every figure it prints must stay the same".
+4. **Do they describe the world here?** Measured on the live logs and transcripts at fixed past windows (an ISO SINCE and UNTIL), before and after binaries alternated, outputs diffed run by run.
+5. **The order.** Red test first (the read counter `READS`, test-only), then the one pass, then the skip.
+6. **The exits.** Green: the read-once test passes, the outputs identical, the bytes down. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Bytes read a call 4.59 GB to 1.63 GB on the night window, the report identical (observed 2026-11-28, method: T536's read-count shim over the 2026-11-27 02:00Z-14:29Z window).
+10. **Before moving a constant.** n/a: `SLACK_S` is new, a GUESS knob with its reasoning beside it.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A report reader sees nothing different: every figure is identical (diffed); the change is its time.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Not fixed here: the report spends about 75 s of its 201 s after its last read, rchar flat at 4.58 GB from 123 s (observed 2026-11-28, method: `/proc/<pid>/io` rchar every 2 s), and re-reads the pool log and `task-starts.jsonl`, 2.3 MB (observed 2026-11-28, method: T536's read-count shim over the 2026-11-27 02:00Z-14:29Z window); neither is a transcript re-read, and the compute wants its own profile. Filed as T559; it orders no other open task.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): it makes `make task-time`, `make where-time` and the task progress view read less.
 
 
 <!-- plan-archive: T533 to T545 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
@@ -3546,6 +3548,32 @@ parallelizing and is ordered by time saved, never by disk freed.
 |---|---|---|---|---|
 
 ### T560 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T559 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T559 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

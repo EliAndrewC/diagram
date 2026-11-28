@@ -538,14 +538,14 @@ pub fn view(
     sids.dedup();
     let span = (lo, now);
     let subs = columns::read_subagents(&sids, projects, span);
-    let queued = columns::enqueued(&sids, projects);
+    let queued = &subs.enqueued;
     let goal =
         columns::default_goal(&std::fs::read_to_string(root.join("Makefile")).unwrap_or_default());
     let read = Read {
         stream: &got.stream,
         aside: &got.aside,
         subs: &subs,
-        queued: &queued,
+        queued,
         goal: &goal,
         span,
     };

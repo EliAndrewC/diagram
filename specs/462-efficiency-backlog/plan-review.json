@@ -270,6 +270,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T544 (make task-time took 61 s median over 31 real calls and 260 s a call on a copy, reading about 5.0 GB, observed 2026-11-27, method: 451 T536's record, dev/measurements/2026-11-27/t536-record-readers/results.md)": {
+   "sha256": "ef77c9afe997aaed0a12b3dffe4b2ebbffd393e50d7c911a2b1b091cb002b5c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T544 Approach (checklist part A)": {
+   "sha256": "030f41ed678cd7fec08bf24885f30944300e33e01d9f2fa07d74614c779d55e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1335,6 +1347,70 @@
      "summary": "Also fix, in this task, the_candidates_at_the_merge_base_and_the_geometry's stale-page case: set the drawing's time to the page's plus one second instead of leaving it to the clock.",
      "class": "within",
      "why": "A defect found by this task's own measurement run (a test refusing good work under load, 1 of 90 red) in the same crate, fixed as found. Fixing a known defect a step turns up is the standing rule (constitution XIV, fix as we go), not unrequested scope, and it adds no behavior beyond making the existing test stop reading the clock. No part of the request is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T544 (make task-time took 61 s median over 31 real calls and 260 s a call on a copy, reading about 5.0 GB, observed 2026-11-27, method: 451 T536's record, dev/measurements/2026-11-27/t536-record-readers/results.md)",
+    "### T544 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T544-1 one pass",
+     "summary": "enqueued's rows read in read_subagents' single pass (Subagents::enqueued); enqueued removed, its three callers read the field.",
+     "class": "within",
+     "why": "Implementation of the moved perf task (FR-002 moves it here; 451 FR-013 tags it perf); the request and spec settle nothing about how, and nothing asked is dropped."
+    },
+    {
+     "id": "T544-2 mtime skip",
+     "summary": "On a bounded window, a transcript whose mtime is before the window start less SLACK_S is not read; its agent or session is still entered with no calls so every map keeps its keys.",
+     "class": "within",
+     "why": "A way of reading less while the report's figures stay the same; it removes no figure and no behavior anything in request.md or the spec asks for."
+    },
+    {
+     "id": "T544-3 SLACK_S",
+     "summary": "SLACK_S is one hour, recorded as a GUESS knob with its reasoning beside it.",
+     "class": "within",
+     "why": "A design constant inside the task; nothing asked settles it."
+    },
+    {
+     "id": "T544-4 unbounded window",
+     "summary": "An unbounded window (stopped, where-time with no readable since) skips nothing.",
+     "class": "within",
+     "why": "Keeps the skip from reaching any window it cannot reason about; reduces no asked scope."
+    },
+    {
+     "id": "T544-5 reach",
+     "summary": "The change reaches where-time and the task progress view through the shared reader.",
+     "class": "within",
+     "why": "Those are the shared reader's existing callers; the change is the same read path, not new behavior."
+    },
+    {
+     "id": "T544-6 identical output as green",
+     "summary": "Green exit requires the report's outputs identical before and after (cmp), figures unchanged.",
+     "class": "within",
+     "why": "Not an exactness standard: a time report whose figures changed after skipping files would be a tool answering wrongly, so 'same figures' is correctness and cmp is only the method of showing it. It holds no port to another implementation's bytes."
+    },
+    {
+     "id": "T544-7 done in bytes",
+     "summary": "Done is measured as bytes read (4.59 GB to 1.63 GB); wall time reported as unresolved by the machine's noise.",
+     "class": "within",
+     "why": "Neither request.md nor the cited spec sets a time target; the figures are reported honestly with their methods. Not a narrowing of anything asked."
+    },
+    {
+     "id": "T544-8 left to T559",
+     "summary": "The pool-log and task-starts.jsonl re-reads (2.3 MB) and the ~75 s post-read compute are left, filed as T559.",
+     "class": "within",
+     "why": "Slowness and a 2.3 MB re-read are not wrong outcomes (XIV defect definition), the work is filed not dropped, and no requirement the blocks validly cite asks for them: the cited '462 FR-004 (read each record once)' is not what FR-004 says (it is T536/T537's measure-and-split), so there is no requirement here to narrow."
+    },
+    {
+     "id": "T544-9 test and tag",
+     "summary": "Test-only READS counter with the red test first; the task tagged [perf] under 451 FR-013.",
+     "class": "within",
+     "why": "Enforcement of the task's own aim and the ordering FR-013 asks for."
     }
    ]
   }

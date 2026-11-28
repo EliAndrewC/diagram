@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-28T02:58:28Z",
+  "target": "plan-gate decide-defer 462-efficiency-backlog T544",
+  "commit": "37da07a52d",
+  "why": "the compute profile orders no other open task"
+}

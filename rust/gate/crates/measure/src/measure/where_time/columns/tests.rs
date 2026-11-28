@@ -98,7 +98,12 @@ fn the_enqueue_row_names_a_runs_end() {
     text += "{\"operation\": \"enqueue\", half a row\n";
     std::fs::create_dir_all(d.join("p")).unwrap();
     std::fs::write(d.join("p/s.jsonl"), text).unwrap();
-    let got = enqueued(&["s".to_owned(), "gone".to_owned()], &d);
+    let got = read_subagents(
+        &["s".to_owned(), "gone".to_owned()],
+        &d,
+        (f64::MIN, f64::MAX),
+    )
+    .enqueued;
     assert_eq!(got.len(), 2, "{got:?}");
     assert_eq!(got["toolu_a"], ts(&at("08:00:05")).unwrap());
     assert_eq!(got["toolu_b"], ts(&at("08:00:06")).unwrap());
