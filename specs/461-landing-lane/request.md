@@ -68,3 +68,15 @@ On where it goes, after the session proposed 461:
 <!-- SOURCE: GM NOTES -->
 > yeahm, I agree this should be part of the existing orchestration feature.
 <!-- END SOURCE -->
+
+2026-11-28, after the lane's gate sat on a hung test for 4 h 51 min with nothing woken (batch 461-4):
+
+<!-- SOURCE: GM NOTES -->
+> How's it going?  things look like they've been idle since 3am
+<!-- END SOURCE -->
+
+On the session's account of the stall and its filing of T107:
+
+<!-- SOURCE: GM NOTES -->
+> Okay, sounds like our tooling needs a fix for that!
+<!-- END SOURCE -->

@@ -133,7 +133,10 @@ departs from it is refused with the policy's own pick. The case this story was f
   `make land` checks there; the push's lock and route are unchanged.
 - **FR-004** A red batch: attribute, else bisect; eject; land the rest; file the repair as a queue entry (US4). How many changes a
   batch holds and when the lane starts one is a knob, seeded from trial 458's finding (451 T415).
-- **FR-005** The lane wakes the coordinator once per landed batch with a short status, and otherwise only for US5's cases.
+- **FR-005** The lane wakes the coordinator once per landed batch with a short status, and otherwise only for US5's cases - and
+  once for a batch that has written nothing past a bound while its runner lives, so a gate that hangs is never silent (the GM,
+  2026-11-28, after a hung test held batch 461-4's gate 4 h 51 min with nothing woken: "things look like they've been idle since
+  3am", "sounds like our tooling needs a fix for that!"; 461 T107).
 - **FR-006** TOKENS, weighed with the same standing as throughput (the GM's fifth process-reviewer message): the total tokens per
   landed task - builders, repair builders, fresh integration agents, review agents and the coordinator together, by kind (output,
   fresh input, cache read; 451 T512) - is measured over a like window before and after, and must not rise. A cost moved from the
