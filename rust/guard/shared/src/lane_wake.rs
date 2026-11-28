@@ -225,12 +225,13 @@ fn waiting(pool: &[Value], refs: &BTreeSet<String>, lane: &[Value]) -> Vec<Strin
 /// THE PHASE-2 BASE, ASKED IN ONE PLACE (461 T56, T64): whether `knob`, `HAND_IN_BASE`'s value, puts hand-ins on `origin/main`,
 /// where every hand-in starts the runner (T12 Decision 6). T22's meaning: unset, empty or `origin` is phase 2; `clone` (and any word
 /// T22's `l7r_shared::builder_pool::hand_in_base` refuses, whose hand-in starts nothing) is not. The Stop rule ([`holds`]) and
-/// `make lane-wait` (the lane crate's `wake.rs`) both ask it, here because the guard reaches no gate crate; carried with T22, it
-/// becomes `matches!(hand_in_base(knob), Ok(Base::Origin))`, so one reading says the base everywhere. In code, not a make default:
-/// the Stop hook and `make lane-wait` never see a `HAND_IN_BASE=` given on `make builder-done`'s command line.
+/// `make lane-wait` (the lane crate's `wake.rs`) both ask it, here because the guard reaches no gate crate; it asks T22's reader,
+/// so one reading says the base everywhere. In code, not a make default: the Stop hook and `make lane-wait` never see a
+/// `HAND_IN_BASE=` given on `make builder-done`'s command line.
 #[must_use]
 pub fn origin_base(knob: Option<&str>) -> bool {
-    matches!(knob, None | Some("" | "origin"))
+    use crate::builder_pool::{hand_in_base, Base};
+    matches!(hand_in_base(knob), Ok(Base::Origin))
 }
 
 /// What the lane under the git common directory `common` holds for its coordinator, said in a few words: its first open batch, else
