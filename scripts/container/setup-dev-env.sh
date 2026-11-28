@@ -154,6 +154,10 @@ if [ ! -x "$HOME/.cargo/bin/cargo-llvm-cov" ]; then
         | tar xz -C "$HOME/.cargo/bin"
 fi
 # maturin is no longer installed: the PyO3 doors it built went with the Python hamlet engine (feature 444 T39)
+# Every locked crate into ~/.cargo/registry: the suites that run cargo offline (the embedder's, `tests/hooks/test-l7r-gate.3.sh`,
+# a proxy of 127.0.0.1:9) need them present, and a fresh container had none (2026-11-28: its first land-tooling went red on
+# "failed to download from static.crates.io"). Idempotent; a warm registry fetches nothing.
+(cd "$REPO/rust" && "$HOME/.cargo/bin/cargo" fetch --locked -q)
 # The headless Chromium the browser crate drives (`rust/browser/`: the source archive's fetch and the glyph crop, feature 449 T146;
 # and, since S7, `make page-lit`'s `l7r-browser lit`, T150): Chrome for Testing's headless shell, pinned by
 # scripts/container/chromium.pin, downloaded and checked by install-chromium.sh with its libraries and fonts. Playwright's own install
