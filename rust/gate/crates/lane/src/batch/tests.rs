@@ -147,6 +147,7 @@ fn an_open_batch_s_end_lands_a_later_hand_in_of_its_task_on_top_or_has_it_supers
         let batches = log::batches(lane);
         let w = World {
             hand_ins: &all,
+            all: &all,
             on_main: &on_main,
             log: lane,
             batches: &batches,
