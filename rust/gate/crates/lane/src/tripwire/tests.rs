@@ -9,6 +9,7 @@ fn hand_in(feature: &str, tasks: &[&str], commit: &str) -> HandIn {
         commit: commit.into(),
         at: String::new(),
         repair_of: None,
+        build_half: false,
     }
 }
 

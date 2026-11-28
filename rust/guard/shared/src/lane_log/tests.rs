@@ -41,14 +41,16 @@ fn hand_ins_are_the_handed_in_done_lines_one_a_commit_and_only_those_still_the_l
                 tasks: vec!["T01".into(), "T02".into()],
                 commit: A.into(),
                 at: "u2".into(),
-                repair_of: None
+                repair_of: None,
+                build_half: false
             },
             HandIn {
                 feature: "451".into(),
                 tasks: vec!["T09".into()],
                 commit: B.into(),
                 at: "u6".into(),
-                repair_of: Some("r3".into())
+                repair_of: Some("r3".into()),
+                build_half: false
             },
         ]
     );
@@ -145,6 +147,7 @@ fn hand_in(feature: &str, tasks: &[&str], commit: &str) -> HandIn {
         commit: commit.into(),
         at: String::new(),
         repair_of: None,
+        build_half: false,
     }
 }
 
@@ -236,6 +239,7 @@ fn a_hand_in_s_state_is_the_first_of_the_data_model_s_order_that_holds() {
         HandInState::Ejected("ask:lane-T01".into()),
         HandInState::Ejected("r2".into()),
         HandInState::InBatch("461-3".into()),
+        HandInState::OnClosingHalf,
         HandInState::Waiting,
     ]
     .iter()
@@ -249,9 +253,83 @@ fn a_hand_in_s_state_is_the_first_of_the_data_model_s_order_that_holds() {
             "ejected -> the round arbiter ask:lane-T01",
             "ejected -> repair r2",
             "in batch 461-3",
+            "waiting on its closing half",
             "waiting"
         ]
     );
+}
+
+/// 461 T90: a hand-in is a build half's where its tree's last brief for its holder since the tree was held says `build-half` - a
+/// brief of another holder, of another tree, or before the tree was taken again says nothing - and a build half's state is
+/// `waiting on its closing half` until a later hand-in of its task supersedes it, an open batch or an ejection still read first.
+#[test]
+fn a_build_half_s_hand_in_waits_on_its_closing_half() {
+    let line = |event: &str, tree: &str, detail: &str, kind: Option<&str>| {
+        let mut l = json!({"utc": "u", "event": event, "tree": tree, "detail": detail});
+        if let Some(k) = kind {
+            l["kind"] = json!(k);
+        }
+        l
+    };
+    let d = |tree: &str, detail: &str, commit: &str| {
+        let mut l = line("done", tree, detail, None);
+        l["commit"] = json!(commit);
+        l["handed_in"] = json!(true);
+        l
+    };
+    let pool = vec![
+        line("take", "/t1", "461 T01", None),
+        line("brief", "/t1", "461 T01", Some("build-half")),
+        line("brief", "/t2", "461 T02", Some("build-half")),
+        line("brief", "/t1", "461 T09", None),
+        d("/t1", "461 T01", A),
+        line("take", "/t1", "461 T02", None),
+        line("take", "/t2", "461 T02", None),
+        line("brief", "/t2", "461 T02", Some("fix")),
+        d("/t2", "461 T02", B),
+        d("/t1", "461 T02", C),
+    ];
+    let all = hand_ins(&pool);
+    let halves: Vec<bool> = all.iter().map(|h| h.build_half).collect();
+    assert_eq!(halves, [true, false, false]);
+    let ask = |h: &HandIn, all: &[HandIn], log: &[Value]| {
+        let b = batches(log);
+        let none = BTreeSet::new();
+        let w = World {
+            hand_ins: all,
+            all,
+            on_main: &none,
+            log,
+            batches: &b,
+        };
+        state(h, &w)
+    };
+    let half = &all[0];
+    assert_eq!(ask(half, &all, &[]), HandInState::OnClosingHalf);
+    // an open batch that formed before T90 still holds it; an ejection is still read as one
+    let formed = json!({"event": "batch", "batch": "461-1", "changes": [A]});
+    assert_eq!(
+        ask(half, &all, &[formed.clone()]),
+        HandInState::InBatch("461-1".into())
+    );
+    let eject = json!({"event": "eject", "batch": "461-1", "change": A, "repair": "r1"});
+    assert_eq!(
+        ask(half, &all, &[formed, eject]),
+        HandInState::Ejected("r1".into())
+    );
+    // its closing half's hand-in supersedes it; the Stop rule's waiting reads neither the half nor what superseded it as waiting
+    let close = d(
+        "/t1",
+        "461 T01",
+        "ffffffffff6666666666666666666666666666666",
+    );
+    let mut both = pool.clone();
+    both.extend([line("take", "/t1", "461 T01", None), close]);
+    let all = hand_ins(&both);
+    assert_eq!(ask(&all[0], &all, &[]), HandInState::Superseded);
+    assert_eq!(ask(&all[3], &all, &[]), HandInState::Waiting);
+    let refs: BTreeSet<String> = [A.to_owned()].into();
+    assert!(waiting_unasked(&hand_ins(&pool), &refs, &[]).is_empty());
 }
 
 /// 461 T53: an earlier hand-in an open batch names stays `in batch` though a later hand-in of its task exists - the batch's line

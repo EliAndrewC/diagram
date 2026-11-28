@@ -34,7 +34,9 @@ Its state, the first that holds:
    change a batch is landing stays its, a later hand-in of its task waiting until the batch ends);
 3. `superseded` - a later hand-in of the same task exists;
 4. `ejected` - the lane log's last line for it is `eject`; it names its repair entry;
-5. `waiting`.
+5. `waiting on its closing half` - a build half's (its tree's last `brief` line since the tree was held says `"kind":
+   "build-half"`): formed into no batch, its closing half's hand-in superseding it (461 T90);
+6. `waiting`.
 
 ## A batch
 

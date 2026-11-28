@@ -317,6 +317,7 @@ fn hand_in(tasks: &str, commit: &str, at: &str) -> HandIn {
         commit: commit.to_owned(),
         at: at.to_owned(),
         repair_of: None,
+        build_half: false,
     }
 }
 

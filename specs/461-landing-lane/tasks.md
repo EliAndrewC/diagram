@@ -101,3 +101,5 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T78 D6 step 2's narrowing: a red unit naming several changes halves over those candidates alone, the others riding with the first half (rust/gate/crates/lane/src/attribute.rs, halve.rs, runner/run.rs); T24 halves over every change that ran, correct but up to a run or so slower; needs a rider pin rule written first (a lone candidate red beside riders is no one-change run)
       research: rendering
+- [ ] T93 T76/T26's done commit (refs/l7r/done/461-T76, 1a729b9a7a) predates T63: its new test in rust/gate/crates/lane/src/batch/tests.rs (an_open_batch_s_end_lands_...) builds World with no all field, which HEAD's l7r_shared::lane_log::World requires since T63, so the lane crate's tests fail to compile once it is carried and the batch gate goes red - add all: &all to that literal at its carry, research: rendering
+      research: rendering

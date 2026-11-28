@@ -1496,14 +1496,50 @@ T24's) fixed here, since the reader alone could not tell a row from its lines.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T90 (<why: the finding or measurement that files it>)
+### T90 (a build half's hand-in formed a batch and stopped the lane: 462 T321's build half 06520f6b3f formed batch 462-4 alone, its tick refused the plan section its closing half writes, the refusal named no change, and the runner stopped with every later batch behind it, 2026-11-28, `.git/l7r-lane/attempts/462-4-1.log` to `-3.log`)
+
+- **Approach**: `rust/guard/shared/src/lane_log.rs` (the lane's computed states, 461 T63, which `lane`'s `log.rs` re-exports and `batch.rs`'s `form` and the Stop rule read) marks each hand-in `build_half` and gives such a hand-in, where it is neither landed, in an open batch, superseded nor ejected, the state `OnClosingHalf` ("waiting on its closing half") in place of `waiting`. `form` batches only `waiting` hand-ins, so a build half forms no batch and is no oldest hand-in for a later one to be cut behind; its closing half's hand-in, a later hand-in of its task, supersedes it (D14's handout half, T09: the closing half's commit holds both halves' work) and is batched as any other.
+- **Decision 1 - a build half told by its brief's `kind`, read from the pool's log.** `kinds()` walks the pool's log once: a tree's `brief` line with a `kind` is kept per tree and holder (`detail`), dropped at the tree's next `take`, `make` or `adopt`; a `done` line takes the kind kept for its tree and holder. This is the reading `task`'s `builder_done::kind_of` makes for the hand-in's milder mode (461 T44). Why it and not the other two clues the brief named: the done line carries no kind (adding one would leave 462 T321's and 461 T36's build halves, already on the log, unmarked, and the lane would still batch them), and a handoff named in the commit is the builder's own words, where the brief's kind is written by `make builder-brief` and never by the builder (T44's reason). Observed 2026-11-28, method: the clone's `builder-pool.log`, lines 1010-1011 and 1086-1087 - both live build halves have a `brief` line with `"kind": "build-half"` before their done line, and 462 T321's closing half (line 1095) `closing-half`. Label: the easier route (no writer changes, no migration).
+- **Decision 2 - its place in the order: last, before `waiting`.** `landed`, `in batch`, `superseded` and `ejected` are still asked first: a batch formed before T90 still carries what its `batch` line names (T53's rule), an ejected build half still waits on its repair, and a superseded one rides inside its closing half's commit. Only what would have read `waiting` reads `waiting on its closing half`. Label: the easier route.
+- **Decision 3 - a new state, not a filter in `form`.** In `l7r_shared::lane_log` so `make lane` shows it by name (`lane.rs` lists every state but landed and superseded) and the Stop rule's `waiting_unasked` no longer counts it - the lane has nothing to do for it until its closing half hands in. Label: the easier route (one rule in one place, T63's reason).
+- The `HandIn` struct gains one field; the five test literals (observed 2026-11-28, method: `grep -rn "HandIn {" rust`) (lane_log, lane's batch, tripwire and wake tests) name it `false`; 461 T76/T26's and T24/T25's done commits construct no `HandIn` literal and touch none of these hunks (`git show refs/l7r/done/461-T76` etc., read 2026-11-28): the new batch test sits after the `formed` helper, away from T76's append at the file's end.
+- Red first (2026-11-28): `batch::tests::a_build_half_s_hand_in_waits_on_its_closing_half_and_forms_no_batch`, 461 T36's build half's shape as the pool's log wrote it, on the old code - 3 passed, 1 failed: `left: ["c736496d82221e0a6d0452b5998882dc04f42c7f"]`, `right: ["dddddddddd4444444444444444444444444444444"]` (the build half formed the batch alone, 462-4's shape). After: `ONLY="batch::tests"` 4 of 4, `ONLY="lane_log::tests"` 8 of 8 with the new `a_build_half_s_hand_in_waits_on_its_closing_half` (the kind's reading per tree, holder and hold; the state's order; the closing half superseding; the Stop rule's waiting). Not run red: the lane_log test (the variant did not exist).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the lane's hand-in state | n/a: tooling, no map | n/a | none | n/a |
+
+### T90 Approach (checklist part A)
+
+1. **The goal, in the world.** A build half's hand-in waits on the lane, in no batch, and holds no later batch behind it; its closing half's hand-in supersedes it and lands both halves in one batch.
+2. **The constraints.** 461 D5 (the batch of `waiting` hand-ins), D14 (a later hand-in of a task supersedes; the closing half builds on the build half's commit, T09), T44 (the kind read from the brief, never from the builder), T63 (the states in one place).
+3. **Where each comes from.** O: batch 462-4's attempts and the lane's log (2026-11-28); O: the pool's log lines above; R: `builder_done.rs`'s `kind_of`.
+4. **Do they describe the world here?** Yes, measured 2026-11-28 (the clone's `builder-pool.log` read for 461 T36's take, brief and done lines): the red test is that build half's own shape, its sha the live one.
+5. **The order.** Before T23 (the lane runs every landing); after T63.
+6. **The exits.** Green: the red test green and the crates whole at `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/lane ONLY="batch::tests"`: 4 of 4; `make lane` lists 461 T36's build half `waiting on its closing half` once landed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A build half batched alone stops the lane with every later batch behind it - a wrong outcome (constitution XIV), not a difference.
+
+**Found and left?**
+- 461 T76/T26's done commit (1a729b9a7a) predates T63: its new batch test builds `World` without `all`, so the lane crate's tests fail to compile once it is carried and the batch gate goes red. Not fixed here: the test is in T76's commit, not on HEAD, and editing it here would conflict with its carry. Filed as T93; lands before T23.
+
+**Performance work?** no
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T93 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T90 Approach (checklist part A)
+### T93 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

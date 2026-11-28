@@ -936,6 +936,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T90 (a build half's hand-in formed a batch and stopped the lane: 462 T321's build half 06520f6b3f formed batch 462-4 alone, its tick refused the plan section its closing half writes, the refusal named no change, and the runner stopped with every later batch behind it, 2026-11-28, `.git/l7r-lane/attempts/462-4-1.log` to `-3.log`)": {
+   "sha256": "43ca66c5ab85afac8b3b6a342feb796c4c9b5df2c58265f607da4fcfcd05c86f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T90 Approach (checklist part A)": {
+   "sha256": "e0c55ff1c55ad2770744f4b1390b9860b255609c7984d0902e621cc547234420",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5884,6 +5896,47 @@
      "summary": "no general mention rule: a row that names T<n> only in its body is not placed on that task; the task line's literal rule (place any row naming T<n>) priced and not taken",
      "class": "within",
      "why": "What is declined is a task line written by a session, not the GM's request or a requirement of the spec. D6 step 2 places a row on the change it names, and T15's rule, already in the plan, says a hold stops the batch and ejects nothing. A mention rule would eject T278 under a hold that is no change's fault. With Decisions 1-2 every line naming T278 in the incident sits inside the row that opens T278:, so the incident is cleared with nothing the spec asks for left out. Even judged as a narrowing of the task line it would be LEGITIMATE: applied literally, the rule defeats D6's purpose of ejecting the change at fault."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T90 (a build half's hand-in formed a batch and stopped the lane: 462 T321's build half 06520f6b3f formed batch 462-4 alone, its tick refused the plan section its closing half writes, the refusal named no change, and the runner stopped with every later batch behind it, 2026-11-28, `.git/l7r-lane/attempts/462-4-1.log` to `-3.log`)",
+    "### T90 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T90 Approach",
+     "summary": "A build half's hand-in gets the state OnClosingHalf instead of waiting, so form never batches it and it is never the oldest hand-in a later batch is cut behind; its closing half's hand-in supersedes it (D14) and is batched normally.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a carve-out from FR-003/D5's 'take the waiting hand-ins in order': one kind of hand-in is no longer batched in its turn, and later hand-ins can land before its work. That carve-out is already in the GM-approved sketch's item 2 ('Builders submit only once their change is ready to land'). A build half is not ready by definition, and under D14 its work lands inside its closing half's commit. Batching it alone, as measured on batch 462-4, stopped the lane with every later batch behind it. That defeats FR-003/SC-001's purpose (a lane that lands batches with no coordinator turn) and is a wrong outcome (XIV), not a difference. The cases are kept apart: only the build half is held, and the closing half is batched like any other hand-in."
+    },
+    {
+     "id": "T90 Decision 1",
+     "summary": "A build half is recognized by the kind on its brief line in the pool's log (written by make builder-brief), the same reading as builder_done::kind_of (T44). It is not taken from the done line or from the builder's commit.",
+     "class": "within",
+     "why": "This is how the approved fix is carried out. It follows T44's rule that the kind comes from the brief and never from the builder. It also covers the build halves already on the log, so nothing the request covers is left out."
+    },
+    {
+     "id": "T90 Decision 2",
+     "summary": "The states landed, in batch, superseded and ejected are still checked first. Only a build half that would read waiting reads waiting on its closing half.",
+     "class": "within",
+     "why": "Existing batches, ejections with their repairs, and supersession stay as D5/D14/T53 set them. The new state replaces waiting only, so nothing else that was asked for changes."
+    },
+    {
+     "id": "T90 Decision 3",
+     "summary": "This is a new named state in lane_log, not a filter inside form. make lane shows it by name, and the Stop rule's waiting_unasked no longer counts it.",
+     "class": "within",
+     "why": "T63 keeps the states in one place, and a named state keeps the hand-in visible on make lane. Leaving it out of the Stop rule is right because the lane has nothing to do for it until the closing half arrives. No requested behavior is narrowed."
+    },
+    {
+     "id": "T90 Found and left: T93",
+     "summary": "T76/T26's done commit has a batch test that will not compile after T63. It is not fixed in T90; it is filed as T93, to land before T23.",
+     "class": "within",
+     "why": "The defect is not carried past the step: it is filed in the same feature and ordered to land before T23, the lane running every landing. Fixing it inside T90 would conflict with T76's carry. No requested work is narrowed."
     }
    ]
   }

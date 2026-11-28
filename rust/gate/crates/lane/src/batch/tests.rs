@@ -15,6 +15,7 @@ fn h(feature: &str, tasks: &[&str], commit: &str) -> HandIn {
         commit: commit.to_owned(),
         at: String::new(),
         repair_of: None,
+        build_half: false,
     }
 }
 
@@ -29,6 +30,51 @@ fn formed(hand_ins: &[HandIn], lane: &[serde_json::Value], max: usize) -> Vec<St
         batches: &batches,
     };
     form(&w, max).iter().map(|h| h.commit.clone()).collect()
+}
+
+/// A BUILD HALF'S HAND-IN FORMS NO BATCH (461 T90): 461 T36's build half on the lane, as the pool's log wrote it (its `brief` line's
+/// `kind`), waits on its closing half - the other feature's hand-in after it is the batch, not held behind it - and the closing
+/// half's hand-in, superseding it, is the batch. 462 T321's build half formed batch 462-4 alone and stopped the lane on its tick.
+#[test]
+fn a_build_half_s_hand_in_waits_on_its_closing_half_and_forms_no_batch() {
+    const BUILD: &str = "c736496d82221e0a6d0452b5998882dc04f42c7f";
+    const OTHER: &str = "dddddddddd4444444444444444444444444444444";
+    const CLOSE: &str = "eeeeeeeeee5555555555555555555555555555555";
+    let pool_line = |event: &str, tree: &str, detail: &str| json!({"utc": "u", "event": event, "tree": tree, "detail": detail});
+    let done = |tree: &str, detail: &str, commit: &str| {
+        let mut l = pool_line("done", tree, detail);
+        l["commit"] = json!(commit);
+        l["handed_in"] = json!(true);
+        l
+    };
+    let brief = |tree: &str, detail: &str, kind: &str| {
+        let mut l = pool_line("brief", tree, detail);
+        l["kind"] = json!(kind);
+        l
+    };
+    let mut pool = vec![
+        pool_line("take", "/t271", "461 T36"),
+        brief("/t271", "461 T36", "build-half"),
+        done("/t271", "461 T36", BUILD),
+        pool_line("release", "/t271", "461 T36"),
+        pool_line("take", "/t269", "462 T9"),
+        brief("/t269", "462 T9", "fix"),
+        done("/t269", "462 T9", OTHER),
+    ];
+    let all = log::hand_ins(&pool);
+    assert_eq!(formed(&all, &[], LANE_MAX), [OTHER]);
+    // the closing half, on the same tree taken again, hands in: it supersedes the build half and is the batch
+    pool.extend([
+        pool_line("take", "/t271", "461 T36"),
+        brief("/t271", "461 T36", "closing-half"),
+        done("/t271", "461 T36", CLOSE),
+    ]);
+    let all = log::hand_ins(&pool);
+    let lane = [
+        json!({"event": "batch", "batch": "462-1", "changes": [OTHER]}),
+        json!({"event": "landed", "batch": "462-1", "landed": [OTHER]}),
+    ];
+    assert_eq!(formed(&all, &lane, LANE_MAX), [CLOSE]);
 }
 
 #[test]

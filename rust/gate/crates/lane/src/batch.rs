@@ -11,7 +11,8 @@
 //! open anyway (it runs one at a time); the rule is here so the batch is right by its own reading, whoever forms it.
 //!
 //! Only `waiting` hand-ins are batched (`log::state`): a superseded one rides inside its successor's commit (D14's handout half,
-//! T09), an ejected one waits on its repair, one in an open batch is that batch's.
+//! T09), an ejected one waits on its repair, one in an open batch is that batch's, and a build half's waits on its closing half
+//! (461 T90), whose hand-in supersedes it: batched alone it was refused at its tick for the section its closing half writes.
 
 use crate::log::{self, HandIn, HandInState, World};
 

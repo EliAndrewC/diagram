@@ -11,7 +11,7 @@
 //! author's time and subject - `task`'s `builder_done::held_by`, the carried rule, asked by the caller into [`World::on_main`] - or a
 //! `landed` line lists it, which holds after the object is pruned), `in batch <b>` (an open batch names it and has not ejected it),
 //! `superseded` (a later hand-in of its feature shares a task), `ejected -> repair <r>` (the last line of the log naming it is an
-//! `eject`), else `waiting`. `in batch` is asked before `superseded`, against data-model.md's list (a deliberate deviation, 461 T53):
+//! `eject`), `waiting on its closing half` (a build half's, [`HandIn::build_half`], 461 T90), else `waiting`. `in batch` is asked before `superseded`, against data-model.md's list (a deliberate deviation, 461 T53):
 //! the open batch's `batch` line names this sha and lands it (D14, T52), so the batch carries it whatever later hand-in of its task
 //! exists, and that later one waits.
 //!
@@ -31,7 +31,7 @@
 //!   resumed (data-model.md, "Recovery"), not stopped - the data model's "or the runner killed" read as Recovery reads it.
 //! - the hand-in scratch refs (`refs/l7r/hand-in/`) mark a hand-in not yet made, which is no lane entry: they add no state.
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 use std::path::Path;
 
@@ -60,6 +60,31 @@ pub struct HandIn {
     pub at: String,
     /// The repair entry it answers, where the line names one.
     pub repair_of: Option<String>,
+    /// A BUILD HALF'S hand-in (461 T90): its tree's builder was briefed as `build-half` ([`kinds`]).
+    pub build_half: bool,
+}
+
+/// The kind each line's builder was briefed as, by the line's index in `pool`: the last `brief` line's `kind` for the same tree and
+/// holder (`detail`) since that tree was last taken, made or adopted - the reading `task`'s `builder_done::kind_of` makes for the
+/// hand-in's milder mode (461 T44). Why the brief's line and not a field of the done line: `make builder-brief` writes it and the
+/// builder never names it, and it is on the log for every build half handed in before T90 (462 T321's, 461 T36's), so no done line
+/// needs a new field or a migration. One pass, a tree's briefs dropped at each hold.
+fn kinds(pool: &[Value]) -> Vec<Option<String>> {
+    let mut briefed: BTreeMap<(String, String), String> = BTreeMap::new();
+    let mut out = Vec::with_capacity(pool.len());
+    for l in pool {
+        let tree = l["tree"].as_str().unwrap_or_default().to_owned();
+        let detail = l["detail"].as_str().unwrap_or_default().to_owned();
+        match (l["event"].as_str().unwrap_or_default(), l["kind"].as_str()) {
+            ("take" | "make" | "adopt", _) => briefed.retain(|(t, _), _| *t != tree),
+            ("brief", Some(k)) => {
+                briefed.insert((tree.clone(), detail.clone()), k.to_owned());
+            }
+            _ => {}
+        }
+        out.push(briefed.get(&(tree, detail)).cloned());
+    }
+    out
 }
 
 /// Every hand-in of the pool's log, in its order, one a commit (the first line of a commit kept).
@@ -67,8 +92,9 @@ pub struct HandIn {
 pub fn hand_ins(pool: &[Value]) -> Vec<HandIn> {
     let mut seen = BTreeSet::new();
     pool.iter()
-        .filter(|l| l["event"] == "done" && l["handed_in"] == true)
-        .filter_map(|l| {
+        .zip(kinds(pool))
+        .filter(|(l, _)| l["event"] == "done" && l["handed_in"] == true)
+        .filter_map(|(l, kind)| {
             let (feature, tasks) = l["detail"].as_str()?.split_once(' ')?;
             Some(HandIn {
                 feature: feature.to_owned(),
@@ -76,6 +102,7 @@ pub fn hand_ins(pool: &[Value]) -> Vec<HandIn> {
                 commit: l["commit"].as_str()?.to_owned(),
                 at: l["utc"].as_str().unwrap_or_default().to_owned(),
                 repair_of: l["repair_of"].as_str().map(str::to_owned),
+                build_half: kind.as_deref() == Some("build-half"),
             })
         })
         .filter(|h| seen.insert(h.commit.clone()))
@@ -220,6 +247,9 @@ pub enum HandInState {
     Ejected(String),
     /// The open batch naming it.
     InBatch(String),
+    /// A build half's hand-in no later one supersedes yet (461 T90): it waits on its closing half, whose hand-in carries both
+    /// halves' work (D14's handout half, T09), and is formed into no batch.
+    OnClosingHalf,
     Waiting,
 }
 
@@ -233,6 +263,7 @@ impl fmt::Display for HandInState {
             }
             Self::Ejected(r) => write!(f, "ejected -> repair {r}"),
             Self::InBatch(b) => write!(f, "in batch {b}"),
+            Self::OnClosingHalf => f.write_str("waiting on its closing half"),
             Self::Waiting => f.write_str("waiting"),
         }
     }
@@ -282,8 +313,14 @@ pub fn state(h: &HandIn, w: &World) -> HandInState {
     if later {
         return HandInState::Superseded;
     }
+    // 461 T90: a build half batched alone was refused at its tick for the plan section its closing half writes, and the refusal,
+    // naming no change, stopped the runner with every later batch behind it (462-4, 2026-11-28)
     if ejected.is_none() {
-        return HandInState::Waiting;
+        return if h.build_half {
+            HandInState::OnClosingHalf
+        } else {
+            HandInState::Waiting
+        };
     }
     // to the repair its last `eject` line names, or the round arbiter's trigger it waits on (461 T18: the tripwire files no repair)
     let ejection = w
