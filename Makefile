@@ -560,9 +560,9 @@ found-close:    ## [project] close found.jsonl rows: FILED as a task, or SETTLED
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record found close --feature "$$(ls -d specs/$(F)-* | head -1)" --rows "$(ROWS)" $(if $(TASK),--task "$(TASK)",) $(if $(WHY),--why "$$WHY",)
 
 task-add: export TASK_TITLE = $(TITLE)
-task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical] [PERF=1: a performance task, docs/performance-checklist.md's questions appended]; make quick's checks run over what it wrote and a line they newly fail withdrawn and refused (451 T19), escape QUICK_OK="<reason>"
+task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical] [PERF=1: a performance task, docs/performance-checklist.md's questions appended] [BUGFIX=1: a process bugfix, its box tagged [bugfix], the scheduling policy's class, 461 FR-011]; make quick's checks run over what it wrote and a line they newly fail withdrawn and refused (451 T19), escape QUICK_OK="<reason>"
 	@if [ -z "$(F)" ]; then printf 'make task-add: F=<feature> is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-add "$(F)" $(if $(SECTION),--section "$(abspath $(SECTION))",) $(if $(filter physical,$(RESEARCH)),--physical,) $(if $(PERF),--performance,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-add "$(F)" $(if $(SECTION),--section "$(abspath $(SECTION))",) $(if $(filter physical,$(RESEARCH)),--physical,) $(if $(PERF),--performance,) $(if $(BUGFIX),--bugfix,)
 
 tick: export TICK_NOTE = $(NOTE)
 tick: export PLAN_REVIEW_OK := $(PLAN_REVIEW_OK)

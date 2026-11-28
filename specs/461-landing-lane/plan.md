@@ -1152,31 +1152,114 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T81 (<why: the finding or measurement that files it>)
+### T81 (US6, FR-011, SC-007: the GM 2026-11-28, "our scheduler probably needs some tool-based enforcement of these kinds of prioritizations"; the case: 462 disk tasks handed builders while 461's phase 3 tasks stood ready)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: part 1 of US6 - the policy's record and its one reader, no handout path rewired (T82 does that). The record
+  `dev/builder-policy.txt` (new): one line each, `#` comments, every line carrying `note=<the GM's words, dated>`; lines `class
+  perf|bugfix|none`, `<key> all`, `<key> floor <n>` (n >= 1), `<key> share`. The committed record is `class perf` (the GM
+  2026-11-20) and `class bugfix` (the GM 2026-11-28) and no feature line - the default; the GM's word sets any `all` or `floor`.
+  The reader `rust/guard/shared/src/builder_queue/policy.rs` (new; tests `policy/tests.rs`): `parse` (each bad line named
+  `dev/builder-policy.txt line <n>: <why>: <line>`), `read` (absent or malformed: the default ranks, `why` says so), `bugfix`
+  (the `[bugfix]` tag among the bracketed tags after the id, read as `set_down_hooks`' `PERF_TAG` reads `[perf]`), `rank` (pure,
+  best first, each `Ranked` with its `why` for T82's refusal and T83's replay), `gather` (the boards' free READY entries, the
+  lane's ready repairs, the unlisted tasks) and `ranked(clone, prefer)`, THE ONE READER - pool, every queue's board, done refs,
+  repairs (`repairs::offer(..).ready`), T313's unlisted performance tasks (`builder_queue::unlisted`), the active features' open
+  bugfixes (`set_down_hooks::open_bugfix`, new), the Makefile's targets,
+  the record. `builder_queue::Next` gains `free` (every READY entry overlapping nothing in flight, in queue order); `next`,
+  `offer`, `idle` and `repairs::first` are unchanged. `make task-add BUGFIX=1` (Makefile, its help line and
+  docs/make-targets.html; `task_add.rs --bugfix`) prefixes the title `[bugfix] ` unless the tag stands. `rust/guard/CLAUDE.md`'s
+  `shared/` row names `builder_queue::policy`; the record is in `rust/guard/shared/Cargo.toml`'s `reads`, so its edit re-runs the
+  test that it parses.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: guard and gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The rank, the first difference deciding**: (1) the class, in the record's order of class lines (none after every class);
+   (2) the feature's form: a floor not met 0, `all` 1, `share` 2, a floor met 3; (3) the caller's own feature (`prefer`);
+   (4) the feature key's name order; (5) within a feature, its repair, then its queue's lines in order, then its unlisted tasks
+   in `tasks.md`'s order. Label: FR-011's words for (1), (3)-(5); (2) by Decision 2.
+2. **A floor not yet met ranks ABOVE `all`.** The GM's "always gets 1 builder so that it is able to move forward" is a
+   guarantee an `all` feature would starve if it ranked below; the record is silent where both forms stand at once. Met, the
+   floor's feature takes only an uncontended tree ("only fills the available builders if there is no contention"). Label: a
+   decision where the GM's words are silent, the guarantee read as the stronger; a knob only by reordering one `match`.
+3. **The classes outrank every form**: "priority over everything else regardless of what feature they are attached to"
+   (2026-11-28). Label: the GM's words.
+4. **The record refuses a line with no `note=`**: FR-011, "one record the GM's words set" and "a change the GM directs changes
+   the record, never an escape". A malformed record ranks as the default and says every bad line, never an order nobody wrote.
+   Label: FR-011's words; the default-on-error the easier route.
+5. **A record with no class line keeps the default's two** (perf, then bugfix), so a line giving one feature `all` never
+   silently drops performance-first (451 FR-013); `class none`, alone among class lines, ranks no class. Label: the easier route,
+   holding the standing rule.
+6. **`LANE_REPAIR_FIRST` is not read**: FR-011 says no words of the GM's set it. By FR-011 a repair ranks by its own task's class
+   and feature, below the classes. A repair is classed by its own tasks' boxes and ranks first within its feature, as that
+   feature's oldest built work. T82 retires the knob when it rewires `idle` and the gate. Label: FR-011's words; first-within the
+   easier route.
+7. **`#! order=queue` (462 T549) needs no reading**: T549's done commit 1136054db4 was ejected by the lane (repair r1,
+   `unplaced`, 2026-11-28T02:54Z) and is not in this tree; a queue's own order is step 5 for every queue, always below the
+   classes (FR-011). The header line in 462's queue parses as a comment. Label: FR-011's words. The ejected rule is T91's.
+8. **UNLISTED WORK is named with its `make queue-add`**: on 2026-11-28 461's phase 3 tasks had no queue lines (461's queue.txt
+   lists T09-T13 only; the pool log's 461 takes T63-T84 name tasks with no line), so a reader of queue entries alone could not
+   name the case's own pick. The reader names as `Source::Unlisted` every open box of an `all` feature or a floor-not-met
+   feature that no queue line names, no held tree holds and no done ref keeps, its command `make queue-add F= T= KIND=fix|build-half`
+   (the kind by `builder_brief::mechanism`); and, of ANY active feature, its unlisted CLASS tasks - T313's performance ones and
+   the open `[bugfix]` ones (`set_down_hooks::open_bugfix`, the walk `open_performance` takes, the two now one `open_where`), each
+   ranked in its class: the GM gave both classes one priority "regardless of what feature they are attached to", and a bugfix
+   filed by `make task-add BUGFIX=1` starts with no queue line. A queue
+   that cannot be parsed hides its feature's tasks from the unlisted walk, as `listed_in` does. Label: the easier route that
+   names the case's pick, and the GM's words for the classes; FR-011 is silent on unqueued work. Round 1 of the review blocked on
+   leaving the unlisted bugfix of a `share` feature unnamed; it is named now.
+9. **One ordering change from today**: within the performance class a listed performance entry ranks before an unlisted
+   performance task of the same feature (the Stop block names the unlisted one first today). Label: the easier route, one
+   ranking with step 5; no pick crosses a class or a feature.
+
+- Red first (2026-11-27, the build half): the policy tests against a stub of today's `offer` (every form `share`, no bugfix
+  class): 6 passed, 3 failed (`the_2026_11_28_case_a_feature_given_every_builder_is_picked_over_the_caller_s_queue`,
+  `the_one_reader_ranks_the_clone_s_work_by_its_record`, `a_floor_not_met_names_its_unlisted_tasks_and_a_mechanism_is_listed_build_half`);
+  after, 11 of 11. `task_add`'s `bugfix_1_tags_the_box_the_policy_reads_as_a_process_bugfix` was written with the code, not run
+  red. The closing half's `bugfix` fix (Found and left, below) adds five cases to
+  `the_bugfix_tag_is_read_among_the_tags_after_the_id_and_never_from_the_title`; the first fails on the build half's split
+  (observed 2026-11-27, method: reading the old `split` against the case). The unlisted bugfix walk (Decision 8) moved
+  `the_one_reader_ranks_the_clone_s_work_by_its_record`'s record-absent and unreadable-queue expectations and added its set-down
+  case; not run red.
 
 ### T81 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A free builder goes to the work the GM's stated priorities rank first, computed by one function
+   from one record, so the session need not remember the rule (US6).
+2. **The constraints.** FR-011 (the three forms, the two classes and their membership, the rules it replaces, the refusal and
+   its escape - the last two T82's), SC-007, 451 FR-013 (performance's membership), constitution XIV (a bugfix is a defect's fix).
+3. **Where each comes from.** G: the GM 2026-11-28 (request.md's last section), 2026-11-20 (performance first). R: spec.md US6,
+   FR-011, SC-007. O: the pool log of 2026-11-28 (461's phase 3 takes naming tasks with no queue line); the red-first counts.
+4. **Do they describe the world here?** On fixtures: a scratch clone with 461 and 462 queues, a pool registry, a done ref, a
+   lane repair and the record, measured 2026-11-27 (the policy tests' fixtures, `world` in `policy/tests.rs`). The real 2026-11-28 log is replayed by T83.
+5. **The order.** After T16 (repairs), T313's `unlisted`; before T82 (the handout paths onto `ranked`), T83 (the replay); T91
+   and T94 before T82.
+6. **The exits.** Green: the first tier over the crates reading `builder_queue` (four, observed 2026-11-27, method: the brief's CHECKS line). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the case's pick had no queue line at all (Decision 8), found by reading 461's queue against the
+   pool log.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks` green over `rust/guard/shared rust/guard rust/gate/crates/task rust/gate/crates/lane`; the
+   batch gate's coverage is the lane's (FR-004, FR-008), not this exit's.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The builders' handout: once T82 wires it, a free tree goes to the feature the record gives `all` or a
+   floor, and to performance and bugfix work of any feature first, where today the caller's own queue or name order decides.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `bugfix` split the tags on single spaces, so a bracketed tag holding a space before `[bugfix]` (`[waits: T80] [bugfix] ...`,
+  which `PERF_TAG` reads whole) ended the scan and the task lost its class. Fixed here: the tags read as `PERF_TAG` reads them,
+  pinned by five new cases; observed 2026-11-27, method: reading `bugfix` beside `set_down_hooks`' `PERF_TAG`.
+- The reader names an unlisted task that cannot start: `unlisted_of` skips no task that waits (`(waits: ...)`, `after T<n>` open,
+  another's `lands before`) or that a GM-question ruling holds or parks, where `next_performance_in` skips all four - once the
+  handout paths read `ranked`, an `all` feature's pick could be such a task. Not fixed here: `waits` is `set_down_hooks`'
+  private reading over its landings log, a share of its own, and no path reads `ranked` until T82. Filed as T94; lands before T82.
+- 462 T549's ejected `#! order=queue` rule (repair r1) is still offered as READY work. Not fixed here: it is the lane's repair
+  of another feature's change, the session's to withdraw or rebuild. Filed as T91; lands before T82.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - it ranks the builders' work; it makes nothing faster.
 
 
 ### T82 (<why: the finding or measurement that files it>)
@@ -1438,6 +1521,59 @@ engine speed, so the performance checklist does not apply.
 |---|---|---|---|---|
 
 ### T95 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T91 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T91 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T94 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T94 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

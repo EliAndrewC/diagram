@@ -1032,6 +1032,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T81 (US6, FR-011, SC-007: the GM 2026-11-28, \"our scheduler probably needs some tool-based enforcement of these kinds of prioritizations\"; the case: 462 disk tasks handed builders while 461's phase 3 tasks stood ready)": {
+   "sha256": "39abc02051f101ca6bbb8d66dfbac21a2486499d327173b5e7236c9f5cdc9bf6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T81 Approach (checklist part A)": {
+   "sha256": "a7ff23ff11b1d827dc3e093ebf2489b52b476d7524d6daccec6795e904d07354",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6434,6 +6446,535 @@
      "why": "The request's bisect, eject and land-the-rest all still happen: a red among the survivors starts a fresh halving, and the failing change is still ejected while the rest lands. US4's bound, which SC-003 cites, is stated for one bad change. A conflict ejection during a halving is a second faulty change that the bound does not describe. The extra runs are a cost, not a fidelity finding, and the decision drops nothing that was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T81 (US6, FR-011, SC-007: the GM 2026-11-28, \"our scheduler probably needs some tool-based enforcement of these kinds of prioritizations\"; the case: 462 disk tasks handed builders while 461's phase 3 tasks stood ready)",
+    "### T81 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Approach: the committed default",
+     "summary": "dev/builder-policy.txt committed as `class perf` and `class bugfix` with no feature line; the GM's word sets any `all` or `floor`.",
+     "class": "within",
+     "why": "FR-011's one record the GM's words set; the two classes are the GM's 2026-11-20 and 2026-11-28 words; no feature form is invented for him."
+    },
+    {
+     "id": "Approach: T81 wires no handout path",
+     "summary": "Part 1 of US6 only: the record and its one reader; the refusal, its escape and the handout paths onto `ranked` are T82's.",
+     "class": "within",
+     "why": "A split of FR-011's work across tasks, not a cut of it; T82 is ordered after and carries the rest."
+    },
+    {
+     "id": "Decision 1",
+     "summary": "Rank by first difference: class, the feature's form, the caller's own feature, the key's name order, then within a feature its repair, its queue lines, its unlisted tasks.",
+     "class": "within",
+     "why": "(1) is the GM's 'priority over everything else'; (2) carries his three forms; (3)-(5) are the rules FR-011 says are made forms of the one policy. Ordering inside a class or a feature is where the GM's words set no order."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "A floor not yet met ranks above `all`; a met floor ranks below `share` and takes only an uncontended tree.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It cuts into 'this feature gets all builders it needs' when both forms stand. On a scarce pool both of the GM's guarantees cannot hold at once - physically impossible - and only the GM's own record can set both; his 'always gets 1 builder so that it is able to move forward' is unconditional, and ranking it below `all` would defeat that stated purpose outright, where the floor costs `all` one tree. The met-floor placement is his own 'only fills the available builders if there is no contention'."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "The classes outrank every form.",
+     "class": "within",
+     "why": "The GM 2026-11-28 verbatim: 'priority over everything else regardless of what feature they are attached to'."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "A line with no note= is refused; a malformed or absent record ranks as the default and names every bad line.",
+     "class": "within",
+     "why": "note= enforces FR-011's 'one record the GM's words set'. Default-on-error is an error path that keeps performance and bugfix first and says why; the record is in shared/Cargo.toml's `reads`, so an edit that breaks it fails the parse test before it lands rather than silently dropping a GM line."
+    },
+    {
+     "id": "Decision 5",
+     "summary": "A record with no class line keeps perf then bugfix; `class none` alone ranks no class.",
+     "class": "within",
+     "why": "Holds the standing performance-first rule (451 FR-013) against an accidental omission; `class none` is a record option only a GM-noted line sets, and nothing is changed by default."
+    },
+    {
+     "id": "Decision 6",
+     "summary": "LANE_REPAIR_FIRST is not read; a repair ranks by its own task's class and feature, first within its feature; T82 retires the knob.",
+     "class": "within",
+     "why": "FR-011 verbatim: no words of the GM's set repairs-first, and a repair ranks by its own task's class and feature below the classes. First-within-feature orders inside a feature, where the GM set no order."
+    },
+    {
+     "id": "Decision 7",
+     "summary": "`#! order=queue` (462 T549) is not read; a queue's own order is step 5 for every queue, below the classes; the header parses as a comment.",
+     "class": "within",
+     "why": "FR-011: a queue's own order ranks below the classes inside its own feature too. The classification does not rest on the premise that T549 was ejected (not verifiable from the bundle): queue order is step 5 below the classes either way, which is what FR-011 asks."
+    },
+    {
+     "id": "Decision 8a",
+     "summary": "Unlisted open boxes of an `all` or floor-not-met feature are named as Source::Unlisted with their `make queue-add` command.",
+     "class": "within",
+     "why": "Serves the forms: without it the 2026-11-28 case's own pick (461 phase 3, no queue lines) cannot be named, and 'gets all builders it needs' / 'always gets 1 builder' would not happen."
+    },
+    {
+     "id": "Decision 8b",
+     "summary": "An unlisted `[bugfix]` task of a `share` feature is not named; naming unlisted work of any feature is kept for performance alone (T313).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM gave performance fixes and process bugfixes ONE priority in one sentence: 'priority over everything else regardless of what feature they are attached to'. The plan gives unlisted performance work discovery in every feature and withholds it from bugfix. Run the case: feature A `all` with an unlisted ordinary task (named by 8a), feature B `share` with an unlisted [bugfix] task (not named): A's task gets the free tree, so a form outranks a class - against Decision 3's own quote. And `make task-add BUGFIX=1` only tags the title, so a freshly filed bugfix is unlisted by default: the class is gutted in its common case. FR-011's 'queued tasks' does not save it - the request is the measure. The grounds given ('T313's rule for performance alone', 'the easier route') are existing behavior and cost, neither a legitimate ground. Should say: an unlisted [bugfix] task of any feature is named, as T313 names unlisted performance tasks, with its `make queue-add`."
+    },
+    {
+     "id": "Decision 8c",
+     "summary": "Unlisted tasks of `share` and floor-met features are not named.",
+     "class": "within",
+     "why": "Today's discovery for those forms (by queue entry); nothing ranked lower takes a tree ahead of them by it - the forms still rank as the GM stated over what is offered. No inversion of the GM's order."
+    },
+    {
+     "id": "Decision 8d",
+     "summary": "A queue that cannot be parsed hides its feature's tasks from the unlisted walk, as `listed_in` does.",
+     "class": "within",
+     "why": "An error path matching the existing reader; not a cut of any priority the GM stated."
+    },
+    {
+     "id": "Decision 9",
+     "summary": "Within the performance class a listed entry ranks before an unlisted task of the same feature (today the Stop block names the unlisted one first).",
+     "class": "within",
+     "why": "Orders inside one class and one feature, where the GM's words set no order; no pick crosses a class or a feature."
+    },
+    {
+     "id": "Approach: bugfix tag and task-add BUGFIX=1",
+     "summary": "`[bugfix]` read among the bracketed tags after the id as PERF_TAG reads `[perf]`, never from the title; `make task-add BUGFIX=1` prefixes the tag.",
+     "class": "within",
+     "why": "FR-011's class membership verbatim: in the class only by that tag, given at filing or added to the line."
+    },
+    {
+     "id": "Found and left: T94 and T91",
+     "summary": "Unlisted tasks that wait or are held are named by the reader (T94); T549's ejected rule still offered as READY (T91); both filed to land before T82.",
+     "class": "within",
+     "why": "FIX AS WE GO: no path reads `ranked` until T82, so neither defect reaches an outcome before both land ahead of T82; the known defect is not carried past the step that would expose it."
+    }
+   ],
+   "tasks": [
+    "T81"
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T81 (US6, FR-011, SC-007: the GM 2026-11-28, \"our scheduler probably needs some tool-based enforcement of these kinds of prioritizations\"; the case: 462 disk tasks handed builders while 461's phase 3 tasks stood ready)",
+    "### T81 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T81 Approach: the record and its default",
+     "summary": "dev/builder-policy.txt with class/all/floor n/share lines, each carrying note=<the GM's words>; committed as class perf + class bugfix and no feature line; one reader `ranked`; [bugfix] tag and make task-add BUGFIX=1; no handout path rewired here (T82).",
+     "class": "within",
+     "why": "FR-011's one record the GM's words set, expressing the three forms of the GM's 2026-11-28 message. The GM gave the three forms as kinds of priority he wants to be able to indicate, not as a standing order for any feature, so committing no feature line follows his words. `floor <n>` is FR-011's 'a floor of builders'. The [bugfix] tag and BUGFIX=1 are FR-011's class membership. Splitting the reader (T81) from the rewiring (T82) is sequencing."
+    },
+    {
+     "id": "Decision 1",
+     "summary": "Rank by the first difference: class; form (floor not met, all, share, floor met); the caller's own feature; feature name order; within a feature: repair, then queue lines in order, then unlisted tasks.",
+     "class": "within",
+     "why": "The classes come first, as in 'priority over everything else regardless of what feature'. share is above floor-met, as in 'other features get the rest of the builders if they need them, and this feature only fills the available builders if there is no contention'. all is above share, as in 'other things get only what is left over'. Caller-preferred, name order and queue order are rules FR-011 lists as becoming forms of the one policy, and they rank below the GM's forms."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "A floor not yet met ranks above `all`.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows `all` ('other things get only what is left over') where a floor feature is also set. When trees are contended both of the GM's forms cannot hold literally, so one must give way. The GM's own word 'always' ('always gets 1 builder so that it is able to move forward') decides which. Ranking `all` above an unmet floor would defeat the floor's stated purpose. Both lines are only ever there by the GM's word (note=), so the case comes up only when he has set both."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "The classes outrank every form, floors and `all` included.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'priority over everything else regardless of what feature they are attached to'."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "A line with no note= is refused; a malformed record ranks as the default and names every bad line.",
+     "class": "within",
+     "why": "Requiring note= enforces FR-011's 'one record the GM's words set'. The record is in the crate's reads, so a malformed committed record fails the parse test and does not go silently to the default. Error handling, not a narrowing of what was asked."
+    },
+    {
+     "id": "Decision 5",
+     "summary": "A record with no class line keeps perf then bugfix; `class none` alone ranks no class; class order is the record's line order.",
+     "class": "within",
+     "why": "This keeps the standing performance-first rule (451 FR-013) and the GM's 2026-11-28 bugfix class even when someone forgets a class line. `class none` can only be written with a note= of the GM's words, so it is his to set. Putting perf before bugfix inside the class tier is a tie order his words leave open."
+    },
+    {
+     "id": "Decision 6",
+     "summary": "LANE_REPAIR_FIRST is not read; a repair ranks by its own task's class and feature, first within its feature.",
+     "class": "within",
+     "why": "FR-011: no words of the GM's set repairs-first; a repair ranks by its class and feature, below the classes. Putting it first inside its own feature is a within-feature tie order and crosses no class or feature."
+    },
+    {
+     "id": "Decision 7",
+     "summary": "462 T549's `#! order=queue` is not read (ejected, not in the tree); queue order is step 5 for every queue, below the classes; the header parses as a comment.",
+     "class": "within",
+     "why": "FR-011 replaces T549's rule with a queue's own order ranked below the classes. Step 5 applies queue order to every queue, so nothing the rule did, as far as FR-011 keeps it, is lost."
+    },
+    {
+     "id": "Decision 8a",
+     "summary": "Unlisted open boxes of `all` and floor-not-met features are named with their make queue-add (kind by builder_brief::mechanism), as are T313's unlisted performance tasks of any feature.",
+     "class": "within",
+     "why": "This names the case's own pick: 461's phase 3 had no queue lines, and the GM's 'this feature gets all builders it needs' cannot be honored by a reader that sees only queue entries. T313's performance naming is kept, as FR-011 requires."
+    },
+    {
+     "id": "Decision 8b",
+     "summary": "An unlisted [bugfix] task of a `share` feature is not named; only performance has its unlisted work named across every feature.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM put performance fixes and process bugfixes in one sentence with one priority: 'priority over everything else regardless of what feature they are attached to'. The limit to queued tasks is the spec's word: FR-011 says 'across every feature's queued tasks', and the GM's 2026-11-28 message says nothing about queues. A narrowing the spec already carries does not pass this review on that account. Under the committed record, which has no feature line, every feature is `share`. So by default no unlisted [bugfix] task is ever named, while every unlisted [perf] task is. As the blocks read (Decisions 1 and 8), an unlisted bugfix task is offered with its class rank only if its feature is `all` or floor-not-met. Its priority then turns on the feature it is attached to, which the GM ruled out. Worse, an ordinary unlisted task of an `all` feature is named and outranks it, so form-ranked work beats class-ranked work. SC-007 asks for 'a performance or process-bugfix task of any feature ahead of both', and the plan treats unlisted work as ready for 461's case. The general rule is not impossible: the same walk names unlisted [perf] tasks of every feature, and the tag reader `bugfix` exists. The grounds given ('naming unlisted work is T313's rule for performance alone') are consistency with existing code, which does not make an exception legitimate. It also leaves the session to remember to queue each bugfix task, the very thing the GM asked the tool to remove. Fix: name every open [bugfix] box that no queue line names, no held tree holds and no done ref keeps, in every feature, as T313's walk names [perf] ones, and rank it in its class. FR-011's 'queued tasks' carries the same limit and should be amended with it."
+    },
+    {
+     "id": "Decision 8c",
+     "summary": "A queue that cannot be parsed hides its feature's tasks from the unlisted walk, as `listed_in` does.",
+     "class": "within",
+     "why": "Error handling for a broken queue file, consistent with how `listed_in` already treats one. A feature whose queue cannot be parsed has its listed work unreadable too. The request says nothing about malformed queues, and no class or form is narrowed for well-formed records."
+    },
+    {
+     "id": "Decision 9",
+     "summary": "Within the performance class, a listed perf entry of a feature ranks before an unlisted perf task of the same feature (today's Stop block names the unlisted first).",
+     "class": "within",
+     "why": "A tie order inside one class and one feature; no pick crosses a class or a feature, and the GM's words do not order listed against unlisted work."
+    },
+    {
+     "id": "Found and left: T94 and T91",
+     "summary": "unlisted_of can name a task that cannot start (waits/after/lands-before/GM-held), filed T94; 462 T549's ejected rule still offered as READY, filed T91; both land before T82.",
+     "class": "within",
+     "why": "Nothing reads `ranked` until T82, and both fixes are ordered to land before T82. The wrong pick can therefore never reach a handout. The plan carries no known defect into the step that would expose it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T81 (US6, FR-011, SC-007: the GM 2026-11-28, \"our scheduler probably needs some tool-based enforcement of these kinds of prioritizations\"; the case: 462 disk tasks handed builders while 461's phase 3 tasks stood ready)",
+    "### T81 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T81 D1",
+     "summary": "Rank order: class, then feature form, then the caller's own feature, then key name order, then within a feature repair/queue lines/unlisted tasks.",
+     "class": "within",
+     "why": "The class first is the GM's 2026-11-28 'priority over everything else regardless of what feature'; the caller's feature, name order and queue order are the rules FR-011 says are folded in as forms of the one policy, each ranked below the classes and forms as FR-011 requires."
+    },
+    {
+     "id": "T81 D2",
+     "summary": "A floor not yet met ranks above `all`; a met floor takes only uncontended trees.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "When both forms are set and builders are contended, the GM's two forms cannot both hold literally ('this feature gets all builders it needs, other things get only what is left over' vs 'this feature always gets 1 builder so that it is able to move forward'), so one has to give way. The GM's own 'always' settles which one: if the floor ranked below `all` it would not be a guarantee. The `all` feature gives up one tree only while the floor is unmet, and after that the floor feature fills only uncontended trees, which is the GM's own wording. The GM sets both lines in the record, so he controls whether they ever meet."
+    },
+    {
+     "id": "T81 D3",
+     "summary": "The classes outrank every feature form.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'priority over everything else regardless of what feature they are attached to'."
+    },
+    {
+     "id": "T81 D4",
+     "summary": "A record line with no note= is refused; a malformed record ranks as the default and names every bad line.",
+     "class": "within",
+     "why": "FR-011 says the record is 'one record the GM's words set'. Each bad line is named in `why`, and because the record is in the crate's `reads`, its parse test re-runs on any edit, so a broken record is caught, not hidden. Nothing the GM asked for is cut."
+    },
+    {
+     "id": "T81 D5",
+     "summary": "A record with no class line keeps perf then bugfix; `class none` alone drops the classes.",
+     "class": "within",
+     "why": "This keeps 451 FR-013's standing performance-first rule and the GM's 2026-11-28 classes as the default. Dropping them takes an explicit line, which the GM's word sets."
+    },
+    {
+     "id": "T81 D6",
+     "summary": "LANE_REPAIR_FIRST is not read; a repair ranks by its own task's class and feature, first within its feature.",
+     "class": "within",
+     "why": "This is FR-011's text verbatim: no words of the GM's set repairs-first, and a repair ranks by its task's class and feature, below the classes. Ranking it first within its own feature changes no pick across a class or a feature."
+    },
+    {
+     "id": "T81 D7",
+     "summary": "`#! order=queue` (462 T549) needs no reading; a queue's own order is step 5, below the classes.",
+     "class": "within",
+     "why": "FR-011 puts a queue's own order below the classes inside its own feature. The ejected T549 rule is not in the tree and goes to T91."
+    },
+    {
+     "id": "T81 D8",
+     "summary": "Unlisted work is named with its queue-add command: every open unlisted box of an `all` or floor-not-met feature, and the unlisted perf AND [bugfix] tasks of any active feature, each in its class.",
+     "class": "within",
+     "why": "Round 1 blocked this decision as NOT LEGITIMATE because it left an unlisted [bugfix] task of a `share` feature unnamed, which cut the GM's 'regardless of what feature' down to queued tasks. The block now names those tasks through `set_down_hooks::open_bugfix` (added to the one reader's inputs), so both classes reach every feature's open work. A `share` feature's unlisted non-class work is not named, as today, and the GM's forms do not ask for it ('other things get only what is left over'). An unparseable queue hiding its feature's tasks follows the existing `listed_in` rule on malformed input; it is not a carve-out from the request."
+    },
+    {
+     "id": "T81 D9",
+     "summary": "Within the performance class, a listed performance entry ranks before an unlisted one of the same feature.",
+     "class": "within",
+     "why": "This only reorders tasks inside one class and one feature. No pick crosses a class or a feature, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T81 Approach item 9",
+     "summary": "Done measure: builder-checks over four crates and `l7r-gate rust cover` naming no uncovered line in two crates, as the task's brief asks.",
+     "class": "within",
+     "why": "This is the task's own exit measure on its own new code, which the gate's existing coverage check (FR-008, nothing dropped) will hold it to. It is not the per-hand-in coverage step that the request struck from FR-002 and SC-002, and it changes no requirement."
+    },
+    {
+     "id": "T81 Found and left (T94, T91)",
+     "summary": "The reader names unlisted tasks that cannot start (waits/after/lands-before/GM-held), filed as T94; T549's ejected rule offered as READY work, filed as T91; both land before T82.",
+     "class": "within",
+     "why": "No handout path reads `ranked` until T82, and both fixes are ordered before T82, so neither defect reaches a builder's handout. None of the request's scope is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T81 (US6, FR-011, SC-007: the GM 2026-11-28, \"our scheduler probably needs some tool-based enforcement of these kinds of prioritizations\"; the case: 462 disk tasks handed builders while 461's phase 3 tasks stood ready)",
+    "### T81 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Part 1 only",
+     "summary": "T81 builds the record and its one reader (ranked); no handout path rewired, next/offer/idle/repairs::first unchanged, T82 rewires them",
+     "class": "within",
+     "why": "A split of FR-011's work across T81-T83 with T82 named to make every replaced rule a form of the one policy; nothing FR-011 asks is dropped, only sequenced."
+    },
+    {
+     "id": "Committed record",
+     "summary": "dev/builder-policy.txt commits class perf and class bugfix and no feature line; any all/floor is set by the GM's word",
+     "class": "within",
+     "why": "FR-011: one record the GM's words set. The GM's 2026-11-28 words name forms he wants to be able to indicate, not a feature assignment, so recording none is faithful."
+    },
+    {
+     "id": "D1",
+     "summary": "rank order: class, then form (floor unmet, all, share, floor met), then caller's feature, then key name order, then within a feature repair, queue lines, unlisted tasks",
+     "class": "within",
+     "why": "Steps 1 and 3-5 are FR-011's replaced rules made forms of one policy (classes first, caller's queue preferred, name order, queue order below the classes); all above share and floor-met below share follow the GM's two form sentences. The one contested step (floor unmet over all) is ruled under D2."
+    },
+    {
+     "id": "D2",
+     "summary": "a floor not yet met ranks above all",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the all form ('gets all builders it needs, other things get only what is left over') by one builder while an unmet floor stands. Ground: physical impossibility - with both forms set and builders scarce, both cannot hold, so a tiebreak is forced. Purpose decides which way: if all ranked first, the floor feature can get zero builders and its form's whole purpose ('always gets 1 builder so that it is able to move forward') is defeated; ranking the floor first costs the all feature one builder of several, its purpose (most capacity) kept. Met, the floor drops below share, per the GM's own words."
+    },
+    {
+     "id": "D3",
+     "summary": "the classes outrank every form",
+     "class": "within",
+     "why": "The GM 2026-11-28: 'priority over everything else regardless of what feature they are attached to'; FR-011's classes ranked first across every feature."
+    },
+    {
+     "id": "D4a",
+     "summary": "the record refuses a line with no note=",
+     "class": "within",
+     "why": "Enforcement of FR-011's 'one record the GM's words set'; it only fails where the record is not the GM's."
+    },
+    {
+     "id": "D4b",
+     "summary": "a malformed record ranks as the default and names every bad line",
+     "class": "within",
+     "why": "Could a GM-set all/floor go unhonoured this way? Only in an uncommitted edit: the record is in rust/guard/shared/Cargo.toml's reads, so its edit re-runs the parse test and a malformed record cannot land. The fallback never invents an order, and keeps performance-first (451 FR-013)."
+    },
+    {
+     "id": "D5a",
+     "summary": "a record with no class line keeps the default's two (perf, then bugfix)",
+     "class": "within",
+     "why": "Holds the GM's standing performance-first rule (2026-11-20, 451 FR-013) and his 2026-11-28 classes against a record that names only a feature."
+    },
+    {
+     "id": "D5b",
+     "summary": "class none ranks no class; a lone class line ranks only that class",
+     "class": "within",
+     "why": "Expressiveness of the record only: every line needs a dated note= of the GM's words (D4a), so a class is dropped only by his word, which FR-011 says changes the record. The committed record carries both classes."
+    },
+    {
+     "id": "D6",
+     "summary": "LANE_REPAIR_FIRST not read; a repair ranks by its own tasks' class and feature, first within its feature",
+     "class": "within",
+     "why": "FR-011's words: no GM words set repairs-first; a repair ranks by its task's class and feature, below the classes. First within its own feature is an ordering FR-011 leaves open and crosses no class or feature."
+    },
+    {
+     "id": "D7",
+     "summary": "#! order=queue not read; queue order is step 5 for every queue, below the classes; the header parses as a comment",
+     "class": "within",
+     "why": "FR-011 puts a queue's own order below the classes inside its own feature, whether or not T549 is in the tree; the decision does not hinge on the ejection premise. The ejected rule's withdrawal is T91's."
+    },
+    {
+     "id": "D8",
+     "summary": "unlisted work named with its make queue-add: open boxes of all and floor-unmet features, and unlisted perf and [bugfix] tasks of any feature; floor-met and share features' unlisted non-class work not named; an unparseable queue hides its feature from the walk",
+     "class": "within",
+     "why": "Judged fresh (earlier.md supplies no prior text). FR-011 is silent on unqueued work; naming it widens rather than narrows, and is what lets the all form reach the 2026-11-28 case's own pick (SC-007). Class tasks of every feature: the GM's 'regardless of what feature'. Not naming floor-met or share features' unlisted non-class tasks is today's behavior (queue entries only) and narrows neither form: the floor-met clause ('only fills the available builders if there is no contention') is a restriction, and its queued work still takes uncontended trees."
+    },
+    {
+     "id": "D9",
+     "summary": "within the performance class a listed entry ranks before an unlisted performance task of the same feature (Stop block names the unlisted first today)",
+     "class": "within",
+     "why": "An order inside one class and one feature the GM's words do not set; no pick crosses a class or a feature. A difference from today, not a defect."
+    },
+    {
+     "id": "bugfix tag reading",
+     "summary": "[bugfix] read among the bracketed tags after the id, as PERF_TAG reads [perf]; make task-add BUGFIX=1 prefixes it",
+     "class": "within",
+     "why": "FR-011: the class's membership is by the [bugfix] tag only, given at filing or added to its line."
+    },
+    {
+     "id": "Found and left: T94",
+     "summary": "unlisted_of names tasks that cannot start (waits, after, lands before, GM hold); filed T94, lands before T82",
+     "class": "within",
+     "why": "A known defect, left only because no path reads ranked until T82 and T94 is ordered before T82, so no wrong pick reaches a builder in this step."
+    },
+    {
+     "id": "Found and left: T91",
+     "summary": "462 T549's ejected #! order=queue repair still offered as READY; filed T91, lands before T82",
+     "class": "within",
+     "why": "As T94: another feature's repair, ordered before the first reader of ranked."
+    },
+    {
+     "id": "Exit coverage",
+     "summary": "checklist items 6 and 9: the builder's exit requires l7r-gate rust cover naming no uncovered line in rust/guard/shared and rust/gate/crates/task, on the brief's CHECKS line",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "request.md records that builder-side 'coverage for its own crates' before hand-in was struck by this review because it reinstates the closing step's coverage the GM questioned, reversed 2026-11-26, with the reopening condition not met; SC-002 has the hand-in run no coverage. Nothing in request.md or spec-cited.md carries it back. Its ground is a session observation (whole batches ejected for coverage on 2026-11-27), not the GM's word and not a claim that the reopening condition is met; and the spec's answer to whole-batch ejection is FR-004 (attribute or bisect, eject the failing change). None of the three grounds holds. Flips to LEGITIMATE if the block cites the GM's word or the docs/process-decisions.md reopening condition as met; otherwise drop the cover clause from items 6 and 9 and keep make builder-checks."
+    }
+   ],
+   "tasks": [
+    "T81"
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T81 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T81-exit-coverage",
+     "summary": "Items 6 and 9: the task's green exit and its done measurement drop the builder-side coverage demand ('the policy module covered whole'; 'l7r-gate rust cover naming no uncovered line in rust/guard/shared and rust/gate/crates/task'); the exit is make builder-checks over the four crates, and the batch gate's coverage is left to the lane (FR-004, FR-008).",
+     "class": "within",
+     "why": "Nothing the GM asked is narrowed. The request's record strikes 'coverage for its own crates' at hand-in, because it reinstates the closing-step coverage the GM questioned and that was reversed on 2026-11-26. The earlier text put that demand back as one task's exit. Coverage is still checked, by the same gate on the lane (FR-008: nothing of the existing checks is dropped), so no check is lost. Moving it off the builder brings the block into line with the request."
+    },
+    {
+     "id": "T81-policy",
+     "summary": "Items 1, 2 and 12: one function over one record ranks the builders' work. A feature the record gives 'all' or a floor goes first, and performance and bugfix work of any feature goes ahead of everything. This replaces the caller's-queue and name-order rules.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-28 request: the three forms, performance and process bugfixes 'over everything else regardless of what feature', and tool enforcement 'so that you don't need to remember'. FR-011 carries it. Unchanged since the CLEAR verdict."
+    },
+    {
+     "id": "T81-bugfix-tag-fix",
+     "summary": "Found and left, 1: bugfix's single-space tag split dropped the class of a task carrying a spaced bracket tag before [bugfix]. Fixed here, read the way PERF_TAG reads, and pinned by five cases.",
+     "class": "within",
+     "why": "A defect in the class reader is fixed in the step that found it. Unchanged."
+    },
+    {
+     "id": "T81-T94-deferred",
+     "summary": "Found and left, 2: unlisted_of does not skip waiting or held tasks. It is filed as T94 and lands before T82, the first path to read 'ranked'.",
+     "class": "within",
+     "why": "No live path reads 'ranked' until T82, and T94 lands before T82, so no defect reaches a working handout and none is carried past the step that exposes it. Unchanged since CLEAR."
+    },
+    {
+     "id": "T81-T91-deferred",
+     "summary": "Found and left, 3: 462 T549's ejected '#! order=queue' repair is still offered as READY. It is filed as T91 and lands before T82.",
+     "class": "within",
+     "why": "The repair belongs to another feature's change, and it is fixed before the step (T82) where the policy takes over the handouts. FR-011 already ranks T549's order rule below the classes. Unchanged since CLEAR."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T81 (US6, FR-011, SC-007: the GM 2026-11-28, \"our scheduler probably needs some tool-based enforcement of these kinds of prioritizations\"; the case: 462 disk tasks handed builders while 461's phase 3 tasks stood ready)",
+    "### T81 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach: part 1 only",
+     "summary": "T81 builds the record and its one reader; no handout path rewired (T82), replay is T83; next/offer/idle/repairs::first unchanged here",
+     "class": "within",
+     "why": "A split of FR-011's work across tasks, each named; nothing of US6 is dropped, only sequenced."
+    },
+    {
+     "id": "Approach: the committed record",
+     "summary": "dev/builder-policy.txt committed as class perf, class bugfix, no feature line; any all/floor set by the GM's word; class perf listed before class bugfix",
+     "class": "within",
+     "why": "The GM asked to be ABLE to indicate such priorities ('I probably want to be able to indicate priorities like'); he set no feature's form, so a default with none is his words, and SC-007's 461-all policy is a replay fixture, not a committed line. Perf before bugfix is a tie-break inside one GM priority that he did not set; both still outrank everything else, and the order is the record's to change."
+    },
+    {
+     "id": "Approach: BUGFIX=1 and the [bugfix] tag",
+     "summary": "make task-add BUGFIX=1 prefixes [bugfix]; bugfix read among the tags after the id as PERF_TAG reads [perf]",
+     "class": "within",
+     "why": "FR-011 names the tag and the filing flag; the split fix (Found and left) is a defect fixed in the step that found it."
+    },
+    {
+     "id": "Decision 1",
+     "summary": "Rank order: class, then form (floor-unmet, all, share, floor-met), then caller's feature, then key name, then within-feature order",
+     "class": "within",
+     "why": "Classes first is the GM's 'priority over everything else regardless of what feature'; forms next carry his first two examples; prefer and name order are the rules FR-011 folds in, ranked below what the GM set."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "A floor not yet met ranks above all; a met floor ranks below share (takes only uncontended trees)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Where an all feature and an unmet floor stand at once, 'gets all builders it needs, other things get only what is left over' and 'always gets 1 builder' cannot both be honored literally - physically impossible, not merely awkward. 'Always' is the GM's own universal, and the narrowing of all is confined to the one tree the floor names; once met, the floor feature 'only fills the available builders if there is no contention', as he wrote. It only arises if the GM writes both lines."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "The classes outrank every form, an unmet floor included",
+     "class": "within",
+     "why": "The GM's words verbatim: 'priority over everything else regardless of what feature they are attached to'."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "A line with no note= is refused; a malformed record ranks as the default and names every bad line",
+     "class": "within",
+     "why": "Enforces FR-011's 'one record the GM's words set'; the record's parse test re-runs on its edit (Cargo reads), so a malformed record does not land, and the fallback never invents an order nobody wrote."
+    },
+    {
+     "id": "Decision 5",
+     "summary": "No class line keeps the default perf-then-bugfix; class none alone ranks no class",
+     "class": "within",
+     "why": "Holds the standing performance-first rule (451 FR-013) and the 2026-11-28 classes against a record that only adds a feature line; class none is a GM-set change to the record, which FR-011 makes the only route."
+    },
+    {
+     "id": "Decision 6",
+     "summary": "LANE_REPAIR_FIRST not read; a repair ranks by its own task's class and feature, first within its feature",
+     "class": "within",
+     "why": "FR-011's words for dropping repairs-first and ranking by class and feature below the classes; the order between a feature's repair and its own queue lines is not set by the GM or the spec, and first-within never crosses a class or a feature."
+    },
+    {
+     "id": "Decision 7",
+     "summary": "#! order=queue not read: T549's commit was ejected and is not in this tree; a queue's order is step 5, below the classes",
+     "class": "within",
+     "why": "FR-011 puts a queue's own order below the classes in its own feature; the ejected rule is filed as T91 to land before T82. Its premise (1136054db4 absent from this tree, the header parsing as a comment) is taken as the plan states it; the bundle allows no repository read to measure it."
+    },
+    {
+     "id": "Decision 8",
+     "summary": "Unlisted open boxes of all and floor-unmet features named with their make queue-add; unlisted perf and bugfix tasks of any active feature named in their class",
+     "class": "within",
+     "why": "Serves 'gets all builders it needs' and 'always gets 1 builder' - the motivating case's pick had no queue line - and the classes 'regardless of what feature'; share and met-floor features keep today's offer of their queue lines, which takes nothing the GM asked for away. The unlisted walk's missing wait-skip is a known defect filed as T94, landing before T82, the first task through which any path reads ranked. A queue that cannot be parsed hiding its feature's tasks, class tasks included, is the existing listed_in behavior carried over, not a new outcome."
+    },
+    {
+     "id": "Decision 9",
+     "summary": "Within the performance class, a listed perf entry ranks before an unlisted perf task of the same feature",
+     "class": "within",
+     "why": "An order inside one class and one feature, which no GM word or requirement sets; no pick crosses a class or a feature."
+    },
+    {
+     "id": "Found and left: T94",
+     "summary": "unlisted_of skips no waiting, after-open, lands-before or GM-held task; filed as T94, lands before T82",
+     "class": "within",
+     "why": "No caller can get a wrong pick from it before T94 lands: no handout path reads ranked until T82, and T94 is ordered before T82. The defect is fixed before the step where it would produce a wrong outcome."
+    },
+    {
+     "id": "Found and left: T91",
+     "summary": "462 T549's ejected order=queue repair (r1) still offered as READY; filed as T91, lands before T82",
+     "class": "within",
+     "why": "T81 neither creates nor reads that offer - repairs::first and the handout paths are unchanged in this task - so the outcome predates T81 and is another feature's repair; it is filed and ordered before T82, the task that rewires the handouts onto ranked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7603,6 +8144,99 @@
      "summary": "A conflict inside a halving's set ends the halving. The survivors land or go red as a plain attempt (a red unplaced starts a fresh halving), and the rest of the batch runs as one.",
      "class": "within",
      "why": "The request's bisect, eject and land-the-rest all still happen: a red among the survivors starts a fresh halving, and the failing change is still ejected while the rest lands. US4's bound, which SC-003 cites, is stated for one bad change. A conflict ejection during a halving is a second faulty change that the bound does not describe. The extra runs are a cost, not a fidelity finding, and the decision drops nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T81": {
+   "section_sha256": "1e163d4122ce3b84c8d383bf30fd41bc159de0cfcd2fc155282fd029d8cce31c",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach: part 1 only",
+     "summary": "T81 builds the record and its one reader; no handout path rewired (T82), replay is T83; next/offer/idle/repairs::first unchanged here",
+     "class": "within",
+     "why": "A split of FR-011's work across tasks, each named; nothing of US6 is dropped, only sequenced."
+    },
+    {
+     "id": "Approach: the committed record",
+     "summary": "dev/builder-policy.txt committed as class perf, class bugfix, no feature line; any all/floor set by the GM's word; class perf listed before class bugfix",
+     "class": "within",
+     "why": "The GM asked to be ABLE to indicate such priorities ('I probably want to be able to indicate priorities like'); he set no feature's form, so a default with none is his words, and SC-007's 461-all policy is a replay fixture, not a committed line. Perf before bugfix is a tie-break inside one GM priority that he did not set; both still outrank everything else, and the order is the record's to change."
+    },
+    {
+     "id": "Approach: BUGFIX=1 and the [bugfix] tag",
+     "summary": "make task-add BUGFIX=1 prefixes [bugfix]; bugfix read among the tags after the id as PERF_TAG reads [perf]",
+     "class": "within",
+     "why": "FR-011 names the tag and the filing flag; the split fix (Found and left) is a defect fixed in the step that found it."
+    },
+    {
+     "id": "Decision 1",
+     "summary": "Rank order: class, then form (floor-unmet, all, share, floor-met), then caller's feature, then key name, then within-feature order",
+     "class": "within",
+     "why": "Classes first is the GM's 'priority over everything else regardless of what feature'; forms next carry his first two examples; prefer and name order are the rules FR-011 folds in, ranked below what the GM set."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "A floor not yet met ranks above all; a met floor ranks below share (takes only uncontended trees)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Where an all feature and an unmet floor stand at once, 'gets all builders it needs, other things get only what is left over' and 'always gets 1 builder' cannot both be honored literally - physically impossible, not merely awkward. 'Always' is the GM's own universal, and the narrowing of all is confined to the one tree the floor names; once met, the floor feature 'only fills the available builders if there is no contention', as he wrote. It only arises if the GM writes both lines."
+    },
+    {
+     "id": "Decision 3",
+     "summary": "The classes outrank every form, an unmet floor included",
+     "class": "within",
+     "why": "The GM's words verbatim: 'priority over everything else regardless of what feature they are attached to'."
+    },
+    {
+     "id": "Decision 4",
+     "summary": "A line with no note= is refused; a malformed record ranks as the default and names every bad line",
+     "class": "within",
+     "why": "Enforces FR-011's 'one record the GM's words set'; the record's parse test re-runs on its edit (Cargo reads), so a malformed record does not land, and the fallback never invents an order nobody wrote."
+    },
+    {
+     "id": "Decision 5",
+     "summary": "No class line keeps the default perf-then-bugfix; class none alone ranks no class",
+     "class": "within",
+     "why": "Holds the standing performance-first rule (451 FR-013) and the 2026-11-28 classes against a record that only adds a feature line; class none is a GM-set change to the record, which FR-011 makes the only route."
+    },
+    {
+     "id": "Decision 6",
+     "summary": "LANE_REPAIR_FIRST not read; a repair ranks by its own task's class and feature, first within its feature",
+     "class": "within",
+     "why": "FR-011's words for dropping repairs-first and ranking by class and feature below the classes; the order between a feature's repair and its own queue lines is not set by the GM or the spec, and first-within never crosses a class or a feature."
+    },
+    {
+     "id": "Decision 7",
+     "summary": "#! order=queue not read: T549's commit was ejected and is not in this tree; a queue's order is step 5, below the classes",
+     "class": "within",
+     "why": "FR-011 puts a queue's own order below the classes in its own feature; the ejected rule is filed as T91 to land before T82. Its premise (1136054db4 absent from this tree, the header parsing as a comment) is taken as the plan states it; the bundle allows no repository read to measure it."
+    },
+    {
+     "id": "Decision 8",
+     "summary": "Unlisted open boxes of all and floor-unmet features named with their make queue-add; unlisted perf and bugfix tasks of any active feature named in their class",
+     "class": "within",
+     "why": "Serves 'gets all builders it needs' and 'always gets 1 builder' - the motivating case's pick had no queue line - and the classes 'regardless of what feature'; share and met-floor features keep today's offer of their queue lines, which takes nothing the GM asked for away. The unlisted walk's missing wait-skip is a known defect filed as T94, landing before T82, the first task through which any path reads ranked. A queue that cannot be parsed hiding its feature's tasks, class tasks included, is the existing listed_in behavior carried over, not a new outcome."
+    },
+    {
+     "id": "Decision 9",
+     "summary": "Within the performance class, a listed perf entry ranks before an unlisted perf task of the same feature",
+     "class": "within",
+     "why": "An order inside one class and one feature, which no GM word or requirement sets; no pick crosses a class or a feature."
+    },
+    {
+     "id": "Found and left: T94",
+     "summary": "unlisted_of skips no waiting, after-open, lands-before or GM-held task; filed as T94, lands before T82",
+     "class": "within",
+     "why": "No caller can get a wrong pick from it before T94 lands: no handout path reads ranked until T82, and T94 is ordered before T82. The defect is fixed before the step where it would produce a wrong outcome."
+    },
+    {
+     "id": "Found and left: T91",
+     "summary": "462 T549's ejected order=queue repair (r1) still offered as READY; filed as T91, lands before T82",
+     "class": "within",
+     "why": "T81 neither creates nor reads that offer - repairs::first and the handout paths are unchanged in this task - so the outcome predates T81 and is another feature's repair; it is filed and ordered before T82, the task that rewires the handouts onto ranked."
     }
    ],
    "verdict": "CLEAR"

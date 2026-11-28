@@ -609,6 +609,27 @@ pub fn open_performance(
     git_dir: &Path,
     prefer: &str,
 ) -> Result<Vec<OpenTask>, String> {
+    open_where(root, git_dir, prefer, true)
+}
+
+/// EVERY OPEN PROCESS BUGFIX OF EVERY ACTIVE FEATURE (461 T81, FR-011): [`open_performance`]'s walk, collecting each box tagged
+/// `[bugfix]` ([`crate::builder_queue::policy::bugfix`]) - the class ranks across every feature, so the policy's reader names one no
+/// queue line lists, as T313 names performance work.
+///
+/// # Errors
+/// A start or set-down log, a tasks.md or a plan.md that cannot be read.
+// GUARD_EDIT_OK: feature 461 T81 - the bugfix class named unlisted, by the walk performance uses
+pub fn open_bugfix(root: &Path, git_dir: &Path, prefer: &str) -> Result<Vec<OpenTask>, String> {
+    open_where(root, git_dir, prefer, false)
+}
+
+/// The walk of [`open_performance`] and [`open_bugfix`]: `perf` picks the performance boxes, else the `[bugfix]` ones.
+fn open_where(
+    root: &Path,
+    git_dir: &Path,
+    prefer: &str,
+    perf: bool,
+) -> Result<Vec<OpenTask>, String> {
     let downs = rows(&git_dir.join("set-downs.jsonl"))?;
     let mut order = started(git_dir)?;
     if !prefer.is_empty() {
@@ -622,7 +643,8 @@ pub fn open_performance(
         }
         let boxes = active(root, &downs, &feature, &since, feature == prefer)?;
         let plan_path = root.join("specs").join(&feature).join("plan.md");
-        let plan = if boxes.is_empty() || !plan_path.is_file() {
+        // GUARD_EDIT_OK: feature 461 T81 - the bugfix walk reads no plan
+        let plan = if !perf || boxes.is_empty() || !plan_path.is_file() {
             String::new()
         } else {
             read(&plan_path)?
@@ -633,9 +655,13 @@ pub fn open_performance(
             .flat_map(|l| [l, "\n"])
             .collect();
         for (id, title) in boxes {
-            if performance(&id, &title, &headings)
-                && crate::parked::held_task(root, git_dir, &title).is_none()
-            {
+            // GUARD_EDIT_OK: feature 461 T81 - one walk, its class picked
+            let class = if perf {
+                performance(&id, &title, &headings)
+            } else {
+                crate::builder_queue::policy::bugfix(&title)
+            };
+            if class && crate::parked::held_task(root, git_dir, &title).is_none() {
                 out.push(OpenTask {
                     feature: feature.clone(),
                     id,

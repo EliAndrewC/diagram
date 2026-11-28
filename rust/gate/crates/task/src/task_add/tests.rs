@@ -273,6 +273,40 @@ fn perf_1_and_a_perf_title_each_file_a_task_the_reader_calls_performance_work() 
     assert!(!performance("T04", &title_of("T04"), &plan));
 }
 
+/// 461 T81 (FR-011): BUGFIX=1 tags the box `[bugfix]`, which the scheduling policy's one reader calls a process bugfix; a title that
+/// carries the tag already is not tagged twice, and a plain filing is no bugfix.
+#[test]
+fn bugfix_1_tags_the_box_the_policy_reads_as_a_process_bugfix() {
+    use l7r_shared::builder_queue::policy::bugfix;
+    let (_dir, root) = quick_repo("task-add-bugfix");
+    let d = root.join("specs/9001-x");
+    put(&root, "specs/9001-x/tasks.md", "- [x] T01 done\n");
+    landed(&root);
+    let fix = |title: &str| cli(&words(&["9001", "--bugfix"]), &root, title).code;
+    assert_eq!(fix("the lane drops a superseded change"), 0);
+    assert_eq!(fix("[bugfix] tagged by its author"), 0);
+    assert_eq!(cli(&words(&["9001"]), &root, "a plain task").code, 0);
+    let tasks = std::fs::read_to_string(d.join("tasks.md")).unwrap();
+    // each box's title after its id, in filing order (the ids are the fixture's next free ones)
+    let titles: Vec<&str> = tasks
+        .lines()
+        .filter_map(|l| l.strip_prefix("- [ ] "))
+        .filter_map(|l| l.split_once(' ').map(|(_, t)| t))
+        .collect();
+    assert_eq!(
+        titles,
+        vec![
+            "[bugfix] the lane drops a superseded change",
+            "[bugfix] tagged by its author",
+            "a plain task"
+        ]
+    );
+    assert!(bugfix(titles[0]) && bugfix(titles[1]) && !bugfix(titles[2]));
+    // the usage names it
+    let usage = cli(&words(&["9001", "--bugfix"]), &root, "").stderr;
+    assert!(usage.contains("[BUGFIX=1]"));
+}
+
 /// `make quick` of a fixture (feature 451 T19): an EARLY check, red where `early-red` exists, as a ruff failure reads; a LINT, red on
 /// each `FR-4nn` of the feature's tasks.md, as spec-lint's check 4 reads a bare id another feature defines, its recipe line continued;
 /// a line `make quick` names ruff by, which leaves a file when it runs (a check that reads no specs/ file is run all the same); the

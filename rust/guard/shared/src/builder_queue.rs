@@ -61,6 +61,8 @@ use crate::builder_pool::Tree;
 
 // GUARD_EDIT_OK: feature 461 T16 - the lane's repair entries, offered before the queue's (D7)
 pub mod repairs;
+// GUARD_EDIT_OK: feature 461 T81 - the scheduling policy record and its one reader (FR-011)
+pub mod policy;
 
 /// The queue's file, in a feature's directory.
 pub const FILE: &str = "queue.txt";
@@ -442,6 +444,9 @@ pub struct Next {
     pub none: String,
     /// The pick is an open performance task's entry (FR-013).
     pub perf: bool,
+    // GUARD_EDIT_OK: feature 461 T81 - every READY entry free to hand out, which the policy's reader ranks (FR-011)
+    /// Every READY entry that overlaps nothing in flight (`alone` kept), in the queue's order: what [`policy::ranked`] ranks.
+    pub free: Vec<usize>,
 }
 
 /// The next entry of `entries`, whose states are `states` (the module's overlap rule).
@@ -535,6 +540,7 @@ pub fn next(entries: &[Entry], states: &[State], f: &Facts) -> Next {
         skipped,
         unchecked,
         none,
+        free, // GUARD_EDIT_OK: feature 461 T81 - the free list the policy's reader ranks
     }
 }
 

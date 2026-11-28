@@ -1,4 +1,4 @@
-//! `l7r-gate task-add <feature> [--section FILE] [--physical] [--performance]` - `make task-add`: a task box, and its plan section,
+//! `l7r-gate task-add <feature> [--section FILE] [--physical] [--performance] [--bugfix]` - `make task-add`: a task box, and its plan section,
 //! filed with the next free id (feature 385 T64, plan D83). Ported whole from `scripts/task-add.py` by feature 449 T135
 //! (`ask:449-phase3-remainder`): the root and the feature's directory are the tick's own ([`crate::tick::repo_root`],
 //! [`crate::tick::spec_dir`]), asked in process where the Python ran `l7r-gate tick --resolve`; the section's template is the plan
@@ -273,9 +273,11 @@ fn record(event: &str, detail: &str, rule: &str) {
 pub(crate) fn cli_with(words: &[String], cwd: &Path, title: &str, env: Env) -> Reply {
     let physical = words.iter().any(|a| a == "--physical");
     let performance = words.iter().any(|a| a == "--performance");
+    // 461 T81 (FR-011): BUGFIX=1 tags the box `[bugfix]`, the process-bugfix class's one mark, which the scheduling policy reads
+    let fix = words.iter().any(|a| a == "--bugfix");
     let mut args: Vec<String> = words
         .iter()
-        .filter(|a| *a != "--physical" && *a != "--performance")
+        .filter(|a| !["--physical", "--performance", "--bugfix"].contains(&a.as_str()))
         .cloned()
         .collect();
     let mut section = String::new();
@@ -284,10 +286,16 @@ pub(crate) fn cli_with(words: &[String], cwd: &Path, title: &str, env: Env) -> R
         args.drain(i..(i + 2).min(args.len()));
     }
     let title = strip(title);
+    let tagged = format!("{} {title}", l7r_shared::builder_queue::policy::BUGFIX_TAG);
+    let title = if fix && !title.is_empty() && !l7r_shared::builder_queue::policy::bugfix(title) {
+        tagged.as_str()
+    } else {
+        title
+    };
     if args.len() != 1 || title.is_empty() {
         return reply(
             String::new(),
-            "usage: make task-add F=<feature> TITLE=\"<what the task does>\" [SECTION=<file with {T}>] [RESEARCH=physical] [PERF=1]\n"
+            "usage: make task-add F=<feature> TITLE=\"<what the task does>\" [SECTION=<file with {T}>] [RESEARCH=physical] [PERF=1] [BUGFIX=1]\n"
                 .to_owned(),
             2,
         );

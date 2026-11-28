@@ -12,9 +12,10 @@ publish = false
 # What the tests read of the tree at run time (feature 449 T93): the recorded command corpora (tests/hooks/fixtures/), the Makefile's
 # recipes and the hooks' helpers under scripts/ - the guard's own set, which these modules' tests carried with them; the check
 # agents' contracts (.claude/agents/, 451 T228's no-edit agreement) and .claude/settings.json (451 T193's hook timeout), both read
-# by a test here and undeclared before T228, so an edit of either left a kept green standing.
+# by a test here and undeclared before T228, so an edit of either left a kept green standing; dev/builder-policy.txt, which the
+# policy's test parses (461 T81). GUARD_EDIT_OK: feature 461 T81 - adding an operation, the record its test reads declared
 [package.metadata.l7r]
-reads = ["tests/hooks/", "Makefile", "scripts/", ".claude/agents/", ".claude/settings.json"]
+reads = ["tests/hooks/", "Makefile", "scripts/", ".claude/agents/", ".claude/settings.json", "dev/builder-policy.txt"]
 
 [lib]
 name = "l7r_shared"

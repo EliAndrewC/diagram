@@ -1,0 +1,15 @@
+# THE BUILDERS' SCHEDULING POLICY (feature 461 FR-011, T81): who gets a free builder, read by one function,
+# rust/guard/shared/src/builder_queue/policy.rs (`ranked`), which every handout path asks. Only the GM's words set it: each line
+# carries them after note=, dated. A change he directs changes this file, never an escape.
+#
+#   class perf note=<his words>         performance work first, of any feature (451 FR-013's membership)
+#   class bugfix note=<his words>       a process bugfix - a box tagged [bugfix] (make task-add BUGFIX=1) - next
+#   <key> all note=<his words>          the feature gets every builder it can use; the others get what is left
+#   <key> floor <n> note=<his words>    the feature always holds <n> builders; past them it fills only uncontended trees
+#   <key> share note=<his words>        the default form of every feature this file does not name
+#
+# The rank: a class first, then the feature's form (a floor not yet met, all, share, a floor met), then the caller's own feature,
+# then the features' name order, then within a feature its lane repair, its queue's lines in order, its unlisted tasks.
+# A file with no class line keeps perf then bugfix; `class none` ranks no class. A malformed file ranks as the default and says why.
+class perf note=the GM 2026-11-20: "can we in general priotitize performance improvements going forward?"
+class bugfix note=the GM 2026-11-28: "performance fixes and process-based bugfixes get priority over everything else regardless of what feature they are attached to"
