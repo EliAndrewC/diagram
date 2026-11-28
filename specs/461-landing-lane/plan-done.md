@@ -3744,3 +3744,356 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 **Performance work?** no: a defect of the lane's attribution (innocent changes ejected), not a speed task.
 
+<!-- plan-archive: archived 2026-11-28 -->
+### T24 (D6 step 3 and 5, its table; US4, FR-004: phase 3's halving in place of phase 2's whole-batch ejection - the real batch 462-1, 2026-11-28, ejected all three of T550, T301 and T549 as `unplaced`)
+
+- **Approach**: `rust/gate/crates/lane/src/halve.rs` (new, pure, over the changes' indices) answers which set a red batch runs next and what each result means; `runner/run.rs`'s `run_batch` keeps ONE loop - a `Run` (the changes left, those landed, the halving under way) whose `next_set` asks the halving (its ejections made on the way, through `file_groups`, the tripwire's check included) or else takes every change left, each set then carried, gated and pushed by the existing `carry`, `land`, `Pushed` and `PushFailed` arms. A first red the record cannot place (`Verdict::Unplaced`: no unit read, a unit naming no change, or a unit - a Phase line or a first-pass row - naming several) writes its `attribute` line (`how` `none`, every change that ran) and starts the halving; a red inside the halving is recorded, not read again. The ejection code (`integrate`, `eject`, `file_groups`, `trip`) moved to `runner/run/eject.rs`: `run.rs` reached 1,001 lines, measured 2026-11-27 (`wc -l`, the file-scale bar's check). Measured 2026-11-27: red first, `make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests::halving runner::run::tests::a_red_the_record_cannot_place"` on the old code: 0 passed, 4 failed (each batch ejected whole as `unplaced` after one run: `["T01 T02 T03 T04"]`); after, the crate 99 of 99 and `make builder-checks CRATE="rust/gate/crates/lane"` clean. The runs counted by the end-to-end tests (after the batch's first red run, against ceil(log2 n) + 1): n = 4, bad B: 3 ([A B] red, [A], [C D]; B `inferred`); bad D: 2; bad C: 3 (C `red`, [D]); n = 6, bad C: 4 ([A B C] red, [A], [B], [D E F]; C `inferred`); bad F: 3 - D6's table row by row. The pure test drives every single bad change of n = 1 to 8 within the bound.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The first half is the first `len / 2`** of a set (`[A B C]` runs `[A]`, then `[B]`). Label: D6's table, literal (its 4-run row for n = 6, bad C).
+2. **A second half whose first half ran green inside a red parent is red without a run** and is halved in turn; one whose first half ran red is untested and runs. Label: D6's table, literal.
+3. **The rest runs as one**: untested sets standing together at the front run as one set (after a `red` ejection, the ejected change's untested sibling and the untested other half). Label: D6 step 2's "it is ejected and the rest runs again"; WHY: without it n = 4 with A bad took 4 runs and n = 6 with B bad took 5, past US4's bound, observed 2026-11-27, method: the rules traced by hand without the merge (the bound held since by `halve::tests::every_single_bad_change_of_n_1_to_8_is_found_within_the_bound`).
+4. **The inferred single is ejected only once everything else has landed or been ejected** (`why` `inferred`, its repair's `attempt` the red run its inference rests on, so the tripwire's ask names that file). Two such singles (two bad changes; the plan says "the one left") are each ejected `inferred`, in hand-in order, at the end. Label: D6's "the one left after every other change landed green"; the two-singles case the easier route.
+5. **A one-change batch red the record cannot place is ejected `red` with no further run**: its first run was its own. Label: data-model.md's pin rule ("ejected after its own one-change red run is `red`").
+6. **The halving runs over every change that ran, not D6 step 2's candidates alone** (a red unit naming several changes is still `Unplaced`). Label: the algorithmically easier route, correct and at most a run or so slower; a lone candidate run red beside riders is no one-change run, so the narrowing needs a rider pin rule first. Not fixed here: the narrowing is a new rule needing its own pin reading. Filed as T78; lands before T27.
+7. **A first-pass refusal is read as any red unit** (round 1's objection 7a and 7c). A row naming several changes (`T13, T14: ...`) is `Unplaced` and HALVED over every change that ran, as Decision 6 halves - each halved set's run takes the first pass again, so a named change refused wherever it runs is ejected `red` after its own one-change run and the innocent ones land; T15 Decision 6's one `unplaced` entry over the named changes (a phase-2 ruling, made before any halving) is retired, and the narrowing to the named changes joins T78. A row naming ONE change is placed (`red`), D6's one-candidate path. A row naming NO change of the batch (a hold, a lock, an owed round of no task of it) still stops the runner with the batch open, nothing ejected, as T15's plan review round 1 ruled: it is no change's fault, and a halving would meet the same refusal in every half and eject every change one by one, the innocent ejection that ruling refused; the next `make lane-start` resumes the batch once the hold clears. Label: D6 step 2 read literally for the first two, the T15 ruling kept for the third with its reason. Pinned by `runner::run::tests::a_first_pass_row_naming_two_changes_is_halved_each_ejected_alone_and_the_rest_lands` (T01 and T02 each refused wherever it runs: both ejected `red`, two entries, T03 landed, measured 2026-11-27 (`make builder-checks`, the crate 99 of 99)) and, unchanged, `a_first_pass_refusal_naming_no_change_ejects_nothing_and_one_naming_a_task_ejects_its_change`.
+8. **`LANE_RETRY` = 0 is handed into the halving** (`Halving::new(.., retry)`): a red set runs again that many times before it is read red; tested at 1 (a flake then lands whole) and at 0 (the flake costs an innocent change's `inferred` ejection, the cost D6 step 5 accepts). Label: GUESS knob, D6 step 5.
+9. **A halving's green set whose push fails** runs again once (the halving asks the same set again, its result not recorded); a second failure is the batch's `integrate` entry over that set, as T19 ruled, and the changes the halving had not yet run stay unlanded and unejected - `waiting` for the next batch (`log::state`). Label: the easier route.
+10. **A runner killed mid-halving resumes what is left as one attempt** (`runner::remaining`), so the halving starts again from that red. Label: the easier route; no halving state is kept in the log.
+11. **No `attribute` line inside a halving**: each set's own `run` line names its red units; the halving's ejections are their own repair entries, `units` the red run's units. Label: the easier route; data-model.md's `attribute` row ("a red is read") is the first red's.
+
+### T25 (phase 3: a carry conflict becomes a repair entry - the lane stopped twice on carry conflicts on 2026-11-28, batch 461-1 at 461 T71 and batch 462-1 at T549's ledger, each needing the coordinator by hand; REBUILT 2026-11-28 on T24's halving, the first build 54f0c0b43f having conflicted with T24's rewrite of run.rs)
+
+- **Approach**: `rust/gate/crates/lane/src/runner/run.rs` and `run/eject.rs`. `carry()` now returns the changes it carried. Where one change's `make carry COMMIT=` stops with unmerged paths (`git diff --name-only --diff-filter=U` in the lane's tree), the tree is put back where that carry found it - `git cherry-pick --abort`, then `git reset -q --hard <the HEAD read before that carry>` - BEFORE any line is written, and `conflicted()` (new, in `eject.rs` beside the other ejections) files the change as ONE repair entry (kind `integrate`, `why` `conflict`, `units` the conflicting files, `ejected` its sha, `attempt` the carry's own stdout and stderr kept as `l7r-lane/attempts/<batch>-carry-<sha10>.log`), then its `eject` line (`why` `conflict`) and one `owed` line (`lane: batch <b>'s carry of <sha> stopped in conflict - <feature> <tasks> ejected as repair <r> (integrate, conflict: <files>) - make builder-next hands it to a fresh builder; the rest of the batch goes on: <file>`); the next change is carried. A change's carry that fails with NO unmerged path is ejected the same way, `why` `carry`, `units` the carry's own `carry:` and `land:` lines (Decision 4, round 2); only a carry on the lane's own tree - exit -1, or the carry's `carry: refused - nothing carried` (`CARRY_REFUSED`) - still stops the runner. The set's one `carry` line follows, code 0, its `conflict` every ejected change's files. In `run_batch` (T24's `Run` loop) the attempt's `todo` is rebound to the carried survivors, so `land`, the red's `eject`, the halving's `record` and a failed push's `integrate` never see an ejected change; where a carry ejected any, the new `Run::conflicted` drops those changes from `left` and ENDS a halving under way (Decision 8); where nothing was carried the loop goes on to the next set before `runs += 1`, so a set whose every carry conflicts runs no landing. `spec_of` (moved out of `land`, unchanged) names the entry's feature. Docs made true in the same change: run.rs's and eject.rs's module docs, `repairs.rs`'s `kind`, data-model.md's `conflict` and `carry` rows, rust/gate/CLAUDE.md's lane row. Measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests"`): red first, 6 of 32 failed on the old code - five by behavior (the newer-main conflict, the all-conflict batch, the same-batch conflict, the conflict inside a halving and a carry failing with no conflicting path each stopped the runner with the batch open: `step` returned `Err`), one by its error's wording only (a carry refused on the lane's own tree, now said so); after, 32 of 32. The tests moved to `run/tests/conflict.rs` (tests.rs was at 902 lines, measured 2026-11-28 (`wc -l`)), the stand-in `make carry` given a `carry-fails-<sha>` file, a `carry-refused` file and a `clash-<sha>` count (that commit's carries after that many stop in conflict) in `tests.rs`'s `CARRY_LINES`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **Kind `integrate`, `why` `conflict`, `units` the conflicting files, pinning nothing.** Label: D7's table and data-model.md's `conflict` row, a labeled departure from D7's Decision paragraph, which gives every ejected change kind `fix`: a carry's repair is a rebase onto the new `origin/main`, not a fix of the change's code, the same kind T19 gave a set whose push failed twice; `tripwire::PINS` already leaves `conflict` out, pinned by `a_change_conflicting_with_an_earlier_one_of_its_batch_is_ejected_and_the_earlier_lands` (`tripwire::pins` empty after the ejection).
+2. **The tree put back to the HEAD read before the carry, not by `cherry-pick --abort` alone, and before any line.** The real `make carry` resolves some paths by rule before it stops, so `--abort` alone is not trusted; and the reset comes first so a runner killed mid-ejection leaves no conflict markers - T55's start-time reset fires only after a `carry` line with a code not 0, which this path never writes. Label: the algorithmically easier route (one reset, no new state for T55's check to read).
+3. **The set's `carry` line keeps code 0, its `conflict` the ejected changes' files.** Code not 0 still means a stop with the batch open (T55's `stopped_carry`, the batch states). Label: the easier route; data-model.md's `carry` row amended to say both.
+4. **A carry that stops with NO unmerged path ejects its change, `why` `carry`, unless the stop is the lane's own tree's** (round 2, the plan review's 4b: each `make carry COMMIT=` carries one named change, so a carry that ran and failed is evidence on it, and a stop re-stops every later start on it). The lane's own, kept as a stop with the batch open and nothing ejected: exit -1 (a `make` that could not start or was killed) and the carry's `carry: refused - nothing carried; <tree> holds unfinished work`, which `land/carry.rs` prints before it picks anything (read 2026-11-28, method: every `Ok(2)` and `stopped` exit of `carry()` in `rust/gate/crates/land/src/land/carry.rs` - the refusal of unfinished work the one exit made before the change is touched; the others, a commit not located, a pick that refused to start, a continue that failed and an end not verified, are taken as the change's). Label: T15's Decision 6 rule read for the carry (a stop only where no change is named); the `why` `carry` is new beside `conflict` (data-model.md amended), pins nothing (`tripwire::PINS`), and no reader keys on `why` (`builder_queue`, `lane_log`, read 2026-11-28 by `grep`). Pinned by `a_carry_of_one_change_that_fails_with_no_conflicting_path_ejects_it_and_the_other_lands` and `a_carry_refused_on_the_lane_s_own_tree_leaves_the_batch_open`.
+5. **The carry's output kept as `attempts/<batch>-carry-<sha10>.log`, the entry's `attempt`.** The `eject` line carries no `attempt` (only the tripwire's hold line does; `tripwire::pins` reads it there first). A resume that conflicts on the same change again overwrites that file, where gate attempts are never overwritten: acceptable, the same carry's output. Label: GUESS, a reading aid for the fresh builder; data-model.md names `attempt` as an attempt file.
+6. **A conflict with an earlier change of the same batch is ejected the same way** (the later change, the earlier landing): the owed line says `stopped in conflict`, not `with origin/main`, since the lane's tree then holds both. Label: the task line's rule read for every carry stop that names a change (Decision 4); pinned by `a_change_conflicting_with_an_earlier_one_of_its_batch_is_ejected_and_the_earlier_lands`.
+7. **One `owed` line a conflict entry, the batch's end line after.** Label: T15's Decision 10 (one line a repair entry), the same wake rule.
+8. **A conflict inside a halving's set ENDS the halving; the batch's rest runs as one** (new in the rebuild: T24's halving landed after the first build). The halving asked for a set that no longer runs as asked; recording the survivors' result as the set's would misread it (a green survivor would mark the sibling red by inference), and recording nothing loops for ever - `Halving::advance` answers an unrecorded `Run` unchanged, and its set's ejected change is no longer carried. So `Run::conflicted` sets `halving` to none: the survivors carried in this attempt land or go red as a plain attempt (a red unplaced starts a fresh halving over them, a placed one ejects), and the changes left run as one after. Costs at most the halving's lost knowledge, a few runs, on a rare event (a halving's subset conflicts only where `origin/main` moved mid-batch or a change was built on another of its batch). Label: the algorithmically easier route, the plan silent; the alternative priced - dropping the ejected index from the halving's sets and recording on the survivors - needs a new `Halving` API and re-proving US4's bound (`halve::tests`' every-bad-subset sweep). Pinned by `a_conflict_in_a_halving_s_set_ends_the_halving_and_the_rest_runs_as_one` (three changes, T03 red unplaced, T02's carry conflicting from its second carry: T01 pushed by the halving, T02 ejected `conflict`, T03 run alone and ejected `red`, the lane's tree clean).
+
+### T24 Approach (checklist part A)
+
+1. **The goal, in the world.** A batch whose red the gate's record cannot place lands its good changes and ejects only the bad one, within ceil(log2 n) + 1 further runs, instead of ejecting the whole batch as 462-1 did.
+2. **The constraints.** D6 steps 3 to 5 and its table; US4; FR-004; FR-008 (nothing pushes ungated: every landed set was gated as it lands); T18's pin rules (a red half of two or more pins nobody); T19's push-failure path.
+3. **Where each comes from.** R: plan.md D6, data-model.md, tasks.md T24's line. O: the red-first counts and the run counts above.
+4. **Do they describe the world here?** The stand-in landing of the end-to-end tests is red exactly when its set holds the bad task, by a Phase line naming a crate no change touches (the record cannot place it), measured 2026-11-27 (`make rust-test`, the halving's end-to-end tests); a real batch's halving is the lane's use once it lands.
+5. **The order.** After T18 and T23; before T25, T26 and T29.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The lane crate 99 of 99, 2026-11-27 (`make builder-checks CRATE="rust/gate/crates/lane"`); the red-first counts above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome fixed: a red the record cannot place ejected every change of the batch (462-1's three), so good changes waited on repairs they did not need. The test `a_red_the_record_cannot_place_ejects_the_whole_batch_as_one_repair_entry_and_forms_no_batch_again` pinned that phase-2 outcome and is rewritten as `a_red_the_record_cannot_place_is_halved_and_each_change_red_alone_is_ejected_after_its_own_run`.
+
+**Found and left?**
+- D6 step 2's narrowing to the candidates (Decisions 6 and 7): the halving runs over the whole set, at most a run or so more where a unit (a Phase line or a first-pass row) names several changes. Not fixed here: a new rule, its rider pin reading unwritten. Filed as T78; lands before T27.
+
+**Performance work?** no
+
+### T68 (the plan review bundle read "451 T274's D3 (...), D13 (...), D5 (...)" in 461 T61's section as 451's plan-level D3 and dropped D13 and D5: found by T61's blocks review, 2026-11-27)
+
+- **Approach**: the plan review bundle's citation reader, moved out of `rust/gate/crates/plan/src/plan/bundle.rs` (1,028 lines with this work, past the file-scale bar, measured 2026-11-27 (`scripts/gates/l7r-gate.sh check file-scale .`)) into `bundle/cited.rs`, its test into `bundle/cited/tests.rs`; four changes. (a) A decision a run names after a task's possessive, `<feature> T<n>'s D<k>`, or `T<n>'s D<k>` with no number (this feature's task), is read from that task's section of that feature's plans (plan.md, then plan-done.md and its archive parts, `plans_of`), the new `in_task`, under `<!-- feature 451 T274 -->`; a task with no section, or a section without the id, is a NOT FOUND line saying which, never the feature's plan-level decision of that name. A requirement a task names stays the spec's ("444 T20's FR-043"). A clause after the run naming the run's own feature cuts nothing from it ("451 T274's D3, D13 and D5 from 451's plan-done.md"). `section.rs` no longer drops a task's possessive in a labeled section (451 T467 dropped it, there being no reader of a task's section then). (b) A run's id may carry a parenthetical gloss naming no id, `D3 (the pid file names the sampler), D13 (...)`, so the run goes on past it. (c) `DECISION` reads a heading decision, `### D7 - title` - 48 plans write decisions so, 461's every one (measured 2026-11-27, `grep -cE "^#{2,4} D[0-9]+" specs/*/plan.md`) - and a block's own decisions are read in a section's indented form too (`  - **D1. ...`, `SECTION_DECISION`), in the block and in its task's whole section in plan.md, so a section's bare D1 is its own and not the plan's, an Approach block's too. (d) A bare id found nowhere is a NOT FOUND line, where it was dropped without a word. Red first: `plan::bundle::tests::a_decision_named_with_another_feature_s_task_is_that_task_s` failed on the old code, 1 of 31 `plan::bundle::tests` (the bundle carried 451's `THEIRS PLAN THREE` and nothing for D13, D5, D7 or D9), 2026-11-27; after, 247 of 247 of the plan crate's tests pass, the one pinned header changed (`433 T01's D3b` now `<!-- feature 433 T01 -->`). On the real plan, `make decide F=461 T=T61` built a bundle carrying 451 T274's D3, D13 and D5 from 451's plan-done.md, 2026-11-27. Round 1 of the review BLOCKED on decision 2 (the unnumbered form left as it was); it is now read by decision 1's rule, pinned by `plan::bundle::cited::tests::a_task_s_run_keeps_its_clause_and_an_unnumbered_task_is_this_feature_s`, and two pins of 451 T467 moved with it (an unlabeled section's `T31's D3` and `T31's D11` now NOT FOUND for T31's section, no longer the plan's).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **A task's decision is its section's, whatever the feature**: `461 T61's D2` is read from 461's T61 section too, not 461's plan-level D2. Label: the brief's rule ("a decision named after `<feature> T<n>'s` is that feature's plan's"), read as the task's section of it, since 451's plan-level D3 was the wrong text the review found.
+2. **An unnumbered `T<n>'s D<k>` is this feature's task's**, read by decision 1's rule in a labeled and an unlabeled section alike, a NOT FOUND line where the section or the id is missing. Label: decision 1's rule; the review's round 1.
+3. **A gloss holding an id ends the run**: `D3 (see D7), D5` is read as before, so an id inside a gloss is never taken as the qualified feature's. Label: design decision.
+
+### T75 (the lane's batch 462-2 stopped at 462 T278's tick: a measurement hands in with its stub section, which the landing refuses)
+
+- **Approach**: a measurement writes its plan section and has it reviewed before it hands in, and its hand-in asks the section as a
+  fix's does - one rule for every kind's landing. Chosen over the tick taking the record in place of a section, which would need the
+  landing to learn a task's kind after its tree is released, waive the plan gate's and the Approach block's asks every other task
+  owes, and tick a task whose decisions no review read. `rust/gate/crates/task/src/builder_brief.rs`: the measurement's STOP POINT
+  orders the record, the levers filed, then the plan section (the record's figures its Approach), `make decide` and the plan review;
+  its HAND IN line waits on "the record written and review CLEAR". `rust/gate/crates/land/src/land/hand_in.rs`: `section_of` returns
+  `Owed` for a measurement (it was `Later`, the asks put off), the record still asked beside it, its refusal restated ("beside its
+  plan section"); `Section::Later` in `rust/gate/crates/task/src/tick/refusal.rs` is set by nothing after that and is removed, its
+  doc comments and the ones in `tick.rs` and `land/cheap.rs` restated; `scripts/container/builder-brief.md`'s THE FOUR KINDS and
+  hand-in paragraphs say so, with the why. What a section costs: over the review ledger's 2,017 plan-review (MODE 4) rows a pass's
+  median is 123 s and its 90th percentile 266 s, spent in the reviewer's context, measured 2026-11-27 (a grep of
+  `dev/review-ledger.md`'s MODE 4 rows and their time column, sorted); 461 T10's measurement builder took one round, 72 s, CLEAR,
+  measured 2026-11-27 (its row in `dev/review-ledger.md`). Red-first, measured 2026-11-27 (`make rust-test ONLY=` on the old code):
+  the brief's block test 0 passed 1 failed (`rust/gate/crates/task`), the hand-in's two tests 0 passed 2 failed
+  (`rust/gate/crates/land`: a measurement's stub section was not refused at hand-in).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the brief's text | `each_kind_s_block_opens_with_its_marker_and_stays_short` pins the new STOP POINT and HAND IN lines and the 2,000-character cap | n/a: no map | none | n/a |
+| the hand-in | `a_fix_a_closing_half_a_measurement_and_an_unbriefed_tree_still_owe_the_section_at_hand_in`, `a_measurement_hands_in_its_record_beside_its_section` | n/a | none | n/a |
+
+### T90 (a build half's hand-in formed a batch and stopped the lane: 462 T321's build half 06520f6b3f formed batch 462-4 alone, its tick refused the plan section its closing half writes, the refusal named no change, and the runner stopped with every later batch behind it, 2026-11-28, `.git/l7r-lane/attempts/462-4-1.log` to `-3.log`)
+
+- **Approach**: `rust/guard/shared/src/lane_log.rs` (the lane's computed states, 461 T63, which `lane`'s `log.rs` re-exports and `batch.rs`'s `form` and the Stop rule read) marks each hand-in `build_half` and gives such a hand-in, where it is neither landed, in an open batch, superseded nor ejected, the state `OnClosingHalf` ("waiting on its closing half") in place of `waiting`. `form` batches only `waiting` hand-ins, so a build half forms no batch and is no oldest hand-in for a later one to be cut behind; its closing half's hand-in, a later hand-in of its task, supersedes it (D14's handout half, T09: the closing half's commit holds both halves' work) and is batched as any other.
+- **Decision 1 - a build half told by its brief's `kind`, read from the pool's log.** `kinds()` walks the pool's log once: a tree's `brief` line with a `kind` is kept per tree and holder (`detail`), dropped at the tree's next `take`, `make` or `adopt`; a `done` line takes the kind kept for its tree and holder. This is the reading `task`'s `builder_done::kind_of` makes for the hand-in's milder mode (461 T44). Why it and not the other two clues the brief named: the done line carries no kind (adding one would leave 462 T321's and 461 T36's build halves, already on the log, unmarked, and the lane would still batch them), and a handoff named in the commit is the builder's own words, where the brief's kind is written by `make builder-brief` and never by the builder (T44's reason). Observed 2026-11-28, method: the clone's `builder-pool.log`, lines 1010-1011 and 1086-1087 - both live build halves have a `brief` line with `"kind": "build-half"` before their done line, and 462 T321's closing half (line 1095) `closing-half`. Label: the easier route (no writer changes, no migration).
+- **Decision 2 - its place in the order: last, before `waiting`.** `landed`, `in batch`, `superseded` and `ejected` are still asked first: a batch formed before T90 still carries what its `batch` line names (T53's rule), an ejected build half still waits on its repair, and a superseded one rides inside its closing half's commit. Only what would have read `waiting` reads `waiting on its closing half`. Label: the easier route.
+- **Decision 3 - a new state, not a filter in `form`.** In `l7r_shared::lane_log` so `make lane` shows it by name (`lane.rs` lists every state but landed and superseded) and the Stop rule's `waiting_unasked` no longer counts it - the lane has nothing to do for it until its closing half hands in. Label: the easier route (one rule in one place, T63's reason).
+- The `HandIn` struct gains one field; the five test literals (observed 2026-11-28, method: `grep -rn "HandIn {" rust`) (lane_log, lane's batch, tripwire and wake tests) name it `false`; 461 T76/T26's and T24/T25's done commits construct no `HandIn` literal and touch none of these hunks (`git show refs/l7r/done/461-T76` etc., read 2026-11-28): the new batch test sits after the `formed` helper, away from T76's append at the file's end.
+- Red first (2026-11-28): `batch::tests::a_build_half_s_hand_in_waits_on_its_closing_half_and_forms_no_batch`, 461 T36's build half's shape as the pool's log wrote it, on the old code - 3 passed, 1 failed: `left: ["c736496d82221e0a6d0452b5998882dc04f42c7f"]`, `right: ["dddddddddd4444444444444444444444444444444"]` (the build half formed the batch alone, 462-4's shape). After: `ONLY="batch::tests"` 4 of 4, `ONLY="lane_log::tests"` 8 of 8 with the new `a_build_half_s_hand_in_waits_on_its_closing_half` (the kind's reading per tree, holder and hold; the state's order; the closing half superseding; the Stop rule's waiting). Not run red: the lane_log test (the variant did not exist).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the lane's hand-in state | n/a: tooling, no map | n/a | none | n/a |
+
+### T25 Approach (checklist part A)
+
+1. **The goal, in the world.** A hand-in whose carry conflicts with a newer `origin/main` costs the coordinator one line - a repair entry for a fresh builder - and the rest of the batch lands without him; the lane never stops on a change's carry, in conflict or not, in a plain attempt or in a halving - only on its own tree's.
+2. **The constraints.** D7's table (a carry conflict: one `integrate` entry, `why` `conflict`, for a fresh builder, the batch's other changes going on), data-model.md's repair entry and `carry` row, T15's ejection order (entry before `eject`), T55's start-time reset, T19's `integrate` entry, T24's halving (D6 step 3, US4), FR-005 (one wake an event).
+3. **Where each comes from.** R: plan.md D7, D6; data-model.md; tasks.md T25. O: the red and green runs above; the coordinator's two hand-resolved stops of 2026-11-28 (the brief).
+4. **Do they describe the world here?** Yes: the tests run the real `run_batch` on a scratch world - a bare origin moved by another commit of the same file after the hand-in, a stand-in `make carry` that is a bare `git cherry-pick` left in conflict (or made to conflict at a chosen carry by a `clash-<sha>` count, to fail by a `carry-fails-<sha>` file, or to refuse the tree as the real one does by a `carry-refused` file), the lane's tree in the pool's registry. A real conflict in the lane is T23's to observe.
+5. **The order.** After T15, T19, T55 and T24 (landed 2026-11-28; this rebuild sits on its `Run` struct); beside T77/T79 (resume and the state readers, untouched: `runner::remaining` already drops every `eject` line's change, `why` `conflict` too).
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `runner::run::tests` 32 of 32 and the lane crate's builder checks clean, 2026-11-28.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome fixed: a carry conflict stopped the runner with the batch open, every later start re-stopping on it (T55's note), so a batch's innocent changes waited on the coordinator's hand.
+
+**Found and left?**
+
+- The queue offers an `integrate` entry as `no kind make builder-brief takes yet: brief its builder by hand` (`rust/guard/shared/src/builder_queue/repairs.rs`), as it does T19's push entries, so each conflict repair costs the coordinator a hand brief where D7 hands it to a fresh builder. Not fixed here: another crate and command (the queue and `make builder-brief`), the first build filed it as T85, which never reached main. Filed as T95; lands before T29.
+
+**Performance work?** no
+
+
+### T28 (451 T405, taken over: the gate's tree check voided a gate for the clone's writes it never read; option (C), plan D10)
+
+- **Approach**: in pool tree `diagram-backlog-t269` on main's 674dae31f3. A test only: option (C) holds by construction once every
+  landing is gated in the lane's tree (D11; the lane runs `make land` with the lane's tree as its working directory, `lane` `run.rs`).
+  - **Where it is** (`rust/gate/crates/measure/src/preflight/tests.rs`, `the_clone_s_writes_never_void_the_lane_tree_s_gate`; the
+    task line's `measure/src/measure/preflight*` is `measure/src/preflight/`): a clone with a linked worktree added `--detach`, as
+    `builder-tree lane` adds the lane's; the gate's tree snapshot taken in the lane tree (`--tree-snap`, as `make done` starts) and the
+    green-gate stamp's `diagram` key read there. Then the clone's writes T405 measured: `make task-add`'s plan stub appended
+    (`specs/<f>/plan.md`, uncommitted), a measurement record committed (`dev/measurements/...`, the clone's HEAD moved), the fetch
+    log appended (`research/source-attempts.jsonl`), and an engine file edited (`l7r/diagram/a.py`, for the stamp). The lane's
+    `--tree-check` stays 0 and silent, and its stamp key unchanged. The same writes in the lane tree: `GATE NOT GREEN` naming each of
+    the four paths, and the key moved - the void T405 measured where the gate runs in the tree being written, so options (A) (a moved
+    path outside every stamp area unseen) and (B) (the landing committing the append-only logs first) are not built: nothing but the
+    landing writes in the lane's tree (D10).
+  - **Red first: the behavior already holds, so a pin and its evidence** (observed 2026-11-27, method: `make rust-test
+    CRATE=rust/gate/crates/measure ONLY="preflight::tests"`): the clone's writes aimed at the gated tree instead (the phase-1 route,
+    a landing gated in the clone it writes in) - 19 passed, 1 failed, this test, at its first assertion: exit 1 naming
+    `dev/measurements/2026-11-27/x/results.md`, `l7r/diagram/a.py`, `research/source-attempts.jsonl` and `specs/461-x/plan.md`;
+    restored, 20 passed, 0 failed.
+  - Not touched: `rust/guard`'s gate-write guard (T27's, D10's fixture over two trees) and `make land`'s one route (T29).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the lane tree's gate pinned unvoided by the clone's writes | n/a - no map | n/a | none | n/a |
+
+### T28 Approach (checklist part A)
+
+1. **The goal, in the world.** The coordinator writes freely in its clone - a filed task, a measurement record, a fetch - while the
+   lane gates a batch, and no such write costs the batch its green gate.
+2. **The constraints.** FR-001, D10 (option (C) only), D11, 451 T405's priced options; constitution XIII (the tree check itself
+   unchanged: a write in the gated tree still voids it).
+3. **Where each comes from.** G: FR-001's request (spec.md); R: D10, 451 T405's box and T307's priced table; O: the test above.
+4. **Do they describe the world here?** Yes: a linked worktree added `--detach` off the clone shares its object store and refs and
+   has its own HEAD and index, as the lane's tree does.
+5. **The order.** After T26 (the task line); beside T27, before T29.
+6. **The exits.** Green: the measure crate's tests and `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The red-first above; `make builder-checks CRATE="rust/gate/crates/claims rust/gate/crates/measure"` green: tests, lint and format clean on both, the claims crate 211 passed, 0 failed (observed 2026-11-27, method: that command, its log).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** none - a pin; the tree check and the stamp unchanged.
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+
+### T29 (plan D11 phase 4: the one route - `make land` refused outside the lane's tree, its escape recorded; FR-001, FR-003, FR-008)
+
+- **Approach**: a new module `rust/gate/crates/land/src/land/route.rs` (D15: the land crate) asked in `land.rs`'s `main` - the dispatch arm `make land` and `make land-batch` reach through `LAND_RUN`, after its usage, NOTE and spec checks and before `Land::landing`, so a refusal writes the landing's `end` line (`refused(2)`) and nothing of the landing runs (no carry, no first pass). The rule (`route::rule`): the tree is the lane's when the pool's registry (`l7r_shared::builder_pool::read_all` of the root's common git directory) holds an entry held by `lane` whose canonical path is the root's - the same reading as `tree/src/state.rs`'s `lane_run`. Neither `L7R_LANE_BATCH` nor `L7R_LAND_ALONE` lets a landing through: both are plain exports, so either would be an unrecorded escape (pinned by a test). Elsewhere, `LAND_HERE_OK="<reason>"` is read first, held to the reason floor (`escape::enough`), and recorded either way to the guard log as `land-here` (`escaped`/`land-here-ok`, `blocked`/`LAND_HERE_OK-no-reason`); with none, the landing is refused, recorded `blocked`/`outside-the-lane`, its message naming the lane's tree (or `make builder-tree-adopt TREE=<clone>-land` where none is adopted), `make builder-done T=<task> F=<feature>`, `make lane-start` and the escape's whole command. The Makefile's `land` and `land-batch` help and `docs/guards.md` carry the rule. The callers, observed 2026-11-28, method: a `grep` for `make land`, `l7r-gate land` and `gate.sh land` over the Makefile, `scripts/`, `rust/` and `tests/hooks/`: the lane's runner runs `make land` in the lane's tree (`lane/src/runner/run.rs` step 3) - passes; `scripts/land-alone.sh` step 6 runs it in `${LAND_ALONE_TREE:-<clone>-land}`, which is the registry's lane entry (`/diagram/.clones/diagram-backlog-land`, read from `builder-pool.json` 2026-11-28) - passes, so land-alone keeps working until T30; `scripts/sync-with-main.sh` and `land-tooling.sh` run no `make land` (one message names it: T98); `tests/hooks/test-disk-floor.sh` stops at the floor before `LAND_RUN`. The lane's runner tests run a fake Makefile, untouched.
+
+| case | before | after |
+|---|---|---|
+| `make land` in the clone | lands (route test: `Ok(0)`, ticked) | refused, exit 2, its `end` written, no stub called |
+| in the lane's tree | lands | lands, nothing recorded |
+| `LAND_HERE_OK` with a reason | - | lands as before (a dirty clone still alone), `escaped` recorded once (the inner land-alone run is in the lane's tree, so it records nothing) |
+| `LAND_HERE_OK=x` | - | refused, `blocked` recorded |
+| an unclean lane tree | refused by the first pass, naming each change (`writers.rs`, 451 T242) | the same |
+
+### T29 Approach (checklist part A)
+
+1. **The goal, in the world.** Every landing is the lane's: the coordinator's `make land` in its clone stops with the route named, and the one recorded exception is a landing by hand when the lane itself cannot land.
+2. **The constraints.** FR-001 (no gate in the coordinator's tree), FR-003 (the lane runs the existing `make land` in its own worktree), FR-008 (nothing of the checks dropped: the refusal comes before them, the escape runs them all); D10, D11 (phase 4), D15; the brief's "keep land-alone working until T30".
+3. **Where each comes from.** G: the GM's lane (FR-003, the spec's words); R: plan D11's phase-4 decision; O: the registry and caller reads of 2026-11-28 above.
+4. **Do they describe the world here?** Yes: the lane's tree is in the registry under `lane` and is the tree land-alone uses, measured 2026-11-28 (a read of the clone's `builder-pool.json` beside `land-alone.sh`'s `WT=`); the lane's runner has landed batches there, measured 2026-11-28 (the brief's account of the 05:2xZ bootstrap).
+5. **The order.** After T26 (phase 3 in use, the lane carrying landings); before T30, which retires land-alone.
+6. **The exits.** Green: the land crate's tests, the route's red-first tests green and each check deleted seen red. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - a tooling rule, no research question.
+8. **The budget.** One landing.
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/land`: 235 passed; red first, the route's main test `Ok(0)` (landed outside the lane) on the old dispatch; each of the five checks (the lane match, the escape read, the reason floor, the escape's record, main's return on refusal) deleted in turn turns a route test red (1 or 2 failed each), measured 2026-11-28.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** A session that runs `make land` in its clone is refused with the route instead of gating and pushing from the clone; the lane's landings are unchanged.
+
+The task line's second refusal, "`make land` refuses an unclean tree, naming each file", read against the brief's "keep land-alone working until then": in the lane's tree (and land-alone's, both `L7R_LAND_ALONE`) an unclean tree is already refused by the first pass, naming each change (`writers.rs`, 451 T242; pinned by `writers/tests.rs`'s `the_first_pass_names_the_changes_and_an_open_handoff_naming_the_clone`). In the clone a dirty tree is land-alone's own trigger (`alone_owed`), so refusing it there now would retire land-alone a task early; the clone's unclean refusal arrives with T30's removal of `alone.rs`, when a dirty clone under `LAND_HERE_OK` meets the same writers' refusal. Label: the easier route, the brief's order kept; the coordinating session told.
+
+**Found and left?**
+- The notices that still send the coordinator to `make land` in its clone - the batch-landing order notice at `make decide` (`static_runs_hooks/order.rs`), the holding box's lines (`shared/src/speckit.rs`), `sync-with-main.sh`'s push message, `builder-brief.md`'s phase-1 step: a session that follows one is now refused. Not fixed here: guard messages in another crate, beyond this task's one job. Filed as T98; lands before T30.
+
+**Performance work?** no
+
+### T68 Approach (checklist part A)
+
+1. **The goal, in the world.** A plan reviewer reads, in `spec-cited.md`, the text of every decision a section names, from the place its name points at, and a NOT FOUND line for any it cannot find.
+2. **The constraints.** T68's line in tasks.md; the brief's rule for `<feature> T<n>'s`; 451 T46's and T48's "never dropped without a word"; 451 T438's and T467's labeled-section rules.
+3. **Where each comes from.** O: T61's blocks review (the bundle /tmp/l7r-check/plan-461-landing-lane-blocks-T61-fd4d36b2/spec-cited.md) and T65's empty one (/tmp/l7r-check/plan-461-landing-lane-blocks-T65-88fbf292/spec-cited.md); the red test above.
+4. **Do they describe the world here?** Yes: the rebuilt T61 bundle carries 451 T274's D3, D13 and D5, measured 2026-11-27 (`make decide F=461 T=T61`, its spec-cited.md read); 461's plan writes its decisions as headings, which no bundle had carried.
+5. **The order.** After T61's review; before T31.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/plan"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The plan crate's 247 tests pass and `make builder-checks CRATE="rust/gate/crates/plan"` is clean, measured 2026-11-27 (that run's own lines).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reviewer judged T61's D2 against 451's plan-level D3 "A background run's end" in place of T274's "The sampler names itself", and never saw D13 or D5; T65's reviewer saw no D7.
+
+**Found and left?**
+- 461 T65's bundle was empty for three citations: plan D7 (a heading decision, fixed here), "T16's Decision 3" and data-model.md's repair entry, forms that are no FR, SC or D id; observed 2026-11-27, method: T65's blocks read against its spec-cited.md. Not fixed here: a reader of other forms and of other spec files is another mechanism. Filed as T69; lands before T31.
+
+**Performance work?** no
+
+<!-- plan-archive: T63 to T21 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+
+### T75 Approach (checklist part A)
+
+1. **The goal, in the world.** A measurement's hand-in reaches the lane with a section its tick passes, so no batch stops at a measurement's tick and no closing half is sent to write one.
+2. **The constraints.** FR-002 (the hand-in runs the landing's first pass), US2 ("A refusal a builder can answer is answered by the builder that has the context"), 461 T44 (the record asked of a measurement), the brief's 2,000-character cap.
+3. **Where each comes from.** G: US2's words; R: `scripts/container/builder-brief.md` ("the landing asks all three whatever the kind"); O: 462 T278's stop (tasks.md T75's line), the ledger's figures above.
+4. **Do they describe the world here?** Yes: the stop was observed on the lane's batch 462-2, and the red tests show a measurement's stub section passing the hand-in on the old code.
+5. **The order.** Lands with T27 (one hand-in); a measurement briefed after it is told to write its section.
+6. **The exits.** Green: the tests named above pass and `make builder-checks` over task, land and guard is green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `grep Section::Later` over `rust/` found the hand-in's one setter and the tick's tests.
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above green; the measurement block's length stays under 2,000 characters in its test.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What breaks today: the lane's batch stops at a measurement's tick (462 T278, 2026-11-28) and a closing half is spent on its section; after it the stub is refused at the hand-in, where the measurement's builder answers it.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+<!-- plan-archive: T76 to T76 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+### T90 Approach (checklist part A)
+
+1. **The goal, in the world.** A build half's hand-in waits on the lane, in no batch, and holds no later batch behind it; its closing half's hand-in supersedes it and lands both halves in one batch.
+2. **The constraints.** 461 D5 (the batch of `waiting` hand-ins), D14 (a later hand-in of a task supersedes; the closing half builds on the build half's commit, T09), T44 (the kind read from the brief, never from the builder), T63 (the states in one place).
+3. **Where each comes from.** O: batch 462-4's attempts and the lane's log (2026-11-28); O: the pool's log lines above; R: `builder_done.rs`'s `kind_of`.
+4. **Do they describe the world here?** Yes, measured 2026-11-28 (the clone's `builder-pool.log` read for 461 T36's take, brief and done lines): the red test is that build half's own shape, its sha the live one.
+5. **The order.** Before T23 (the lane runs every landing); after T63.
+6. **The exits.** Green: the red test green and the crates whole at `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/lane ONLY="batch::tests"`: 4 of 4; `make lane` lists 461 T36's build half `waiting on its closing half` once landed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A build half batched alone stops the lane with every later batch behind it - a wrong outcome (constitution XIV), not a difference.
+
+**Found and left?**
+- 461 T76/T26's done commit (1a729b9a7a) predates T63: its new batch test builds `World` without `all`, so the lane crate's tests fail to compile once it is carried and the batch gate goes red. Not fixed here: the test is in T76's commit, not on HEAD, and editing it here would conflict with its carry. Filed as T93; lands before T23.
+
+**Performance work?** no
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+<!-- plan-archive: T93 to T63 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-28 -->
+### T23 (phase 2's measurement on real work: the lane's first batches, 2026-11-28T02:00Z to 06:20Z; D1, D9, D11)
+
+- **Approach**: nothing changes. Read-only scripts under `dev/measurements/2026-11-28/461-t23-lane-first-batches/` read the lane's log (its snapshot `lane.jsonl`), every `make land` Phase line, the sampler, the main session's transcript and origin/main's ticks; their outputs are beside them and are read in `results.md`. Concurrency (FR-010): W0 20:00Z-02:02Z trees held 3.46, load1 median 14.4; W1 02:02Z-05:49Z 2.87, 19.2; W2 05:49Z-06:20Z 3.46, 31.6, on 22 cores, measured 2026-11-28 (t23-conc.py). None is a like window, W2 being 31 minutes long, measured 2026-11-28 (t23-conc.py). (1) Of 8 batches only 461-3 (T81, T93/T86) landed by the lane, in 1 green run of 28.5 min with its own push, measured 2026-11-28 (t23-batches.py). 462-1 and 462-3 ejected every change `unplaced` (r1, r3); 462-2 and 462-4 ejected T278 and T321 after each had landed by hand (r2, r4); 461-1 and 461-2 were landed by hand and read back, measured 2026-11-28 (t23-batches.py). The coordinator landed 8 times by hand, 21 tasks, each for a lane defect since fixed, and the runner needed 22 starts, 21 of them resumes, measured 2026-11-28 (ticks.out and t23-batches.py). (2) In W2 1 batch of 2 changes and 3 tasks landed without a hand, its hand-ins waiting 73.6 and 39.3 min to the push, measured 2026-11-28 (lane.jsonl and make lane); 462-5 took one change of a queue alternating features (D5). (3) The coordinator's model calls on landing per landed task were W0 2.1 (102 of 408 calls, 48 tasks by hand), W1 8.6 (146 of 330, 17 by hand) and W2 3.0 (9 of 23, 3 by the lane: 6 wakes and r3's re-hand-ins by hand), measured 2026-11-28 (t23-coord.py). (4) Still the lane's to do by itself: T96, T95, T77/T79 (in the lane), T78, then phase 4. D1: b1 ran no gate; the lane tree's first gate took 15.9 min and compiled 302 cover-build crates against 11 to 42 for every later gate in either tree, measured 2026-11-28 (t23-gates.py); the later lane gates took 13.2 and 23.1 min at load 30 against the clone's 4.1 to 15.1 min at load 6 to 23, measured 2026-11-28 (t23-gates.py); D1 stands, the cache warm after one gate. D9: 32 waits all completed on a lane line, the longest 27.4 min and 27.1 past its turn, measured 2026-11-28 (t23-wait.py): no limit found, so `LANE_WAIT_MAX` is not priced. D11: gates built in the clone until 05:48:13Z and its target directory holds the `l7r-gate` that `make lane-wait` runs, measured 2026-11-28 (t23-gates.py and ps), so it is kept and T29 reopens it. The task line's verify, `make task-time` showing the lane tree's Phase lines, fails: T100.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the read | n/a: nothing changed | n/a | n/a | n/a |
+
+### T23 Approach (checklist part A)
+
+1. **The goal, in the world.** The record says, with figures and the concurrency they were taken under, what the lane did with its first real batches, what it cost the coordinator, and D1, D9 and D11's answers, so phase 3's follow-ups and T31 start from measured figures.
+2. **The constraints.** US3, US4, SC-002, SC-003; FR-005 (one wake a landed batch); FR-010 (each figure with its concurrency); D1, D5, D9, D11; the brief's four things.
+3. **Where each comes from.** O: the lane's `lane.jsonl` and `repairs.jsonl`, the event log's Phase lines, the sampler, the session's transcript, the tick commits (each script's output beside it). G: the plan's phase 2 measurement line.
+4. **Do they describe the world here?** Yes, they are this clone's own logs over the window. The figures are re-derived by re-running the scripts over the snapshot (`batches.out`) or over the live files up to the window's end (the others).
+5. **The order.** After T22 put phase 2 live and T24/T25 put phase 3 on main; before T31 (the like-window measurement) and phase 4 (T29, which D11 hands to).
+6. **The exits.** Green: the record's figures re-derived from its outputs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one read of each source.
+8. **The budget.** One landing.
+9. **Done, measured.** `python3 -I dev/measurements/2026-11-28/461-t23-lane-first-batches/t23-batches.py dev/measurements/2026-11-28/461-t23-lane-first-batches/lane.jsonl | diff - dev/measurements/2026-11-28/461-t23-lane-first-batches/batches.out` is empty, and each table of `results.md` matches its output file.
+10. **Before moving a constant.** n/a: `LANE_WAIT_MAX` stays unpriced (D9, no limit found up to 27.4 min, measured 2026-11-28 (t23-wait.py)), and `LANE_MAX` and D5's one-feature rule are unmoved (T101 prices the latter).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: no code changes; not a defect.
+
+**Found and left?**
+- The lane's `landed` line reports the minutes since the last resume (462-4: 0.1 against 12.9 run minutes, measured 2026-11-28 (t23-batches.py)), so FR-005's status line under-reports a resumed batch's time. Not fixed here: a measurement changes no source. Filed as T99; lands before T31.
+- `make task-time` books none of a lane batch's gate (no line names the lane's tree; 461-3's 28.5-minute run shows as 20.9 working minutes, and the Unbooked line holds 3878 phases tied to no run), so the landings' side reads short. Not fixed here: a measurement changes no source. Filed as T100; lands before T31.
+- One feature a batch (D5) splits an interleaved queue into batches of one (462-5), a throughput lever with no wrong outcome. Not fixed here: a lever to price, not a defect. Filed as T101; lands before T31.
+
+**Performance work?** yes: a measurement of where the landing's time goes (451 FR-013: the landings, measured), no engine-speed change.
+
+<!-- plan-archive: T24 to T90 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-28 -->
+### T78 (D6 step 2's narrowing, left by T24 Decisions 6 and 7: a red unit naming several changes was halved over every change that ran, correct but up to a run or so slower)
+
+- **Approach**: `rust/gate/crates/lane/src/attribute.rs`'s `attribute` gives a third verdict, `Verdict::Candidates` - every red unit names a change and some unit several: the changes any unit names, in order; a unit naming none (or no unit read) stays `Unplaced`. `halve.rs` gains `Halving::narrowed(candidates, riders, n, retry)` (`new` is `narrowed` with no riders, its rules unchanged): the halving runs over the candidates alone, and each `Next::Run` it answers carries the riders too, in hand-in order, until a run is recorded green, which lands them. `runner/run.rs`'s `Run::red` alone changed: on `Candidates` its `attribute` line says `how` `candidates` and names those changes, and it starts `Halving::narrowed`; everything else of the step and of `run_batch`'s landed check is untouched (461 T77/T79's ground). Red first, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/lane ONLY="runner::run::tests::halving::a_red_naming_two_of_five"` on the old code): 0 passed, 1 failed - a red under `lib/two`, which T02 and T04 of five touch, T04 bad, ran `["T01 T02 T03 T04 T05", "T01 T02", "T03", "T04", "T05"]` (four runs after the first) and ejected T04 `red`; after, `["T01 T02 T03 T04 T05", "T01 T02 T03 T05"]` (one run after the first) and T04 ejected `inferred`. Green: `make builder-checks CRATE="rust/gate/crates/lane"` 109 of 109 and clean; `scripts/gates/l7r-gate.sh rust cover --crate rust/gate/crates/lane` clean, no line named, 2026-11-28. Every test of T24's halving passes unchanged (halve/tests.rs with its every-subset test of n = 1 to 6, the end-to-end n = 4 and n = 6 rows, the tripwire's halving test, and the first-pass row naming two changes, which now takes 4 runs where it took 5, T03 riding, measured 2026-11-28 (`make builder-checks`, the lane crate)). Three attribute assertions flip on purpose, `Unplaced` to `Candidates([0, 1])`: a several-crate `cover-build` unit over two changes, two changes under one crate, a file two changes touch.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The pin rule beside riders: a red of a set holding riders is its candidates' alone.** A lone candidate run red beside riders is ejected `red` and pinned (`tripwire.rs`'s doc), though the run was not its own; a rider never gets an `eject` line from the halving, so it is never pinned by one. Label: D6 step 2's "the halving runs over those candidates only" read literally - the riders are presumed innocent of the red, since no unit named them, as the one-candidate path already trusts the record. Pinned by `runner::run::tests::halving::a_lone_candidate_red_beside_riders_is_ejected_red_and_no_rider_is_pinned` (T02 bad: 3 runs, T02 `red`, one repair, no `stop`, measured 2026-11-28 (`make rust-test`, the end-to-end test)) and `halve::tests::a_lone_candidate_red_beside_its_riders_is_ejected_red_and_they_ride_on`.
+2. **The riders ride with every set the halving runs until one is green**, not only the first half's first run: a red run lands nothing, so they are still unlanded and ride the next. Label: D6's "the others riding with the first half" read as the riders landing with the first green half; WHY: a rider kept off the later runs would wait for the halving's end and cost a run of its own. Pinned by `halve::tests::a_narrowed_halving_ejects_exactly_its_bad_candidates_and_lands_each_rider_once` (every candidate set of n = 1 to 6, every non-empty set of bad candidates: exactly those ejected, each rider in exactly one green run where any ran).
+3. **A rider red after all is an accepted cost.** Each candidate run beside it is ejected, and once the halving is done the riders left run again as the rest and are read afresh, so the loop ends and the rider is found. What it costs: those candidates' ejection and their repairs (an innocent ejection); the alternative priced, a candidate's lone red re-run without riders before its ejection, costs a run on every true red. Label: the easier route, D6 step 2 literal; who chose: this task, the plan silent. Pinned by `runner::run::tests::halving::a_red_rider_costs_its_candidates_their_ejection_and_is_read_afresh_after` (T01 a rider red under `lib/two`: T02 and T04 ejected, then T01, T03 and T05 landed).
+4. **A unit naming one change beside a unit naming several joins the candidates** rather than being ejected first. Label: the algorithmically easier route (one red read one way); the halving finds that change in its turn. Pinned in `attribute::tests::a_red_no_unit_or_no_single_change_places_is_unplaced` (`Candidates([0, 1, 2])`).
+5. **The `attribute` line's `how` gains `candidates`** (`data-model.md`'s row); no reader of `how` exists beside its two writers (searched 2026-11-28, `grep '"how"'` over `rust/`). Label: the easier route.
+
+This supersedes T24 Decision 6 and the narrowing half of its Decision 7 (each stays as written in T24's section, its history).
+
+### T78 Approach (checklist part A)
+
+1. **The goal, in the world.** A red batch whose gate names a unit several of its changes touch lands the changes no unit named on its next run, and halves only over the named ones.
+2. **The constraints.** D6 step 2 ("Several: the halving runs over those candidates only, the others riding with the first half"), D6 steps 3 and 4 (the halving, the pin rule), US4's bound, FR-004; T24's halving tests kept passing; T18's tripwire.
+3. **Where each comes from.** R: plan.md D6 steps 2 to 4; tasks.md T78's line; data-model.md's `attribute` row. O: the red-first counts above.
+4. **Do they describe the world here?** Yes: the stand-in landing's red is a Phase line naming `lib/two`, which only T02's and T04's deltas touch, so the record names two of five exactly as a real crate unit would (`attribute::touches`), measured 2026-11-28 (`make rust-test`, the end-to-end tests).
+5. **The order.** After T24 and T86 (on main at this base); before T27.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks` clean, coverage clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The red-first test passes (one run after the first where there were four); the crate 109 of 109, coverage clean, 2026-11-28.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A slower outcome, not a wrong one: the changes no unit named waited through a halving over every change (up to a run or so more each) before landing; now they land on the next run.
+
+**Found and left?** none
+
+**Performance work?** no: D6 step 2's rule built as written (not filed as a `[perf]` task), though its effect is fewer runs (the red-first case: 1 run after the first red against 4, measured 2026-11-28 (`make rust-test`, red first)).
+

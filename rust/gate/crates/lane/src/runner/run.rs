@@ -35,7 +35,9 @@
 //! `attribute` line (`how` `none`) names every change that ran, and each set the halving names runs as an attempt of its own, its own
 //! `run` line; a green one pushes at once (its `push` line), a red one is halved again with no `attribute` line, and a change is
 //! ejected `red` after its own one-change red run or `inferred` when left last, each its own repair entry naming the attempt its red
-//! rests on. A runner killed mid-halving resumes what is left as one attempt (the easier route: the halving starts again from its
+//! rests on. Where every red unit names a change and some several (461 T78, D6 step 2), the `attribute` line (`how` `candidates`)
+//! names those, the halving runs over them alone and the batch's other changes ride with each set it runs until one is green.
+//! A runner killed mid-halving resumes what is left as one attempt (the easier route: the halving starts again from its
 //! red). A halving's set whose push fails twice is the batch's `integrate` entry (T19), its changes not yet run left `waiting`.
 //!
 //! A GREEN ATTEMPT WHOSE PUSH FAILED (461 T19; plan, Risks, "Two writers of main", D7's table): told by the landing's own line
@@ -441,13 +443,19 @@ impl Run {
             return Ok(());
         }
         let Verdict::Placed(placed) = &out.verdict else {
-            let candidates: Vec<&str> = todo.iter().map(|h| h.commit.as_str()).collect();
+            // the candidates a red unit names halved, the others riding (461 T78); else every change that ran
+            let (named, how) = match &out.verdict {
+                Verdict::Candidates(c) => (c.clone(), "candidates"),
+                _ => ((0..todo.len()).collect(), "none"),
+            };
+            let riders: Vec<usize> = (0..todo.len()).filter(|i| !named.contains(i)).collect();
+            let candidates: Vec<&str> = named.iter().map(|&i| todo[i].commit.as_str()).collect();
             l.append(
                 "attribute",
-                &json!({"batch": id, "candidates": candidates, "how": "none"}),
+                &json!({"batch": id, "candidates": candidates, "how": how}),
             )?;
             let pool: Vec<HandIn> = todo.iter().map(|&h| h.clone()).collect();
-            let halving = Halving::new((0..pool.len()).collect(), out.n, halve::LANE_RETRY);
+            let halving = Halving::narrowed(named, riders, out.n, halve::LANE_RETRY);
             self.halving = Some((halving, pool, vec![out]));
             return Ok(());
         };

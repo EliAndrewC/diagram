@@ -200,3 +200,88 @@ fn a_task_left_last_by_one_halving_and_again_by_a_later_batch_s_stops_the_lane_f
     // T07 landed before the trip
     assert_eq!(w.origin_holds("f/T07.txt"), "T07");
 }
+
+/// A red naming the crate `lib/two`, which only the changes with a file under it touch.
+const UNDER_TWO: &str = r#"{"ev":"Phase","src":"rust","step":"test","t0":"@T@","t1":"@T@","code":101,"clone":"@TREE@","crates":["lib/two"]}"#;
+
+/// Five hand-ins, T02 and T04 under `lib/two/`, the rest elsewhere, and `culprits` red under `lib/two` wherever they run: batch
+/// 461-1 stepped, its sets and its ejections.
+fn two_of_five(tag: &str, culprits: &[&str]) -> (World, Vec<String>, Vec<(String, String)>) {
+    let tasks = ["T01", "T02", "T03", "T04", "T05"];
+    let w = world(tag);
+    let shas: Vec<String> = tasks
+        .iter()
+        .map(|t| {
+            let dir = if ["T02", "T04"].contains(t) {
+                "lib/two"
+            } else {
+                "f"
+            };
+            w.hand_in("461", t, &format!("{dir}/{t}.txt"), &format!("{t}\n"))
+        })
+        .collect();
+    for t in culprits {
+        std::fs::write(
+            w.common.join(format!("phase-{t}")),
+            format!("{UNDER_TWO}\n"),
+        )
+        .unwrap();
+    }
+    let _ = step(&lane_of(&w));
+    let (runs, out) = (
+        sets(&w, "461-1", &shas, &tasks),
+        ejects(&w, "461-1", &shas, &tasks),
+    );
+    (w, runs, out)
+}
+
+/// D6 step 2's narrowing (461 T78): a red naming two of five changes halves over those two alone, the other three riding with the
+/// first half - here the first half (T02) and its riders land green, and T04, left last, is ejected by inference.
+#[test]
+fn a_red_naming_two_of_five_changes_halves_over_those_two_the_others_riding() {
+    let (w, runs, out) = two_of_five("lane-narrow-second", &["T04"]);
+    assert_eq!(runs, ["T01 T02 T03 T04 T05", "T01 T02 T03 T05"]);
+    assert_eq!(out, [("T04".to_owned(), "inferred".to_owned())]);
+    let attribute = w
+        .lane()
+        .into_iter()
+        .find(|x| x["event"] == "attribute")
+        .unwrap();
+    assert_eq!(attribute["how"], "candidates");
+    assert_eq!(attribute["candidates"].as_array().unwrap().len(), 2);
+}
+
+/// The narrowing's pin rule (461 T78): T02, the first half, red beside its riders is ejected `red` though the run was not its own;
+/// no rider is ejected, pinned or asked about, and they land with T04.
+#[test]
+fn a_lone_candidate_red_beside_riders_is_ejected_red_and_no_rider_is_pinned() {
+    let (w, runs, out) = two_of_five("lane-narrow-first", &["T02"]);
+    assert_eq!(
+        runs,
+        ["T01 T02 T03 T04 T05", "T01 T02 T03 T05", "T01 T03 T04 T05"]
+    );
+    assert_eq!(out, [("T02".to_owned(), "red".to_owned())]);
+    assert!(!w.events().contains(&"stop".to_owned()));
+    assert_eq!(repairs::read(&w.common).len(), 1);
+}
+
+/// A rider red after all (T01, red under `lib/two` though its delta is not): each candidate run beside it is ejected, the cost the
+/// rule accepts, and once the halving is done the riders run again, read afresh, so T01 is found and T03 and T05 land.
+#[test]
+fn a_red_rider_costs_its_candidates_their_ejection_and_is_read_afresh_after() {
+    let (w, runs, out) = two_of_five("lane-narrow-rider", &["T01", "T04"]);
+    assert_eq!(
+        runs,
+        [
+            "T01 T02 T03 T04 T05",
+            "T01 T02 T03 T05",
+            "T01 T03 T04 T05",
+            "T01 T03 T05",
+            "T01",
+            "T03 T05"
+        ]
+    );
+    let culprits: Vec<&str> = out.iter().map(|(t, _)| t.as_str()).collect();
+    assert_eq!(culprits, ["T02", "T04", "T01"]);
+    assert_eq!(w.origin_holds("f/T05.txt"), "T05");
+}

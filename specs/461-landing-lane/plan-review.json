@@ -1068,6 +1068,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T29 (plan D11 phase 4: the one route - `make land` refused outside the lane's tree, its escape recorded; FR-001, FR-003, FR-008)": {
+   "sha256": "759d4632c35fae15ca9eea865f0f3121a44fe1536bebab77a016a3493de2341e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "779595dc9bdd14a23aae67571793334d961e7892727ccd645bb81583b186305d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T23 (phase 2's measurement on real work: the lane's first batches, 2026-11-28T02:00Z to 06:20Z; D1, D9, D11)": {
+   "sha256": "8d9af15f3a2c553402745f5f2d243789ed8a402612334894333109fbfa91944e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (checklist part A)": {
+   "sha256": "5acc6dd2e2b6807867d2e199a18099305c8aaf311b7b695da401b53c0263d2ff",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T78 (D6 step 2's narrowing, left by T24 Decisions 6 and 7: a red unit naming several changes was halved over every change that ran, correct but up to a run or so slower)": {
+   "sha256": "32c800bdd6f7221df46b6b3240490428c144c66c28c9fd6bd9d97c3bd118432c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T78 Approach (checklist part A)": {
+   "sha256": "05bce3bec480affeafd53eaa9d868935bf32a155b15f4fbd2e7559a28253f686",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7061,6 +7097,188 @@
      "why": "Sequencing and exits. They narrow nothing the request or the spec carries."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T29 (plan D11 phase 4: the one route - `make land` refused outside the lane's tree, its escape recorded; FR-001, FR-003, FR-008)",
+    "### T29 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T29-refusal-outside-lane",
+     "summary": "make land / make land-batch refused (exit 2, end line refused(2), nothing of the landing run) when the root is not the registry's lane-held tree, its message naming the lane tree (or builder-tree-adopt), builder-done, lane-start and the escape",
+     "class": "within",
+     "why": "D11 phase 4 verbatim: make land outside the lane tree is refused, naming make lane-start; refusing before the checks drops none of them (FR-008), since nothing lands."
+    },
+    {
+     "id": "T29-lane-tree-rule",
+     "summary": "the lane's tree is the pool registry entry held by lane whose canonical path is the root's, the same reading as state.rs lane_run",
+     "class": "within",
+     "why": "How 'the lane tree' of D11 is recognized; settles a mechanism the spec left open, narrows nothing."
+    },
+    {
+     "id": "T29-no-env-escapes",
+     "summary": "neither L7R_LANE_BATCH nor L7R_LAND_ALONE lets a landing through outside the lane's tree",
+     "class": "within",
+     "why": "D11 names one escape, recorded; plain exports would be unrecorded escapes. Holds the rule tighter, not narrower; land-alone's step 6 runs in the lane's tree and so still passes."
+    },
+    {
+     "id": "T29-escape",
+     "summary": "LAND_HERE_OK=\"<reason>\" read first, held to the reason floor, recorded to the guard log both ways (escaped / blocked)",
+     "class": "within",
+     "why": "D11's escape LAND_HERE_OK=\"<reason>\" (recorded). The floor and the blocked record enforce the recording D11 asks for."
+    },
+    {
+     "id": "T29-module-placement",
+     "summary": "the rule lives in a new land/src/land/route.rs asked in land.rs main after usage/NOTE/spec checks, before Land::landing",
+     "class": "within",
+     "why": "Placement of D11 phase 4's refusal; D15's 'land.rs gains the --hand-in arm only' governs the lane's hand-in code, and a design location is not a fidelity matter."
+    },
+    {
+     "id": "T29-docs",
+     "summary": "Makefile land/land-batch help and docs/guards.md carry the rule",
+     "class": "within",
+     "why": "Documents the requested refusal."
+    },
+    {
+     "id": "T29-unclean-clone-refusal-with-T30",
+     "summary": "the task line's 'make land refuses an unclean tree, naming each file': in the lane's tree it already holds (writers first pass, 451 T242); in the clone it arrives with T30's removal of alone.rs, so land-alone keeps working until T30",
+     "class": "within",
+     "why": "D11 puts the unclean-tree refusal and the dirty-clone route's retirement in the same phase 4 and orders neither; T29 and T30 are both phase 4, so this sequences the phase rather than narrowing it. Until T30, a dirty clone reaches land-alone only under the recorded escape, which is the existing route D11 retires in that phase, not a defect. It holds only if T30 carries the clone's unclean refusal; a T30 that does not would be the narrowing."
+    },
+    {
+     "id": "T29-stale-notices-T98",
+     "summary": "notices still sending the coordinator to make land in its clone (order.rs, speckit.rs holding box, sync-with-main.sh, builder-brief.md) left, filed as T98 to land before T30",
+     "class": "within",
+     "why": "Neither the request nor the spec asks for these notices to be changed. They are made stale by this phase, and the fix is filed to land inside the same phase, before T30, and is not carried past the step. A session following one is refused with the correct route named."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T23 (phase 2's measurement on real work: the lane's first batches, 2026-11-28T02:00Z to 06:20Z; D1, D9, D11)",
+    "### T23 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T23-approach",
+     "summary": "A read-only measurement: scripts under dev/measurements/2026-11-28/461-t23-lane-first-batches/ read the lane log snapshot, Phase lines, sampler, transcript and ticks; no source changes.",
+     "class": "within",
+     "why": "The plan's phase 2 measurement on real work; it carries FR-010 (each figure with its concurrency: W0/W1/W2 trees held and load stated, and none claimed as a like window) and the spec's own D1/D9/D11 'measured in phase 2' items. It narrows nothing in the request or spec."
+    },
+    {
+     "id": "T23-D1",
+     "summary": "D1 stands: the lane tree's first gate was cold (15.9 min, 302 cover-build crates), later gates warm; the adopted -land tree stays the lane's tree.",
+     "class": "within",
+     "why": "D1 named exactly this measurement ('the lane's first gate minutes in phase 2') as what could move it; the reading does not move it, so the accepted decision is unchanged."
+    },
+    {
+     "id": "T23-D9",
+     "summary": "LANE_WAIT_MAX is not priced: 32 waits all completed on a lane line, the longest 27.4 min, so no platform limit was found.",
+     "class": "within",
+     "why": "D9 prices a ceiling only if the platform ends the background command at a time limit, as a wake FR-005 does not list; with no limit found, adding none keeps FR-005's 'otherwise only for US5's cases' intact."
+    },
+    {
+     "id": "T23-D11",
+     "summary": "The clone's own target directory is kept (gates built there until 05:48:13Z and it holds the l7r-gate binary make lane-wait runs); T29 (phase 4) reopens it.",
+     "class": "within",
+     "why": "D11 drops the clone's target directory 'only once phase 2's measurement shows no gate builds in it'; the measurement shows gates did build there, so keeping it is D11's own rule applied, not an exception."
+    },
+    {
+     "id": "T23-T99",
+     "summary": "The lane's 'landed' line reports minutes since the last resume, so FR-005's status line under-reports a resumed batch's time; left unfixed in T23 and filed as T99, landing before T31.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a status line answering wrongly), so leaving it needs a ruling. It is legitimate: T23 is a measurement and by its approach changes no source, so the fix cannot be done in this task without turning a read into a code change. And leaving it in this task does not defeat what the request asks: the status line still wakes the coordinator once a batch (FR-005's actual requirement, and the GM's token-cost purpose), T23's own figures come from lane.jsonl rather than from that line, and the fix is scheduled before T31, the like-window measurement whose figures would rely on it. The defect is filed with an order, not carried silently."
+    },
+    {
+     "id": "T23-T100",
+     "summary": "make task-time books none of a lane batch's gate (461-3's 28.5-min run reads as 20.9 working minutes), so T23's task-line verify fails; the task closes on its own re-derivation check (step 9) and the fix is filed as T100, landing before T31.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A tool that answers short is a defect, and the task's verify line is not met, so this needs a ruling. The verify is the plan's, not the GM's or the spec's. What it stands for, landing time being measured correctly for FR-006/FR-010/SC-005's before-and-after comparison, is needed at T31's like window, and T100 is ordered before T31. T23's own figures (batches, gate minutes, waits, coordinator calls) come from lane.jsonl, the Phase lines and the transcript through its own scripts, not from task-time, so none of the figures it records is corrupted by the defect. The fix is a source change that this read-only task cannot make. The purpose survives."
+    },
+    {
+     "id": "T23-T101",
+     "summary": "D5's one-feature-a-batch rule splits an interleaved queue into batches of one (462-5); recorded as a throughput lever to price as T101, not changed; LANE_MAX unmoved.",
+     "class": "within",
+     "why": "Not a defect: no wrong outcome, D5's accepted rule working as written. Leaving the accepted decision as it is narrows nothing, and pricing it later is the spec's own GUESS-knob route."
+    },
+    {
+     "id": "T23-perf",
+     "summary": "The task is classed as performance work under 451 FR-013 (a measurement of where landing time goes).",
+     "class": "within",
+     "why": "FR-013 counts measurement of where the time goes, the landings included, as performance work for ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T78 (D6 step 2's narrowing, left by T24 Decisions 6 and 7: a red unit naming several changes was halved over every change that ran, correct but up to a run or so slower)",
+    "### T78 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "attribute gains Verdict::Candidates (every red unit names a change, some unit several); the halving runs over the candidates alone with the riders carried; supersedes T24 Decision 6 and the narrowing half of Decision 7",
+     "class": "within",
+     "why": "Removes a narrowing rather than adding one: FR-004 'attribute, else bisect' and US4 as D6 quotes it ('first by the gate's own report ... by bisection only where that names none') make the report the first authority, and the request's 'bisects and ejects the failing change. The rest of the batch lands' is served better when changes the report clears land on the next run. FR-008 untouched: every landing still passes the same gate."
+    },
+    {
+     "id": "Approach-mixed",
+     "summary": "a red where some unit names changes and another unit names none (or no unit is read) stays Unplaced, so the halving runs over the whole batch",
+     "class": "within",
+     "why": "US4's 'by bisection only where that names none': a red with a part the report does not place is not placed, so bisecting the whole batch is what FR-004 asks; nothing is trusted that the report did not name."
+    },
+    {
+     "id": "Approach-new",
+     "summary": "Halving::new is Halving::narrowed with no riders, its rules unchanged; T24's halving tests pass unchanged; three attribute assertions flip Unplaced to Candidates on purpose",
+     "class": "within",
+     "why": "Keeps the bisection FR-004 already has for an unplaced red; the flipped assertions are exactly the cases FR-004 sends to attribution first."
+    },
+    {
+     "id": "1",
+     "summary": "a lone candidate run red beside riders is ejected `red` and pinned; a rider is never pinned by the halving",
+     "class": "within",
+     "why": "A pin on the report's word, the red-attributed kind the one-candidate path already takes from a multi-change run; it tightens the tripwire (more pins, never fewer) and drops no check (FR-008). Note: the plan's D6 step 4 'a red half of two changes or more pins on nobody' now has an exception this block does not state that it amends."
+    },
+    {
+     "id": "2",
+     "summary": "riders ride with every set the halving runs until one is recorded green, which lands them",
+     "class": "within",
+     "why": "Serves the request's 'the rest of the batch lands' and FR-004's 'land the rest': a red run lands nothing, so the riders are still unlanded and ride the next set; every landing is still the set that was gated (FR-008)."
+    },
+    {
+     "id": "3",
+     "summary": "a rider that is red after all costs the candidates run beside it their ejection (an innocent ejection, returned as repairs); the riders left then run again as the rest and are read afresh",
+     "class": "within",
+     "why": "FR-004 and US4 make the gate's report the first authority, so ejecting what the report named is what was asked even when the report misleads; the one-candidate attribution path carries the same case. The innocent changes return through the request's own repair route ('the ejected task returns to the queue as a repair entry'), nothing lands ungated (FR-008), and the leftover riders are re-tested rather than trusted twice."
+    },
+    {
+     "id": "4",
+     "summary": "a unit naming one change beside a unit naming several puts that change among the candidates rather than ejecting it first",
+     "class": "within",
+     "why": "FR-004 attributes the red as a whole: the candidates are the changes the red units name, and the halving over them still ejects the failing change. No change is landed or ejected without a run or a report behind it."
+    },
+    {
+     "id": "5",
+     "summary": "the attribute line's `how` gains `candidates` (data-model row); no other reader of `how`",
+     "class": "within",
+     "why": "Records the new verdict in the existing lane log; adds and removes nothing the request or spec asks for."
+    },
+    {
+     "id": "Perf-no",
+     "summary": "the task declares 'Performance work? no' (not filed as a [perf] task), though its effect is fewer runs",
+     "class": "within",
+     "why": "The declaration changes nothing that is built: the task builds FR-004's attribution-first rule as written. Its scheduling class under the GM's 2026-11-28 priority words (FR-011) only orders work, and taking this one as an ordinary lane task removes nothing the GM asked to have built."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8381,6 +8599,126 @@
      "summary": "order after T24 and T76, before 461 T23; exits: green on the lane crate's tests and coverage, or red recorded and set down with any cannot-be-done claim ruled through make arbiter-ask",
      "class": "within",
      "why": "Sequencing and exits. They narrow nothing the request or the spec carries."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T23": {
+   "section_sha256": "d410625fb057a61b4e1003a2110fa80b91e3a9969c17878b415accacca44da1e",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T23-approach",
+     "summary": "A read-only measurement: scripts under dev/measurements/2026-11-28/461-t23-lane-first-batches/ read the lane log snapshot, Phase lines, sampler, transcript and ticks; no source changes.",
+     "class": "within",
+     "why": "The plan's phase 2 measurement on real work; it carries FR-010 (each figure with its concurrency: W0/W1/W2 trees held and load stated, and none claimed as a like window) and the spec's own D1/D9/D11 'measured in phase 2' items. It narrows nothing in the request or spec."
+    },
+    {
+     "id": "T23-D1",
+     "summary": "D1 stands: the lane tree's first gate was cold (15.9 min, 302 cover-build crates), later gates warm; the adopted -land tree stays the lane's tree.",
+     "class": "within",
+     "why": "D1 named exactly this measurement ('the lane's first gate minutes in phase 2') as what could move it; the reading does not move it, so the accepted decision is unchanged."
+    },
+    {
+     "id": "T23-D9",
+     "summary": "LANE_WAIT_MAX is not priced: 32 waits all completed on a lane line, the longest 27.4 min, so no platform limit was found.",
+     "class": "within",
+     "why": "D9 prices a ceiling only if the platform ends the background command at a time limit, as a wake FR-005 does not list; with no limit found, adding none keeps FR-005's 'otherwise only for US5's cases' intact."
+    },
+    {
+     "id": "T23-D11",
+     "summary": "The clone's own target directory is kept (gates built there until 05:48:13Z and it holds the l7r-gate binary make lane-wait runs); T29 (phase 4) reopens it.",
+     "class": "within",
+     "why": "D11 drops the clone's target directory 'only once phase 2's measurement shows no gate builds in it'; the measurement shows gates did build there, so keeping it is D11's own rule applied, not an exception."
+    },
+    {
+     "id": "T23-T99",
+     "summary": "The lane's 'landed' line reports minutes since the last resume, so FR-005's status line under-reports a resumed batch's time; left unfixed in T23 and filed as T99, landing before T31.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a status line answering wrongly), so leaving it needs a ruling. It is legitimate: T23 is a measurement and by its approach changes no source, so the fix cannot be done in this task without turning a read into a code change. And leaving it in this task does not defeat what the request asks: the status line still wakes the coordinator once a batch (FR-005's actual requirement, and the GM's token-cost purpose), T23's own figures come from lane.jsonl rather than from that line, and the fix is scheduled before T31, the like-window measurement whose figures would rely on it. The defect is filed with an order, not carried silently."
+    },
+    {
+     "id": "T23-T100",
+     "summary": "make task-time books none of a lane batch's gate (461-3's 28.5-min run reads as 20.9 working minutes), so T23's task-line verify fails; the task closes on its own re-derivation check (step 9) and the fix is filed as T100, landing before T31.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A tool that answers short is a defect, and the task's verify line is not met, so this needs a ruling. The verify is the plan's, not the GM's or the spec's. What it stands for, landing time being measured correctly for FR-006/FR-010/SC-005's before-and-after comparison, is needed at T31's like window, and T100 is ordered before T31. T23's own figures (batches, gate minutes, waits, coordinator calls) come from lane.jsonl, the Phase lines and the transcript through its own scripts, not from task-time, so none of the figures it records is corrupted by the defect. The fix is a source change that this read-only task cannot make. The purpose survives."
+    },
+    {
+     "id": "T23-T101",
+     "summary": "D5's one-feature-a-batch rule splits an interleaved queue into batches of one (462-5); recorded as a throughput lever to price as T101, not changed; LANE_MAX unmoved.",
+     "class": "within",
+     "why": "Not a defect: no wrong outcome, D5's accepted rule working as written. Leaving the accepted decision as it is narrows nothing, and pricing it later is the spec's own GUESS-knob route."
+    },
+    {
+     "id": "T23-perf",
+     "summary": "The task is classed as performance work under 451 FR-013 (a measurement of where landing time goes).",
+     "class": "within",
+     "why": "FR-013 counts measurement of where the time goes, the landings included, as performance work for ordering."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T78": {
+   "section_sha256": "b55e2ae9e9861df89ec730ad0f66b9438857eada35e30866dfe32de0972811b3",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "attribute gains Verdict::Candidates (every red unit names a change, some unit several); the halving runs over the candidates alone with the riders carried; supersedes T24 Decision 6 and the narrowing half of Decision 7",
+     "class": "within",
+     "why": "Removes a narrowing rather than adding one: FR-004 'attribute, else bisect' and US4 as D6 quotes it ('first by the gate's own report ... by bisection only where that names none') make the report the first authority, and the request's 'bisects and ejects the failing change. The rest of the batch lands' is served better when changes the report clears land on the next run. FR-008 untouched: every landing still passes the same gate."
+    },
+    {
+     "id": "Approach-mixed",
+     "summary": "a red where some unit names changes and another unit names none (or no unit is read) stays Unplaced, so the halving runs over the whole batch",
+     "class": "within",
+     "why": "US4's 'by bisection only where that names none': a red with a part the report does not place is not placed, so bisecting the whole batch is what FR-004 asks; nothing is trusted that the report did not name."
+    },
+    {
+     "id": "Approach-new",
+     "summary": "Halving::new is Halving::narrowed with no riders, its rules unchanged; T24's halving tests pass unchanged; three attribute assertions flip Unplaced to Candidates on purpose",
+     "class": "within",
+     "why": "Keeps the bisection FR-004 already has for an unplaced red; the flipped assertions are exactly the cases FR-004 sends to attribution first."
+    },
+    {
+     "id": "1",
+     "summary": "a lone candidate run red beside riders is ejected `red` and pinned; a rider is never pinned by the halving",
+     "class": "within",
+     "why": "A pin on the report's word, the red-attributed kind the one-candidate path already takes from a multi-change run; it tightens the tripwire (more pins, never fewer) and drops no check (FR-008). Note: the plan's D6 step 4 'a red half of two changes or more pins on nobody' now has an exception this block does not state that it amends."
+    },
+    {
+     "id": "2",
+     "summary": "riders ride with every set the halving runs until one is recorded green, which lands them",
+     "class": "within",
+     "why": "Serves the request's 'the rest of the batch lands' and FR-004's 'land the rest': a red run lands nothing, so the riders are still unlanded and ride the next set; every landing is still the set that was gated (FR-008)."
+    },
+    {
+     "id": "3",
+     "summary": "a rider that is red after all costs the candidates run beside it their ejection (an innocent ejection, returned as repairs); the riders left then run again as the rest and are read afresh",
+     "class": "within",
+     "why": "FR-004 and US4 make the gate's report the first authority, so ejecting what the report named is what was asked even when the report misleads; the one-candidate attribution path carries the same case. The innocent changes return through the request's own repair route ('the ejected task returns to the queue as a repair entry'), nothing lands ungated (FR-008), and the leftover riders are re-tested rather than trusted twice."
+    },
+    {
+     "id": "4",
+     "summary": "a unit naming one change beside a unit naming several puts that change among the candidates rather than ejecting it first",
+     "class": "within",
+     "why": "FR-004 attributes the red as a whole: the candidates are the changes the red units name, and the halving over them still ejects the failing change. No change is landed or ejected without a run or a report behind it."
+    },
+    {
+     "id": "5",
+     "summary": "the attribute line's `how` gains `candidates` (data-model row); no other reader of `how`",
+     "class": "within",
+     "why": "Records the new verdict in the existing lane log; adds and removes nothing the request or spec asks for."
+    },
+    {
+     "id": "Perf-no",
+     "summary": "the task declares 'Performance work? no' (not filed as a [perf] task), though its effect is fewer runs",
+     "class": "within",
+     "why": "The declaration changes nothing that is built: the task builds FR-004's attribution-first rule as written. Its scheduling class under the GM's 2026-11-28 priority words (FR-011) only orders work, and taking this one as an ordinary lane task removes nothing the GM asked to have built."
     }
    ],
    "verdict": "CLEAR"

@@ -98,7 +98,7 @@ fn a_red_line_naming_several_crates_is_one_unit_over_all_of_them() {
     let elsewhere = change(&["docs/z.md"], &["T03"]);
     assert_eq!(
         attribute(&read, &[under_a.clone(), under_e.clone()]),
-        Verdict::Unplaced
+        Verdict::Candidates(vec![0, 1])
     );
     assert_eq!(
         attribute(&read, &[elsewhere, under_e]),
@@ -247,12 +247,26 @@ fn a_red_no_unit_or_no_single_change_places_is_unplaced() {
         ),
         Verdict::Unplaced
     );
-    // two changes under it
+    // two changes under it: the candidates a halving runs over (461 T78)
     let both = [
         change(&["rust/gate/crates/land/a.rs"], &["T01"]),
         change(&["rust/gate/crates/land/b.rs"], &["T02"]),
     ];
-    assert_eq!(attribute(&r, &both), Verdict::Unplaced);
+    assert_eq!(attribute(&r, &both), Verdict::Candidates(vec![0, 1]));
+    // beside a unit naming a third change alone, that one joins them
+    let mut third = both.to_vec();
+    third.push(change(&["docs/z.md"], &["T03"]));
+    let mut with_row = r.clone();
+    with_row.extend(reds(
+        &[],
+        SPAN,
+        Path::new("/lane"),
+        "Every refusal:\n  T03: owes its round\n",
+    ));
+    assert_eq!(
+        attribute(&with_row, &third),
+        Verdict::Candidates(vec![0, 1, 2])
+    );
     // one unit placed, another not: the batch is unplaced
     let output = "Every refusal:\n  push-checks: nothing named\n  Tx: not a task\n";
     let mut more = r.clone();
@@ -389,12 +403,12 @@ fn a_line_no_test_reaches_names_the_change_that_touches_its_file() {
         attribute(&read, &batch_462_3()),
         Verdict::Placed(vec![(1, files.iter().map(|f| (*f).to_owned()).collect())])
     );
-    // a file no change touches, or one two changes touch, is unplaced: the halving's (461 T24)
+    // a file no change touches, or one two changes touch, is the halving's: one two changes touch its candidates (461 T78), one none touch unplaced (461 T24)
     let mut two = batch_462_3();
     two[0]
         .files
         .push("rust/gate/crates/plan/src/plan/split.rs".to_owned());
-    assert_eq!(attribute(&read, &two), Verdict::Unplaced);
+    assert_eq!(attribute(&read, &two), Verdict::Candidates(vec![0, 1]));
     let none = &batch_462_3()[2..];
     assert_eq!(attribute(&read, none), Verdict::Unplaced);
     // beside another red unit, each is placed on its own change

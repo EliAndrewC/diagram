@@ -802,7 +802,8 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
         ),
         Ok(2)
     );
-    // a landing from main whose tasks.md cannot be read: the first pass raises before any tool runs
+    // a landing from main whose tasks.md cannot be read: the first pass raises before any tool runs (in the lane's tree, 461 T29)
+    super::route::tests::adopt(&fx.root, &fx.root);
     std::fs::write(fx.root.join("specs/449-x/tasks.md"), [0xff]).unwrap();
     assert!(super::main(
         &args(&["449", "T1"]),

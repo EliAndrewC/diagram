@@ -1,0 +1,12 @@
+window 0: 2026-11-27T20:00:00Z .. 2026-11-28T02:02:00Z
+  tool calls: 326, landing-side 102: hand-land 28, carry 52, lane-mend 0, own-push 0, wake 21, file-lane 1, other 224
+  model calls: 408, landing-side 102: hand-land 28, carry 52, lane-mend 0, own-push 0, wake 21, file-lane 1
+  output tokens landing-side 56615, other 163237; cache-read landing-side 59942154, other 172981452
+window 1: 2026-11-28T02:02:00Z .. 2026-11-28T05:49:00Z
+  tool calls: 297, landing-side 160: hand-land 28, carry 15, lane-mend 19, own-push 9, wake 78, file-lane 11, other 137
+  model calls: 330, landing-side 146: hand-land 28, carry 15, lane-mend 19, own-push 9, wake 70, file-lane 5
+  output tokens landing-side 90457, other 91088; cache-read landing-side 79049891, other 101082324
+window 2: 2026-11-28T05:49:00Z .. 2026-11-28T06:20:00Z
+  tool calls: 20, landing-side 9: hand-land 0, carry 3, lane-mend 0, own-push 0, wake 6, file-lane 0, other 11
+  model calls: 23, landing-side 9: hand-land 0, carry 3, lane-mend 0, own-push 0, wake 6, file-lane 0
+  output tokens landing-side 5773, other 11788; cache-read landing-side 6704817, other 10460430

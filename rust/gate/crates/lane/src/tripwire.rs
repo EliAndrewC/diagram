@@ -2,7 +2,10 @@
 //! tripwire fires on repeated reds of the same TASK, which T17's stand-down leaves to it. A red counts against a task only where the
 //! lane PINS it: an `eject` line of `lane.jsonl` with `why` `red`, `inferred` or `unplaced` ([`PINS`]) whose change is a hand-in of
 //! that task's (keyed by feature and task: `T01` is every feature's). A `conflict` ejection pins nothing, nor does the ruling's own
-//! ejection (`arbiter`), nor a red half of two changes or more (the halving, `crate::halve`, writes no `eject` line for one). Pins are counted
+//! ejection (`arbiter`), nor a red half of two changes or more (the halving, `crate::halve`, writes no `eject` line for one). A red of
+//! a set holding RIDERS (461 T78: the batch's changes no red unit named, riding with a narrowed halving's sets) pins only its
+//! candidates: a lone candidate so run red is ejected `red` and pinned, and a rider gets no `eject` line from the halving, so it is
+//! never pinned by one. Pins are counted
 //! by BATCH: each batch ejects a task at most once, and a kill between a repair entry and its `eject` lines (461 T15 Decision 7) is
 //! never read as a second pin.
 //!

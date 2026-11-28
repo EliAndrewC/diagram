@@ -140,3 +140,67 @@ fn every_set_of_bad_changes_of_n_1_to_6_ejects_exactly_those() {
         }
     }
 }
+
+/// Every candidate set of n = 1 to 6 changes (the rest riding, 461 T78) and every non-empty set of bad candidates: exactly the bad
+/// ones are ejected, each once, no rider is, and each rider is in exactly one green run - the run that lands it.
+#[test]
+fn a_narrowed_halving_ejects_exactly_its_bad_candidates_and_lands_each_rider_once() {
+    for n in 1..=6_usize {
+        for cands in 1..(1_u32 << n) {
+            let candidates: Vec<usize> = (0..n).filter(|&c| cands & (1 << c) != 0).collect();
+            let riders: Vec<usize> = (0..n).filter(|c| !candidates.contains(c)).collect();
+            for mask in 1..(1_u32 << candidates.len()) {
+                let bad: Vec<usize> = (0..candidates.len())
+                    .filter(|&k| mask & (1 << k) != 0)
+                    .map(|k| candidates[k])
+                    .collect();
+                let mut h = Halving::narrowed(candidates.clone(), riders.clone(), 1, 0);
+                let (mut runs, mut out) = (0, Vec::new());
+                let mut green_runs: Vec<Vec<usize>> = Vec::new();
+                loop {
+                    match h.advance() {
+                        Next::Run(set) => {
+                            runs += 1;
+                            assert!(set.windows(2).all(|w| w[0] < w[1]), "{set:?}");
+                            let green = !set.iter().any(|c| bad.contains(c));
+                            if green {
+                                green_runs.push(set);
+                            }
+                            h.record(green, runs + 1);
+                        }
+                        Next::Eject { change, .. } => out.push(change),
+                        Next::Done => break,
+                    }
+                }
+                out.sort_unstable();
+                assert_eq!(out, bad, "n {n} candidates {candidates:?}");
+                let landed = |r: &usize| green_runs.iter().filter(|s| s.contains(r)).count();
+                let riders_landed: usize = riders.iter().map(landed).sum();
+                if green_runs.is_empty() {
+                    assert_eq!(riders_landed, 0);
+                } else {
+                    assert_eq!(riders_landed, riders.len(), "{candidates:?} {bad:?}");
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn a_lone_candidate_red_beside_its_riders_is_ejected_red_and_they_ride_on() {
+    // [1 3] named of five: [0 1 2 4] red ([1] and the riders), 1 ejected red; [0 2 3 4] green, all landed
+    let mut h = Halving::narrowed(vec![1, 3], vec![0, 2, 4], 1, 0);
+    assert_eq!(h.advance(), Next::Run(vec![0, 1, 2, 4]));
+    h.record(false, 2);
+    assert_eq!(
+        h.advance(),
+        Next::Eject {
+            change: 1,
+            why: Why::Red,
+            at: 2
+        }
+    );
+    assert_eq!(h.advance(), Next::Run(vec![0, 2, 3, 4]));
+    h.record(true, 3);
+    assert_eq!(h.advance(), Next::Done);
+}

@@ -656,7 +656,7 @@ step-back-on:   ## [project] resume the hourly step-back (feature 405 T43)   REA
 LAND_RUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" land
 land: export LAND_NOTE = $(NOTE)
 land: export LAND_BOXES = $(BOXES)
-land:           ## [project] land one task or several and tick them: each task's done commit carried first (make builder-done's, 451 T397; make carry kept for a carry by hand or a stopped one), then every cheap refusal together, then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446; no coverage run beside them, gone with the Python tests, 449 FR-001b), the push, the ticks (feature 405 T33); T= takes commas or spaces (451 T18)   F=405 T="T12 [T13]" (or T=T12,T13) NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes]
+land:           ## [project] land one task or several and tick them: each task's done commit carried first (make builder-done's, 451 T397; make carry kept for a carry by hand or a stopped one), then every cheap refusal together, then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446; no coverage run beside them, gone with the Python tests, 449 FR-001b), the push, the ticks (feature 405 T33); T= takes commas or spaces (451 T18); refused before anything runs outside the landing lane's tree (the pool's lane entry), naming make builder-done and make lane-start, escape LAND_HERE_OK="<reason>" for the lane's own failure, recorded (461 T29)   F=405 T="T12 [T13]" (or T=T12,T13) NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes] [LAND_HERE_OK="<why the lane cannot>"]
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
 	$(DISK_FLOOR)
 	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
@@ -762,7 +762,7 @@ land-stop:       ## [project] stop this tree's running `make land` cleanly - its
 	@$(LAND_RUN) --stop
 
 land-batch: export LAND_NOTE = $(NOTE)
-land-batch:     ## [project] the same command as make land (feature 385 T117's name, kept)   F=385 T="T106 T108" NOTE="what was verified"
+land-batch:     ## [project] the same command as make land (feature 385 T117's name, kept), refused outside the landing lane's tree as it is (461 T29)   F=385 T="T106 T108" NOTE="what was verified"
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land-batch: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
 	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
 	  if [ $$rc = 0 ] || [ $$rc = 3 ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" builder-tree landed "$(F)" $(T) || printf 'make land-batch: the landed tasks'"'"' pool trees were not released (the landing stands) - make builder-tree-release T="$(T)"\n' >&2; fi; \
