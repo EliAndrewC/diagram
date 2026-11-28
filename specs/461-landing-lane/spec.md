@@ -86,7 +86,8 @@ Landing runs in a worktree of its own, driven by tooling rather than the coordin
 order, carries them, runs the batch gate, and pushes. It wakes the coordinator only for what needs judgment.
 
 **Acceptance**: a landing's gate never runs in the session's clone; the lane runs a batch with no coordinator turn between the
-hand-ins and the push.
+hand-ins and the push but the one wake for a batch silent past the bound; a batch that writes nothing past the bound while its runner
+lives wakes the coordinator once, and never silently holds the lane (the red case: batch 461-4's gate, 2026-11-28).
 
 ### US4 - a red batch lands its good changes (P2)
 
@@ -212,8 +213,10 @@ T321 (a reproduction helper), T354 (brief sizing) and T401 (the tree-idle re-mea
 The acceptance of each user story, gathered by requirement (the measures themselves unchanged from the stories above):
 
 - **SC-001** (FR-001, FR-003, FR-005): a landing's gate never runs in the session's clone; the lane runs a batch with no coordinator
-  turn between the hand-ins and the push, and wakes the coordinator once per landed batch; a filing or a note in the session's tree
-  during a gate is never held (US1, US3).
+  turn between the hand-ins and the push but the one wake for a batch silent past the bound, and wakes the coordinator once per
+  landed batch; a batch that writes nothing past the bound while its runner lives wakes the coordinator once, and never silently
+  holds the lane (the red case: batch 461-4's gate, 2026-11-28); a filing or a note in the session's tree during a gate is never
+  held (US1, US3).
 - **SC-002** (FR-002): a hand-in the landing's first pass would refuse is refused at hand-in with its fixing command, and runs no
   coverage; landings refused before a gate are well under the night's 19 of 50 (US2).
 - **SC-003** (FR-004): a red batch lands its other changes as US4 bounds it, the failing change returned as a repair for a fresh
