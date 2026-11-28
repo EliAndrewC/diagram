@@ -2655,31 +2655,38 @@ engine-speed task, so `docs/performance-checklist.md` does not apply.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T65 (<why: the finding or measurement that files it>)
+### T65 (`make lane`'s status lists the repairs the queue's reader keeps open: found by T16)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/gate/crates/lane/src/log.rs`'s `repairs_open` becomes `repairs_open(common: &Path) -> Vec<String>`, the ids of `l7r_shared::builder_queue::repairs::open(common)` (T16's reader) - REUSED DIRECTLY: the lane crate already depends on `l7r_shared` (its `Cargo.toml`), so no route through `task` and no third copy of the rule. `lane.rs`'s `status` computes it from the clone's common directory and hands it to `report` as a third argument (`log::World` gains no field: `runner/run.rs` builds one, and T18 edits that file). The old in-memory reader (an `eject` line's id, answered by a hand-in's `repair_of`) is gone. Docs restated: `log.rs`'s and `lane.rs`'s, `rust/gate/CLAUDE.md`'s lane row, and the one line of `builder_queue/repairs.rs`'s module doc that said the lane read rule 2 alone. `runner/run.rs` untouched; one line of `runner/run/tests.rs` (its `repairs_open` call, now `&w.common`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **One rule, the queue's**: the status lists exactly the entries `make builder-next` may offer (open: filed, ejected, unanswered, not superseded), before the offer's in-flight and kind filters - those say who may take a repair, not whether it is owed. Label: data-model.md, "A repair entry" (`superseded` read as closed), as T16's Decision 3 states it.
+2. **The status now needs the entry, not the `eject` line alone**: an `eject` line naming an id no `repairs.jsonl` line holds is listed by no one. Label: the algorithmically easier route, and the writer's own order - the runner files the entry before its `eject` lines (`repairs.rs`'s module doc), so the case arises in no real log; the status test's fixture now files its entry through `repairs::file`.
+3. **Red first**: `lane::tests::status_closes_a_repair_a_later_hand_in_of_its_task_superseded_as_the_queue_does` (entries and `eject` lines written by the lane's own `repairs::file` and `log::append`; r1 handed in again after its ejection, r2 only before it, r3 answered by `repair_of`) failed on the old code, 1 of 6 `lane::tests` (the status said `repairs open: r1, r2, r3`; expected `r2`), 2026-11-27. After: 75 of 75 of the lane crate's tests pass.
 
 ### T65 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make lane`'s `repairs open` line names the repairs the queue still offers, so the coordinator is never told a repair is owed that no command hands out.
+2. **The constraints.** data-model.md's repair entry; T16's Decision 3; plan D7; the brief's keep-out of `runner/run.rs` (T18).
+3. **Where each comes from.** R: data-model.md, T16's section. O: the red test above.
+4. **Do they describe the world here?** No real repair entry exists yet (the lane has run no real batch); the fixtures write the lane's own line shapes through its writers.
+5. **The order.** After T15 and T16; before T23.
+6. **The exits.** Green: the lane crate's tests and `make builder-checks CRATE="rust/gate/crates/lane rust/guard/shared"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/lane rust/guard/shared"` clean, 2026-11-27 (lane: 75 passed).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The status said a superseded repair was open, which no command offered: the coordinator would chase a repair the queue had closed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 

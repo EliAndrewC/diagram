@@ -732,6 +732,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T65 (`make lane`'s status lists the repairs the queue's reader keeps open: found by T16)": {
+   "sha256": "f07ac4b87018b243e15bc974dec60443daa638bce9cd6a33bfad93c1ae769ed9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T65 Approach (checklist part A)": {
+   "sha256": "8cd617a1d1820383b17b9b7af784fb2bd82ded2c254c9a666d0fa69d6dc0ede8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4728,6 +4740,66 @@
      "summary": "Counted as performance work under 451 FR-013 as a measurement tool.",
      "class": "within",
      "why": "FR-013 counts work that measures where the builders' time goes; the sampler measures the builders' memory, which bears on how many builders the pool runs. A scheduling classification, not a change to what is built; it narrows nothing the GM asked. Noted: FR-013's words are 'where the time goes', so the classification rests on the sampler serving builder throughput."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T65 (`make lane`'s status lists the repairs the queue's reader keeps open: found by T16)",
+    "### T65 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T65 approach: reuse l7r_shared's reader",
+     "summary": "repairs_open returns the ids of l7r_shared::builder_queue::repairs::open(common), reused directly rather than a third copy of the rule",
+     "class": "within",
+     "why": "Implementation choice serving FR-005's status and FR-004's queue entry; one rule instead of a second copy narrows nothing the GM asked for and is in the spirit of FR-009's reuse."
+    },
+    {
+     "id": "T65 approach: report's third argument, runner/run.rs kept out",
+     "summary": "status computes the open list from the clone's common directory and passes it to report; log::World gains no field so runner/run.rs (T18's file) is untouched",
+     "class": "within",
+     "why": "Plumbing and task coordination only; changes no behavior the request or spec describes."
+    },
+    {
+     "id": "T65 approach: old in-memory reader removed",
+     "summary": "the reader that took an eject line's id as open until a hand-in's repair_of answered it is deleted",
+     "class": "within",
+     "why": "Replacing the status's reader with the queue's is the task; its behavioural consequences are ruled separately under Decision 1 (supersession) and Decision 2 (eject line without an entry)."
+    },
+    {
+     "id": "T65 Decision 1a: listed before the offer's in-flight and kind filters",
+     "summary": "the status lists every open entry, including one a builder currently holds or one of a kind not offered to the asker",
+     "class": "within",
+     "why": "It lists more, not less: a repair being worked is still owed, so the coordinator's status (FR-005) loses nothing the request asked it to show."
+    },
+    {
+     "id": "T65 Decision 1b: a superseded repair is closed",
+     "summary": "a repair whose task is handed in again after its ejection is no longer listed open, though no hand-in carried repair_of (the red test's r1)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against request.md and FR-004/SC-003 directly, not on T16's Decision 3 (not in the bundle). The request's purpose is that an ejected change is not lost: it returns to the queue and lands through the gate. A later hand-in of the same task carries that change back to the lane, where it passes the same gate and push checks (FR-003, FR-008); if it is red again it is ejected again and a new repair is filed (FR-004). Nothing the request protects is lost, and listing r1 would tell the coordinator a repair is owed that no command hands out, defeating the status's purpose (FR-005)."
+    },
+    {
+     "id": "T65 Decision 2: an eject line with no repair entry is listed by no one",
+     "summary": "the status now needs the repairs.jsonl entry; an eject line naming an id no entry holds is not shown",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block's first label, 'the algorithmically easier route', carries no weight: ease of implementation is not a ground for an exception. The ruling rests on one ground only: the block states that the runner files the entry before its eject lines (repairs.rs's module doc), so the writer cannot produce an eject line without an entry and the case arises in no real log. That premise is the block's assertion and was not verified here (the bundle forbids reading the repository); if the writer can append an eject after a failed filing, the case is reachable, an ejected change would be invisible to both the queue and the status, and this ruling would not hold."
+    },
+    {
+     "id": "T65 Decision 3: red first",
+     "summary": "status_closes_a_repair_a_later_hand_in_of_its_task_superseded_as_the_queue_does failed on the old code (1 of 6 lane::tests, 2026-11-27), 75 of 75 after",
+     "class": "within",
+     "why": "Evidence for the change, not a scope decision; the test enforces the behavior the block implements."
+    },
+    {
+     "id": "T65 Approach checklist (part A)",
+     "summary": "goal, constraints, exits and done measure: lane crate tests and make builder-checks for the lane and shared crates",
+     "class": "within",
+     "why": "States the same goal as the block and decides nothing the spec leaves open; its figures carry a date and method."
     }
    ]
   }

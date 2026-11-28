@@ -445,7 +445,7 @@ fn a_kill_between_a_repair_entry_and_its_eject_lines_resumes_what_the_log_has_no
     assert_eq!(w.origin_holds("b.txt"), "b");
     // no second entry; the one entry names both, but only T01's `eject` line makes it T01's repair
     assert_eq!(repairs::read(&w.common).len(), 1);
-    assert_eq!(log::repairs_open(&lines, &[]), ["r1"]);
+    assert_eq!(log::repairs_open(&w.common), ["r1"]);
     let ejected: Vec<&Value> = lines.iter().filter(|x| x["event"] == "eject").collect();
     assert_eq!(ejected.len(), 1);
 }

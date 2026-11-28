@@ -320,19 +320,40 @@ fn an_open_batch_s_change_is_in_batch_though_a_later_hand_in_of_its_task_exists(
     assert_eq!(ask(&a, &[formed, stop]), HandInState::Superseded);
 }
 
+/// The repairs open are the queue's reader's (461 T65): an entry filed and ejected is open, listed once however many `eject`
+/// lines name it, until a done line answers it by `repair_of`; an entry no `eject` line names is not yet open. (The supersede is
+/// pinned through `make lane`'s status, `lane::tests`.)
 #[test]
 fn a_repair_is_open_until_a_hand_in_names_it_and_is_listed_once() {
-    let log = vec![
-        json!({"event": "eject", "change": A, "repair": "r1"}),
-        json!({"event": "eject", "change": B, "repair": "r2"}),
-        json!({"event": "eject", "change": C, "repair": "r1"}),
-        json!({"event": "eject", "change": C}),
-        json!({"event": "run", "repair": "r9"}),
-    ];
-    let mut fix = hand_in("461", &["T01"], C);
-    assert_eq!(repairs_open(&log, &[fix.clone()]), ["r1", "r2"]);
-    fix.repair_of = Some("r1".into());
-    assert_eq!(repairs_open(&log, &[fix]), ["r2"]);
+    let dir = l7r_gate_core::ci::fixtures::scratch("lane-log-repairs");
+    let common = dir.path();
+    for (change, task) in [(A, "T01"), (B, "T02"), (C, "T03")] {
+        let entry = crate::repairs::Entry {
+            feature: "461-landing-lane".into(),
+            tasks: vec![task.into()],
+            kind: "fix".into(),
+            ejected: vec![change.into()],
+            batch: "461-1".into(),
+            why: "red".into(),
+            units: Vec::new(),
+            attempt: "a.log".into(),
+        };
+        let id = crate::repairs::file(common, "t1", &entry).unwrap();
+        // C's entry is filed, its `eject` line never written (a runner killed between them)
+        for _ in 0..usize::from(change != C) * 2 {
+            let fields = json!({"batch": "461-1", "change": change, "repair": id});
+            append(common, "t1", "eject", &fields).unwrap();
+        }
+    }
+    assert_eq!(repairs_open(common), ["r1", "r2"]);
+    let mut answer = done("t0", "461 T01", A);
+    answer["repair_of"] = json!("r1");
+    std::fs::write(
+        common.join(l7r_shared::builder_queue::LOG),
+        format!("{answer}\n"),
+    )
+    .unwrap();
+    assert_eq!(repairs_open(common), ["r2"]);
 }
 
 /// A sha is named by its whole or a prefix of seven characters or more, never a shorter one.

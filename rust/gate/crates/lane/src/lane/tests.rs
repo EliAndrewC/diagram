@@ -144,6 +144,18 @@ fn status_lists_each_hand_in_s_state_the_open_batch_the_last_landed_and_the_repa
         })
         .collect();
     std::fs::write(common.join(l7r_shared::builder_queue::LOG), pool).unwrap();
+    // the runner files the entry before its `eject` line (`repairs.rs`); the status lists it once that line names it (461 T65)
+    let entry = crate::repairs::Entry {
+        feature: "461-landing-lane".into(),
+        tasks: vec!["T09".into()],
+        kind: "fix".into(),
+        ejected: vec!["0000000aaa".into()],
+        batch: "461-1".into(),
+        why: "red".into(),
+        units: Vec::new(),
+        attempt: "a.log".into(),
+    };
+    crate::repairs::file(&common, "2026-11-28T02:00:00Z", &entry).unwrap();
     for (event, fields) in [
         (
             "batch",
@@ -175,4 +187,49 @@ fn status_lists_each_hand_in_s_state_the_open_batch_the_last_landed_and_the_repa
             &batched[..10]
         )
     );
+}
+
+/// A REPAIR SUPERSEDED BY A LATER HAND-IN OF ITS TASK IS CLOSED (461 T65): the status lists the repairs the queue's reader
+/// (`l7r_shared::builder_queue::repairs::open`, 461 T16) keeps open - filed and ejected by the lane's own writers, unanswered, and
+/// no hand-in of its feature sharing a task later than its last `eject` line. r1's T01 is handed in again after its ejection; r2's
+/// T02 only before it; r3's T03 answers it by `repair_of`.
+#[test]
+fn status_closes_a_repair_a_later_hand_in_of_its_task_superseded_as_the_queue_does() {
+    let dir = repo("lane-superseded");
+    let common = dir.path().join(".git");
+    let ejected = |n: u8| format!("{n}{}", "a".repeat(39));
+    for (n, task) in [(1, "T01"), (2, "T02"), (3, "T03")] {
+        let entry = crate::repairs::Entry {
+            feature: "461-landing-lane".into(),
+            tasks: vec![task.into()],
+            kind: "fix".into(),
+            ejected: vec![ejected(n)],
+            batch: format!("461-{n}"),
+            why: "red".into(),
+            units: Vec::new(),
+            attempt: "a.log".into(),
+        };
+        let id = crate::repairs::file(&common, "2026-11-28T02:00:00Z", &entry).unwrap();
+        let fields =
+            json!({"batch": entry.batch, "change": ejected(n), "repair": id, "why": "red"});
+        log::append(&common, "2026-11-28T02:00:00Z", "eject", &fields).unwrap();
+    }
+    let done = |utc: &str, task: &str, n: u8, repair_of: Option<&str>| {
+        let mut l = json!({"utc": utc, "event": "done", "detail": format!("461 {task}"), "commit": format!("{n}{}", "b".repeat(39)), "handed_in": true});
+        if let Some(r) = repair_of {
+            l["repair_of"] = json!(r);
+        }
+        l.to_string() + "\n"
+    };
+    let pool = [
+        done("2026-11-28T03:00:00Z", "T01", 1, None),
+        done("2026-11-28T01:00:00Z", "T02", 2, None),
+        done("2026-11-28T03:00:00Z", "T03", 3, Some("r3")),
+    ]
+    .concat();
+    std::fs::write(common.join(l7r_shared::builder_queue::LOG), pool).unwrap();
+    let said = ask(&["status"], dir.path());
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    let last = said.stdout.lines().last();
+    assert_eq!(last, Some("lane: repairs open: r2"));
 }

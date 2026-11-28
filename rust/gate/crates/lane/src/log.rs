@@ -352,21 +352,15 @@ pub fn state(h: &HandIn, w: &World) -> HandInState {
     )
 }
 
-/// The repair entries the log's ejections filed that no hand-in answers by its `repair_of`, each once, in the order filed.
+/// The repair entries open under the git common directory `common`, by id, in the order filed: the queue's reader's
+/// (`l7r_shared::builder_queue::repairs::open`, 461 T16) - filed, ejected, unanswered by a `repair_of` and not superseded by a later
+/// hand-in of its task - so `make lane` says the repairs `make builder-next` offers (461 T65), one rule in one place.
 #[must_use]
-pub fn repairs_open(log: &[Value], hand_ins: &[HandIn]) -> Vec<String> {
-    let mut open: Vec<String> = Vec::new();
-    let filed = log
-        .iter()
-        .filter(|l| l["event"] == "eject")
-        .filter_map(|l| l["repair"].as_str());
-    for r in filed {
-        let answered = hand_ins.iter().any(|h| h.repair_of.as_deref() == Some(r));
-        if !answered && !open.iter().any(|o| o == r) {
-            open.push(r.to_owned());
-        }
-    }
-    open
+pub fn repairs_open(common: &Path) -> Vec<String> {
+    l7r_shared::builder_queue::repairs::open(common)
+        .into_iter()
+        .map(|r| r.id)
+        .collect()
 }
 
 #[cfg(test)]

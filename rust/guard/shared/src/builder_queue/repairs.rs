@@ -15,7 +15,7 @@
 //!    `make builder-brief REPAIR=` wrote): built.
 //! 3. SUPERSEDED - a hand-in (a `done` line with `"handed_in": true`) of its feature sharing one of its tasks, later than its last
 //!    `eject` line: data-model.md's "the earlier one's repair entry then read as closed (`superseded`)", the work handed in again
-//!    by a builder briefed without `REPAIR=`. The lane's own `log::repairs_open` reads 2 alone; it lists, this offers.
+//!    by a builder briefed without `REPAIR=`. The lane's own `log::repairs_open` (`make lane`'s status) lists these same entries by id (461 T65); this offers.
 //!
 //! Of the open ones, [`offer`] passes over two kinds with a line, and the rest are READY:
 //! - IN FLIGHT - a pool tree is held for one of its tasks: a handout would hand that tree back to whoever holds it, and a repair is

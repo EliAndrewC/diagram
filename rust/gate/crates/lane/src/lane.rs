@@ -1,6 +1,6 @@
 //! `l7r-gate lane <verb>` (feature 461 T11, `contracts/lane-cli.md`): the lane's command line. T11 builds `status` (`make lane`):
 //! each hand-in on the lane and its state, each open batch and its state, the last landed batch's line and the repairs open, all
-//! COMPUTED (`log.rs`) from the pool's log, the done refs, `origin/main` and the lane's log. It only reads: no fetch (the
+//! COMPUTED (`log.rs`) from the pool's log, the done refs, `origin/main` and the lane's log (the repairs by the queue's reader, 461 T65). It only reads: no fetch (the
 //! `origin/main` the clone last fetched), nothing created, and an empty lane ends 0. T12 adds the runner's verbs (`runner.rs`):
 //! `start` (`make lane-start`), `stop [--now]` (`make lane-stop`, `NOW=1`) and the runner's own `--work <common>`; T20 `wait`
 //! (`make lane-wait`, `wake.rs`), the coordinator's wake-up.
@@ -108,13 +108,14 @@ fn status(cwd: &Path) -> Reply {
         log: &lane,
         batches: &batches,
     };
-    reply(report(&world, &subjects), String::new(), 0)
+    let repairs = log::repairs_open(&common);
+    reply(report(&world, &subjects, &repairs), String::new(), 0)
 }
 
 /// What `make lane` prints of `w`: the hand-ins not yet landed or superseded (the landed are history, the log's), each with its
-/// state; each open batch; the last landed batch's line; the repairs open.
+/// state; each open batch; the last landed batch's line; the repairs open (`repairs`, [`log::repairs_open`]'s).
 #[must_use]
-pub fn report(w: &World, subjects: &BTreeMap<String, String>) -> String {
+pub fn report(w: &World, subjects: &BTreeMap<String, String>, repairs: &[String]) -> String {
     let live: Vec<_> = w
         .hand_ins
         .iter()
@@ -169,7 +170,6 @@ pub fn report(w: &World, subjects: &BTreeMap<String, String>) -> String {
         }
         None => out.push_str("lane: no batch landed yet\n"),
     }
-    let repairs = log::repairs_open(w.log, w.hand_ins);
     if repairs.is_empty() {
         out.push_str("lane: no repair open\n");
     } else {
