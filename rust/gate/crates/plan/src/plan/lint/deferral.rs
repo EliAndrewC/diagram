@@ -74,9 +74,9 @@ pub(super) fn boxes(spec_dir: &Path) -> Boxes {
     };
     for (name, live) in [("tasks.md", true), ("tasks-done.md", false)] {
         let text = if live {
-            std::fs::read_to_string(spec_dir.join(name)).unwrap_or_default()
+            super::super::once::text(&spec_dir.join(name))
         } else {
-            l7r_shared::speckit::tasks::done_text(spec_dir).unwrap_or_default()
+            super::super::once::tasks_done(spec_dir)
         };
         for c in BOX.captures_iter(&text).map_while(Result::ok) {
             out.filed.insert(c[2].to_owned());

@@ -3015,31 +3015,64 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T543 (<why: the finding or measurement that files it>)
+### T543 (make plan-delta read 451's plan-done.md eleven times a call and plan-review.json twice: 451 T536's read counter, dev/measurements/2026-11-27/t536-record-readers/results.md)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: every reader on `plan delta`'s path reads through one module, `rust/gate/crates/plan/src/plan/once.rs`: inside
+  `once::held`, which the `plan delta` arm of `plan.rs` alone enters, a file is read from disk once and served from memory after, and
+  the review record is parsed once (`once::record`); outside it each read goes to disk as before, so decide, tick and record, which
+  write the records between their reads, see no change. Routed: `plan_delta`'s plan.md, `status::delta_keys` (plan.md, the record,
+  plan-done, tasks.md, tasks-done) and the earlier-text check's plan-done (`status.rs`, the eleven-fold read: one a changed block),
+  `lint.rs` (`tasks_without_approach`, `findings`' request.md), `lint/deferral.rs` (`boxes`), `lint/task_line.rs`, and `bundle.rs`'s
+  `read`, `plans_of` and `review_of` (its `cited` and `section` children read through `bundle::read`). The archive's own reader
+  (`l7r_shared::speckit::archive::text`, T545's tree) is untouched: `once` hands it a caching reader closure.
+  FOUND MEASURING, and the wall time's larger part (observed 2026-11-28, method: the read shim and spawn logger on the copy): each `History::block` looked the clone's common git directory up again,
+  `git rev-parse --path-format=absolute --git-common-dir`, 413 processes in one `plan delta 451`; a History now looks it up once
+  (`history.rs`, `git_dir`). Measured 2026-11-28 on a `git clone --shared` copy of this tree (451 split under `archive/`, 461 flat;
+  method: T536's `LD_PRELOAD` read shim, an `LD_PRELOAD` `posix_spawn` logger, 7 interleaved runs a side, load average 11 to 23):
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+| `plan delta` | plan-done | plan-review.json | plan.md | tasks-done | index.json | processes | wall median | label |
+|---|---|---|---|---|---|---|---|---|
+| 451 before | 40,579,308 (11x) | 10,148,316 (2x) | 1,339,930 (5x) | 1,823,772 (3x) | 801,879 (13x) | 422 | 2,644 ms | observed 2026-11-28, method: the read shim and spawn logger on the copy |
+| 451 after | 3,689,028 (1x) | 5,074,158 (1x) | 267,986 (1x) | 1,823,772 (3x) | 123,366 (2x) | 11 | 1,802 ms | observed 2026-11-28, method: the read shim and spawn logger on the copy |
+| 461 before | 2,248,496 (8x) | 853,370 (2x) | 705,585 (5x) | 284,060 (5x) | - | 24 | 1,263 ms | observed 2026-11-28, method: the read shim and spawn logger on the copy |
+| 461 after | 281,062 (1x) | 426,685 (1x) | 141,117 (1x) | 170,436 (3x) | - | 11 | 1,207 ms | observed 2026-11-28, method: the read shim and spawn logger on the copy |
+
+  Through `once` every file is now read once (the trace of its disk reads, one line a path); the repeats left (observed 2026-11-28, method: the read shim and spawn logger on the copy) are the spec lint's
+  beside it (`rust/gate/src/lib.rs` `linted_plan`, the checks crate: tasks-done and tasks.md twice more, 451's spec.md 16 times) -
+  outside this crate, filed as T560 with the claims hint's 0.6 s. Unchanged (observed 2026-11-28, method: the read shim and spawn logger on the copy), checked on the same copy: stdout, exit code and every
+  file of the bundle (`diff -r`, 8 files) for 451 and 461, the "no block owed" reply of 449 and 450, the no-directory refusal, and a
+  lint refusal (a made-up GM quote added to 461's plan.md).
+  RED FIRST: `once/tests.rs` `plan_delta_reads_each_file_once_flat_and_split` with the readers routed and nothing held failed with
+  tasks.md 7, request.md 6, tasks-done.md 6, plan.md 5, plan-done.md 3, archive/index.json 3, plan-review.json 2 reads (flat case);
+  held, 1 each, flat and split. `history/tests.rs` `a_history_looks_its_git_directory_up_once`: 6 lookups for five blocks before, 1 after.
 
 ### T543 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** `make plan-delta` reads each record once a call and starts no process a block, so a builder's plan
+   review is dispatched sooner (9.2 s median over 142 real calls, observed 2026-11-27, method: the event logs' PostToolUse ms, T536).
+2. **The constraints.** 462 FR-004 (the record readers); every block, verdict and bundle the command writes stays the same; T545 owns
+   the archive code and plan-review.json's split, so the shared archive reader is not edited.
+3. **Where each comes from.** O: T536's measurement; O: this task's copy runs (the table above); G: the brief's "every block, verdict
+   and bundle it writes must stay the same".
+4. **Do they describe the world here?** measured 2026-11-28 (the read shim on a copy) on today's tree (451 split by T548) and on 461's current plan, the live feature.
+5. **The order.** After 462 T548 (the split it measures on); before or beside T545 (plan-review.json's split: its reader of the record
+   in this crate becomes `once::record`'s one line).
+6. **The exits.** Green: the two red-first tests pass and the shim shows one read of each record through the plan crate. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The table above (observed 2026-11-28, method: the read shim and spawn logger on the copy): 451 2,644 -> 1,802 ms, plan-done 11x -> 1x, plan-review.json 2x -> 1x, 422 -> 11 processes.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** nothing a reader sees differently: the bundle and reply are byte for byte the same; the command is faster.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The 413 `git rev-parse` processes of a `plan delta 451` call, observed 2026-11-28, method: the spawn logger over one call, every
+  process listed (about 0.8 s of its 2.6 s, the wall medians before and after): fixed here (`history.rs`).
+- The claims hint (`triage_hint` -> `claims triage-owed`, 0.6 s a call, observed 2026-11-28, method: the command timed alone, n=3) and the spec lint's repeated reads beside plan-delta (451's
+  spec.md 16 times, tasks-done three): Not fixed here: outside the plan crate (the claims and checks crates), not plan-delta's own
+  read path. Filed as T560; lands before T547 (decide's repeats, whose call runs the same lint and hint).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): it makes the gate's `make plan-delta` faster; not an engine-speed task.
 
 
 ### T544 (<why: the finding or measurement that files it>)
@@ -3333,4 +3366,30 @@ parallelizing and is ordered by time saved, never by disk freed.
 5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
    time with the host's load - evidence, not a pass>
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+### T560 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T560 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

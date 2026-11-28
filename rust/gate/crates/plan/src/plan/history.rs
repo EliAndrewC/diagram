@@ -32,7 +32,14 @@ const DIR: &str = "plan-seen";
 const CHUNK: usize = 25;
 
 fn store(plan: &Path) -> Option<PathBuf> {
-    common_git_dir(plan.parent()?).map(|d| d.join(DIR))
+    git_dir_of(plan.parent()?).map(|d| d.join(DIR))
+}
+
+/// The common git directory of `dir`, one `git rev-parse` process.
+fn git_dir_of(dir: &Path) -> Option<PathBuf> {
+    #[cfg(test)]
+    GIT_DIRS.with(|n| n.set(n.get() + 1));
+    common_git_dir(dir)
 }
 
 /// Keep each (digest, text) a verdict was written at, whether or not that version was ever committed.
@@ -45,11 +52,12 @@ pub(super) fn keep(plan: &Path, pairs: &[(String, String)]) {
     }
 }
 
-fn recall(plan: &Path, sha: &str) -> Option<String> {
+/// The text kept for `sha` in `store` (the git directory's `plan-seen/`), where one is.
+fn recall(store: Option<PathBuf>, sha: &str) -> Option<String> {
     if sha.is_empty() || !sha.chars().all(char::is_alphanumeric) {
         return None;
     }
-    std::fs::read_to_string(store(plan)?.join(format!("{sha}.txt"))).ok()
+    std::fs::read_to_string(store?.join(format!("{sha}.txt"))).ok()
 }
 
 /// One version of plan.md, indexed: each block's key -> (its block digest, its text), and each task -> (its section's digest, the
@@ -148,6 +156,9 @@ pub(super) struct History {
     index: RefCell<Option<(Option<PathBuf>, Shared)>>,
     /// Whether this History has read the file again since it met a commit the index did not cover.
     reread: std::cell::Cell<bool>,
+    /// Its common git directory, looked up once (462 T543: `make plan-delta F=451` started a `git rev-parse` for each kept text it
+    /// sought, 413 a call, about 2 s of its 2.4 s on a copy).
+    git_dir: std::cell::OnceCell<Option<PathBuf>>,
 }
 
 impl History {
@@ -158,6 +169,7 @@ impl History {
             revisions: RefCell::new(None),
             index: RefCell::new(None),
             reread: std::cell::Cell::new(false),
+            git_dir: std::cell::OnceCell::new(),
         }
     }
 
@@ -167,6 +179,10 @@ impl History {
 
     fn dir(&self) -> &Path {
         self.path.parent().unwrap_or(Path::new("."))
+    }
+
+    fn git_dir(&self) -> Option<PathBuf> {
+        self.git_dir.get_or_init(|| git_dir_of(self.dir())).clone()
     }
 
     fn git(&self, args: &[&str]) -> String {
@@ -229,7 +245,7 @@ impl History {
         if let Some(have) = &*self.index.borrow() {
             return have.clone();
         }
-        let file = common_git_dir(self.dir()).map(|d| index::file(&d, rel));
+        let file = self.git_dir().map(|d| index::file(&d, rel));
         let shared = file.as_ref().map_or_else(Shared::default, |file| {
             let have = INDEXES.with(|i| i.borrow().get(file).cloned());
             have.unwrap_or_else(|| {
@@ -354,7 +370,9 @@ impl History {
 
     /// The text a block had when its digest was `sha`, as its verdict kept it or from the plan's history.
     pub(super) fn block(&self, key: &str, sha: &str) -> Option<String> {
-        if let Some(kept) = recall(&self.path, sha).filter(|k| block_digest(k) == sha) {
+        if let Some(kept) =
+            recall(self.git_dir().map(|d| d.join(DIR)), sha).filter(|k| block_digest(k) == sha)
+        {
             return Some(kept);
         }
         self.first(true, key, sha)
@@ -412,6 +430,17 @@ thread_local! {
 #[cfg(test)]
 fn counted() -> (usize, usize) {
     COUNTS.with(std::cell::Cell::get)
+}
+
+/// The common git directories looked up on this thread, for the tests (462 T543).
+#[cfg(test)]
+fn git_dirs() -> usize {
+    GIT_DIRS.with(std::cell::Cell::get)
+}
+
+#[cfg(test)]
+thread_local! {
+    static GIT_DIRS: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
 }
 
 #[cfg(test)]

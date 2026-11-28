@@ -458,7 +458,7 @@ fn missing_red_exits(section: &str) -> Vec<(usize, String)> {
 /// In a plan whose tasks owe approach blocks, each open task with no `### Txx Approach` block in the plan or plan-done.md (D5); a bundle's
 /// block, `### T01, T02 Approach`, covers every task its heading lists (451 T141).
 fn tasks_without_approach(spec_dir: &Path, plan: &str) -> Vec<String> {
-    let done = l7r_shared::speckit::archive::plan_done(spec_dir);
+    let done = super::once::plan_done(spec_dir);
     let joined = format!("{plan}\n{done}");
     let any = APPROACH_HEAD
         .is_match(&format!("{plan}{done}"))
@@ -466,7 +466,7 @@ fn tasks_without_approach(spec_dir: &Path, plan: &str) -> Vec<String> {
     if !plan.contains("**Approach checklist**:") && !any {
         return Vec::new();
     }
-    let tasks = std::fs::read_to_string(spec_dir.join("tasks.md")).unwrap_or_default();
+    let tasks = super::once::text(&spec_dir.join("tasks.md"));
     let have: Vec<String> = APPROACH_HEAD
         .captures_iter(&joined)
         .map_while(Result::ok)
@@ -488,7 +488,7 @@ fn tasks_without_approach(spec_dir: &Path, plan: &str) -> Vec<String> {
 /// stopped at its first finding, and a section of four findings took four runs). A label rule's finding is dropped only where an
 /// earlier label rule found the very same span, since the one label clears both; a span inside a longer one stays, its own label owed.
 pub(super) fn findings(spec_dir: &Path, section: &str) -> Vec<Finding> {
-    let req = std::fs::read_to_string(spec_dir.join("request.md")).unwrap_or_default();
+    let req = super::once::text(&spec_dir.join("request.md"));
     let mut out: Vec<Finding> = gm_quotes_missing(section, &req)
         .into_iter()
         .map(|(at, q)| Finding {

@@ -180,6 +180,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T543 (make plan-delta read 451's plan-done.md eleven times a call and plan-review.json twice: 451 T536's read counter, dev/measurements/2026-11-27/t536-record-readers/results.md)": {
+   "sha256": "c46a1017ad5075a912f50e6a207f0819d420f17a8720a7b4da51c7662ba6d09d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T543 Approach (checklist part A)": {
+   "sha256": "3db74ce443c0d60329b8a91e44a55d12da0b9a64f7012b86c627e08d9a8b1e18",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -806,6 +818,58 @@
      "summary": "T555 runs after 462 T548, in one make archive-split run before T545's review cut.",
      "class": "within",
      "why": "Sequencing. Consistent with T545's order and the ruling's 'after T548'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T543 (make plan-delta read 451's plan-done.md eleven times a call and plan-review.json twice: 451 T536's read counter, dev/measurements/2026-11-27/t536-record-readers/results.md)",
+    "### T543 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T543-a held scope",
+     "summary": "Reads are cached only inside once::held, which only the plan delta arm of plan.rs enters; decide, tick and record keep reading disk between their writes.",
+     "class": "within",
+     "why": "T543 is plan-delta's own perf task (its title and goal name make plan-delta); leaving the writing commands uncached is the task's scope, not a narrowing of anything the GM or the spec asked, and it keeps a cache from serving a record those commands have just rewritten."
+    },
+    {
+     "id": "T543-b archive reader untouched",
+     "summary": "l7r_shared::speckit::archive::text is not edited; once hands it a caching reader closure; T545 owns the archive code and plan-review.json's split.",
+     "class": "within",
+     "why": "A sequencing boundary between two tasks of the same feature; nothing is dropped, the record's reader becomes once::record's one line when T545 lands (item 5)."
+    },
+    {
+     "id": "T543-c git-dir lookup",
+     "summary": "History looks the common git directory up once instead of once a block (413 git rev-parse processes in one plan delta 451), fixed in history.rs within this task.",
+     "class": "within",
+     "why": "Found while measuring the same command's wall time and on its own path; fixing a found inefficiency in the step it was found is what fix-as-we-go asks, and it serves the task's goal (plan-delta faster). Not unrequested scope."
+    },
+    {
+     "id": "T543-d lint and hint left to T560",
+     "summary": "The spec lint's repeated reads beside plan-delta (checks crate: tasks-done, tasks.md, 451's spec.md 16 times) and the claims hint's 0.6 s are not fixed here; filed as T560, ordered before T547.",
+     "class": "within",
+     "why": "These are slower, not wrong: no wrong outcome (constitution XIV's defect definition), so 'fix all known bugs before moving on' does not reach them, and they are filed with an order rather than dropped. The goal line's 'reads each record once a call' is true of the plan crate's reads (exit 6 says 'through the plan crate'); tasks-done 3x and index.json 2x remain in the after row from the lint, which the block states."
+    },
+    {
+     "id": "T543-e one whole read remains",
+     "summary": "After the change plan delta still reads plan-done (3.69 MB for 451) and plan-review.json (5.07 MB) whole, once a call each.",
+     "class": "within",
+     "why": "SC-002 (no reader T536 named reads a record whole after T537) is the feature's criterion, and the block does not claim to discharge it: the record's split and the archive reader are T545's (item 2, item 5), so the remaining whole read is carried there, not excepted. The GM's purpose (sessions' context windows, request.md 'on the split') is not touched by a Rust tool's in-memory read, and T543 moves it toward SC-002 (11x/2x to 1x). T543 therefore narrows nothing; SC-002 stays owed by T545."
+    },
+    {
+     "id": "T543-f output unchanged",
+     "summary": "Constraint and item 12: every block, verdict and bundle the command writes stays the same, checked by diff -r of the bundle, stdout, exit code and the refusals on a copy.",
+     "class": "within",
+     "why": "The exits (item 6) gate on the two red-first tests and the shim, not on bytes; the identity is an observation that a read cache changed nothing a reader sees, which is the right check that a pure cache works. It must not be read as an exactness standard (the GM 2026-11-18): a future correct change to the bundle's bytes is not held to this."
+    },
+    {
+     "id": "T543-g order, exits, budget, perf tag",
+     "summary": "After T548, before or beside T545; red exit through make arbiter-ask; one landing; tagged [perf] under 451 FR-013.",
+     "class": "within",
+     "why": "Ordering and bookkeeping inside the feature; [perf] is correct under FR-013's definition (makes the gate faster)."
     }
    ]
   }

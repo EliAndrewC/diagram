@@ -17,7 +17,7 @@ use serde_json::{json, Map, Value};
 
 use super::history::History;
 use super::sections::{block_digest, blocks, digest, re, task_sections};
-use super::status::{reviewed_blocks, text_of, RECORD, REMOVED};
+use super::status::{reviewed_blocks, text_of, REMOVED};
 
 static IDS: LazyLock<Regex> = LazyLock::new(|| re(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b"));
 /// A requirement or decision id, and a list of them run on with commas, "and" or "or", which one qualifier names whole ("feature 204's
@@ -275,11 +275,11 @@ fn trimmed_request(text: &str, n: Option<u32>) -> (String, String) {
 }
 
 fn read(path: &Path) -> String {
-    std::fs::read_to_string(path).unwrap_or_default()
+    super::once::text(path)
 }
 
 fn plans_of(dir: &Path) -> String {
-    read(&dir.join("plan.md")) + &l7r_shared::speckit::archive::plan_done(dir)
+    read(&dir.join("plan.md")) + &super::once::plan_done(dir)
 }
 
 /// Each `m:` figure the blocks cite, in full from the feature's `measurements.json`.
@@ -542,8 +542,8 @@ pub(super) fn tree_of(spec_dir: &Path) -> String {
         .to_string()
 }
 
-fn review_of(spec_dir: &Path) -> Value {
-    serde_json::from_str(&read(&spec_dir.join(RECORD))).unwrap_or(json!({}))
+fn review_of(spec_dir: &Path) -> std::rc::Rc<Value> {
+    super::once::record(spec_dir)
 }
 
 fn number_of(spec_dir: &Path) -> String {
