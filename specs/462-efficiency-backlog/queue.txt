@@ -5,6 +5,6 @@
 # <task[,task]> <kind> [jobs=<1-3>] [measures=<n>] [load=1] crates=<dir,dir|-> files=<path,prefix|-> [waits=<T<n>,GM,alone>] [note=<the rest of the line>]
 T533 fix crates=- files=-
 T301 fix crates=- files=-
-T374 fix crates=- files=-
+T374 fix crates=- files=- waits=T301 note=built inside 462 T301 parts 3 and 4 (handed in, on the lane); its box ticks with T301's landing
 T278 fix crates=- files=-
 T371 fix crates=- files=-
