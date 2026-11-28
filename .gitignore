@@ -20,6 +20,9 @@ __pycache__
 # sessions"). Each is a full `git clone` of this repo, kept out of git so the two working trees
 # never cross-contaminate. Lives on the host mount, so it survives a container rebuild.
 .clones/
+# The shared cargo target cache, mounted at ~/.cache/l7r-cargo-target by the container-mounts line of CLAUDE.md, so a
+# rebuilt container keeps its warm builds (the GM, 2026-11-28; a fresh container had cost the whole 163 GB cache).
+.cargo-cache/
 
 # /diagram POOL - TWO TREES WITH OPPOSITE POLICIES, which is why these rules are patterns rather
 # than the 49 hand-written lines they replaced (feature 161).
