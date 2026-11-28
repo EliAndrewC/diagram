@@ -102,7 +102,7 @@ fn a_second_red_gate_in_a_row_owes_the_arbiter_and_a_first_does_not() {
                 "\n  \"detail\": \"a second red make done in a row\",\n  \"kind\": \"red-gate\""
             ),
     );
-    second_red_gate(&dir, 0.0).unwrap();
+    second_red_gate(&dir, 0.0, &Run::default()).unwrap();
     let both: serde_json::Value =
         serde_json::from_str(&std::fs::read_to_string(&owed).unwrap()).unwrap();
     assert_eq!(both.as_object().unwrap().len(), 2);
@@ -169,6 +169,40 @@ fn the_command_line_answers_and_refuses() {
     assert_eq!(utc(0.0), "1970-01-01T00:00:00Z");
 }
 
+/// RED FIRST (feature 461 T84): the ruling of red-gate@2026-11-28T03:47:58Z on 461 T74/T63's landing was filed in 462's
+/// `arbiter.jsonl` - the clone's `.specify/feature.json` - and charged 462 T22 a part B, because the tripwire's row named no
+/// feature. It names the landing's feature (`home`, never `feature`: that key scopes which feature's gates a row holds, and a red
+/// gate holds the tree's every gate) and its tasks, where the run was told them and the feature's directory is there.
+#[test]
+fn a_second_red_gate_names_the_landing_it_tripped() {
+    let (_dir, dir) = repo("red-home");
+    std::fs::create_dir_all(dir.join("specs/461-x")).unwrap();
+    let owed = dir.join(".git/arbiter-owed.json");
+    let landing = Run {
+        feature: "461-x".to_owned(),
+        tasks: "T74 T63".to_owned(),
+        ..Run::default()
+    };
+    record(&dir, FAILED, "done", &landing).unwrap();
+    record(&dir, FAILED, "done", &landing).unwrap();
+    let row: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&owed).unwrap()).unwrap();
+    let row = row.as_object().unwrap().values().next().unwrap().clone();
+    assert_eq!(row["home"], "461-x");
+    assert_eq!(row["tasks"], serde_json::json!(["T74", "T63"]));
+    assert_eq!(row["kind"], "red-gate");
+    assert!(row.get("feature").is_none());
+    // a feature with no directory, or none told, names nothing: the arbiter resolves it as before
+    std::fs::remove_file(&owed).unwrap();
+    let stray = Run {
+        feature: "999-gone".to_owned(),
+        ..Run::default()
+    };
+    record(&dir, FAILED, "done", &stray).unwrap();
+    let text = std::fs::read_to_string(&owed).unwrap();
+    assert!(!text.contains("home") && !text.contains("tasks"), "{text}");
+}
+
 /// THE STAND-DOWN'S REACH (feature 461 T17, plan D6 step 4): the lane's own rule takes a second red only for a run in the lane's
 /// tree whose batch is open in `lane.jsonl`, or one the runner holding `lane.lock` started; every other run is stopped as before.
 mod lane {
@@ -183,6 +217,7 @@ mod lane {
         let run = Run {
             batch: batch.to_owned(),
             me,
+            ..Run::default()
         };
         let owed = dir.join(".git/arbiter-owed.json");
         let _ = std::fs::remove_file(&owed);

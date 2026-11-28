@@ -112,8 +112,8 @@ pub(super) fn named(root: &Rooted, trigger: &str, review: &str) -> Result<Option
     Ok(d)
 }
 
-/// The feature a ruling on `trigger` is filed in, resolved once: the one its words name ([`named`]), else the one its owed row names,
-/// else the active one; `Err` where none resolves or its words name one that does not.
+/// The feature a ruling on `trigger` is filed in, resolved once: the one its words name ([`named`]), else the one its owed row names
+/// (its `feature`, else a red gate's `home`, the landing that tripped it, 461 T84), else the active one; `Err` where none resolves or its words name one that does not.
 ///
 /// # Errors
 ///
@@ -127,10 +127,13 @@ pub(super) fn resolve(root: &Rooted, trigger: &str) -> Result<PathBuf, String> {
     if let Some(d) = named(root, trigger, &field("review"))? {
         return Ok(d);
     }
-    let owed_in = field("feature");
-    let d = root.join("specs").join(&owed_in);
-    if !owed_in.is_empty() && d.is_dir() {
-        return Ok(d);
+    // the feature its owed row says it was owed in, else the landing a red gate's row names (`home`, 461 T84: `feature` there would
+    // scope which feature's gates it holds)
+    for owed_in in [field("feature"), field("home")] {
+        let d = root.join("specs").join(&owed_in);
+        if !owed_in.is_empty() && !owed_in.contains('/') && d.is_dir() {
+            return Ok(d);
+        }
     }
     core::feature_dir_in(root, trigger, root.reader()).ok_or_else(|| {
         format!("no active feature (.specify/feature.json), and neither {trigger} nor its owed row names one, to record the ruling in")

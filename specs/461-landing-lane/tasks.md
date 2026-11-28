@@ -105,3 +105,9 @@ coordinator (US1, US3); phase 3 the whole red path (US4, US5); phase 4 makes the
       research: rendering
 - [ ] T80 gate-write: a make target that writes a tracked spec file aimed into a gated tree is let through - task-withdraw, queue-add, gm-reviewed beside task-add (held since 461 T27); rust/guard/src/guards/gate_write_hooks.rs MAKE_WRITE; measure each one's writes against preflight --tree-check first (make append is unseen on purpose, 405 T41); observed 2026-11-27 by reading MAKE_WRITE against the Makefile
       research: rendering
+- [ ] T87 no command withdraws a misfiled arbiter ruling's part-B owing: red-gate@2026-11-28T03:47:58Z (461's landing) charged 462 T22 a part B in the clone's common .git/approach-owed.json (row {462-efficiency-backlog, T22, part B, 2026-11-28T03:51:25Z}) and its ruling row sits in specs/462-efficiency-backlog/arbiter.jsonl (55c7bd6da6); make tick refuses 462 T22 until a part B is written or the row is dropped by hand - add a withdraw verb (rust/gate/crates/plan/src/plan/approach.rs owed_entries/owe_all, a make target, its reason recorded) and use it for this row
+      research: rendering
+- [x] T88 x Withdrawn 2026-11-28: filed by mistake as a probe of task-add by T84's builder, no defect
+      research: rendering
+- [x] T89 probe Withdrawn 2026-11-28: filed by mistake as a probe of task-add by T84's builder, no defect
+      research: rendering

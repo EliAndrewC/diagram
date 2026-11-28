@@ -543,6 +543,34 @@ fn a_red_long_run_stops_before_the_ticks() {
     assert!(!fx.log().contains("sync-with-main.sh"));
 }
 
+/// RED FIRST (461 T84): the gate is told the landing it runs for, so a second red names it and its ruling is filed there - the
+/// ruling of red-gate@2026-11-28T03:47:58Z on 461's landing was filed under the clone's `.specify/feature.json` (462).
+#[test]
+fn the_gate_is_told_the_landing_it_runs_for() {
+    let fx = fx("land-gate-told");
+    fx.answer(
+        &format!("{} stamp --check origin/main", tool("gates/l7r-gate.sh")),
+        "rc",
+        "1",
+    );
+    let seen = fx.root.join(".git/t84-told");
+    fx.answer(
+        "make --no-print-directory done NO_CUTOFF=1",
+        "sh",
+        &format!(
+            "printf '%s|%s' \"$L7R_GATE_FEATURE\" \"$L7R_GATE_TASKS\" > '{}'\n",
+            seen.display()
+        ),
+    );
+    fx.answer("make --no-print-directory done NO_CUTOFF=1", "rc", "2");
+    assert_eq!(
+        fx.land
+            .land(&fx.root.join("specs/449-x"), &tasks(&["T1"]), NOTE),
+        Ok(1)
+    );
+    assert_eq!(std::fs::read_to_string(&seen).unwrap(), "449-x|T1");
+}
+
 #[test]
 fn a_refused_tick_puts_every_tick_back_and_a_raise_ends_the_landing() {
     // T2's tick would close the feature, and the closing check refuses it at the tick: its report gone since the first pass asked

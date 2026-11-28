@@ -457,5 +457,35 @@ pub(super) fn ruled(root: &Path, trigger: &str, now: Option<&str>) -> Option<Str
     Some(owe_all(root, &name, &own, trigger, "B", now))
 }
 
+/// [`ruled`] for a ruling filed in `home` (461 T84): a red gate's naming its landing's `tasks` owes ONE part B section, in `home`, for
+/// those still open there and not built inside another's - nothing where all have landed - and charges no task of the clone's
+/// active feature. WHY: red-gate@2026-11-28T03:47:58Z, tripped by 461 T74/T63's landing, charged 462 T22 - waiting, unrelated -
+/// because [`flight`] reads `.specify/feature.json`. A ruling naming no tasks is [`ruled`]'s.
+pub(super) fn ruled_for(
+    root: &Path,
+    trigger: &str,
+    home: &Path,
+    tasks: &[String],
+    now: Option<&str>,
+) -> Option<String> {
+    if !trigger.starts_with("red-gate@") || tasks.is_empty() {
+        return ruled(root, trigger, now);
+    }
+    checklist(root)?;
+    let listed = std::fs::read_to_string(home.join("tasks.md")).unwrap_or_default();
+    let own: Vec<String> = tasks
+        .iter()
+        .filter(|t| {
+            re(&format!(r"(?m)^- \[ \] {}\b", fancy_regex::escape(t)))
+                .is_match(&listed)
+                .unwrap_or(false)
+                && super::inside::built_inside(home, t).is_none()
+        })
+        .cloned()
+        .collect();
+    let name = home.file_name().unwrap_or_default().to_string_lossy();
+    Some(owe_all(root, &name, &own, trigger, "B", now))
+}
+
 #[cfg(test)]
 mod tests;

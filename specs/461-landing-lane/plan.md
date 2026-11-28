@@ -1519,31 +1519,35 @@ T24's) fixed here, since the reader alone could not tell a row from its lines.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T84 (<why: the finding or measurement that files it>)
+### T84 (the round arbiter's ruling of red-gate@2026-11-28T03:47:58Z, tripped by 461 T74/T63's landing, was filed in 462's arbiter.jsonl and charged 462 T22 a part B)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the cause, read 2026-11-28 from the code and the clone's files: the tripwire (`tree`'s `state::second_red_gate`) wrote an owed row naming no feature; `arbiter`'s `home::resolve` found no feature in the trigger's words or row and fell to the active one, which in the round-arbiter subagent's own shell (no `SPECIFY_FEATURE` export) is the clone's `.specify/feature.json` - `specs/462-efficiency-backlog`; and the part B charge (`plan`'s `approach::ruled`, through `flight`) reads only `.specify/feature.json` and its active task, so it charged 462 T22. Three edits, one mechanism: `make land` tells its gate the landing (`L7R_GATE_FEATURE`, `L7R_GATE_TASKS` on `long_runs::run_gate`'s `make done`); the tripwire writes them into the row as `home` and `tasks` (the feature only where `specs/<it>` is a directory; else `SPECIFY_FEATURE`, the shell's export, for a by-hand gate); `home::resolve` reads `home` after the row's `feature`, the ruling row keeps `tasks`, and `plan::approach_ruled_for` charges part B in that feature to those tasks still open and not built inside another's - nothing where all have landed - never the pointer's active task. A row naming no tasks is charged as before.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| tripwire row | `state::tests::a_second_red_gate_names_the_landing_it_tripped` (red: 8 compile errors, no `feature`/`tasks` on `Run`) | n/a | none | none |
+| land tells the gate | `land::tests::the_gate_is_told_the_landing_it_runs_for` (red: the gate saw `"|"`, wanted `"449-x|T1"`) | n/a | none | none |
+| ruling filed and part B | `arbiter::tests::home::a_red_gate_ruling_is_filed_under_the_landing_that_tripped_it` (red: "recorded in 999-x's arbiter.jsonl", the pointer's feature), `plan::approach::tests::a_red_gate_ruling_for_a_landing_owes_its_open_tasks_alone` | n/a | none | none |
 
 ### T84 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A red gate's ruling lands in the arbiter log of the feature whose landing tripped it, and its part B is owed by that landing's open tasks, so no unrelated waiting task is held at its tick.
+2. **The constraints.** T84's line ("file a red-gate ruling under the feature of the landing that tripped it"); 451 T179 (a trigger's feature resolved once, bundle and ruling alike - the bundle's `home::resolve` fallback reads the same row); 451 T472 (one part B section for the batch); a red gate still holds every gate of its tree (`shared::checks::arbiter`'s `mine` scopes rows by `feature`, so the landing is written as `home`, never `feature`).
+3. **Where each comes from.** O: `specs/462-efficiency-backlog/arbiter.jsonl`'s row for the trigger; the clone's `.git/approach-owed.json` row `{462-efficiency-backlog, T22, part B, 2026-11-28T03:51:25Z}`; the clone's `.specify/feature.json` naming 462; `land.rs` exporting `SPECIFY_FEATURE` only at the ticks, after the gate phase.
+4. **Do they describe the world here?** Yes: the arbiter test reproduces the misfiling on the old code ("recorded in 999-x's", the pointer's feature) with the landing's row in hand.
+5. **The order.** Tripwire and land first (the row must name the landing), then the arbiter's resolve and part B.
+6. **The exits.** Green: the four tests pass on the four crates and `make builder-checks` is clean (measured 2026-11-28, `make builder-checks`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/tree rust/gate/crates/land rust/gate/crates/arbiter rust/gate/crates/plan"`: test, lint and format clean on 4 crates (2026-11-28).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** `arbiter.rs` passed the 1,000-line bar (1,020, measured 2026-11-28, `wc -l`): its verbs' command lines moved whole to `arbiter/commands.rs` (735 and 294 lines, measured 2026-11-28, `wc -l`), indexed in `rust/gate/CLAUDE.md`.
+12. **Before any fix.** A session would see a red gate's ruling in the wrong feature's log and an unrelated task refused at its tick for a part B it never tripped (462 T22).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The misfiled ruling itself is left where it was committed (55c7bd6da6), and 462 T22's owing stays in the clone's `.git/approach-owed.json`: no command withdraws an owing a misfiled ruling charged, and 462's plan is not edited by hand. Not fixed here: a new command, its own builder. Filed as T87; lands before 462 T22 (whose tick that owing holds).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T86 (<why: the finding or measurement that files it>)
@@ -1686,4 +1690,32 @@ T24's) fixed here, since the reader alone could not tell a row from its lines.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T87 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T87 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
 

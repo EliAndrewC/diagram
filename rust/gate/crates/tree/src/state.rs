@@ -101,12 +101,25 @@ fn commit(root: &Path) -> String {
 }
 
 /// A second red `make done` in a row owes the round arbiter a ruling before the next gate (feature 375 FR-010), unless the run is
-/// the landing lane's own ([`lane_run`], 461 T17).
-fn second_red_gate(root: &Path, now: f64) -> Result<(), String> {
+/// the landing lane's own ([`lane_run`], 461 T17). The row names the landing it tripped (461 T84): `home`, its feature, where the run
+/// was told one whose directory is under `specs/`, and `tasks`, the tasks it was landing - so the ruling is filed in that feature's
+/// `arbiter.jsonl` and its part B owed by those tasks, never by the clone's `.specify/feature.json` (red-gate@2026-11-28T03:47:58Z,
+/// 461's landing, was filed in 462's log and charged 462 T22). `home`, not `feature`: `feature` scopes which feature's gates a row
+/// holds (`shared::checks::arbiter`'s `mine`), and a red gate holds every gate of its tree.
+fn second_red_gate(root: &Path, now: f64, run: &Run) -> Result<(), String> {
     let trigger = format!("red-gate@{}", utc(now));
+    let mut row = json!({"detail": "a second red make done in a row", "kind": "red-gate", "t": now, "unit": ""});
+    let feature = run.feature.trim();
+    if !feature.is_empty() && !feature.contains('/') && root.join("specs").join(feature).is_dir() {
+        row["home"] = json!(feature);
+        let tasks: Vec<&str> = run.tasks.split_whitespace().collect();
+        if !tasks.is_empty() {
+            row["tasks"] = json!(tasks);
+        }
+    }
     l7r_shared::checks::with_owed(&dir_of(root), &mut |owed| {
         if let Some(map) = owed.as_object_mut() {
-            map.insert(trigger.clone(), json!({"detail": "a second red make done in a row", "kind": "red-gate", "t": now, "unit": ""}));
+            map.insert(trigger.clone(), row.clone());
         }
         true
     })
@@ -123,17 +136,34 @@ pub fn current_hash(root: &Path) -> Result<String, String> {
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn write(root: &Path, event: &str, target: &str) -> Result<State, String> {
+    let var = |k: &str| std::env::var(k).unwrap_or_default();
     let run = Run {
-        batch: std::env::var("L7R_LANE_BATCH").unwrap_or_default(),
+        batch: var("L7R_LANE_BATCH"),
         me: std::process::id(),
+        // the landing's own words first (`make land` tells its gate, 461 T84), else the feature the shell exported
+        feature: [var(GATE_FEATURE), var("SPECIFY_FEATURE")]
+            .into_iter()
+            .find(|f| !f.trim().is_empty())
+            .unwrap_or_default(),
+        tasks: var(GATE_TASKS),
     };
     record(root, event, target, &run)
 }
 
-/// Who runs the gate, as the red-gate tripwire asks (feature 461 T17): the batch `L7R_LANE_BATCH` names, and this process.
+/// The feature a landing tells its gate it is landing (461 T84): `make land` sets it and [`GATE_TASKS`] on its `make done` (`land`'s
+/// `long_runs::run_gate`, which names them in its own words: `land` builds on no `tree`).
+const GATE_FEATURE: &str = "L7R_GATE_FEATURE";
+/// The tasks of [`GATE_FEATURE`]'s landing, space-separated.
+const GATE_TASKS: &str = "L7R_GATE_TASKS";
+
+/// Who runs the gate, as the red-gate tripwire asks (feature 461 T17): the batch `L7R_LANE_BATCH` names, and this process; and
+/// the landing it runs for, which a second red names (461 T84).
+#[derive(Default)]
 struct Run {
     batch: String,
     me: u32,
+    feature: String,
+    tasks: String,
 }
 
 /// THE TRIPWIRE'S STAND-DOWN (feature 461 T17, plan D6 step 4; FR-008): a second red is left to the lane's own rule, which keys the
@@ -221,7 +251,7 @@ fn record(root: &Path, event: &str, target: &str, run: &Run) -> Result<State, St
             && std::fs::read_to_string(&last).unwrap_or_default().trim() == FAILED
             && !lane_run(root, run)
         {
-            second_red_gate(root, clock())?;
+            second_red_gate(root, clock(), run)?;
         }
         stated(std::fs::write(&last, format!("{event}\n")), "last-gate")?;
     }

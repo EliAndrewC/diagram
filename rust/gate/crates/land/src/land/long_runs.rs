@@ -171,8 +171,13 @@ impl Land {
     /// planner's call alone, never an environment the gate's tests inherit (the round arbiter on red-gate@2026-10-24T19:05: an exported
     /// `INCR_NO_CUTOFF` reached three planner tests and turned them red).
     fn run_gate(&self, target: &str) -> Result<i32, String> {
+        // THE LANDING THE GATE RUNS FOR (461 T84): a second red names it, so its ruling is filed in this feature and its part B owed
+        // by these tasks - `tree`'s `state::GATE_FEATURE` and `GATE_TASKS`, named here in its words (red-gate@2026-11-28T03:47:58Z,
+        // 461's landing, was filed under the clone's `.specify/feature.json`, 462)
         let mut child = self
             .command(&[&self.make, "--no-print-directory", target, "NO_CUTOFF=1"])
+            .env("L7R_GATE_FEATURE", self.landing_feature.borrow().as_str())
+            .env("L7R_GATE_TASKS", self.landing_tasks.borrow().join(" "))
             .process_group(0)
             .spawn()
             .map_err(|e| super::spawn_error(&self.make, &e))?;

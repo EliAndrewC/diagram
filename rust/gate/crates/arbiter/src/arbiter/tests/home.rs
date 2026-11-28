@@ -336,3 +336,62 @@ fn the_named_feature_reads_each_form() {
         .unwrap_err()
         .contains("no active feature"));
 }
+
+/// RED FIRST (461 T84): the ruling of red-gate@2026-11-28T03:47:58Z on 461 T74/T63's landing was filed in 462's `arbiter.jsonl` -
+/// the clone's `.specify/feature.json` - and charged 462 T22, a waiting task, a part B. The tripwire's row now names the landing
+/// (`home`, `tasks`, `tree`'s `state::second_red_gate`): the ruling is filed there, and its part B owed by the landing's tasks
+/// still open, never the pointer's active task.
+#[test]
+fn a_red_gate_ruling_is_filed_under_the_landing_that_tripped_it() {
+    let root = clone_at("home-red-gate");
+    std::fs::create_dir_all(root.join("docs")).unwrap();
+    std::fs::write(root.join("docs/approach-checklist.md"), "1. one\n").unwrap();
+    let active = root.join("specs/999-x");
+    tasks(&active, "- [ ] T22 waiting\n");
+    std::fs::write(active.join("plan.md"), "# p\n\n### T22 w\n").unwrap();
+    let landing = root.join("specs/461-x");
+    std::fs::create_dir_all(&landing).unwrap();
+    tasks(
+        &landing,
+        "- [x] T63 landed\n- [ ] T74 open\n- [ ] T81 other\n",
+    );
+    std::fs::write(landing.join("plan.md"), "# p\n\n### T74 a\n").unwrap();
+    owe(
+        &root,
+        &json!({"red-gate@1": {"kind": "red-gate", "detail": "a second red make done in a row", "unit": "", "t": 1, "home": "461-x", "tasks": ["T74", "T63"]}}),
+    );
+    let file = rule_file(
+        &root,
+        "r.json",
+        &json!({"ruling": "continue", "why": "w", "what": "again"}),
+    );
+    let r = run(
+        &root,
+        &["ruled", "red-gate@1", &file, "--as", "round-arbiter"],
+    );
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert!(r.stdout.contains("recorded in 461-x's arbiter.jsonl"));
+    assert!(rows(&root).is_empty());
+    let filed = std::fs::read_to_string(landing.join("arbiter.jsonl")).unwrap();
+    assert!(
+        filed.contains("\"trigger\": \"red-gate@1\"")
+            && filed.contains("\"tasks\": [\"T74\", \"T63\"]")
+    );
+    let owed = std::fs::read_to_string(root.join(".git/approach-owed.json")).unwrap();
+    assert!(owed.contains("\"feature\": \"461-x\"") && owed.contains("\"task\": \"T74\""));
+    assert!(!owed.contains("T22") && !owed.contains("T63") && !owed.contains("T81"));
+    assert!(r.stdout.contains("T74 owes the checklist's"));
+    // a landing whose tasks have all landed owes no part B, and charges no other task
+    owe(
+        &root,
+        &json!({"red-gate@2": {"kind": "red-gate", "unit": "", "t": 2, "home": "461-x", "tasks": ["T63"]}}),
+    );
+    std::fs::remove_file(root.join(".git/approach-owed.json")).unwrap();
+    let r = run(
+        &root,
+        &["ruled", "red-gate@2", &file, "--as", "round-arbiter"],
+    );
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert!(!root.join(".git/approach-owed.json").exists());
+    assert!(!r.stdout.contains("owes the checklist"), "{}", r.stdout);
+}

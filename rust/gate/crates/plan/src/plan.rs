@@ -711,6 +711,18 @@ pub fn resolve_feature(feature: &str, root: &Path) -> Option<PathBuf> {
     resolve(feature, root)
 }
 
+/// [`approach_ruled`] for a ruling filed in `home`: a red gate's that names its landing's `tasks` owes part B in `home` by those of
+/// them still open, never by the clone's active task (461 T84); any other as [`approach_ruled`].
+#[must_use]
+pub fn approach_ruled_for(
+    root: &Path,
+    trigger: &str,
+    home: &Path,
+    tasks: &[String],
+) -> Option<String> {
+    approach::ruled_for(root, trigger, home, tasks, None)
+}
+
 #[must_use]
 pub fn approach_ruled(root: &Path, trigger: &str) -> Option<String> {
     approach::ruled(root, trigger, None)

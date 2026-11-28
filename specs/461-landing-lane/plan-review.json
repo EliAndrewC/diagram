@@ -984,6 +984,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T84 (the round arbiter's ruling of red-gate@2026-11-28T03:47:58Z, tripped by 461 T74/T63's landing, was filed in 462's arbiter.jsonl and charged 462 T22 a part B)": {
+   "sha256": "45e4445d0afa825121b0753378ae2194e77dc8a398f17614c03be84bbdeba449",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T84 Approach (checklist part A)": {
+   "sha256": "9e462bcbbde872c19460ee35421a9ff18d5c06e27f32e404d5d14736933ede92",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6104,6 +6116,71 @@
      "summary": "The empty template stub '### T40 (<why...>)' removed, replaced by the filled T40 section.",
      "class": "within",
      "why": "The stub held no decision; its replacement is the T40 section judged above."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T84 (the round arbiter's ruling of red-gate@2026-11-28T03:47:58Z, tripped by 461 T74/T63's landing, was filed in 462's arbiter.jsonl and charged 462 T22 a part B)",
+    "### T84 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T84-carry",
+     "summary": "make land tells its gate the landing (L7R_GATE_FEATURE, L7R_GATE_TASKS on long_runs::run_gate's make done); the tripwire writes them into the owed row as `home` and `tasks`, never as `feature`, so arbiter's `mine` still scopes by feature and a red gate still holds every gate of its tree.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a red-gate ruling filed in an unrelated feature's log) found in this feature's own landing path; fix-as-we-go reaches it. Writing the landing as `home` rather than `feature` keeps the existing hold on every gate of the tree, so no check is dropped (FR-008). Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T84-resolve-order",
+     "summary": "home::resolve reads the row's `feature`, then `home`, then falls to the active feature; the ruling row keeps `tasks`; the bundle's fallback reads the same row (451 T179).",
+     "class": "within",
+     "why": "The order changes only rows that previously named no feature, which is exactly the misfiling case; a trigger's feature is still resolved once for bundle and ruling alike. No requested behavior is reduced."
+    },
+    {
+     "id": "T84-by-hand-gate",
+     "summary": "For a gate run by hand (no land env), the tripwire takes SPECIFY_FEATURE from the shell, and records a feature only where specs/<it> is a directory.",
+     "class": "within",
+     "why": "A by-hand gate is a different case from a landing: it runs in the shell of the session doing the work, whose export names that work. The directory check only stops a non-feature name being recorded. Neither narrows the request or the spec."
+    },
+    {
+     "id": "T84-partB-open-tasks",
+     "summary": "plan::approach_ruled_for charges part B in the landing's feature to that landing's tasks still open and not built inside another's, never the pointer's active task.",
+     "class": "within",
+     "why": "This is the fix itself: the defect was an unrelated waiting task (462 T22) held at its tick for a part B it never tripped. Charging the landing's own open tasks matches the goal stated in item 1. 451 T472 (one part B section for the batch) is cited, but its text is not in the bundle, so whether one section answers for several tasks was not checked against it. Neither request.md nor the spec speaks to part B charging."
+    },
+    {
+     "id": "T84-partB-all-landed",
+     "summary": "Where every task of the tripping landing has already landed, part B is charged to nothing.",
+     "class": "within",
+     "why": "Before, such a ruling's part B went to whichever task the pointer named, which is the wrong outcome being fixed; with no open task of the landing there is nothing it can rightly hold. Not ruled a narrowing: neither the GM's words nor the spec require an owing to exist for a landed batch. The bundle does not show whether some other record carries the ruling's part B obligation in this case (451 T472's text is not supplied). Noted, not blocking."
+    },
+    {
+     "id": "T84-no-tasks-as-before",
+     "summary": "A row naming no tasks (a by-hand gate, or rows written before this change) is charged as before, to the pointer's active task.",
+     "class": "within",
+     "why": "This keeps the pointer path that caused the incident, but only for rows with no landing named. A landing's rows now always carry tasks, so the incident's case no longer reaches the old path. The by-hand case runs in the shell of the session whose active task is the work being gated, where the pointer is not unrelated. No requested behavior is narrowed."
+    },
+    {
+     "id": "T84-arbiter-split",
+     "summary": "arbiter.rs (1,020 lines, past the 1,000-line bar) has its verbs' command lines moved whole to arbiter/commands.rs, indexed in rust/gate/CLAUDE.md.",
+     "class": "within",
+     "why": "Housekeeping under the project's file-size bar; no behavior is decided. Not a fidelity matter."
+    },
+    {
+     "id": "T84-left-misfiled-row",
+     "summary": "The misfiled ruling row stays in 462's arbiter.jsonl as committed (55c7bd6da6).",
+     "class": "within",
+     "why": "This is a historical record, and its commit message already says it was filed under 462 though the landing was 461's. Leaving it causes no wrong outcome for any reader or check that the bundle shows. Rewriting committed log history is not asked for. It is a difference, not a defect (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T84-left-462-T22-owing",
+     "summary": "462 T22's wrongly charged part B owing stays in the clone's .git/approach-owed.json; no existing command withdraws it and 462's plan is not hand-edited. The withdrawal is filed as T87, to land before 462 T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a live defect left: it would refuse 462 T22's tick (item 12 names it as the reason for the fix), so it is a narrowing of fix-as-we-go and is ruled. The stated reason, 'a new command, its own builder', is a cost argument and carries no weight here. The ground that does carry the ruling: T84's line ('file a red-gate ruling under the feature of the landing that tripped it') is forward-looking, and withdrawing an owing that has already been charged needs a new verb, which is new behavior beyond that line. The defect is not carried past the point where it does harm. It is assigned to T87 in this same plan, ordered ahead of the one tick it can refuse. The owing itself holds that tick until it is withdrawn, so it cannot slip through unnoticed. T87's filing and its ordering are asserted in the block and were not verified (the bundle does not contain them). The ruling stands on that ordering being real: if T87 is not filed ahead of 462 T22, this decision is NOT LEGITIMATE."
     }
    ]
   }

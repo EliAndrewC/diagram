@@ -9,7 +9,7 @@ use serde_json::json;
 use super::super::tests::{git, repo};
 use super::{
     apart, best, future_refusal, future_stamps, in_flight, owe, owe_all, owed_entries, parse_utc,
-    part_items, refusal, ruled, split_items, unanswered,
+    part_items, refusal, ruled, ruled_for, split_items, unanswered,
 };
 
 const CHECKLIST: &str = "# Checklist\n\n## A. At task start\n\n1. **The goal.** x\n2. **The constraints.** y\n3. **Where from.** z\n\n## B. When the work resists\n\n1. **What refuses.** a\n2. **Again.** b\n\n## C. Habits\n\n1. **Edit once.** c\n";
@@ -465,4 +465,65 @@ fn a_red_gate_ruling_owes_one_section_for_the_batch() {
     assert!(ruled(&root, "hour:999-x@3", Some("2026-10-17T21:41:00Z"))
         .unwrap()
         .contains("T02 owes"));
+}
+
+/// RED FIRST (461 T84): a red gate's ruling filed in the landing's feature owes part B there, by the landing's tasks still open and
+/// not built inside another's - red-gate@2026-11-28T03:47:58Z, 461's landing, charged 462 T22 through `.specify/feature.json`.
+#[test]
+fn a_red_gate_ruling_for_a_landing_owes_its_open_tasks_alone() {
+    let (root, dir) = feature();
+    let landing = root.join("specs/461-x");
+    std::fs::create_dir_all(&landing).unwrap();
+    std::fs::write(
+        landing.join("tasks.md"),
+        "- [x] T63 landed\n- [ ] T74 open\n- [ ] T75 inside\n- [ ] T81 other\n",
+    )
+    .unwrap();
+    std::fs::write(
+        landing.join("plan.md"),
+        "# p\n\n### T74 a\n\nBuilt here: T75 - its lane.\n",
+    )
+    .unwrap();
+    let named: Vec<String> = ["T74", "T63", "T75"].map(str::to_owned).to_vec();
+    let msg = ruled_for(
+        &root,
+        "red-gate@1",
+        &landing,
+        &named,
+        Some("2026-11-28T03:51:00Z"),
+    )
+    .unwrap();
+    assert!(msg.contains("T74 owes the checklist's") && !msg.contains("T63"));
+    let owing: Vec<String> = owed_entries(&root)
+        .iter()
+        .map(|r| {
+            format!(
+                "{} {}",
+                r["feature"].as_str().unwrap(),
+                r["task"].as_str().unwrap()
+            )
+        })
+        .collect();
+    assert_eq!(owing, ["461-x T74"]);
+    // all landed: nothing owed, no other task charged
+    assert_eq!(
+        ruled_for(&root, "red-gate@2", &landing, &["T63".to_owned()], None),
+        Some(String::new())
+    );
+    // no tasks named, or not a red gate: the active feature's flight, as before
+    std::fs::write(
+        root.join(".git/active-task"),
+        json!({"feature": "999-x", "task": "T01"}).to_string(),
+    )
+    .unwrap();
+    assert!(ruled_for(&root, "red-gate@3", &landing, &[], None)
+        .unwrap()
+        .contains("T01"));
+    assert!(ruled_for(&root, "hour:999-x@3", &landing, &named, None)
+        .unwrap()
+        .contains("T01 owes"));
+    assert!(dir.join("tasks.md").is_file());
+    // no checklist: nothing owed
+    std::fs::remove_file(root.join("docs/approach-checklist.md")).unwrap();
+    assert_eq!(ruled_for(&root, "red-gate@4", &landing, &named, None), None);
 }
