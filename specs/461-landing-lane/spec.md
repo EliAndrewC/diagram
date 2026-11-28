@@ -248,3 +248,8 @@ The acceptance of each user story, gathered by requirement (the measures themsel
 - 2026-11-27, round 5 (spec-fidelity-verify, MODE 3): FAITHFUL.
 - 2026-11-27, after round 5: the "Success measure" section restated as SC-001 to SC-006, each naming its requirements, for spec-lint; no requirement or measure changed.
 - 2026-11-27, after T02: FR-010's baseline restated - four pool trees, 3.19 held time-weighted (461 T02), where it had said three; the requirement unchanged.
+- 2026-11-28, US6 / FR-011 / SC-007 added (the GM's scheduling priorities): spec-fidelity CHANGES REQUIRED, 5 items (every handout
+  path, the rules replaced, the process-bugfix class, repairs below the classes, the escape's ground), then FAITHFUL on the revision.
+- 2026-11-28, FR-005's stall wake added (the GM on the 4 h 51 min stall): one NOT-REVIEWABLE round (a figure's label, no round used),
+  then CHANGES REQUIRED, 2 items (a success criterion in US3 and SC-001; T107's line separating the gate's span from the test
+  binary's), both applied; the round arbiter ruled `accept` on round:spec-fidelity|461-landing-lane#1@6 as the review's verdict.
