@@ -124,8 +124,12 @@ fn exe() -> PathBuf {
 /// `l7r-gate land ...`; a hand-in that succeeded starts the lane's runner from phase 2's base (feature 461 T12, plan D2).
 fn land_or_hand_in(args: &[String]) -> Reply {
     let done = land::cli(args, &here());
-    let base = std::env::var("HAND_IN_BASE").ok();
-    l7r_gate_lane::runner::on_hand_in(args, done, base.as_deref(), &here(), &exe())
+    // the land crate's one reading of HAND_IN_BASE (461 T22): unset is `origin`, so the hand-in and its runner start agree
+    let origin = matches!(
+        land::hand_in_base(),
+        Ok(l7r_shared::builder_pool::Base::Origin)
+    );
+    l7r_gate_lane::runner::on_hand_in(args, done, origin, &here(), &exe())
 }
 
 fn cache_off(value: Option<&str>) -> bool {

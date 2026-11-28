@@ -787,31 +787,77 @@ engine speed, so the performance checklist does not apply.
 <!-- plan-archive: T19 to T19 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T20 to T14 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T21 to T20 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T22 (<why: the finding or measurement that files it>)
+### T22 (D3's base by phase, D13, D8: phase 2's base switched on - the coordinator's commits out first, the base `origin/main`; lands after T14, T16, T18)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: three changes, one knob.
+  - **THE ONE READING, for T56 and T64 to match** (T12's "For T22"): `l7r_shared::builder_pool::hand_in_base(value: Option<&str>)
+    -> Result<Base, String>` (`rust/guard/shared/src/builder_pool.rs`, beside the pool's registry; the constant `HAND_IN_BASE`,
+    the enum `Base { Clone, Origin }`). Unset, empty or `origin` is `Base::Origin` - THE DEFAULT is now phase 2's; `clone` is
+    `Base::Clone`; any other word an `Err` naming both. The caller hands it its own environment's value, once a process: the land
+    crate's public reading is `l7r_gate_land::land::hand_in_base()` (`hand_in.rs`'s `base()`, `std::env::var`), which the hand-in
+    (`run` now takes the `Result`) and the binary's `land_or_hand_in` (`rust/gate/src/lib.rs`) both ask, so a hand-in with the
+    knob unset lands on `origin/main` AND starts the runner; `on_hand_in` (`lane/src/runner.rs`) now takes `origin: bool` in place
+    of the raw `Option<&str>`. The task crate's `Env::live()` (`builder_tree.rs`) reads it into `Env.origin` (a refused value read
+    as origin, the stricter). T56 (the lane crate) and T64 (`l7r_shared::lane_wake`, the guard's: no gate crate is reachable from
+    there) read the same function, `hand_in_base(crate::env::opt(HAND_IN_BASE).as_deref())` in the guard's form, and treat
+    `Ok(Base::Origin)` as phase 2. Label: deliberate deviation from the task line's "the land crate's" reading - the function lives
+    in `l7r_shared`, the land crate's public reading a call of it - because T64's Stop rule is in the guard, which can depend on no
+    gate crate (`check guard-deps`), and the task crate, which D13 and D8 need, sits below land. An override in one command's
+    environment reaches no hook: each process reads its own.
+  - **D13** (`builder_tree.rs`, `unpushed`, asked in `take`'s `settled` after the "already holds it" answer and before the done-commit wait, moved there
+    out of `take` for clippy's 100-line limit):
+    where `env.origin`, `git rev-list --count origin/main..HEAD` in the clone; any count refuses the handout (exit 2, no tree
+    held) naming `<clone>/scripts/sync-with-main.sh done`; an `origin/main` the clone cannot read refuses naming `git -C <clone>
+    fetch origin`. No fetch: the prompt hook's `sync-in` fetches each turn, and a handout's fetch would be a network round a
+    handout. Label: the easier route, the record silent.
+  - **D8** (`builder_done.rs`, `listed`, behind `make builder-trees`): from phase 2's base "carried" is asked of `origin/main`
+    (`uncarried_by`, `uncarried`'s rule of any revision), listed as waiting on the lane with `make lane` named and no `make carry`.
+    Kept on the clone's HEAD, by reading: `to_carry` (the landing carries what ITS tree lacks - the lane's tree in phase 2), and the
+    hand-in's and handout's waits and `kept_in`'s ref deletion, which ask what the clone holds; D13 keeps HEAD at `origin/main`
+    from now on. Label: the easier route (the task line names `make builder-trees` only).
+  - Words: `hand_in.rs`'s module doc and refusal, `dev/audits/hand-in-base.md`, the Makefile's `builder-done`, `builder-tree` and
+    `builder-trees` help (`make docs` regenerated `docs/make-targets.html`), `rust/gate/CLAUDE.md`'s lane row, `builder_done.rs`'s
+    WHAT IS CARRIED and `builder_tree.rs`'s take. The hand-in tests that are phase 1's now pass `clone` (23 calls and two direct
+    `run`s, `CLONE`, observed 2026-11-27, method: the edit's replace count and the compiler's two errors); the pool's test `env()` keeps `origin: false` (their worlds' clones are ahead of `origin/main`).
+  - Red first (observed 2026-11-27, method: `make rust-test` with `ONLY=` over the new tests on each mutated line, then restored):
+    the task crate's two new tests with `unpushed` returning none and `listed` asking HEAD, 0 passed, 2 failed
+    (`from_phase_two_s_base_a_handout_waits_until_the_clone_s_own_commits_are_pushed`,
+    `from_phase_two_s_base_builder_trees_lists_what_waits_on_the_lane`); with the shared reader's unset put back to `clone`, the
+    land crate's `land::hand_in::tests` 28 passed, 1 failed (`an_unset_knob_is_phase_two_s_base_origin_main`) and the lane's
+    `a_hand_in_starts_the_runner_only_from_phase_two_s_base_and_only_when_it_succeeded` 0 passed, 1 failed (an unset knob started
+    no runner). Green: the counts in item 9.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| phase 2's base: the knob's one reading, D13, D8 | n/a - no map | n/a | none | n/a |
 
 ### T22 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** With nothing set, a builder's `make builder-done` applies onto `origin/main` and starts the lane's
+   runner; a handout waits while the coordinator's own commits are unpushed, naming the push; `make builder-trees` lists what
+   waits on the lane.
+2. **The constraints.** D3 ("The base by phase"), D13, D8, D2 (every hand-in starts the runner), T12 Decision 6 and "For T22",
+   T21 Decision 2 (no second reading of the knob), `check guard-deps`, the crates' own-tests coverage (rust/gate/CLAUDE.md).
+3. **Where each comes from.** R: plan.md D3, D8, D13, the phases; tasks.md T22; T12's and T21's sections. O: the red and green runs
+   (2026-11-27).
+4. **Do they describe the world here?** On fixtures: the task crate's clone with a bare origin one commit behind, the land crate's
+   origin clone, the lane's real start. Not on the real clone, which flips when this lands.
+5. **The order.** After T14, T16, T18 (and T51, T54, T55, carried); with T56 and T64, which read the reader above; before T23.
+6. **The exits.** Green: the new tests and the changed crates whole, `make builder-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the task line's reading in the land crate cannot serve the guard (T64) or the task crate (D13, D8);
+   moved one crate down, said above.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make builder-checks CRATE="rust/guard/shared rust/gate/crates/land rust/gate/crates/lane
+   rust/gate/crates/task rust/gate"` green, 66 s (observed 2026-11-27, method: that run's log): tests, lint and format clean; the
+   shared crate 623 passed, land 224, lane 83, task 164 (162 before, +2), the binary 10, 0 failed.
+10. **Before moving a constant.** The knob's default moves `clone` to `origin`: D3's own phase 2 setting, its audit entry restated.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. Before: an unset knob handed in on the clone's HEAD and started no runner, and a handout
+    over the coordinator's unpushed commits would build on work its hand-in's base lacks.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T23 (<why: the finding or measurement that files it>)

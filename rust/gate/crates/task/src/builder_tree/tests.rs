@@ -28,6 +28,8 @@ pub(crate) fn env(dir: &Path) -> Env {
         sampler: Vec::new(),
         lane_tree: String::new(),
         apply: Vec::new(),
+        // phase 1's base: these worlds have no origin (461 T22's tests set it)
+        origin: false,
     }
 }
 
@@ -604,6 +606,46 @@ fn a_warm_handout_empties_the_tree_s_store_of_rendered_messages() {
     assert_eq!(run(&words(&["release", "T01", "9001"]), &root, &e).code, 0);
     assert_eq!(run(&words(&["take", "T02", "9001-x"]), &root, &e).code, 0);
     assert!(!store.join("escalation-hooks.sh.jsonl").exists());
+}
+
+#[test]
+fn from_phase_two_s_base_a_handout_waits_until_the_clone_s_own_commits_are_pushed() {
+    // 461 T22, plan D13: the hand-in applies onto origin/main, so a tree handed out over the clone's unpushed commits would build on
+    // work its hand-in's base lacks
+    let (dir, root) = world("pool-unpushed");
+    let mut e = env(&dir);
+    e.origin = true;
+    // the world's guard-wrapper commit is the clone's own: origin/main lacks it
+    let said = run(&words(&["take", "T01", "9001"]), &root, &e);
+    assert_eq!((said.code, said.stdout.as_str()), (2, ""));
+    let push = format!(
+        "push them first: {}/scripts/sync-with-main.sh done, then make builder-tree again\n",
+        root.display()
+    );
+    assert!(
+        said.stderr
+            .contains("the clone's HEAD holds 1 commit(s) origin/main lacks")
+            && said.stderr.ends_with(&push)
+    );
+    assert!(pool_of(&root).is_empty());
+    // phase 1's base hands it out as before
+    e.origin = false;
+    let clone_base = run(&words(&["take", "T02", "9001"]), &root, &e);
+    assert_eq!(clone_base.code, 0);
+    // pushed, the handout goes ahead at phase 2's base
+    git(&root, &["push", "-q", "origin", "main"]);
+    e.origin = true;
+    assert_eq!(run(&words(&["take", "T01", "9001"]), &root, &e).code, 0);
+    // an origin/main the clone cannot read refuses too, naming the fetch
+    git(&root, &["update-ref", "-d", "refs/remotes/origin/main"]);
+    let unread = run(&words(&["take", "T03", "9001"]), &root, &e);
+    assert_eq!(unread.code, 2);
+    assert!(
+        unread.stderr.contains("origin/main cannot be read in")
+            && unread
+                .stderr
+                .contains(&format!("git -C {} fetch origin", root.display()))
+    );
 }
 
 mod lane;

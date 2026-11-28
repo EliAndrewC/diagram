@@ -492,7 +492,7 @@ fn a_closing_half_handed_out_before_its_build_half_s_carry_builds_on_it_and_its_
     // the closing half's done: one commit of both halves on the handout's base, the one ref moved to it
     put(&b1, "scripts/o.py", "o = 1\n");
     let said = done(&root, &e, "T01", "9001 T01: the closing half", "");
-    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert_eq!(said.code, 0);
     assert_eq!(refs(&root), "refs/l7r/done/9001-T01");
     let second = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
     assert_ne!(second, first);
@@ -595,7 +595,7 @@ fn the_next_dispatch_is_the_queue_s_next_entry() {
     let b2 = pool_of(&root)[1].tree.clone();
     put(&b2, "scripts/b.py", "y = 2\n");
     let said = done(&b2, &e, "T02", "9001 T02: two", "");
-    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert_eq!(said.code, 0);
     let none = "  1. no next dispatch: the queue is empty: each entry is landed, built or in flight (make queue F=9001)\n";
     assert!(said.stdout.contains(none), "{}", said.stdout);
 }
@@ -624,7 +624,7 @@ fn the_next_dispatch_prefers_performance_work_of_any_queue() {
     );
     put(&b1, "scripts/a.py", "x = 2\n");
     let said = done(&b1, &e, "T01", "9001 T01: one", "");
-    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert_eq!(said.code, 0);
     let want = "  1. FIRST, open performance work (FR-013) no queue line names - write each one's line (CRATE= and FILES= as its task line names them, WAITS= where it waits, which quiets it):\n     make queue-add F=9002 T=T06 KIND=fix   (9002 T06, KIND by make builder-brief's mechanism test)\n     make builder-brief T=T05 F=9002 KIND=fix ENTRY=1   (9002 T05, line 1 of specs/9002-y/queue.txt: the next READY entry that overlaps no task in flight, performance work of any queue first)\n  2. make land F=9001 T=\"T01\"";
     assert!(said.stdout.contains(want), "{}", said.stdout);
     // the other queue's performance entry lined and waiting, T06's too: the done task's own feature's pick
@@ -747,7 +747,7 @@ fn a_found_tree_s_commit_made_elsewhere_is_kept_as_a_hand_in() {
     git(&b1, &["commit", "-qm", "the hand-in"]);
     let sha = git(&b1, &["rev-parse", "HEAD"]);
     let said = f.kept(&sha, true);
-    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert_eq!(said.code, 0);
     // 461 T08: the lane's line where the landing's stood
     assert!(
         said.stdout
@@ -851,7 +851,7 @@ fn a_repair_entry_is_dispatched_first_briefed_with_the_gate_s_output_and_answere
     builder_tree::run(&words(&["take", "T02", "9001"]), &root, &e);
     put(&b1, "scripts/a.py", "a = 1\n");
     let said = done(&b1, &e, "T02", "9001 T02: two", "");
-    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert_eq!(said.code, 0);
     let first = format!("  1. make builder-brief T=T01 F=9001 KIND=fix CRATE=\"rust/x\" REPAIR=r1   (9001 T01 (repair r1): the lane ejected {} from batch 9001-1 (red); the gate's output /c/.git/l7r-lane/attempts/9001-1-1.log - a FRESH builder, never one kept past its report)\n", &sha[..10]);
     assert!(said.stdout.contains(&first), "{}", said.stdout);
     let brief = |a: &[&str]| crate::builder_brief::run(&words(a), &root, &e, "");
@@ -947,4 +947,26 @@ fn an_arbiter_repair_is_briefed_with_its_ruling_s_row_and_the_two_red_attempts()
         .chars()
         .count();
     assert!(n < 2000, "{n}");
+#[test]
+fn from_phase_two_s_base_builder_trees_lists_what_waits_on_the_lane() {
+    // 461 T22, plan D8: carried is asked of origin/main, where the lane lands, not of the clone's HEAD
+    let (_dir, root, mut e, b1) = held("done-lane-listed", "T01");
+    put(&b1, "scripts/a.py", "x = 2\n");
+    assert_eq!(done(&b1, &e, "T01", "9001 T01: the lane's", "").code, 0);
+    let sha = git(&root, &["rev-parse", "refs/l7r/done/9001-T01"]);
+    // in the clone's HEAD but not on origin/main: carried at phase 1's base, waiting on the lane at phase 2's
+    git(&root, &["cherry-pick", &sha]);
+    assert!(list(&root, &e).ends_with("builder-trees: no done commit waits on its carry\n"));
+    e.origin = true;
+    let listed = list(&root, &e);
+    assert!(listed.contains("builder-trees: commits done and not yet on origin/main, waiting on the lane (make builder-done kept each under refs/l7r/done/; make lane for where each stands): 1\n"));
+    assert!(listed.ends_with(&format!(
+        "  {}  9001-T01  9001 T01: the lane's\n",
+        &sha[..10]
+    )));
+    // landed on origin/main: nothing waits
+    git(&root, &["push", "-q", "origin", "main"]);
+    assert!(list(&root, &e).ends_with(
+        "builder-trees: no done commit waits on the lane (origin/main holds every one)\n"
+    ));
 }

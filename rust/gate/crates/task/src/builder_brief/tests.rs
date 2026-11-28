@@ -31,6 +31,7 @@ fn env(dir: &Path) -> Env {
         sampler: Vec::new(),
         lane_tree: String::new(),
         apply: Vec::new(),
+        origin: false,
     }
 }
 

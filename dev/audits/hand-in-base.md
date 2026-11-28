@@ -1,7 +1,7 @@
 ---
 kind: adopted
 title: the base a hand-in applies a builder's work onto
-for: make builder-done's hand-in (l7r-gate land --hand-in) applies the builder's scratch commit onto HAND_IN_BASE - clone, the clone's HEAD (the default, phase 1, while the session still carries into its clone), or origin, origin/main after git fetch origin (phase 2, when landings leave the clone) - a knob set by phase, not measured (461 plan D3, "The base by phase")
+for: make builder-done's hand-in (l7r-gate land --hand-in) applies the builder's scratch commit onto HAND_IN_BASE - origin, origin/main after git fetch origin (the default since 461 T22, phase 2, when landings leave the clone), or clone, the clone's HEAD (phase 1, while the session still carries into its clone); read once, by l7r_shared::builder_pool::hand_in_base, for the hand-in, its runner start, the handout's D13 refusal and make builder-trees - a knob set by phase, not measured (461 plan D3, "The base by phase")
 measured: 2026-11-27
 measurement: none yet - 461 T10 hands in this feature's next task through make builder-done (base clone) and counts the landings refused before a gate over phase 1 against the night of 2026-11-26/27's 19 of 50 (spec, Why)
 command: make rust-test CRATE=rust/gate/crates/land ONLY="land::hand_in::tests"

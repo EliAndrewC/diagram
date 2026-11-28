@@ -33,6 +33,7 @@ mod carry_done;
 mod cheap;
 mod claims_wait;
 mod hand_in;
+pub use hand_in::base as hand_in_base;
 mod inproc;
 mod long_runs;
 mod memory;

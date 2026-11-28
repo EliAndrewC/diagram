@@ -528,35 +528,37 @@ fn a_hand_in_starts_the_runner_only_from_phase_two_s_base_and_only_when_it_succe
     };
     // any other `land` verb (a landing, a carry) starts nothing, whatever the base
     let landing = ["T01".to_owned()];
+    assert_eq!(on_hand_in(&landing, ok(), true, dir.path(), &exe), ok());
+    // phase 1 (the base the clone's HEAD): the coordinator still lands by hand, so no runner is started
+    let phase = |knob| {
+        l7r_shared::builder_pool::hand_in_base(knob) == Ok(l7r_shared::builder_pool::Base::Origin)
+    };
     assert_eq!(
-        on_hand_in(&landing, ok(), Some("origin"), dir.path(), &exe),
+        on_hand_in(&hand_in, ok(), phase(Some("clone")), dir.path(), &exe),
         ok()
     );
-    // phase 1 (the base the clone's HEAD, or unset): the coordinator still lands by hand, so no runner is started
-    for base in [None, Some("clone")] {
-        assert_eq!(on_hand_in(&hand_in, ok(), base, dir.path(), &exe), ok());
-    }
     assert!(!held(&common));
     let refused = || l7r_gate_core::Reply { code: 2, ..ok() };
     assert_eq!(
-        on_hand_in(&hand_in, refused(), Some("origin"), dir.path(), &exe),
+        on_hand_in(&hand_in, refused(), true, dir.path(), &exe),
         refused()
     );
     assert!(!held(&common));
-    let started = on_hand_in(&hand_in, ok(), Some("origin"), dir.path(), &exe);
+    // 461 T22: the knob unset is phase 2's base, so the hand-in starts the runner
+    let started = on_hand_in(&hand_in, ok(), phase(None), dir.path(), &exe);
     assert_eq!(started.code, 0);
     let pid = holder(&common).unwrap();
     assert!(started
         .stdout
         .ends_with(&format!("lane: the runner started (pid {pid})\n")));
-    let again = on_hand_in(&hand_in, ok(), Some("origin"), dir.path(), &exe);
+    let again = on_hand_in(&hand_in, ok(), true, dir.path(), &exe);
     assert!(again
         .stdout
         .ends_with(&format!("lane: the runner already runs (pid {pid})\n")));
     assert_eq!(stop(&common, true, 5.0).code, 0);
     // outside a repository the hand-in's reply stands, with the lane's error after it
     let nowhere = l7r_gate_core::ci::fixtures::scratch("lane-hand-in-norepo");
-    let lost = on_hand_in(&hand_in, ok(), Some("origin"), nowhere.path(), &exe);
+    let lost = on_hand_in(&hand_in, ok(), true, nowhere.path(), &exe);
     assert_eq!(lost.code, 0);
     assert!(lost.stderr.contains("is in no git repository"));
 }

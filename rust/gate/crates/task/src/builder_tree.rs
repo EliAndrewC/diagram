@@ -7,7 +7,9 @@
 //! - `take <tasks> [feature]` (`make builder-tree`): the tree the tasks already hold, else the first free tree brought to the
 //!   clone's HEAD (detached) and marked held, its path on stdout; with none free, ONE more made (`<clone>-b<N>`) up to the cap
 //!   (`L7R_BUILDER_POOL`, `builder_pool::CAP`), said to be cold, its guard binary built before it is handed out (451 T286: a fresh
-//!   tree's first closing checks died on the hook wrapper's 45 s build limit under load); at the cap, who holds each.
+//!   tree's first closing checks died on the hook wrapper's 45 s build limit under load); at the cap, who holds each. From phase
+//!   2's base (`HAND_IN_BASE` unset or `origin`, `builder_pool::hand_in_base`, 461 T22) a handout is refused while the clone's HEAD
+//!   holds commits `origin/main` lacks, naming `scripts/sync-with-main.sh done` (plan D13, `settled.rs`).
 //! - THE PRE-WARM (451 T316; the GM, 2026-11-26: "would it make sense to begin compiling immediately within a work tree builder?"):
 //!   a warm handout starts, detached, the tree's own `scripts/gates/l7r-gate.sh rust prewarm --since <commit>` - the test builds of
 //!   the crates the commits since the tree's LAST HANDOUT moved, built while the builder reads (`rustc/prewarm.rs`: it starts a
@@ -88,6 +90,9 @@ pub(crate) struct Env {
     /// The program and arguments that apply a done commit onto a handed-out tree uncommitted - the gate binary's `land --carry
     /// --no-commit` (461 T05's door), given `""` and the sha, run in the tree; empty where the binary is not known (461 T09, D14).
     pub apply: Vec<String>,
+    /// Phase 2's base (`HAND_IN_BASE` unset or `origin`, `builder_pool::hand_in_base`, 461 T22): a handout is refused while the
+    /// clone's HEAD holds commits `origin/main` lacks (D13), and a done commit is carried once `origin/main` holds it (D8).
+    pub origin: bool,
 }
 
 impl Env {
@@ -114,6 +119,9 @@ impl Env {
             sampler: sampler_words(std::env::current_exe().ok(), &var("L7R_SAMPLER")),
             lane_tree: var("L7R_LANE_TREE"),
             apply: apply_words(std::env::current_exe().ok()),
+            // a knob the hand-in refuses is no phase 1: the stricter reading, origin's
+            origin: builder_pool::hand_in_base(Some(&var(builder_pool::HAND_IN_BASE)))
+                != Ok(builder_pool::Base::Clone),
         }
     }
 }
@@ -466,21 +474,8 @@ fn take(p: &Pool, tasks: &[String], feature: &str, env: &Env) -> Reply {
     }
     let turn = lock(&p.common, env.lock_tries);
     let mut trees = builder_pool::read_all(&p.common);
-    if let Some(t) = trees.iter().find(|t| holds(t, tasks, feature)) {
-        return reply(
-            format!("{}\n", t.tree.display()),
-            format!(
-                "builder-tree: {} already holds it (since {})\n",
-                t.holder(),
-                t.since
-            ),
-            0,
-        );
-    }
-    // the task's own done commit not yet carried: the handout builds on it (461 T09, D14, `builder_done::build_on`), or with no
-    // apply program known its next builder would start without it, and waits (451 T398)
-    if let Some(why) = crate::builder_done::handout_waits(p, tasks, feature, env) {
-        return refused(why);
+    if let Some(answer) = settled::settled(p, &trees, tasks, feature, env) {
+        return answer;
     }
     let mut notes = String::new();
     for t in &mut trees {
@@ -697,7 +692,7 @@ fn list(p: &Pool, env: &Env) -> Reply {
             cache_size(&builder_pool::cache(&env.cache, &t.tree))
         );
     }
-    out.push_str(&crate::builder_done::listed(p));
+    out.push_str(&crate::builder_done::listed(p, env));
     reply(out, String::new(), 0)
 }
 
@@ -978,6 +973,8 @@ pub(crate) fn run(args: &[String], cwd: &Path, env: &Env) -> Reply {
         _ => refused(USAGE.to_owned()),
     }
 }
+
+mod settled;
 
 #[cfg(test)]
 pub(crate) mod tests;

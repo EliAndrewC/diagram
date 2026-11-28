@@ -34,6 +34,36 @@ pub const CAP: usize = 4;
 // GUARD_EDIT_OK: feature 461 T13 - a new operation, the lane's tree in the pool's registry under a reserved holder
 pub const LANE: &str = "lane";
 
+/// THE HAND-IN'S BASE, the knob `HAND_IN_BASE` (feature 461 plan D3, "The base by phase"; T22): where `make builder-done` applies a
+/// builder's work, and so where work lands. `origin` - `origin/main` after a fetch, phase 2, THE DEFAULT since T22 - or `clone`, the
+/// clone's HEAD, phase 1's. Read HERE ONLY ([`hand_in_base`], the value given by each caller from its own environment), so the
+/// hand-in (`land/hand_in.rs`), its runner start (the binary's `land_or_hand_in`), the handout's D13 refusal and what counts as
+/// carried (`builder_tree.rs`, `builder_done.rs`), the lane's wake (T56) and the Stop rule (`lane_wake`, T64) never disagree on an
+/// unset knob: before T22 the land crate's unset was `clone` and the binary's was "not origin", one flip away from a hand-in on
+/// `origin/main` that started no runner (T12, "For T22"). In the gate and the guard alike: the guard reaches no gate crate.
+pub const HAND_IN_BASE: &str = "HAND_IN_BASE";
+
+/// Where a hand-in applies the work ([`HAND_IN_BASE`]).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Base {
+    /// `clone`: the clone's HEAD (phase 1: the coordinator carries and lands in its clone).
+    Clone,
+    /// `origin`, or unset: `origin/main` after a fetch (phase 2: the lane lands).
+    Origin,
+}
+
+/// [`HAND_IN_BASE`]'s value read: unset or empty is `origin` (461 T22); any word but the two is refused, naming both.
+///
+/// # Errors
+/// A value that is neither `origin` nor `clone`, in words that name both.
+pub fn hand_in_base(value: Option<&str>) -> Result<Base, String> {
+    match value.unwrap_or_default() {
+        "" | "origin" => Ok(Base::Origin),
+        "clone" => Ok(Base::Clone),
+        other => Err(format!("{HAND_IN_BASE} is origin (origin/main after a fetch, phase 2, the default) or clone (the clone's HEAD, phase 1), not {other:?}")),
+    }
+}
+
 /// One pool tree: where it is, and the feature and tasks holding it since `since` (free since then where `tasks` is empty).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Tree {
@@ -213,5 +243,21 @@ mod tests {
         // one that is not the registry's shape is an empty pool
         std::fs::write(common.join(FILE), "{\"trees\": 3}").unwrap();
         assert!(read(&common).is_empty());
+    }
+
+    // GUARD_EDIT_OK: feature 461 T22 - a new operation, the one reading of HAND_IN_BASE, which the gate and the guard share
+    #[test]
+    fn the_hand_in_s_base_is_origin_unless_the_knob_says_clone() {
+        // 461 T22: phase 2's base is the default, so a hand-in with the knob unset lands on origin/main and starts the runner
+        for unset in [None, Some(""), Some("origin")] {
+            assert_eq!(hand_in_base(unset), Ok(Base::Origin));
+        }
+        assert_eq!(hand_in_base(Some("clone")), Ok(Base::Clone));
+        let err = hand_in_base(Some("elsewhere")).unwrap_err();
+        assert!(
+            err.contains("origin (origin/main")
+                && err.contains("or clone")
+                && err.contains("\"elsewhere\"")
+        );
     }
 }

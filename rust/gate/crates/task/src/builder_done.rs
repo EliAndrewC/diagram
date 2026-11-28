@@ -48,7 +48,10 @@
 //! carried by that command; the second test covers a commit that reached HEAD another way (a carry stopped on a conflict and
 //! finished by hand): a carry is a cherry-pick, so the carried commit has another id and `git branch --contains` never names it,
 //! while a cherry-pick keeps the author's time and the subject. A carry that kept both sides of a conflict is still found, where a
-//! patch-id comparison (`git cherry`) would miss it.
+//! patch-id comparison (`git cherry`) would miss it. From phase 2's base (`HAND_IN_BASE` unset or `origin`, 461 T22, plan D8)
+//! `make builder-trees` asks it of `origin/main` instead ([`listed`]): the lane lands there and deletes the ref after its push, so
+//! what it lists waits on the lane; the hand-in's and the handout's own asks stay on the clone's HEAD, which D13 keeps at
+//! `origin/main` from then on.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
@@ -156,11 +159,16 @@ fn dones(clone: &Path) -> Vec<Done> {
 /// Those of `dones` the clone's HEAD does not hold (the module's doc: by the author's time and the subject, which a cherry-pick
 /// keeps): one read of the clone's history since the oldest of them.
 fn uncarried<'a>(clone: &Path, dones: &'a [Done]) -> Vec<&'a Done> {
+    uncarried_by(clone, "HEAD", dones)
+}
+
+/// Those of `dones` that `rev`'s history does not hold, [`uncarried`]'s rule asked of any revision.
+fn uncarried_by<'a>(clone: &Path, rev: &str, dones: &'a [Done]) -> Vec<&'a Done> {
     let time = |d: &Done| d.key.split('\t').next().and_then(|t| t.parse::<u64>().ok());
     let Some(oldest) = dones.iter().filter_map(time).min() else {
         return Vec::new();
     };
-    let held = keys_since(clone, "HEAD", oldest);
+    let held = keys_since(clone, rev, oldest);
     dones
         .iter()
         .filter(|d| !held.contains(d.key.as_str()))
@@ -276,12 +284,18 @@ fn carry_command(p: &Pool, sha: &str) -> String {
     format!("make carry FROM={} COMMIT={sha}", tree_of(p, sha).display())
 }
 
-/// What `make builder-trees` says after the trees: each commit done and not yet carried, the tasks it is kept for and its carry.
-pub(crate) fn listed(p: &Pool) -> String {
+/// What `make builder-trees` says after the trees: each commit done and not yet carried, the tasks it is kept for and its carry. From
+/// phase 2's base (`env.origin`, 461 T22, plan D8) "carried" is asked of `origin/main`, where the lane lands, not of the clone's
+/// HEAD: the list is what waits on the lane, and `make lane` says where each stands (no `make carry`: the lane carries).
+pub(crate) fn listed(p: &Pool, env: &Env) -> String {
     let dones = dones(&p.clone);
     let mut open: BTreeMap<&str, Vec<&Done>> = BTreeMap::new();
-    for d in uncarried(&p.clone, &dones) {
+    let rev = if env.origin { "origin/main" } else { "HEAD" };
+    for d in uncarried_by(&p.clone, rev, &dones) {
         open.entry(d.sha.as_str()).or_default().push(d);
+    }
+    if env.origin {
+        return lane_listed(&open);
     }
     if open.is_empty() {
         return "builder-trees: no done commit waits on its carry\n".to_owned();
@@ -300,6 +314,29 @@ pub(crate) fn listed(p: &Pool) -> String {
             names.join(", "),
             kept[0].subject(),
             carry_command(p, sha)
+        );
+    }
+    out
+}
+
+/// [`listed`] from phase 2's base: the done commits `origin/main` does not hold yet, which wait on the lane.
+fn lane_listed(open: &BTreeMap<&str, Vec<&Done>>) -> String {
+    if open.is_empty() {
+        return "builder-trees: no done commit waits on the lane (origin/main holds every one)\n"
+            .to_owned();
+    }
+    let mut out = format!(
+        "builder-trees: commits done and not yet on origin/main, waiting on the lane (make builder-done kept each under {REFS}; make lane for where each stands): {}\n",
+        open.len()
+    );
+    for (sha, kept) in open {
+        let names: Vec<&str> = kept.iter().map(|d| d.name.as_str()).collect();
+        let _ = writeln!(
+            out,
+            "  {}  {}  {}",
+            sha.get(..10).unwrap_or(sha),
+            names.join(", "),
+            kept[0].subject()
         );
     }
     out

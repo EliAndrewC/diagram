@@ -59,10 +59,15 @@ fn handed_out(root: &Path, tree: &Path) {
     git(tree, &["checkout", "-q", "--detach", &head]);
 }
 
+/// Phase 1's base, the clone's HEAD: these worlds' landings stand in the clone.
+const CLONE: Result<l7r_shared::builder_pool::Base, String> =
+    Ok(l7r_shared::builder_pool::Base::Clone);
+
 /// `make builder-done T=T01 F=9001` as a hand-in, run in the tree, the base by `knob`.
 fn handed(tree: &Path, knob: &str, first: FirstPass) -> Reply {
     let args = ["T01".to_owned(), "9001".to_owned()];
-    run(&args, tree, "9001 T01: the work", "", knob, first)
+    let base = l7r_shared::builder_pool::hand_in_base(Some(knob));
+    run(&args, tree, "9001 T01: the work", "", &base, first)
 }
 
 /// Whether the clone holds `name`.
@@ -107,7 +112,7 @@ fn a_hand_in_applies_the_work_onto_the_clone_s_head_and_lands_one_commit_there()
     commit(&root, "later", &[("rust/later.rs", "fn later() {}\n")]);
     let head = git(&root, &["rev-parse", "HEAD"]);
     put(&tree, "rust/held.rs", "fn held() {}\n");
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     landed(&said);
     has(&said.stdout, "hand-in: the work applied onto ");
     has(&said.stdout, " committed as ");
@@ -144,7 +149,7 @@ fn a_hand_in_that_conflicts_with_its_base_is_refused_naming_the_files_and_resume
     let head = git(&root, &["rev-parse", "HEAD"]);
     put(&tree, "rust/lib.rs", "fn builder() {}\n");
     put(&tree, TASKS_MD, &with_line("T01"));
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     nothing_done(&root, &said, 2, "hand-in: STOPPED - nothing committed: ");
     has(&said.stderr, "rust/lib.rs (a line that is not prose");
     has(
@@ -159,7 +164,7 @@ fn a_hand_in_that_conflicts_with_its_base_is_refused_naming_the_files_and_resume
     assert!(holds(&root, SCRATCH));
     assert_eq!(git(&tree, &["rev-parse", "HEAD"]), head);
     // run again unresolved: only the path no rule resolves is named
-    let again = handed(&tree, "", &clear);
+    let again = handed(&tree, "clone", &clear);
     nothing_done(&root, &again, 2, "rust/lib.rs (a line that is not prose");
     assert!(!again.stderr.contains("tasks.md ("));
     // resolved by hand: the resume resolves tasks.md by its rule and lands one commit on the base
@@ -167,7 +172,7 @@ fn a_hand_in_that_conflicts_with_its_base_is_refused_naming_the_files_and_resume
     git(&tree, &["add", "--", "rust/lib.rs"]);
     // a file written while resolving and never added is committed too: everything is staged first (T05)
     put(&tree, "rust/extra.rs", "fn extra() {}\n");
-    let resumed = handed(&tree, "", &clear);
+    let resumed = handed(&tree, "clone", &clear);
     landed(&resumed);
     let (parent, names) = done(&root);
     assert_eq!(
@@ -193,7 +198,7 @@ fn a_first_pass_refusal_commits_nothing_and_the_resume_reads_the_rules_resolved_
     put(&tree, "docs/a.md", "one two THREE\n");
     let owed =
         |_: &Asked| vec!["the plan review is owed: make plan-review T=T01 F=9001".to_owned()];
-    let said = handed(&tree, "", &owed);
+    let said = handed(&tree, "clone", &owed);
     nothing_done(
         &root,
         &said,
@@ -207,7 +212,7 @@ fn a_first_pass_refusal_commits_nothing_and_the_resume_reads_the_rules_resolved_
     let resolved = std::fs::read_to_string(files(&tree).join("9001-T01.resolved")).unwrap();
     assert!(resolved.starts_with("docs/a.md ("), "{resolved}");
     assert!(holds(&root, SCRATCH));
-    let resumed = handed(&tree, "", &clear);
+    let resumed = handed(&tree, "clone", &clear);
     landed(&resumed);
     assert_eq!(
         git(&root, &["show", &format!("{DONE}:docs/a.md")]),
@@ -221,11 +226,11 @@ fn a_resolution_that_drops_the_work_is_not_verified() {
     let (_dir, root, tree) = pool("hand-in-dropped");
     commit(&root, "the clone's", &[("rust/lib.rs", "fn clone() {}\n")]);
     put(&tree, "rust/lib.rs", "fn builder() {}\n");
-    nothing_done(&root, &handed(&tree, "", &clear), 2, "STOPPED");
+    nothing_done(&root, &handed(&tree, "clone", &clear), 2, "STOPPED");
     // "resolved" by taking the base's side: the work is gone from the tree
     put(&tree, "rust/lib.rs", "fn clone() {}\n");
     git(&tree, &["add", "--", "rust/lib.rs"]);
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     nothing_done(
         &root,
         &said,
@@ -255,11 +260,11 @@ fn a_file_a_rule_resolved_back_to_the_base_s_text_stays_resolved_past_a_failed_e
     );
     put(&tree, "docs/a.md", "ONE two three\n");
     put(&tree, "rust/lib.rs", "fn builder() {}\n");
-    nothing_done(&root, &handed(&tree, "", &clear), 2, "STOPPED");
+    nothing_done(&root, &handed(&tree, "clone", &clear), 2, "STOPPED");
     // resolved by taking the base's side: the resume resolves docs/a.md by its rule, then its end fails on lib.rs
     put(&tree, "rust/lib.rs", "fn clone() {}\n");
     git(&tree, &["add", "--", "rust/lib.rs"]);
-    let dropped = handed(&tree, "", &clear);
+    let dropped = handed(&tree, "clone", &clear);
     nothing_done(&root, &dropped, 1, "NOT VERIFIED");
     let resolved =
         std::fs::read_to_string(files(&tree).join("9001-T01.resolved")).unwrap_or_default();
@@ -267,7 +272,7 @@ fn a_file_a_rule_resolved_back_to_the_base_s_text_stays_resolved_past_a_failed_e
     // mended: the third run lands, docs/a.md held by its rule though the base's text
     put(&tree, "rust/lib.rs", "fn both() {}\n");
     git(&tree, &["add", "--", "rust/lib.rs"]);
-    let mended = handed(&tree, "", &clear);
+    let mended = handed(&tree, "clone", &clear);
     landed(&mended);
     assert_eq!(done(&root).1, "rust/lib.rs");
 }
@@ -290,7 +295,7 @@ fn a_scratch_commit_git_refuses_leaves_the_work_uncommitted() {
     );
     std::fs::write(root.join(".git/no-commit"), "").unwrap();
     put(&tree, "rust/held.rs", "fn held() {}\n");
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     nothing_done(&root, &said, 1, "hand-in: git commit failed in ");
     has(&said.stderr, "refused by the hook");
     assert!(!holds(&root, SCRATCH));
@@ -313,14 +318,14 @@ fn a_hand_in_commit_git_refuses_is_said_and_the_next_run_resumes() {
         std::fs::write(&flag, "").unwrap();
         Vec::new()
     };
-    let said = handed(&tree, "", &arm);
+    let said = handed(&tree, "clone", &arm);
     nothing_done(&root, &said, 1, "hand-in: git commit failed in ");
     has(
         &said.stderr,
         "the work stands applied, uncommitted; run it again",
     );
     assert!(holds(&root, SCRATCH));
-    let resumed = handed(&tree, "", &clear);
+    let resumed = handed(&tree, "clone", &clear);
     landed(&resumed);
     assert_eq!(done(&root).1, "rust/held.rs");
 }
@@ -337,7 +342,7 @@ fn an_apply_refused_puts_the_work_back_uncommitted() {
     );
     std::fs::write(root.join(".git/stage"), "").unwrap();
     put(&tree, "rust/held.rs", "fn held() {}\n");
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     nothing_done(&root, &said, 2, "hand-in: refused - nothing applied: ");
     has(&said.stderr, "the work is back in the tree uncommitted");
     assert!(!holds(&root, SCRATCH));
@@ -350,7 +355,7 @@ fn a_base_already_holding_the_work_hands_nothing_in() {
     let (_dir, root, tree) = pool("hand-in-empty");
     commit(&root, "the same", &[("rust/held.rs", "fn held() {}\n")]);
     put(&tree, "rust/held.rs", "fn held() {}\n");
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     nothing_done(&root, &said, 2, "hand-in: nothing to hand in - the base ");
     has(&said.stderr, "make builder-tree-release T=T01 F=9001");
     assert!(!holds(&root, SCRATCH));
@@ -362,7 +367,7 @@ fn a_scratch_ref_this_tree_did_not_leave_is_refused() {
     let head = git(&root, &["rev-parse", "HEAD"]);
     git(&root, &["update-ref", SCRATCH, &head]);
     put(&tree, "rust/held.rs", "fn held() {}\n");
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     nothing_done(
         &root,
         &said,
@@ -374,7 +379,18 @@ fn a_scratch_ref_this_tree_did_not_leave_is_refused() {
 
 #[test]
 fn the_base_is_origin_main_after_a_fetch_where_the_knob_says_origin() {
-    let (dir, root, tree) = pool("hand-in-origin");
+    lands_on_origin_main("hand-in-origin", "origin");
+}
+
+#[test]
+fn an_unset_knob_is_phase_two_s_base_origin_main() {
+    // 461 T22: the default flipped, so a hand-in with HAND_IN_BASE unset builds on origin/main, not on the clone's staged commit
+    lands_on_origin_main("hand-in-unset", "");
+}
+
+/// A hand-in with the base `knob` over a clone one commit ahead of its `origin/main`: it lands on `origin/main`.
+fn lands_on_origin_main(tag: &str, knob: &str) {
+    let (dir, root, tree) = pool(tag);
     let origin = dir.join("origin.git");
     git(
         &root,
@@ -393,7 +409,7 @@ fn the_base_is_origin_main_after_a_fetch_where_the_knob_says_origin() {
         &[("rust/staged.rs", "fn staged() {}\n")],
     );
     put(&tree, "rust/held.rs", "fn held() {}\n");
-    let said = handed(&tree, "origin", &clear);
+    let said = handed(&tree, knob, &clear);
     landed(&said);
     assert_eq!(done(&root), (main, "rust/held.rs".to_owned()));
 }
@@ -450,7 +466,7 @@ fn a_git_step_that_fails_after_the_scratch_commit_puts_the_work_back_uncommitted
     write_executable(&at, veto);
     let old = git(&tree, &["rev-parse", "HEAD"]);
     put(&tree, "rust/held.rs", "fn held() {}\n");
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     nothing_done(
         &root,
         &said,
@@ -462,7 +478,7 @@ fn a_git_step_that_fails_after_the_scratch_commit_puts_the_work_back_uncommitted
     assert_eq!(git(&tree, &["status", "--porcelain"]), "?? rust/held.rs");
     assert!(!files(&tree).exists());
     std::fs::remove_file(&at).unwrap();
-    landed(&handed(&tree, "", &clear));
+    landed(&handed(&tree, "clone", &clear));
     assert_eq!(done(&root).1, "rust/held.rs");
 }
 
@@ -475,7 +491,7 @@ fn the_knob_the_arguments_and_today_s_refusals_are_asked_first() {
         &root,
         &knob,
         2,
-        "HAND_IN_BASE is clone (the clone's HEAD, phase 1) or origin",
+        "HAND_IN_BASE is origin (origin/main after a fetch, phase 2, the default) or clone",
     );
     // the arm in land.rs: the arguments checked as make builder-done checks them
     let usage = super::super::cli(&["--hand-in".to_owned()], &tree);
@@ -487,7 +503,7 @@ fn the_knob_the_arguments_and_today_s_refusals_are_asked_first() {
     );
     // today's refusals (builder_done::unready): a guard file with no GUARD=
     put(&tree, "Makefile", "all:\n");
-    let guard = handed(&tree, "", &clear);
+    let guard = handed(&tree, "clone", &clear);
     nothing_done(
         &root,
         &guard,
@@ -513,10 +529,10 @@ fn a_resolution_added_with_its_markers_standing_is_refused() {
     let (_dir, root, tree) = pool("hand-in-markers");
     commit(&root, "the clone's", &[("rust/lib.rs", "fn clone() {}\n")]);
     put(&tree, "rust/lib.rs", "fn builder() {}\n");
-    nothing_done(&root, &handed(&tree, "", &clear), 2, "STOPPED");
+    nothing_done(&root, &handed(&tree, "clone", &clear), 2, "STOPPED");
     // added as git left it, the markers in
     git(&tree, &["add", "--", "rust/lib.rs"]);
-    let said = handed(&tree, "", &clear);
+    let said = handed(&tree, "clone", &clear);
     let why = "hand-in: refused - nothing committed: a conflict's markers stand in rust/lib.rs of ";
     nothing_done(&root, &said, 2, why);
     assert!(holds(&root, SCRATCH));
@@ -531,7 +547,7 @@ fn the_records_a_clear_first_pass_writes_are_committed_with_the_work() {
         put(at.tree, "dev/review-ledger.md", "a row\n");
         Vec::new()
     };
-    landed(&handed(&tree, "", &records));
+    landed(&handed(&tree, "clone", &records));
     assert_eq!(done(&root).1, "dev/review-ledger.md\nrust/held.rs");
     assert_eq!(git(&tree, &["status", "--porcelain"]), "");
 }
@@ -571,7 +587,7 @@ fn at_hand_in(tag: &str) -> (Fx, PathBuf) {
 /// `make builder-done T=T1 F=449` with the real first pass over the fixture's landing.
 fn handed_in(fx: &Fx, tree: &Path) -> Reply {
     let args = ["T1".to_owned(), "449".to_owned()];
-    run(&args, tree, "449 T1: the work", "", "", &|a| {
+    run(&args, tree, "449 T1: the work", "", &CLONE, &|a| {
         pass(&fx.land, a)
     })
 }
@@ -672,7 +688,7 @@ fn a_first_pass_that_cannot_be_asked_refuses_never_clears() {
         &tree,
         "9001 T01: the work",
         "",
-        "",
+        &CLONE,
         &super::first_pass,
     );
     nothing_done(&root, &said, 2, "no single specs/9001* directory");

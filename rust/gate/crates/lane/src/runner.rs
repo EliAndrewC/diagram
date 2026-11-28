@@ -615,22 +615,14 @@ pub fn work_cli(common: &Path, env: &dyn Fn(&str) -> Option<String>) -> Reply {
     }
 }
 
-/// Every hand-in starts the runner, idempotently (plan D2) - from phase 2's base, `HAND_IN_BASE` = `origin`: in phase 1 the
-/// coordinator still lands by hand, and a runner batching the same hand-ins would race it. A refused hand-in starts nothing; the
+/// Every hand-in starts the runner, idempotently (plan D2) - from phase 2's base, `origin` (`HAND_IN_BASE` unset or `origin`, as
+/// `l7r_shared::builder_pool::hand_in_base` reads it, 461 T22; the caller's reading): in phase 1 (`clone`) the coordinator still
+/// lands by hand, and a runner batching the same hand-ins would race it. A refused hand-in starts nothing; the
 /// start's line is added after the hand-in's, and its failure never changes the hand-in's exit. `land` is `l7r-gate land`'s
 /// arguments: any verb but `--hand-in` passes through untouched.
 #[must_use]
-pub fn on_hand_in(
-    land: &[String],
-    mut done: Reply,
-    base: Option<&str>,
-    cwd: &Path,
-    exe: &Path,
-) -> Reply {
-    if land.first().map(String::as_str) != Some("--hand-in")
-        || done.code != 0
-        || base != Some("origin")
-    {
+pub fn on_hand_in(land: &[String], mut done: Reply, origin: bool, cwd: &Path, exe: &Path) -> Reply {
+    if land.first().map(String::as_str) != Some("--hand-in") || done.code != 0 || !origin {
         return done;
     }
     let Some(common) = crate::lane::common_dir(cwd) else {

@@ -9,8 +9,9 @@
 //! 1. today's refusals are asked (`Found::unready`: an unfinished operation, an unmerged path, a conflict's markers, nothing to
 //!    commit, a guard file with no `GUARD=`, the task's earlier done commit not yet carried
 //!    and not built on by the tree's handout, 461 T09), nothing done on any;
-//! 2. the base is found FIRST - `HAND_IN_BASE` (a GUESS knob, `dev/audits/hand-in-base.md`): `clone` (the default, phase 1) the
-//!    clone's HEAD, `origin` (phase 2) `origin/main` after `git fetch origin` - so a fetch that fails refuses with nothing done (the
+//! 2. the base is found FIRST - `HAND_IN_BASE` (a GUESS knob, `dev/audits/hand-in-base.md`, read by [`base`], the one reading in
+//!    `l7r_shared::builder_pool::hand_in_base`, 461 T22): `origin` (the default since T22, phase 2) `origin/main` after `git fetch
+//!    origin`, `clone` (phase 1) the clone's HEAD - so a fetch that fails refuses with nothing done (the
 //!    plan's step 3 fetches after the scratch commit; fetching first changes nothing else and leaves no scratch commit to undo). The
 //!    fetch is asked only for `origin`: in phase 1 nothing reads `origin/main`, and the clone's HEAD is in the shared object store;
 //! 3. the work is committed as a SCRATCH commit on the tree's HEAD, kept at `refs/l7r/hand-in/<feature>-<task>` (one ref a task, as
@@ -55,6 +56,7 @@ use std::path::{Path, PathBuf};
 use l7r_gate_core::Reply;
 use l7r_gate_task::builder_done::{self, Found};
 use l7r_gate_task::tick::Section;
+use l7r_shared::builder_pool::{self, Base};
 use l7r_shared::guards::conflict_marker_hooks::has_conflict;
 
 use super::carry::apply::{apply, ended, verified, Applied};
@@ -126,8 +128,17 @@ pub(super) type FirstPass<'a> = &'a dyn Fn(&Asked) -> Vec<String>;
 /// mode (461 T08).
 pub(super) fn cli(args: &[String], cwd: &Path) -> Reply {
     let var = |n: &str| std::env::var(n).unwrap_or_default();
-    let (msg, guard, knob) = (var("MSG"), var("GUARD"), var("HAND_IN_BASE"));
-    run(args, cwd, &msg, &guard, &knob, &first_pass)
+    let (msg, guard) = (var("MSG"), var("GUARD"));
+    run(args, cwd, &msg, &guard, &base(), &first_pass)
+}
+
+/// THE BASE A HAND-IN LANDS ON, as this process's environment sets it (`HAND_IN_BASE`; 461 T22): the land crate's one public reading,
+/// which the binary's runner start (`land_or_hand_in`) asks too, so an unset knob is `origin` for both.
+///
+/// # Errors
+/// A value that is neither `origin` nor `clone`, in words that name both.
+pub fn base() -> Result<Base, String> {
+    builder_pool::hand_in_base(std::env::var(builder_pool::HAND_IN_BASE).ok().as_deref())
 }
 
 /// The first pass at hand-in as the process asks it: a landing rooted at the builder's tree - never at `cwd`, since the registry
@@ -247,13 +258,12 @@ pub(super) fn run(
     cwd: &Path,
     msg: &str,
     guard: &str,
-    knob: &str,
+    base: &Result<Base, String>,
     first: FirstPass,
 ) -> Reply {
-    let origin = match knob {
-        "" | "clone" => false,
-        "origin" => true,
-        _ => return said(format!("hand-in: refused - nothing done: HAND_IN_BASE is clone (the clone's HEAD, phase 1) or origin (origin/main after a fetch, phase 2), not {knob:?}\n"), 2),
+    let origin = match base {
+        Ok(b) => *b == Base::Origin,
+        Err(why) => return said(format!("hand-in: refused - nothing done: {why}\n"), 2),
     };
     let f = match builder_done::found(args, cwd, msg, guard) {
         Ok(f) => f,

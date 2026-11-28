@@ -804,6 +804,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T22 (D3's base by phase, D13, D8: phase 2's base switched on - the coordinator's commits out first, the base `origin/main`; lands after T14, T16, T18)": {
+   "sha256": "ac0ab43ee8127a6a52fb1d2264c0aa9405f177cc79916086af29e110a6567778",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "c9b31384a4f78ebece3ffbd87cd933c579847869e3d911833c96e6e5b50da899",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5179,6 +5191,52 @@
      "summary": "the template-placeholder quote read as a citation by cited/forms.rs carried (observed by T69) is not fixed under T70 but filed as T71, landing before T31",
      "class": "within",
      "why": "The defect is scheduled to be fixed before the next step (T31) begins, as fix-as-we-go requires; it is deferred only because the file is T69's code not yet in this tree. Nothing asked is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T22 (D3's base by phase, D13, D8: phase 2's base switched on - the coordinator's commits out first, the base `origin/main`; lands after T14, T16, T18)",
+    "### T22 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T22-reader-in-shared",
+     "summary": "The knob's one reading, hand_in_base(), lives in l7r_shared::builder_pool rather than the land crate (the task line's wording); the land crate's public reading calls it, and the lane (T56), the guard (T64) and the task crate read the same function.",
+     "class": "within",
+     "why": "Where a function lives is placement, not scope: the same single reading reaches every caller, including the guard that can depend on no gate crate. Nothing the GM asked for or the spec requires (FR-002, FR-003) is narrowed; the deviation is from a task line's location, labeled as such."
+    },
+    {
+     "id": "T22-default-origin",
+     "summary": "Unset, empty or 'origin' now means Base::Origin (phase 2's base); 'clone' keeps phase 1; any other word is an Err naming both. A hand-in with the knob unset lands on origin/main and starts the lane's runner.",
+     "class": "within",
+     "why": "This switches on what was asked: builders rebase onto current main before handing in (sketch item 2, FR-002) and the lane, not the coordinator, carries and lands the work (sketch items 1 and 3, FR-001, FR-003, FR-005). It widens the feature's reach rather than narrowing it."
+    },
+    {
+     "id": "T22-refused-value-as-origin",
+     "summary": "The task crate's Env::live() reads a refused knob value as origin, the stricter base, where the land crate returns the Err.",
+     "class": "within",
+     "why": "An error-handling choice inside the requested behavior; the stricter reading cannot let a handout skip the phase 2 check, so no requested property is lost."
+    },
+    {
+     "id": "T22-D13-unpushed-refusal",
+     "summary": "From phase 2's base a handout is refused (exit 2, no tree held) while the clone has commits not on origin/main, naming scripts/sync-with-main.sh done; an unreadable origin/main refuses naming the fetch. No fetch at handout: the prompt hook's sync-in fetches each turn.",
+     "class": "within",
+     "why": "It keeps a builder from starting on a base its hand-in onto origin/main lacks, which serves builders handing in only once ready to land on current main (sketch item 2, FR-002). Skipping the fetch narrows nothing: a stale origin/main only makes the count larger, so the refusal is stricter rather than looser."
+    },
+    {
+     "id": "T22-D8-builder-trees-origin",
+     "summary": "From phase 2's base make builder-trees asks 'carried' of origin/main and lists what waits on the lane, naming make lane and not make carry; to_carry, the hand-in's and handout's waits and kept_in's ref deletion stay on the clone's HEAD.",
+     "class": "within",
+     "why": "It reports the lane's queue as the lane sees it (FR-003, FR-005). The parts kept on HEAD ask what the clone holds, and D13 keeps HEAD at origin/main, so nothing requested goes unreported. It takes the task line's own scope (builder-trees only) and goes no further."
+    },
+    {
+     "id": "T22-phase1-tests-pinned",
+     "summary": "The hand-in tests that are phase 1's pass 'clone' explicitly; the pool's test env() keeps origin: false because its fixture clones are ahead of origin/main.",
+     "class": "within",
+     "why": "Test fixtures pinned to the base they test after the default moves. FR-008's checks are not reduced, and the new phase 2 tests were red first and are green."
     }
    ]
   }
