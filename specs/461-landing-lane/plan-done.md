@@ -3579,3 +3579,168 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 **Performance work?** no.
 
 
+<!-- plan-archive: archived 2026-11-28 -->
+### T81 (US6, FR-011, SC-007: the GM 2026-11-28, "our scheduler probably needs some tool-based enforcement of these kinds of prioritizations"; the case: 462 disk tasks handed builders while 461's phase 3 tasks stood ready)
+
+- **Approach**: part 1 of US6 - the policy's record and its one reader, no handout path rewired (T82 does that). The record
+  `dev/builder-policy.txt` (new): one line each, `#` comments, every line carrying `note=<the GM's words, dated>`; lines `class
+  perf|bugfix|none`, `<key> all`, `<key> floor <n>` (n >= 1), `<key> share`. The committed record is `class perf` (the GM
+  2026-11-20) and `class bugfix` (the GM 2026-11-28) and no feature line - the default; the GM's word sets any `all` or `floor`.
+  The reader `rust/guard/shared/src/builder_queue/policy.rs` (new; tests `policy/tests.rs`): `parse` (each bad line named
+  `dev/builder-policy.txt line <n>: <why>: <line>`), `read` (absent or malformed: the default ranks, `why` says so), `bugfix`
+  (the `[bugfix]` tag among the bracketed tags after the id, read as `set_down_hooks`' `PERF_TAG` reads `[perf]`), `rank` (pure,
+  best first, each `Ranked` with its `why` for T82's refusal and T83's replay), `gather` (the boards' free READY entries, the
+  lane's ready repairs, the unlisted tasks) and `ranked(clone, prefer)`, THE ONE READER - pool, every queue's board, done refs,
+  repairs (`repairs::offer(..).ready`), T313's unlisted performance tasks (`builder_queue::unlisted`), the active features' open
+  bugfixes (`set_down_hooks::open_bugfix`, new), the Makefile's targets,
+  the record. `builder_queue::Next` gains `free` (every READY entry overlapping nothing in flight, in queue order); `next`,
+  `offer`, `idle` and `repairs::first` are unchanged. `make task-add BUGFIX=1` (Makefile, its help line and
+  docs/make-targets.html; `task_add.rs --bugfix`) prefixes the title `[bugfix] ` unless the tag stands. `rust/guard/CLAUDE.md`'s
+  `shared/` row names `builder_queue::policy`; the record is in `rust/guard/shared/Cargo.toml`'s `reads`, so its edit re-runs the
+  test that it parses.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| n/a: guard and gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **The rank, the first difference deciding**: (1) the class, in the record's order of class lines (none after every class);
+   (2) the feature's form: a floor not met 0, `all` 1, `share` 2, a floor met 3; (3) the caller's own feature (`prefer`);
+   (4) the feature key's name order; (5) within a feature, its repair, then its queue's lines in order, then its unlisted tasks
+   in `tasks.md`'s order. Label: FR-011's words for (1), (3)-(5); (2) by Decision 2.
+2. **A floor not yet met ranks ABOVE `all`.** The GM's "always gets 1 builder so that it is able to move forward" is a
+   guarantee an `all` feature would starve if it ranked below; the record is silent where both forms stand at once. Met, the
+   floor's feature takes only an uncontended tree ("only fills the available builders if there is no contention"). Label: a
+   decision where the GM's words are silent, the guarantee read as the stronger; a knob only by reordering one `match`.
+3. **The classes outrank every form**: "priority over everything else regardless of what feature they are attached to"
+   (2026-11-28). Label: the GM's words.
+4. **The record refuses a line with no `note=`**: FR-011, "one record the GM's words set" and "a change the GM directs changes
+   the record, never an escape". A malformed record ranks as the default and says every bad line, never an order nobody wrote.
+   Label: FR-011's words; the default-on-error the easier route.
+5. **A record with no class line keeps the default's two** (perf, then bugfix), so a line giving one feature `all` never
+   silently drops performance-first (451 FR-013); `class none`, alone among class lines, ranks no class. Label: the easier route,
+   holding the standing rule.
+6. **`LANE_REPAIR_FIRST` is not read**: FR-011 says no words of the GM's set it. By FR-011 a repair ranks by its own task's class
+   and feature, below the classes. A repair is classed by its own tasks' boxes and ranks first within its feature, as that
+   feature's oldest built work. T82 retires the knob when it rewires `idle` and the gate. Label: FR-011's words; first-within the
+   easier route.
+7. **`#! order=queue` (462 T549) needs no reading**: T549's done commit 1136054db4 was ejected by the lane (repair r1,
+   `unplaced`, 2026-11-28T02:54Z) and is not in this tree; a queue's own order is step 5 for every queue, always below the
+   classes (FR-011). The header line in 462's queue parses as a comment. Label: FR-011's words. The ejected rule is T91's.
+8. **UNLISTED WORK is named with its `make queue-add`**: on 2026-11-28 461's phase 3 tasks had no queue lines (461's queue.txt
+   lists T09-T13 only; the pool log's 461 takes T63-T84 name tasks with no line), so a reader of queue entries alone could not
+   name the case's own pick. The reader names as `Source::Unlisted` every open box of an `all` feature or a floor-not-met
+   feature that no queue line names, no held tree holds and no done ref keeps, its command `make queue-add F= T= KIND=fix|build-half`
+   (the kind by `builder_brief::mechanism`); and, of ANY active feature, its unlisted CLASS tasks - T313's performance ones and
+   the open `[bugfix]` ones (`set_down_hooks::open_bugfix`, the walk `open_performance` takes, the two now one `open_where`), each
+   ranked in its class: the GM gave both classes one priority "regardless of what feature they are attached to", and a bugfix
+   filed by `make task-add BUGFIX=1` starts with no queue line. A queue
+   that cannot be parsed hides its feature's tasks from the unlisted walk, as `listed_in` does. Label: the easier route that
+   names the case's pick, and the GM's words for the classes; FR-011 is silent on unqueued work. Round 1 of the review blocked on
+   leaving the unlisted bugfix of a `share` feature unnamed; it is named now.
+9. **One ordering change from today**: within the performance class a listed performance entry ranks before an unlisted
+   performance task of the same feature (the Stop block names the unlisted one first today). Label: the easier route, one
+   ranking with step 5; no pick crosses a class or a feature.
+
+- Red first (2026-11-27, the build half): the policy tests against a stub of today's `offer` (every form `share`, no bugfix
+  class): 6 passed, 3 failed (`the_2026_11_28_case_a_feature_given_every_builder_is_picked_over_the_caller_s_queue`,
+  `the_one_reader_ranks_the_clone_s_work_by_its_record`, `a_floor_not_met_names_its_unlisted_tasks_and_a_mechanism_is_listed_build_half`);
+  after, 11 of 11. `task_add`'s `bugfix_1_tags_the_box_the_policy_reads_as_a_process_bugfix` was written with the code, not run
+  red. The closing half's `bugfix` fix (Found and left, below) adds five cases to
+  `the_bugfix_tag_is_read_among_the_tags_after_the_id_and_never_from_the_title`; the first fails on the build half's split
+  (observed 2026-11-27, method: reading the old `split` against the case). The unlisted bugfix walk (Decision 8) moved
+  `the_one_reader_ranks_the_clone_s_work_by_its_record`'s record-absent and unreadable-queue expectations and added its set-down
+  case; not run red.
+
+### T81 Approach (checklist part A)
+
+1. **The goal, in the world.** A free builder goes to the work the GM's stated priorities rank first, computed by one function
+   from one record, so the session need not remember the rule (US6).
+2. **The constraints.** FR-011 (the three forms, the two classes and their membership, the rules it replaces, the refusal and
+   its escape - the last two T82's), SC-007, 451 FR-013 (performance's membership), constitution XIV (a bugfix is a defect's fix).
+3. **Where each comes from.** G: the GM 2026-11-28 (request.md's last section), 2026-11-20 (performance first). R: spec.md US6,
+   FR-011, SC-007. O: the pool log of 2026-11-28 (461's phase 3 takes naming tasks with no queue line); the red-first counts.
+4. **Do they describe the world here?** On fixtures: a scratch clone with 461 and 462 queues, a pool registry, a done ref, a
+   lane repair and the record, measured 2026-11-27 (the policy tests' fixtures, `world` in `policy/tests.rs`). The real 2026-11-28 log is replayed by T83.
+5. **The order.** After T16 (repairs), T313's `unlisted`; before T82 (the handout paths onto `ranked`), T83 (the replay); T91
+   and T94 before T82.
+6. **The exits.** Green: the first tier over the crates reading `builder_queue` (four, observed 2026-11-27, method: the brief's CHECKS line). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the case's pick had no queue line at all (Decision 8), found by reading 461's queue against the
+   pool log.
+8. **The budget.** One landing.
+9. **Done, measured.** `make builder-checks` green over `rust/guard/shared rust/guard rust/gate/crates/task rust/gate/crates/lane`; the
+   batch gate's coverage is the lane's (FR-004, FR-008), not this exit's.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The builders' handout: once T82 wires it, a free tree goes to the feature the record gives `all` or a
+   floor, and to performance and bugfix work of any feature first, where today the caller's own queue or name order decides.
+
+**Found and left?**
+- `bugfix` split the tags on single spaces, so a bracketed tag holding a space before `[bugfix]` (`[waits: T80] [bugfix] ...`,
+  which `PERF_TAG` reads whole) ended the scan and the task lost its class. Fixed here: the tags read as `PERF_TAG` reads them,
+  pinned by five new cases; observed 2026-11-27, method: reading `bugfix` beside `set_down_hooks`' `PERF_TAG`.
+- The reader names an unlisted task that cannot start: `unlisted_of` skips no task that waits (`(waits: ...)`, `after T<n>` open,
+  another's `lands before`) or that a GM-question ruling holds or parks, where `next_performance_in` skips all four - once the
+  handout paths read `ranked`, an `all` feature's pick could be such a task. Not fixed here: `waits` is `set_down_hooks`'
+  private reading over its landings log, a share of its own, and no path reads `ranked` until T82. Filed as T94; lands before T82.
+- 462 T549's ejected `#! order=queue` rule (repair r1) is still offered as READY work. Not fixed here: it is the lane's repair
+  of another feature's change, the session's to withdraw or rebuild. Filed as T91; lands before T82.
+
+**Performance work?** no - it ranks the builders' work; it makes nothing faster.
+
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T93 (T76's done commit predated T63's `all` field on World, so its carried test did not compile)
+
+- **Approach**: one line, already on main as 33dde3d59d ("461 T93: T76's open-batch test builds World with T63's `all` field (the carry's join)"), made by the session at the bootstrap landing of 2026-11-28: `rust/gate/crates/lane/src/batch/tests.rs`'s open-batch test builds `l7r_shared::lane_log::World` with `all: &all`, the field HEAD's `World` requires since T63; T76/T26's done commit (refs/l7r/done/461-T76, 1a729b9a7a) was written before T63 and built the literal without it, so the lane crate's tests failed to compile once it was carried. Checked 2026-11-28: 33dde3d59d is an ancestor of this tree's HEAD (`git merge-base --is-ancestor`), its stat one insertion in that file, and the literal holds `all: &all` at line 150. No decision beyond the join; this section records it so the box ticks.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T93 Approach (checklist part A)
+
+1. **The goal, in the world.** The lane crate's tests compile and pass with T76's test carried beside T63's World.
+2. **The constraints.** T63's `World` (its required `all` field); T76's test unchanged otherwise.
+3. **Where each comes from.** O: the compile failure at the carry, 2026-11-28; O: 33dde3d59d.
+4. **Do they describe the world here?** Yes: the commit is on main and in this tree's history.
+5. **The order.** After T63 and T76; landed at the bootstrap landing of 2026-11-28.
+6. **The exits.** Green: the lane crate's tests compile and pass at HEAD. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing (already made).
+9. **Done, measured.** `make builder-checks CRATE="rust/gate/crates/lane"` green at this tree's HEAD, which holds 33dde3d59d.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome: the batch gate red on a compile failure.
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+<!-- plan-archive: archived 2026-11-28 -->
+### T86 (batch 462-3's coverage red ejected its whole batch unplaced, where the gate's output named files one change alone touched)
+
+- **Approach**: `rust/gate/crates/lane/src/attribute.rs`'s `reds` reads, from the attempt's output, each cover-step line `<path> - lines no test reaches: <lines>` (written by `rustc.rs`'s `cover_ran`) as one unit a file, `<file> cover-run`, the path taken from the lane tree's root (its raw or canonical form; a path outside it kept whole), and `touches` names every change whose delta holds that exact path; `attribute`'s verdict is unchanged (one change a unit, else unplaced and halved, 461 T24). What was found, measured 2026-11-28 from the clone's `.git/l7r-lane/lane.jsonl` and `l7r-events/*.jsonl`: the task line's reading ("attribute.rs read the cover-run lines by crate") is not what happened - batch 462-3's `run` line is `"red":[]` and its `attribute` line `"how":"none"`, because both crates' `cover-run` Phase lines in the attempt's span (`rust/gate/crates/plan` 04:14:36Z, `rust/guard/shared` 04:14:44Z) are `code` 0: a coverage gap is the cover step's verdict printed to the output, not a red Phase line, so the record held no unit at all and the six changes were ejected `unplaced` as repair r3. The four files (`rust/gate/crates/plan/src/plan/split.rs`, `split/tests.rs`, `rust/guard/shared/src/speckit/archive/report.rs`, `report/tests.rs`) are touched by 1505e57eeb (462 T545/T555) alone of the six, observed 2026-11-28, method: `git show --name-only` on each sha of the `batch` line; two changes touch `rust/gate/crates/plan` and two `rust/guard/shared`, so a crate-level reading would still have been unplaced. Red-first, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/lane ONLY="attribute::tests"`): the test `a_line_no_test_reaches_names_the_change_that_touches_its_file` (in `attribute/tests.rs`, the log's four lines verbatim under `/diagram/.clones/diagram-backlog-land`, the two `code` 0 Phase lines, the six changes' files) read 0 units of 4 on the old code (7 of 8 attribute tests passing, it failing); on the new, 4 units, all placed on change 1. Its other cases: a file two changes touch, or none, stays unplaced for the halving; a file unit beside a red `lint` line places each on its own change; a path outside the tree names only that whole path. The unit form is written in the module doc, `data-model.md`'s `units` paragraph and `rust/gate/CLAUDE.md`'s lane row.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T86 Approach (checklist part A)
+
+1. **The goal, in the world.** A batch whose gate goes red only on lines no test reaches ejects the one change whose delta holds those files and lands the rest, instead of ejecting the batch.
+2. **The constraints.** 461 plan D6 step 2 (a red placed by the gate's own record), data-model.md's `units` form, T24's halving for what the record cannot place.
+3. **Where each comes from.** O: `l7r-lane/lane.jsonl`'s 462-3 lines and the event log's `cover-run` Phase lines, 2026-11-28; O: `l7r-lane/attempts/462-3-1.log` lines 174-181; R: `rustc.rs`'s `cover_ran`, the line's writer.
+4. **Do they describe the world here?** Yes: the test is built from that attempt's own lines and changes, and read 0 units before the fix, 4 placed after, measured 2026-11-28 (`make rust-test CRATE=rust/gate/crates/lane ONLY="attribute::tests"` on the old code and the new).
+5. **The order.** After T24 and T76 (on main, read at this base); before 461 T23.
+6. **The exits.** Green: the lane crate's tests and coverage green with the new test. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The red-first test passes: batch 462-3's output places its four units on 1505e57eeb alone.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome: five innocent changes were ejected and needed repairs for one change's coverage gap.
+
+**Found and left?** none.
+
+**Performance work?** no: a defect of the lane's attribution (innocent changes ejected), not a speed task.
+
