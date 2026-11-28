@@ -96,3 +96,42 @@ fn a_family_s_owed_coverage_builds_go_together_and_a_failed_one_crate_by_crate()
     assert!(builds(&alone).iter().all(|c| !c.contains(" -p ")));
     assert_eq!(builds(&alone).len(), 1);
 }
+
+/// A COVERAGE BUILD'S LINK ON A MIXED SESSION, healed once (feature 462 T206, the test build's heal of 451 T336, `stale.rs`): the
+/// family's build directory holds a crate's sessions and fingerprints the linker names; they are dropped and the group asked once
+/// more, a `link-heal` line beside its `cover-build` line. Where that build fails too, the crate-by-crate builds heal nothing again,
+/// though cargo wrote the crate's sessions anew.
+#[test]
+fn a_coverage_build_s_link_on_a_mixed_session_is_healed_once() {
+    use super::stale::{cache, link_error};
+    let (root, g, mid, low) = nested_crates();
+    let fails = |n: usize| {
+        format!("d=$(dirname \"$0\")\nif [ \"$1 $2 $3\" = 'test --no-run --lib' ]; then mkdir -p $(cat \"$d/sessions\"); if [ \"$(grep -c '^test --no-run --lib' \"$d/calls\")\" -le {n} ]; then cat \"$d/link-error\" >&2; exit 101; fi; fi\nexit 0")
+    };
+    let heals = |root: &std::path::Path| -> Vec<i64> {
+        super::phases::phases(root)
+            .iter()
+            .filter(|l| l["step"] == "link-heal")
+            .map(|l| l["code"].as_i64().unwrap())
+            .collect()
+    };
+    let builds = |world: &super::World| {
+        calls(world)
+            .iter()
+            .filter(|c| c.starts_with("test --no-run --lib"))
+            .count()
+    };
+    for (n, built, healed) in [(1, 2, &[0][..]), (99, 5, &[0, 101][..])] {
+        let world = world_with(&root, &fails(n));
+        let profile = super::super::cover::cover_dir(&world, &g).join("target/debug");
+        cache(&profile);
+        std::fs::write(world.target.join("link-error"), link_error(&profile)).unwrap();
+        let session = profile.join("incremental/k-aaa").display().to_string();
+        std::fs::write(world.target.join("sessions"), session).unwrap();
+        let _ = uncovered_each(&world, &[&g, &mid, &low]);
+        assert_eq!(builds(&world), built);
+        assert!(!profile.join(".fingerprint/k-0123456789abcdef").exists());
+        assert!(profile.join(".fingerprint/other-1111111111111111").exists());
+        assert_eq!(heals(&root), healed);
+    }
+}

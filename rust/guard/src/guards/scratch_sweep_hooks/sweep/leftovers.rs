@@ -148,10 +148,23 @@ pub(super) fn scratchpad(c: &Config, numbers: &[u64]) -> Vec<(PathBuf, &'static 
         .collect()
 }
 
-/// The numbers of `numbers` another feature than `feature` started and has not ticked, whatever the start's age (451 T517): a live
-/// scratchpad has no age rule to fall back on, as `/tmp`'s has (`tmp::landed`'s day), so a start of another feature still open in its
-/// `tasks.md` (the clone's `specs/<feature>/`, beside the git directory holding `starts`) holds the number. A start whose `tasks.md`
-/// cannot be read holds it too.
+/// The number an open box gives, `- [ ] T50 ...` or an older feature's `- [ ] **T007** ...`, at any indent; none for a ticked box,
+/// a box with no id (`- [ ] GM review`) or another number's (`T1650` is never `T165`'s, [`number`]).
+fn open_box(line: &str) -> Option<u64> {
+    let rest = line.trim_start().strip_prefix("- [ ] ")?;
+    number(rest.strip_prefix("**").unwrap_or(rest), 'T')
+}
+
+/// The numbers of `numbers` another feature than `feature` still holds (451 T517, 462 T550). A live scratchpad has no age rule to
+/// fall back on, as `/tmp`'s has (`tmp::landed`'s day), and a scratch entry names its task's number but never its feature (`t<N>-`,
+/// 451 T271), so a number is held while ANOTHER feature has an open box of it in its `tasks.md` or `tasks-done.md`, started or not.
+/// They are read in the clone's `specs/`, beside the git directory holding `starts`: the clone that lands, never the `/diagram`
+/// mirror, which lags (462 T533's one-off take read the mirror and took 144 entries of 461's open T50-T69). A ticked box holds
+/// nothing: its own landing took its scratch. So 451's `Withdrawn: moved to 462` lines hold nothing, and the moved task's open box
+/// in 462 holds the number at every other feature's landing while 462's own takes it. A start of another feature whose `tasks.md`
+/// cannot be read holds its number too (the T517 builder's conservative branch). Measured 2026-11-27 over the clone's specs
+/// (`scratchpad/t550-measure2.py`): of 451's 537 numbers 184 are held so, of 461's 70 56, of 462's 113 14; with ticked boxes
+/// holding too, all 70 of 461's and 94 of 462's would be held and the take all but gone.
 pub(super) fn open_elsewhere(starts: &Path, feature: &str, numbers: &[u64]) -> Vec<u64> {
     let text = crate::shared::speckit::marks::live_starts(
         &std::fs::read_to_string(starts).unwrap_or_default(),
@@ -161,27 +174,36 @@ pub(super) fn open_elsewhere(starts: &Path, feature: &str, numbers: &[u64]) -> V
         .and_then(Path::parent)
         .unwrap_or(Path::new(""))
         .join("specs");
-    let ours = |f: &str| f == feature || f.starts_with(&format!("{feature}-"));
-    let open = |f: &str, task: &str| {
-        let line = format!("- [ ] {task} ");
-        children(&specs)
-            .into_iter()
-            .find(|(_, name, _)| name == f || name.starts_with(&format!("{f}-")))
-            .and_then(|(d, _, _)| std::fs::read_to_string(d.join("tasks.md")).ok())
-            .is_none_or(|t| t.lines().any(|l| format!("{l} ").starts_with(&line)))
+    let id = |f: &str| f.split('-').next().unwrap_or_default().to_owned();
+    let ours = |f: &str| id(f) == id(feature);
+    let dirs = children(&specs);
+    let open: Vec<u64> = dirs
+        .iter()
+        .filter(|(_, name, _)| !ours(name))
+        .flat_map(|(d, _, _)| {
+            ["tasks.md", "tasks-done.md"]
+                .map(|f| std::fs::read_to_string(d.join(f)).unwrap_or_default())
+        })
+        .flat_map(|t| t.lines().filter_map(open_box).collect::<Vec<u64>>())
+        .collect();
+    let unreadable = |f: &str| {
+        dirs.iter()
+            .find(|(_, name, _)| id(name) == id(f))
+            .is_none_or(|(d, _, _)| !d.join("tasks.md").is_file())
     };
     numbers
         .iter()
         .copied()
         .filter(|n| {
-            text.lines().any(|l| {
-                let v: serde_json::Value = serde_json::from_str(l).unwrap_or_default();
-                let (f, task) = (
-                    v["feature"].as_str().unwrap_or(""),
-                    v["task"].as_str().unwrap_or(""),
-                );
-                !f.is_empty() && !ours(f) && number(task, 'T') == Some(*n) && open(f, task)
-            })
+            open.contains(n)
+                || text.lines().any(|l| {
+                    let v: serde_json::Value = serde_json::from_str(l).unwrap_or_default();
+                    let (f, task) = (
+                        v["feature"].as_str().unwrap_or(""),
+                        v["task"].as_str().unwrap_or(""),
+                    );
+                    !f.is_empty() && !ours(f) && number(task, 'T') == Some(*n) && unreadable(f)
+                })
         })
         .collect()
 }

@@ -69,7 +69,7 @@ fn single_quoted(line: &str) -> Vec<String> {
 
 /// (the task, the quote) for each span of the GM's words on a task's line of `tasks.md` that `request.md` does not hold.
 pub(super) fn missing(spec_dir: &Path, tasks: &[String]) -> Vec<(String, String)> {
-    let read = |name: &str| std::fs::read_to_string(spec_dir.join(name)).unwrap_or_default();
+    let read = |name: &str| super::super::once::text(&spec_dir.join(name));
     let (req, boxes) = (folded(&read("request.md")), read("tasks.md"));
     let mut out = Vec::new();
     for task in tasks {

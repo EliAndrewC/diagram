@@ -16,6 +16,7 @@ mod inside;
 pub use inside::{box_suffix, built_inside, built_inside_box, Host};
 mod lint;
 mod merge;
+mod once;
 pub use merge::merge_files;
 mod record;
 pub use record::{feature_task, task_ids, Accepted};
@@ -362,7 +363,7 @@ fn bundle_refusal(
 
 fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims, env: defer::Env<'_>) -> crate::Reply {
     let plan = dir.join("plan.md");
-    let text = std::fs::read_to_string(&plan).unwrap_or_default();
+    let text = once::text(&plan);
     if let Some(ahead) = approach::future_refusal(&text, None) {
         return fail(format!("plan-delta: {ahead}\n"), 1);
     }
@@ -661,7 +662,8 @@ fn answer(
                     };
                     said(format!("plan-archive: {} task section(s) moved to {name}/plan-done.md: {list}\nplan-archive: {} ticked task(s) moved to {name}/tasks-done.md: {tasks}\n", ids.len(), moved.len()))
                 }
-                _ => plan_delta(&dir, out_root, claims, env),
+                // each file read once a call (462 T543): plan-delta writes none of the files it reads
+                _ => once::held(|| plan_delta(&dir, out_root, claims, env)),
             }
         }
         // GIT'S MERGE DRIVER FOR THE RECORD (451 T256): `%O %A %B`, the merge written to `%A`

@@ -26,12 +26,14 @@ const HAMLETS: &str = "hamlets";
 /// How long the crop may take before the Python's `subprocess.TimeoutExpired`.
 #[cfg(not(test))]
 const CROP_TIMEOUT: Duration = Duration::from_secs(180);
-/// The tests' own, under the fake crop's 5 s sleep: 300 ms was outlasted by a Python start alone with the coverage runs five crates at
-/// a time, at a load of 13.8 (feature 449 T108, 2026-11-11), failing the crop of a page that was not slow, so it was a second - which the
-/// slow page's test waited out whole, 1.3 s against FR-008's tenth of a second. The fake crop is a `sh` script now, which starts in a
-/// few milliseconds where Python took tens, so 150 ms is still many times a start under that load (feature 449 T160).
+/// The tests' own for every page but the `slow` one, under the fake crop's 5 s sleep. It is a ceiling no green run waits out: the fake
+/// crop of a page that is not slow ends in milliseconds, and the poll ends the wait at once, so only a crop that never ends pays it.
+/// It was 300 ms (feature 449 T108), then 150 ms (T160), each "many times a start under load"; at 150 ms the `sh` fake's start was
+/// outlasted at a load of 18 to 333 (the bundle binary 30 at once, three rounds), failing three crop tests' bundles with
+/// `subprocess.TimeoutExpired` 18 times in 90 runs, measured 2026-11-27 (462 T107) - so 30 s, a GUESS knob only a hung crop pays.
+/// The slow page's own 20 ms (`crop_timeout`) is what its timeout test waits, so this costs no test its time.
 #[cfg(test)]
-const CROP_TIMEOUT: Duration = Duration::from_millis(150);
+const CROP_TIMEOUT: Duration = Duration::from_secs(30);
 /// How often the crop is asked whether it has finished: a twentieth of a second, against its three minutes.
 #[cfg(not(test))]
 const CROP_POLL: Duration = Duration::from_millis(50);
@@ -46,7 +48,8 @@ fn crop_timeout(_page: &Path) -> Duration {
     CROP_TIMEOUT
 }
 /// ...and in the tests, a page named `slow` 20 ms - the fake crop sleeps 5 s on it, so the timeout is all its test waits, and 150 ms of
-/// it alone was past FR-008's tenth of a second; every other page keeps the 150 ms a crop under load needs (feature 449 T167).
+/// it alone was past FR-008's tenth of a second; every other page keeps `CROP_TIMEOUT`, the ceiling a crop under load needs (feature
+/// 449 T167, 462 T107).
 #[cfg(test)]
 fn crop_timeout(page: &Path) -> Duration {
     if page.to_string_lossy().contains("slow") {

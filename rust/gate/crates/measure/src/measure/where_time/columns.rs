@@ -163,38 +163,27 @@ pub fn default_goal(makefile: &str) -> String {
     first
 }
 
-/// tool-use id -> when the main transcript queued its run's notice: each session's `<projects>/*/<sid>.jsonl` `queue-operation` `enqueue`
-/// rows naming a `<tool-use-id>`, the first kept. A row that is no JSON, or names no time, is skipped: a transcript the session is still
-/// writing can end on half a row.
-#[must_use]
-pub fn enqueued(sids: &[String], projects: &Path) -> HashMap<String, f64> {
-    let mut out = HashMap::new();
-    for sid in sids {
-        for project in names(projects) {
-            let path = projects.join(project).join(format!("{sid}.jsonl"));
-            let Ok(text) = std::fs::read_to_string(&path) else {
-                continue;
-            };
-            for line in text.lines().filter(|l| l.contains("\"enqueue\"")) {
-                let Ok(Value::Object(row)) = serde_json::from_str::<Value>(line) else {
-                    continue;
-                };
-                let (Some(content), Some(at)) = (
-                    get(&row, "content").as_str(),
-                    get(&row, "timestamp").as_str().and_then(|t| ts(t).ok()),
-                ) else {
-                    continue;
-                };
-                if !is(&row, "type", "queue-operation") {
-                    continue;
-                }
-                if let Ok(Some(c)) = TOOL_USE.captures(content) {
-                    out.entry(c[1].to_owned()).or_insert(at);
-                }
-            }
+/// A main transcript's `queue-operation` `enqueue` rows naming a `<tool-use-id>` into `out`: tool-use id -> when it queued its run's
+/// notice, the first kept. A row that is no JSON, or names no time, is skipped: a transcript the session is still writing can end on
+/// half a row. Read in [`read_subagents`]' one pass over the transcripts (462 T544), its map [`Subagents::enqueued`].
+fn enqueue_rows(text: &str, out: &mut HashMap<String, f64>) {
+    for line in text.lines().filter(|l| l.contains("\"enqueue\"")) {
+        let Ok(Value::Object(row)) = serde_json::from_str::<Value>(line) else {
+            continue;
+        };
+        let (Some(content), Some(at)) = (
+            get(&row, "content").as_str(),
+            get(&row, "timestamp").as_str().and_then(|t| ts(t).ok()),
+        ) else {
+            continue;
+        };
+        if !is(&row, "type", "queue-operation") {
+            continue;
+        }
+        if let Ok(Some(c)) = TOOL_USE.captures(content) {
+            out.entry(c[1].to_owned()).or_insert(at);
         }
     }
-    out
 }
 
 /// `TaskStop` call id -> the background task it stopped, from each session's transcript and its subagents'
@@ -207,9 +196,41 @@ pub fn stopped(sids: &[String], projects: &Path) -> HashMap<String, String> {
     read_subagents(sids, projects, (f64::MIN, f64::MAX)).stopped
 }
 
+#[cfg(test)]
+thread_local! {
+    /// Each transcript's reads in this thread, a test's count of what the readers re-read (462 T544).
+    pub static READS: std::cell::RefCell<HashMap<std::path::PathBuf, usize>> = std::cell::RefCell::default();
+}
+
+/// THE SLACK BEFORE THE WINDOW (462 T544): a transcript last written more than this before the window's start holds nothing a report
+/// of the window reads - its usage rows are before the window, and a run of the window (its start at or after the window's) has its
+/// `Bash` call, its notice and any `TaskStop` of it written at or after its start, the call seconds before the start's hook line. So it
+/// is not read: on 2026-11-28 `make task-time` for 2026-11-27 02:00Z-14:29Z read 7,138 transcripts, 4,460 of them (2.57 GB of 4.59 GB)
+/// last written before its read-back. GUESS, a knob: an hour is far past the seconds the reasoning needs.
+const SLACK_S: f64 = 3600.0;
+
+/// Whether `path` was last written before `lo` less [`SLACK_S`]; never for an unbounded window or a time the file system cannot give.
+fn before(path: &Path, lo: f64) -> bool {
+    let modified = std::fs::metadata(path)
+        .and_then(|m| m.modified())
+        .ok()
+        .and_then(|t| t.duration_since(std::time::UNIX_EPOCH).ok());
+    lo > f64::MIN && modified.is_some_and(|d| d.as_secs_f64() < lo - SLACK_S)
+}
+
+/// A transcript's text, None where it cannot be read; each read counted in a test ([`READS`]).
+fn read_transcript(path: &Path) -> Option<String> {
+    let text = std::fs::read_to_string(path).ok()?;
+    #[cfg(test)]
+    READS.with(|r| *r.borrow_mut().entry(path.to_path_buf()).or_default() += 1);
+    Some(text)
+}
+
 /// What [`read_subagents`] reads of the transcripts.
 #[derive(Debug, Default)]
 pub struct Subagents {
+    /// tool-use id -> when the main transcript queued its run's notice ([`enqueue_rows`]).
+    pub enqueued: HashMap<String, f64>,
     /// [`stopped`]'s map.
     pub stopped: HashMap<String, String>,
     /// tool-use id -> when a subagent's background run's notice was queued.
@@ -233,10 +254,12 @@ pub struct Subagents {
 /// open to the window's end. The attachment's time is the run's end: it fell within 30 ms of the run's output file's last write on
 /// each of eight runs, measured 2026-11-21 (the session's subagent transcripts against `/tmp/claude-1000/.../tasks/*.output` mtimes).
 /// One pass reads both, since the subagent transcripts are the most of what the command reads (1,311 for the main session), and with
-/// them each agent's tokens inside `window` ([`spent::tokens`], T10).
+/// them each agent's tokens inside `window` ([`spent::tokens`], T10), and each main transcript's enqueue rows ([`enqueue_rows`]), so
+/// each transcript is read once a report; one last written before `window` is not read at all ([`SLACK_S`], 462 T544).
 #[must_use]
 pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> Subagents {
     let (mut out, mut queued, mut commands) = (HashMap::new(), HashMap::new(), HashMap::new());
+    let mut enqueued = HashMap::new();
     let mut tokens = spent::Tokens::default();
     for sid in sids {
         for project in names(projects) {
@@ -244,11 +267,19 @@ pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> S
             let subs = dir.join(sid).join("subagents");
             let mut files = vec![dir.join(format!("{sid}.jsonl"))];
             files.extend(names(&subs).into_iter().map(|n| subs.join(n)));
-            for path in files {
-                let Ok(text) = std::fs::read_to_string(&path) else {
+            for (i, path) in files.into_iter().enumerate() {
+                // a transcript last written before the window is not read, its agent or session still named with no calls (T544)
+                if before(&path, window.0) {
+                    tokens.read(&path, "", window);
+                    continue;
+                }
+                let Some(text) = read_transcript(&path) else {
                     continue;
                 };
                 tokens.read(&path, &text, window);
+                if i == 0 {
+                    enqueue_rows(&text, &mut enqueued);
+                }
                 for line in text.lines().filter(|l| {
                     l.contains("\"TaskStop\"")
                         || l.contains("\"KillShell\"")
@@ -293,6 +324,7 @@ pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> S
         }
     }
     Subagents {
+        enqueued,
         stopped: out,
         queued,
         calls: tokens.calls(),
@@ -514,7 +546,7 @@ pub struct Runs {
 pub struct Window<'a> {
     /// The window's end (UTC seconds): `UNTIL=`, else the last line's time.
     pub end: f64,
-    /// [`enqueued`]'s map.
+    /// [`Subagents::enqueued`]'s map.
     pub enqueued: &'a HashMap<String, f64>,
     /// [`stopped`]'s map.
     pub stopped: &'a HashMap<String, String>,
@@ -783,3 +815,6 @@ mod scratch_tests;
 
 #[cfg(test)]
 mod spent_tests;
+
+#[cfg(test)]
+mod transcripts_tests;

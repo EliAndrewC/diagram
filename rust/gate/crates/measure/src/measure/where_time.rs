@@ -705,7 +705,6 @@ fn booked(
     };
     let makefile = std::fs::read_to_string(root.join("Makefile")).unwrap_or_default();
     let goal = columns::default_goal(&makefile);
-    let queued = columns::enqueued(&sids, projects);
     // an agent's tokens inside the window; a `since` the reader cannot read (a date alone) cuts nothing below
     let lo = if since.is_empty() {
         f64::MIN
@@ -715,7 +714,7 @@ fn booked(
     let subs = columns::read_subagents(&sids, projects, (lo, end));
     let window = columns::Window {
         end,
-        enqueued: &queued,
+        enqueued: &subs.enqueued,
         stopped: &subs.stopped,
         queued: &subs.queued,
         goal: &goal,

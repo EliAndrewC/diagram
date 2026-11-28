@@ -198,6 +198,90 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T543 (make plan-delta read 451's plan-done.md eleven times a call and plan-review.json twice: 451 T536's read counter, dev/measurements/2026-11-27/t536-record-readers/results.md)": {
+   "sha256": "c46a1017ad5075a912f50e6a207f0819d420f17a8720a7b4da51c7662ba6d09d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T543 Approach (checklist part A)": {
+   "sha256": "3db74ce443c0d60329b8a91e44a55d12da0b9a64f7012b86c627e08d9a8b1e18",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T550 (T533's one-off take: the landed-scratchpad rule matches a `t<N>` entry by number alone and protects only another feature's open START, observed 2026-11-27, method: the rule's matching re-run read only over the session scratchpad, 462 T533's `measure.py`)": {
+   "sha256": "a252e4e0c7a3360eafbac0c60ee7488eb8ffc5aea124019dcabb7b5d381fc0af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T550 Approach (checklist part A)": {
+   "sha256": "87d4ef77ddd54286fd23e8045b296a720747fabb9046a9d7b4a9fb2bfbfbca86",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T206 (the coverage build's link failed on stale `l7r_shared` incremental units, `rust-lld: undefined hidden symbol`, and no retry reached it: observed 2026-11-23, `make crate-checks` on `rust/guard/shared`, healed only by deleting the `l7r_shared-*` directories under the family's `cover-guard/target/debug/incremental` by hand)": {
+   "sha256": "840b91aa9dcf1975ab368be4d923acedd1efccbc5318c169f30d6c1115c67ae1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T206 Approach (checklist part A)": {
+   "sha256": "0a43163e3eee9c60049bbadab515135b253728f476977abd38642ae8c420fe4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T146 (the guard launcher's tool-profile build and `make rust-test`'s dev-profile test builds failed their links on stale incremental units, `rust-lld: undefined hidden symbol` - l7r_shared's units under l7r-rust twice on 2026-11-22, l7r_gate_archive's lib test on 2026-11-19 - with no heal reaching either; filed from 451 beside T142's launcher heal)": {
+   "sha256": "ac6e49b16c9f55459e5961af5d83128b780881220700224bcbc84b96705ffa86",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T146 Approach (checklist part A)": {
+   "sha256": "471e6f342d698338892874335806842a97f95687b5d666280095ddf871ee05f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T173 (tests/hooks/test-finished-run-hooks.sh section 6's five refusal cases failed twice chained after the rust/guard crate builds at load ~15, 2026-11-23 (451 T171's finisher), the cause the fixture's 12 s life, which one slow Stop call outlasts, measured 2026-11-27 (the suite with its first Stop slowed))": {
+   "sha256": "822776f56e5517709793160f85708348ac73b6e45e54e0442fc6a3e90ce9ad67",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T173 Approach (checklist part A)": {
+   "sha256": "5ec64a1615bb3a3b340b59cf5d185c1f66cd574ee0e49af88652d75df3c6da9d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T107 (the bundle crate's `the_rare_paths_of_a_depiction_bundle` returned -1 where 0 was expected under load near 30, 2026-11-21 at 451 T102's landing; its -1 is the tests' 150 ms crop bound outlasted by the fake crop's `sh` start, measured 2026-11-27 (the bundle binary 30 at once))": {
+   "sha256": "4ff7e86f9a28658c27da56407a00f424c678d62d048d53a8ca07ab4d94df00c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T107 Approach (checklist part A)": {
+   "sha256": "6261c6b0ba8711824f3f4d346e2012016c82e5a10d660b487d7b9fb56e46c803",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T544 (make task-time took 61 s median over 31 real calls and 260 s a call on a copy, reading about 5.0 GB, observed 2026-11-27, method: 451 T536's record, dev/measurements/2026-11-27/t536-record-readers/results.md)": {
+   "sha256": "ef77c9afe997aaed0a12b3dffe4b2ebbffd393e50d7c911a2b1b091cb002b5c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T544 Approach (checklist part A)": {
+   "sha256": "030f41ed678cd7fec08bf24885f30944300e33e01d9f2fa07d74614c779d55e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -961,6 +1045,374 @@
      "why": "These are sequencing and exit mechanics, and none of them narrows what the GM asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T543 (make plan-delta read 451's plan-done.md eleven times a call and plan-review.json twice: 451 T536's read counter, dev/measurements/2026-11-27/t536-record-readers/results.md)",
+    "### T543 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T543-a held scope",
+     "summary": "Reads are cached only inside once::held, which only the plan delta arm of plan.rs enters; decide, tick and record keep reading disk between their writes.",
+     "class": "within",
+     "why": "T543 is plan-delta's own perf task (its title and goal name make plan-delta); leaving the writing commands uncached is the task's scope, not a narrowing of anything the GM or the spec asked, and it keeps a cache from serving a record those commands have just rewritten."
+    },
+    {
+     "id": "T543-b archive reader untouched",
+     "summary": "l7r_shared::speckit::archive::text is not edited; once hands it a caching reader closure; T545 owns the archive code and plan-review.json's split.",
+     "class": "within",
+     "why": "A sequencing boundary between two tasks of the same feature; nothing is dropped, the record's reader becomes once::record's one line when T545 lands (item 5)."
+    },
+    {
+     "id": "T543-c git-dir lookup",
+     "summary": "History looks the common git directory up once instead of once a block (413 git rev-parse processes in one plan delta 451), fixed in history.rs within this task.",
+     "class": "within",
+     "why": "Found while measuring the same command's wall time and on its own path; fixing a found inefficiency in the step it was found is what fix-as-we-go asks, and it serves the task's goal (plan-delta faster). Not unrequested scope."
+    },
+    {
+     "id": "T543-d lint and hint left to T560",
+     "summary": "The spec lint's repeated reads beside plan-delta (checks crate: tasks-done, tasks.md, 451's spec.md 16 times) and the claims hint's 0.6 s are not fixed here; filed as T560, ordered before T547.",
+     "class": "within",
+     "why": "These are slower, not wrong: no wrong outcome (constitution XIV's defect definition), so 'fix all known bugs before moving on' does not reach them, and they are filed with an order rather than dropped. The goal line's 'reads each record once a call' is true of the plan crate's reads (exit 6 says 'through the plan crate'); tasks-done 3x and index.json 2x remain in the after row from the lint, which the block states."
+    },
+    {
+     "id": "T543-e one whole read remains",
+     "summary": "After the change plan delta still reads plan-done (3.69 MB for 451) and plan-review.json (5.07 MB) whole, once a call each.",
+     "class": "within",
+     "why": "SC-002 (no reader T536 named reads a record whole after T537) is the feature's criterion, and the block does not claim to discharge it: the record's split and the archive reader are T545's (item 2, item 5), so the remaining whole read is carried there, not excepted. The GM's purpose (sessions' context windows, request.md 'on the split') is not touched by a Rust tool's in-memory read, and T543 moves it toward SC-002 (11x/2x to 1x). T543 therefore narrows nothing; SC-002 stays owed by T545."
+    },
+    {
+     "id": "T543-f output unchanged",
+     "summary": "Constraint and item 12: every block, verdict and bundle the command writes stays the same, checked by diff -r of the bundle, stdout, exit code and the refusals on a copy.",
+     "class": "within",
+     "why": "The exits (item 6) gate on the two red-first tests and the shim, not on bytes; the identity is an observation that a read cache changed nothing a reader sees, which is the right check that a pure cache works. It must not be read as an exactness standard (the GM 2026-11-18): a future correct change to the bundle's bytes is not held to this."
+    },
+    {
+     "id": "T543-g order, exits, budget, perf tag",
+     "summary": "After T548, before or beside T545; red exit through make arbiter-ask; one landing; tagged [perf] under 451 FR-013.",
+     "class": "within",
+     "why": "Ordering and bookkeeping inside the feature; [perf] is correct under FR-013's definition (makes the gate faster)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T550 (T533's one-off take: the landed-scratchpad rule matches a `t<N>` entry by number alone and protects only another feature's open START, observed 2026-11-27, method: the rule's matching re-run read only over the session scratchpad, 462 T533's `measure.py`)",
+    "### T550 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 open box holds",
+     "summary": "open_elsewhere holds a number while any other feature has an open box of it in tasks.md or tasks-done.md, started or not, plain or bold id, at any indent",
+     "class": "within",
+     "why": "The request and spec say nothing about how the sweep works. This serves the GM's disk-cleanup priority (request.md, 'on the order of 462's work') and stops a landing deleting another feature's work in flight. It widens protection and narrows nothing."
+    },
+    {
+     "id": "D2 landing clone's specs",
+     "summary": "Specs are read beside the landing clone's git-common-dir (make land passes it), never the /diagram mirror",
+     "class": "within",
+     "why": "This is a choice of data source that fixes T533's cause. The request is silent on it, and it narrows nothing."
+    },
+    {
+     "id": "D3 by number, not keyed to feature",
+     "summary": "Scratch entries are matched by task number alone, because the record names no feature for an entry",
+     "class": "within",
+     "why": "The request and spec do not choose a mechanism. Matching by number errs toward keeping files, never toward deleting another feature's work. (The premise that the pool log cannot attribute an entry may rest on a timezone misreading; see the reviewer's note. It is a design premise, not a fidelity one.)"
+    },
+    {
+     "id": "D4 open boxes only; ticked boxes do not hold",
+     "summary": "A ticked box, or a 'Withdrawn: moved to 462' line, holds nothing itself. A moved task is held by its open box in 462.",
+     "class": "within",
+     "why": "Not asked against. By the plan's figures, holding ticked boxes would keep all 70 of 461's numbers and 94 of 462's 113, which would all but end the cleanup the GM put first. A ticked task's scratch was already taken at its own landing (T517), so no work in flight is exposed."
+    },
+    {
+     "id": "D5 unreadable start still held",
+     "summary": "T517's conservative branch is kept: a start whose tasks.md cannot be read still holds its number",
+     "class": "within",
+     "why": "This keeps existing safety behavior and narrows nothing the GM asked for."
+    },
+    {
+     "id": "D6 feature matched by leading number",
+     "summary": "F=462 and 462-efficiency-backlog are treated as the same feature",
+     "class": "within",
+     "why": "An implementation detail that touches no request clause."
+    },
+    {
+     "id": "D7 found and left: per-feature scratch naming deferred to T553",
+     "summary": "A landed task's scratch whose number another feature holds open is kept until that box closes or the session ends. Naming scratch by feature is filed as T553 and lands before T301.",
+     "class": "within",
+     "why": "Keeping a file a little longer is not a wrong outcome (constitution XIV): nothing is deleted wrongly and no tool answers wrongly, so no defect is carried forward. The work stays inside 462's disk tasks, which the GM put first, and is ordered early."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T517 and T533; before T301; T553 after it",
+     "class": "within",
+     "why": "Consistent with the GM's ordering of disk tasks ahead of the rest of 462. Not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T550 (T533's one-off take: the landed-scratchpad rule matches a `t<N>` entry by number alone and protects only another feature's open START, observed 2026-11-27, method: the rule's matching re-run read only over the session scratchpad, 462 T533's `measure.py`)",
+    "### T550 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 by-number hold on any other feature's open box",
+     "summary": "open_elsewhere holds a number while any other feature has an open box of it (plain or old bold id, any indent) in tasks.md or tasks-done.md, started or not",
+     "class": "within",
+     "why": "The task line's own constraint is 'key to the feature or exclude another feature's open and moved numbers, started or not'; this is the second of the two options it names, and it fixes the defect (a landing deleting another feature's work in flight). Nothing in request.md or FR-001..005 constrains the mechanism."
+    },
+    {
+     "id": "D2 read the landing clone's specs, never the mirror",
+     "summary": "specs/ is read beside the git-common-dir make land passes, i.e. the clone that lands",
+     "class": "within",
+     "why": "Named in the task line's constraints ('read the landing clone, never the mirror') and is the measured cause in T533 (the mirror's 461 tasks.md lacked T50-T69)."
+    },
+    {
+     "id": "D3 open boxes only, ticked boxes not held",
+     "summary": "The brief's 'open or ticked' is not taken; a ticked box holds nothing",
+     "class": "within",
+     "why": "The task line's constraint is stated as open and moved numbers; holding ticked boxes would hold 70 of 461's 70 and 94 of 462's 113 numbers (recorded with date and method), which empties the take and reverses T517's fix, against the GM's stated disk-cleanup priority. A ticked task's scratch was already taken at its own landing since T517, so no in-flight work goes unprotected. Not a departure from anything the GM asked."
+    },
+    {
+     "id": "D4 moved-to-462 lines covered through 462's open box",
+     "summary": "A 'Withdrawn: moved to 462' line is ticked and holds nothing itself; the moved task's open box in 462 under its kept 451 id holds the number",
+     "class": "within",
+     "why": "Covers the brief's 'moved numbers' case by the mechanism FR-002 sets up (moved tasks keep their 451 numbers open here), not by an exception."
+    },
+    {
+     "id": "D5 T517 rows kept (unreadable tasks.md still holds; unstarted start with no open box not held)",
+     "summary": "T517's conservative branch and existing test kept unchanged",
+     "class": "within",
+     "why": "Preserves prior accepted behavior the brief lists as a constraint; no request clause asks to change it."
+    },
+    {
+     "id": "D6 feature matched by leading number",
+     "summary": "F=462 and 462-efficiency-backlog are the same feature",
+     "class": "within",
+     "why": "Implementation detail that makes the rule apply to both forms make land is given; serves the fix."
+    },
+    {
+     "id": "D7 window/feature-keyed attribution left to T553",
+     "summary": "Keying scratch by pool-log window or by feature-named scratch is not done here; a number another feature holds open keeps its scratch until that box closes or the session ends; filed as T553",
+     "class": "within",
+     "why": "The brief offered keying by feature OR excluding open numbers; choosing the latter is within it. What is left is later cleanup of some scratch (retained, not deleted wrongly), not a wrong outcome: no work is lost and session-end cleanup still runs. It is filed, not dropped, and the costs of the window approach (mtime is last write, entries predating the log, the coordinator's own scratch in no window) are stated."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T517 and T533, before T301 (no overlap), T553 after",
+     "class": "within",
+     "why": "Sequencing among 462's own tasks; touches no request clause and does not defer the GM's disk-cleanup priority."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T206 (the coverage build's link failed on stale `l7r_shared` incremental units, `rust-lld: undefined hidden symbol`, and no retry reached it: observed 2026-11-23, `make crate-checks` on `rust/guard/shared`, healed only by deleting the `l7r_shared-*` directories under the family's `cover-guard/target/debug/incremental` by hand)",
+    "### T206 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T206-scope",
+     "summary": "T206 (a 451 task moved here) is worked in 462: the coverage build's link failure on stale incremental units is healed",
+     "class": "within",
+     "why": "FR-002 moves every other open 451 task here with its plan section; the fix is a wrong outcome (a coverage step red on right code until directories were removed by hand), so fixing it is inside what was asked."
+    },
+    {
+     "id": "stale.rs healed_under",
+     "summary": "healed becomes a wrapper over healed_under(target dir given), so the coverage family's own target directory can be healed; rule, wording and LOCK_S unchanged; SIGN shared with cover.rs",
+     "class": "within",
+     "why": "A design choice for reaching the one existing heal from the cover build; it narrows nothing the request or spec asks."
+    },
+    {
+     "id": "cover.rs build heal",
+     "summary": "on undefined hidden symbol the group build heals over its CARGO_TARGET_DIR and rebuilds once with the same call, under the held slot and inside the cover-build span, saying so on stderr",
+     "class": "within",
+     "why": "Implements the task's own goal (heal once, as the test build does, and say so); no case excepted."
+    },
+    {
+     "id": "once a family",
+     "summary": "if the healed build fails too, the crate-by-crate builds that follow do not heal",
+     "class": "within",
+     "why": "Mirrors the test build's single heal (the brief: the one heal of stale.rs) and prevents a heal loop; the failure still surfaces red, so no defect is left unaddressed and nothing the GM asked is carved out."
+    },
+    {
+     "id": "not run live",
+     "summary": "the heal is pinned on a stub cargo (red first measured 2026-11-27) and not run on a really broken coverage cache",
+     "class": "within",
+     "why": "Verification depth on a tooling fix, matching how 451 T336/T362 treated the test build; it does not leave a known defect or narrow the requested behavior."
+    },
+    {
+     "id": "perf classification",
+     "summary": "T206 counted as performance work under 451 FR-013 (keeps the checks from stopping); performance checklist n/a",
+     "class": "within",
+     "why": "A scheduling classification under FR-013's own terms (work on the checks/gate); it narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T146 (the guard launcher's tool-profile build and `make rust-test`'s dev-profile test builds failed their links on stale incremental units, `rust-lld: undefined hidden symbol` - l7r_shared's units under l7r-rust twice on 2026-11-22, l7r_gate_archive's lib test on 2026-11-19 - with no heal reaching either; filed from 451 beside T142's launcher heal)",
+    "### T146 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T146-no-new-code",
+     "summary": "T146 is closed by work already landed: make rust-test's test builds are healed by stale.rs (451 T336), the guard launcher's build by l7r-guard.sh (451 T449); the section records which heal covers which build",
+     "class": "within",
+     "why": "The task's goal, that no rust-test test build and no guard launcher build stays red on a stale incremental unit, is fully met by the two landed heals. Each is pinned by a named test and was checked red-first on 2026-11-27 (dated, with a method). Nothing the task asked for is dropped. FR-002 moves the task here as it is, and closing it on existing work narrows nothing."
+    },
+    {
+     "id": "T146-two-heals",
+     "summary": "Two heals stay, stale::healed_under in Rust and the shell heal in each launcher, rather than one healing code; the section says why one cannot",
+     "class": "within",
+     "why": "The task's brief allows this outright ('one healing code, reached from each - or say why one cannot'), and the reason given is structural. A healer inside the binary the launcher builds cannot run when that binary fails to link, and the guard must not wait on the gate's tool (check guard-deps). Neither the GM's request nor 462's spec asks for the heals to be unified. Both builds heal, so no wrong outcome is left, and under constitution XIV (GM 2026-11-19) a difference from a task line's own wording is not a defect."
+    },
+    {
+     "id": "T146-subcommand-not-taken",
+     "summary": "A guard-binary subcommand run on the last good binary was priced and neither taken nor filed",
+     "class": "within",
+     "why": "The subcommand would only move a rule each launcher already holds, and every build the task names already heals. Leaving out work that would fix no wrong outcome is within what was asked. The GM's 2026-11-19 ruling is explicit: do not 'fix' things that already work."
+    },
+    {
+     "id": "T146-record",
+     "summary": "stale.rs's header is updated to name the one Rust heal, the builds that reach it and why the launchers heal separately (it said the guard launcher and the coverage build 'do not yet')",
+     "class": "within",
+     "why": "This replaces a stale statement with the current state. It is a record of what the task delivered, not new behavior."
+    },
+    {
+     "id": "T146-perf-order",
+     "summary": "Counted as performance work under 451 FR-013 (it keeps the checks and the builders' loop from stopping on a stale link) and landed in one landing with T206",
+     "class": "within",
+     "why": "FR-013 counts work that keeps the builders' loop and the checks from stalling as performance work, and the classification follows that text. Landing it with T206 is ordering only, and the scope stays the same."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T173 (tests/hooks/test-finished-run-hooks.sh section 6's five refusal cases failed twice chained after the rust/guard crate builds at load ~15, 2026-11-23 (451 T171's finisher), the cause the fixture's 12 s life, which one slow Stop call outlasts, measured 2026-11-27 (the suite with its first Stop slowed))",
+    "### T173 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "Fix the suite's fixture (a live run that outlives one slow Stop call), not the guard; no hook change; a fresh guard binary before the suite priced and declined",
+     "class": "within",
+     "why": "T173 is a moved backlog task (FR-002) whose defect is section 6's five refusal cases failing when one Stop call outlasts the fixture's 12 s. The section measures that cause (first Stop slowed 13 s: the five red on HEAD, 84 of 84 on the fixed text), so the guard's refusal is not the defect and fixing the fixture fixes the whole defect. Declining a pre-built binary is a design choice among fixes, not a narrowing of what was asked; nothing in the GM's request bears on this suite."
+    },
+    {
+     "id": "RUN_S 600 s",
+     "summary": "The fixture sleeps RUN_S (600 s, a GUESS knob with its measured why) in place of sleep 12, across sections 6, 6b (sleeper and 6d's p2), 6c, 6e, 6f, 6g, 9, 10, 11; 6d's p1 3 s transition kept",
+     "class": "within",
+     "why": "The mechanism of Decision 1 applied to every live run that shares the Makefile; keeping p1's 3 s preserves the transition 6d tests rather than excepting a case from the fix."
+    },
+    {
+     "id": "endruns / endone / EXIT trap",
+     "summary": "New cleanup ends a clone's live makes and their direct children, and the EXIT trap runs it over the three fixture clones",
+     "class": "within",
+     "why": "Answers the price of the longer fixture (a killed or red suite leaving a 600 s sleeper); scoped to the suite's own temp clones and per-run NEVER token, so it adds no behavior outside the test."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T107 (the bundle crate's `the_rare_paths_of_a_depiction_bundle` returned -1 where 0 was expected under load near 30, 2026-11-21 at 451 T102's landing; its -1 is the tests' 150 ms crop bound outlasted by the fake crop's `sh` start, measured 2026-11-27 (the bundle binary 30 at once))",
+    "### T107 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "Fix the tests' crop bound, not the bundle: the test-only CROP_TIMEOUT goes from 150 ms to 30 s (a GUESS knob with its measured why); the slow page keeps its own 20 ms so the timeout path stays proved; production CROP_TIMEOUT (180 s) and glyph_crop untouched; success assertions carry run.err on their own line.",
+     "class": "within",
+     "why": "T107 is one of 451's open tasks moved here whole by FR-002 (the GM's go on the session's proposal: 'Move the rest'). The task is a false red of the crop tests under load; the block measures the cause as the test-only bound outrun by the fake crop's sh start and changes only that bound, leaving the timeout behavior still tested by the slow page and production behavior unchanged. Nothing the task or the request asks for is left undone or excepted; making a test stop refusing good work is the task itself."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "Also fix, in this task, the_candidates_at_the_merge_base_and_the_geometry's stale-page case: set the drawing's time to the page's plus one second instead of leaving it to the clock.",
+     "class": "within",
+     "why": "A defect found by this task's own measurement run (a test refusing good work under load, 1 of 90 red) in the same crate, fixed as found. Fixing a known defect a step turns up is the standing rule (constitution XIV, fix as we go), not unrequested scope, and it adds no behavior beyond making the existing test stop reading the clock. No part of the request is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T544 (make task-time took 61 s median over 31 real calls and 260 s a call on a copy, reading about 5.0 GB, observed 2026-11-27, method: 451 T536's record, dev/measurements/2026-11-27/t536-record-readers/results.md)",
+    "### T544 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T544-1 one pass",
+     "summary": "enqueued's rows read in read_subagents' single pass (Subagents::enqueued); enqueued removed, its three callers read the field.",
+     "class": "within",
+     "why": "Implementation of the moved perf task (FR-002 moves it here; 451 FR-013 tags it perf); the request and spec settle nothing about how, and nothing asked is dropped."
+    },
+    {
+     "id": "T544-2 mtime skip",
+     "summary": "On a bounded window, a transcript whose mtime is before the window start less SLACK_S is not read; its agent or session is still entered with no calls so every map keeps its keys.",
+     "class": "within",
+     "why": "A way of reading less while the report's figures stay the same; it removes no figure and no behavior anything in request.md or the spec asks for."
+    },
+    {
+     "id": "T544-3 SLACK_S",
+     "summary": "SLACK_S is one hour, recorded as a GUESS knob with its reasoning beside it.",
+     "class": "within",
+     "why": "A design constant inside the task; nothing asked settles it."
+    },
+    {
+     "id": "T544-4 unbounded window",
+     "summary": "An unbounded window (stopped, where-time with no readable since) skips nothing.",
+     "class": "within",
+     "why": "Keeps the skip from reaching any window it cannot reason about; reduces no asked scope."
+    },
+    {
+     "id": "T544-5 reach",
+     "summary": "The change reaches where-time and the task progress view through the shared reader.",
+     "class": "within",
+     "why": "Those are the shared reader's existing callers; the change is the same read path, not new behavior."
+    },
+    {
+     "id": "T544-6 identical output as green",
+     "summary": "Green exit requires the report's outputs identical before and after (cmp), figures unchanged.",
+     "class": "within",
+     "why": "Not an exactness standard: a time report whose figures changed after skipping files would be a tool answering wrongly, so 'same figures' is correctness and cmp is only the method of showing it. It holds no port to another implementation's bytes."
+    },
+    {
+     "id": "T544-7 done in bytes",
+     "summary": "Done is measured as bytes read (4.59 GB to 1.63 GB); wall time reported as unresolved by the machine's noise.",
+     "class": "within",
+     "why": "Neither request.md nor the cited spec sets a time target; the figures are reported honestly with their methods. Not a narrowing of anything asked."
+    },
+    {
+     "id": "T544-8 left to T559",
+     "summary": "The pool-log and task-starts.jsonl re-reads (2.3 MB) and the ~75 s post-read compute are left, filed as T559.",
+     "class": "within",
+     "why": "Slowness and a 2.3 MB re-read are not wrong outcomes (XIV defect definition), the work is filed not dropped, and no requirement the blocks validly cite asks for them: the cited '462 FR-004 (read each record once)' is not what FR-004 says (it is T536/T537's measure-and-split), so there is no requirement here to narrow."
+    },
+    {
+     "id": "T544-9 test and tag",
+     "summary": "Test-only READS counter with the red test first; the task tagged [perf] under 451 FR-013.",
+     "class": "within",
+     "why": "Enforcement of the task's own aim and the ordering FR-013 asks for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1182,6 +1634,190 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T550": {
+   "section_sha256": "8f7605d3b66d975025eded9e218a896ae8cadedd78b0c3c1611369663c9d1da0",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 by-number hold on any other feature's open box",
+     "summary": "open_elsewhere holds a number while any other feature has an open box of it (plain or old bold id, any indent) in tasks.md or tasks-done.md, started or not",
+     "class": "within",
+     "why": "The task line's own constraint is 'key to the feature or exclude another feature's open and moved numbers, started or not'; this is the second of the two options it names, and it fixes the defect (a landing deleting another feature's work in flight). Nothing in request.md or FR-001..005 constrains the mechanism."
+    },
+    {
+     "id": "D2 read the landing clone's specs, never the mirror",
+     "summary": "specs/ is read beside the git-common-dir make land passes, i.e. the clone that lands",
+     "class": "within",
+     "why": "Named in the task line's constraints ('read the landing clone, never the mirror') and is the measured cause in T533 (the mirror's 461 tasks.md lacked T50-T69)."
+    },
+    {
+     "id": "D3 open boxes only, ticked boxes not held",
+     "summary": "The brief's 'open or ticked' is not taken; a ticked box holds nothing",
+     "class": "within",
+     "why": "The task line's constraint is stated as open and moved numbers; holding ticked boxes would hold 70 of 461's 70 and 94 of 462's 113 numbers (recorded with date and method), which empties the take and reverses T517's fix, against the GM's stated disk-cleanup priority. A ticked task's scratch was already taken at its own landing since T517, so no in-flight work goes unprotected. Not a departure from anything the GM asked."
+    },
+    {
+     "id": "D4 moved-to-462 lines covered through 462's open box",
+     "summary": "A 'Withdrawn: moved to 462' line is ticked and holds nothing itself; the moved task's open box in 462 under its kept 451 id holds the number",
+     "class": "within",
+     "why": "Covers the brief's 'moved numbers' case by the mechanism FR-002 sets up (moved tasks keep their 451 numbers open here), not by an exception."
+    },
+    {
+     "id": "D5 T517 rows kept (unreadable tasks.md still holds; unstarted start with no open box not held)",
+     "summary": "T517's conservative branch and existing test kept unchanged",
+     "class": "within",
+     "why": "Preserves prior accepted behavior the brief lists as a constraint; no request clause asks to change it."
+    },
+    {
+     "id": "D6 feature matched by leading number",
+     "summary": "F=462 and 462-efficiency-backlog are the same feature",
+     "class": "within",
+     "why": "Implementation detail that makes the rule apply to both forms make land is given; serves the fix."
+    },
+    {
+     "id": "D7 window/feature-keyed attribution left to T553",
+     "summary": "Keying scratch by pool-log window or by feature-named scratch is not done here; a number another feature holds open keeps its scratch until that box closes or the session ends; filed as T553",
+     "class": "within",
+     "why": "The brief offered keying by feature OR excluding open numbers; choosing the latter is within it. What is left is later cleanup of some scratch (retained, not deleted wrongly), not a wrong outcome: no work is lost and session-end cleanup still runs. It is filed, not dropped, and the costs of the window approach (mtime is last write, entries predating the log, the coordinator's own scratch in no window) are stated."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T517 and T533, before T301 (no overlap), T553 after",
+     "class": "within",
+     "why": "Sequencing among 462's own tasks; touches no request clause and does not defer the GM's disk-cleanup priority."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T206": {
+   "section_sha256": "18d2db7777525fc63f3aea76898aa19ea353cd0264120d59731df8178d38fb97",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T206-scope",
+     "summary": "T206 (a 451 task moved here) is worked in 462: the coverage build's link failure on stale incremental units is healed",
+     "class": "within",
+     "why": "FR-002 moves every other open 451 task here with its plan section; the fix is a wrong outcome (a coverage step red on right code until directories were removed by hand), so fixing it is inside what was asked."
+    },
+    {
+     "id": "stale.rs healed_under",
+     "summary": "healed becomes a wrapper over healed_under(target dir given), so the coverage family's own target directory can be healed; rule, wording and LOCK_S unchanged; SIGN shared with cover.rs",
+     "class": "within",
+     "why": "A design choice for reaching the one existing heal from the cover build; it narrows nothing the request or spec asks."
+    },
+    {
+     "id": "cover.rs build heal",
+     "summary": "on undefined hidden symbol the group build heals over its CARGO_TARGET_DIR and rebuilds once with the same call, under the held slot and inside the cover-build span, saying so on stderr",
+     "class": "within",
+     "why": "Implements the task's own goal (heal once, as the test build does, and say so); no case excepted."
+    },
+    {
+     "id": "once a family",
+     "summary": "if the healed build fails too, the crate-by-crate builds that follow do not heal",
+     "class": "within",
+     "why": "Mirrors the test build's single heal (the brief: the one heal of stale.rs) and prevents a heal loop; the failure still surfaces red, so no defect is left unaddressed and nothing the GM asked is carved out."
+    },
+    {
+     "id": "not run live",
+     "summary": "the heal is pinned on a stub cargo (red first measured 2026-11-27) and not run on a really broken coverage cache",
+     "class": "within",
+     "why": "Verification depth on a tooling fix, matching how 451 T336/T362 treated the test build; it does not leave a known defect or narrow the requested behavior."
+    },
+    {
+     "id": "perf classification",
+     "summary": "T206 counted as performance work under 451 FR-013 (keeps the checks from stopping); performance checklist n/a",
+     "class": "within",
+     "why": "A scheduling classification under FR-013's own terms (work on the checks/gate); it narrows nothing asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T146": {
+   "section_sha256": "935b34c337a2c9706903bfdd8369e7aa98bbb2ecd0bf2579e1ea8031c0b9157c",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T146-no-new-code",
+     "summary": "T146 is closed by work already landed: make rust-test's test builds are healed by stale.rs (451 T336), the guard launcher's build by l7r-guard.sh (451 T449); the section records which heal covers which build",
+     "class": "within",
+     "why": "The task's goal, that no rust-test test build and no guard launcher build stays red on a stale incremental unit, is fully met by the two landed heals. Each is pinned by a named test and was checked red-first on 2026-11-27 (dated, with a method). Nothing the task asked for is dropped. FR-002 moves the task here as it is, and closing it on existing work narrows nothing."
+    },
+    {
+     "id": "T146-two-heals",
+     "summary": "Two heals stay, stale::healed_under in Rust and the shell heal in each launcher, rather than one healing code; the section says why one cannot",
+     "class": "within",
+     "why": "The task's brief allows this outright ('one healing code, reached from each - or say why one cannot'), and the reason given is structural. A healer inside the binary the launcher builds cannot run when that binary fails to link, and the guard must not wait on the gate's tool (check guard-deps). Neither the GM's request nor 462's spec asks for the heals to be unified. Both builds heal, so no wrong outcome is left, and under constitution XIV (GM 2026-11-19) a difference from a task line's own wording is not a defect."
+    },
+    {
+     "id": "T146-subcommand-not-taken",
+     "summary": "A guard-binary subcommand run on the last good binary was priced and neither taken nor filed",
+     "class": "within",
+     "why": "The subcommand would only move a rule each launcher already holds, and every build the task names already heals. Leaving out work that would fix no wrong outcome is within what was asked. The GM's 2026-11-19 ruling is explicit: do not 'fix' things that already work."
+    },
+    {
+     "id": "T146-record",
+     "summary": "stale.rs's header is updated to name the one Rust heal, the builds that reach it and why the launchers heal separately (it said the guard launcher and the coverage build 'do not yet')",
+     "class": "within",
+     "why": "This replaces a stale statement with the current state. It is a record of what the task delivered, not new behavior."
+    },
+    {
+     "id": "T146-perf-order",
+     "summary": "Counted as performance work under 451 FR-013 (it keeps the checks and the builders' loop from stopping on a stale link) and landed in one landing with T206",
+     "class": "within",
+     "why": "FR-013 counts work that keeps the builders' loop and the checks from stalling as performance work, and the classification follows that text. Landing it with T206 is ordering only, and the scope stays the same."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T173": {
+   "section_sha256": "77f4efb5e05f7e45dba75534771acf4c9f9bf32a2ff7332141c32cf48244141f",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "Fix the suite's fixture (a live run that outlives one slow Stop call), not the guard; no hook change; a fresh guard binary before the suite priced and declined",
+     "class": "within",
+     "why": "T173 is a moved backlog task (FR-002) whose defect is section 6's five refusal cases failing when one Stop call outlasts the fixture's 12 s. The section measures that cause (first Stop slowed 13 s: the five red on HEAD, 84 of 84 on the fixed text), so the guard's refusal is not the defect and fixing the fixture fixes the whole defect. Declining a pre-built binary is a design choice among fixes, not a narrowing of what was asked; nothing in the GM's request bears on this suite."
+    },
+    {
+     "id": "RUN_S 600 s",
+     "summary": "The fixture sleeps RUN_S (600 s, a GUESS knob with its measured why) in place of sleep 12, across sections 6, 6b (sleeper and 6d's p2), 6c, 6e, 6f, 6g, 9, 10, 11; 6d's p1 3 s transition kept",
+     "class": "within",
+     "why": "The mechanism of Decision 1 applied to every live run that shares the Makefile; keeping p1's 3 s preserves the transition 6d tests rather than excepting a case from the fix."
+    },
+    {
+     "id": "endruns / endone / EXIT trap",
+     "summary": "New cleanup ends a clone's live makes and their direct children, and the EXIT trap runs it over the three fixture clones",
+     "class": "within",
+     "why": "Answers the price of the longer fixture (a killed or red suite leaving a 600 s sleeper); scoped to the suite's own temp clones and per-run NEVER token, so it adds no behavior outside the test."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T107": {
+   "section_sha256": "9b7ee8a4f1aabd24dda8f68b23e6403db790d02dca734c5ed0fd6162b34f4dab",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Decision 1",
+     "summary": "Fix the tests' crop bound, not the bundle: the test-only CROP_TIMEOUT goes from 150 ms to 30 s (a GUESS knob with its measured why); the slow page keeps its own 20 ms so the timeout path stays proved; production CROP_TIMEOUT (180 s) and glyph_crop untouched; success assertions carry run.err on their own line.",
+     "class": "within",
+     "why": "T107 is one of 451's open tasks moved here whole by FR-002 (the GM's go on the session's proposal: 'Move the rest'). The task is a false red of the crop tests under load; the block measures the cause as the test-only bound outrun by the fake crop's sh start and changes only that bound, leaving the timeout behavior still tested by the slow page and production behavior unchanged. Nothing the task or the request asks for is left undone or excepted; making a test stop refusing good work is the task itself."
+    },
+    {
+     "id": "Decision 2",
+     "summary": "Also fix, in this task, the_candidates_at_the_merge_base_and_the_geometry's stale-page case: set the drawing's time to the page's plus one second instead of leaving it to the clock.",
+     "class": "within",
+     "why": "A defect found by this task's own measurement run (a test refusing good work under load, 1 of 90 red) in the same crate, fixed as found. Fixing a known defect a step turns up is the standing rule (constitution XIV, fix as we go), not unrequested scope, and it adds no behavior beyond making the existing test stop reading the clock. No part of the request is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

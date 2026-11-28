@@ -94,11 +94,7 @@ pub(super) fn section_current(
         quiet_out(&section, plan),
     );
     let done = history
-        .and_then(|h| {
-            h.path()
-                .parent()
-                .map(l7r_shared::speckit::archive::plan_done)
-        })
+        .and_then(|h| h.path().parent().map(super::once::plan_done))
         .unwrap_or_default();
     typo_only(&was, &now) || typo_only(&repointed(&was, &now, task, &format!("{plan}{done}")), &now)
 }
@@ -520,9 +516,9 @@ fn in_scope(
 /// (<why: ...>)`, T475's removed stub heading, which no tick held (T475's CLEAR task verdict answers for it), and a reviewer spent the
 /// round bb51ce5d2c on it.
 pub(super) fn delta_keys(spec_dir: &Path, history: &History) -> Vec<String> {
-    let read = |f: &str| std::fs::read_to_string(spec_dir.join(f)).unwrap_or_default();
+    let read = |f: &str| super::once::text(&spec_dir.join(f));
     let text = read("plan.md");
-    let review: Value = serde_json::from_str(&read(RECORD)).unwrap_or_else(|_| json!({}));
+    let review = super::once::record(spec_dir);
     let sections = task_sections(&text);
     let ruled = ruled_tasks(&review, &text, &sections, Some(history));
     let (mut keys, blocked) = block_status_of(
@@ -531,7 +527,7 @@ pub(super) fn delta_keys(spec_dir: &Path, history: &History) -> Vec<String> {
         &sections,
         &ruled,
         Some(history),
-        &l7r_shared::speckit::archive::plan_done(spec_dir),
+        &super::once::plan_done(spec_dir),
     );
     for key in blocked {
         if !keys.contains(&key) {
@@ -540,10 +536,8 @@ pub(super) fn delta_keys(spec_dir: &Path, history: &History) -> Vec<String> {
     }
     // a section still the `make task-add` template rides in no bundle (451 T462): no reviewer judges it, no round is counted for it
     let keys = written_only(keys, &text, &BTreeSet::new());
-    let tasks = l7r_shared::speckit::tasks::joined(
-        &read("tasks.md"),
-        &l7r_shared::speckit::tasks::done_text(spec_dir).unwrap_or_default(),
-    );
+    let tasks =
+        l7r_shared::speckit::tasks::joined(&read("tasks.md"), &super::once::tasks_done(spec_dir));
     let mut every = scope_of(&tasks, &[]);
     every.tasks.extend(sections.keys().cloned());
     for key in &keys {

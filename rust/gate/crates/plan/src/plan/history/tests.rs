@@ -2,7 +2,7 @@
 
 use super::super::sections::{block_digest, digest};
 use super::super::tests::{git, repo};
-use super::{counted, keep, recall, History, CHUNK};
+use super::{counted, git_dirs, keep, recall, History, CHUNK};
 use crate::checks::scratch;
 
 #[test]
@@ -18,7 +18,7 @@ fn a_kept_text_is_found_by_its_digest_before_it_is_ever_committed() {
         Some(body)
     );
     assert_eq!(history.block("## A", "bad/sha"), None);
-    assert_eq!(recall(&plan, ""), None);
+    assert_eq!(recall(None, ""), None);
     assert_eq!(history.path(), plan);
 }
 
@@ -383,4 +383,22 @@ fn a_kept_section_text_is_found_by_its_section_digest() {
     assert_eq!(mtime(), old);
     assert!(super::kept_text(&file, "c0", false, "T1", &digest(body.as_bytes())).is_some());
     assert!(mtime() > old);
+}
+
+/// RED FIRST (462 T543): a History looks its git directory up once, however many blocks it is asked for - `make plan-delta F=451`
+/// started 413 `git rev-parse --git-common-dir` processes a call, one for each kept text it sought (observed 2026-11-28, an
+/// `LD_PRELOAD` spawn logger on a copy).
+#[test]
+fn a_history_looks_its_git_directory_up_once() {
+    let root = repo();
+    let plan = root.join("plan.md");
+    std::fs::write(&plan, "## A\n\nthe rule\n").unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-q", "-m", "plan"]);
+    let history = History::new(&plan, "HEAD");
+    let before = git_dirs();
+    for sha in ["a1", "b2", "c3", "d4", "e5"] {
+        assert_eq!(history.block("## A", sha), None);
+    }
+    assert_eq!(git_dirs() - before, 1);
 }

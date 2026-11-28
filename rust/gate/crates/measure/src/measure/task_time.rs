@@ -694,11 +694,11 @@ pub fn run(
     sids.dedup();
     let makefile = std::fs::read_to_string(root.join("Makefile")).unwrap_or_default();
     let goal = columns::default_goal(&makefile);
-    let queued = columns::enqueued(&sids, projects);
     let subs = columns::read_subagents(&sids, projects, got.window);
+    let queued = &subs.enqueued;
     let w = columns::Window {
         end: got.window.1,
-        enqueued: &queued,
+        enqueued: queued,
         stopped: &subs.stopped,
         queued: &subs.queued,
         goal: &goal,
