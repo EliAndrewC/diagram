@@ -1400,41 +1400,7 @@ timed: the base tree was already extracted, and the fixtures' gate calls stay in
 
 <!-- plan-archive: T65 to T16 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 <!-- plan-archive: T67 to T18 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
-### T69 (the plan review bundle carried nothing for 461 T65's "T16's Decision 3" and data-model.md's repair entry: found by T65's blocks review, 2026-11-27)
-
-- **Approach**: a reader of the two citation forms that are no FR, SC or D id, new in `rust/gate/crates/plan/src/plan/bundle/cited/forms.rs` (`carried`, asked by `cited_text` after the ids), its test in `bundle/cited/tests.rs`. (a) A task's numbered decision, `T<n>'s Decision <k>` or `Decisions <k> and <m>`, with a feature number before it or none (this feature's), is read from that task's section of that feature's plans (`plans_of`, `task_sections`), in its `**Decisions**` list to the list's next heading, a `<k>. **...**` item - never the Approach checklist's same number - under `<!-- feature 461 T16, Decision 3 -->`. (b) A file of the feature named with a quoted heading or phrase, `data-model.md, "A repair entry"`, is that heading's section (a heading below the title holding the words, ignoring case, to the next heading of its level or higher), else the paragraph holding the words; named with `<word> entry`, `data-model.md's repair entry`, the heading holding `repair entry`. One text is carried once, whichever form named it. `request.md`'s quotes are skipped: they are the GM's words, which the bundle's own `request.md` carries. (c) Each not found is a NOT FOUND line saying why: no such feature directory, no such task section, a section listing no decision `<k>`, no such file in the feature's directory, no heading or paragraph with the words. The feature-directory lookup `foreign` did inline is now `dir_of`, shared by both. The forms, counted 2026-11-27 over every `specs/*/plan.md` and `plan-done.md` (`grep -oE`): `T<n>'s Decision(s) <k>` 10 times, all 461's; `data-model.md, "<words>"` 6 (461's: "A repair entry" 3, "Recovery" 3); `data-model.md's <word> entry` 5 ("repair entry"); `request.md, "<words>"` 29, every one a quote of the GM. Red first: `plan::bundle::cited::tests::a_task_s_numbered_decision_and_a_spec_file_s_entry_are_carried` failed on the old code, 1 of 3 `plan::bundle::cited::tests` (spec-cited.md carried no line for any of them), 2026-11-27; after, 249 of 249 of the plan crate's tests pass. On the real plan, `make decide F=461 T=T65` built a bundle (/tmp/l7r-check/plan-461-landing-lane-T65-33952447/spec-cited.md) carrying T16's Decision 3 and data-model.md's "A repair entry" section once, beside plan D7, 2026-11-27.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| n/a: gate tooling, no map drawn | - | - | none | - |
-
-**Decisions** (each labeled):
-
-1. **A task's `Decision <k>` is its `**Decisions**` list's item `<k>`**, read to the list's next heading, so the Approach checklist's `3. **Where each comes from.**` is never taken for Decision 3; a section with no such list is a NOT FOUND line. Label: the form the sections the 10 citations name write (461's T12, T15, T16, T20, T51: `1. **...**` under `**Decisions**`), measured above.
-2. **A file's entry is its heading's section first, then the quoted words' paragraph**: `data-model.md, "Recovery"` names a heading; a quote no heading holds names prose. Label: the algorithmically easier route (no reader of a file's quoted words existed); a heading is the larger unit, so a reviewer gets the whole entry.
-3. **Only the feature's own directory's files**, and not `request.md`: a path with a directory (`docs/spec-kit-and-reviews.md`) is no entry of the feature's and is left as the blocks' words. Label: the algorithmically easier route; the forms measured are all 461's own `data-model.md`.
-4. **A bare `Decision <k>` (69 in plans) is left**: it names the block's own section's list, which the block itself carries. Label: the algorithmically easier route.
-
-### T69 Approach (checklist part A)
-
-1. **The goal, in the world.** A plan reviewer reads, in `spec-cited.md`, the text of a task's numbered decision and of a spec file's entry a section names, or a NOT FOUND line saying why.
-2. **The constraints.** T69's line in tasks.md; T68's section (`cited.rs`, `in_task`, the NOT FOUND lines); 451 T46's and T48's "never dropped without a word".
-3. **Where each comes from.** O: T65's blocks review (/tmp/l7r-check/plan-461-landing-lane-blocks-T65-88fbf292/spec-cited.md, empty of both); the counts and the red test above.
-4. **Do they describe the world here?** Yes: the rebuilt T65 bundle carries both, measured 2026-11-27 (`make decide F=461 T=T65`, its spec-cited.md read).
-5. **The order.** After T68; before T31.
-6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/plan"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The plan crate's 249 tests pass and `make builder-checks CRATE="rust/gate/crates/plan"` is clean (test, lint, format), 2026-11-27.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** T65's reviewer judged its Decision 1 without T16's Decision 3 or data-model.md's repair entry, both named as its label.
-
-**Found and left?** none
-
-**Performance work?** no
-
-<!-- plan-archive: T32 to T05 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
+<!-- plan-archive: T69 to T65 moved to plan-done.md, 2026-11-28 (feature 375 FR-044) -->
 ### T70 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
