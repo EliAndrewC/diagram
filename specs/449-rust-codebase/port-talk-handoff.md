@@ -1,3 +1,22 @@
+# Resume point, 2026-11-28 about 13:10Z (the GM logs out of GNOME; the container restarts)
+
+- **Lane**: runner stopped, no batch open, 8 hand-ins waiting. On resume: `make lane-start`, then `make lane-wait` (background).
+  Repair r9 (461 T95/T96, inferred red in batch 461-5) wants a fresh builder; read `.git/l7r-lane/attempts/461-5-7.log` first.
+- **Landed today since the GM slept**: 461 T81 T93 T86 (461-3), T29 T23 T78 (461-5), T25, T74, T63, and the bootstrap's nine;
+  462 T545 T555, T543 T550 T562 T146 T206 T107 T173 T544 (462-6), T120. T29 is on main: `make land` outside the lane's tree
+  needs `LAND_HERE_OK`.
+- **In the clone, not yet on main**: 462 T563's carry (the tests' git with core.fsync=none) - pushed below if the gate allowed;
+  else land it (`LAND_HERE_OK="..."`) or let its hand-in through the lane. T565 (namespace tmpfs TMPDIR, ~40% suite time) and
+  T568 are filed inside it.
+- **Builders**: none running. 461 T104 is built but NOT handed in - its work is uncommitted in `diagram-backlog-t270`, its
+  handoff `.git/l7r-handoffs/T104-a4dac5b32a717056d.md`: brief its closing half on that tree (five section edits, one coverage
+  run, a review round, builder-done). Next briefs: 462 T565 (build half, the GM asked it high), T559, and T82's bundle-departure
+  gap (file it: a mixed bundle must be judged member by member, as T104's D3 ruled).
+- **Host IO**: the freezes were mostly gnome-shell's temperature-bar extension fsyncing every 3 s on its main thread (up to
+  1.8 s each), fixed on the host, live after the GM's re-log-in. Container git 4-18 and cargo 4-11 of 77-204 flushes a minute;
+  our churn lengthens each commit (110-266 ms busy), so T565's tmpfs is still the lever if stalls remain. The headless Chrome
+  at 12:45-12:47 was most likely the browser crate's end-to-end test inside a gate.
+
 # While the GM slept, 2026-11-28 (the session's summary, kept current - read this first)
 
 Written by the coordinating session about 05:00Z 2026-11-28; the GM went to bed saying "proceed with getting the orchestration
