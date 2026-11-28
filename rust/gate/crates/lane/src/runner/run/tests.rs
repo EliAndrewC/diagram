@@ -46,10 +46,10 @@ const PUSH_LINES: &str = concat!(
 const MAKEFILE: &str = "carry:\n\tgit cherry-pick $(COMMIT)\nland:\n@RED@\t@if [ -f \"$$(git rev-parse --git-common-dir)/red\" ]; then echo red; exit 1; fi\n\t@echo \"land F=$(F) T=$(T) NOTE=$(NOTE) batch=$$L7R_LANE_BATCH spec=$$SPECIFY_FEATURE alone=$$L7R_LAND_ALONE backup=$$SYNC_BACKUP\"\n\tfor t in $(T); do sed -i \"s/^- \\[ \\] $$t /- [x] $$t /\" specs/461-x/tasks.md; done\n\tgit commit -qam \"461-x: $(T) ticked (make land)\"\n@PUSH@\tgit push -q origin HEAD:main\n\t@if [ -f \"$$(git rev-parse --git-common-dir)/merged\" ]; then exit 3; fi\n";
 
 /// The round arbiter's ask (461 T18), as the lane runs it in its tree: its words kept in the common directory's `asked` file, the
-/// bundle named on stdout; with an `ask-fails` file there, refused.
+/// bundle named on stdout; with an `ask-fails` file there, refused; with an `ask-silent` file, done with no bundle named.
 const ASK: &str = concat!(
     "arbiter-ask:\n\t",
-    r#"@c=$$(git rev-parse --git-common-dir); printf '%s\n' "SUBJECT=$(SUBJECT) FILES=$(FILES) spec=$$SPECIFY_FEATURE dir=$$SPECIFY_FEATURE_DIRECTORY" '$(WHY)' >> "$$c/asked"; if [ -f "$$c/ask-fails" ]; then echo refused >&2; exit 1; fi; echo "bundle: /tmp/arbiter-$(SUBJECT)/MANIFEST.md""#,
+    r#"@c=$$(git rev-parse --git-common-dir); printf '%s\n' "SUBJECT=$(SUBJECT) FILES=$(FILES) spec=$$SPECIFY_FEATURE dir=$$SPECIFY_FEATURE_DIRECTORY" '$(WHY)' >> "$$c/asked"; if [ -f "$$c/ask-fails" ]; then echo refused >&2; exit 1; fi; if [ -f "$$c/ask-silent" ]; then exit 0; fi; echo "bundle: /tmp/arbiter-$(SUBJECT)/MANIFEST.md""#,
     "\n"
 );
 
@@ -153,7 +153,7 @@ impl World {
                 &sha,
             ],
         );
-        let line = json!({"utc": "2026-11-28T01:00:00Z", "event": "done", "handed_in": true, "detail": format!("{feature} {task}"), "commit": sha});
+        let line = json!({"utc": "2026-11-28T00:00:01Z", "event": "done", "handed_in": true, "detail": format!("{feature} {task}"), "commit": sha});
         let log = self.common.join(l7r_shared::builder_queue::LOG);
         let mut text = std::fs::read_to_string(&log).unwrap_or_default();
         let _ = writeln!(text, "{line}");

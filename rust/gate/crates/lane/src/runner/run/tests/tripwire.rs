@@ -159,7 +159,7 @@ fn the_held_task_waits_on_its_ruling_whose_repair_is_filed_once_and_a_third_pin_
         json!({"repair": "r2", "feature": "461-x", "tasks": ["T02"], "kind": "fix", "ejected": [again], "batch": "461-2",
             "why": "arbiter", "units": ["continue: fix the test"], "attempt": "ask:lane-T02"})
     );
-    assert_eq!(log::repairs_open(&lines, &[]), ["r1", "r2"]);
+    assert_eq!(log::repairs_open(&w.common), ["r1", "r2"]);
     // filed once: the next step writes nothing
     let before = w.lane().len();
     assert_eq!(step(&l), Ok(false));
@@ -207,6 +207,22 @@ fn an_ask_the_arbiter_refuses_still_stops_the_batch_and_its_line_names_the_ask_t
         "ask:lane-T02"
     );
     assert_eq!(repairs::read(&w.common).len(), 1);
+}
+
+#[test]
+fn an_ask_that_names_no_bundle_still_stops_the_batch_and_its_line_points_at_the_kept_output() {
+    let w = world("lane-trip-ask-silent");
+    w.hand_in("461", "T02", "lib/two/x.rs", "x\n");
+    red(&w);
+    std::fs::write(w.common.join("ask-silent"), "").unwrap();
+    let l = lane_of(&w);
+    assert_eq!(step(&l), Ok(true));
+    w.hand_in("461", "T02", "lib/two/y.rs", "y\n");
+    let err = step(&l).unwrap_err();
+    let two = attempt_of(&w.lane(), "461-2");
+    assert!(err.contains(&format!(
+        "dispatch round-arbiter on the bundle its output names ({two}.arbiter.log)"
+    )));
 }
 
 #[test]

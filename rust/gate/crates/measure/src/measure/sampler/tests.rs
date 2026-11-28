@@ -576,10 +576,7 @@ fn the_door_takes_the_first_start_and_the_real_re_run_says_why_it_failed() {
         "sampler: ended - its hours are up (L7R_SAMPLE_MAX_H)\n"
     );
     let log = super::read(&env.common.join(DIR).join("sampler.log"));
-    assert!(
-        log.contains("runs its rebuilt binary, a sample every"),
-        "{log}"
-    );
+    assert!(log.contains("runs its rebuilt binary, a sample every"));
     assert_eq!(exec_live(&[]).to_string(), "no program");
     assert_eq!(
         exec_live(&words(&["/no/such/program"])).kind(),
