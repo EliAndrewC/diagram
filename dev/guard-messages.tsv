@@ -126,6 +126,7 @@ key	verdict	chars	guard	kind	by	over	head
 42bd2b52e2c8a776	PASS	323	gate-write-hooks	refuse	af73b9ebe55fcb488		BLOCKED (gate-write): a shell write of <path> (`cat >> <path> <<BODY`) while
 440be6e83fa2e5a3	BASELINE	606	set-down-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: feature N-x has N open task(s), every one a parked hamlet
 443f474c470b9328	PASS	515	builder-brief-hooks	refuse	a7000c764a70b68af		BLOCKED (builder-brief): this dispatch has a STOP POINT line and no BUILDER-BRIEF
+4519d58de38975cf	PASS	306	gate-write-hooks	refuse	message-check a41ff09501f24ba2c		BLOCKED (gate-write): make task-add (it writes a tracked record) while this tree's
 455345e7f947028c	PASS	859	agent-model-hooks	refuse	ac1df8d661090ad85		BLOCKED: this `Explore` agent names no model and carries no `SESSION_MODEL:` line,
 459b73134b6e65d4	PASS	884	context-cap-hooks	refuse	ab7bffa0599f317c4		BLOCKED: this builder's context is N tokens, past the cap of N:
 45a9267c80f06976	BASELINE	485	pair-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a settlement-review with no green gate for this content. A review
@@ -151,6 +152,7 @@ key	verdict	chars	guard	kind	by	over	head
 51d381c38dbde546	BASELINE	388	budget-change-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: a work budget changes only with the GM's own words (feature
 5253e1fa79f3ee8b	PASS	683	pair-hooks	refuse	ab27eab0ddbc290ad		BLOCKED: round N of settlement-review--testmap for glyph-check in this feature - the
 526aff7b07d65070	PASS	331	no-poll-hooks	refuse	message-check ad4efe4ad7dc44b1f		BLOCKED (no-poll): this is a busy-wait loop (a loop containing `sleep`). Do
+5279a8b3f6a76ffe	PASS	279	gate-write-hooks	refuse	message-check a41ff09501f24ba2c		BLOCKED (gate-write): an Edit of a.md while this tree's `make done` runs.
 5300d59636d79d9d	BASELINE	421	house-style-hooks	notice	unreviewed - house-style's edit notice, a family of 6 keys: 10 shown a session, 4,220 characters, under 6 x 31,680 - under T177's break-even of 31,680 a key (the coordinator's session and its 1,743 builders', 2026-11-17 to 23; 451 T174, measured 2026-11-23)		House style was applied to this edit for you (`demesne` -> `domain`).
 53df4f011ed222e5	PASS	161	builder-brief-hooks	refuse	message-check a1ec2a2aee139b292		BLOCKED (builder-brief): BUILDER_BRIEF_OK with no reason. Give one on its line: BUILDER_BRIEF_OK:
 545fe34f09454cb7	PASS	459	discard-hooks	refuse	ace1afc5bc6430da1		BLOCKED (discard): this command would throw away UNCOMMITTED work in: dirty.py <path>
