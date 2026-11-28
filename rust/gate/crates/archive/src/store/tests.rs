@@ -214,12 +214,12 @@ fn a_git_that_will_not_run_or_fails_silently() {
     std::fs::remove_dir_all(&store.dir).unwrap();
     assert_eq!(store.ensure().unwrap_err().kind, "OSError");
     let quiet = w.dir.path().join("quiet-git");
-    std::fs::write(
+    // written by a child process, so no test thread's fork holds it open for writing when it runs (ETXTBSY, `Text file busy`, met
+    // at a landing's gate 2026-11-28)
+    l7r_gate_core::write_executable(
         &quiet,
         "#!/bin/sh\nfor a in \"$@\"; do [ \"$a\" = push ] && exit 3; done\nexit 0\n",
-    )
-    .unwrap();
-    chmod(&quiet, "+x");
+    );
     store.git_program = quiet.to_string_lossy().into_owned();
     assert_eq!(store.push().unwrap(), "git push exited 3");
 }

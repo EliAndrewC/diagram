@@ -68,9 +68,13 @@ pub const FILE: &str = "queue.txt";
 pub const LOG: &str = "builder-pool.log";
 /// Where a done commit is kept until it is carried: `refs/l7r/done/<feature>-<task>`.
 pub const DONE_REFS: &str = "refs/l7r/done/";
-/// The settled count of builders at once, which the pool is kept at unless `L7R_BUILDERS` says otherwise. GUESS, a knob: the three
-/// warm trees the session ran rolling by hand on 2026-11-26 (451 T313's line); the count worth running is 451 T284's to measure.
-pub const BUILDERS: usize = 3;
+/// The settled count of builders at once, which the pool is kept at unless `L7R_BUILDERS` says otherwise. GUESS, a knob, an interim
+/// 4 (2026-11-28): the four trees the session ran all of 2026-11-27 and 28 by `L7R_BUILDERS=4`, which fit (the night's sampler, 02:00Z
+/// to 15:00Z: memory peak 59% of 10 GiB at four against 31% at three, no OOM, CPU stall 1.04 s a sample against 0.69 s) - a reading of
+/// resources only, not of throughput, which integration bounded that night; 461 T35 measures 3, 4 and 5 through the lane over like
+/// windows and sets it (the GM, 2026-11-27: "do those measurements and then settle on something for now"). Was 3, the warm trees run
+/// by hand on 2026-11-26 (451 T313).
+pub const BUILDERS: usize = 4;
 /// A builder's kinds, as `make builder-brief` takes them.
 pub const KINDS: [&str; 4] = ["fix", "measurement", "build-half", "closing-half"];
 const SHAPE: &str = "<task[,task]> <kind> [jobs=<1-3>] [measures=<n>] [load=1] crates=<dir,dir|-> files=<path,prefix|-> [waits=<T<n>,GM,alone>] [note=<the rest of the line>]";

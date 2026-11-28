@@ -398,7 +398,7 @@ fn the_builder_count_is_a_knob() {
     crate::env::set("L7R_BUILDERS", "2");
     assert_eq!(builders(), 2);
     crate::env::set("L7R_BUILDERS", "many");
-    assert_eq!(builders(), 3);
+    assert_eq!(builders(), BUILDERS);
     crate::env::unset("L7R_BUILDERS");
 }
 
