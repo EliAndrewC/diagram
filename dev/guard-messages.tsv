@@ -363,6 +363,7 @@ c916d77692a2f8db	BASELINE	1246	main-tree-hooks	refuse	unreviewed - stood before 
 c91b3477e0191643	BASELINE	276	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this make call sets Q twice, and make silently keeps only
 c997198336fec401	BASELINE	256	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: check-wave unit N - a guard of its type refused it:
 caf321ee8e44ba80	PASS	180	readme-hooks	refuse	message-check a4beff929301454d7		BLOCKED: README_OK with no reason given. Give one where the token is,
+cb89d15665249389	PASS	388	pool-idle-hooks	block	message-check ae2df0072802c83d4		pool-idle: batch N-N is open on the lane, and no make lane-wait
 cbfeaa3ae6de4122	PASS	882	context-cap-hooks	refuse	ab7bffa0599f317c4		BLOCKED: this builder's context is N tokens, past the cap of N:
 cc4482b1603455fc	BASELINE	599	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `source-reader` dispatch points the agent at files IN the repository.
 ce0f272918914000	BASELINE	314	make-only-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an engine entry point run outside make - no make target
@@ -376,6 +377,7 @@ d023d10bbfc9fa21	BASELINE	818	agent-prefix-hooks	refuse	unreviewed - stood befor
 d1be8ccadffc4cb1	BASELINE	507	workflow-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: an agent() call with no agentType: agent('summarize the file', {label: 'a'})
 d1f1e3138cdcf91c	PASS	419	builder-brief-hooks	refuse	message-check a1ec2a2aee139b292		BLOCKED (builder-brief): the marker's tree <path> is not held by N TN,TN
 d24f51c20dd428ed	BASELINE	599	guard-file-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this edit puts a COMMAND SUBSTITUTION inside a recipe comment of
+d29cd93abd3990a3	PASS	129	pool-idle-hooks	block	message-check ae2df0072802c83d4		pool-idle: LANE_WAIT_OK with no reason. Start a line with: LANE_WAIT_OK: <why nothing
 d2b8c5c05764077e	BASELINE	581	check-bundle-hooks	refuse	unreviewed - stood before 451 T170		BLOCKED: this `quote-check` dispatch points the agent at files IN the repository.
 d2f27e4150d4f0d3	BASELINE	494	agent-stall-hooks	notice	unreviewed - stood before 451 T170		agent-stall: STALLED stallN: transcript unchanged for Ns, last record a tool_result with
 d3fe49eefe1d84a7	PASS	477	house-style-hooks	refuse	a51c66292386230a1		BLOCKED: house style (`colour` [the GM own words - not corrected, only
