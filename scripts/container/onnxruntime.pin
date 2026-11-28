@@ -6,3 +6,9 @@
 # together (the SHA-256 is the archive's, `sha256sum onnxruntime-linux-x64-<version>.tgz`).
 ONNXRUNTIME_VERSION=1.31.1
 ONNXRUNTIME_SHA256=c849e36a1ef3e22d4ff217b9d1ce4a3cf5b9467b975610913ae959ad5b16bdc9
+# THE FALLBACK (2026-11-28: github.com/microsoft/onnxruntime answered 404 - the repository page, its API and every release
+# asset - so a fresh container could not install the archive above): PyPI's CPython 3.12 manylinux wheel of the same version, the
+# build the Python's `onnxruntime` itself was, its `onnxruntime/capi/libonnxruntime.so.<version>` extracted to the same path. Its
+# URL and SHA-256 are PyPI's own (`https://pypi.org/pypi/onnxruntime/1.31.1/json`); change them with the version.
+ONNXRUNTIME_WHEEL_URL=https://files.pythonhosted.org/packages/eb/27/c6a823bac55b2977bea2027c3ec9393a2c1002cb9a09eb40354563e02730/onnxruntime-1.31.1-cp312-cp312-manylinux_2_28_x86_64.whl
+ONNXRUNTIME_WHEEL_SHA256=1f3dea47f2f0e5117c2404cea7d21fd253ae7836a3bf167a501cdfbb2600d536
