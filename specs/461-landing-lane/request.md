@@ -69,7 +69,7 @@ On where it goes, after the session proposed 461:
 > yeahm, I agree this should be part of the existing orchestration feature.
 <!-- END SOURCE -->
 
-2026-11-28, after the lane's gate sat on a hung test for 4 h 51 min with nothing woken (batch 461-4):
+2026-11-28, after the lane's gate sat on a hung test for 4 h 51 min (290.5 minutes, measured 2026-11-28, method: batch 461-4's `run` line in `l7r-lane/lane.jsonl`, 06:42:52Z to 11:33:17Z) with nothing woken (batch 461-4):
 
 <!-- SOURCE: GM NOTES -->
 > How's it going?  things look like they've been idle since 3am
