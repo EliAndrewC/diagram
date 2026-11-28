@@ -210,3 +210,48 @@ fn another_feature_s_start_holds_the_number_while_its_task_is_open_whatever_its_
     );
     assert!(open_elsewhere(&base.join("none.jsonl"), "451", &[163]).is_empty());
 }
+
+#[test]
+fn every_open_number_of_another_feature_holds_whether_started_or_not() {
+    let base = TempDir::new("guard-sweep-open-unstarted");
+    let git = base.join("clone/.git");
+    std::fs::create_dir_all(&git).unwrap();
+    let specs = base.join("clone/specs");
+    for (dir, file, text) in [
+        // 451: its moved boxes ticked in tasks-done.md, one open of its own
+        (
+            "451-time",
+            "tasks-done.md",
+            "- [x] T22 Withdrawn 2026-11-27: moved to 462 as 451 T22\n- [x] T40 landed\n",
+        ),
+        ("451-time", "tasks.md", "- [ ] T537 open\n"),
+        // 462: a moved task keeps its 451 id, open here
+        (
+            "462-backlog",
+            "tasks.md",
+            "- [ ] T22 (451 T22) moved\n- [X] T23 done\n",
+        ),
+        // 461: open, never started; an old feature's bold zero-padded id; a box with no id
+        (
+            "461-lane",
+            "tasks.md",
+            "- [ ] T50 open\n  - [ ] **T007** old form\n- [ ] GM review\n- [x] T60 done\n",
+        ),
+    ] {
+        std::fs::create_dir_all(specs.join(dir)).unwrap();
+        std::fs::write(specs.join(dir).join(file), text).unwrap();
+    }
+    // no start at all: task-starts.jsonl holds nothing
+    let starts = git.join("task-starts.jsonl");
+    std::fs::write(&starts, "").unwrap();
+    // 451 lands: 461's open T50 and T7 and 462's open T22 hold; ticked T60 and T23, and 451's own, do not
+    assert_eq!(
+        open_elsewhere(&starts, "451", &[7, 22, 23, 40, 50, 60, 537]),
+        [7, 22, 50]
+    );
+    // 462 lands its moved T22: 451's ticked line moved to it holds nothing; 451's open T537 holds, by name or number
+    assert_eq!(open_elsewhere(&starts, "462", &[22, 537]), [537]);
+    assert_eq!(open_elsewhere(&starts, "462-backlog", &[22, 537]), [537]);
+    // 461 lands: 462's open T22 holds it, whatever 451 ticked
+    assert_eq!(open_elsewhere(&starts, "461", &[22, 40, 50]), [22]);
+}

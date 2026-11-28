@@ -192,6 +192,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T550 (T533's one-off take: the landed-scratchpad rule matches a `t<N>` entry by number alone and protects only another feature's open START, observed 2026-11-27, method: the rule's matching re-run read only over the session scratchpad, 462 T533's `measure.py`)": {
+   "sha256": "a252e4e0c7a3360eafbac0c60ee7488eb8ffc5aea124019dcabb7b5d381fc0af",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T550 Approach (checklist part A)": {
+   "sha256": "87d4ef77ddd54286fd23e8045b296a720747fabb9046a9d7b4a9fb2bfbfbca86",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -872,6 +884,122 @@
      "why": "Ordering and bookkeeping inside the feature; [perf] is correct under FR-013's definition (makes the gate faster)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T550 (T533's one-off take: the landed-scratchpad rule matches a `t<N>` entry by number alone and protects only another feature's open START, observed 2026-11-27, method: the rule's matching re-run read only over the session scratchpad, 462 T533's `measure.py`)",
+    "### T550 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 open box holds",
+     "summary": "open_elsewhere holds a number while any other feature has an open box of it in tasks.md or tasks-done.md, started or not, plain or bold id, at any indent",
+     "class": "within",
+     "why": "The request and spec say nothing about how the sweep works. This serves the GM's disk-cleanup priority (request.md, 'on the order of 462's work') and stops a landing deleting another feature's work in flight. It widens protection and narrows nothing."
+    },
+    {
+     "id": "D2 landing clone's specs",
+     "summary": "Specs are read beside the landing clone's git-common-dir (make land passes it), never the /diagram mirror",
+     "class": "within",
+     "why": "This is a choice of data source that fixes T533's cause. The request is silent on it, and it narrows nothing."
+    },
+    {
+     "id": "D3 by number, not keyed to feature",
+     "summary": "Scratch entries are matched by task number alone, because the record names no feature for an entry",
+     "class": "within",
+     "why": "The request and spec do not choose a mechanism. Matching by number errs toward keeping files, never toward deleting another feature's work. (The premise that the pool log cannot attribute an entry may rest on a timezone misreading; see the reviewer's note. It is a design premise, not a fidelity one.)"
+    },
+    {
+     "id": "D4 open boxes only; ticked boxes do not hold",
+     "summary": "A ticked box, or a 'Withdrawn: moved to 462' line, holds nothing itself. A moved task is held by its open box in 462.",
+     "class": "within",
+     "why": "Not asked against. By the plan's figures, holding ticked boxes would keep all 70 of 461's numbers and 94 of 462's 113, which would all but end the cleanup the GM put first. A ticked task's scratch was already taken at its own landing (T517), so no work in flight is exposed."
+    },
+    {
+     "id": "D5 unreadable start still held",
+     "summary": "T517's conservative branch is kept: a start whose tasks.md cannot be read still holds its number",
+     "class": "within",
+     "why": "This keeps existing safety behavior and narrows nothing the GM asked for."
+    },
+    {
+     "id": "D6 feature matched by leading number",
+     "summary": "F=462 and 462-efficiency-backlog are treated as the same feature",
+     "class": "within",
+     "why": "An implementation detail that touches no request clause."
+    },
+    {
+     "id": "D7 found and left: per-feature scratch naming deferred to T553",
+     "summary": "A landed task's scratch whose number another feature holds open is kept until that box closes or the session ends. Naming scratch by feature is filed as T553 and lands before T301.",
+     "class": "within",
+     "why": "Keeping a file a little longer is not a wrong outcome (constitution XIV): nothing is deleted wrongly and no tool answers wrongly, so no defect is carried forward. The work stays inside 462's disk tasks, which the GM put first, and is ordered early."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T517 and T533; before T301; T553 after it",
+     "class": "within",
+     "why": "Consistent with the GM's ordering of disk tasks ahead of the rest of 462. Not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T550 (T533's one-off take: the landed-scratchpad rule matches a `t<N>` entry by number alone and protects only another feature's open START, observed 2026-11-27, method: the rule's matching re-run read only over the session scratchpad, 462 T533's `measure.py`)",
+    "### T550 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 by-number hold on any other feature's open box",
+     "summary": "open_elsewhere holds a number while any other feature has an open box of it (plain or old bold id, any indent) in tasks.md or tasks-done.md, started or not",
+     "class": "within",
+     "why": "The task line's own constraint is 'key to the feature or exclude another feature's open and moved numbers, started or not'; this is the second of the two options it names, and it fixes the defect (a landing deleting another feature's work in flight). Nothing in request.md or FR-001..005 constrains the mechanism."
+    },
+    {
+     "id": "D2 read the landing clone's specs, never the mirror",
+     "summary": "specs/ is read beside the git-common-dir make land passes, i.e. the clone that lands",
+     "class": "within",
+     "why": "Named in the task line's constraints ('read the landing clone, never the mirror') and is the measured cause in T533 (the mirror's 461 tasks.md lacked T50-T69)."
+    },
+    {
+     "id": "D3 open boxes only, ticked boxes not held",
+     "summary": "The brief's 'open or ticked' is not taken; a ticked box holds nothing",
+     "class": "within",
+     "why": "The task line's constraint is stated as open and moved numbers; holding ticked boxes would hold 70 of 461's 70 and 94 of 462's 113 numbers (recorded with date and method), which empties the take and reverses T517's fix, against the GM's stated disk-cleanup priority. A ticked task's scratch was already taken at its own landing since T517, so no in-flight work goes unprotected. Not a departure from anything the GM asked."
+    },
+    {
+     "id": "D4 moved-to-462 lines covered through 462's open box",
+     "summary": "A 'Withdrawn: moved to 462' line is ticked and holds nothing itself; the moved task's open box in 462 under its kept 451 id holds the number",
+     "class": "within",
+     "why": "Covers the brief's 'moved numbers' case by the mechanism FR-002 sets up (moved tasks keep their 451 numbers open here), not by an exception."
+    },
+    {
+     "id": "D5 T517 rows kept (unreadable tasks.md still holds; unstarted start with no open box not held)",
+     "summary": "T517's conservative branch and existing test kept unchanged",
+     "class": "within",
+     "why": "Preserves prior accepted behavior the brief lists as a constraint; no request clause asks to change it."
+    },
+    {
+     "id": "D6 feature matched by leading number",
+     "summary": "F=462 and 462-efficiency-backlog are the same feature",
+     "class": "within",
+     "why": "Implementation detail that makes the rule apply to both forms make land is given; serves the fix."
+    },
+    {
+     "id": "D7 window/feature-keyed attribution left to T553",
+     "summary": "Keying scratch by pool-log window or by feature-named scratch is not done here; a number another feature holds open keeps its scratch until that box closes or the session ends; filed as T553",
+     "class": "within",
+     "why": "The brief offered keying by feature OR excluding open numbers; choosing the latter is within it. What is left is later cleanup of some scratch (retained, not deleted wrongly), not a wrong outcome: no work is lost and session-end cleanup still runs. It is filed, not dropped, and the costs of the window approach (mtime is last write, entries predating the log, the coordinator's own scratch in no window) are stated."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T517 and T533, before T301 (no overlap), T553 after",
+     "class": "within",
+     "why": "Sequencing among 462's own tasks; touches no request clause and does not defer the GM's disk-cleanup priority."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1027,6 +1155,62 @@
      "summary": "A kill at the bound can cut a rustc mid-write, leaving one stale link that stale.rs heals once; the help says build first.",
      "class": "within",
      "why": "This is the consequence of the bound the task asks for. The block says it is healed automatically, so it is not a wrong outcome."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T550": {
+   "section_sha256": "8f7605d3b66d975025eded9e218a896ae8cadedd78b0c3c1611369663c9d1da0",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 by-number hold on any other feature's open box",
+     "summary": "open_elsewhere holds a number while any other feature has an open box of it (plain or old bold id, any indent) in tasks.md or tasks-done.md, started or not",
+     "class": "within",
+     "why": "The task line's own constraint is 'key to the feature or exclude another feature's open and moved numbers, started or not'; this is the second of the two options it names, and it fixes the defect (a landing deleting another feature's work in flight). Nothing in request.md or FR-001..005 constrains the mechanism."
+    },
+    {
+     "id": "D2 read the landing clone's specs, never the mirror",
+     "summary": "specs/ is read beside the git-common-dir make land passes, i.e. the clone that lands",
+     "class": "within",
+     "why": "Named in the task line's constraints ('read the landing clone, never the mirror') and is the measured cause in T533 (the mirror's 461 tasks.md lacked T50-T69)."
+    },
+    {
+     "id": "D3 open boxes only, ticked boxes not held",
+     "summary": "The brief's 'open or ticked' is not taken; a ticked box holds nothing",
+     "class": "within",
+     "why": "The task line's constraint is stated as open and moved numbers; holding ticked boxes would hold 70 of 461's 70 and 94 of 462's 113 numbers (recorded with date and method), which empties the take and reverses T517's fix, against the GM's stated disk-cleanup priority. A ticked task's scratch was already taken at its own landing since T517, so no in-flight work goes unprotected. Not a departure from anything the GM asked."
+    },
+    {
+     "id": "D4 moved-to-462 lines covered through 462's open box",
+     "summary": "A 'Withdrawn: moved to 462' line is ticked and holds nothing itself; the moved task's open box in 462 under its kept 451 id holds the number",
+     "class": "within",
+     "why": "Covers the brief's 'moved numbers' case by the mechanism FR-002 sets up (moved tasks keep their 451 numbers open here), not by an exception."
+    },
+    {
+     "id": "D5 T517 rows kept (unreadable tasks.md still holds; unstarted start with no open box not held)",
+     "summary": "T517's conservative branch and existing test kept unchanged",
+     "class": "within",
+     "why": "Preserves prior accepted behavior the brief lists as a constraint; no request clause asks to change it."
+    },
+    {
+     "id": "D6 feature matched by leading number",
+     "summary": "F=462 and 462-efficiency-backlog are the same feature",
+     "class": "within",
+     "why": "Implementation detail that makes the rule apply to both forms make land is given; serves the fix."
+    },
+    {
+     "id": "D7 window/feature-keyed attribution left to T553",
+     "summary": "Keying scratch by pool-log window or by feature-named scratch is not done here; a number another feature holds open keeps its scratch until that box closes or the session ends; filed as T553",
+     "class": "within",
+     "why": "The brief offered keying by feature OR excluding open numbers; choosing the latter is within it. What is left is later cleanup of some scratch (retained, not deleted wrongly), not a wrong outcome: no work is lost and session-end cleanup still runs. It is filed, not dropped, and the costs of the window approach (mtime is last write, entries predating the log, the coordinator's own scratch in no window) are stated."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T517 and T533, before T301 (no overlap), T553 after",
+     "class": "within",
+     "why": "Sequencing among 462's own tasks; touches no request clause and does not defer the GM's disk-cleanup priority."
     }
    ],
    "verdict": "CLEAR"

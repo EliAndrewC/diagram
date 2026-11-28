@@ -143,7 +143,8 @@ pub(crate) fn landed_leftovers(c: &Config, git: &Path, numbers: &[u64]) -> Vec<I
 }
 
 /// The landed tasks' scratch worlds in the landing session's scratchpad (451 T517, `leftovers::scratchpad`), but a number another
-/// feature started and has not ticked (`leftovers::open_elsewhere`), held by no live process; none where `/proc` cannot be read.
+/// feature holds open, started or not (`leftovers::open_elsewhere`, 462 T550), held by no live process; none where `/proc` cannot be
+/// read.
 pub(crate) fn landed_scratchpad(
     c: &Config,
     feature: &str,

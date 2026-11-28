@@ -3222,14 +3222,45 @@ parallelizing and is ordered by time saved, never by disk freed.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T550 (<why: the finding or measurement that files it>)
+### T550 (T533's one-off take: the landed-scratchpad rule matches a `t<N>` entry by number alone and protects only another feature's open START, observed 2026-11-27, method: the rule's matching re-run read only over the session scratchpad, 462 T533's `measure.py`)
+
+- **Approach**: `sweep/leftovers.rs`'s `open_elsewhere` now holds a number while ANY other feature has an OPEN box of it (`- [ ] T50`, an older feature's `- [ ] **T007**`, at any indent; `open_box`) in its `tasks.md` or `tasks-done.md`, started or not, read from `specs/` beside the git directory holding `task-starts.jsonl` - `make land` passes the landing clone's `git rev-parse --git-common-dir`, so the clone that lands, never the `/diagram` mirror (T533's cause: the mirror's 461 `tasks.md` lacked T50-T69). A start of another feature whose `tasks.md` cannot be read still holds its number (T517's conservative branch, kept); a start whose task is open is now held by its box. A feature is matched by its leading number, so `F=462` and `462-efficiency-backlog` are one. Name, signature, `why` strings and callers unchanged (`sweep.rs`'s doc line restated).
+- **Which, and why - by number, open boxes only**: an entry's contents and owner do not name its feature: a builder's scratch is named `t<N>-` (451 T271) with no feature and every entry has the one uid. The pool log's take/release windows DO attribute some: the scratchpad's `t22-*` (00:11-00:25Z on 11-28, `ls` shows the container's EST) fall inside 461 T22's window (00:02-00:26Z), observed 2026-11-27, method: `stat` of the scratchpad's entries against `grep` of `.git/builder-pool.log` (the T550 plan review's note caught the zone). But not all: the coordinating session's own `t<N>-` scratch falls in no window, nor does any entry from before the pool's log began (2026-11-26), an mtime is a last write and not a creation, and two features' same number can run at once. So keying by window is a second mechanism over the log, with its own misattribution to price, not this fix: by number here, the window lever filed as T553. The brief's "open or ticked" was priced and not taken: over the clone's specs (28 features with an open box), holding ticked boxes too would hold all 70 of 461's numbers and 94 of 462's 113, the take all but gone (T517's growth back), while open boxes only hold 184 of 451's 537, 56 of 461's 70 and 14 of 462's 113, observed 2026-11-27, method: `scratchpad/t550-measure2.py` over `specs/*/tasks*.md` (5,975 of 7,287 box lines carry a plain id; the bold-id form of features before 130 parsed too; the rest are id-less boxes such as `GM review`). A ticked box needs no hold: its own landing took its scratch since T517. Each case the brief names is covered: an unstarted open task of another feature is held by its box; a `Withdrawn: moved to 462` line is ticked and holds nothing itself, but the moved task keeps its id open in 462 (462 tasks.md's preamble), so it is held at every other feature's landing and taken at 462's own; a builder's `t<N>-` scratch of another feature is held while that task is open. Chosen by the T550 builder; cost: a landed number another feature holds open keeps its scratch until that box closes or the session ends.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| another feature's open box holds its number, started or not, an old bold id too; a ticked box or a moved-to-us line does not; by number or full name | red first: `every_open_number_of_another_feature_holds_whether_started_or_not` (`sweep/leftovers/tests.rs`; 1 failed, 5 passed on the old code: `left: [] right: [7, 22, 50]`) | n/a: tooling | none | n/a |
+| T517's rows kept: a start open elsewhere held, ticked not, an unstarted start with no open box (its fixture's T172) not, unreadable held | `another_feature_s_start_holds_the_number_while_its_task_is_open_whatever_its_age` unchanged and green; `disk/tests.rs`'s landing test green | n/a: tooling | none | n/a |
+
+### T550 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing takes its own tasks' scratch in the session's scratchpad and never another feature's work in flight, whether that task was started, never started or moved under the same number.
+2. **The constraints.** T550's line (key to the feature or exclude another feature's open and moved numbers, started or not; read the landing clone, never the mirror); T517's rule (whole numbers, live holds, worktrees, the unreadable branch); T533's lesson.
+3. **Where each comes from.** R: T517's and T533's sections, 462 `tasks.md`'s preamble (moved boxes keep their 451 ids); O: the measurements above.
+4. **Do they describe the world here?** Yes: the clone's real specs counted (`t550-measure2.py`), the Makefile's `--scratch-sweep landed` call read (the clone's `--git-common-dir`), the pool log and scratchpad read, 2026-11-27.
+5. **The order.** After T517 and T533 (landed); before T301 (it edits `sweep/tmp.rs`; no overlap); T553 after it.
+6. **The exits.** Green: the red-first test green, `make builder-checks CRATE=rust/guard` (637 passed) and `tests/hooks/test-disk-floor.sh` (16 passed). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** The take's held numbers on the clone's specs: 451 184 of 537, 461 56 of 70, 462 14 of 113, observed 2026-11-27, method: `scratchpad/t550-measure2.py`.
+10. **Before moving a constant.** n/a: no constant or knob.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; another feature's open work is no longer deleted at a landing of the same number.
+
+**Found and left?**
+- A scratch entry carries no feature, so an entry whose number another feature holds open is kept past its own landing (461: 56 of 70 numbers), observed 2026-11-27, method: `scratchpad/t550-measure2.py`. Not fixed here: naming scratch by feature changes `make builder-brief`'s block and every builder's habit, a mechanism of its own. Filed as T553; lands before T301 (no dependency either way).
+
+**Performance work?** no
+
+
+### T553 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T550 Approach (checklist part A)
+### T553 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
