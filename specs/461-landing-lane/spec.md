@@ -202,6 +202,10 @@ The acceptance of each user story, gathered by requirement (the measures themsel
   per hour of builder work at least the night's, read beside task size; the cross-blocking row no higher; total tokens per landed
   task no higher; every figure stated with its concurrency.
 - **SC-006** (FR-009): the plan's reuse decision is recorded for each part of the lane (research.md R1) before that part is built.
+- **SC-007** (FR-011): replaying the pool's log of 2026-11-28 under a policy giving 461 every builder it can use, every handout
+  path names a ready 461 task wherever one stood ready, and a performance or process-bugfix task of any feature ahead of both;
+  over the first like window after US6 lands, no free tree goes to a task the policy ranks below a ready one, but by a recorded
+  escape.
 
 ## Review history
 
