@@ -1092,6 +1092,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T78 (D6 step 2's narrowing, left by T24 Decisions 6 and 7: a red unit naming several changes was halved over every change that ran, correct but up to a run or so slower)": {
+   "sha256": "32c800bdd6f7221df46b6b3240490428c144c66c28c9fd6bd9d97c3bd118432c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T78 Approach (checklist part A)": {
+   "sha256": "05bce3bec480affeafd53eaa9d868935bf32a155b15f4fbd2e7559a28253f686",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7203,6 +7215,70 @@
      "why": "FR-013 counts measurement of where the time goes, the landings included, as performance work for ordering."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T78 (D6 step 2's narrowing, left by T24 Decisions 6 and 7: a red unit naming several changes was halved over every change that ran, correct but up to a run or so slower)",
+    "### T78 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "attribute gains Verdict::Candidates (every red unit names a change, some unit several); the halving runs over the candidates alone with the riders carried; supersedes T24 Decision 6 and the narrowing half of Decision 7",
+     "class": "within",
+     "why": "Removes a narrowing rather than adding one: FR-004 'attribute, else bisect' and US4 as D6 quotes it ('first by the gate's own report ... by bisection only where that names none') make the report the first authority, and the request's 'bisects and ejects the failing change. The rest of the batch lands' is served better when changes the report clears land on the next run. FR-008 untouched: every landing still passes the same gate."
+    },
+    {
+     "id": "Approach-mixed",
+     "summary": "a red where some unit names changes and another unit names none (or no unit is read) stays Unplaced, so the halving runs over the whole batch",
+     "class": "within",
+     "why": "US4's 'by bisection only where that names none': a red with a part the report does not place is not placed, so bisecting the whole batch is what FR-004 asks; nothing is trusted that the report did not name."
+    },
+    {
+     "id": "Approach-new",
+     "summary": "Halving::new is Halving::narrowed with no riders, its rules unchanged; T24's halving tests pass unchanged; three attribute assertions flip Unplaced to Candidates on purpose",
+     "class": "within",
+     "why": "Keeps the bisection FR-004 already has for an unplaced red; the flipped assertions are exactly the cases FR-004 sends to attribution first."
+    },
+    {
+     "id": "1",
+     "summary": "a lone candidate run red beside riders is ejected `red` and pinned; a rider is never pinned by the halving",
+     "class": "within",
+     "why": "A pin on the report's word, the red-attributed kind the one-candidate path already takes from a multi-change run; it tightens the tripwire (more pins, never fewer) and drops no check (FR-008). Note: the plan's D6 step 4 'a red half of two changes or more pins on nobody' now has an exception this block does not state that it amends."
+    },
+    {
+     "id": "2",
+     "summary": "riders ride with every set the halving runs until one is recorded green, which lands them",
+     "class": "within",
+     "why": "Serves the request's 'the rest of the batch lands' and FR-004's 'land the rest': a red run lands nothing, so the riders are still unlanded and ride the next set; every landing is still the set that was gated (FR-008)."
+    },
+    {
+     "id": "3",
+     "summary": "a rider that is red after all costs the candidates run beside it their ejection (an innocent ejection, returned as repairs); the riders left then run again as the rest and are read afresh",
+     "class": "within",
+     "why": "FR-004 and US4 make the gate's report the first authority, so ejecting what the report named is what was asked even when the report misleads; the one-candidate attribution path carries the same case. The innocent changes return through the request's own repair route ('the ejected task returns to the queue as a repair entry'), nothing lands ungated (FR-008), and the leftover riders are re-tested rather than trusted twice."
+    },
+    {
+     "id": "4",
+     "summary": "a unit naming one change beside a unit naming several puts that change among the candidates rather than ejecting it first",
+     "class": "within",
+     "why": "FR-004 attributes the red as a whole: the candidates are the changes the red units name, and the halving over them still ejects the failing change. No change is landed or ejected without a run or a report behind it."
+    },
+    {
+     "id": "5",
+     "summary": "the attribute line's `how` gains `candidates` (data-model row); no other reader of `how`",
+     "class": "within",
+     "why": "Records the new verdict in the existing lane log; adds and removes nothing the request or spec asks for."
+    },
+    {
+     "id": "Perf-no",
+     "summary": "the task declares 'Performance work? no' (not filed as a [perf] task), though its effect is fewer runs",
+     "class": "within",
+     "why": "The declaration changes nothing that is built: the task builds FR-004's attribution-first rule as written. Its scheduling class under the GM's 2026-11-28 priority words (FR-011) only orders work, and taking this one as an ordinary lane task removes nothing the GM asked to have built."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8581,6 +8657,68 @@
      "summary": "The task is classed as performance work under 451 FR-013 (a measurement of where landing time goes).",
      "class": "within",
      "why": "FR-013 counts measurement of where the time goes, the landings included, as performance work for ordering."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T78": {
+   "section_sha256": "b55e2ae9e9861df89ec730ad0f66b9438857eada35e30866dfe32de0972811b3",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach",
+     "summary": "attribute gains Verdict::Candidates (every red unit names a change, some unit several); the halving runs over the candidates alone with the riders carried; supersedes T24 Decision 6 and the narrowing half of Decision 7",
+     "class": "within",
+     "why": "Removes a narrowing rather than adding one: FR-004 'attribute, else bisect' and US4 as D6 quotes it ('first by the gate's own report ... by bisection only where that names none') make the report the first authority, and the request's 'bisects and ejects the failing change. The rest of the batch lands' is served better when changes the report clears land on the next run. FR-008 untouched: every landing still passes the same gate."
+    },
+    {
+     "id": "Approach-mixed",
+     "summary": "a red where some unit names changes and another unit names none (or no unit is read) stays Unplaced, so the halving runs over the whole batch",
+     "class": "within",
+     "why": "US4's 'by bisection only where that names none': a red with a part the report does not place is not placed, so bisecting the whole batch is what FR-004 asks; nothing is trusted that the report did not name."
+    },
+    {
+     "id": "Approach-new",
+     "summary": "Halving::new is Halving::narrowed with no riders, its rules unchanged; T24's halving tests pass unchanged; three attribute assertions flip Unplaced to Candidates on purpose",
+     "class": "within",
+     "why": "Keeps the bisection FR-004 already has for an unplaced red; the flipped assertions are exactly the cases FR-004 sends to attribution first."
+    },
+    {
+     "id": "1",
+     "summary": "a lone candidate run red beside riders is ejected `red` and pinned; a rider is never pinned by the halving",
+     "class": "within",
+     "why": "A pin on the report's word, the red-attributed kind the one-candidate path already takes from a multi-change run; it tightens the tripwire (more pins, never fewer) and drops no check (FR-008). Note: the plan's D6 step 4 'a red half of two changes or more pins on nobody' now has an exception this block does not state that it amends."
+    },
+    {
+     "id": "2",
+     "summary": "riders ride with every set the halving runs until one is recorded green, which lands them",
+     "class": "within",
+     "why": "Serves the request's 'the rest of the batch lands' and FR-004's 'land the rest': a red run lands nothing, so the riders are still unlanded and ride the next set; every landing is still the set that was gated (FR-008)."
+    },
+    {
+     "id": "3",
+     "summary": "a rider that is red after all costs the candidates run beside it their ejection (an innocent ejection, returned as repairs); the riders left then run again as the rest and are read afresh",
+     "class": "within",
+     "why": "FR-004 and US4 make the gate's report the first authority, so ejecting what the report named is what was asked even when the report misleads; the one-candidate attribution path carries the same case. The innocent changes return through the request's own repair route ('the ejected task returns to the queue as a repair entry'), nothing lands ungated (FR-008), and the leftover riders are re-tested rather than trusted twice."
+    },
+    {
+     "id": "4",
+     "summary": "a unit naming one change beside a unit naming several puts that change among the candidates rather than ejecting it first",
+     "class": "within",
+     "why": "FR-004 attributes the red as a whole: the candidates are the changes the red units name, and the halving over them still ejects the failing change. No change is landed or ejected without a run or a report behind it."
+    },
+    {
+     "id": "5",
+     "summary": "the attribute line's `how` gains `candidates` (data-model row); no other reader of `how`",
+     "class": "within",
+     "why": "Records the new verdict in the existing lane log; adds and removes nothing the request or spec asks for."
+    },
+    {
+     "id": "Perf-no",
+     "summary": "the task declares 'Performance work? no' (not filed as a [perf] task), though its effect is fewer runs",
+     "class": "within",
+     "why": "The declaration changes nothing that is built: the task builds FR-004's attribution-first rule as written. Its scheduling class under the GM's 2026-11-28 priority words (FR-011) only orders work, and taking this one as an ordinary lane task removes nothing the GM asked to have built."
     }
    ],
    "verdict": "CLEAR"

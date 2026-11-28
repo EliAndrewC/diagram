@@ -19,6 +19,13 @@
 //!   n = 4 with A bad took 4 runs and n = 6 with B bad took 5, past US4's ceil(log2 n) + 1 (counted by
 //!   `tests::every_single_bad_change_of_n_1_to_8_is_found_within_the_bound`).
 //! - NO RETRY OF A FLAKE: a red set is run again [`LANE_RETRY`] times before it is read red (D6 step 5).
+//! - THE RIDERS (461 T78, D6 step 2's "the halving runs over those candidates only, the others riding with the first half"): a
+//!   halving NARROWED to the candidates a red unit names ([`Halving::narrowed`]) halves over them alone; the batch's other changes
+//!   ride with every set it runs, in hand-in order, until a run is green, which lands them. They are presumed innocent of the red
+//!   (no unit named them), so a set's red is read as its candidates' alone: a lone candidate run red beside riders is ejected `red`
+//!   though the run was not its own, and a rider is never ejected nor pinned by the halving (`crate::tripwire`'s doc). A rider that
+//!   was red after all costs the candidates of its runs their ejection, and once the halving is done it runs again with the rest,
+//!   read afresh: the cost accepted, as the one-candidate path's own trust in the record.
 //!
 //! Each `Ran`, `Inferred` and `Sibling` carries the run the knowledge rests on (`n`): an `inferred` ejection's repair names that
 //! attempt's file, so the tripwire's ask (`crate::tripwire::files`) gets the attempt its red rests on.
@@ -75,6 +82,8 @@ pub struct Halving {
     sets: VecDeque<(Vec<usize>, Known)>,
     /// The singles known red by inference, ejected at the end.
     left: VecDeque<(usize, usize)>,
+    /// The changes riding with each set run until one is green (the module's doc).
+    riders: Vec<usize>,
     retry: usize,
     tries: usize,
 }
@@ -83,9 +92,16 @@ impl Halving {
     /// The halving of `changes`, which ran together red at run `n`, with `retry` runs again of a red set.
     #[must_use]
     pub fn new(changes: Vec<usize>, n: usize, retry: usize) -> Self {
+        Self::narrowed(changes, Vec::new(), n, retry)
+    }
+
+    /// The halving of the `candidates` a red unit named, the batch's `riders` riding with each set run until one is green (461 T78).
+    #[must_use]
+    pub fn narrowed(candidates: Vec<usize>, riders: Vec<usize>, n: usize, retry: usize) -> Self {
         Self {
-            sets: VecDeque::from([(changes, Known::Ran(n))]),
+            sets: VecDeque::from([(candidates, Known::Ran(n))]),
             left: VecDeque::new(),
+            riders,
             retry,
             tries: 0,
         }
@@ -102,6 +118,8 @@ impl Halving {
                         self.sets.pop_front();
                     }
                     self.sets.push_front((run.clone(), Known::Unknown));
+                    run.extend(&self.riders);
+                    run.sort_unstable();
                     return Next::Run(run);
                 }
                 Known::Ran(at) if set.len() == 1 => {
@@ -138,7 +156,9 @@ impl Halving {
         let Some((set, _)) = self.sets.pop_front() else {
             return;
         };
-        if !green {
+        if green {
+            self.riders.clear();
+        } else {
             self.sets.push_front((set, Known::Ran(n)));
         }
         let at = usize::from(!green);

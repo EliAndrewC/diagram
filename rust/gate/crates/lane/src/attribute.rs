@@ -35,12 +35,13 @@
 //! pass's own form for a task's refusal).
 //!
 //! THE VERDICT ([`attribute`]): every red unit names exactly one change - those changes are placed, each with its units, and ejected
-//! (`why` `red`); anything else - no unit read (a red the record does not hold), a unit no change touches, or a unit several changes
-//! touch - is UNPLACED, and since 461 T24 the runner halves over every change that ran (`crate::halve`). Several candidates are read
-//! as unplaced, so the halving runs over the whole set where D6 step 2 would run it over the candidates alone, the others riding:
-//! label: the algorithmically easier route (a lone candidate run red beside riders is no one-change run, so the pin rule would need a
-//! reading of its own), correct and at most a run or so slower; the narrowing is filed as 461 T78.
+//! (`why` `red`); where every unit names a change and some unit several, the changes any unit names are the CANDIDATES (461 T78, D6
+//! step 2's "the halving runs over those candidates only, the others riding with the first half"; `crate::halve`'s riders) - a unit
+//! naming one change beside one naming several joins the candidates rather than being ejected first (label: the algorithmically
+//! easier route, one red read one way; the halving finds that change in its turn); anything else - no unit read (a red the record
+//! does not hold) or a unit no change touches - is UNPLACED, and since 461 T24 the runner halves over every change that ran.
 
+use std::collections::BTreeSet;
 use std::fmt::Write as _;
 use std::path::Path;
 
@@ -96,6 +97,9 @@ pub struct Change {
 pub enum Verdict {
     /// Each placed change, by its index among the changes, with its units, in the changes' order.
     Placed(Vec<(usize, Vec<String>)>),
+    /// Every unit names a change and some unit several (461 T78): the changes any unit names, by their indices, in order - the
+    /// candidates a halving runs over, the others riding (`crate::halve`).
+    Candidates(Vec<usize>),
     Unplaced,
 }
 
@@ -320,17 +324,26 @@ pub fn refusal(reds: &[Red], changes: &[Change]) -> Refusal {
 #[must_use]
 pub fn attribute(reds: &[Red], changes: &[Change]) -> Verdict {
     let mut placed: Vec<(usize, Vec<String>)> = Vec::new();
+    let mut several: BTreeSet<usize> = BTreeSet::new();
     for red in reds {
         let names: Vec<usize> = (0..changes.len())
             .filter(|&i| touches(red, &changes[i]))
             .collect();
-        let [one] = names[..] else {
+        if names.is_empty() {
             return Verdict::Unplaced;
+        }
+        let [one] = names[..] else {
+            several.extend(names);
+            continue;
         };
         match placed.iter_mut().find(|(i, _)| *i == one) {
             Some((_, units)) => units.push(red.unit.clone()),
             None => placed.push((one, vec![red.unit.clone()])),
         }
+    }
+    if !several.is_empty() {
+        several.extend(placed.iter().map(|(i, _)| *i));
+        return Verdict::Candidates(several.into_iter().collect());
     }
     if placed.is_empty() {
         return Verdict::Unplaced;
