@@ -41,6 +41,7 @@ mod named;
 mod parity;
 mod phase;
 mod ready;
+mod route;
 mod stop;
 pub mod unfinished;
 mod writers;
@@ -895,6 +896,15 @@ fn main(
         );
         return refused(2);
     };
+    // THE ONE ROUTE (461 T29, [`route`]): only the lane's tree lands, but by the recorded escape
+    match route::rule(&root, &args[0], &tasks) {
+        route::Route::Lane => {}
+        route::Route::Escaped(line) => eprintln!("{line}"),
+        route::Route::Refused(why) => {
+            eprintln!("{why}");
+            return refused(2);
+        }
+    }
     Land::new_in(&root, &scripts(&root)).landing(&d, &tasks, &note, began)
 }
 

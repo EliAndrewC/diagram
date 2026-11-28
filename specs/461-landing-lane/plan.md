@@ -880,32 +880,39 @@ engine speed, so the performance checklist does not apply.
 **Performance work?** no.
 
 
-### T29 (<why: the finding or measurement that files it>)
+### T29 (plan D11 phase 4: the one route - `make land` refused outside the lane's tree, its escape recorded; FR-001, FR-003, FR-008)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a new module `rust/gate/crates/land/src/land/route.rs` (D15: the land crate) asked in `land.rs`'s `main` - the dispatch arm `make land` and `make land-batch` reach through `LAND_RUN`, after its usage, NOTE and spec checks and before `Land::landing`, so a refusal writes the landing's `end` line (`refused(2)`) and nothing of the landing runs (no carry, no first pass). The rule (`route::rule`): the tree is the lane's when the pool's registry (`l7r_shared::builder_pool::read_all` of the root's common git directory) holds an entry held by `lane` whose canonical path is the root's - the same reading as `tree/src/state.rs`'s `lane_run`. Neither `L7R_LANE_BATCH` nor `L7R_LAND_ALONE` lets a landing through: both are plain exports, so either would be an unrecorded escape (pinned by a test). Elsewhere, `LAND_HERE_OK="<reason>"` is read first, held to the reason floor (`escape::enough`), and recorded either way to the guard log as `land-here` (`escaped`/`land-here-ok`, `blocked`/`LAND_HERE_OK-no-reason`); with none, the landing is refused, recorded `blocked`/`outside-the-lane`, its message naming the lane's tree (or `make builder-tree-adopt TREE=<clone>-land` where none is adopted), `make builder-done T=<task> F=<feature>`, `make lane-start` and the escape's whole command. The Makefile's `land` and `land-batch` help and `docs/guards.md` carry the rule. The callers, observed 2026-11-28, method: a `grep` for `make land`, `l7r-gate land` and `gate.sh land` over the Makefile, `scripts/`, `rust/` and `tests/hooks/`: the lane's runner runs `make land` in the lane's tree (`lane/src/runner/run.rs` step 3) - passes; `scripts/land-alone.sh` step 6 runs it in `${LAND_ALONE_TREE:-<clone>-land}`, which is the registry's lane entry (`/diagram/.clones/diagram-backlog-land`, read from `builder-pool.json` 2026-11-28) - passes, so land-alone keeps working until T30; `scripts/sync-with-main.sh` and `land-tooling.sh` run no `make land` (one message names it: T98); `tests/hooks/test-disk-floor.sh` stops at the floor before `LAND_RUN`. The lane's runner tests run a fake Makefile, untouched.
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+| case | before | after |
+|---|---|---|
+| `make land` in the clone | lands (route test: `Ok(0)`, ticked) | refused, exit 2, its `end` written, no stub called |
+| in the lane's tree | lands | lands, nothing recorded |
+| `LAND_HERE_OK` with a reason | - | lands as before (a dirty clone still alone), `escaped` recorded once (the inner land-alone run is in the lane's tree, so it records nothing) |
+| `LAND_HERE_OK=x` | - | refused, `blocked` recorded |
+| an unclean lane tree | refused by the first pass, naming each change (`writers.rs`, 451 T242) | the same |
 
 ### T29 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every landing is the lane's: the coordinator's `make land` in its clone stops with the route named, and the one recorded exception is a landing by hand when the lane itself cannot land.
+2. **The constraints.** FR-001 (no gate in the coordinator's tree), FR-003 (the lane runs the existing `make land` in its own worktree), FR-008 (nothing of the checks dropped: the refusal comes before them, the escape runs them all); D10, D11 (phase 4), D15; the brief's "keep land-alone working until T30".
+3. **Where each comes from.** G: the GM's lane (FR-003, the spec's words); R: plan D11's phase-4 decision; O: the registry and caller reads of 2026-11-28 above.
+4. **Do they describe the world here?** Yes: the lane's tree is in the registry under `lane` and is the tree land-alone uses, measured 2026-11-28 (a read of the clone's `builder-pool.json` beside `land-alone.sh`'s `WT=`); the lane's runner has landed batches there, measured 2026-11-28 (the brief's account of the 05:2xZ bootstrap).
+5. **The order.** After T26 (phase 3 in use, the lane carrying landings); before T30, which retires land-alone.
+6. **The exits.** Green: the land crate's tests, the route's red-first tests green and each check deleted seen red. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - a tooling rule, no research question.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make rust-test CRATE=rust/gate/crates/land`: 235 passed; red first, the route's main test `Ok(0)` (landed outside the lane) on the old dispatch; each of the five checks (the lane match, the escape read, the reason floor, the escape's record, main's return on refusal) deleted in turn turns a route test red (1 or 2 failed each), measured 2026-11-28.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** A session that runs `make land` in its clone is refused with the route instead of gating and pushing from the clone; the lane's landings are unchanged.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+The task line's second refusal, "`make land` refuses an unclean tree, naming each file", read against the brief's "keep land-alone working until then": in the lane's tree (and land-alone's, both `L7R_LAND_ALONE`) an unclean tree is already refused by the first pass, naming each change (`writers.rs`, 451 T242; pinned by `writers/tests.rs`'s `the_first_pass_names_the_changes_and_an_open_handoff_naming_the_clone`). In the clone a dirty tree is land-alone's own trigger (`alone_owed`), so refusing it there now would retire land-alone a task early; the clone's unclean refusal arrives with T30's removal of `alone.rs`, when a dirty clone under `LAND_HERE_OK` meets the same writers' refusal. Label: the easier route, the brief's order kept; the coordinating session told.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Found and left?**
+- The notices that still send the coordinator to `make land` in its clone - the batch-landing order notice at `make decide` (`static_runs_hooks/order.rs`), the holding box's lines (`shared/src/speckit.rs`), `sync-with-main.sh`'s push message, `builder-brief.md`'s phase-1 step: a session that follows one is now refused. Not fixed here: guard messages in another crate, beyond this task's one job. Filed as T98; lands before T30.
 
+**Performance work?** no
 
 ### T30 (<why: the finding or measurement that files it>)
 
@@ -1522,6 +1529,59 @@ engine speed, so the performance checklist does not apply.
 |---|---|---|---|---|
 
 ### T110 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T97 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T97 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T98 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T98 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -1068,6 +1068,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T29 (plan D11 phase 4: the one route - `make land` refused outside the lane's tree, its escape recorded; FR-001, FR-003, FR-008)": {
+   "sha256": "759d4632c35fae15ca9eea865f0f3121a44fe1536bebab77a016a3493de2341e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "779595dc9bdd14a23aae67571793334d961e7892727ccd645bb81583b186305d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -7059,6 +7071,64 @@
      "summary": "order after T24 and T76, before 461 T23; exits: green on the lane crate's tests and coverage, or red recorded and set down with any cannot-be-done claim ruled through make arbiter-ask",
      "class": "within",
      "why": "Sequencing and exits. They narrow nothing the request or the spec carries."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T29 (plan D11 phase 4: the one route - `make land` refused outside the lane's tree, its escape recorded; FR-001, FR-003, FR-008)",
+    "### T29 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T29-refusal-outside-lane",
+     "summary": "make land / make land-batch refused (exit 2, end line refused(2), nothing of the landing run) when the root is not the registry's lane-held tree, its message naming the lane tree (or builder-tree-adopt), builder-done, lane-start and the escape",
+     "class": "within",
+     "why": "D11 phase 4 verbatim: make land outside the lane tree is refused, naming make lane-start; refusing before the checks drops none of them (FR-008), since nothing lands."
+    },
+    {
+     "id": "T29-lane-tree-rule",
+     "summary": "the lane's tree is the pool registry entry held by lane whose canonical path is the root's, the same reading as state.rs lane_run",
+     "class": "within",
+     "why": "How 'the lane tree' of D11 is recognized; settles a mechanism the spec left open, narrows nothing."
+    },
+    {
+     "id": "T29-no-env-escapes",
+     "summary": "neither L7R_LANE_BATCH nor L7R_LAND_ALONE lets a landing through outside the lane's tree",
+     "class": "within",
+     "why": "D11 names one escape, recorded; plain exports would be unrecorded escapes. Holds the rule tighter, not narrower; land-alone's step 6 runs in the lane's tree and so still passes."
+    },
+    {
+     "id": "T29-escape",
+     "summary": "LAND_HERE_OK=\"<reason>\" read first, held to the reason floor, recorded to the guard log both ways (escaped / blocked)",
+     "class": "within",
+     "why": "D11's escape LAND_HERE_OK=\"<reason>\" (recorded). The floor and the blocked record enforce the recording D11 asks for."
+    },
+    {
+     "id": "T29-module-placement",
+     "summary": "the rule lives in a new land/src/land/route.rs asked in land.rs main after usage/NOTE/spec checks, before Land::landing",
+     "class": "within",
+     "why": "Placement of D11 phase 4's refusal; D15's 'land.rs gains the --hand-in arm only' governs the lane's hand-in code, and a design location is not a fidelity matter."
+    },
+    {
+     "id": "T29-docs",
+     "summary": "Makefile land/land-batch help and docs/guards.md carry the rule",
+     "class": "within",
+     "why": "Documents the requested refusal."
+    },
+    {
+     "id": "T29-unclean-clone-refusal-with-T30",
+     "summary": "the task line's 'make land refuses an unclean tree, naming each file': in the lane's tree it already holds (writers first pass, 451 T242); in the clone it arrives with T30's removal of alone.rs, so land-alone keeps working until T30",
+     "class": "within",
+     "why": "D11 puts the unclean-tree refusal and the dirty-clone route's retirement in the same phase 4 and orders neither; T29 and T30 are both phase 4, so this sequences the phase rather than narrowing it. Until T30, a dirty clone reaches land-alone only under the recorded escape, which is the existing route D11 retires in that phase, not a defect. It holds only if T30 carries the clone's unclean refusal; a T30 that does not would be the narrowing."
+    },
+    {
+     "id": "T29-stale-notices-T98",
+     "summary": "notices still sending the coordinator to make land in its clone (order.rs, speckit.rs holding box, sync-with-main.sh, builder-brief.md) left, filed as T98 to land before T30",
+     "class": "within",
+     "why": "Neither the request nor the spec asks for these notices to be changed. They are made stale by this phase, and the fix is filed to land inside the same phase, before T30, and is not carried past the step. A session following one is refused with the correct route named."
     }
    ]
   }
