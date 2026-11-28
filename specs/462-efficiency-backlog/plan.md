@@ -1400,32 +1400,48 @@ After the move two edits were made to satisfy the plan lint, neither changing a 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T278 (<why: the finding or measurement that files it>)
+### T278 (451 T278's line: the cargo-variant sweep keeps 16 variants a crate and prunes only after 12 idle hours, and the clone's `cover-gate` held 44 GB where a fresh one is 2.65 GB, measured 2026-11-26 (`dev/measurements/2026-11-26/build-levers`); measured again 2026-11-27 after T325 and T515 had landed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement, no code changed. The record is `dev/measurements/2026-11-27/t278-variants/results.md`, its scripts and tables beside it (`t278-count.py`, `t278-net.py`, `t278-live.py`, `t278-prune.py`, `t278-build.sh`, `t278-arms.sh`; `t278-count.tsv`, `t278-net.tsv`, `t278-runs.tsv`). Every read of a live cache was by `lstat` alone; every build ran on a copy in the session scratchpad, and the copies were deleted after.
+  - **What was measured.** The variants per crate in all 27 `cover-*` directories, and what the sweep (`rust/guard/src/guards/scratch_sweep_hooks/sweep/cargo.rs`, `KEPT = 16`, `L7R_CACHE_IDLE_HOURS` = 12) would take at keep 16, 8, 4, 2 and 1, each at idle cutoffs of 12, 6, 1 and 0 h, gross and net of T515's 48 h prune, measured 2026-11-27 (`t278-count.py`, `t278-net.py`). Then the gate family's coverage build, a hand replica of `cover.rs`'s call (validated: 0 units compiled, 80 fresh, 0.5 s after the warm-up), on a copy of `diagram-backlog-t270/cover-gate` warmed to HEAD, with the rule applied at keep 16, 4 and 2: a warm whole-family build, a warm `-p l7r_gate_claims` alone, and the whole family after a one-line edit of `rust/gate/crates/registry/src/lib.rs`, measured 2026-11-27 (`t278-arms.sh`). Units compiled is the figure to go by: wall time moved from 124 to 202 s across arms that compiled the same 27 units, with the machine at load 14 to 57 on 22 cores, measured 2026-11-27 (`t278-runs.tsv`).
+  - **Today, the rule as it stands takes almost nothing.** Keep 16 at 12 h takes 0.02 GB, all of it in the clone's `cover-gate` (17.27 GB, 1,349 entries, largest group 17), and 0.00 GB in every other directory, measured 2026-11-27 (`t278-count.py`). T515's prune did the work: the clone's `cover-gate` went from 44 GB to 17.3 GB, measured 2026-11-26 and 2026-11-27 (`build-levers`, `t278-count.py`).
+  - **The levers priced**, measured 2026-11-27 (`t278-net.py`, `t278-arms.sh`):
+
+    | lever | GB taken, all 27 `cover-*` | net of T515 | of which the clone's `cover-gate` | time lost |
+    |---|---|---|---|---|
+    | keep 16 → 8 | 3.11 | 0.78 | 0.78 | 0 (no live entry within 4 of the cut) |
+    | keep 16 → 4 | 11.52 | 5.69 | 3.78 | 0 measured (0 units warm; the same 27 after the edit as at keep 16), but no margin: keep 3 takes a live entry |
+    | keep 16 → 2 | 26.40 | 16.68 | 6.48 | 62 units, 297.9 s on the next warm build, and 14 units, 41.9 s on a second `-p` selection, measured 2026-11-27 (`t278-runs.tsv`) |
+    | idle 12 h → 0 h, at keep 16 | 0.02 | 0.02 | 0.02 | 0, measured 2026-11-27 (`t278-net.tsv`) |
+
+    The net is an upper bound: `t278-net.py` leaves out T515's newest-of-kind keep.
+  - **Why keep 4 has no margin.** `variant_of` groups a crate's library, its build-script compile and its build-script run under one name, so a crate with a build script has 3 live entries in `.fingerprint`, and two `-p` selections that resolve an outside crate differently add a fourth. Keep 3 already takes `.fingerprint/serde_json-864f8b427ec4b3cb`, a live build-script run unit, measured 2026-11-27 (`t278-prune.py ... 3 12 --live`).
+  - **The idle cutoff is no lever.** At every keep the take at 12, 6, 1 and 0 h is the same to the hundredth of a GB in every directory, measured 2026-11-27 (`t278-count.tsv`'s `take_k*_h*` columns): the entries past rank 16 are all older than 12 h, so the cutoff never decides what goes and frees 0 GB.
+  - **The decision: no lever is adopted here.** Keep 16 stays. Keep 2 loses time, so the GM's rule (time saved outranks disk, 462 T301's restatement of 2026-11-26) rules it out. The idle cutoff frees 0 GB, measured 2026-11-27 (`t278-count.tsv`). Keep 4 lost no time, but only by luck of today's groups: one more live unit in a group (a fourth `-p` resolution, a second build script) and it evicts a live entry. Keep 8 is safe with 4 of margin but frees only 0.78 GB net, measured 2026-11-27 (`t278-net.tsv`). Adopting either changes `cargo.rs` and its suite, which a measurement does not do. Filed as T556: adopt keep 4 only with the group split by unit kind (library, build-script compile, build-script run, as T515's newest-of-kind does), else keep 8.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| no code changed: a measurement, its record and scripts in `dev/measurements/2026-11-27/t278-variants/` | n/a: nothing fixed | n/a: tooling | none | n/a |
 
 ### T278 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** The `cover-*` build directories hold no variant a later coverage build cannot reuse, and the sweep never evicts one a later build would rebuild; the session knows, from measurement, which keep and which idle cutoff do that.
+2. **The constraints.** The GM's rule that time saved outranks disk and that nothing a later run would reuse is evicted (462 T301's restatement, 2026-11-26); the task line's order to adopt what loses no time; no live process or live cache touched, every build on a copy; T325 (one feature set per family) and T515 (the stale prune, `L7R_CACHE_STALE_HOURS`) landed first, so the measurement sees the variants that are left after them.
+3. **Where each comes from.** G: the GM's words of 2026-11-26 on the disk work, restated in 462 T301's task line and held verbatim in `specs/451-time-retro-and-efficiency/request.md`: time saved outranks disk usage. O: `dev/measurements/2026-11-26/build-levers` (the clone's `cover-gate` that filed the task, measured 2026-11-26 there) and this record, `dev/measurements/2026-11-27/t278-variants/results.md`.
+4. **Do they describe the world here?** Yes: the copy used for the builds matched its original's counts row for row, and the hand replica of the gate's coverage call compiled 0 units with 80 fresh after the warm-up, measured 2026-11-27 (`t278-count.py`, `t278-build.sh`).
+5. **The order.** After T325 and T515 (both landed 2026-11-26/27, which change how many variants are live); before T556 (the keep change, filed here) and T558 (462 T301's part 2, what else no later run can reuse), which read this record.
+6. **The exits.** Green: each lever priced in GB freed and units recompiled, measured 2026-11-27 (`t278-net.tsv`, `t278-runs.tsv`), and a lever adopted only if it lost nothing with margin. Keep 8 qualified (0 units lost, 4 of margin), but adopting it, or keep 4 with the group split, changes `cargo.rs` and its suite, which a measurement does not do, so the adoption is T556's. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing, of this section, the record and its scripts, and T556's line.
+9. **Done, measured.** Keep 16 → 8, 4, 2 and the idle cutoff 12 → 0 h each priced at 0.78, 5.69, 16.68 and 0.02 GB net of T515, losing 0, 0 (no margin), 62 units and 297.9 s, and 0 units, measured 2026-11-27 (`t278-net.py`, `t278-arms.sh`).
+10. **Before moving a constant.** No constant is moved here: `KEPT` stays 16 and `L7R_CACHE_IDLE_HOURS` 12. Moving `KEPT` is T556's, with the margin this record measured.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing is fixed here, and nothing a reader would see changes: no map moves, and the sweep is left as it is. The one finding with a cost - `variant_of` grouping three unit kinds under one name, so a smaller keep evicts a live build-script unit - is a defect only once the keep is lowered, and it is T556's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `variant_of` in `rust/guard/src/guards/scratch_sweep_hooks/sweep/cargo.rs` groups a crate's library, build-script compile and build-script run under one name, so at keep 3 the sweep takes a live entry (`.fingerprint/serde_json-864f8b427ec4b3cb`) and at keep 2 the next warm build of the gate family compiles 62 units in 297.9 s, measured 2026-11-27 (`t278-prune.py --live`, `t278-arms.sh`); visible effect: today none at keep 16, but it caps the keep the sweep can safely use at 4 with no margin, holding 5.69 GB net of T515 in place, measured 2026-11-27 (`t278-net.py`). Not fixed here: a measurement changes no source, and the fix (split the group by unit kind, then keep 4; else keep 8) is a change to `cargo.rs` and its suite. Filed as T556; lands before T558.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no: disk work, ordered by the GM's order for 462 (T549); rebuild time was measured only to make sure no lever costs a later build any time.
 
 ### T279 (<why: the finding or measurement that files it>)
 
@@ -3550,6 +3566,32 @@ parallelizing and is ordered by time saved, never by disk freed.
 |---|---|---|---|---|
 
 ### T558 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T556 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T556 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

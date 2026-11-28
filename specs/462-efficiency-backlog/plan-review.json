@@ -132,6 +132,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T278 (451 T278's line: the cargo-variant sweep keeps 16 variants a crate and prunes only after 12 idle hours, and the clone's `cover-gate` held 44 GB where a fresh one is 2.65 GB, measured 2026-11-26 (`dev/measurements/2026-11-26/build-levers`); measured again 2026-11-27 after T325 and T515 had landed)": {
+   "sha256": "ee83aa2592524b900d1b77b6d462affe017486ef824a7dc5ed43747ac09cbbb6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T278 Approach (checklist part A)": {
+   "sha256": "2140aed4a05aa3bd94303ac449fef51aa026c46b71539365a19093e2e1a542cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -405,6 +417,189 @@
      "why": "Ordering and exit choices inside 462's disk work, consistent with the GM's priority of disk tasks over 462's longer-term ones."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T278 (451 T278's line: the cargo-variant sweep keeps 16 variants a crate and prunes only after 12 idle hours, and the clone's `cover-gate` held 44 GB where a fresh one is 2.65 GB, measured 2026-11-26 (`dev/measurements/2026-11-26/build-levers`); measured again 2026-11-27 after T325 and T515 had landed)",
+    "### T278 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 measurement only; adoption filed as T556",
+     "summary": "T278 changes no code: it prices every lever and files the adoption (keep 4 with variant_of split by unit kind, else keep 8) as T556, landing before T558.",
+     "class": "within",
+     "why": "Neither request.md nor the spec (FR-002 moves 451 tasks with their lines; no FR scopes T278) places the code change inside T278. The adoption isn't dropped: T556 carries all of it, including the zero-cost keep 8 fallback. It stays 462 disk work, which the GM's 2026-11-27 order puts ahead of the long-term tasks. Re-sequencing inside the feature is not a narrowing of the request. Non-blocking note: Exit 6 says 'a lever adopted only if it lost nothing with margin - none did', which contradicts the block's own decision paragraph and table ('Keep 8 is safe with 4 of margin'). The real ground for deferring is the task's own scope (a measurement changes no source), and Exit 6 should say so."
+    },
+    {
+     "id": "D2 keep 2 ruled out",
+     "summary": "Keep 2 is rejected because the next warm build recompiles 62 units (297.9 s).",
+     "class": "within",
+     "why": "This applies the GM's rule that time saved outranks disk (cited by the block to 462 T301 / 451 request.md, which is not in the bundle and is taken on that citation). It narrows nothing that was asked."
+    },
+    {
+     "id": "D3 idle cutoff stays 12 h",
+     "summary": "L7R_CACHE_IDLE_HOURS stays 12 because every cutoff from 12 down to 0 h frees the same GB.",
+     "class": "within",
+     "why": "This is a measured no-op lever left unchanged. Nothing asked is dropped."
+    },
+    {
+     "id": "D4 KEPT stays 16 for now",
+     "summary": "No constant is moved in T278. KEPT changes only under T556, with the measured margin.",
+     "class": "within",
+     "why": "Follows from D1. The work is carried by T556."
+    },
+    {
+     "id": "D5 units compiled, not wall time, as the cost figure",
+     "summary": "Rebuild cost is judged by units compiled because wall time varied from 124 to 202 s on the same 27 units under machine load.",
+     "class": "within",
+     "why": "A method choice inside the measurement."
+    },
+    {
+     "id": "D6 lstat-only reads of live caches, builds on scratch copies, net stated as an upper bound",
+     "summary": "No live cache or process is touched. The net-of-T515 figure is an upper bound because the newest-of-kind keep is omitted.",
+     "class": "within",
+     "why": "A method and safety choice. Nothing asked is narrowed."
+    },
+    {
+     "id": "D7 order: after T325 and T515, before T556 and T558",
+     "summary": "Sequencing among 462's disk tasks.",
+     "class": "within",
+     "why": "Consistent with the GM's ordering of disk work. Nothing is deferred out of the feature."
+    },
+    {
+     "id": "D8 variant_of grouping found and left (filed as T556)",
+     "summary": "variant_of groups the lib, build-script compile and build-script run under one name. It is not fixed in T278.",
+     "class": "within",
+     "why": "At keep 16 it produces no wrong outcome. It only caps how low the keep could safely go, so under constitution XIV's definition it is not a defect left. It is filed as T556, which lands before T558."
+    },
+    {
+     "id": "D9 classed as disk work, not performance work",
+     "summary": "Rebuild time is measured only to make sure no lever costs any time.",
+     "class": "within",
+     "why": "Matches the GM's 2026-11-27 disk-priority order."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T278 (451 T278's line: the cargo-variant sweep keeps 16 variants a crate and prunes only after 12 idle hours, and the clone's `cover-gate` held 44 GB where a fresh one is 2.65 GB, measured 2026-11-26 (`dev/measurements/2026-11-26/build-levers`); measured again 2026-11-27 after T325 and T515 had landed)",
+    "### T278 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T278-a",
+     "summary": "No sweep lever is adopted in T278; adoption of a smaller keep moves to the new task T556, ordered before T558.",
+     "class": "within",
+     "why": "Sequencing, not removal: every lever that met the block's own adoption test (keep 8: 0 time lost, 4 of margin) is carried by T556, whose floor is keep 8, and T556 is disk work in the same feature, ordered before T558, so the GM's 2026-11-27 clause putting disk cleanup ahead of the long-term work is not breached. Judged on the block's own account of the task line's 'adopt what loses no time' order, which is not in the bundle. Wording fix owed: exit 6's 'a lever adopted only if it lost nothing with margin - none did' contradicts the block's own figures - keep 8 qualified; it should read that keep 8 qualified and its adoption (or keep 4 with the split) is T556's."
+    },
+    {
+     "id": "T278-b",
+     "summary": "T556's content is fixed here: keep 4 only with variant_of's group split by unit kind, else keep 8.",
+     "class": "within",
+     "why": "Prices the levers the task asked about and keeps the no-time-lost floor (keep 8) as the fallback; narrows nothing the GM or the spec asked."
+    },
+    {
+     "id": "T278-c",
+     "summary": "Keep 2 is rejected because it recompiles 62 units (297.9 s) on the next warm build.",
+     "class": "within",
+     "why": "Applies the GM's time-saved-outranks-disk rule as the block states it (462 T301's restatement; the source is not in the bundle and was judged on the block's account)."
+    },
+    {
+     "id": "T278-d",
+     "summary": "The idle cutoff (L7R_CACHE_IDLE_HOURS 12) is declared no lever and left at 12.",
+     "class": "within",
+     "why": "A measured finding (0.02 GB at every cutoff, identical at 12/6/1/0 h); leaving an inert constant as it is narrows nothing asked."
+    },
+    {
+     "id": "T278-e",
+     "summary": "Method: units compiled is the time figure rather than wall time (load 14 to 57); time cost measured on one family's build on one copied cover-gate while GB figures span all 27 cover-* directories; all builds on copies, live caches read by lstat only.",
+     "class": "within",
+     "why": "Method choices inside the measurement; none drops a case the task or the GM's words require."
+    },
+    {
+     "id": "T278-f",
+     "summary": "variant_of grouping library, build-script compile and build-script run under one name is found and left, filed into T556.",
+     "class": "within",
+     "why": "At keep 16 nothing live is evicted (the block measured 0 units recompiled at the current rule), so it is not a defect under XIV's wrong-outcome test; it becomes one only when the keep is lowered, which is T556's, and T556 carries the fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T278 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T278-D1 adoption of the qualifying keep goes to T556",
+     "summary": "Item 6 (the only passage changed since the CLEAR verdict) now records that keep 8 qualified (0 units lost, 4 of margin) and moves adopting it, or keep 4 with variant_of split, to T556, because either changes cargo.rs and its suite.",
+     "class": "within",
+     "why": "The lever is still adopted, by a task filed in this same feature and ordered before T558, so nothing the task line asked for is dropped. Putting a source change in its own task is a choice about order. The GM's rule (time saved outranks disk) is kept: the keep that is adopted loses no units. The edit corrects a wrong 'none did' to what the measurement shows."
+    },
+    {
+     "id": "T278-D2 order",
+     "summary": "Measured after T325 and T515 landed; before T556 and T558, which read this record.",
+     "class": "within",
+     "why": "Order only, inside the disk work the GM put first within 462 (2026-11-27)."
+    },
+    {
+     "id": "T278-D3 no constant moved here",
+     "summary": "KEPT stays 16 and L7R_CACHE_IDLE_HOURS stays 12 in this task; the idle cutoff 12 to 0 h frees 0.02 GB and is not adopted.",
+     "class": "within",
+     "why": "KEPT is the same decision as D1 and moves in T556. Leaving the idle cutoff where it is costs no time and leaves no wrong outcome, so it is a difference, not a defect, and needs no ruling."
+    },
+    {
+     "id": "T278-D4 variant_of grouping left to T556",
+     "summary": "variant_of groups library, build-script compile and build-script run under one name, so keep 3 or below evicts a live entry; the fix (split by unit kind) is filed as T556.",
+     "class": "within",
+     "why": "At today's keep of 16 it has no effect. It only becomes a wrong outcome once the keep is lowered, and the fix and the lowering land together in T556, before T558, so no known defect is carried past the step that would expose it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T278 (451 T278's line: the cargo-variant sweep keeps 16 variants a crate and prunes only after 12 idle hours, and the clone's `cover-gate` held 44 GB where a fresh one is 2.65 GB, measured 2026-11-26 (`dev/measurements/2026-11-26/build-levers`); measured again 2026-11-27 after T325 and T515 had landed)",
+    "### T278 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T278-D1",
+     "summary": "T278 is a measurement only: no code changes, KEPT stays 16 and L7R_CACHE_IDLE_HOURS stays 12. Adopting the safe lever (keep 8, or keep 4 with variant_of split by unit kind) goes to a new 462 task, T556, ordered before T558.",
+     "class": "within",
+     "why": "Neither the GM's request nor 462's spec says how T278 must be scoped. The request moves 451's deferred work here and puts disk-cleanup work ahead of most of 462's long-term tasks. The adoption is not dropped: it is filed as T556, a disk task inside 462 at the same priority and ordered before T558, so the GM's ordering survives. The 'adopt what loses no time' order in constraint 2 comes from the task line, not from the GM's words here. Moving that work to a sibling task in the same feature does not narrow what the GM asked for. It costs one extra landing and does not defeat the purpose of the disk work."
+    },
+    {
+     "id": "T278-D2",
+     "summary": "Keep 2 is ruled out because it costs 62 units and 297.9 s on the next warm build.",
+     "class": "within",
+     "why": "This applies the GM's rule that time saved outranks disk usage, restated in 462 T301. The cost is measured and labeled (2026-11-27, t278-runs.tsv)."
+    },
+    {
+     "id": "T278-D3",
+     "summary": "The idle cutoff is not a lever and stays at 12 h, because it frees 0 GB at every keep.",
+     "class": "within",
+     "why": "A lever that frees nothing serves no part of the disk request. The figure is measured and labeled (t278-count.tsv)."
+    },
+    {
+     "id": "T278-D4",
+     "summary": "variant_of's grouping of library, build-script compile and build-script run under one name is recorded as found and left; its fix goes to T556.",
+     "class": "within",
+     "why": "At today's keep of 16 it produces no wrong outcome: no live entry is evicted and no build loses time. Under constitution XIV it is not a defect while the keep stays at 16. It only constrains the future keep change, and T556 carries it."
+    },
+    {
+     "id": "T278-D5",
+     "summary": "Method: every build runs on a scratchpad copy and live caches are read by lstat only. Units compiled, not wall time, is the cost measure, because the machine's load varied from 14 to 57.",
+     "class": "within",
+     "why": "This is how the measurement was done, and it serves the task's goal. Nothing the GM asked for is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -454,6 +649,44 @@
      "summary": "T371 runs after T370 and before T377/T378, independent of T372, as a [perf] task under 451 FR-013 (performance first).",
      "class": "within",
      "why": "Ordering inside the backlog, consistent with FR-013 and with the GM's ranking of disk work ahead of most of 462 (and behind orchestration where builders can be kept busy with it). No requested work is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T278": {
+   "section_sha256": "0caff39090ec7218c1f31a3fb1b8219a85c780a6e0d27f8a73b1e06da34593bf",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T278-D1",
+     "summary": "T278 is a measurement only: no code changes, KEPT stays 16 and L7R_CACHE_IDLE_HOURS stays 12. Adopting the safe lever (keep 8, or keep 4 with variant_of split by unit kind) goes to a new 462 task, T556, ordered before T558.",
+     "class": "within",
+     "why": "Neither the GM's request nor 462's spec says how T278 must be scoped. The request moves 451's deferred work here and puts disk-cleanup work ahead of most of 462's long-term tasks. The adoption is not dropped: it is filed as T556, a disk task inside 462 at the same priority and ordered before T558, so the GM's ordering survives. The 'adopt what loses no time' order in constraint 2 comes from the task line, not from the GM's words here. Moving that work to a sibling task in the same feature does not narrow what the GM asked for. It costs one extra landing and does not defeat the purpose of the disk work."
+    },
+    {
+     "id": "T278-D2",
+     "summary": "Keep 2 is ruled out because it costs 62 units and 297.9 s on the next warm build.",
+     "class": "within",
+     "why": "This applies the GM's rule that time saved outranks disk usage, restated in 462 T301. The cost is measured and labeled (2026-11-27, t278-runs.tsv)."
+    },
+    {
+     "id": "T278-D3",
+     "summary": "The idle cutoff is not a lever and stays at 12 h, because it frees 0 GB at every keep.",
+     "class": "within",
+     "why": "A lever that frees nothing serves no part of the disk request. The figure is measured and labeled (t278-count.tsv)."
+    },
+    {
+     "id": "T278-D4",
+     "summary": "variant_of's grouping of library, build-script compile and build-script run under one name is recorded as found and left; its fix goes to T556.",
+     "class": "within",
+     "why": "At today's keep of 16 it produces no wrong outcome: no live entry is evicted and no build loses time. Under constitution XIV it is not a defect while the keep stays at 16. It only constrains the future keep change, and T556 carries it."
+    },
+    {
+     "id": "T278-D5",
+     "summary": "Method: every build runs on a scratchpad copy and live caches are read by lstat only. Units compiled, not wall time, is the cost measure, because the machine's load varied from 14 to 57.",
+     "class": "within",
+     "why": "This is how the measurement was done, and it serves the task's goal. Nothing the GM asked for is narrowed."
     }
    ],
    "verdict": "CLEAR"
