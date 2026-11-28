@@ -123,5 +123,3 @@ landing on its own, each small; T22 last.
 
 ### The close
 
-- [ ] T537 closing 451: split its large records mechanically for the sessions that come back (the GM's go of 2026-11-27, 'doing the split that we discussed', and his message of that day on future sessions 'naively just opening these very large files and then blowing through their own context windows'): plan-done.md, plan-review.json and tasks-done.md cut into parts small enough to read safely under an archive directory, with a note ('Load this file when') saying what is where, how to find one task's section, and warning off whole reads and broad greps; every tool that reads them pointed at the new layout, tested; lands after the readers' measurement and when 451's closing set has landed
-      research: rendering
