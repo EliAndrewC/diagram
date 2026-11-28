@@ -120,6 +120,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-27",
    "declared": "spec-fidelity"
+  },
+  "### T533 (451 T517's backlog: the landing session's scratchpad held 17.86 GB of 451 tasks landed before T517, observed 2026-11-27, method: `du -s` against `tasks-done.md`)": {
+   "sha256": "b7ffb2f858340f0efa2597b2837677b58b5e881d0d52dcc296cc67ed8d4615e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T533 Approach (checklist part A)": {
+   "sha256": "485059ef3d7571ef88ff2208afe96a7e6f31052efbc0ab6f9dadd60e192c30d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -332,6 +344,65 @@
      "summary": "T371 runs after T370 and before T377/T378, independent of T372, as a [perf] task under 451 FR-013 (performance first).",
      "class": "within",
      "why": "Ordering inside the backlog, consistent with FR-013 and with the GM's ranking of disk work ahead of most of 462 (and behind orchestration where builders can be kept busy with it). No requested work is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T533 (451 T517's backlog: the landing session's scratchpad held 17.86 GB of 451 tasks landed before T517, observed 2026-11-27, method: `du -s` against `tasks-done.md`)",
+    "### T533 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T533-method",
+     "summary": "One-off take by hand from a computed list, no code and no new sweep mode.",
+     "class": "within",
+     "why": "A method choice for the backlog take T533's line names. It narrows nothing the GM asked for (disk tasks first, request.md 2026-11-27), and the take was done."
+    },
+    {
+     "id": "T533-ban-gives-way",
+     "summary": "The session's brief bans the coordinating session's scratchpad; the block sets that ban aside for this take.",
+     "class": "within",
+     "why": "T533's line names the landing session's scratchpad, and the block measured that this is the coordinating session's. Under the ban the task would have no object, so setting it aside is implied by the task. It widens nothing beyond T533 and narrows nothing the GM asked. The brief's text is not in the bundle; this rests on the block's account of it."
+    },
+    {
+     "id": "T533-exclude-open-work",
+     "summary": "Excluded: T517's open_elsewhere starts (49 entries), entries a live process holds (4), registered worktrees (none), 451's open numbers (t537), the 101 moved-to-462 numbers, and open 461/462 numbers.",
+     "class": "within",
+     "why": "Each is open work or scratch that is not a landed 451 task's. T533 asks for the landed 451 tasks' backlog, and the block's own goal is that nothing an open task or a live process uses goes. The 'session's ruling of 2026-11-27' the block cites is the author's own, not in request.md or rulings.md, and is not the authority here: T533's line is."
+    },
+    {
+     "id": "T533-exclude-ticked-461-462",
+     "summary": "Entries whose number is a TICKED 461 or 462 task are excluded too, though no open task uses them.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the take: some landed-451 scratch is left. A name match cannot tell a landed 451 task's t<N> from a 461/462 task's of the same number, and that ambiguity is exactly what took the 144 wrongly. Taking them would mean deleting scratch whose owner cannot be told by name, against the task's own constraint. The purpose is not gutted. From the block's own figures, the 3.35 GB left is about 2.52 GB unprefixed + 0.46 GB moved + 0.37 GB open-451, so this exclusion leaves a few tens of MB at most, and those are the other feature's to take at its own landings."
+    },
+    {
+     "id": "T533-exclude-unprefixed",
+     "summary": "Entries without a t<N> prefix (597 entries, 2.52 GB, m14 among them) are excluded.",
+     "class": "within",
+     "why": "T533's line is the scratch 'of 451 tasks landed'. An entry with no task prefix cannot be shown to be one, so leaving it is the task's own scope, not a carve-out from it. Most of what remains is this, and it is not 451-landed scratch by any measure the block has."
+    },
+    {
+     "id": "T533-144-accepted",
+     "summary": "144 entries (1,385,388 bytes) of open 461 tasks T50-T69 were removed because 461's numbers were read from the stale /diagram mirror; the block records them and accepts them as harmless.",
+     "class": "within",
+     "why": "This is an irreversible accident recorded honestly, with the list (wrongly-taken.txt), the cause (the mirror was behind the clone) and the lesson, not a decision to narrow what was asked. 'Harmless' (each task already handed in, its section, records and tests committed, no builder on it) is the block's own statement and carries no method. It is attributed to the block, not verified here. The table row's 'the exclusions above kept' is contradicted by these 144 and should say so."
+    },
+    {
+     "id": "T533-rule-defect-to-T550",
+     "summary": "T517's landed-scratchpad rule matches by number alone, so an open or moved task of another feature loses its scratch when 451's same number lands (247 entries, 0.46 GB of moved-to-462 numbers match it today). It is left unfixed here, filed as T550, and ordered before T301.",
+     "class": "within",
+     "why": "This is a real defect (a tool that would take good work), not a mere difference. But T533's ask is a one-off backlog take with no code, and a rule change with its red-first test is separate work. It is filed as a 462 disk task and ordered, not dropped, and it matches the GM's disk-first order. Fix-before-the-next-step is stated for port steps, which this is not. T550's text and T301 are not in the bundle; the block hangs both the matching fix and the clone-not-mirror lesson on T550."
+    },
+    {
+     "id": "T533-order",
+     "summary": "After 451 T517 (landed), beside T550; budget one landing; exits green on before/after measurement, red through make arbiter-ask.",
+     "class": "within",
+     "why": "Ordering and exit choices inside 462's disk work, consistent with the GM's priority of disk tasks over 462's longer-term ones."
     }
    ]
   }

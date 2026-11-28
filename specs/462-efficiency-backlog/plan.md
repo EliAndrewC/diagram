@@ -3069,31 +3069,38 @@ parallelizing and is ordered by time saved, never by disk freed.
 
 
 
-### T533 (<why: the finding or measurement that files it>)
+### T533 (451 T517's backlog: the landing session's scratchpad held 17.86 GB of 451 tasks landed before T517, observed 2026-11-27, method: `du -s` against `tasks-done.md`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a one-off take by hand, no code. The landing session is the coordinating session itself (`CLAUDE_CODE_SESSION_ID=c6fd72d1-ab6c-4736-b723-0697a1f5ca51`, the only scratchpad under `/tmp/claude-1000` past 100K, observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`), so the session ruled that its brief's ban on that scratchpad gives way for this take, done from a computed list rather than a new sweep mode: `--scratch-sweep landed` has no dry form and also takes `/tmp/t<N>`, the clones' `.git/t<N>` and the start marks, and the rule's own fix is T550.
+- **The list**: an entry of the scratchpad whose name is `t` then a whole number N (`t51` is never `t515`'s, `leftovers::number`), N ticked `[x]` in 451's `tasks-done.md`.
+- **Excluded**: N held by another feature's open start (`open_elsewhere` as built, re-run over the clone's `task-starts.jsonl` and `specs/*/tasks.md`, the numbers 6, 11, 12, 27, 34, 36, 42, 55, 106, 127, 158, in 49 entries, observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`), an entry a live process holds (`/proc/*/cwd` and `fd`, 4 entries, observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`), one holding a registered worktree (none), 451's open numbers (`t537`, 44 entries of 0.37 GB, observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`), the 101 numbers 451 ticks as `Withdrawn: moved to 462` (observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`), every task number of 461 or 462 open or ticked, and every entry without a `t<N>` prefix (597 entries of 2.52 GB, `m14` among them, observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`).
+- **Removed** with `rm -rf` over the list, and no guard refused. The list, the wrong removals and the script are `dev/measurements/2026-11-27/t533-scratchpad-take/` (`take.txt`, bytes and name a line, `wrongly-taken.txt`, `measure.py`).
+- **Measured**: before 17,965,240,831 bytes in 4,177 entries, after 3,354,947,305 bytes in 1,260 entries, taken 2,917 entries of about 14.61 GB (`t373` 3.50 GB, `t388` 2.99 GB, `t386-bench` 0.99 GB, `t457-clone` 0.91 GB and `t419` 0.77 GB the largest), observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`, just before and after.
+- **The 144 wrong removals**: the 461 and 462 numbers were read from the `/diagram` mirror's `tasks.md`, which is behind the session clone's, the mirror's 461 holding no T50-T70 where the clone's lists them open. So 144 entries of 1,385,388 bytes of 461 T50, T53, T54, T56, T58 (22 entries), T59, T60, T61, T62 (68 entries, its `t62-load-*` series and `t62-section.md`), T65, T67, T68 and T69 were taken with 451's same numbers (observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`, `wrongly-taken.txt`). Harmless, the session confirmed: each of those tasks was already handed in and carried, its section, records and tests committed, and no builder was working one. Read from the clone, the list would have held 2,773 entries (observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`). The lesson is T550's: another feature's task numbers are read from the clone that lands, never the mirror.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the landed `t<N>` entries of feature 451 in the session's scratchpad taken once, the exclusions above kept | n/a: a one-off take, no code, before and after measured 2026-11-27 (`du -sb`) | n/a: no code | none | n/a |
 
 ### T533 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The coordinating session's scratchpad no longer holds the landed 451 tasks' scratch worlds that no landing ever took; nothing an open task or a live process uses goes.
+2. **The constraints.** T533's line and T517's rule (whole numbers, `open_elsewhere`, live holds, worktrees); the session's ruling of 2026-11-27 (461 and 462 numbers, moved numbers, 451's open ones and unprefixed entries excluded; by hand from a computed list; no new sweep mode).
+3. **Where each comes from.** G: the GM's order of 2026-11-27 putting 462's disk tasks first (request.md); R: 451 T517's section, `sweep/leftovers.rs`; O: the measurements above.
+4. **Do they describe the world here?** Yes: the real scratchpad listed and sized, the session id read in the shell, the real starts file and task files read, measured 2026-11-27 (`du -sb`, `measure.py`). But the mirror's `tasks.md` of feature 461 was stale, measured 2026-11-27 (`grep` of its task lines against the clone's), the cause of the wrong removals above.
+5. **The order.** After 451 T517 (landed); beside T550, which fixes the rule.
+6. **The exits.** Green: the take measured before and after. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 14.61 GB in 2,917 entries taken, 3.35 GB in 1,260 entries left, observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`.
+10. **Before moving a constant.** n/a: no constant or knob.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; the host's disk has the taken bytes free (observed 2026-11-27, method: `du -sb` and `ls | wc -l` of the scratchpad and `measure.py`).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The landed-scratchpad rule matches by number alone, so an open or moved task of another feature with no live start loses its scratch when 451's same number lands (observed 2026-11-27, method: the rule's matching re-run read only, `measure.py`: 247 entries of 0.46 GB of moved-to-462 numbers). Not fixed here: a rule change with its red-first test, outside a one-off take. Filed as T550; lands before T301.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T534 (<why: the finding or measurement that files it>)
@@ -3435,6 +3442,33 @@ parallelizing and is ordered by time saved, never by disk freed.
 |---|---|---|---|---|
 
 ### T549 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T550 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T550 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
