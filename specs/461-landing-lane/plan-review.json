@@ -756,6 +756,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-28",
    "declared": "spec-fidelity"
+  },
+  "### T68 (the plan review bundle read \"451 T274's D3 (...), D13 (...), D5 (...)\" in 461 T61's section as 451's plan-level D3 and dropped D13 and D5: found by T61's blocks review, 2026-11-27)": {
+   "sha256": "aa8eb1c8644efcfb74149dd888f66e48869c722a5010205f4b4f06d9474d8baf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
+  },
+  "### T68 Approach (checklist part A)": {
+   "sha256": "a8621c895461d17516c8de6a1902fae0ebad53988f7019f2cb33f0b0c176a9ef",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4852,6 +4864,141 @@
      "summary": "All reads live in l7r_shared; the lane crate and lane_wake.rs untouched; fixtures use T18's own line shapes since no real arbiter repair exists yet.",
      "class": "within",
      "why": "Implementation placement and test fixtures inside FR-004's repair path; no requested behavior is excluded, and no known defect is left (the one found is fixed as Decision 3)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T68 (the plan review bundle read \"451 T274's D3 (...), D13 (...), D5 (...)\" in 461 T61's section as 451's plan-level D3 and dropped D13 and D5: found by T61's blocks review, 2026-11-27)",
+    "### T68 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T68 (a) in_task",
+     "summary": "<feature> T<n>'s D<k> is read from that task's section of that feature's plans; a missing section or id is a NOT FOUND line saying which, never the feature's plan-level decision",
+     "class": "within",
+     "why": "Is the defect the task was filed for, fixed in the direction of the block's own goal (checklist item 1: the text from the place its name points at)."
+    },
+    {
+     "id": "T68 (a) requirement",
+     "summary": "A requirement a task names stays the spec's (444 T20's FR-043)",
+     "class": "within",
+     "why": "Requirements live in the spec, not a task section; the reading the name points at."
+    },
+    {
+     "id": "T68 (b) gloss",
+     "summary": "A parenthetical gloss naming no id does not end a run",
+     "class": "within",
+     "why": "The observed form that dropped 451 T274's D13 and D5; reading past it is the fix."
+    },
+    {
+     "id": "T68 (c) heading and section decisions",
+     "summary": "DECISION reads heading decisions (### D7 - title); a section's indented decisions are read (SECTION_DECISION) and a section's bare D1 is its own",
+     "class": "within",
+     "why": "Makes the bundle carry the decisions 461's plan actually writes; T65's reviewer saw no D7. Points each name at its own text."
+    },
+    {
+     "id": "T68 (d) bare id not found",
+     "summary": "A bare id found nowhere is a NOT FOUND line instead of a silent drop",
+     "class": "within",
+     "why": "Carries 451 T46/T48's never-dropped-without-a-word rule the block names."
+    },
+    {
+     "id": "T68 Found and left: T69",
+     "summary": "\"T16's Decision 3\" and data-model.md's repair entry are left to T69, which lands before T31",
+     "class": "within",
+     "why": "A separate reader of other forms and other spec files, each form named and its carrier named and ordered before T31. Contrast with decision 2, which names neither."
+    },
+    {
+     "id": "T68 Decision 1",
+     "summary": "A task's decision is its section's whatever the feature: 461 T61's D2 from 461's T61 section",
+     "class": "within",
+     "why": "The same rule as (a), applied to the plan's own feature; the name's own referent."
+    },
+    {
+     "id": "T68 Decision 2",
+     "summary": "An unnumbered T<n>'s D<k> is left as it was: in an unlabeled section read as the plan's D<k>, in a labeled section dropped",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Ruled on the block's words alone (tasks.md not in the bundle). The block's goal (checklist 1) is that the reviewer reads the text a name points at, or a NOT FOUND line; its constraints (checklist 2) include 451 T46/T48's never dropped without a word; Decision 1 states that T<n>'s D<k> is the task section's decision, not the plan's. Unlabeled half: reading T61's D2 as the plan-level D2 hands the reviewer the wrong text - the exact wrong outcome T68 was filed for (a reviewer judging against a plan-level decision in place of the task's), and the block itself writes this form (checklist 12: 'T61's D2'). That is a defect left, not a difference. Labeled half: a silent drop, the other defect T68 fixes in (d), and Approach (a) gives T467's drop its reason as there being no reader of a task's section, which T68 now builds; no reason but ease remains. Carrier: 'T69 holds the other unread citation forms' does not name this form, and Found and left lists T69's forms ('T16's Decision 3', data-model.md) without it; the unlabeled half is a misread, not an unread form. Each half adjudicated separately; both NOT LEGITIMATE. Clears by any one of: read the unnumbered form by Decision 1's rule as the plan's own feature's task section (with in_task's NOT FOUND), or name this form, both halves, in T69's line and in Found and left with a NOT FOUND/ambiguity line emitted meanwhile in place of the plan-level text and the drop."
+    },
+    {
+     "id": "T68 Decision 3",
+     "summary": "A gloss holding an id ends the run: D3 (see D7), D5 read as before",
+     "class": "within",
+     "why": "No instance of an id-bearing gloss is shown, unlike Decision 2's form, which the block writes itself; and the reading genuinely goes two ways (an id in a gloss may be the plan's own). A design choice in an ambiguous, unobserved form, not a known defect left."
+    },
+    {
+     "id": "T68 order and exits",
+     "summary": "After T61's review, before T31; green on builder-checks for the plan crate, red recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Ordering and exit conditions; settle nothing the request or spec leaves open in a narrowing direction."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-28",
+   "blocks": [
+    "### T68 (the plan review bundle read \"451 T274's D3 (...), D13 (...), D5 (...)\" in 461 T61's section as 451's plan-level D3 and dropped D13 and D5: found by T61's blocks review, 2026-11-27)",
+    "### T68 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T68 D1",
+     "summary": "A decision named after a task's possessive (`<feature> T<n>'s D<k>`) is read from that task's section of that feature's plans (plan.md, plan-done.md, archive parts); a missing section or id is a NOT FOUND line, never the plan-level decision of that name.",
+     "class": "within",
+     "why": "Fixes the defect found by T61's blocks review: the bundle showed a reviewer 451's plan-level D3 in place of T274's D3 and dropped D13 and D5, a check passing a review on the wrong text. Reading the task's section of 'that feature's plan' is the brief's rule read as the citation literally points; nothing asked is narrowed."
+    },
+    {
+     "id": "T68 D2",
+     "summary": "An unnumbered `T<n>'s D<k>` is this feature's task's, read by D1's rule in labeled and unlabeled sections alike, NOT FOUND where the section or id is missing; two 451 T467 pins move with it.",
+     "class": "within",
+     "why": "Answers round 1's BLOCKED ruling: the unnumbered form is no longer left reading the plan-level decision (unlabeled) or dropped (labeled), so the same defect is fixed in both forms. The moved pins (`T31's D3`, `T31's D11` now NOT FOUND for T31's section) follow the literal reading of the citation and are surfaced with a word, never silently dropped, which is 451 T46/T48's rule. This bundle's spec-cited.md shows the new behavior directly: `461 T31's D3` and `D11` come out as NOT FOUND lines for T31's section."
+    },
+    {
+     "id": "T68 D3",
+     "summary": "A gloss holding an id ends the run (`D3 (see D7), D5` read as before), so an id inside a gloss is never attributed to the qualified feature.",
+     "class": "within",
+     "why": "Unchanged from round 1, which blocked on decision 2 only. In `451 T274's D3 (see D7), D5` the trailing D5 is read bare, and where this feature has a plan-level D5 the reviewer gets that text with no NOT FOUND line, so part (d) does not cover it. That is the T61 finding's shape, but in a form nobody has written: no bundle the blocks name shows a gloss holding an id, so no wrong outcome has been observed and no known defect is left (XIV). The citation itself is ambiguous: continuing the run would attribute the gloss's D7 to 451 just as wrongly. Ending the run is a parser design choice the spec leaves open."
+    },
+    {
+     "id": "T68 (a) requirement after a task",
+     "summary": "A requirement named after a task's possessive stays the spec's (`444 T20's FR-043`), not the task section's.",
+     "class": "within",
+     "why": "Requirements live in spec.md, not in task sections, so this is the citation read where it points. Where it is missing it is surfaced, as this bundle's NOT FOUND line for 444's FR-043 shows."
+    },
+    {
+     "id": "T68 (a) own-feature clause",
+     "summary": "A clause after a run naming the run's own feature ('from 451's plan-done.md') cuts nothing from the run.",
+     "class": "within",
+     "why": "This is the exact form of the T61 citation that lost D13 and D5, so the change is part of fixing the defect that was found."
+    },
+    {
+     "id": "T68 (c) heading and section-form decisions",
+     "summary": "`DECISION` reads heading decisions (`### D7 - title`, 48 plans, measured 2026-11-27). A block's own indented decisions (`SECTION_DECISION`) are read in the block and in its task's whole section, so a section's or Approach block's bare D<k> is its own, not the plan's.",
+     "class": "within",
+     "why": "T65's bundle missed plan D7 because it is a heading decision, and a section's bare D1 was taken as the plan's. Both mean wrong or missing text in front of a reviewer, so this is fixing a defect."
+    },
+    {
+     "id": "T68 (d) bare id found nowhere",
+     "summary": "A bare id found nowhere becomes a NOT FOUND line, where before it was dropped without a word.",
+     "class": "within",
+     "why": "This applies 451 T46/T48's 'never dropped without a word' and narrows nothing."
+    },
+    {
+     "id": "T68 move",
+     "summary": "The citation reader and its test move from bundle.rs (1,028 lines, past the file-scale bar, measured 2026-11-27) into bundle/cited.rs and bundle/cited/tests.rs.",
+     "class": "within",
+     "why": "Structure required by the project's file-scale check; changes no behavior asked for."
+    },
+    {
+     "id": "T68 Approach: T69 split",
+     "summary": "Other citation forms T65's bundle missed ('T16's Decision 3', data-model.md's repair entry) are not fixed in T68 but filed as T69, which lands before T31.",
+     "class": "within",
+     "why": "The known defect is filed and ordered to land before the next piece of work (T31), so fix-as-we-go is honored rather than excepted: no known defect is carried past the step. A different reader (other forms, other spec files) is a separate mechanism; splitting tasks narrows nothing the GM asked."
     }
    ]
   }

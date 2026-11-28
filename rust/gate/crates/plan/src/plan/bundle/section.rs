@@ -2,7 +2,7 @@
 //! in a task section that writes its own decisions `T369-D1`, a bare `D1` is the section's, not the spec's, so the bundle carries no
 //! spec text for it; the spec's are cited there as `spec D5`, `plan D5`, `the plan's D6` or `451 D7`.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 use std::sync::LazyLock;
 
@@ -22,8 +22,6 @@ static SPEC_RUN: LazyLock<Regex> = LazyLock::new(|| {
         r"(?<![\w.-])(?:spec|plan)(?:\.md)?\s+{ID}\b{RUN_ON}"
     ))
 });
-/// A task's possessive, `T183's `, inside a run `QUALIFIED` reads (`451 T183's D10`): that task's own decision (451 T467).
-static TASK_POSSESSIVE: LazyLock<Regex> = LazyLock::new(|| re(r"\bT\d+[a-z]?'s\s"));
 /// The possessives that name a task section's own decisions, not the spec's (451 T438): "the section's D4" in a labeled section.
 const SECTION_NAMES: [&str; 3] = ["section", "task", "block"];
 
@@ -53,12 +51,32 @@ pub(super) fn labeled_owners(sections: &BTreeMap<String, String>, body: &str) ->
     owners
 }
 
-/// The labeled task sections each block of `under` stands in, by the feature's plan.md (`labeled_owners`, 451 T438).
-pub(super) fn owners_of(spec_dir: &Path, under: &[(String, String)]) -> Vec<Vec<String>> {
+/// Each block of `under`: the labeled task sections it stands in, by the feature's plan.md (`labeled_owners`, 451 T438), and the
+/// decisions its task sections write for themselves there (`pattern`, the bundle's `SECTION_DECISION`): a bare one is its section's
+/// own wherever in the section the block stands, an Approach block's D1 its section's other block's (461 T68).
+pub(super) fn owners_of(
+    spec_dir: &Path,
+    under: &[(String, String)],
+    pattern: &Regex,
+) -> Vec<(Vec<String>, BTreeSet<String>)> {
     let sections = task_sections(&read(&spec_dir.join("plan.md")));
     under
         .iter()
-        .map(|(_, b)| labeled_owners(&sections, b))
+        .map(|(_, body)| {
+            let mut defined = BTreeSet::new();
+            for head in BLOCK_HEAD.captures_iter(body).map_while(Result::ok) {
+                for task in leading_tasks(head[1].trim()) {
+                    let section = sections.get(task).map_or("", String::as_str);
+                    defined.extend(
+                        pattern
+                            .captures_iter(section)
+                            .map_while(Result::ok)
+                            .map(|c| c[1].to_owned()),
+                    );
+                }
+            }
+            (labeled_owners(&sections, body), defined)
+        })
         .collect()
 }
 
@@ -67,13 +85,13 @@ pub(super) fn owners_of(spec_dir: &Path, under: &[(String, String)]) -> Vec<Vec<
 pub(super) fn ours(
     feature: &str,
     under: &[(String, String)],
-    owners: &[Vec<String>],
+    owners: &[(Vec<String>, BTreeSet<String>)],
 ) -> Vec<(String, String)> {
     let own_no: String = feature.chars().take(3).collect();
     under
         .iter()
         .zip(owners)
-        .map(|((k, b), owned)| (k.clone(), named(b, &own_no, owned).bare))
+        .map(|((k, b), (owned, _))| (k.clone(), named(b, &own_no, owned).bare))
         .collect()
 }
 
@@ -91,7 +109,7 @@ pub(super) fn is_task(word: &str) -> bool {
 /// `text` (its ranges written out) with each bare decision id taken out, for a block of a labeled task section (`labeled_owners`
 /// names it) that writes its own decisions `T369-D1` (451 T438: T369's "(D1)" and "(D3)" were its own T369-D1 and T369-D3, and the bundle carried the spec's).
 /// Kept, to be read as before: a run named as the spec's (`spec D5`, `plan D5, D6`), one a feature number names (`451 D7`, which
-/// `QUALIFIED` reads), and one a possessive names (`the plan's D6`, `house style's D11`) - except the section's own possessives,
+/// `QUALIFIED` reads, with a task's possessive too, `451 T183's D10`, read from that task's section, 461 T68), and one a possessive names (`the plan's D6`, `house style's D11`) - except the section's own possessives,
 /// `the section's D4` and the owner's `T369's D1`, and another task's, `T295's D3`, that task's own decision (451 T467), left out
 /// as the section's are: its text is that task's section's, not the spec's. A requirement (`FR-`, `SC-`) is always the spec's and never taken out.
 pub(super) fn section_ids_out(text: &str) -> String {
@@ -103,19 +121,16 @@ pub(super) fn section_ids_out(text: &str) -> String {
             .collect()
     };
     let mut kept = spans(&SPEC_RUN);
-    // a feature's number before a task's possessive, `451 T183's D10`, names that task's own decision too (451 T467)
-    kept.extend(
-        spans(&QUALIFIED)
-            .into_iter()
-            .filter(|&(a, b)| !TASK_POSSESSIVE.is_match(&text[a..b]).unwrap_or(false)),
-    );
+    // a feature's number before a task's possessive, `451 T183's D10`, names that task's own decision, which the bundle now reads from
+    // that task's section (461 T68; 451 T467 left it out, there being no reader of a task's section then)
+    kept.extend(spans(&QUALIFIED));
     kept.extend(
         NAMED
             .captures_iter(text)
             .map_while(Result::ok)
             .filter(|c| {
                 let word = c[2].to_lowercase();
-                !SECTION_NAMES.contains(&word.as_str()) && !is_task(&word)
+                !SECTION_NAMES.contains(&word.as_str())
             })
             .filter_map(|c| c.get(0).map(|m| (m.start(), m.end()))),
     );

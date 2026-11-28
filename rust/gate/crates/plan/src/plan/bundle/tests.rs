@@ -730,10 +730,10 @@ fn another_feature_s_decisions_are_carried_from_it_never_from_this_one() {
     assert!(cited.contains("- **D1**: NOT FOUND - feature 123 has no directory under specs/"));
     assert!(cited.contains("- **FR-010**: NOT FOUND - named as claims gate's"));
     assert!(cited.contains("OURS THREE") && cited.contains("- **FR-002**: Ours."));
-    assert!(
-        cited.contains("OURS ELEVEN")
-            && cited.contains("- **FR-020**: NOT FOUND - named as gate's")
-    );
+    // a task's decision is read from that task's section, never the plan's (461 T68)
+    let t31 = "<!-- feature 451 T31 -->\n- **D11**: NOT FOUND - specs/451-x has no T31 section";
+    assert!(cited.contains(t31) && !cited.contains("OURS ELEVEN"));
+    assert!(cited.contains("- **FR-020**: NOT FOUND - named as gate's"));
     assert!(
         cited.contains("- **FR-013**: Performance work goes first.")
             && !cited.contains("reviewed feature's")
@@ -848,7 +848,8 @@ fn a_number_then_a_task_s_possessive_names_that_feature_s_id() {
             && !mine.contains("- **D1**: NOT FOUND")
     );
     assert!(cited.contains("<!-- feature 444 -->\n- **FR-043**: THEIRS."));
-    assert!(cited.contains("<!-- feature 433 -->\n- **D3b**: NOT FOUND"));
+    // a task's decision is that task's section's (461 T68)
+    assert!(cited.contains("<!-- feature 433 T01 -->\n- **D3b**: NOT FOUND"));
     assert!(cited.contains("<!-- feature 449 -->\n- **FR-024**: NOT FOUND"));
     assert!(cited.contains("FR-001 The sty."));
     // a feature number's run stops at a clause naming another source (451 T46 round 2: "449 T233's FR-023 and FR-024, and D5 and D11 in

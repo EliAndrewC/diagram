@@ -2548,32 +2548,39 @@ waiting on its closing half.
 engine-speed task, so `docs/performance-checklist.md` does not apply.
 
 
-### T68 (<why: the finding or measurement that files it>)
+### T68 (the plan review bundle read "451 T274's D3 (...), D13 (...), D5 (...)" in 461 T61's section as 451's plan-level D3 and dropped D13 and D5: found by T61's blocks review, 2026-11-27)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the plan review bundle's citation reader, moved out of `rust/gate/crates/plan/src/plan/bundle.rs` (1,028 lines with this work, past the file-scale bar, measured 2026-11-27 (`scripts/gates/l7r-gate.sh check file-scale .`)) into `bundle/cited.rs`, its test into `bundle/cited/tests.rs`; four changes. (a) A decision a run names after a task's possessive, `<feature> T<n>'s D<k>`, or `T<n>'s D<k>` with no number (this feature's task), is read from that task's section of that feature's plans (plan.md, then plan-done.md and its archive parts, `plans_of`), the new `in_task`, under `<!-- feature 451 T274 -->`; a task with no section, or a section without the id, is a NOT FOUND line saying which, never the feature's plan-level decision of that name. A requirement a task names stays the spec's ("444 T20's FR-043"). A clause after the run naming the run's own feature cuts nothing from it ("451 T274's D3, D13 and D5 from 451's plan-done.md"). `section.rs` no longer drops a task's possessive in a labeled section (451 T467 dropped it, there being no reader of a task's section then). (b) A run's id may carry a parenthetical gloss naming no id, `D3 (the pid file names the sampler), D13 (...)`, so the run goes on past it. (c) `DECISION` reads a heading decision, `### D7 - title` - 48 plans write decisions so, 461's every one (measured 2026-11-27, `grep -cE "^#{2,4} D[0-9]+" specs/*/plan.md`) - and a block's own decisions are read in a section's indented form too (`  - **D1. ...`, `SECTION_DECISION`), in the block and in its task's whole section in plan.md, so a section's bare D1 is its own and not the plan's, an Approach block's too. (d) A bare id found nowhere is a NOT FOUND line, where it was dropped without a word. Red first: `plan::bundle::tests::a_decision_named_with_another_feature_s_task_is_that_task_s` failed on the old code, 1 of 31 `plan::bundle::tests` (the bundle carried 451's `THEIRS PLAN THREE` and nothing for D13, D5, D7 or D9), 2026-11-27; after, 247 of 247 of the plan crate's tests pass, the one pinned header changed (`433 T01's D3b` now `<!-- feature 433 T01 -->`). On the real plan, `make decide F=461 T=T61` built a bundle carrying 451 T274's D3, D13 and D5 from 451's plan-done.md, 2026-11-27. Round 1 of the review BLOCKED on decision 2 (the unnumbered form left as it was); it is now read by decision 1's rule, pinned by `plan::bundle::cited::tests::a_task_s_run_keeps_its_clause_and_an_unnumbered_task_is_this_feature_s`, and two pins of 451 T467 moved with it (an unlabeled section's `T31's D3` and `T31's D11` now NOT FOUND for T31's section, no longer the plan's).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| n/a: gate tooling, no map drawn | - | - | none | - |
+
+**Decisions** (each labeled):
+
+1. **A task's decision is its section's, whatever the feature**: `461 T61's D2` is read from 461's T61 section too, not 461's plan-level D2. Label: the brief's rule ("a decision named after `<feature> T<n>'s` is that feature's plan's"), read as the task's section of it, since 451's plan-level D3 was the wrong text the review found.
+2. **An unnumbered `T<n>'s D<k>` is this feature's task's**, read by decision 1's rule in a labeled and an unlabeled section alike, a NOT FOUND line where the section or the id is missing. Label: decision 1's rule; the review's round 1.
+3. **A gloss holding an id ends the run**: `D3 (see D7), D5` is read as before, so an id inside a gloss is never taken as the qualified feature's. Label: design decision.
 
 ### T68 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A plan reviewer reads, in `spec-cited.md`, the text of every decision a section names, from the place its name points at, and a NOT FOUND line for any it cannot find.
+2. **The constraints.** T68's line in tasks.md; the brief's rule for `<feature> T<n>'s`; 451 T46's and T48's "never dropped without a word"; 451 T438's and T467's labeled-section rules.
+3. **Where each comes from.** O: T61's blocks review (the bundle /tmp/l7r-check/plan-461-landing-lane-blocks-T61-fd4d36b2/spec-cited.md) and T65's empty one (/tmp/l7r-check/plan-461-landing-lane-blocks-T65-88fbf292/spec-cited.md); the red test above.
+4. **Do they describe the world here?** Yes: the rebuilt T61 bundle carries 451 T274's D3, D13 and D5, measured 2026-11-27 (`make decide F=461 T=T61`, its spec-cited.md read); 461's plan writes its decisions as headings, which no bundle had carried.
+5. **The order.** After T61's review; before T31.
+6. **The exits.** Green: `make builder-checks CRATE="rust/gate/crates/plan"` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The plan crate's 247 tests pass and `make builder-checks CRATE="rust/gate/crates/plan"` is clean, measured 2026-11-27 (that run's own lines).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reviewer judged T61's D2 against 451's plan-level D3 "A background run's end" in place of T274's "The sampler names itself", and never saw D13 or D5; T65's reviewer saw no D7.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- 461 T65's bundle was empty for three citations: plan D7 (a heading decision, fixed here), "T16's Decision 3" and data-model.md's repair entry, forms that are no FR, SC or D id; observed 2026-11-27, method: T65's blocks read against its spec-cited.md. Not fixed here: a reader of other forms and of other spec files is another mechanism. Filed as T69; lands before T31.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 ### T63 (<why: the finding or measurement that files it>)
 
@@ -2698,4 +2705,30 @@ engine-speed task, so `docs/performance-checklist.md` does not apply.
 - `crates()` read an arbiter repair's ruling words as a red unit when they end in a step's word (`continue: fix the test` -> `CRATE="continue: fix the"`), so the offered command named a crate that does not exist. Fixed here (Decision 3).
 
 **Performance work?** no
+
+### T69 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T69 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster, or measures where time goes: a measurement task counts, the GM 2026-11-20), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

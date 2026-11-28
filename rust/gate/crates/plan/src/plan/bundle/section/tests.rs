@@ -99,8 +99,8 @@ fn a_labeled_section_s_own_possessives_are_taken_out() {
 }
 
 /// Another task's possessive decision in a labeled section is that task's own, `T295-D3`, not the spec's D3 (451 T467: 451 T306's
-/// section, labeled T306-D1 to D3, wrote "T295's D3 limit", and its bundle carried the spec's D3). An unlabeled section's `T31's D3`
-/// is read as before, the spec's.
+/// section, labeled T306-D1 to D3, wrote "T295's D3 limit", and its bundle carried the spec's D3), read from that task's section or
+/// named NOT FOUND, never dropped (461 T68); an unlabeled section's `T31's D3` is read so too, never as the spec's.
 #[test]
 fn another_task_s_possessive_decision_in_a_labeled_section_is_that_task_s() {
     let root = repo();
@@ -130,6 +130,7 @@ fn another_task_s_possessive_decision_in_a_labeled_section_is_that_task_s() {
         assert!(!cited.contains(spec_only), "{spec_only}: {cited}");
     }
     assert!(cited.contains("SPEC FIVE"), "{cited}");
+    assert!(cited.contains("<!-- feature 451 T295 -->\n- **D3**: NOT FOUND"));
     let tail = "### T05 - an unlabeled section\n\nAs T31's D3 says.\n";
     let m = build(
         &dir,
@@ -140,5 +141,9 @@ fn another_task_s_possessive_decision_in_a_labeled_section_is_that_task_s() {
         "h",
     )
     .unwrap();
-    assert!(read(m.parent().unwrap(), "spec-cited.md").contains("SPEC THREE"));
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    assert!(
+        cited.contains("- **D3**: NOT FOUND - specs/451-x has no T31 section")
+            && !cited.contains("SPEC THREE")
+    );
 }
