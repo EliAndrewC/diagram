@@ -337,3 +337,6 @@ pub(super) fn merged(base: &str, ours: &str, theirs: &str) -> Result<String, Str
     }
     Ok(merged)
 }
+
+#[cfg(test)]
+mod tests;
